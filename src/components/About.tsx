@@ -1,6 +1,7 @@
 import { GraduationCap, Languages as LanguagesIcon } from 'lucide-react';
 import { about, education, languages } from '../data/profile';
 import { useT } from '../i18n/LanguageContext';
+import { Expertise } from './Expertise';
 
 export function About() {
   const t = useT(about);
@@ -70,6 +71,8 @@ export function About() {
             </div>
           </div>
         </div>
+
+        <Expertise />
       </div>
     </section>
   );

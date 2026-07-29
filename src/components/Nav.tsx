@@ -4,7 +4,7 @@ import { Logo } from './Logo';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useUiStrings } from '../hooks/useUiStrings';
 
-const SECTION_IDS = ['about', 'expertise', 'journey', 'cases', 'testimonials', 'articles', 'clients', 'contact'];
+const SECTION_IDS = ['about', 'journey', 'cases', 'testimonials', 'articles', 'clients', 'contact'];
 
 export function Nav() {
   const { lang, toggle } = useLanguage();

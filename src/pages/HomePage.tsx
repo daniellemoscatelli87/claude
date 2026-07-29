@@ -1,7 +1,6 @@
 import { Nav } from '../components/Nav';
 import { Hero } from '../components/Hero';
 import { About } from '../components/About';
-import { Expertise } from '../components/Expertise';
 import { Journey } from '../components/Journey';
 import { Cases } from '../components/Cases';
 import { Testimonials } from '../components/Testimonials';
@@ -16,7 +15,6 @@ export function HomePage() {
       <main>
         <Hero />
         <About />
-        <Expertise />
         <Journey />
         <Cases />
         <Testimonials />
