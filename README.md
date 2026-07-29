@@ -1,24 +1,42 @@
-# Métricas para Designers
+# Danielle Moscatelli — Experience Design Studio
 
-Sistema para transformar o guia "Métricas de UX e Negócio para Designers" em uma
-ferramenta de uso diário. Para cada projeto, o designer:
+Site profissional de Danielle Moscatelli: currículo vivo, portfólio e site
+corporativo em um só lugar, com versão bilíngue PT‑BR (mercado brasileiro) e
+EN (mercado europeu/irlandês).
 
-1. **Descreve o problema e a hipótese de design** (Passo 1 do framework).
-2. **Marca as necessidades da etapa atual** ("preciso validar usabilidade", "preciso medir
-   conversão", etc.) e o sistema recomenda automaticamente quais métricas coletar para cada uma,
-   com dicas de como obter o dado (origem, ferramentas e quem envolver na empresa).
-3. **Acompanha cada métrica**: define baseline e meta, e registra os valores coletados ao longo
-   do tempo, com data, fonte e notas.
-4. **Registra a decisão pós-lançamento** (manter & escalar, iterar & ajustar, ou pivotar/reverter).
+## Estrutura de conteúdo
 
-Também inclui:
+Todo o conteúdo factual vive em `src/data/*.ts`, com pares `{ pt, en }` para
+tudo que muda de framing entre os dois mercados (hero, sobre, trajetória,
+cases). Nada foi inventado: cada dado vem dos documentos compartilhados
+(CV, licenças/certificados, projetos, recomendações, reconhecimentos).
 
-- **Catálogo de Métricas** — referência de todas as métricas de UX e negócio (TSR, TMT, SUS,
-  CSAT, NPS, CR, Churn, LTV/CAC etc.), com descrição, origem do dado e como coletá-lo.
-- **Guia Rápido** — FAQ sobre de onde vêm os dados, quem acionar (PM, Data Analyst, Tech Lead,
-  UX Researcher, CS) e checklists interativos de autonomia em dados.
+- `profile.ts` — hero, sobre, formação, idiomas, ferramentas
+- `timeline.ts` — trajetória profissional (fase, tag, título de impacto, palavras-chave)
+- `cases.ts` — cases flagship (deep-dive), arquivo completo e "Cofre de Inovação" (NDA)
+- `testimonials.ts`, `certifications.ts`, `awards.ts`, `expertise.ts`, `clients.ts`, `articles.ts`
 
-Todos os dados dos projetos ficam salvos no `localStorage` do navegador.
+## Gaps conhecidos (placeholders prontos para receber o real)
+
+- **Logo**: nenhum arquivo de logo foi enviado — `src/components/Logo.tsx` usa
+  um wordmark de texto ("DM") até a logo oficial (branca para dark mode) ser
+  fornecida.
+- **Paleta de cores**: os tokens em `src/index.css` (`--color-graphite-*`,
+  `--color-blood-*`) foram calibrados visualmente a partir da referência de
+  design system compartilhada. Se houver um export exato de tokens (Figma/JSON),
+  é só substituir os valores hexadecimais.
+- **Logos de clientes**: `src/data/clients.ts` lista os nomes reais dos clientes
+  como wordmarks de texto até as logos oficiais chegarem.
+- **Matérias**: `src/data/articles.ts` está vazio de propósito — nenhuma matéria
+  foi compartilhada ainda.
+- **Artefatos visuais dos cases**: cada case lista os artefatos que foram
+  realmente produzidos (personas, blueprints, BMC, etc.) como "sob solicitação"
+  — nenhuma imagem foi inventada. Basta anexar as imagens reais por case.
+- **Cofre de Inovação (NDA)**: o gate de acesso em `VaultSection.tsx` é um
+  controle de front-end (não substitui um NDA jurídico) que libera o conteúdo
+  localmente e abre um e-mail pré-preenchido para `daniellemoscatelli87@gmail.com`.
+- **Formulário de contato**: usa `mailto:` como fallback funcional sem backend.
+  Para captura real de leads, integrar com um serviço (Formspree, EmailJS, etc.).
 
 ## Rodando localmente
 
@@ -29,4 +47,4 @@ npm run dev
 
 ## Stack
 
-React + TypeScript + Vite + Tailwind CSS + React Router + Zustand.
+React + TypeScript + Vite + Tailwind CSS v4 + React Router + Zustand + lucide-react.
