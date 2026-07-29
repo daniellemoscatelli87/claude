@@ -1,21 +1,17 @@
-import { Route, Routes } from 'react-router-dom'
-import Layout from './components/Layout'
-import ProjectsPage from './pages/ProjectsPage'
-import ProjectDetailPage from './pages/ProjectDetailPage'
-import CatalogPage from './pages/CatalogPage'
-import GuidePage from './pages/GuidePage'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { LanguageProvider } from './i18n/LanguageContext';
+import { HomePage } from './pages/HomePage';
+import { CaseDetailPage } from './pages/CaseDetailPage';
 
-function App() {
+export default function App() {
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<ProjectsPage />} />
-        <Route path="/projetos/:projectId" element={<ProjectDetailPage />} />
-        <Route path="/catalogo" element={<CatalogPage />} />
-        <Route path="/guia" element={<GuidePage />} />
-      </Route>
-    </Routes>
-  )
+    <LanguageProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/cases/:slug" element={<CaseDetailPage />} />
+        </Routes>
+      </BrowserRouter>
+    </LanguageProvider>
+  );
 }
-
-export default App
