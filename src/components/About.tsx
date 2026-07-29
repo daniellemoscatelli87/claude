@@ -21,15 +21,6 @@ export function About() {
                 </p>
               ))}
             </div>
-
-            <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {t.highlights.map((h) => (
-                <div key={h.label} className="glass-card p-4 text-center">
-                  <p className="text-2xl font-bold text-blood-400">{h.value}</p>
-                  <p className="mt-1 text-[11px] leading-tight text-graphite-200">{h.label}</p>
-                </div>
-              ))}
-            </div>
           </div>
 
           <div className="animate-fade-up flex flex-col gap-6" style={{ animationDelay: '120ms' }}>
@@ -67,6 +58,15 @@ export function About() {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {t.highlights.map((h) => (
+                <div key={h.label} className="glass-card p-4 text-center">
+                  <p className="text-2xl font-bold text-blood-400">{h.value}</p>
+                  <p className="mt-1 text-[11px] leading-tight text-graphite-200">{h.label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
