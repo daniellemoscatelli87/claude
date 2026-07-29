@@ -1,27 +1,107 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #f2f6ff;
-  --color-brand-100: #e2ebff;
-  --color-brand-200: #c7d8ff;
-  --color-brand-300: #9fb9ff;
-  --color-brand-400: #7093ff;
-  --color-brand-500: #4a6cf7;
-  --color-brand-600: #3450e0;
-  --color-brand-700: #2a3fb8;
-  --color-brand-800: #263793;
-  --color-brand-900: #233279;
+  /* Cool graphite scale — blue-tinted dark neutrals */
+  --color-graphite-950: #05070a;
+  --color-graphite-900: #0b0f14;
+  --color-graphite-850: #0e131a;
+  --color-graphite-800: #11161d;
+  --color-graphite-750: #151b23;
+  --color-graphite-700: #1a212b;
+  --color-graphite-650: #212936;
+  --color-graphite-600: #283142;
+  --color-graphite-500: #333e52;
+  --color-graphite-400: #475269;
+  --color-graphite-300: #647087;
+  --color-graphite-200: #8b97a8;
+  --color-graphite-100: #b7c0cc;
+  --color-graphite-50: #e7eaee;
+
+  /* Blood / burnt red accent — cool, desaturated red */
+  --color-blood-800: #4a1015;
+  --color-blood-700: #6f161c;
+  --color-blood-600: #8b1e24;
+  --color-blood-500: #a8272e;
+  --color-blood-400: #c23d3d;
+  --color-blood-300: #de6a68;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --animate-fade-up: fade-up 0.6s ease both;
+  --animate-glow: glow 2.4s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes glow {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
 }
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
+}
+
+* {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  @apply bg-slate-50 text-slate-900 antialiased;
+  @apply bg-graphite-900 text-graphite-50 antialiased font-sans;
+  background-image: radial-gradient(circle at 15% 0%, rgba(139, 30, 36, 0.12), transparent 45%),
+    radial-gradient(circle at 85% 20%, rgba(71, 82, 105, 0.15), transparent 40%);
+  background-attachment: fixed;
 }
 
 #root {
   min-height: 100svh;
+}
+
+::selection {
+  background: var(--color-blood-600);
+  color: #fff;
+}
+
+/* Glassmorphism card, per the dark-mode design system */
+.glass-card {
+  @apply relative rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl;
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.06) inset, 0 20px 40px -20px rgba(0, 0, 0, 0.6);
+}
+
+.outline-btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/70 px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:bg-white hover:text-graphite-900;
+}
+
+.solid-btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-blood-600 px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:bg-blood-500;
+}
+
+.tag-chip {
+  @apply inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-medium tracking-wide text-graphite-100;
+}
+
+.section-eyebrow {
+  @apply text-xs font-semibold uppercase tracking-[0.28em] text-blood-400;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
