@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rede de Parceiros | Dani Moscatelli</title>
+<meta name="description" content="Cadastro na Rede de Parceiros da Dani Moscatelli | Experience Design Studio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coral: #ff5656;
+    --coral-soft: #fe6a62;
+    --coral-tint: #fff1f0;
+    --slate: #5c6986;
+    --ink: #111111;
+    --muted: #5c6986;
+    --line: #e4e6ec;
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --error: #d93636;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  header.brand { text-align: center; padding: 8px 0 28px; }
+  header.brand img { width: 100%; max-width: 340px; height: auto; }
+  .progress { height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+  .progress > div { height: 100%; width: 0; background: var(--coral); transition: width .3s ease; }
+  .step-label { font-size: 13px; color: var(--muted); margin-bottom: 16px; letter-spacing: .02em; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--coral);
+    border-radius: 12px;
+    padding: 32px 28px;
+  }
+  @media (max-width: 560px) { .card { padding: 24px 18px; } }
+  h1 { font-size: 26px; margin: 0 0 4px; letter-spacing: .02em; }
+  h2 { font-size: 20px; margin: 0 0 24px; color: var(--ink); }
+  h2 small { display: block; font-size: 12px; font-weight: 600; letter-spacing: .12em; color: var(--coral); text-transform: uppercase; margin-bottom: 4px; }
+  h3 { font-size: 16px; margin: 28px 0 8px; }
+  .subtitle { color: var(--slate); font-weight: 500; margin: 0 0 4px; }
+  .tagline { color: var(--coral); font-weight: 600; margin: 0 0 24px; }
+  .intro p { margin: 0 0 14px; }
+  .contact { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 15px; }
+  .contact p { margin: 0 0 4px; }
+  a { color: var(--coral); }
+  .q { margin-bottom: 28px; }
+  .q:last-child { margin-bottom: 0; }
+  .q-label { display: block; font-weight: 600; margin-bottom: 4px; }
+  .q-label .req { color: var(--coral); margin-left: 2px; }
+  .help { font-size: 14px; color: var(--muted); margin: 0 0 10px; }
+  .help ul { margin: 6px 0; padding-left: 20px; }
+  .info { font-size: 14px; color: var(--muted); background: var(--bg); border-radius: 8px; padding: 14px 16px; margin: 10px 0 12px; }
+  .info p { margin: 0 0 8px; }
+  .info p:last-child { margin: 0; }
+  input[type=text], input[type=email], input[type=tel], textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 11px 13px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  textarea { min-height: 120px; resize: vertical; }
+  input:focus, textarea:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px var(--coral-tint); }
+  .options { display: grid; gap: 8px; }
+  .group-title { font-size: 13px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; margin: 18px 0 4px; }
+  .group-title:first-child { margin-top: 4px; }
+  .opt {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: border-color .15s, background .15s;
+  }
+  .opt:hover { border-color: var(--coral-soft); }
+  .opt input { margin: 4px 0 0; accent-color: var(--coral); flex-shrink: 0; width: 16px; height: 16px; }
+  .opt:has(input:checked) { border-color: var(--coral); background: var(--coral-tint); }
+  .q.invalid input[type=text], .q.invalid input[type=email], .q.invalid input[type=tel], .q.invalid textarea, .q.invalid .opt { border-color: var(--error); }
+  .err { display: none; color: var(--error); font-size: 13px; margin-top: 6px; }
+  .q.invalid .err { display: block; }
+  .nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; }
+  button {
+    font: inherit; font-weight: 600; font-size: 15px;
+    border-radius: 8px; padding: 12px 24px; cursor: pointer;
+    border: 1px solid var(--coral);
+  }
+  .btn-primary { background: var(--coral); color: #fff; margin-left: auto; }
+  .btn-primary:hover { background: #f04848; }
+  .btn-primary:disabled { opacity: .6; cursor: wait; }
+  .btn-ghost { background: #fff; color: var(--coral); }
+  .btn-ghost:hover { background: var(--coral-tint); }
+  .form-error { display: none; color: var(--error); font-size: 14px; margin-top: 12px; text-align: right; }
+  .end p { margin: 0 0 14px; }
+  .end .sign { margin-top: 20px; }
+  .end .sign p { margin: 0; }
+  .end .sign .motto { color: var(--coral); font-weight: 600; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="brand">
+    <img src="logo.png" alt="Dani Moscatelli | Experience Design Studio">
+  </header>
+
+  <div id="progressBox" class="hidden">
+    <div class="progress"><div id="progressBar"></div></div>
+    <div class="step-label" id="stepLabel"></div>
+  </div>
+
+  <form id="form" novalidate>
+    <!-- Introdução -->
+    <section class="card intro step" data-step="0">
+      <h1>REDE DE PARCEIROS</h1>
+      <p class="subtitle">Dani Moscatelli | Experience Design Studio</p>
+      <p class="tagline">Conectando competências. Ampliando possibilidades. Transformando negócios.</p>
+
+      <p>Olá! Sou Dani Moscatelli, especialista em Design de Experiência, Service Design e Estratégia de Negócios.</p>
+      <p>Estou construindo um ecossistema de profissionais independentes, especialistas e consultores para ampliar as possibilidades de colaboração em projetos de Design, Experiência Humana, Negócios, Tecnologia e Inovação.</p>
+      <p>A proposta é conectar diferentes competências e conhecimentos para desenvolver projetos multidisciplinares, que podem envolver desde pesquisa, diagnóstico e planejamento estratégico até o desenho, desenvolvimento e implementação de soluções para negócios físicos e digitais.</p>
+      <p>Busco profissionais que atuem como prestadores de serviços (PJ), com conhecimentos especializados e interesse em colaborar em projetos futuros, seja na construção de estratégias, na prestação de consultoria especializada ou na execução de soluções.</p>
+      <p>Também são bem-vindos profissionais com expertise em segmentos específicos, como saúde, hospitalidade, educação, varejo, serviços financeiros, indústria e outros setores.</p>
+
+      <h3>Sobre este cadastro</h3>
+      <p>Este formulário tem como objetivo constituir uma rede de contatos profissionais para possíveis colaborações futuras.</p>
+      <p>O preenchimento não representa uma oferta de trabalho, contratação imediata ou garantia de participação em projetos.</p>
+      <p>Eventuais oportunidades remuneradas serão apresentadas conforme o surgimento de demandas, considerando a aderência das competências, a disponibilidade e as condições de contratação.</p>
+      <p>Se você acredita que suas competências podem contribuir para transformar desafios em experiências e soluções de alto valor, será um prazer conhecer seu trabalho!</p>
+
+      <div class="contact">
+        <p><strong>Dani Moscatelli</strong><br>Experience Design Studio</p>
+        <p>E-mail: <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a></p>
+        <p>WhatsApp: (41) 99748-5414</p>
+        <p>LinkedIn: <a href="https://www.linkedin.com/in/danimoscatelli/" target="_blank" rel="noopener">linkedin.com/in/danimoscatelli/</a></p>
+      </div>
+    </section>
+  </form>
+
+  <!-- Telas finais -->
+  <section class="card end hidden" id="endSuccess">
+    <h2>Cadastro recebido com sucesso!</h2>
+    <p>Obrigada pelo interesse em fazer parte da Rede de Parceiros da Dani Moscatelli | Experience Design Studio.</p>
+    <p>Suas informações serão consideradas para possíveis oportunidades de colaboração em projetos futuros, de acordo com suas especialidades, experiências e disponibilidade.</p>
+    <p>Este cadastro não representa uma contratação ou compromisso de participação em projetos.</p>
+    <p>Espero que possamos construir conexões e experiências de alto valor!</p>
+    <div class="sign">
+      <p><strong>Dani Moscatelli</strong></p>
+      <p>Experience Design Studio</p>
+      <p class="motto">Meaningful Experiences.</p>
+    </div>
+  </section>
+
+  <section class="card end hidden" id="endPJ">
+    <h2>Agradecemos pelo seu interesse!</h2>
+    <p>A Rede de Parceiros | Dani Moscatelli Experience Design Studio é uma iniciativa voltada à conexão com profissionais independentes que tenham interesse em colaborar em projetos futuros na modalidade de prestação de serviços (PJ).</p>
+    <p>Como esse modelo não corresponde ao seu interesse profissional neste momento, não será possível prosseguir com o cadastro.</p>
+    <p>Agradecemos seu tempo e esperamos que possamos nos conectar em outras oportunidades!</p>
+    <div class="sign">
+      <p><strong>Dani Moscatelli</strong></p>
+      <p>Experience Design Studio</p>
+    </div>
+  </section>
+
+  <section class="card end hidden" id="endConsent">
+    <h2>Sua privacidade é importante para nós!</h2>
+    <p>Para integrar a Rede de Parceiros | Dani Moscatelli Experience Design Studio, precisamos da sua autorização para armazenar e utilizar as informações profissionais fornecidas, exclusivamente para as finalidades apresentadas neste formulário.</p>
+    <p>Respeitamos sua decisão de não conceder essa autorização. Por esse motivo, não poderemos incluir seu perfil em nossa base de parceiros.</p>
+    <p>Agradecemos seu interesse e sua disponibilidade!</p>
+    <div class="sign">
+      <p><strong>Dani Moscatelli</strong></p>
+      <p>Experience Design Studio</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const SUPABASE_URL = "https://lipfvnerohkaajegqvwr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej";
+const WHATSAPP_GROUP = "https://chat.whatsapp.com/ChB6TTutuNv8g5BFYdy7FK?mode=gi_t";
+
+const PJ_NO = "Não tenho interesse em atuar como PJ.";
+const CONSENT_YES = "Sim, autorizo.";
+const CONSENT_NO = "Não autorizo.";
+
+const SECTIONS = [
+  { title: "Informações profissionais e contato", n: "Seção 1", questions: [
+    { id: "nome", n: 1, label: "Qual é o seu nome completo?", type: "text", required: true },
+    { id: "email", n: 2, label: "Qual é o seu e-mail profissional?", type: "email", required: true },
+    { id: "telefone", n: 3, label: "Qual é o seu telefone/WhatsApp para contato?", type: "tel", required: true, help: "Informe o número com DDD." },
+    { id: "cidade_estado", n: 4, label: "Em qual cidade e estado você reside atualmente?", type: "text", required: true, help: "Exemplo: Curitiba — PR." },
+    { id: "linkedin", n: 5, label: "Qual é o seu perfil no LinkedIn?", type: "text", required: false, help: "Insira o link completo." },
+    { id: "apresentacao", n: 6, label: "Como você se apresenta profissionalmente?", type: "paragraph", required: true, help: "Descreva brevemente sua atuação, suas principais competências e o tipo de contribuição que costuma oferecer aos projetos." },
+  ]},
+  { title: "Modelo de atuação e contratação", n: "Seção 2", questions: [
+    { id: "atuacao_pj", n: 7, label: "Atualmente, você atua como prestador(a) de serviços PJ?", type: "radio", required: true, options: [
+      "Sim, tenho CNPJ ativo.",
+      "Sim, atuo por meio de uma empresa ou consultoria própria.",
+      "Estou em processo de formalização.",
+      "Atualmente não tenho CNPJ, mas tenho interesse em atuar como PJ.",
+      PJ_NO,
+    ]},
+    { id: "modelo_atuacao", n: 8, label: "Qual é o seu modelo de atuação profissional?", type: "checkbox", required: true, options: [
+      "Consultor(a) independente.",
+      "Freelancer especializado(a).",
+      "Profissional autônomo com atuação por projetos.",
+      "Sócio(a) ou proprietário(a) de consultoria.",
+      "Sócio(a) ou proprietário(a) de estúdio/agência.",
+      "Especialista técnico(a) que presta serviços para outras empresas.",
+      "Profissional contratado(a) que também realiza projetos como PJ.",
+      "Outro.",
+    ]},
+    { id: "formas_colaboracao", n: 9, label: "De que forma você teria interesse em colaborar?", type: "checkbox", required: true, options: [
+      "Consultoria estratégica.",
+      "Consultoria técnica especializada.",
+      "Pesquisa, diagnóstico e análise.",
+      "Planejamento e desenho de soluções.",
+      "Desenvolvimento e implementação de soluções.",
+      "Facilitação de workshops e processos colaborativos.",
+      "Treinamentos e capacitação de equipes.",
+      "Acompanhamento e avaliação de resultados.",
+      "Apoio pontual em demandas específicas.",
+      "Participação em equipes multidisciplinares.",
+      "Liderança de frentes específicas de projetos.",
+      "Outro.",
+    ]},
+    { id: "disponibilidade_colaborar", n: 10, label: "Qual seria sua disponibilidade para colaborar em projetos futuros?", type: "radio", required: true, options: [
+      "Disponibilidade imediata.",
+      "Disponibilidade mediante agendamento.",
+      "Disponibilidade parcial, conciliando com outros projetos.",
+      "Disponibilidade apenas para projetos pontuais.",
+      "Sem disponibilidade atualmente, mas tenho interesse em oportunidades futuras.",
+    ]},
+  ]},
+  { title: "Áreas de especialização", n: "Seção 3", questions: [
+    { id: "areas_experiencia", n: 11, label: "Em quais áreas você possui experiência profissional?", type: "checkbox", required: true, groups: [
+      { title: "Estratégia e Negócios", options: [
+        "Estratégia de negócios.", "Business Design.", "Inovação e transformação de negócios.", "Desenvolvimento de novos produtos e serviços.", "Modelagem de negócios.", "Planejamento estratégico.", "Estratégia comercial e crescimento.", "Branding e posicionamento de marca.",
+      ]},
+      { title: "Design e Experiência", options: [
+        "Service Design.", "Customer Experience (CX).", "Patient Experience (PX).", "User Experience (UX).", "UX Research.", "UX/UI Design.", "Product Design.", "Design de Interfaces.", "Design Systems.", "Design de Interação.", "Design Estratégico.", "Design Organizacional.", "Design de Experiência Física e Ambiental.", "Design de Informação.", "Acessibilidade e Design Inclusivo.",
+      ]},
+      { title: "Pesquisa e Comportamento", options: [
+        "Pesquisa qualitativa.", "Pesquisa quantitativa.", "Pesquisa etnográfica.", "Pesquisa de mercado.", "Pesquisa com usuários e clientes.", "Pesquisa comportamental.", "Antropologia aplicada.", "Psicologia aplicada à experiência.", "Análise e interpretação de dados.",
+      ]},
+      { title: "Tecnologia e Desenvolvimento", options: [
+        "Desenvolvimento Front-end.", "Desenvolvimento Back-end.", "Desenvolvimento Full Stack.", "Desenvolvimento Mobile.", "Desenvolvimento No-code/Low-code.", "Automação de processos e fluxos.", "Inteligência Artificial aplicada a negócios.", "Integração de sistemas e APIs.", "Arquitetura de soluções digitais.", "Análise e Engenharia de Dados.", "Business Intelligence (BI).",
+      ]},
+      { title: "Operações, Serviços e Implementação", options: [
+        "Gestão e desenho de operações de serviços.", "Implantação de produtos e serviços.", "Qualidade e excelência de serviços.", "Gestão de mudanças.", "Capacitação e desenvolvimento de equipes.", "Facilitação e cocriação.", "Operações omnichannel.", "Avaliação e mensuração de experiências.",
+      ]},
+      { title: "Outras Especialidades", options: [
+        "Comunicação e Marketing.", "Comunicação Institucional.", "Educação e aprendizagem.", "Arquitetura e ambientes.", "Consultoria regulatória e compliance.", "Outra especialidade.",
+      ]},
+    ]},
+    { id: "principal_especializacao", n: 12, label: "Qual é a sua principal área de especialização?", type: "text", required: true, help: "Indique a competência pela qual você gostaria de ser reconhecido(a) e eventualmente convidado(a) a participar de projetos." },
+    { id: "atividades_entregaveis", n: 13, label: "Quais são as principais atividades ou entregáveis que você consegue desenvolver?", type: "paragraph", required: true, help: "Exemplos: condução de pesquisas, mapeamento de jornadas, elaboração de service blueprints, prototipação, construção de interfaces, desenvolvimento de plataformas, automações, diagnóstico de serviços, facilitação de workshops, planejamento estratégico etc." },
+    { id: "etapas_projeto", n: 14, label: "Em quais etapas de um projeto você costuma atuar?", type: "checkbox", required: true, options: [
+      "Descoberta e entendimento do problema.",
+      "Pesquisa e diagnóstico.",
+      "Análise de dados e identificação de oportunidades.",
+      "Definição de estratégias.",
+      "Ideação e cocriação.",
+      "Prototipação e validação.",
+      "Desenho de soluções.",
+      "Desenvolvimento e implementação.",
+      "Capacitação e gestão da mudança.",
+      "Mensuração e acompanhamento de resultados.",
+      "Atuação transversal em todas as etapas.",
+    ]},
+  ]},
+  { title: "Segmentos e conhecimento setorial", n: "Seção 4", questions: [
+    { id: "segmentos", n: 15, label: "Em quais segmentos de mercado você possui experiência ou conhecimento especializado?", type: "checkbox", required: true, options: [
+      "Saúde e serviços hospitalares.", "Clínicas e consultórios.", "Operadoras de planos de saúde.", "Saúde digital e Healthtechs.", "Turismo e hospitalidade.", "Hotelaria e meios de hospedagem.", "Gastronomia e alimentação.", "Varejo e comércio.", "E-commerce e marketplaces.", "Serviços financeiros e Fintechs.", "Educação e Edtechs.", "Tecnologia e software.", "Indústria e manufatura.", "Mobilidade e transportes.", "Logística e distribuição.", "Telecomunicações.", "Mercado imobiliário.", "Construção civil e arquitetura.", "Entretenimento e eventos.", "Setor público e serviços governamentais.", "Terceiro setor e organizações sociais.", "Agronegócio.", "Energia e sustentabilidade.", "Outros segmentos.",
+    ]},
+    { id: "conhecimento_segmento", n: 16, label: "Você possui conhecimento aprofundado sobre algum segmento, público ou contexto específico?", type: "paragraph", required: false, help: "Exemplos: jornada hospitalar, atendimento de urgência e emergência, operação hoteleira, comportamento do consumidor, serviços públicos, jornada de compra no varejo, experiência de pessoas idosas, acessibilidade etc." },
+    { id: "colaboracao_multidisciplinar", n: 17, label: "Você já participou de projetos que envolveram colaboração entre diferentes áreas ou especialidades?", type: "radio", required: true, options: [
+      "Sim, frequentemente.",
+      "Sim, em algumas ocasiões.",
+      "Ainda não, mas tenho interesse.",
+      "Não tenho experiência ou interesse nesse formato.",
+    ]},
+    { id: "experiencia_colaboracao", n: 18, label: "Caso tenha respondido sim, conte brevemente sobre essa experiência.", type: "paragraph", required: false, help: "Descreva o contexto, sua contribuição e como ocorreu a colaboração entre os profissionais." },
+  ]},
+  { title: "Formação e experiência", n: "Seção 5", questions: [
+    { id: "nivel_formacao", n: 19, label: "Qual é o seu nível de formação acadêmica?", type: "radio", required: true, options: [
+      "Ensino técnico.", "Graduação em andamento.", "Graduação completa.", "Especialização / MBA em andamento.", "Especialização / MBA completo.", "Mestrado.", "Doutorado.", "Formação predominantemente autodidata ou por cursos livres.", "Outro.",
+    ]},
+    { id: "formacao", n: 20, label: "Qual é a sua formação acadêmica e/ou técnica?", type: "paragraph", required: true, help: "Informe sua área de formação, instituições e principais qualificações relevantes para sua atuação." },
+    { id: "certificacoes", n: 21, label: "Possui certificações, cursos ou especializações relevantes?", type: "paragraph", required: false, help: "Informe as principais certificações, cursos ou especializações relacionadas às suas competências." },
+    { id: "tempo_especialidade", n: 22, label: "Há quanto tempo você atua profissionalmente em sua principal especialidade?", type: "radio", required: true, options: [
+      "Menos de 1 ano.", "Entre 1 e 2 anos.", "Entre 3 e 5 anos.", "Entre 6 e 10 anos.", "Entre 11 e 15 anos.", "Entre 16 e 20 anos.", "Mais de 20 anos.",
+    ]},
+    { id: "tempo_independente", n: 23, label: "Há quanto tempo você presta serviços de forma independente ou atua como consultor(a)?", type: "radio", required: true, options: [
+      "Ainda não comecei, mas tenho interesse.", "Menos de 1 ano.", "Entre 1 e 2 anos.", "Entre 3 e 5 anos.", "Entre 6 e 10 anos.", "Mais de 10 anos.",
+    ]},
+    { id: "lideranca", n: 24, label: "Você possui experiência liderando projetos ou frentes de trabalho?", type: "radio", required: true, options: [
+      "Sim, lidero projetos completos.", "Sim, lidero frentes específicas de projetos.", "Já liderei projetos pontualmente.", "Ainda não, mas tenho interesse.", "Prefiro atuar como especialista ou executor(a).",
+    ]},
+  ]},
+  { title: "Portfólio, cases e experiência prática", n: "Seção 6", questions: [
+    { id: "possui_portfolio", n: 25, label: "Você possui portfólio, site profissional ou cases publicados?", type: "radio", required: true, options: [
+      "Sim, possuo portfólio online.", "Sim, possuo site profissional.", "Sim, possuo cases ou apresentações de projetos.", "Possuo trabalhos, mas não posso divulgá-los publicamente.", "Ainda não possuo portfólio estruturado.",
+    ]},
+    { id: "link_portfolio", n: 26, label: "Compartilhe o link do seu portfólio, site ou cases profissionais.", type: "text", required: false, help: "LinkedIn, Behance, Dribbble, GitHub, Notion, site próprio ou outro endereço relevante." },
+    { id: "projeto_relevante", n: 27, label: "Conte brevemente sobre um projeto relevante do qual participou.", type: "paragraph", required: true,
+      helpHtml: "Se possível, descreva:<ul><li>Qual era o desafio ou problema?</li><li>Qual foi sua responsabilidade?</li><li>Que abordagem ou metodologia utilizou?</li><li>Qual solução foi desenvolvida?</li><li>Quais resultados foram alcançados?</li></ul>Não compartilhe informações confidenciais de clientes ou empresas." },
+    { id: "servicos_especialista_externo", n: 28, label: "Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?", type: "radio", required: true, options: [
+      "Sim, frequentemente.", "Sim, ocasionalmente.", "Ainda não, mas tenho interesse.", "Não tenho interesse nesse modelo de colaboração.",
+    ]},
+    { id: "ferramentas", n: 29, label: "Quais ferramentas, plataformas ou metodologias você domina?", type: "paragraph", required: false, help: "Exemplos: Figma, Miro, FigJam, Adobe, ferramentas de pesquisa, plataformas de automação, linguagens de programação, frameworks de Service Design, Design Thinking, métodos de pesquisa, inteligência artificial etc." },
+  ]},
+  { title: "Disponibilidade e modelo de colaboração", n: "Seção 7", questions: [
+    { id: "formatos_atuacao", n: 30, label: "Em quais formatos você tem disponibilidade para atuar?", type: "checkbox", required: true, options: [
+      "100% remoto.", "Híbrido, com encontros presenciais pontuais.", "Presencial na minha cidade/região.", "Presencial em outras cidades, mediante planejamento.", "Presencial em qualquer região do Brasil, mediante negociação.",
+    ]},
+    { id: "viagens", n: 31, label: "Você possui disponibilidade para deslocamentos ou viagens profissionais?", type: "radio", required: true, options: [
+      "Sim, tenho disponibilidade para viagens nacionais.", "Sim, mas apenas para viagens de curta duração.", "Sim, dependendo da localização e das condições.", "Apenas para deslocamentos dentro da minha região.", "Não tenho disponibilidade para viagens.",
+    ]},
+    { id: "presencial_curitiba", n: 32, label: "Você teria disponibilidade para atuar presencialmente em Curitiba/PR ou região metropolitana?", type: "radio", required: true, options: [
+      "Sim, sem necessidade de deslocamento ou hospedagem.", "Sim, mediante negociação de deslocamento e/ou hospedagem.", "Sim, apenas para encontros ou atividades pontuais.", "Não, somente em formato remoto.",
+    ]},
+    { id: "horas_semanais", n: 33, label: "Qual é sua disponibilidade média para dedicação a projetos?", type: "radio", required: true, options: [
+      "Até 5 horas semanais.", "De 6 a 10 horas semanais.", "De 11 a 20 horas semanais.", "De 21 a 30 horas semanais.", "Mais de 30 horas semanais.", "Disponibilidade variável conforme o projeto.",
+    ]},
+    { id: "formatos_contratacao", n: 34, label: "Quais formatos de contratação você costuma aceitar?", type: "checkbox", required: true, options: [
+      "Projeto com escopo e valor fechado.", "Contratação por hora.", "Contratação por diária.", "Contratação por entregáveis.", "Contratação recorrente por período determinado.", "Consultoria ou mentoria pontual.", "Formato negociável conforme a demanda.",
+    ]},
+    { id: "precificacao", n: 35, label: "Como você costuma precificar seus serviços?", type: "radio", required: true, options: [
+      "Valor por hora.", "Valor por diária.", "Valor por projeto.", "Valor por entregável.", "Mensalidade / contrato recorrente.", "Depende do escopo e da complexidade.",
+    ]},
+    { id: "referencia_valores", n: 36, label: "Deseja compartilhar uma referência de valores para contratação?", type: "paragraph", required: false, help: "Campo opcional. Você pode informar valores por hora, diária, projeto ou outros parâmetros comerciais que considere relevantes. Os valores são apenas referenciais e não representam uma proposta contratual." },
+    { id: "equipe_propria", n: 37, label: "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?", type: "radio", required: true, options: [
+      "Sim, possuo equipe própria.", "Sim, possuo parceiros recorrentes.", "Não, atuo individualmente.", "Não, mas tenho interesse em formar parcerias.",
+    ]},
+    { id: "interesse_parceria", n: 38, label: "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?", type: "radio", required: true, options: [
+      "Sim, tenho bastante interesse.", "Sim, dependendo do projeto e das responsabilidades.", "Prefiro atuar individualmente.", "Gostaria de entender melhor o formato de colaboração.",
+    ]},
+    { id: "condicoes", n: 39, label: "Existe alguma condição ou preferência importante para sua participação em projetos futuros?", type: "paragraph", required: false, help: "Compartilhe restrições de agenda, disponibilidade, preferências de atuação, condições comerciais ou outras informações que considere relevantes." },
+  ]},
+  { title: "Conexão e autorizações", n: "Seção 8", questions: [
+    { id: "como_conheceu", n: 40, label: "Como você conheceu esta iniciativa?", type: "radio", required: false, options: [
+      "LinkedIn.", "Instagram.", "Indicação de outro profissional.", "Comunidade ou grupo profissional.", "Já conhecia o trabalho da Dani Moscatelli.", "Outro.",
+    ]},
+    { id: "autoriza_dados", n: 41, label: "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?", type: "radio", required: true,
+      infoHtml: "<p><strong>Informações sobre o tratamento de dados:</strong></p><p>Os dados fornecidos serão utilizados por Dani Moscatelli | Experience Design Studio para organização da rede de parceiros, análise de competências profissionais e contato relacionado a possíveis oportunidades de colaboração.</p><p>O preenchimento é voluntário. As informações não serão divulgadas publicamente nem compartilhadas com terceiros para finalidades incompatíveis com as descritas neste formulário.</p><p>Você poderá solicitar acesso, correção ou exclusão dos seus dados pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação.</p>",
+      options: [CONSENT_YES, CONSENT_NO] },
+  ]},
+  { title: "Comunidade de networking", n: "Seção final", questions: [
+    { id: "interesse_whatsapp", n: 42, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
+      infoHtml: "<p>Estamos construindo uma comunidade para conectar profissionais de diferentes especialidades, promover a troca de conhecimentos, compartilhar referências e fortalecer conexões profissionais.</p><p>O espaço será voltado a conversas sobre Design, Experiência Humana, Negócios, Tecnologia e Inovação, além da troca de experiências e oportunidades de colaboração.</p><p>A participação é opcional e independente deste cadastro.</p>",
+      afterHtml: "<div class=\"info\"><p>🔗 <strong>Link de acesso ao grupo:</strong><br><a href=\"" + WHATSAPP_GROUP + "\" target=\"_blank\" rel=\"noopener\">" + WHATSAPP_GROUP + "</a></p><p>Se tiver interesse, basta acessar o link acima. A participação no grupo não é necessária para concluir seu cadastro.</p></div>",
+      options: ["Sim, tenho interesse em participar.", "Não, obrigado(a). Quero apenas fazer parte da rede de parceiros."] },
+  ]},
+];
+
+const form = document.getElementById("form");
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function optionHtml(q, value) {
+  const type = q.type === "checkbox" ? "checkbox" : "radio";
+  return `<label class="opt"><input type="${type}" name="${q.id}" value="${esc(value)}"><span>${esc(value)}</span></label>`;
+}
+
+function questionHtml(q) {
+  const req = q.required ? '<span class="req" aria-hidden="true">*</span>' : "";
+  let help = "";
+  if (q.help) help = `<p class="help">${esc(q.help)}</p>`;
+  if (q.helpHtml) help = `<div class="help">${q.helpHtml}</div>`;
+  const info = q.infoHtml ? `<div class="info">${q.infoHtml}</div>` : "";
+  let field = "";
+  if (q.type === "paragraph") field = `<textarea id="${q.id}" name="${q.id}"></textarea>`;
+  else if (q.type === "text" || q.type === "email" || q.type === "tel")
+    field = `<input type="${q.type}" id="${q.id}" name="${q.id}" autocomplete="${{ nome: "name", email: "email", telefone: "tel" }[q.id] || "off"}">`;
+  else if (q.groups)
+    field = `<div class="options">${q.groups.map(g => `<div class="group-title">${esc(g.title)}</div>${g.options.map(o => optionHtml(q, o)).join("")}`).join("")}</div>`;
+  else field = `<div class="options">${q.options.map(o => optionHtml(q, o)).join("")}</div>`;
+  const errMsg = q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
+  return `<div class="q" data-q="${q.id}">
+    <label class="q-label" ${["text", "email", "tel", "paragraph"].includes(q.type) ? `for="${q.id}"` : ""}>${q.n}. ${esc(q.label)}${req}</label>
+    ${help}${info}${field}${q.afterHtml || ""}
+    <div class="err">${errMsg}</div>
+  </div>`;
+}
+
+SECTIONS.forEach((s, i) => {
+  const sec = document.createElement("section");
+  sec.className = "card step hidden";
+  sec.dataset.step = i + 1;
+  sec.innerHTML = `<h2><small>${esc(s.n)}</small>${esc(s.title)}</h2>${s.questions.map(questionHtml).join("")}`;
+  form.appendChild(sec);
+});
+
+const nav = document.createElement("div");
+nav.innerHTML = `<div class="nav">
+    <button type="button" class="btn-ghost hidden" id="back">Voltar</button>
+    <button type="button" class="btn-primary" id="next">Começar</button>
+  </div>
+  <div class="form-error" id="formError"></div>`;
+form.appendChild(nav);
+
+const steps = [...form.querySelectorAll(".step")];
+const total = SECTIONS.length;
+let current = 0;
+
+function value(q) {
+  if (q.type === "checkbox") return [...form.querySelectorAll(`input[name="${q.id}"]:checked`)].map(i => i.value);
+  if (q.type === "radio") return form.querySelector(`input[name="${q.id}"]:checked`)?.value || "";
+  return form.elements[q.id].value.trim();
+}
+
+function validateQuestion(q) {
+  const v = value(q);
+  let ok = true;
+  if (q.required) ok = Array.isArray(v) ? v.length > 0 : v !== "";
+  if (ok && q.type === "email" && v) ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  form.querySelector(`[data-q="${q.id}"]`).classList.toggle("invalid", !ok);
+  return ok;
+}
+
+function validateStep(i) {
+  if (i === 0) return true;
+  const results = SECTIONS[i - 1].questions.map(validateQuestion);
+  const firstBad = form.querySelector(`.step[data-step="${i}"] .q.invalid`);
+  if (firstBad) firstBad.scrollIntoView({ behavior: "smooth", block: "center" });
+  return results.every(Boolean);
+}
+
+form.addEventListener("input", e => {
+  const box = e.target.closest(".q.invalid");
+  if (!box) return;
+  const q = SECTIONS.flatMap(s => s.questions).find(q => q.id === box.dataset.q);
+  validateQuestion(q);
+});
+
+function show(i) {
+  steps.forEach((s, n) => s.classList.toggle("hidden", n !== i));
+  current = i;
+  document.getElementById("back").classList.toggle("hidden", i === 0);
+  document.getElementById("next").textContent = i === 0 ? "Começar" : i === total ? "Enviar cadastro" : "Próxima";
+  document.getElementById("progressBox").classList.toggle("hidden", i === 0);
+  document.getElementById("progressBar").style.width = `${(i / total) * 100}%`;
+  document.getElementById("stepLabel").textContent = `Etapa ${i} de ${total}`;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function end(id) {
+  form.classList.add("hidden");
+  document.getElementById("progressBox").classList.add("hidden");
+  document.getElementById(id).classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function payload() {
+  const data = {};
+  SECTIONS.flatMap(s => s.questions).forEach(q => {
+    const v = value(q);
+    data[q.id] = Array.isArray(v) ? v : (v === "" ? null : v);
+  });
+  data.autoriza_dados = data.autoriza_dados === CONSENT_YES;
+  return data;
+}
+
+async function submit() {
+  const btn = document.getElementById("next");
+  const errBox = document.getElementById("formError");
+  btn.disabled = true;
+  btn.textContent = "Enviando…";
+  errBox.style.display = "none";
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/cadastros`, {
+      method: "POST",
+      headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" },
+      body: JSON.stringify(payload()),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    end("endSuccess");
+  } catch (err) {
+    console.error(err);
+    errBox.textContent = "Não foi possível enviar seu cadastro. Verifique sua conexão e tente novamente.";
+    errBox.style.display = "block";
+    btn.disabled = false;
+    btn.textContent = "Enviar cadastro";
+  }
+}
+
+document.getElementById("next").addEventListener("click", () => {
+  if (!validateStep(current)) return;
+  if (current === 2 && value({ id: "atuacao_pj", type: "radio" }) === PJ_NO) return end("endPJ");
+  if (current === 8 && value({ id: "autoriza_dados", type: "radio" }) === CONSENT_NO) return end("endConsent");
+  if (current === total) return submit();
+  show(current + 1);
+});
+document.getElementById("back").addEventListener("click", () => show(current - 1));
+
+show(0);
+</script>
+</body>
+</html>
