@@ -1,23 +1,218 @@
 <!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Danielle Moscatelli — Design Leadership, Product Strategy & Applied AI. Currículo vivo, portfólio e estúdio de experience design."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap"
-      rel="stylesheet"
-    />
-    <title>Danielle Moscatelli · Experience Design Studio</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<html class="overflow-x-clip" lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Em Breve • Dani Moscatelli | Experience Design Studio</title>
+<meta name="description" content="Dani Moscatelli | Experience Design Studio — um novo espaço para conectar negócios, estratégia e humanidade e transformar experiências em valor.">
+<link rel="icon" type="image/png" href="/favicon-dm.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script type="module" src="/src/em-breve.ts"></script>
+</head>
+<body class="min-h-dvh bg-ambient-gradient font-sans text-brand-dark antialiased flex flex-col justify-between selection:bg-red-100 selection:text-brand-red relative overflow-x-hidden">
+<div aria-hidden="true" class="absolute inset-0 grid-pattern-subtle pointer-events-none -z-10"></div>
+<div aria-hidden="true" class="absolute top-1/4 right-5 w-[650px] max-w-full h-[650px] bg-gradient-to-tr from-red-100/40 via-red-50/30 to-amber-50/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+<!-- Cabeçalho -->
+<header class="w-full max-w-7xl mx-auto px-6 lg:px-10 py-6 md:py-8 flex items-center justify-between gap-4 z-20">
+  <a href="/" class="flex items-center">
+    <img alt="Dani Moscatelli - Experience Design Studio" class="h-12 md:h-16 w-auto object-contain" src="/logo-dm.png">
+  </a>
+  <button type="button" data-open-contact class="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-brand-red hover:bg-[#c13e3e] text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer">Contato</button>
+</header>
+
+<!-- Conteúdo principal -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-6 lg:px-10 py-6 md:py-10 z-10 flex flex-col justify-center">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+
+    <!-- Lado esquerdo -->
+    <div class="lg:col-span-6 flex flex-col items-start text-left space-y-6 md:space-y-7">
+      <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-brand-red bg-red-50/90 rounded-full px-4 py-1.5 shadow-sm">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-red animate-pulse"></span><span>em breve</span>
+      </div>
+
+      <h1 class="text-[2rem] sm:text-5xl font-extrabold text-brand-dark tracking-[-0.025em] leading-[1.15]">Um novo espaço para conectar negócios, estratégia e humanidade e transformar experiências em valor.</h1>
+
+      <p class="text-base sm:text-lg text-brand-muted font-normal leading-relaxed max-w-xl">
+        Enquanto preparamos nossa nova experiência digital, estamos selecionando empresas para o Programa Parceiro Piloto: uma oportunidade de aplicar nosso método de Experience Design em desafios reais e transformar diagnósticos em resultados mensuráveis.
+      </p>
+
+      <div class="w-full max-w-lg pt-1">
+        <form id="notify-form" novalidate class="p-2 bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-full shadow-floating-input flex flex-col sm:flex-row items-center gap-2 transition-all hover:shadow-xl">
+          <div class="w-full relative flex-1">
+            <label for="notify-email" class="sr-only">Seu e-mail corporativo</label>
+            <input id="notify-email" name="email" type="email" required autocomplete="email" placeholder="Seu e-mail corporativo" class="w-full pl-6 pr-4 py-3.5 bg-transparent border-0 text-sm md:text-base text-brand-dark placeholder:text-slate-400 focus:outline-none">
+          </div>
+          <button type="submit" id="notify-btn" class="w-full sm:w-auto px-7 py-3.5 text-sm font-semibold rounded-xl sm:rounded-full transition-all duration-200 whitespace-nowrap focus:outline-none active:scale-[0.98] inline-flex items-center justify-center gap-2 hover:-translate-y-0.5 cursor-pointer bg-[#F9DADA] hover:bg-[#F3C5C5] text-brand-red shadow-[0_10px_25px_-3px_rgba(249,218,218,0.6)] hover:shadow-[0_12px_28px_-3px_rgba(249,218,218,0.8)] disabled:opacity-60 disabled:cursor-wait">
+            <span id="notify-btn-label">Notificar lançamento</span>
+            <svg class="w-3.5 h-3.5 fill-none stroke-current" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+          </button>
+        </form>
+        <p id="notify-msg" class="text-xs text-slate-400 mt-3.5 pl-3">Prometemos valor e zero spam. Apenas o convite para o primeiro acesso.</p>
+      </div>
+    </div>
+
+    <!-- Lado direito -->
+    <div class="lg:col-span-6 flex justify-center items-center relative flex-col">
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 select-none">
+        <div class="w-[320px] h-[320px] sm:w-[500px] sm:h-[500px] rounded-full bg-gradient-to-tr from-red-200/50 via-rose-100/40 to-transparent blur-3xl opacity-80 animate-pulse [animation-duration:6s]"></div>
+        <div class="absolute w-[260px] h-[260px] sm:w-[360px] sm:h-[360px] rounded-full border border-red-200/40 opacity-60"></div>
+        <div class="absolute w-[330px] h-[330px] sm:w-[490px] sm:h-[490px] rounded-full border border-dashed border-slate-300/40 opacity-50"></div>
+      </div>
+
+      <div class="relative w-full max-w-[560px] flex items-center justify-center">
+        <img alt="Dani Moscatelli - Metodologia & Visão Sistêmica de Design de Experiência" src="/dani-jornada.webp" width="1120" height="1019" class="w-full max-h-[600px] h-auto object-contain select-none drop-shadow-2xl relative z-10 transition-transform duration-500 hover:scale-[1.02]">
+      </div>
+
+      <div class="pt-4 flex flex-col items-center gap-3 z-10 w-full">
+        <span class="text-xs font-medium text-slate-500 tracking-wide">Me siga nas redes sociais:</span>
+        <div class="flex flex-wrap items-center justify-center gap-2.5">
+          <a class="group inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/95 backdrop-blur-md text-brand-charcoal text-xs font-medium shadow-subtle-card hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:text-brand-red" href="https://www.linkedin.com/in/danimoscatelli/" rel="noopener noreferrer" target="_blank">
+            <svg class="w-3.5 h-3.5 text-[#0077B5] fill-current group-hover:scale-110 transition-transform" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+            <span>Perfil Profissional</span>
+          </a>
+          <a class="group inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/95 backdrop-blur-md text-brand-charcoal text-xs font-medium shadow-subtle-card hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:text-brand-red" href="https://www.linkedin.com/company/danimoscatellistudio/" rel="noopener noreferrer" target="_blank">
+            <svg class="w-3.5 h-3.5 text-[#0077B5] fill-current group-hover:scale-110 transition-transform" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+            <span>Página da Empresa</span>
+          </a>
+          <a class="group inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/95 backdrop-blur-md text-brand-charcoal text-xs font-medium shadow-subtle-card hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:text-brand-red" href="https://www.instagram.com/danimoscatelli.studio/" rel="noopener noreferrer" target="_blank">
+            <svg class="w-3.5 h-3.5 text-[#E1306C] fill-none stroke-current group-hover:scale-110 transition-transform" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+            <span>Instagram</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Rodapé -->
+<footer class="w-full max-w-7xl mx-auto px-6 lg:px-10 py-6 md:py-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200/50 text-xs text-brand-muted z-10 text-center sm:text-left">
+  <p>© 2026 Dani Moscatelli • Experience Design Studio. Todos os direitos reservados.</p>
+  <div class="flex items-center gap-6">
+    <button type="button" data-open-contact class="hover:text-brand-red transition-colors cursor-pointer bg-transparent border-none p-0 text-xs font-medium text-brand-muted">Contato</button>
+    <span aria-hidden="true" class="text-slate-300">•</span>
+    <a class="hover:text-brand-red transition-colors" href="https://www.linkedin.com/in/danimoscatelli/" rel="noopener noreferrer" target="_blank">LinkedIn</a>
+    <span aria-hidden="true" class="text-slate-300">•</span>
+    <span class="text-slate-400">São Paulo / Curitiba</span>
+  </div>
+</footer>
+
+<!-- Gaveta de contato -->
+<div id="drawer-backdrop" aria-hidden="true" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ease-in-out opacity-0 pointer-events-none"></div>
+<aside id="contact-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" class="fixed top-0 right-0 bottom-0 z-50 w-full sm:w-[500px] md:w-[540px] max-w-full bg-white shadow-drawer transition-transform duration-300 ease-in-out flex flex-col justify-between overflow-hidden sm:rounded-l-3xl translate-x-full invisible">
+  <div class="px-6 sm:px-8 pt-5 pb-3.5 border-b border-slate-100 flex items-start justify-between relative bg-white z-10">
+    <div>
+      <div class="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-brand-red bg-red-50/80 rounded-full px-3 py-0.5 mb-1"><span class="w-1.5 h-1.5 rounded-full bg-brand-red"></span> Contato &amp; Parcerias</div>
+      <h2 id="drawer-title" class="text-2xl sm:text-3xl font-extrabold text-brand-dark tracking-[-0.025em] leading-tight">Inicie uma conversa</h2>
+      <p class="text-xs sm:text-sm text-brand-muted mt-1 leading-snug pr-6">Preencha os dados abaixo que em breve entrarei em contato para agendar uma conversa e apresentar uma proposta para o seu desafio.</p>
+    </div>
+    <button type="button" id="btn-close-drawer" aria-label="Fechar formulário de contato" class="flex-shrink-0 -mr-2 -mt-1 p-2 rounded-full text-slate-400 hover:text-brand-dark hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+  </div>
+
+  <div class="flex-1 overflow-y-auto px-6 sm:px-8 py-4 space-y-3 custom-scroll">
+    <form id="contact-form" novalidate class="gap-2.5 flex flex-col">
+      <input class="field" name="nome" placeholder="Nome completo *" aria-label="Nome completo" required type="text" autocomplete="name">
+      <input class="field" name="email" placeholder="E-mail corporativo *" aria-label="E-mail corporativo" required type="email" autocomplete="email">
+      <input class="field" name="telefone" placeholder="Telefone / WhatsApp *" aria-label="Telefone / WhatsApp" required type="tel" autocomplete="tel">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <input class="field" name="empresa" placeholder="Nome da Empresa *" aria-label="Nome da Empresa" required type="text" autocomplete="organization">
+        <input class="field" name="cargo" placeholder="Cargo / Função *" aria-label="Cargo / Função" required type="text" autocomplete="organization-title">
+      </div>
+
+      <div id="accordion-business" class="rounded-xl border border-slate-200 bg-slate-50/50 transition-all overflow-hidden">
+        <button type="button" id="btn-toggle-business" aria-expanded="false" aria-controls="accordion-business-body" class="w-full p-3 flex items-center justify-between text-left cursor-pointer focus:outline-none transition-colors hover:bg-slate-100/60 select-none">
+          <span class="text-slate-700 font-medium text-[13px]">Meu negócio é... *</span>
+          <svg id="accordion-business-icon" class="w-4 h-4 text-slate-400 transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+        <div id="accordion-business-body" class="px-3 pb-3 pt-1 space-y-1.5 border-t border-slate-200/60 hidden">
+          <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white/70 border border-slate-200/50 hover:bg-white hover:border-slate-300 transition-all cursor-pointer">
+            <input class="mt-0.5 w-4 h-4 cursor-pointer flex-shrink-0 accent-brand-red" name="tipo_negocio" type="radio" value="Um produto/serviço digital">
+            <div class="flex-1"><span class="block font-medium text-brand-charcoal leading-snug text-[13px]">Um produto/serviço digital</span><span class="block text-slate-500 mt-0.5 leading-snug text-[11.5px]">(SaaS, E-commerce, Marketplace, APP, Sistema, Software, etc.)</span></div>
+          </label>
+          <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white/70 border border-slate-200/50 hover:bg-white hover:border-slate-300 transition-all cursor-pointer">
+            <input class="mt-0.5 w-4 h-4 cursor-pointer flex-shrink-0 accent-brand-red" name="tipo_negocio" type="radio" value="Um Negócio Físico">
+            <div class="flex-1"><span class="block font-medium text-brand-charcoal leading-snug text-[13px]">Um Negócio Físico</span><span class="block text-slate-500 mt-0.5 leading-snug text-[11.5px]">(Clínicas, Salões, Petshops, Hotéis, Restaurantes, Cafés e Bares, etc.)</span></div>
+          </label>
+          <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white/70 border border-slate-200/50 hover:bg-white hover:border-slate-300 transition-all cursor-pointer">
+            <input class="mt-0.5 w-4 h-4 cursor-pointer flex-shrink-0 accent-brand-red" name="tipo_negocio" type="radio" value="Um Negócio Físico e Digital">
+            <div class="flex-1"><span class="block font-medium text-brand-charcoal leading-snug text-[13px]">Um Negócio Físico e Digital</span></div>
+          </label>
+          <div class="flex items-center gap-2 p-2 rounded-lg bg-white/70 border border-slate-200/50 hover:bg-white hover:border-slate-300 transition-all">
+            <label class="flex items-center gap-2.5 cursor-pointer flex-shrink-0">
+              <input id="radio-business-outro" class="w-4 h-4 cursor-pointer flex-shrink-0 accent-brand-red" name="tipo_negocio" type="radio" value="Outro">
+              <span class="font-medium text-brand-charcoal leading-snug text-[13px]">Outro:</span>
+            </label>
+            <input id="input-outro-descricao" name="tipo_negocio_outro" type="text" aria-label="Outro tipo de negócio" placeholder="Qual? Descreva brevemente..." class="flex-1 min-w-0 px-2.5 py-1 bg-white rounded-md border border-slate-200 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-all text-xs">
+          </div>
+        </div>
+      </div>
+
+      <div class="relative">
+        <select class="field" name="assunto" aria-label="Assunto" required>
+          <option disabled selected value="">Assunto *</option>
+          <option>Diagnóstico ou orçamento de projeto</option>
+          <option>Palestra, aula ou conteúdo</option>
+          <option>Parceria ou colaboração</option>
+          <option>Imprensa ou divulgação</option>
+          <option>Inscrição para o Programa Parceiro Piloto</option>
+          <option>Outro</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg></div>
+      </div>
+
+      <textarea class="field resize-none h-[90px]" name="mensagem" rows="3" required aria-label="Conte um pouco sobre seu desafio" placeholder="Conte um pouco sobre seu desafio (Quais objetivos, dores ou ideias você gostaria de trabalhar conosco?) *"></textarea>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <div id="days-box" class="flex flex-col justify-center px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50">
+          <div class="mb-1 flex items-center justify-between">
+            <span class="font-semibold text-slate-700 text-xs">Melhor dia da semana *</span>
+            <span class="text-[10px] text-slate-400">múltiplos</span>
+          </div>
+          <div class="flex items-center justify-between gap-1">
+            <label class="flex-1 text-center"><input type="checkbox" name="dias" value="Seg" class="sr-only peer"><span class="block py-1 font-semibold rounded-lg text-brand-muted text-xs peer-checked:bg-brand-red peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand-red/30 transition-colors cursor-pointer select-none">Seg</span></label>
+            <label class="flex-1 text-center"><input type="checkbox" name="dias" value="Ter" class="sr-only peer"><span class="block py-1 font-semibold rounded-lg text-brand-muted text-xs peer-checked:bg-brand-red peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand-red/30 transition-colors cursor-pointer select-none">Ter</span></label>
+            <label class="flex-1 text-center"><input type="checkbox" name="dias" value="Qua" class="sr-only peer"><span class="block py-1 font-semibold rounded-lg text-brand-muted text-xs peer-checked:bg-brand-red peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand-red/30 transition-colors cursor-pointer select-none">Qua</span></label>
+            <label class="flex-1 text-center"><input type="checkbox" name="dias" value="Qui" class="sr-only peer"><span class="block py-1 font-semibold rounded-lg text-brand-muted text-xs peer-checked:bg-brand-red peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand-red/30 transition-colors cursor-pointer select-none">Qui</span></label>
+            <label class="flex-1 text-center"><input type="checkbox" name="dias" value="Sex" class="sr-only peer"><span class="block py-1 font-semibold rounded-lg text-brand-muted text-xs peer-checked:bg-brand-red peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand-red/30 transition-colors cursor-pointer select-none">Sex</span></label>
+          </div>
+        </div>
+        <div class="relative h-full flex items-center">
+          <select class="field h-full" name="periodo" aria-label="Período de preferência" required>
+            <option disabled selected value="">Período (preferência) *</option>
+            <option>Manhã</option>
+            <option>Tarde</option>
+            <option>Flexível</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg></div>
+        </div>
+      </div>
+      <p id="contact-error" class="hidden text-xs text-brand-red"></p>
+    </form>
+
+    <div id="contact-success" class="hidden py-8 px-4 flex-col items-center text-center space-y-4">
+      <div class="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center text-brand-red"><svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg></div>
+      <div>
+        <h3 class="text-xl font-bold text-brand-dark">Mensagem enviada com sucesso!</h3>
+        <p class="text-sm text-brand-muted mt-2 max-w-xs mx-auto">Entraremos em contato em breve para agendarmos a nossa conversa.</p>
+      </div>
+      <button type="button" id="btn-success-close" class="mt-4 px-6 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-brand-charcoal text-xs font-semibold transition-colors cursor-pointer">Fechar</button>
+    </div>
+  </div>
+
+  <div id="drawer-submit-bar" class="px-6 sm:px-8 py-3 bg-white border-t border-slate-100 flex-shrink-0 z-10">
+    <button type="submit" form="contact-form" id="btn-submit-contact" class="w-full py-3 px-6 rounded-xl bg-brand-red hover:bg-[#c13e3e] text-white text-sm font-semibold tracking-wide shadow-btn-glow hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-wait">
+      <span id="btn-submit-label">Solicitar reunião</span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+    </button>
+  </div>
+  <div class="px-6 sm:px-8 py-2.5 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-400 flex items-center justify-between gap-3">
+    <span>🔒 Seus dados estão seguros e sob sigilo.</span>
+    <span class="font-medium text-brand-charcoal">Dani Moscatelli Studio</span>
+  </div>
+</aside>
+</body>
 </html>
