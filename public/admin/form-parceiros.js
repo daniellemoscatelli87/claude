@@ -418,7 +418,7 @@ window.FORM_PARCEIROS = [
     "id": "ferramentas",
     "n": 29,
     "label": "Quais ferramentas, plataformas ou metodologias você domina?",
-    "type": "paragraph"
+    "type": "checkbox"
    }
   ]
  },
