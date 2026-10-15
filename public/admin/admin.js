@@ -66,7 +66,8 @@
   // Linha clicável com iniciais, título, data e resumo.
   // Mensagem de contato: envelope fechado (não lida), aberto em cinza (lida), envelope com check em verde
   // (respondida) ou calendário com check em azul (virou reunião agendada).
-  const mailState = (r) => (r.reuniao_em ? "reuniao" : r.respondido_em ? "respondida" : r.visualizado_em ? "lida" : "");
+  // Não aberta vem primeiro: uma resposta nova do contato volta a mensagem para "não lida".
+  const mailState = (r) => (!r.visualizado_em ? "" : r.reuniao_em ? "reuniao" : r.respondido_em ? "respondida" : "lida");
   const MAIL_ICONS = { "": ["mail", "Não lida"], lida: ["mailOpen", "Lida"], respondida: ["mailCheck", "Respondida"], reuniao: ["meeting", "Reunião agendada"] };
   function mailIcon(state) {
     const [name, label] = MAIL_ICONS[state || ""];

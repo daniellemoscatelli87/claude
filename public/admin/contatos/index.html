@@ -65,6 +65,11 @@
   .ev { justify-self: center; font-size: 12px; color: var(--muted); background: #fff; border: 1px dashed var(--line); border-radius: 999px; padding: 4px 12px; text-align: center; }
   .bubble .imgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 6px; margin-top: 8px; }
   .bubble .imgs img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; display: block; background: #fff; }
+  .bubble .full { margin-top: 8px; font-size: 13px; color: var(--muted); }
+  .bubble .full summary { cursor: pointer; font-weight: 600; }
+  .bubble .full .txt { margin-top: 6px; font-size: 13px; }
+  .bubble .files { display: grid; gap: 4px; margin-top: 8px; font-size: 13px; }
+  .bubble .files a { color: var(--red); overflow-wrap: anywhere; }
   .attach { gap: 8px; cursor: pointer; }
   .attach svg { width: 18px; height: 18px; }
   .chips { display: grid; gap: 6px; margin-top: 8px; }
@@ -213,14 +218,15 @@ const safeName = (n) => n.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^\w
 async function historico(r) {
   const box = document.getElementById("historico");
   box.replaceChildren(Admin.el("h2", null, "Histórico"), Admin.el("p", "muted", "Carregando…"));
-  const [resp, evs] = await Promise.all([
+  const [resp, evs, rec] = await Promise.all([
     Admin.sb.from("respostas").select("id, created_at, mensagem, anexos").eq("contato_id", r.id).order("created_at", { ascending: true }),
     Admin.sb.from("contato_eventos").select("id, created_at, tipo, detalhe").eq("contato_id", r.id).order("created_at", { ascending: true }),
+    Admin.sb.from("mensagens_recebidas").select("id, created_at, texto, texto_completo, anexos").eq("contato_id", r.id).order("created_at", { ascending: true }),
   ]);
-  const respostas = resp.data || [], eventos = evs.data || [];
+  const respostas = resp.data || [], eventos = evs.data || [], recebidas = rec.data || [];
 
   // Links temporários para ver as imagens enviadas (o bucket é privado).
-  const paths = respostas.flatMap((x) => (x.anexos || []).map((a) => a.path));
+  const paths = [...respostas, ...recebidas].flatMap((x) => (x.anexos || []).map((a) => a.path));
   const urls = {};
   if (paths.length) {
     const { data } = await Admin.sb.storage.from("anexos").createSignedUrls(paths, 3600);
@@ -230,6 +236,7 @@ async function historico(r) {
   const items = [
     { at: r.created_at, kind: "in" },
     ...respostas.map((x) => ({ at: x.created_at, kind: "out", x })),
+    ...recebidas.map((x) => ({ at: x.created_at, kind: "in", x })),
     ...eventos.map((x) => ({ at: x.created_at, kind: "ev", x })),
   ].sort((a, b) => new Date(a.at) - new Date(b.at));
 
@@ -242,12 +249,25 @@ async function historico(r) {
     }
     const b = Admin.el("div", "bubble " + it.kind);
     b.appendChild(Admin.el("div", "who", (it.kind === "in" ? r.nome || "Contato" : "Você") + " · " + Admin.fmtDate(it.at)));
-    const text = it.kind === "in" ? r.mensagem : it.x.mensagem;
+    const text = !it.x ? r.mensagem : it.kind === "in" ? it.x.texto : it.x.mensagem;
     if (text) b.appendChild(Admin.el("div", "txt", text));
-    const anexos = it.kind === "out" ? it.x.anexos || [] : [];
-    if (anexos.length) {
+    // Resposta recebida por e-mail: permite ver o e-mail inteiro, com o trecho citado.
+    if (it.x?.texto_completo && it.x.texto_completo.trim() !== (it.x.texto || "").trim()) {
+      const more = Admin.el("details", "full");
+      more.append(Admin.el("summary", null, "Ver e-mail completo"), Admin.el("div", "txt", it.x.texto_completo));
+      b.appendChild(more);
+    }
+    const anexos = it.x?.anexos || [];
+    const imagens = anexos.filter((a) => (a.type || "").startsWith("image/"));
+    const outros = anexos.filter((a) => !(a.type || "").startsWith("image/"));
+    if (outros.length) {
+      const l = Admin.el("div", "files");
+      outros.forEach((a) => { const link = Admin.el("a", null, "📎 " + a.name); link.href = urls[a.path] || "#"; link.target = "_blank"; link.rel = "noopener"; l.appendChild(link); });
+      b.appendChild(l);
+    }
+    if (imagens.length) {
       const g = Admin.el("div", "imgs");
-      anexos.forEach((a) => {
+      imagens.forEach((a) => {
         const link = Admin.el("a"); link.href = urls[a.path] || "#"; link.target = "_blank"; link.rel = "noopener"; link.title = a.name;
         const img = Admin.el("img"); img.src = urls[a.path] || ""; img.alt = a.name; img.loading = "lazy";
         link.appendChild(img); g.appendChild(link);
@@ -320,7 +340,7 @@ async function historico(r) {
   });
 
   box.replaceChildren(Admin.el("h2", null, "Histórico"), thread);
-  if (resp.error || evs.error) box.appendChild(Admin.el("p", "msg err", "Parte do histórico não pôde ser carregada."));
+  if (resp.error || evs.error || rec.error) box.appendChild(Admin.el("p", "msg err", "Parte do histórico não pôde ser carregada."));
   box.appendChild(form);
 }
 
