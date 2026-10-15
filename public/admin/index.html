@@ -12,8 +12,9 @@
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
   .home { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
-  .totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 20px; }
-  @media (max-width: 520px) { .totals { grid-template-columns: repeat(2, minmax(0, 1fr)); } .total.wide { grid-column: 1 / -1; } }
+  .totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+  @media (max-width: 900px) { .totals { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .total .sub { font-size: 12px; color: var(--muted); margin-top: -4px; }
   .total { display: flex; flex-direction: column; gap: 6px; text-decoration: none; }
   .total .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--red-tint); color: var(--red); margin-bottom: 4px; }
   .total .ic svg { width: 20px; height: 20px; }
@@ -45,9 +46,10 @@
   <p class="muted">Veja as últimas mensagens de contato e candidaturas à Rede de Parceiros.</p>
   <p class="msg err hidden" id="load-err"></p>
   <div class="totals" id="totals">
-    <a class="card total" href="/admin/contatos/"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><span class="v" id="tot-contatos">—</span><span class="k">Contatos recebidos</span></a>
-    <a class="card total" href="/admin/parceiros/?aba=candidaturas"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></svg></span><span class="v" id="tot-parceiros">—</span><span class="k">Parceiros registrados</span></a>
-    <a class="card total wide" href="/admin/parceiros/?aba=candidaturas"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span class="v" id="tot-parceiros-7d">—</span><span class="k">Parceiros nos últimos 7 dias</span></a>
+    <a class="card total" href="/admin/contatos/"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><span class="v" id="tot-novas">—</span><span class="k">Novas mensagens</span><span class="sub">nos últimos 7 dias</span></a>
+    <a class="card total" href="/admin/contatos/?situacao=pendentes"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="v" id="tot-pendentes">—</span><span class="k">Mensagens não respondidas</span><span class="sub">aguardando retorno</span></a>
+    <a class="card total" href="/admin/contatos/?situacao=respondidas"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg></span><span class="v" id="tot-reunioes">—</span><span class="k">Reuniões agendadas</span><span class="sub">mensagens respondidas</span></a>
+    <a class="card total" href="/admin/parceiros/?aba=candidaturas"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></svg></span><span class="v" id="tot-parceiros-7d">—</span><span class="k">Novos parceiros</span><span class="sub">nos últimos 7 dias</span></a>
   </div>
   <div class="home">
     <section class="card" aria-labelledby="h-contato">
@@ -102,11 +104,19 @@ Admin.init({ page: "inicio", onReady: async () => {
   const err = c.error || p.error, box = document.getElementById("load-err");
   box.classList.toggle("hidden", !err);
   if (err) { box.textContent = "Não foi possível carregar os dados: " + err.message; return; }
-  document.getElementById("tot-contatos").textContent = c.count;
-  document.getElementById("tot-parceiros").textContent = p.count;
   const since = new Date(Date.now() - 7 * 864e5).toISOString();
-  const w = await Admin.sb.from("cadastros").select("id", { count: "exact", head: true }).gte("created_at", since);
-  document.getElementById("tot-parceiros-7d").textContent = w.error ? "—" : w.count;
+  const cnt = async (q) => { const r = await q; return r.error ? "—" : r.count; };
+  const head = (t) => Admin.sb.from(t).select("id", { count: "exact", head: true });
+  const [novas, pend, resp, parc7] = await Promise.all([
+    cnt(head("contatos").gte("created_at", since)),
+    cnt(head("contatos").is("respondido_em", null)),
+    cnt(head("contatos").not("respondido_em", "is", null)),
+    cnt(head("cadastros").gte("created_at", since)),
+  ]);
+  document.getElementById("tot-novas").textContent = novas;
+  document.getElementById("tot-pendentes").textContent = pend;
+  document.getElementById("tot-reunioes").textContent = resp;
+  document.getElementById("tot-parceiros-7d").textContent = parc7;
   document.getElementById("cnt-contatos").textContent = plural(c.count, "mensagem recebida", "mensagens recebidas") + (c.count > LIMIT ? " · últimas " + LIMIT : "");
   document.getElementById("cnt-parceiros").textContent = plural(p.count, "candidatura", "candidaturas") + (p.count > LIMIT ? " · últimas " + LIMIT : "");
   const fill = (id, rows, make, empty) => {
