@@ -141,13 +141,14 @@
     const top = el("div", "topbar hidden");
     top.id = "topbar";
     top.innerHTML = `<div class="in"><a href="/admin/"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
-      <button type="button" class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">${icon("menu")}</button></div>`;
+      <button type="button" class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">${icon("menu")}<span class="burger-dot hidden" id="burger-dot"></span></button></div>`;
     const backdrop = el("div", "backdrop"); backdrop.id = "backdrop";
     const drawer = el("aside", "drawer"); drawer.id = "drawer";
     drawer.setAttribute("aria-label", "Menu");
     drawer.innerHTML = `<button type="button" class="close" id="drawer-close" aria-label="Fechar menu">${icon("close")}</button>
       <div class="who"><span class="avatar">${initials(ADMIN_NAME)}</span><div><div class="n">${ADMIN_NAME}</div><div class="e" id="who-email"></div></div></div>
-      <nav>${PAGES.map((p) => `<a href="${p.href}"${p.id === page ? ' aria-current="page"' : ""}>${icon(p.icon)}${p.label}</a>`).join("")}</nav>
+      <section class="notif hidden" id="notif" aria-label="Notificações"><div class="notif-h">Notificações</div><div id="notif-list"></div></section>
+      <nav>${PAGES.map((p) => `<a href="${p.href}"${p.id === page ? ' aria-current="page"' : ""}>${icon(p.icon)}${p.label}<span class="nav-count hidden" data-count="${p.id}"></span></a>`).join("")}</nav>
       <div class="foot"><button type="button" class="logout" id="logout">${icon("logout")}Sair</button></div>`;
 
     const wrap = el("div", "wrap"); wrap.id = "gate";
@@ -235,6 +236,7 @@
       if (email !== ADMIN_EMAIL) { $("denied-email").textContent = email; return show("denied"); }
       $("who-email").textContent = email;
       show("app");
+      loadNotifications();
       await onReady();
     }
 
@@ -303,6 +305,51 @@
     });
   }
 
+  // Notificações: mensagens de contato não abertas (novas ou com resposta nova do contato)
+  // e candidaturas ainda não vistas. Aparecem no menu e são usadas pela Início.
+  let notifPromise = null;
+  function loadNotifications() {
+    notifPromise = (async () => {
+      const [c, p] = await Promise.all([
+        sb.from("contatos").select("id, nome, created_at", { count: "exact" }).is("visualizado_em", null).order("created_at", { ascending: false }).limit(5),
+        sb.from("cadastros").select("id, nome, created_at", { count: "exact" }).is("visualizado_em", null).order("created_at", { ascending: false }).limit(5),
+      ]);
+      const contatos = c.data || [], parceiros = p.data || [];
+      const ids = contatos.map((x) => x.id);
+      const respostas = new Map();
+      if (ids.length) {
+        const { data } = await sb.from("mensagens_recebidas").select("contato_id, created_at").in("contato_id", ids).order("created_at", { ascending: false });
+        (data || []).forEach((m) => { if (!respostas.has(m.contato_id)) respostas.set(m.contato_id, m.created_at); });
+      }
+      const n = { contatos: c.count || 0, parceiros: p.count || 0 };
+      const items = [
+        ...contatos.map((x) => ({ href: "/admin/contatos/?id=" + x.id, at: respostas.get(x.id) || x.created_at, text: (respostas.has(x.id) ? "Nova resposta de " : "Nova mensagem de ") + (x.nome || "contato"), icon: "mail" })),
+        ...parceiros.map((x) => ({ href: "/admin/parceiros/?id=" + x.id, at: x.created_at, text: "Nova candidatura de " + (x.nome || "parceiro"), icon: "users" })),
+      ].sort((a, b) => new Date(b.at) - new Date(a.at)).slice(0, 6);
+
+      const total = n.contatos + n.parceiros;
+      const dot = $("burger-dot");
+      dot.textContent = total > 99 ? "99+" : String(total);
+      dot.classList.toggle("hidden", !total);
+      $("burger").setAttribute("aria-label", total ? "Abrir menu, " + total + (total === 1 ? " notificação" : " notificações") : "Abrir menu");
+      for (const [id, v] of Object.entries(n)) {
+        const s = document.querySelector(`[data-count="${id}"]`);
+        if (s) { s.textContent = String(v); s.classList.toggle("hidden", !v); }
+      }
+      const list = $("notif-list"); list.replaceChildren();
+      items.forEach((it) => {
+        const a = el("a", "notif-item"); a.href = it.href;
+        const ic = el("span", "ni"); ic.innerHTML = icon(it.icon);
+        const t = el("span", "nt"); t.append(el("b", null, it.text), el("small", null, fmtDay(it.at)));
+        a.append(ic, t); list.appendChild(a);
+      });
+      $("notif").classList.toggle("hidden", !items.length);
+      return n;
+    })().catch(() => ({ contatos: 0, parceiros: 0 }));
+    return notifPromise;
+  }
+  const notifications = () => notifPromise || loadNotifications();
+
   const CONTATO_SECOES = [{ title: "Contato", fields: [
     ["nome", "Nome completo"], ["email", "E-mail corporativo"], ["telefone", "Telefone / WhatsApp"],
     ["empresa", "Empresa"], ["cargo", "Cargo / Função"], ["tipo_negocio", "Meu negócio é..."],
@@ -310,5 +357,5 @@
     ["dias_preferidos", "Melhor dia da semana"], ["periodo", "Período de preferência"],
   ]}];
 
-  window.Admin = { sb, el, init, icon, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES };
+  window.Admin = { sb, el, init, icon, notifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES };
 })();

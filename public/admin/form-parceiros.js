@@ -56,8 +56,7 @@ window.FORM_PARCEIROS = [
     "label": "Atualmente, você atua como prestador(a) de serviços PJ?",
     "type": "radio",
     "options": [
-     "Sim, tenho CNPJ ativo.",
-     "Sim, atuo por meio de uma empresa ou consultoria própria.",
+     "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria).",
      "Estou em processo de formalização.",
      "Atualmente não tenho CNPJ, mas tenho interesse em atuar como PJ.",
      "Não tenho interesse em atuar como PJ."
@@ -82,7 +81,7 @@ window.FORM_PARCEIROS = [
    {
     "id": "formas_colaboracao",
     "n": 10,
-    "label": "De que forma você teria interesse em colaborar?",
+    "label": "Quais tipos de serviço você presta?",
     "type": "checkbox",
     "options": [
      "Consultoria estratégica.",
@@ -108,8 +107,7 @@ window.FORM_PARCEIROS = [
      "Disponibilidade imediata.",
      "Disponibilidade mediante agendamento.",
      "Disponibilidade parcial, conciliando com outros projetos.",
-     "Disponibilidade apenas para projetos pontuais.",
-     "Sem disponibilidade atualmente, mas tenho interesse em oportunidades futuras."
+     "Disponibilidade apenas para projetos pontuais."
     ]
    }
   ]
@@ -329,18 +327,12 @@ window.FORM_PARCEIROS = [
    {
     "id": "formacao",
     "n": 21,
-    "label": "Qual é a sua formação acadêmica e/ou técnica?",
-    "type": "paragraph"
-   },
-   {
-    "id": "certificacoes",
-    "n": 22,
-    "label": "Possui certificações, cursos ou especializações relevantes?",
+    "label": "Quais são a sua formação e as certificações, cursos ou especializações relevantes?",
     "type": "paragraph"
    },
    {
     "id": "tempo_especialidade",
-    "n": 23,
+    "n": 22,
     "label": "Há quanto tempo você atua profissionalmente em sua principal especialidade?",
     "type": "radio",
     "options": [
@@ -355,7 +347,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "tempo_independente",
-    "n": 24,
+    "n": 23,
     "label": "Há quanto tempo você presta serviços de forma independente ou atua como consultor(a)?",
     "type": "radio",
     "options": [
@@ -369,7 +361,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "lideranca",
-    "n": 25,
+    "n": 24,
     "label": "Você possui experiência liderando projetos ou frentes de trabalho?",
     "type": "radio",
     "options": [
@@ -387,7 +379,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "possui_portfolio",
-    "n": 26,
+    "n": 25,
     "label": "Você possui portfólio, site profissional ou cases publicados?",
     "type": "radio",
     "options": [
@@ -400,19 +392,19 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "link_portfolio",
-    "n": 27,
+    "n": 26,
     "label": "Compartilhe o link do seu portfólio, site ou cases profissionais.",
     "type": "text"
    },
    {
     "id": "projeto_relevante",
-    "n": 28,
+    "n": 27,
     "label": "Conte brevemente sobre um projeto relevante do qual participou.",
     "type": "paragraph"
    },
    {
     "id": "servicos_especialista_externo",
-    "n": 29,
+    "n": 28,
     "label": "Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?",
     "type": "radio",
     "options": [
@@ -424,9 +416,9 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "ferramentas",
-    "n": 30,
+    "n": 29,
     "label": "Quais ferramentas, plataformas ou metodologias você domina?",
-    "type": "paragraph"
+    "type": "checkbox"
    }
   ]
  },
@@ -435,7 +427,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "formatos_atuacao",
-    "n": 31,
+    "n": 30,
     "label": "Em quais formatos você tem disponibilidade para atuar?",
     "type": "checkbox",
     "options": [
@@ -448,7 +440,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "viagens",
-    "n": 32,
+    "n": 31,
     "label": "Você possui disponibilidade para deslocamentos ou viagens profissionais?",
     "type": "radio",
     "options": [
@@ -461,7 +453,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "presencial_curitiba",
-    "n": 33,
+    "n": 32,
     "label": "Você teria disponibilidade para atuar presencialmente em Curitiba/PR ou região metropolitana?",
     "type": "radio",
     "options": [
@@ -473,7 +465,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "horas_semanais",
-    "n": 34,
+    "n": 33,
     "label": "Qual é sua disponibilidade média para dedicação a projetos?",
     "type": "radio",
     "options": [
@@ -487,7 +479,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "formatos_contratacao",
-    "n": 35,
+    "n": 34,
     "label": "Quais formatos de contratação você costuma aceitar?",
     "type": "checkbox",
     "options": [
@@ -502,7 +494,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "precificacao",
-    "n": 36,
+    "n": 35,
     "label": "Como você costuma precificar seus serviços?",
     "type": "radio",
     "options": [
@@ -515,14 +507,8 @@ window.FORM_PARCEIROS = [
     ]
    },
    {
-    "id": "referencia_valores",
-    "n": 37,
-    "label": "Deseja compartilhar uma referência de valores para contratação?",
-    "type": "paragraph"
-   },
-   {
     "id": "equipe_propria",
-    "n": 38,
+    "n": 36,
     "label": "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?",
     "type": "radio",
     "options": [
@@ -534,7 +520,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "interesse_parceria",
-    "n": 39,
+    "n": 37,
     "label": "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?",
     "type": "radio",
     "options": [
@@ -546,7 +532,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "condicoes",
-    "n": 40,
+    "n": 38,
     "label": "Existe alguma condição ou preferência importante para sua participação em projetos futuros?",
     "type": "paragraph"
    }
@@ -557,7 +543,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "como_conheceu",
-    "n": 41,
+    "n": 39,
     "label": "Como você conheceu esta iniciativa?",
     "type": "radio",
     "options": [
@@ -565,13 +551,13 @@ window.FORM_PARCEIROS = [
      "Instagram.",
      "Indicação de outro profissional.",
      "Comunidade ou grupo profissional.",
-     "Já conhecia o trabalho da Dani Moscatelli.",
+     "Indicação da Dani Moscatelli.",
      "Outro."
     ]
    },
    {
     "id": "autoriza_dados",
-    "n": 42,
+    "n": 40,
     "label": "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?",
     "type": "radio",
     "options": [
@@ -586,7 +572,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "interesse_whatsapp",
-    "n": 43,
+    "n": 41,
     "label": "Você gostaria de participar do nosso grupo de networking no WhatsApp?",
     "type": "radio",
     "options": [

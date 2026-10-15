@@ -262,7 +262,8 @@ const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
 const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const uf = (s) => ((s || "").toUpperCase().match(/\b([A-Z]{2})\s*\.?$/) || [])[1] || "-";
 const MINUSC = new Set(["de", "da", "do", "das", "dos", "e"]);
-const cidade = (s) => (s || "").split(/[—–\-\/,]/)[0].trim().replace(/\s+/g, " ").toLowerCase().split(" ").map((w, i) => (i && MINUSC.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(" ") || "Não informado";
+// Tira o estado do fim ("Curitiba - PR", "Curitiba/PR", "Curitiba, PR") sem cortar nomes com hífen ("Embu-Guaçu").
+const cidade = (s) => (s || "").replace(/\s*([—–\/,]|\s-)\s*[A-Za-z]{2}\s*\.?$/, "").split(/\s[—–-]\s|[\/,]/)[0].trim().replace(/\s+/g, " ").toLowerCase().split(" ").map((w, i) => (i && MINUSC.has(w) ? w : w.split("-").map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join("-"))).join(" ") || "Não informado";
 const startsSim = (v) => typeof v === "string" && v.startsWith("Sim");
 const svg = (tag, attrs) => { const e = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
 
@@ -691,7 +692,7 @@ function skills(rows) {
   for (const r of rows) { const raw = (r.principal_especializacao || "").trim(); if (!raw) continue; const k = norm(raw); const cur = m.get(k) || { label: raw, n: 0 }; cur.n++; m.set(k, cur); }
   const list = [...m.values()].sort((a, b) => b.n - a.n).map((x) => [x.label, x.n]);
   c2.appendChild(list.length ? ranked(list, t, { limit: 6 }) : emptyNote());
-  const c3 = card("Formas de colaboração de interesse", { cls: "span2", note: "Pergunta " + Q.formas_colaboracao.n + " · as três mais escolhidas." });
+  const c3 = card("Tipos de serviço prestados", { cls: "span2", note: "Pergunta " + Q.formas_colaboracao.n + " · as três mais escolhidas." });
   c3.appendChild(t ? podium(rows, "formas_colaboracao") : emptyNote());
   more.append(c2, c3);
   const c4 = card("Etapas de projeto em que atuam", { cls: "span3", note: "Pergunta " + Q.etapas_projeto.n + " · em que fases do projeto a rede está presente." });
@@ -812,7 +813,15 @@ Admin.init({ page: "parceiros", onReady: async () => {
     const box = document.getElementById("detail");
     if (error || !data) { box.replaceChildren(el("div", "card empty", error ? "Não foi possível carregar a candidatura." : "Candidatura não encontrada.")); return; }
     Admin.markSeen("cadastros", data);
-    box.replaceChildren(Admin.detail(data, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)));
+    // Junta à opção "Outro" o texto que a pessoa escreveu.
+    const shown = { ...data };
+    // Candidaturas antigas tinham certificações em pergunta separada; agora fica junto da formação.
+    if (data.certificacoes) shown.formacao = [data.formacao, data.certificacoes].filter(Boolean).join("\n");
+    for (const [k, txt] of Object.entries(data.outros || {})) {
+      const addTxt = (v) => (/^Outr[oa]s?\b/.test(v) ? v.replace(/\.$/, "") + ": " + txt : v);
+      shown[k] = Array.isArray(shown[k]) ? shown[k].map(addTxt) : addTxt(shown[k] || "");
+    }
+    box.replaceChildren(Admin.detail(shown, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)));
     return;
   }
   const { data, error } = await Admin.sb.from("cadastros").select("*").order("created_at", { ascending: false });

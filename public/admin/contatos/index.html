@@ -14,6 +14,22 @@
   .toolbar { display: flex; gap: 12px; align-items: center; margin: 20px 0 12px; flex-wrap: wrap; }
   .toolbar input { max-width: 420px; }
   #status { display: grid; gap: 18px; }
+  /* Cabeçalho da mensagem (acordeão) */
+  #detail { margin-bottom: 12px; }
+  .ch { padding: 0; overflow: hidden; }
+  .ch-head { width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; text-align: left; background: none; border: 0; border-radius: 0; padding: 16px 18px; color: var(--dark); font-weight: 400; }
+  .ch-head:hover { background: #fbfbfc; }
+  .ch-head .ini { width: 46px; height: 46px; border-radius: 50%; background: var(--red); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 16px; }
+  .ch-info { display: grid; gap: 2px; min-width: 0; }
+  .ch-top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  .ch-name { font-weight: 800; font-size: 17px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ch-when { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .ch-mail { font-size: 14px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ch-subj { font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ch-chev { width: 32px; height: 32px; border-radius: 50%; background: var(--track); color: var(--muted); display: grid; place-items: center; transition: transform .2s; }
+  .ch-chev svg { width: 18px; height: 18px; }
+  .ch.open .ch-chev { transform: rotate(180deg); }
+  .ch-body { border-top: 1px solid var(--track); padding: 4px 18px 12px; }
   /* Etapas */
   .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); position: relative; }
   .step { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; position: relative; }
@@ -72,11 +88,12 @@
   .bubble .files a { color: var(--red); overflow-wrap: anywhere; }
   .attach { gap: 8px; cursor: pointer; }
   .attach svg { width: 18px; height: 18px; }
-  .chips { display: grid; gap: 6px; margin-top: 8px; }
+  .chips { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; margin-top: 8px; }
   .chips:empty { display: none; }
-  .chip { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 12px; padding: 6px 8px; background: #fff; font-size: 13px; }
+  .chip { display: flex; align-items: center; gap: 10px; min-width: 0; border: 1px solid var(--line); border-radius: 12px; padding: 6px 8px; background: #fff; font-size: 13px; }
   .chip img { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
-  .chip span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chip .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chip .sz { flex-shrink: 0; color: var(--muted); font-size: 12px; }
   .chip button { border: 0; background: var(--track); color: var(--muted); width: 28px; height: 28px; padding: 0; border-radius: 50%; font-size: 18px; line-height: 1; }
   .chip button:hover { color: var(--red); }
 </style>
@@ -93,9 +110,9 @@
   </div>
   <div id="view-detail" class="hidden">
     <a class="back" href="/admin/contatos/">← Todas as mensagens</a>
+    <div id="detail"></div>
     <div class="card status-bar" id="status"></div>
     <section class="card" id="historico"></section>
-    <div id="detail"></div>
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -154,9 +171,9 @@ function statusBar(r) {
     acts.append(g, button("btn-line", "Alterar data", async () => { r._editMeeting = true; return true; }), button("link-danger", "Cancelar reunião", () => confirm("Cancelar esta reunião?") && save(r, { reuniao_em: null })));
     next.append(card, acts);
   } else if (!r.respondido_em) {
-    next.append(Admin.el("p", "hint", "Responda pelo histórico abaixo ou, se já respondeu por fora, marque aqui."));
+    next.append(Admin.el("p", "hint", "Responda pelo histórico abaixo. A mensagem é marcada como respondida automaticamente."));
     const acts = Admin.el("div", "acts");
-    acts.append(button("btn-ok", "Marcar como respondida", () => save(r, { respondido_em: new Date().toISOString() })), meetingToggle(r));
+    acts.append(meetingToggle(r));
     next.appendChild(acts);
   } else {
     if (!r._scheduling && !r._editMeeting) {
@@ -199,6 +216,29 @@ function meetingForm(r, button) {
   );
   f.append(grid, err, acts);
   return f;
+}
+
+// Cabeçalho da mensagem em acordeão: fechado mostra nome, e-mail, data/hora e assunto;
+// aberto mostra todos os dados enviados pelo formulário.
+function contactHeader(r) {
+  const card = Admin.el("section", "card ch");
+  const head = Admin.el("button", "ch-head"); head.type = "button"; head.setAttribute("aria-expanded", "false"); head.setAttribute("aria-controls", "ch-body");
+  const info = Admin.el("span", "ch-info");
+  const top = Admin.el("span", "ch-top"); top.append(Admin.el("span", "ch-name", r.nome || "Sem nome"), Admin.el("span", "ch-when", Admin.fmtDate(r.created_at)));
+  info.append(top, Admin.el("span", "ch-mail", r.email || "Sem e-mail"), Admin.el("span", "ch-subj", r.assunto || "Sem assunto"));
+  const chev = Admin.el("span", "ch-chev"); chev.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+  head.append(Admin.el("span", "ini", Admin.initials(r.nome)), info, chev);
+  const body = Admin.el("div", "ch-body hidden"); body.id = "ch-body";
+  const full = Admin.detail(r, Admin.CONTATO_SECOES, "");
+  full.classList.remove("card"); full.querySelector(".detail-head")?.remove();
+  body.appendChild(full);
+  head.addEventListener("click", () => {
+    const open = body.classList.toggle("hidden") === false;
+    head.setAttribute("aria-expanded", String(open));
+    card.classList.toggle("open", open);
+  });
+  card.append(head, body);
+  return card;
 }
 
 // Histórico completo: mensagem recebida, respostas enviadas (com imagens) e cada mudança de situação,
@@ -293,7 +333,7 @@ async function historico(r) {
       const im = Admin.el("img"); im.src = URL.createObjectURL(f); im.alt = "";
       const rm = Admin.el("button", null, "×"); rm.type = "button"; rm.setAttribute("aria-label", "Remover " + f.name);
       rm.addEventListener("click", () => { files.splice(i, 1); renderChips(); });
-      c.append(im, Admin.el("span", null, f.name + " · " + fmtSize(f.size)), rm);
+      c.append(im, Admin.el("span", "nm", f.name), Admin.el("span", "sz", fmtSize(f.size)), rm);
       chips.appendChild(c);
     });
   };
@@ -358,7 +398,7 @@ Admin.init({ page: "contatos", onReady: async () => {
     data.visualizado_em = data.visualizado_em || new Date().toISOString();
     statusBar(data);
     historico(data);
-    box.replaceChildren(Admin.detail(data, Admin.CONTATO_SECOES, "Recebida em " + Admin.fmtDate(data.created_at)));
+    box.replaceChildren(contactHeader(data));
     return;
   }
   const { data, error } = await Admin.sb.from("contatos").select("*").order("created_at", { ascending: false });

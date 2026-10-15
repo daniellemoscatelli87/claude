@@ -15,7 +15,9 @@
   .totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
   @media (max-width: 900px) { .totals { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .total .sub { font-size: 12px; color: var(--muted); margin-top: -4px; }
-  .total { display: flex; flex-direction: column; gap: 6px; text-decoration: none; }
+  .total { display: flex; flex-direction: column; gap: 6px; text-decoration: none; position: relative; }
+  .total .flag.corner { position: absolute; top: 14px; right: 14px; }
+  .panel-head .flag { margin-top: 4px; }
   .total .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--red-tint); color: var(--red); margin-bottom: 4px; }
   .total .ic svg { width: 20px; height: 20px; }
   .total .v { font-size: 32px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
@@ -117,6 +119,19 @@ Admin.init({ page: "inicio", onReady: async () => {
   document.getElementById("tot-pendentes").textContent = pend;
   document.getElementById("tot-reunioes").textContent = resp;
   document.getElementById("tot-parceiros-7d").textContent = parc7;
+  // Sinaliza o que chegou e ainda não foi aberto.
+  Admin.notifications().then((n) => {
+    const flag = (text) => Admin.el("span", "flag", text);
+    const totals = document.querySelectorAll("#totals .total");
+    if (n.contatos) {
+      totals[0].appendChild(Object.assign(flag(n.contatos === 1 ? "1 não lida" : n.contatos + " não lidas"), { className: "flag corner" }));
+      document.getElementById("cnt-contatos").after(flag(n.contatos === 1 ? "1 não lida" : n.contatos + " não lidas"));
+    }
+    if (n.parceiros) {
+      totals[3].appendChild(Object.assign(flag(n.parceiros === 1 ? "1 nova" : n.parceiros + " novas"), { className: "flag corner" }));
+      document.getElementById("cnt-parceiros").after(flag(n.parceiros === 1 ? "1 nova" : n.parceiros + " novas"));
+    }
+  });
   document.getElementById("cnt-contatos").textContent = plural(c.count, "mensagem recebida", "mensagens recebidas") + (c.count > LIMIT ? " · últimas " + LIMIT : "");
   document.getElementById("cnt-parceiros").textContent = plural(p.count, "candidatura", "candidaturas") + (p.count > LIMIT ? " · últimas " + LIMIT : "");
   const fill = (id, rows, make, empty) => {
