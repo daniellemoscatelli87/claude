@@ -86,3 +86,10 @@ select.field option { color: var(--color-brand-dark); }
 .notify-btn[data-state="idle"] [data-icon="idle"],
 .notify-btn[data-state="sending"] [data-icon="sending"],
 .notify-btn[data-state="success"] [data-icon="success"] { display: block; }
+
+/* Celular: campos com 16px evitam o zoom automático do iPhone ao tocar no campo,
+   que deixava a página desencaixada; e nada pode criar rolagem lateral. */
+html { overflow-x: clip; }
+@media (max-width: 767px) {
+  input, select, textarea, .field { font-size: 16px !important; }
+}
