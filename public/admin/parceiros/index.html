@@ -64,24 +64,21 @@
   .ranked.compact li { font-size: 13px; padding: 5px 0; grid-template-columns: 22px minmax(0, 1fr) auto; }
   .ranked.compact .pos { width: 20px; height: 20px; font-size: 11px; }
 
-  /* Linha do tempo do projeto */
-  .tl { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); position: relative; padding-top: 6px; }
-  .tl::before { content: ""; position: absolute; left: 4%; right: 4%; top: 34px; height: 2px; background: var(--line); }
-  .tl .st { display: grid; justify-items: center; text-align: center; gap: 8px; position: relative; padding: 0 2px; }
-  .tl .dot { width: var(--d); height: var(--d); border-radius: 50%; background: rgb(212 77 77 / var(--a)); border: 2px solid #fff; box-shadow: 0 0 0 1px rgb(212 77 77 / .35); display: grid; place-items: center; font-size: 12px; font-weight: 800; color: var(--dark); margin-top: calc((56px - var(--d)) / 2); }
-  .tl .dot.hi { color: #fff; }
-  .tl .stn { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: .06em; margin-top: calc((56px - var(--d)) / 2); }
-  .tl .stl { font-size: 11.5px; line-height: 1.3; color: var(--dark); }
-  .tl-foot { margin-top: 14px; font-size: 13px; color: var(--muted); }
-  .tl-foot b { color: var(--dark); }
-  @media (max-width: 760px) {
-    .tl { grid-auto-flow: row; grid-auto-columns: auto; gap: 6px; }
-    .tl::before { left: 27px; right: auto; top: 10px; bottom: 10px; width: 2px; height: auto; }
-    .tl .st { grid-template-columns: 56px auto minmax(0, 1fr); justify-items: start; text-align: left; align-items: center; }
-    .tl .dot, .tl .stn { margin-top: 0; justify-self: center; }
-    .tl .stn { order: -1; display: none; }
-  }
 
+  /* Etapas do projeto: lista na ordem das fases, com barra de cobertura */
+  .stages { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .stage { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--track); }
+  .stage:last-child { border-bottom: 0; }
+  .stage .sn { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .stage .sl { font-size: 14px; color: var(--dark); }
+  .stage .sv { font-size: 13px; color: var(--muted); white-space: nowrap; text-align: right; }
+  .stage .sv b { color: var(--dark); font-size: 15px; }
+  .stage .bar { grid-column: 2 / -1; height: 6px; border-radius: 999px; background: var(--track); overflow: hidden; }
+  .stage .bar i { display: block; height: 100%; border-radius: 999px; background: var(--red); }
+  .stage.zero .sl { color: var(--muted); }
+  .stage.zero .sv { color: var(--red); font-weight: 600; }
+  .stages-foot { margin-top: 12px; font-size: 13px; color: var(--muted); }
+  .stages-foot b { color: var(--dark); }
   /* Régua remoto ↔ presencial */
   .spec { position: relative; padding: 8px 0 0; }
   .spec .line { position: absolute; left: 10%; right: 10%; top: 44px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--slate), var(--red)); opacity: .35; }
@@ -363,27 +360,28 @@ function toggleMore(box, n) {
   return btn;
 }
 
-// Linha do tempo: as etapas do projeto na ordem do formulário; o círculo cresce com a quantidade.
-function timeline(rows, id) {
+// Etapas do projeto: uma linha por fase, na ordem do projeto. Quem atua em todas as etapas
+// conta em cada uma; a barra mostra a parte das candidaturas que cobre a fase.
+function stages(rows, id) {
   const t = rows.length;
-  const opts = optionsOf(id).filter((o) => o !== "Atuação transversal em todas as etapas.");
-  const cnt = new Map(counts(rows, id));
-  const max = Math.max(1, ...opts.map((o) => cnt.get(o) || 0));
+  const ALL = "Atuação transversal em todas as etapas.";
+  const opts = optionsOf(id).filter((o) => o !== ALL);
+  const all = rows.filter((r) => (r[id] || []).includes(ALL)).length;
   const wrap = el("div");
-  const tl = el("div", "tl");
+  const ol = el("ol", "stages");
   opts.forEach((o, i) => {
-    const n = cnt.get(o) || 0;
-    const st = el("div", "st");
-    st.title = clean(o) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, t) + "%)";
-    const d = el("div", "dot" + (n / max > 0.6 ? " hi" : ""), String(n));
-    d.style.setProperty("--d", (26 + (n / max) * 30) + "px");
-    d.style.setProperty("--a", (0.12 + (n / max) * 0.88).toFixed(2));
-    st.append(el("div", "stn", String(i + 1).padStart(2, "0")), d, el("div", "stl", clean(o)));
-    tl.appendChild(st);
+    const n = rows.filter((r) => (r[id] || []).includes(o) || (r[id] || []).includes(ALL)).length;
+    const li = el("li", "stage" + (n ? "" : " zero"));
+    li.title = clean(o) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, t) + "%)";
+    const sv = el("span", "sv");
+    if (n) { sv.append(el("b", null, String(n)), document.createTextNode(" · " + pct(n, t) + "%")); } else sv.textContent = "Ninguém ainda";
+    const bar = el("span", "bar"); const fill = el("i"); fill.style.width = pct(n, t) + "%"; bar.appendChild(fill);
+    li.append(el("span", "sn", String(i + 1).padStart(2, "0")), el("span", "sl", clean(o)), sv, bar);
+    ol.appendChild(li);
   });
-  wrap.appendChild(tl);
-  const all = cnt.get("Atuação transversal em todas as etapas.") || 0;
-  const foot = el("div", "tl-foot"); foot.append(el("b", null, plural(all, "parceiro", "parceiros")), document.createTextNode(" atuam de forma transversal, em todas as etapas."));
+  wrap.appendChild(ol);
+  const foot = el("p", "stages-foot");
+  foot.append(document.createTextNode("Cada número é a quantidade de parceiros que atuam na etapa. "), el("b", null, plural(all, "parceiro", "parceiros")), document.createTextNode(all === 1 ? " atua em todas as etapas e entra em cada uma." : " atuam em todas as etapas e entram em cada uma."));
   wrap.appendChild(foot);
   return wrap;
 }
@@ -655,8 +653,8 @@ function skills(rows) {
   const servicos = counts(rows, "formas_colaboracao");
   c3.appendChild(t && servicos.length ? ranked(servicos, t, { limit: 6 }) : emptyNote());
   more.append(c2, c3);
-  const c4 = card("Etapas de projeto em que atuam", { cls: "span3", note: "Pergunta " + Q.etapas_projeto.n + " · em que fases do projeto a rede está presente." });
-  c4.appendChild(t ? timeline(rows, "etapas_projeto") : emptyNote());
+  const c4 = card("Etapas de projeto em que atuam", { cls: "span3", note: "Pergunta " + Q.etapas_projeto.n + " · fases do projeto, na ordem, e quantos parceiros cobrem cada uma." });
+  c4.appendChild(t ? stages(rows, "etapas_projeto") : emptyNote());
   more.appendChild(c4);
 }
 
