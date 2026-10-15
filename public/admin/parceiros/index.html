@@ -36,6 +36,14 @@
   @media (max-width: 900px) { .g3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .g2, .g3 { grid-template-columns: 1fr; } .span2 { grid-column: auto; } }
   .note { font-size: 12px; color: var(--muted); margin: -8px 0 12px; }
+  .ins-line { font-size: 13px; color: var(--dark); line-height: 1.45; }
+  .ins-line:empty { display: none; }
+  .ins-line.loading { color: var(--muted); font-style: italic; }
+  .block > .ins-line { margin: -4px 0 12px; }
+  .ai-card h3 { display: flex; align-items: center; gap: 8px; }
+  .ai-card h3 svg { width: 18px; height: 18px; color: var(--red); }
+  .ai-list { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 14px; line-height: 1.45; }
+  .ai-meta { margin: 12px 0 0; font-size: 12px; color: var(--muted); }
 
   /* Indicadores */
   .kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
@@ -206,9 +214,11 @@
 
     <section id="panel-dashboard" role="tabpanel" aria-labelledby="tab-dashboard">
       <div class="block"><div class="kpis" id="kpis"></div></div>
+      <div class="block hidden" id="ai-block"><div class="card ai-card"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>Análise da rede</h3><ul class="ai-list" id="ai-geral"></ul><p class="ai-meta" id="ai-meta"></p></div></div>
 
       <div class="block">
         <div class="block-head"><span class="num">01</span><h2>Habilidades disponíveis</h2></div>
+        <p class="note ins-line" data-ins="areas" id="areas-ins"></p>
         <div class="skill-groups" id="skill-groups"></div>
         <div class="g g3" style="margin-top:12px" id="skills-more"></div>
       </div>
@@ -338,8 +348,11 @@ function card(title, opts = {}) {
   const c = el("div", "card" + (opts.cls ? " " + opts.cls : ""));
   c.appendChild(el("h3", null, title));
   if (opts.note) c.appendChild(el("p", "note", opts.note));
+  if (opts.key) c.appendChild(insLine(opts.key));
   return c;
 }
+// Linha de conclusão gerada pela IA (preenchida por loadInsights depois que o gráfico aparece).
+function insLine(key) { const p = el("p", "note ins-line"); p.dataset.ins = key; return p; }
 const emptyNote = () => el("p", "muted", "Sem dados para os filtros atuais.");
 
 // Escala da marca (escuro → claro) e a cor do texto que contrasta com cada passo.
@@ -473,7 +486,6 @@ function coverage(rows, id) {
 function insight(title, rows, id) {
   const c = el("div", "card ins");
   c.appendChild(el("div", "q", title));
-  if (Q[id]) c.appendChild(el("div", "qn", "Pergunta " + Q[id].n + " · " + Q[id].label));
   const t = rows.length;
   const e = counts(rows, id).filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
   if (!t || !e.length) { c.appendChild(emptyNote()); return c; }
@@ -485,7 +497,8 @@ function insight(title, rows, id) {
     : p === 100 ? "Todos os parceiros responderam " + ans + "."
     : p > 50 ? "A maioria da rede respondeu " + ans + "."
     : "A resposta mais comum foi " + ans + ".";
-  c.append(el("div", "big", p + "%"), el("p", "concl", sentence));
+  const concl = el("p", "concl", sentence); concl.dataset.ins = id; concl.dataset.keep = "1";
+  c.append(el("div", "big", p + "%"), concl);
   const rest = e.slice(tie ? 2 : 1, tie ? 3 : 2)[0];
   if (rest && !tie) c.appendChild(el("p", "next", "Em seguida: " + clean(rest[0]) + " (" + pct(rest[1], t) + "%)."));
   c.appendChild(el("p", "base", "Base: " + plural(t, "candidatura", "candidaturas") + "."));
@@ -601,33 +614,32 @@ function skills(rows) {
   });
 
   const more = document.getElementById("skills-more"); more.replaceChildren();
-  const c2 = card("Especializações declaradas", { note: "Pergunta " + Q.principal_especializacao.n + " · resposta livre, agrupada por texto igual." });
+  const c2 = card("Especializações declaradas", { key: "especializacao" });
   const m = new Map();
   for (const r of rows) { const raw = (r.principal_especializacao || "").trim(); if (!raw) continue; const k = norm(raw); const cur = m.get(k) || { label: raw, n: 0 }; cur.n++; m.set(k, cur); }
   const list = [...m.values()].sort((a, b) => b.n - a.n).map((x) => [x.label, x.n]);
   c2.appendChild(list.length ? ranked(list, t, { limit: 6 }) : emptyNote());
-  const c3 = card("Tipos de serviço prestados", { cls: "span2", note: "Pergunta " + Q.formas_colaboracao.n + " · ranking dos mais oferecidos, com a quantidade de parceiros e o % das candidaturas." });
+  const c3 = card("Tipos de serviço prestados", { cls: "span2", key: "formas_colaboracao" });
   const servicos = counts(rows, "formas_colaboracao");
   c3.appendChild(t && servicos.length ? ranked(servicos, t, { limit: 6 }) : emptyNote());
   more.append(c2, c3);
-  const c4 = card("Etapas de projeto em que atuam", { cls: "span3", note: "Pergunta " + Q.etapas_projeto.n + " · fases do projeto, na ordem, e quantos parceiros cobrem cada uma." });
+  const c4 = card("Etapas de projeto em que atuam", { cls: "span3", key: "etapas_projeto" });
   c4.appendChild(t ? stages(rows, "etapas_projeto") : emptyNote());
   more.appendChild(c4);
 }
 
 function addDonut(box, title, rows, id, center, cls) {
-  const c = card(title, { cls });
+  const c = card(title, { cls, key: id });
   c.appendChild(rows.length ? donut(counts(rows, id), rows.length, center) : emptyNote());
   box.appendChild(c);
 }
 function addViz(box, title, rows, fn, opts = {}) {
-  const c = card(title, { cls: opts.cls, note: opts.note });
+  const c = card(title, { cls: opts.cls, note: opts.note, key: opts.key });
   c.appendChild(rows.length ? fn() : emptyNote());
   box.appendChild(c);
 }
 function addCols(box, title, rows, id, cls, onlyCount) {
-  // A nota liga o gráfico à pergunta do formulário (número e enunciado).
-  const c = card(title, { cls: "colcard" + (cls ? " " + cls : ""), note: "Pergunta " + Q[id].n + " · " + Q[id].label });
+  const c = card(title, { cls: "colcard" + (cls ? " " + cls : ""), key: id });
   c.appendChild(rows.length ? columns(counts(rows, id), rows.length, onlyCount) : emptyNote());
   box.appendChild(c);
 }
@@ -658,7 +670,7 @@ function dashboard(rows) {
     const got = new Map(counts(rows, "modelo_atuacao"));
     const all = [...got.entries(), ...optionsOf("modelo_atuacao").filter((o) => !got.has(o)).map((o) => [o, 0])];
     return columns(all, rows.length);
-  }, { cls: "span3", note: "Pergunta " + Q.modelo_atuacao.n + " · " + Q.modelo_atuacao.label + " Cada parceiro pode marcar mais de um modelo, por isso a soma passa de 100%." });
+  }, { cls: "span3", key: "modelo_atuacao" });
 
   const dis = document.getElementById("disponibilidade"); dis.replaceChildren();
   addDonut(dis, "Disponibilidade para projetos", rows, "disponibilidade_colaborar", "candidaturas");
@@ -673,15 +685,15 @@ function dashboard(rows) {
   addViz(dis, "Formatos de atuação aceitos", rows, () => {
     const got = new Map(counts(rows, "formatos_atuacao"));
     return columns(optionsOf("formatos_atuacao").map((o) => [o, got.get(o) || 0]), rows.length);
-  }, { cls: "span3", note: "Pergunta " + Q.formatos_atuacao.n + " · " + Q.formatos_atuacao.label + " Cada parceiro pode aceitar mais de um formato, por isso a soma passa de 100%." });
-  addViz(dis, "Formatos de contratação aceitos", rows, () => tiles(rows, "formatos_contratacao"), { cls: "span3", note: "Pergunta " + Q.formatos_contratacao.n + " · cada parceiro pode aceitar vários." });
+  }, { cls: "span3", key: "formatos_atuacao" });
+  addViz(dis, "Formatos de contratação aceitos", rows, () => tiles(rows, "formatos_contratacao"), { cls: "span3", key: "formatos_contratacao" });
 
   const seg = document.getElementById("segmentos"); seg.replaceChildren();
-  addViz(seg, "Segmentos de mercado", rows, () => coverage(rows, "segmentos"), { cls: "span3", note: "Pergunta " + Q.segmentos.n + " · onde a rede tem conhecimento e onde ainda há lacunas." });
+  addViz(seg, "Segmentos de mercado", rows, () => coverage(rows, "segmentos"), { cls: "span3", key: "segmentos" });
 
   const loc = document.getElementById("localizacao"); loc.replaceChildren();
   // Pizza só com os estados identificados; os 5 maiores e o restante somado em "Outros estados".
-  const cu = card("Estados", { cls: "span2", note: "Pergunta " + Q.cidade_estado.n + " · estado onde o parceiro reside." });
+  const cu = card("Estados", { cls: "span2", key: "estados" });
   const ufs = counts(rows, "uf", (r) => uf(r.cidade_estado)).filter(([u]) => UF_NOME[u]);
   const semUf = rows.length - ufs.reduce((a, [, n]) => a + n, 0);
   if (!ufs.length) cu.appendChild(emptyNote());
@@ -707,7 +719,7 @@ function dashboard(rows) {
   }
   if (semUf > 0) cu.appendChild(el("p", "note after", plural(semUf, "candidatura", "candidaturas") + " sem estado identificado (formulário antigo, sem a sigla) não " + (semUf === 1 ? "entra" : "entram") + " no gráfico."));
   loc.appendChild(cu);
-  const wa = card("Grupo de WhatsApp");
+  const wa = card("Grupo de WhatsApp", { key: "whatsapp" });
   wa.appendChild(rows.length ? ring(rows.filter((r) => startsSim(r.interesse_whatsapp)).length, rows.length, "querem participar do grupo de networking") : emptyNote());
   loc.appendChild(wa);
   addDonut(loc, "Como conheceram a iniciativa", rows, "como_conheceu", "respostas", "span2");
@@ -721,6 +733,49 @@ function candidaturas(rows) {
   rows.forEach((r) => list.appendChild(Admin.rowLink("/admin/parceiros/?id=" + r.id, r.nome, [r.principal_especializacao, r.cidade_estado, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em)));
 }
 
+/* ---------- Conclusões por IA ---------- */
+// Pede à função insights-parceiros as conclusões do recorte atual (todos ou os filtrados) e preenche
+// as linhas [data-ins] de cada gráfico e o bloco "Análise da rede". Resultados ficam guardados por recorte.
+const INS_CACHE = new Map();
+let insTimer = null, insSeq = 0;
+function fillInsights(res) {
+  document.querySelectorAll("[data-ins]").forEach((p) => {
+    const t = res && res.graficos ? res.graficos[p.dataset.ins] : "";
+    p.classList.remove("loading");
+    if (t) p.textContent = t;
+    else if (!p.dataset.keep) p.textContent = "";
+  });
+  const block = document.getElementById("ai-block"), list = document.getElementById("ai-geral"), meta = document.getElementById("ai-meta");
+  list.replaceChildren();
+  if (res && res.error) {
+    block.classList.remove("hidden");
+    meta.textContent = res.error === "sem_chave" ? "A análise por IA ainda não está ativa: falta salvar a chave da Anthropic (ANTHROPIC_API_KEY) nos secrets do Supabase." : "Não foi possível gerar a análise agora. Tente recarregar a página.";
+    return;
+  }
+  const geral = (res && res.geral) || [];
+  block.classList.toggle("hidden", !geral.length);
+  geral.forEach((g) => list.appendChild(el("li", null, g)));
+  meta.textContent = res && res.gerado_em ? "Gerada por IA com base em " + plural(res.base, "candidatura", "candidaturas") + " · " + Admin.fmtDate(res.gerado_em) : "";
+}
+function loadInsights(rows) {
+  const key = rows.length === ALL.length ? "all" : rows.map((r) => r.id).sort().join(",");
+  if (INS_CACHE.has(key)) return fillInsights(INS_CACHE.get(key));
+  document.querySelectorAll("[data-ins]").forEach((p) => { if (!p.dataset.keep) { p.textContent = "Gerando análise…"; p.classList.add("loading"); } });
+  clearTimeout(insTimer);
+  const seq = ++insSeq;
+  insTimer = setTimeout(async () => {
+    const body = key === "all" ? {} : { ids: rows.map((r) => r.id) };
+    const { data, error } = await Admin.sb.functions.invoke("insights-parceiros", { body });
+    let res = data;
+    if (error) {
+      let code = "falha";
+      try { code = (await error.context.json()).error || code; } catch {}
+      res = { error: code };
+    } else INS_CACHE.set(key, res);
+    if (seq === insSeq) fillInsights(res);
+  }, 600);
+}
+
 function update() {
   const rows = filtered();
   const n = activeFilters();
@@ -728,6 +783,7 @@ function update() {
   document.getElementById("showing").textContent = "Mostrando " + rows.length + " de " + plural(ALL.length, "candidatura", "candidaturas");
   document.getElementById("n-cand").textContent = rows.length;
   dashboard(rows);
+  loadInsights(rows);
   candidaturas(rows);
 }
 
