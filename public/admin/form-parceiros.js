@@ -551,7 +551,7 @@ window.FORM_PARCEIROS = [
      "Instagram.",
      "Indicação de outro profissional.",
      "Comunidade ou grupo profissional.",
-     "Já conhecia o trabalho da Dani Moscatelli.",
+     "Indicação da Dani Moscatelli.",
      "Outro."
     ]
    },
