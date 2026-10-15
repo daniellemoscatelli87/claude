@@ -97,3 +97,7 @@ dd a { color: var(--red); }
 .btn-ok { background: var(--red); color: #fff; border-radius: 12px; padding: 10px 18px; font-size: 14px; }
 .btn-ok:hover { background: var(--red-dark); }
 .btn-ok:disabled { opacity: .6; cursor: wait; }
+
+/* Celular: campos com 16px evitam o zoom automático do iPhone ao tocar no campo; sem rolagem lateral. */
+html { overflow-x: clip; }
+@media (max-width: 767px) { input, select, textarea { font-size: 16px !important; } }

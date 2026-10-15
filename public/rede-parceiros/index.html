@@ -122,6 +122,9 @@
   .end .sign p { margin: 0; }
   .end .sign .motto { color: var(--coral); font-weight: 600; }
   .hidden { display: none !important; }
+  /* Celular: campos com 16px evitam o zoom automático do iPhone ao tocar no campo; sem rolagem lateral. */
+  html { overflow-x: clip; }
+  @media (max-width: 767px) { input, select, textarea { font-size: 16px !important; } }
 </style>
 </head>
 <body>
