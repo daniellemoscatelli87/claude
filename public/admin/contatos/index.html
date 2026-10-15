@@ -61,7 +61,19 @@
   .reply textarea { width: 100%; min-height: 140px; font: inherit; font-size: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; color: var(--dark); resize: vertical; outline: none; }
   .reply textarea:focus { border-color: var(--red); background: #fff; box-shadow: 0 0 0 3px rgb(212 77 77 / .15); }
   .reply .row-end { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
-  .reply .to { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+  .reply .to { display: block; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; margin-top: 8px; }
+  .ev { justify-self: center; font-size: 12px; color: var(--muted); background: #fff; border: 1px dashed var(--line); border-radius: 999px; padding: 4px 12px; text-align: center; }
+  .bubble .imgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 6px; margin-top: 8px; }
+  .bubble .imgs img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; display: block; background: #fff; }
+  .attach { gap: 8px; cursor: pointer; }
+  .attach svg { width: 18px; height: 18px; }
+  .chips { display: grid; gap: 6px; margin-top: 8px; }
+  .chips:empty { display: none; }
+  .chip { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 12px; padding: 6px 8px; background: #fff; font-size: 13px; }
+  .chip img { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+  .chip span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chip button { border: 0; background: var(--track); color: var(--muted); width: 28px; height: 28px; padding: 0; border-radius: 50%; font-size: 18px; line-height: 1; }
+  .chip button:hover { color: var(--red); }
 </style>
 </head>
 <body>
@@ -92,6 +104,7 @@ async function save(r, fields) {
   const { data, error } = await Admin.sb.from("contatos").update(fields).eq("id", r.id).select("id, respondido_em, reuniao_em").maybeSingle();
   if (error || !data) { alert("Não foi possível atualizar a mensagem. Tente novamente."); return false; }
   r.respondido_em = data.respondido_em; r.reuniao_em = data.reuniao_em;
+  historico(r); // mostra a mudança registrada no histórico
   return true;
 }
 
@@ -183,45 +196,131 @@ function meetingForm(r, button) {
   return f;
 }
 
-// Histórico: a mensagem recebida e as respostas enviadas pela plataforma, com campo para responder.
+// Histórico completo: mensagem recebida, respostas enviadas (com imagens) e cada mudança de situação,
+// em ordem cronológica. Abaixo, o campo para responder com anexos de imagem.
+const EVENTOS = {
+  lida: () => "Mensagem aberta",
+  respondida: () => "Marcada como respondida",
+  resposta_desfeita: () => "Resposta desfeita",
+  reuniao_agendada: (d) => "Reunião agendada para " + fmtMeeting(d),
+  reuniao_alterada: (d) => "Reunião remarcada para " + fmtMeeting(d),
+  reuniao_cancelada: () => "Reunião cancelada",
+};
+const MAX_ANEXOS = 10, MAX_MB = 10;
+const fmtSize = (n) => (n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB");
+const safeName = (n) => n.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^\w.-]+/g, "-").slice(-80);
+
 async function historico(r) {
   const box = document.getElementById("historico");
   box.replaceChildren(Admin.el("h2", null, "Histórico"), Admin.el("p", "muted", "Carregando…"));
-  const { data: respostas, error } = await Admin.sb.from("respostas").select("id, created_at, mensagem").eq("contato_id", r.id).order("created_at", { ascending: true });
-  const thread = Admin.el("div", "thread");
-  const bubble = (cls, who, text) => { const b = Admin.el("div", "bubble " + cls); b.append(Admin.el("div", "who", who), Admin.el("div", "txt", text || "")); return b; };
-  thread.appendChild(bubble("in", (r.nome || "Contato") + " · " + Admin.fmtDate(r.created_at), r.mensagem));
-  (respostas || []).forEach((x) => thread.appendChild(bubble("out", "Você · " + Admin.fmtDate(x.created_at), x.mensagem)));
+  const [resp, evs] = await Promise.all([
+    Admin.sb.from("respostas").select("id, created_at, mensagem, anexos").eq("contato_id", r.id).order("created_at", { ascending: true }),
+    Admin.sb.from("contato_eventos").select("id, created_at, tipo, detalhe").eq("contato_id", r.id).order("created_at", { ascending: true }),
+  ]);
+  const respostas = resp.data || [], eventos = evs.data || [];
 
+  // Links temporários para ver as imagens enviadas (o bucket é privado).
+  const paths = respostas.flatMap((x) => (x.anexos || []).map((a) => a.path));
+  const urls = {};
+  if (paths.length) {
+    const { data } = await Admin.sb.storage.from("anexos").createSignedUrls(paths, 3600);
+    (data || []).forEach((u) => { if (u.signedUrl) urls[u.path] = u.signedUrl; });
+  }
+
+  const items = [
+    { at: r.created_at, kind: "in" },
+    ...respostas.map((x) => ({ at: x.created_at, kind: "out", x })),
+    ...eventos.map((x) => ({ at: x.created_at, kind: "ev", x })),
+  ].sort((a, b) => new Date(a.at) - new Date(b.at));
+
+  const thread = Admin.el("div", "thread");
+  for (const it of items) {
+    if (it.kind === "ev") {
+      const f = EVENTOS[it.x.tipo];
+      thread.appendChild(Admin.el("div", "ev", (f ? f(it.x.detalhe) : it.x.tipo) + " · " + Admin.fmtDate(it.at)));
+      continue;
+    }
+    const b = Admin.el("div", "bubble " + it.kind);
+    b.appendChild(Admin.el("div", "who", (it.kind === "in" ? r.nome || "Contato" : "Você") + " · " + Admin.fmtDate(it.at)));
+    const text = it.kind === "in" ? r.mensagem : it.x.mensagem;
+    if (text) b.appendChild(Admin.el("div", "txt", text));
+    const anexos = it.kind === "out" ? it.x.anexos || [] : [];
+    if (anexos.length) {
+      const g = Admin.el("div", "imgs");
+      anexos.forEach((a) => {
+        const link = Admin.el("a"); link.href = urls[a.path] || "#"; link.target = "_blank"; link.rel = "noopener"; link.title = a.name;
+        const img = Admin.el("img"); img.src = urls[a.path] || ""; img.alt = a.name; img.loading = "lazy";
+        link.appendChild(img); g.appendChild(link);
+      });
+      b.appendChild(g);
+    }
+    thread.appendChild(b);
+  }
+
+  // Formulário de resposta
   const form = Admin.el("form", "reply");
   const label = Admin.el("label", "l", "Responder"); label.htmlFor = "resposta";
   const ta = Admin.el("textarea"); ta.id = "resposta"; ta.placeholder = "Escreva sua resposta…";
-  const to = Admin.el("span", "to", r.email ? "Para: " + r.email : "Este contato não informou e-mail.");
-  const btn = Admin.el("button", "btn-ok", "Enviar resposta"); btn.type = "submit"; btn.disabled = !r.email;
+  const files = [];
+  const picker = Admin.el("input"); picker.type = "file"; picker.accept = "image/*"; picker.multiple = true; picker.id = "anexos"; picker.className = "hidden";
+  const attach = Admin.el("label", "btn-line attach"); attach.htmlFor = "anexos"; attach.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>Anexar imagem';
+  const chips = Admin.el("div", "chips");
   const msg = Admin.el("p", "msg"); msg.setAttribute("aria-live", "polite");
-  const end = Admin.el("div", "row-end"); end.append(to, btn);
-  form.append(label, ta, end, msg);
+  const renderChips = () => {
+    chips.replaceChildren();
+    files.forEach((f, i) => {
+      const c = Admin.el("div", "chip");
+      const im = Admin.el("img"); im.src = URL.createObjectURL(f); im.alt = "";
+      const rm = Admin.el("button", null, "×"); rm.type = "button"; rm.setAttribute("aria-label", "Remover " + f.name);
+      rm.addEventListener("click", () => { files.splice(i, 1); renderChips(); });
+      c.append(im, Admin.el("span", null, f.name + " · " + fmtSize(f.size)), rm);
+      chips.appendChild(c);
+    });
+  };
+  picker.addEventListener("change", () => {
+    msg.className = "msg"; msg.textContent = "";
+    for (const f of picker.files) {
+      if (!f.type.startsWith("image/")) { msg.className = "msg err"; msg.textContent = "Só é possível anexar imagens."; continue; }
+      if (f.size > MAX_MB * 1048576) { msg.className = "msg err"; msg.textContent = f.name + " passa de " + MAX_MB + " MB."; continue; }
+      if (files.length >= MAX_ANEXOS) { msg.className = "msg err"; msg.textContent = "Máximo de " + MAX_ANEXOS + " imagens por resposta."; break; }
+      files.push(f);
+    }
+    picker.value = "";
+    renderChips();
+  });
+  const to = Admin.el("span", "to", r.email ? "Para: " + r.email + " · Sua assinatura é incluída automaticamente no final do e-mail." : "Este contato não informou e-mail.");
+  const btn = Admin.el("button", "btn-ok", "Enviar resposta"); btn.type = "submit"; btn.disabled = !r.email;
+  const tools = Admin.el("div", "row-end"); tools.append(attach, btn);
+  form.append(label, ta, picker, chips, tools, to, msg);
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const texto = ta.value.trim();
     msg.className = "msg";
-    if (!texto) { msg.className = "msg err"; msg.textContent = "Escreva a resposta antes de enviar."; return; }
-    btn.disabled = true; btn.textContent = "Enviando…";
-    const { data, error } = await Admin.sb.functions.invoke("responder-contato", { body: { contato_id: r.id, mensagem: texto } });
-    btn.disabled = false; btn.textContent = "Enviar resposta";
+    if (!texto && !files.length) { msg.className = "msg err"; msg.textContent = "Escreva a resposta ou anexe uma imagem."; return; }
+    btn.disabled = true;
+    const fail = (t) => { btn.disabled = false; btn.textContent = "Enviar resposta"; msg.className = "msg err"; msg.textContent = t; };
+    const anexos = [];
+    for (const [i, f] of files.entries()) {
+      btn.textContent = "Enviando imagem " + (i + 1) + " de " + files.length + "…";
+      const path = "respostas/" + r.id + "/" + Date.now() + "-" + i + "-" + safeName(f.name);
+      const { error } = await Admin.sb.storage.from("anexos").upload(path, f, { contentType: f.type, upsert: false });
+      if (error) return fail("Não foi possível enviar a imagem " + f.name + ". Tente novamente.");
+      anexos.push({ path, name: f.name, type: f.type, size: f.size });
+    }
+    btn.textContent = "Enviando…";
+    const { data, error } = await Admin.sb.functions.invoke("responder-contato", { body: { contato_id: r.id, mensagem: texto, anexos } });
     if (error || !data?.resposta) {
       let detail = "";
       try { detail = (await error?.context?.json())?.error || ""; } catch {}
-      msg.className = "msg err"; msg.textContent = "Não foi possível enviar a resposta." + (detail ? " " + detail : " Tente novamente.");
-      return;
+      return fail("Não foi possível enviar a resposta." + (detail ? " " + detail : " Tente novamente."));
     }
-    ta.value = "";
-    thread.appendChild(bubble("out", "Você · " + Admin.fmtDate(data.resposta.created_at), data.resposta.mensagem));
-    msg.textContent = "Resposta enviada para " + r.email + ".";
     if (!r.respondido_em) { r.respondido_em = data.respondido_em; statusBar(r); }
+    await historico(r);
+    const m = document.querySelector("#historico .reply .msg"); if (m) m.textContent = "Resposta enviada para " + r.email + ".";
   });
+
   box.replaceChildren(Admin.el("h2", null, "Histórico"), thread);
-  if (error) box.appendChild(Admin.el("p", "msg err", "Não foi possível carregar as respostas anteriores."));
+  if (resp.error || evs.error) box.appendChild(Admin.el("p", "msg err", "Parte do histórico não pôde ser carregada."));
   box.appendChild(form);
 }
 
