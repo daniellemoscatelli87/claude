@@ -189,21 +189,29 @@
   .ai-col.lacunas .pc-h { color: #a06d00; }
   .ai-col.recomendacoes .pc-h { color: var(--slate); }
   .ai-loading { font-style: italic; margin: 0; }
-  /* Necessidade do projeto */
-  .need-intro { margin: 0 0 12px; font-size: 13px; }
-  #need-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-  @media (max-width: 800px) { #need-fields { grid-template-columns: 1fr; } }
-  .need-field label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
-  #need-fields .toggles { grid-column: 1 / -1; }
-  .need-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 12px; font-size: 13px; flex-wrap: wrap; }
+  /* Filtro por área e desafio */
+  .area-filter { margin-bottom: 8px; }
+  .area-lbl { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .area-filter .chips { margin-top: 6px; }
+  .pc-count { font-size: 13px; margin: 6px 0 10px; }
+  .btn-desafio { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 14px; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 9px 18px; cursor: pointer; }
+  .btn-desafio:hover { background: var(--red-dark); }
+  .btn-desafio svg { width: 16px; height: 16px; }
+  .desafio-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; background: var(--red-tint); border-color: transparent; flex-wrap: wrap; }
+  .desafio-bar p { margin: 4px 0 0; font-size: 14px; color: var(--dark); }
+  .desafio-dlg { width: min(560px, 92vw); border: 0; border-radius: 18px; padding: 24px; box-shadow: 0 20px 60px -10px rgb(15 23 42 / .35); }
+  .desafio-dlg::backdrop { background: rgb(15 23 42 / .45); }
+  .desafio-dlg h2 { margin: 0 0 6px; font-size: 20px; }
+  .desafio-dlg .muted { font-size: 13px; margin: 0 0 12px; }
+  .desafio-dlg textarea { width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; resize: vertical; }
+  .desafio-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
   .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
   .chip { display: inline-flex; align-items: center; font: inherit; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--dark); line-height: 1.3; }
   button.chip { cursor: pointer; }
   .chip.on { background: var(--red); border-color: var(--red); color: #fff; }
   .chip.more { color: var(--muted); }
   /* Perfis: cards resumidos + painel lateral */
-  .pc-bar { justify-content: space-between; align-items: baseline; }
-  .pc-bar .muted { font-size: 13px; }
+  .pc-bar { justify-content: space-between; align-items: center; }
   .pcs-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   @media (max-width: 1000px) { .pcs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .pcs-grid { grid-template-columns: 1fr; } }
@@ -276,16 +284,12 @@
       </div>
 
       <div class="block">
-        <div class="block-head"><h2>Encontrar parceiros para um projeto</h2></div>
-        <div class="card need">
-          <p class="muted need-intro">Marque o que o projeto precisa. Os perfis abaixo são ordenados pelos que mais atendem.</p>
-          <div id="need-fields"></div>
-          <div class="need-foot"><span class="muted" id="need-count"></span><button type="button" class="btn-ghost" id="need-clear">Limpar</button></div>
+        <div class="block-head pc-bar"><h2>Perfis dos parceiros</h2>
+          <button type="button" class="btn-desafio" id="desafio-open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>Desafio</button>
         </div>
-      </div>
-
-      <div class="block">
-        <div class="block-head pc-bar"><h2>Perfis dos parceiros</h2><span class="muted" id="pc-count"></span></div>
+        <div class="card desafio-bar hidden" id="desafio-bar"><div><div class="pc-h">Desafio do projeto</div><p id="desafio-resumo"></p></div><button type="button" class="btn-ghost" id="desafio-clear">Limpar desafio</button></div>
+        <div class="area-filter"><span class="area-lbl">Área de atuação</span><div class="chips" id="area-chips"></div></div>
+        <p class="muted pc-count" id="pc-count"></p>
         <div class="pcs-grid" id="pc-grid"></div>
       </div>
     </section>
@@ -302,6 +306,13 @@
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/admin/admin.js"></script>
+<dialog class="desafio-dlg" id="desafio-dlg" aria-labelledby="desafio-h">
+  <h2 id="desafio-h">Qual é o desafio do projeto?</h2>
+  <p class="muted">Descreva o projeto, o cliente ou segmento, o que precisa ser entregue e as condições (prazo, presencial ou remoto). A IA analisa todos os perfis e mostra os mais aderentes primeiro.</p>
+  <textarea id="desafio-txt" rows="7" maxlength="3000" placeholder="Ex.: Redesenhar a jornada de pacientes de um hospital em Curitiba, com pesquisa com usuários, service blueprint e protótipos. Projeto de 3 meses, com encontros presenciais."></textarea>
+  <p class="msg err" id="desafio-msg" aria-live="polite"></p>
+  <div class="desafio-actions"><button type="button" class="btn-ghost" id="desafio-cancel">Cancelar</button><button type="button" class="btn-ok" id="desafio-go">Buscar parceiros</button></div>
+</dialog>
 <div class="backdrop" id="pd-backdrop"></div>
 <aside class="drawer pd-drawer" id="pd-drawer" aria-label="Perfil do parceiro">
   <button type="button" class="close" id="pd-close" aria-label="Fechar perfil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
@@ -409,58 +420,52 @@ function kpis(rows) {
   });
 }
 
-/* ---------- Necessidade do projeto (aderência) ---------- */
-// Cada item marcado vale 1 ponto; os perfis são ordenados por quantos itens atendem.
-const NEED_TOGGLES = [
-  ["lidera", "Lidera projetos", (r) => startsSim(r.lideranca)],
-  ["imediata", "Disponibilidade imediata", (r) => r.disponibilidade_colaborar === "Disponibilidade imediata."],
-  ["curitiba", "Presencial em Curitiba", (r) => startsSim(r.presencial_curitiba)],
-  ["viagens", "Aceita viagens", (r) => startsSim(r.viagens)],
-  ["remoto", "Trabalha 100% remoto", (r) => (r.formatos_atuacao || []).includes("100% remoto.")],
-  ["portfolio", "Tem portfólio", (r) => startsSim(r.possui_portfolio)],
-];
-const NEED = { areas_experiencia: new Set(), segmentos: new Set(), etapas_projeto: new Set(), toggles: new Set() };
-const NEED_LISTS = [["areas_experiencia", "Áreas de experiência", "Adicionar área"], ["segmentos", "Segmentos de mercado", "Adicionar segmento"], ["etapas_projeto", "Etapas do projeto", "Adicionar etapa"]];
-function needCriteria() {
-  const c = [];
-  for (const [id] of NEED_LISTS) NEED[id].forEach((o) => c.push({ label: clean(o), test: (r) => (r[id] || []).includes(o) || (id === "etapas_projeto" && (r[id] || []).includes("Atuação transversal em todas as etapas.")) }));
-  NEED_TOGGLES.forEach(([k, label, test]) => { if (NEED.toggles.has(k)) c.push({ label, test }); });
-  return c;
-}
-function buildNeed() {
-  const box = document.getElementById("need-fields"); box.replaceChildren();
-  for (const [id, label, ph] of NEED_LISTS) {
-    const wrap = el("div", "need-field");
-    const lab = el("label", null, label); lab.htmlFor = "need-" + id;
-    const sel = el("select"); sel.id = "need-" + id;
-    sel.append(new Option(ph, ""));
-    if (Q[id].groups) Q[id].groups.forEach((g) => { const og = document.createElement("optgroup"); og.label = g.title; g.options.forEach((o) => og.append(new Option(clean(o), o))); sel.append(og); });
-    else optionsOf(id).filter((o) => o !== "Atuação transversal em todas as etapas.").forEach((o) => sel.append(new Option(clean(o), o)));
-    const chips = el("div", "chips");
-    const draw = () => {
-      chips.replaceChildren();
-      NEED[id].forEach((o) => {
-        const ch = el("button", "chip on"); ch.type = "button"; ch.textContent = clean(o) + " ×"; ch.setAttribute("aria-label", "Remover " + clean(o));
-        ch.addEventListener("click", () => { NEED[id].delete(o); draw(); update(); });
-        chips.appendChild(ch);
-      });
-    };
-    sel.addEventListener("change", () => { if (sel.value) NEED[id].add(sel.value); sel.value = ""; draw(); update(); });
-    wrap.append(lab, sel, chips);
-    box.appendChild(wrap);
-  }
-  const tg = el("div", "chips toggles");
-  NEED_TOGGLES.forEach(([k, label]) => {
-    const b = el("button", "chip"); b.type = "button"; b.textContent = label; b.setAttribute("aria-pressed", "false");
-    b.addEventListener("click", () => { NEED.toggles.has(k) ? NEED.toggles.delete(k) : NEED.toggles.add(k); b.classList.toggle("on"); b.setAttribute("aria-pressed", String(NEED.toggles.has(k))); update(); });
-    tg.appendChild(b);
-  });
-  box.appendChild(tg);
-  document.getElementById("need-clear").addEventListener("click", () => {
-    Object.values(NEED).forEach((s) => s.clear());
-    buildNeed(); update();
+/* ---------- Filtro por área de atuação ---------- */
+let AREA_SEL = ""; // título do grupo de áreas escolhido ("" = todas)
+const temArea = (r, g) => (r.areas_experiencia || []).some((x) => g.options.includes(x));
+function buildAreaChips() {
+  const box = document.getElementById("area-chips"); box.replaceChildren();
+  const groups = [{ title: "" }, ...Q.areas_experiencia.groups];
+  groups.forEach((g) => {
+    const b = el("button", "chip" + (AREA_SEL === g.title ? " on" : ""), g.title || "Todas as áreas"); b.type = "button";
+    b.setAttribute("aria-pressed", String(AREA_SEL === g.title));
+    b.addEventListener("click", () => { AREA_SEL = g.title; buildAreaChips(); profiles(filtered()); });
+    box.appendChild(b);
   });
 }
+
+/* ---------- Desafio do projeto (IA) ---------- */
+// A pessoa descreve o desafio; a IA lê todos os perfis e devolve a aderência (0 a 100) e o motivo de cada um.
+let DESAFIO = null; // { texto, ranking: Map(id -> { aderencia, motivo }) }
+function initDesafio() {
+  const dlg = document.getElementById("desafio-dlg"), txt = document.getElementById("desafio-txt"), msg = document.getElementById("desafio-msg"), go = document.getElementById("desafio-go");
+  document.getElementById("desafio-open").addEventListener("click", () => { txt.value = DESAFIO ? DESAFIO.texto : txt.value; msg.textContent = ""; dlg.showModal(); txt.focus(); });
+  document.getElementById("desafio-cancel").addEventListener("click", () => dlg.close());
+  document.getElementById("desafio-clear").addEventListener("click", () => { DESAFIO = null; drawDesafioBar(); profiles(filtered()); });
+  go.addEventListener("click", async () => {
+    const texto = txt.value.trim();
+    if (texto.length < 20) { msg.textContent = "Descreva o desafio com um pouco mais de detalhe."; return; }
+    go.disabled = true; go.textContent = "Analisando os perfis…"; msg.textContent = "";
+    const { data, error } = await Admin.sb.functions.invoke("insights-parceiros", { body: { desafio: texto } });
+    go.disabled = false; go.textContent = "Buscar parceiros";
+    if (error || !data || !Array.isArray(data.ranking)) {
+      let code = "falha";
+      try { code = (await error.context.json()).error || code; } catch {}
+      msg.textContent = code === "ocupado" ? "A IA gratuita está ocupada agora. Tente de novo em alguns minutos." : code === "sem_chave" ? "Falta salvar a chave do Gemini (GEMINI_API_KEY) no Supabase." : "Não foi possível analisar agora. Tente de novo.";
+      return;
+    }
+    DESAFIO = { texto, ranking: new Map(data.ranking.map((x) => [x.id, { aderencia: Math.max(0, Math.min(100, Math.round(+x.aderencia || 0))), motivo: x.motivo || "" }])) };
+    dlg.close(); drawDesafioBar(); profiles(filtered());
+    document.getElementById("pc-grid").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+function drawDesafioBar() {
+  const bar = document.getElementById("desafio-bar");
+  bar.classList.toggle("hidden", !DESAFIO);
+  if (DESAFIO) document.getElementById("desafio-resumo").textContent = "“" + (DESAFIO.texto.length > 140 ? DESAFIO.texto.slice(0, 140) + "…" : DESAFIO.texto) + "”";
+}
+const matchOf = (r) => (DESAFIO ? DESAFIO.ranking.get(r.id) || { aderencia: 0, motivo: "" } : null);
+const nivelAderencia = (n) => (n >= 75 ? "full" : n >= 40 ? "" : "none");
 
 /* ---------- Carrossel de perfis ---------- */
 const TEMPO_ORDEM = (v) => optionsOf("tempo_especialidade").indexOf(v);
@@ -492,18 +497,18 @@ function section(title, ...nodes) {
 const ICON = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 function linkBtn(href, label, d) { const a = el("a", "pc-link"); a.href = href; a.target = "_blank"; a.rel = "noopener"; a.innerHTML = ICON(d); a.append(label); return a; }
 // Perfil completo (abre no painel lateral pelo "Ver mais").
-function profileDetail(r, crit) {
+function profileDetail(r) {
   const c = el("div", "pc pc-detail");
   const head = el("div", "pc-head");
   const who = el("div", "pc-who");
   who.append(el("h3", null, r.nome || "Sem nome"), el("div", "pc-sub", [r.empresa, cidade(r.cidade_estado) + (UF_NOME[uf(r.cidade_estado)] ? " - " + uf(r.cidade_estado) : "")].filter(Boolean).join(" · ")));
   head.append(el("span", "ini", Admin.initials(r.nome)), who);
   c.appendChild(head);
-  if (crit.length) {
-    const ok = crit.filter((x) => x.test(r)), miss = crit.filter((x) => !x.test(r));
-    const fit = el("div", "pc-fit" + (ok.length === crit.length ? " full" : ok.length ? "" : " none"));
-    fit.append(el("b", null, "Atende " + ok.length + " de " + crit.length));
-    if (miss.length) fit.append(el("span", null, "Falta: " + miss.map((x) => x.label).join(", ")));
+  const m = matchOf(r);
+  if (m) {
+    const fit = el("div", "pc-fit " + nivelAderencia(m.aderencia));
+    fit.append(el("b", null, "Aderência ao desafio: " + m.aderencia + "%"));
+    if (m.motivo) fit.append(el("span", null, m.motivo));
     c.appendChild(fit);
   }
   const ia = PERFIS_IA.get(r.id);
@@ -540,30 +545,28 @@ function areasAtuacao(r) {
   return Q.areas_experiencia.groups.map((g) => [g.title, (r.areas_experiencia || []).filter((x) => g.options.includes(x)).length])
     .filter(([, n]) => n).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([t]) => t);
 }
-function fitBadge(r, crit) {
-  const ok = crit.filter((x) => x.test(r)).length;
-  return el("span", "pcs-fit" + (ok === crit.length ? " full" : ok ? "" : " none"), "Atende " + ok + " de " + crit.length);
-}
-function summaryCard(r, crit) {
+function summaryCard(r) {
   const c = el("article", "card pcs");
   const head = el("div", "pc-head");
   const who = el("div", "pc-who"); who.append(el("h3", null, r.nome || "Sem nome"));
-  if (crit.length) who.appendChild(fitBadge(r, crit));
+  const m = matchOf(r);
+  if (m) who.appendChild(el("span", "pcs-fit " + nivelAderencia(m.aderencia), "Aderência " + m.aderencia + "%"));
   head.append(el("span", "ini", Admin.initials(r.nome)), who);
   const dl = el("dl", "pcs-dl");
   const row = (k, v) => { if (!v) return; const d = el("div"); d.append(el("dt", null, k), el("dd", null, v)); dl.appendChild(d); };
   row("Especialidade", r.principal_especializacao || "Não informada");
   row("Área de atuação", areasAtuacao(r).join(" · ") || "Não informada");
   row("Senioridade", [NIVEL[r.tempo_especialidade], r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase()].filter(Boolean).join(" · ") || "Não informada");
+  if (m && m.motivo) row("Por que atende", m.motivo);
   const btn = el("button", "pcs-more", "Ver mais"); btn.type = "button";
-  btn.addEventListener("click", () => openProfile(r, crit, btn));
+  btn.addEventListener("click", () => openProfile(r, btn));
   c.append(head, dl, btn);
   return c;
 }
 let lastTrigger = null;
-function openProfile(r, crit, trigger) {
+function openProfile(r, trigger) {
   lastTrigger = trigger;
-  const body = document.getElementById("pd-body"); body.replaceChildren(profileDetail(r, crit)); body.scrollTop = 0;
+  const body = document.getElementById("pd-body"); body.replaceChildren(profileDetail(r)); body.scrollTop = 0;
   document.getElementById("pd-drawer").classList.add("open");
   document.getElementById("pd-backdrop").classList.add("open");
   const b = document.body;
@@ -583,16 +586,14 @@ function initProfiles() {
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeProfile(); });
 }
 function profiles(rows) {
-  const crit = needCriteria();
-  const score = (r) => crit.filter((x) => x.test(r)).length;
-  const list = [...rows].sort((a, b) => (score(b) - score(a)) || (TEMPO_ORDEM(b.tempo_especialidade) - TEMPO_ORDEM(a.tempo_especialidade)));
-  document.getElementById("need-count").textContent = crit.length
-    ? plural(list.filter((r) => score(r) === crit.length).length, "parceiro atende", "parceiros atendem") + " a todos os itens · perfis ordenados por aderência"
-    : "Marque o que o projeto precisa para ordenar os perfis por aderência.";
-  document.getElementById("pc-count").textContent = plural(list.length, "parceiro", "parceiros");
+  const g = Q.areas_experiencia.groups.find((x) => x.title === AREA_SEL);
+  const base = g ? rows.filter((r) => temArea(r, g)) : rows;
+  const ad = (r) => (DESAFIO ? matchOf(r).aderencia : 0);
+  const list = [...base].sort((a, b) => (ad(b) - ad(a)) || (TEMPO_ORDEM(b.tempo_especialidade) - TEMPO_ORDEM(a.tempo_especialidade)));
+  document.getElementById("pc-count").textContent = plural(list.length, "parceiro", "parceiros") + (DESAFIO ? " · ordenados por aderência ao desafio" : "");
   const grid = document.getElementById("pc-grid"); grid.replaceChildren();
   if (!list.length) return grid.appendChild(el("div", "card empty", "Nenhum parceiro para os filtros atuais."));
-  list.forEach((r) => grid.appendChild(summaryCard(r, crit)));
+  list.forEach((r) => grid.appendChild(summaryCard(r)));
 }
 
 function dashboard(rows) {
@@ -745,7 +746,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
   };
   for (const r of data) for (const [k, map] of Object.entries(LEGADO)) if (map[r[k]]) r[k] = map[r[k]];
   ALL = data;
-  if (!document.getElementById("f-areas_experiencia")) { buildFilters(); buildNeed(); initProfiles(); }
+  if (!document.getElementById("f-areas_experiencia")) { buildFilters(); buildAreaChips(); initDesafio(); initProfiles(); }
   if (window.matchMedia("(min-width: 800px)").matches) document.getElementById("filters-box").open = true;
   setTab(params.get("aba"));
   update();
