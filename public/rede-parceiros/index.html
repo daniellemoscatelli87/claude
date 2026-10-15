@@ -35,6 +35,10 @@
   .topbar { max-width: 1280px; margin: 0 auto; padding: 24px 24px 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
   .topbar img { height: 48px; width: auto; display: block; }
   @media (min-width: 768px) { .topbar { padding: 32px 40px 0; } .topbar img { height: 64px; } }
+  /* No celular, só o ícone da marca. */
+  .topbar .logo-full { display: none; }
+  .topbar .logo-icon { height: 40px; }
+  @media (min-width: 640px) { .topbar .logo-full { display: block; } .topbar .logo-icon { display: none; } }
   .btn-back { display: inline-flex; align-items: center; padding: 10px 8px; border-radius: 999px; color: var(--coral); font-size: 15px; font-weight: 600; text-decoration: none; }
   .btn-back:hover { text-decoration: underline; }
   .progress { height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
@@ -173,7 +177,7 @@
 </head>
 <body>
 <header class="topbar">
-  <a href="/"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
+  <a href="/"><img class="logo-icon" src="/favicon-dm.png" alt="Dani Moscatelli | Experience Design Studio"><img class="logo-full" src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
   <a href="/" class="btn-back">Sair</a>
 </header>
 <div class="wrap">
