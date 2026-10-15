@@ -63,3 +63,26 @@
 select.field { appearance: none; cursor: pointer; }
 select.field:invalid { color: var(--color-slate-400); }
 select.field option { color: var(--color-brand-dark); }
+
+/* Botão "Notificar lançamento": idle → sending → success */
+.notify-btn {
+  background-color: #f9dada;
+  color: var(--color-brand-red);
+  box-shadow: 0 10px 25px -3px rgba(249, 218, 218, 0.6);
+}
+.notify-btn[data-state="idle"]:hover {
+  background-color: #f3c5c5;
+  box-shadow: 0 12px 28px -3px rgba(249, 218, 218, 0.8);
+  transform: translateY(-2px);
+}
+.notify-btn[data-state="sending"] { cursor: wait; }
+.notify-btn[data-state="success"] {
+  background-color: #16a34a;
+  color: #fff;
+  box-shadow: 0 10px 25px -3px rgba(22, 163, 74, 0.35);
+  cursor: default;
+}
+.notify-btn [data-icon] { display: none; }
+.notify-btn[data-state="idle"] [data-icon="idle"],
+.notify-btn[data-state="sending"] [data-icon="sending"],
+.notify-btn[data-state="success"] [data-icon="success"] { display: block; }

@@ -32,22 +32,29 @@ notifyForm.addEventListener('submit', async (e) => {
     notifyEmail.focus();
     return;
   }
-  notifyBtn.disabled = true;
-  notifyLabel.textContent = 'Enviando…';
+  setNotifyState('sending');
   try {
     await insert('notificacoes_lancamento', { email });
     notifyForm.reset();
-    notifyLabel.textContent = 'Inscrição confirmada!';
-    notifyMsg.textContent = 'Pronto! Você receberá o convite para o primeiro acesso.';
-    notifyMsg.classList.remove('text-brand-red');
+    setNotifyState('success');
+    setTimeout(() => setNotifyState('idle'), NOTIFY_SUCCESS_MS);
   } catch (err) {
     console.error(err);
-    notifyBtn.disabled = false;
-    notifyLabel.textContent = 'Notificar lançamento';
+    setNotifyState('idle');
     notifyMsg.textContent = 'Não foi possível enviar. Tente novamente.';
     notifyMsg.classList.add('text-brand-red');
   }
 });
+
+const NOTIFY_SUCCESS_MS = 4000;
+const NOTIFY_LABELS = { idle: 'Notificar lançamento', sending: 'Enviando…', success: 'Obrigado! Até breve!' };
+
+function setNotifyState(state: keyof typeof NOTIFY_LABELS) {
+  notifyBtn.dataset.state = state;
+  notifyBtn.disabled = state !== 'idle';
+  notifyEmail.disabled = state !== 'idle';
+  notifyLabel.textContent = NOTIFY_LABELS[state];
+}
 notifyEmail.addEventListener('input', () => {
   if (notifyMsg.classList.contains('text-brand-red')) {
     notifyMsg.textContent = notifyDefaultMsg;
