@@ -20,6 +20,15 @@
   .panel-head .cnt { font-size: 12px; color: var(--muted); font-weight: 600; }
   .seeall { font-size: 13px; font-weight: 700; color: var(--red); text-decoration: none; white-space: nowrap; }
   .seeall:hover { text-decoration: underline; }
+  .entry { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 2px 12px; padding: 14px 10px; border-radius: 12px; text-decoration: none; align-items: start; }
+  .entry + .entry { border-top: 1px solid var(--track); }
+  .entry:hover { background: var(--track); }
+  .entry .ini { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; background: var(--red-tint); color: var(--red); grid-row: span 4; }
+  .entry .t { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .entry .when { text-align: right; font-size: 12px; color: var(--muted); white-space: nowrap; line-height: 1.35; }
+  .entry .when b { display: block; color: var(--dark); font-weight: 600; }
+  .entry .f { grid-column: 2 / -1; font-size: 13px; color: var(--dark); line-height: 1.45; overflow-wrap: anywhere; }
+  .entry .f span { color: var(--muted); }
 </style>
 </head>
 <body>
@@ -50,27 +59,46 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/admin/admin.js"></script>
 <script>
-const LIMIT = 6;
+const LIMIT = 15;
 const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
+const clean = (v) => String(v ?? "").replace(/\.$/, "");
+
+// Linha com nome, data e hora completas e os campos pedidos para cada bloco.
+function entry(href, r, fields) {
+  const a = Admin.el("a", "entry"); a.href = href;
+  const d = new Date(r.created_at);
+  const when = Admin.el("div", "when");
+  when.append(Admin.el("b", null, d.toLocaleDateString("pt-BR")), document.createTextNode(d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })));
+  a.append(Admin.el("span", "ini", Admin.initials(r.nome)), Admin.el("span", "t", r.nome || "Sem nome"), when);
+  for (const [label, value] of fields) {
+    const f = Admin.el("div", "f");
+    f.append(Admin.el("span", null, label + ": "), document.createTextNode(value || "—"));
+    a.appendChild(f);
+  }
+  return a;
+}
+
+const segs = (list) => { const l = (list || []).map(clean); return l.length > 2 ? l.slice(0, 2).join(", ") + " +" + (l.length - 2) : l.join(", "); };
+
 Admin.init({ page: "inicio", onReady: async () => {
   const h = new Date().getHours();
   document.getElementById("hello").textContent = (h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite") + ", Dani!";
   const [c, p] = await Promise.all([
-    Admin.sb.from("contatos").select("id, created_at, nome, assunto, empresa", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
-    Admin.sb.from("cadastros").select("id, created_at, nome, principal_especializacao, cidade_estado", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
+    Admin.sb.from("contatos").select("id, created_at, nome, empresa, cargo, assunto", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
+    Admin.sb.from("cadastros").select("id, created_at, nome, principal_especializacao, segmentos", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
   ]);
   const err = c.error || p.error, box = document.getElementById("load-err");
   box.classList.toggle("hidden", !err);
   if (err) { box.textContent = "Não foi possível carregar os dados: " + err.message; return; }
-  document.getElementById("cnt-contatos").textContent = plural(c.count, "mensagem recebida", "mensagens recebidas");
-  document.getElementById("cnt-parceiros").textContent = plural(p.count, "candidatura", "candidaturas");
-  const fill = (id, rows, href, sub, empty) => {
-    const box = document.getElementById(id); box.replaceChildren();
-    if (!rows.length) return box.appendChild(Admin.el("div", "empty", empty));
-    rows.forEach((r) => box.appendChild(Admin.rowLink(href(r), r.nome, sub(r), r.created_at)));
+  document.getElementById("cnt-contatos").textContent = plural(c.count, "mensagem recebida", "mensagens recebidas") + (c.count > LIMIT ? " · últimas " + LIMIT : "");
+  document.getElementById("cnt-parceiros").textContent = plural(p.count, "candidatura", "candidaturas") + (p.count > LIMIT ? " · últimas " + LIMIT : "");
+  const fill = (id, rows, make, empty) => {
+    const el = document.getElementById(id); el.replaceChildren();
+    if (!rows.length) return el.appendChild(Admin.el("div", "empty", empty));
+    rows.forEach((r) => el.appendChild(make(r)));
   };
-  fill("last-contatos", c.data, (r) => "/admin/contatos/?id=" + r.id, (r) => [r.assunto, r.empresa].filter(Boolean).join(" · "), "Nenhuma mensagem ainda.");
-  fill("last-parceiros", p.data, (r) => "/admin/parceiros/?id=" + r.id, (r) => [r.principal_especializacao, r.cidade_estado].filter(Boolean).join(" · "), "Nenhuma candidatura ainda.");
+  fill("last-contatos", c.data, (r) => entry("/admin/contatos/?id=" + r.id, r, [["Empresa", r.empresa], ["Cargo", r.cargo], ["Assunto", r.assunto]]), "Nenhuma mensagem ainda.");
+  fill("last-parceiros", p.data, (r) => entry("/admin/parceiros/?id=" + r.id, r, [["Serviço", r.principal_especializacao], ["Segmento", segs(r.segmentos)]]), "Nenhuma candidatura ainda.");
 }});
 </script>
 </body>
