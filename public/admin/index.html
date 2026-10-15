@@ -17,18 +17,18 @@
   .total .sub { font-size: 12px; color: var(--muted); margin-top: -4px; }
   .total { display: flex; flex-direction: column; gap: 6px; text-decoration: none; position: relative; }
   .total .sub.alert { color: var(--red); font-weight: 600; }
-  .panel-head .unread { display: block; color: var(--red); font-weight: 600; }
+  .panel-head .unread { color: var(--red); font-size: 13px; font-weight: 700; white-space: nowrap; }
   .total .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--red-tint); color: var(--red); margin-bottom: 4px; }
   .total .ic svg { width: 20px; height: 20px; }
   .total .v { font-size: 32px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
   .total .k { font-size: 13px; font-weight: 600; color: var(--muted); }
   a.total:hover { border-color: var(--red); }
-  .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  .panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
   .panel-head .ttl { display: flex; align-items: center; gap: 10px; }
   .panel-head .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--red-tint); color: var(--red); }
   .panel-head .ic svg { width: 20px; height: 20px; }
   .panel-head .cnt { font-size: 12px; color: var(--muted); font-weight: 600; }
-  .seeall { font-size: 13px; font-weight: 700; color: var(--red); text-decoration: none; white-space: nowrap; }
+  .seeall { display: block; margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--line); text-align: center; font-size: 13px; font-weight: 700; color: var(--red); text-decoration: none; white-space: nowrap; }
   .seeall:hover { text-decoration: underline; }
   .entry { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 2px 12px; padding: 14px 10px; border-radius: 12px; text-decoration: none; align-items: start; }
   .entry + .entry { border-top: 1px solid var(--track); }
@@ -57,17 +57,19 @@
       <div class="panel-head">
         <div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
           <div><h2 id="h-contato">Contato</h2><div class="cnt" id="cnt-contatos"></div></div></div>
-        <a class="seeall" href="/admin/contatos/">Ver todos →</a>
+        <span class="unread" id="unread-contatos"></span>
       </div>
       <div class="rows" id="last-contatos"></div>
+      <a class="seeall" href="/admin/contatos/">Ver todos →</a>
     </section>
     <section class="card" aria-labelledby="h-parceiros">
       <div class="panel-head">
         <div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></svg></span>
           <div><h2 id="h-parceiros">Parceiros</h2><div class="cnt" id="cnt-parceiros"></div></div></div>
-        <a class="seeall" href="/admin/parceiros/?aba=candidaturas">Ver todos →</a>
+        <span class="unread" id="unread-parceiros"></span>
       </div>
       <div class="rows" id="last-parceiros"></div>
+      <a class="seeall" href="/admin/parceiros/?aba=candidaturas">Ver todos →</a>
     </section>
   </div>
 </main>
@@ -125,11 +127,11 @@ Admin.init({ page: "inicio", onReady: async () => {
     // Nos blocos, o que ainda não foi aberto entra na própria descrição.
     if (n.contatos) {
       totals[0].appendChild(Admin.el("span", "sub alert", n.contatos === 1 ? "1 não lida" : n.contatos + " não lidas"));
-      document.getElementById("cnt-contatos").append(Admin.el("span", "unread", n.contatos === 1 ? "1 não lida" : n.contatos + " não lidas"));
+      document.getElementById("unread-contatos").textContent = n.contatos === 1 ? "1 não lida" : n.contatos + " não lidas";
     }
     if (n.parceiros) {
       totals[3].appendChild(Admin.el("span", "sub alert", n.parceiros === 1 ? "1 não vista" : n.parceiros + " não vistas"));
-      document.getElementById("cnt-parceiros").append(Admin.el("span", "unread", n.parceiros === 1 ? "1 não vista" : n.parceiros + " não vistas"));
+      document.getElementById("unread-parceiros").textContent = n.parceiros === 1 ? "1 não vista" : n.parceiros + " não vistas";
     }
   });
   document.getElementById("cnt-contatos").textContent = plural(c.count, "mensagem recebida", "mensagens recebidas") + (c.count > LIMIT ? " · últimas " + LIMIT : "");

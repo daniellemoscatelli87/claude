@@ -198,6 +198,20 @@ window.FORM_PARCEIROS = [
       ]
      },
      {
+      "title": "Saúde e Bem-estar",
+      "options": [
+       "Medicina.",
+       "Enfermagem.",
+       "Psicologia.",
+       "Nutrição.",
+       "Fisioterapia.",
+       "Farmácia.",
+       "Gestão hospitalar e de saúde.",
+       "Qualidade e segurança do paciente.",
+       "Saúde digital."
+      ]
+     },
+     {
       "title": "Outras Especialidades",
       "options": [
        "Comunicação e Marketing.",
@@ -205,6 +219,11 @@ window.FORM_PARCEIROS = [
        "Educação e aprendizagem.",
        "Arquitetura e ambientes.",
        "Consultoria regulatória e compliance.",
+       "Direito.",
+       "Engenharia.",
+       "Finanças e contabilidade.",
+       "Recursos humanos.",
+       "Hospitalidade e turismo.",
        "Outra especialidade."
       ]
      }
@@ -225,19 +244,20 @@ window.FORM_PARCEIROS = [
    {
     "id": "etapas_projeto",
     "n": 15,
-    "label": "Em quais etapas de um projeto você costuma atuar?",
+    "label": "Em quais etapas de um projeto você pode contribuir?",
     "type": "checkbox",
     "options": [
-     "Descoberta e entendimento do problema.",
-     "Pesquisa e diagnóstico.",
+     "Diagnóstico e entendimento do problema.",
+     "Pesquisa e levantamento de informações.",
      "Análise de dados e identificação de oportunidades.",
-     "Definição de estratégias.",
-     "Ideação e cocriação.",
-     "Prototipação e validação.",
-     "Desenho de soluções.",
-     "Desenvolvimento e implementação.",
-     "Capacitação e gestão da mudança.",
-     "Mensuração e acompanhamento de resultados.",
+     "Planejamento e definição de estratégias.",
+     "Ideação e cocriação de soluções.",
+     "Prototipação, testes e validação.",
+     "Execução e desenvolvimento das entregas.",
+     "Implementação e acompanhamento.",
+     "Capacitação de equipes e gestão da mudança.",
+     "Consultoria técnica ou parecer especializado.",
+     "Mensuração de resultados e melhoria contínua.",
      "Atuação transversal em todas as etapas."
     ]
    }
@@ -249,7 +269,7 @@ window.FORM_PARCEIROS = [
    {
     "id": "segmentos",
     "n": 16,
-    "label": "Em quais segmentos de mercado você possui experiência ou conhecimento especializado?",
+    "label": "Em quais setores de mercado você já atuou ou atende clientes?",
     "type": "checkbox",
     "options": [
      "Saúde e serviços hospitalares.",
@@ -281,7 +301,7 @@ window.FORM_PARCEIROS = [
    {
     "id": "conhecimento_segmento",
     "n": 17,
-    "label": "Dentro dos segmentos que você marcou, em quais assuntos você tem domínio aprofundado?",
+    "label": "Dentro dos setores que você marcou, em quais assuntos você tem domínio aprofundado?",
     "type": "paragraph"
    },
    {

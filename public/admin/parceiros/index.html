@@ -11,8 +11,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
-  .tabs { display: inline-flex; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 14px; margin: 20px 0 16px; }
-  .tab { background: none; border: 0; border-radius: 10px; padding: 9px 18px; color: var(--muted); font-size: 14px; }
+  .tabs { display: flex; width: 100%; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 14px; margin: 20px 0 16px; }
+  .tab { flex: 1; background: none; border: 0; border-radius: 10px; padding: 9px 18px; color: var(--muted); font-size: 14px; }
   .tab[aria-selected=true] { background: var(--dark); color: #fff; }
   .tab .n { display: inline-block; margin-left: 6px; padding: 0 7px; border-radius: 999px; background: rgb(148 163 184 / .25); font-size: 12px; }
   .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; align-items: end; }
@@ -192,7 +192,8 @@
   /* Filtro por área e desafio */
   .area-filter { margin-bottom: 8px; }
   .area-lbl { font-size: 12px; font-weight: 600; color: var(--muted); }
-  .area-filter .chips { margin-top: 6px; }
+  .area-filter { max-width: 360px; }
+  .area-filter label { display: block; margin-bottom: 4px; }
   .pc-count { font-size: 13px; margin: 6px 0 10px; }
   .btn-desafio { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 14px; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 9px 18px; cursor: pointer; }
   .btn-desafio:hover { background: var(--red-dark); }
@@ -259,7 +260,7 @@
       <button type="button" class="tab" role="tab" id="tab-candidaturas" aria-controls="panel-candidaturas" aria-selected="false">Candidaturas <span class="n" id="n-cand">0</span></button>
     </div>
 
-    <div class="filter-row">
+    <div class="filter-row hidden" id="filter-row">
     <div class="card total-chip hidden" id="cand-total"></div>
     <details class="card fold" id="filters-box">
       <summary><span>Filtros<span class="active-count" id="active-count"></span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
@@ -288,7 +289,7 @@
           <button type="button" class="btn-desafio" id="desafio-open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>Desafio</button>
         </div>
         <div class="card desafio-bar hidden" id="desafio-bar"><div><div class="pc-h">Desafio do projeto</div><p id="desafio-resumo"></p></div><button type="button" class="btn-ghost" id="desafio-clear">Limpar desafio</button></div>
-        <div class="area-filter"><span class="area-lbl">Área de atuação</span><div class="chips" id="area-chips"></div></div>
+        <div class="area-filter"><label class="area-lbl" for="area-sel">Área de atuação</label><select id="area-sel"></select></div>
         <p class="muted pc-count" id="pc-count"></p>
         <div class="pcs-grid" id="pc-grid"></div>
       </div>
@@ -394,28 +395,37 @@ function activeFilters() {
 /* ---------- Números do topo ---------- */
 const KPI_ICONS = {
   users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/>',
-  bolt: '<path d="M13 3L5 13h6l-1 8 8-10h-6z"/>',
-  flag: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
-  pin: '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
 };
 const TINTS = [["#fdf3dc", "#a06d00"], ["var(--slate-tint)", "var(--slate)"], ["#fdece4", "#c2501f"]];
+// Resposta mais frequente entre os parceiros (para os números do topo).
+function maisComum(rows, get) {
+  const m = new Map();
+  rows.forEach((r) => [].concat(get(r) || []).forEach((v) => m.set(v, (m.get(v) || 0) + 1)));
+  return [...m.entries()].sort((a, b) => b[1] - a[1])[0] || null;
+}
 function kpis(rows) {
   const box = document.getElementById("kpis"); box.replaceChildren();
   const t = rows.length;
+  const segs = new Set(rows.flatMap((r) => r.segmentos || []).filter((x) => !/^Outros segmentos/.test(x)));
+  const totalSegs = optionsOf("segmentos").filter((x) => !/^Outros segmentos/.test(x)).length;
+  const area = maisComum(rows, (r) => Q.areas_experiencia.groups.filter((g) => temArea(r, g)).map((g) => g.title));
+  const tempo = maisComum(rows, (r) => r.tempo_especialidade);
   const items = [
-    ["Parceiros na rede", t, "users"],
-    ["Disponibilidade imediata", rows.filter((r) => r.disponibilidade_colaborar === "Disponibilidade imediata.").length, "bolt"],
-    ["Lideram projetos ou frentes", rows.filter((r) => startsSim(r.lideranca)).length, "flag"],
-    ["Podem atuar presencialmente em Curitiba", rows.filter((r) => startsSim(r.presencial_curitiba)).length, "pin"],
+    [String(t), "Parceiros na rede", t === ALL.length ? "Total recebido" : "de " + ALL.length + " no total", "users"],
+    [String(segs.size), segs.size === 1 ? "Segmento atendido" : "Segmentos atendidos", "de " + totalSegs + " setores do formulário", "grid"],
+    [area ? pct(area[1], t) + "%" : "-", area ? "de especialistas em " + area[0] : "Especialistas por área", area ? plural(area[1], "parceiro", "parceiros") : "Sem dados", "star"],
+    [tempo ? pct(tempo[1], t) + "%" : "-", tempo ? "dos parceiros têm " + clean(tempo[0]).replace(/^Mais de/, "mais de").replace(/^Entre/, "entre").replace(/^Menos de/, "menos de") + " de carreira" : "Tempo de carreira", tempo ? "na principal especialidade" : "Sem dados", "clock"],
   ];
-  items.forEach(([k, v, ic], i) => {
+  items.forEach(([v, k, sub, ic], i) => {
     const c = el("div", "card kpi" + (i === 0 ? " hero" : ""));
     const badge = el("div", "ic");
     if (i === 0) { badge.style.background = "rgb(255 255 255 / .12)"; badge.style.color = "#fff"; }
     else { badge.style.background = TINTS[i - 1][0]; badge.style.color = TINTS[i - 1][1]; }
     badge.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${KPI_ICONS[ic]}</svg>`;
-    c.append(badge, el("div", "v", String(v)), el("div", "k", k));
-    c.appendChild(el("div", "p", i === 0 ? (t === ALL.length ? "Total recebido" : "de " + ALL.length + " no total") : pct(v, t) + "% dos parceiros"));
+    c.append(badge, el("div", "v", v), el("div", "k", k), el("div", "p", sub));
     box.appendChild(c);
   });
 }
@@ -424,14 +434,10 @@ function kpis(rows) {
 let AREA_SEL = ""; // título do grupo de áreas escolhido ("" = todas)
 const temArea = (r, g) => (r.areas_experiencia || []).some((x) => g.options.includes(x));
 function buildAreaChips() {
-  const box = document.getElementById("area-chips"); box.replaceChildren();
-  const groups = [{ title: "" }, ...Q.areas_experiencia.groups];
-  groups.forEach((g) => {
-    const b = el("button", "chip" + (AREA_SEL === g.title ? " on" : ""), g.title || "Todas as áreas"); b.type = "button";
-    b.setAttribute("aria-pressed", String(AREA_SEL === g.title));
-    b.addEventListener("click", () => { AREA_SEL = g.title; buildAreaChips(); profiles(filtered()); });
-    box.appendChild(b);
-  });
+  const sel = document.getElementById("area-sel"); sel.replaceChildren(new Option("Todas as áreas", ""));
+  Q.areas_experiencia.groups.forEach((g) => sel.append(new Option(g.title, g.title)));
+  sel.value = AREA_SEL;
+  sel.onchange = () => { AREA_SEL = sel.value; profiles(ALL); };
 }
 
 /* ---------- Desafio do projeto (IA) ---------- */
@@ -441,7 +447,7 @@ function initDesafio() {
   const dlg = document.getElementById("desafio-dlg"), txt = document.getElementById("desafio-txt"), msg = document.getElementById("desafio-msg"), go = document.getElementById("desafio-go");
   document.getElementById("desafio-open").addEventListener("click", () => { txt.value = DESAFIO ? DESAFIO.texto : txt.value; msg.textContent = ""; dlg.showModal(); txt.focus(); });
   document.getElementById("desafio-cancel").addEventListener("click", () => dlg.close());
-  document.getElementById("desafio-clear").addEventListener("click", () => { DESAFIO = null; drawDesafioBar(); profiles(filtered()); });
+  document.getElementById("desafio-clear").addEventListener("click", () => { DESAFIO = null; drawDesafioBar(); profiles(ALL); });
   go.addEventListener("click", async () => {
     const texto = txt.value.trim();
     if (texto.length < 20) { msg.textContent = "Descreva o desafio com um pouco mais de detalhe."; return; }
@@ -455,7 +461,7 @@ function initDesafio() {
       return;
     }
     DESAFIO = { texto, ranking: new Map(data.ranking.map((x) => [x.id, { aderencia: Math.max(0, Math.min(100, Math.round(+x.aderencia || 0))), motivo: x.motivo || "" }])) };
-    dlg.close(); drawDesafioBar(); profiles(filtered());
+    dlg.close(); drawDesafioBar(); profiles(ALL);
     document.getElementById("pc-grid").scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
@@ -549,6 +555,8 @@ function summaryCard(r) {
   const c = el("article", "card pcs");
   const head = el("div", "pc-head");
   const who = el("div", "pc-who"); who.append(el("h3", null, r.nome || "Sem nome"));
+  const senior = [NIVEL[r.tempo_especialidade], r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase() + " de carreira"].filter(Boolean).join(" · ");
+  if (senior) who.appendChild(el("div", "pc-sub", senior));
   const m = matchOf(r);
   if (m) who.appendChild(el("span", "pcs-fit " + nivelAderencia(m.aderencia), "Aderência " + m.aderencia + "%"));
   head.append(el("span", "ini", Admin.initials(r.nome)), who);
@@ -556,7 +564,7 @@ function summaryCard(r) {
   const row = (k, v) => { if (!v) return; const d = el("div"); d.append(el("dt", null, k), el("dd", null, v)); dl.appendChild(d); };
   row("Especialidade", r.principal_especializacao || "Não informada");
   row("Área de atuação", areasAtuacao(r).join(" · ") || "Não informada");
-  row("Senioridade", [NIVEL[r.tempo_especialidade], r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase()].filter(Boolean).join(" · ") || "Não informada");
+  row("Entrega de valor", PERFIS_IA.get(r.id) || contribFallback(r));
   if (m && m.motivo) row("Por que atende", m.motivo);
   const btn = el("button", "pcs-more", "Ver mais"); btn.type = "button";
   btn.addEventListener("click", () => openProfile(r, btn));
@@ -650,7 +658,7 @@ async function loadAnalysis() {
     Object.entries(IA.perfis || {}).forEach(([id, t]) => PERFIS_IA.set(id, t));
   }
   fillAnalysis();
-  if (!IA.error) profiles(filtered());
+  if (!IA.error) profiles(ALL);
 }
 
 function update() {
@@ -659,7 +667,7 @@ function update() {
   document.getElementById("active-count").textContent = n ? "· " + plural(n, "ativo", "ativos") : "";
   document.getElementById("showing").textContent = "Mostrando " + rows.length + " de " + plural(ALL.length, "candidatura", "candidaturas");
   document.getElementById("n-cand").textContent = rows.length;
-  dashboard(rows);
+  dashboard(ALL);
   candidaturas(rows);
 }
 
@@ -670,6 +678,8 @@ function setTab(name) {
   document.getElementById("panel-dashboard").classList.toggle("hidden", !dash);
   document.getElementById("panel-candidaturas").classList.toggle("hidden", dash);
   document.getElementById("cand-total").classList.toggle("hidden", dash);
+  // O bloco de filtros só aparece em Candidaturas; no Dashboard, a busca é pelo Desafio.
+  document.getElementById("filter-row").classList.toggle("hidden", dash);
   const url = new URL(location.href);
   if (dash) url.searchParams.delete("aba"); else url.searchParams.set("aba", "candidaturas");
   history.replaceState(null, "", url);
@@ -689,7 +699,7 @@ function lgpdCard(data) {
   const btn = el("button", "btn-danger", "Excluir cadastro"); btn.type = "button";
   const msg = el("p", "msg");
   btn.addEventListener("click", async () => {
-    if (!confirm("Excluir definitivamente o cadastro de " + (data.nome || "esta pessoa") + "? Essa ação não pode ser desfeita.")) return;
+    if (!(await Admin.confirmDialog({ title: "Excluir cadastro?", message: "O cadastro de " + (data.nome || "esta pessoa") + " e todas as respostas serão apagados definitivamente. Essa ação não pode ser desfeita.", ok: "Excluir cadastro" }))) return;
     btn.disabled = true; btn.textContent = "Excluindo…";
     const { data: del, error } = await Admin.sb.from("cadastros").delete().eq("id", data.id).select("id");
     if (error || !del || !del.length) { btn.disabled = false; btn.textContent = "Excluir cadastro"; msg.textContent = "Não foi possível excluir o cadastro" + (error ? ": " + error.message : "."); return; }
@@ -708,6 +718,15 @@ const CONTRATACAO_LEGADO = {
   "Valor por projeto.": "Projeto com escopo e valor fechado.", "Mensalidade / contrato recorrente.": "Contrato recorrente (mensal ou por período determinado).",
   "Depende do escopo e da complexidade.": "Negociável conforme escopo e complexidade.",
 };
+// Etapas do projeto: opções antigas da pergunta 15 passam para as atuais.
+const ETAPAS_LEGADO = {
+  "Descoberta e entendimento do problema.": "Diagnóstico e entendimento do problema.", "Pesquisa e diagnóstico.": "Pesquisa e levantamento de informações.",
+  "Definição de estratégias.": "Planejamento e definição de estratégias.", "Ideação e cocriação.": "Ideação e cocriação de soluções.",
+  "Prototipação e validação.": "Prototipação, testes e validação.", "Desenho de soluções.": "Ideação e cocriação de soluções.",
+  "Desenvolvimento e implementação.": "Execução e desenvolvimento das entregas.", "Capacitação e gestão da mudança.": "Capacitação de equipes e gestão da mudança.",
+  "Mensuração e acompanhamento de resultados.": "Mensuração de resultados e melhoria contínua.",
+};
+const etapasAtuais = (r) => [...new Set((r.etapas_projeto || []).map((v) => ETAPAS_LEGADO[v] || v))];
 function contratacaoAtual(r) {
   const all = [...(r.formatos_contratacao || []), ...(r.precificacao ? [r.precificacao] : [])].map((v) => CONTRATACAO_LEGADO[v] || v);
   return [...new Set(all)];
@@ -724,7 +743,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
     if (error || !data) { box.replaceChildren(el("div", "card empty", error ? "Não foi possível carregar a candidatura." : "Candidatura não encontrada.")); return; }
     Admin.markSeen("cadastros", data);
     // Junta à opção "Outro" o texto que a pessoa escreveu.
-    const shown = { ...data, formatos_contratacao: contratacaoAtual(data) };
+    const shown = { ...data, formatos_contratacao: contratacaoAtual(data), etapas_projeto: etapasAtuais(data) };
     // Candidaturas antigas tinham certificações em pergunta separada; agora fica junto da formação.
     if (data.certificacoes) shown.formacao = [data.formacao, data.certificacoes].filter(Boolean).join("\n");
     for (const [k, txt] of Object.entries(data.outros || {})) {
@@ -738,7 +757,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
   const err = document.getElementById("load-err");
   err.classList.toggle("hidden", !error);
   if (error) { err.textContent = "Não foi possível carregar as candidaturas: " + error.message; return; }
-  for (const r of data) r.formatos_contratacao = contratacaoAtual(r);
+  for (const r of data) { r.formatos_contratacao = contratacaoAtual(r); r.etapas_projeto = etapasAtuais(r); }
   // Respostas de versões antigas do formulário passam a contar na opção atual equivalente.
   const LEGADO = {
     atuacao_pj: { "Sim, tenho CNPJ ativo.": "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria).", "Sim, atuo por meio de uma empresa ou consultoria própria.": "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria)." },

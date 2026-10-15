@@ -34,7 +34,7 @@
     meeting: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/>',
     users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/>',
     bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
-    logout: '<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 16l-4-4 4-4M6 12h10"/>',
+    logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
   };
   const icon = (name) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
 
@@ -156,7 +156,7 @@
 
     const wrap = el("div", "wrap"); wrap.id = "gate";
     wrap.innerHTML = `<section class="card login hidden" id="login">
-        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:44px;margin-bottom:20px">
+        <a href="/" aria-label="Ir para a página inicial" style="display:block;width:fit-content;margin:0 auto 28px"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:72px"></a>
         <span class="tag">Área restrita</span>
         <h1>Entrar</h1>
         <p class="muted">Use o e-mail e a senha de administrador.</p>
@@ -172,7 +172,7 @@
         </form>
       </section>
       <section class="card login hidden" id="forgot">
-        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:44px;margin-bottom:20px">
+        <a href="/" aria-label="Ir para a página inicial" style="display:block;width:fit-content;margin:0 auto 28px"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:72px"></a>
         <span class="tag">Área restrita</span>
         <h1>Definir senha</h1>
         <p class="muted">Enviaremos um link para o e-mail de administrador. Ao abrir o link, você cria uma nova senha.</p>
@@ -185,7 +185,7 @@
         </form>
       </section>
       <section class="card login hidden" id="newpass">
-        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:44px;margin-bottom:20px">
+        <a href="/" aria-label="Ir para a página inicial" style="display:block;width:fit-content;margin:0 auto 28px"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:72px"></a>
         <span class="tag">Área restrita</span>
         <h1>Nova senha</h1>
         <p class="muted">Crie uma senha com pelo menos 8 caracteres.</p>
@@ -333,9 +333,13 @@
   let notifPromise = null;
   function loadNotifications() {
     notifPromise = (async () => {
-      const [c, p] = await Promise.all([
+      const desde = new Date(Date.now() - 30 * 864e5).toISOString();
+      const [c, p, cv, pv] = await Promise.all([
         sb.from("contatos").select("id, nome, assunto, created_at", { count: "exact" }).is("visualizado_em", null).order("created_at", { ascending: false }).limit(200),
         sb.from("cadastros").select("id, nome, principal_especializacao, created_at", { count: "exact" }).is("visualizado_em", null).order("created_at", { ascending: false }).limit(200),
+        // Já vistas nos últimos 30 dias, para aparecerem abaixo das novas.
+        sb.from("contatos").select("id, nome, assunto, created_at").not("visualizado_em", "is", null).gte("created_at", desde).order("created_at", { ascending: false }).limit(30),
+        sb.from("cadastros").select("id, nome, principal_especializacao, created_at").not("visualizado_em", "is", null).gte("created_at", desde).order("created_at", { ascending: false }).limit(30),
       ]);
       const contatos = c.data || [], parceiros = p.data || [];
       const ids = contatos.map((x) => x.id);
@@ -349,6 +353,10 @@
         ...contatos.map((x) => ({ href: "/admin/contatos/?id=" + x.id, at: respostas.get(x.id) || x.created_at, text: (respostas.has(x.id) ? "Nova resposta de " : "Nova mensagem de ") + (x.nome || "contato"), sub: x.assunto, icon: "mail" })),
         ...parceiros.map((x) => ({ href: "/admin/parceiros/?id=" + x.id, at: x.created_at, text: "Nova candidatura de " + (x.nome || "parceiro"), sub: x.principal_especializacao, icon: "users" })),
       ].sort((a, b) => new Date(b.at) - new Date(a.at));
+      const vistas = [
+        ...(cv.data || []).map((x) => ({ href: "/admin/contatos/?id=" + x.id, at: x.created_at, text: "Mensagem de " + (x.nome || "contato"), sub: x.assunto, icon: "mail" })),
+        ...(pv.data || []).map((x) => ({ href: "/admin/parceiros/?id=" + x.id, at: x.created_at, text: "Candidatura de " + (x.nome || "parceiro"), sub: x.principal_especializacao, icon: "users" })),
+      ].sort((a, b) => new Date(b.at) - new Date(a.at)).slice(0, 30);
 
       const total = n.contatos + n.parceiros;
       const dot = $("bell-dot");
@@ -361,15 +369,19 @@
         if (s) { s.textContent = String(v); s.classList.toggle("hidden", !v); }
       }
       const list = $("notif-list"); list.replaceChildren();
-      items.forEach((it) => {
-        const a = el("a", "notif-item"); a.href = it.href;
+      const item = (it, nova) => {
+        const a = el("a", "notif-item" + (nova ? " new" : " seen")); a.href = it.href;
         const ic = el("span", "ni"); ic.innerHTML = icon(it.icon);
         const t = el("span", "nt"); t.append(el("b", null, it.text));
         if (it.sub) t.append(el("span", "ns", it.sub));
         t.append(el("small", null, fmtDay(it.at)));
-        a.append(ic, t); list.appendChild(a);
-      });
-      if (!items.length) list.appendChild(el("div", "empty", "Nenhuma notificação nova. Mensagens e candidaturas ainda não abertas aparecem aqui."));
+        a.append(ic, t);
+        if (nova) { const d = el("span", "nd"); d.setAttribute("aria-label", "Não lida"); a.appendChild(d); }
+        return a;
+      };
+      if (items.length) { list.appendChild(el("div", "notif-sec", "Novas")); items.forEach((it) => list.appendChild(item(it, true))); }
+      else list.appendChild(el("div", "empty", "Nenhuma notificação nova. Mensagens e candidaturas ainda não abertas aparecem aqui."));
+      if (vistas.length) { list.appendChild(el("div", "notif-sec", "Já visualizadas")); vistas.forEach((it) => list.appendChild(item(it, false))); }
       return n;
     })().catch(() => ({ contatos: 0, parceiros: 0 }));
     return notifPromise;
@@ -383,5 +395,19 @@
     ["dias_preferidos", "Melhor dia da semana"], ["periodo", "Período de preferência"],
   ]}];
 
-  window.Admin = { sb, el, init, icon, notifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES };
+  // Confirmação em janela (modal) antes de ações que não podem ser desfeitas.
+  function confirmDialog({ title, message, ok = "Excluir", danger = true }) {
+    return new Promise((resolve) => {
+      const dlg = document.createElement("dialog"); dlg.className = "confirm-dlg";
+      dlg.setAttribute("aria-labelledby", "cd-title");
+      dlg.innerHTML = `<h2 id="cd-title"></h2><p class="muted"></p><div class="cd-acts"><button type="button" class="btn-ghost" data-v="0">Cancelar</button><button type="button" class="${danger ? "btn-danger-solid" : "btn-ok"}" data-v="1"></button></div>`;
+      dlg.querySelector("h2").textContent = title; dlg.querySelector("p").textContent = message; dlg.querySelector('[data-v="1"]').textContent = ok;
+      const done = (v) => { dlg.close(); dlg.remove(); resolve(v); };
+      dlg.addEventListener("click", (e) => { const b = e.target.closest("button[data-v]"); if (b) done(b.dataset.v === "1"); else if (e.target === dlg) done(false); });
+      dlg.addEventListener("cancel", (e) => { e.preventDefault(); done(false); });
+      document.body.appendChild(dlg); dlg.showModal(); dlg.querySelector('[data-v="0"]').focus();
+    });
+  }
+
+  window.Admin = { sb, el, init, icon, notifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES, confirmDialog };
 })();
