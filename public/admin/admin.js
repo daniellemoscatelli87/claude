@@ -162,7 +162,13 @@
       $("login-btn").disabled = true;
       const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + "/admin/" } });
       $("login-btn").disabled = false;
-      if (error) { msg.className = "msg err"; msg.textContent = "Não foi possível enviar o link: " + error.message; return; }
+      if (error) {
+        msg.className = "msg err";
+        msg.textContent = /rate limit/i.test(error.message)
+          ? "Muitos links pedidos em pouco tempo. Aguarde alguns minutos e tente de novo — o último link enviado continua válido."
+          : "Não foi possível enviar o link: " + error.message;
+        return;
+      }
       msg.textContent = "Pronto! Abra o link enviado para " + email + " neste mesmo navegador.";
     });
 
