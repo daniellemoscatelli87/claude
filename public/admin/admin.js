@@ -103,7 +103,7 @@
 
     const wrap = el("div", "wrap"); wrap.id = "gate";
     wrap.innerHTML = `<section class="card login hidden" id="login">
-        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="height:44px;margin-bottom:20px">
+        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:44px;margin-bottom:20px">
         <span class="tag">Área restrita</span>
         <h1>Entrar</h1>
         <p class="muted">Digite o e-mail de administrador para receber um link de acesso.</p>
