@@ -80,6 +80,9 @@ label.check input { width: 18px; height: 18px; accent-color: var(--red); margin:
 /* Mensagem respondida: verde */
 .rowlink.answered.seen .ini, .entry.answered.seen .ini { background: #e6f4ea; color: #1e7b45; }
 .rowlink.answered.seen .t, .entry.answered.seen .t { color: #1e7b45; }
+/* Reunião agendada: azul */
+.rowlink.meeting.seen .ini, .entry.meeting.seen .ini { background: #e8f0fe; color: #1a56c4; }
+.rowlink.meeting.seen .t, .entry.meeting.seen .t { color: #1a56c4; }
 /* Já visualizado: cinza, mas continua clicável */
 .rowlink.seen .ini, .entry.seen .ini { background: var(--track); color: var(--muted); }
 .rowlink.seen .t, .entry.seen .t { color: var(--muted); font-weight: 600; }
@@ -105,7 +108,7 @@ dd a { color: var(--red); }
 .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .badge.pend { background: #fdf3dc; color: #a06d00; }
 .badge.ok { background: var(--slate-tint); color: var(--slate); }
-.badge.meet { background: #e6f4ea; color: #1e7b45; }
+.badge.meet { background: #e8f0fe; color: #1a56c4; }
 .status-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
 .status-bar .when { font-size: 13px; color: var(--muted); }
 .btn-ok { background: var(--red); color: #fff; border-radius: 12px; padding: 10px 18px; font-size: 14px; }

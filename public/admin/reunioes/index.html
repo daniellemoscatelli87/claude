@@ -23,10 +23,10 @@
   .cal .day { aspect-ratio: 1; border: 0; border-radius: 10px; background: none; padding: 0; font-size: 14px; font-weight: 600; color: var(--dark); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; position: relative; }
   .cal .day.out { color: #cbd5e1; }
   .cal .day.today { box-shadow: inset 0 0 0 1.5px var(--red); }
-  .cal .day.has { background: #e6f4ea; color: #1e7b45; cursor: pointer; }
-  .cal .day.has:hover { background: #d3ecdb; }
+  .cal .day.has { background: #e8f0fe; color: #1a56c4; cursor: pointer; }
+  .cal .day.has:hover { background: #d6e4fc; }
   .cal .day.has.past { background: var(--track); color: var(--muted); }
-  .cal .day.sel, .cal .day.sel:hover, .cal .day.has.past.sel { background: #1e7b45; color: #fff; }
+  .cal .day.sel, .cal .day.sel:hover, .cal .day.has.past.sel { background: #1a56c4; color: #fff; }
   .cal .day .dots { display: flex; gap: 2px; height: 5px; }
   .cal .day .dots i { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
   .cal .day:not(.has) { cursor: default; }
@@ -37,7 +37,7 @@
   .sec-title .n { font-size: 13px; color: var(--muted); font-weight: 600; }
   .meet { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 4px 14px; padding: 14px 4px; }
   .meet + .meet { border-top: 1px solid var(--track); }
-  .meet .date { grid-row: span 3; text-align: center; border-radius: 12px; background: #e6f4ea; color: #1e7b45; padding: 8px 4px; align-self: start; }
+  .meet .date { grid-row: span 3; text-align: center; border-radius: 12px; background: #e8f0fe; color: #1a56c4; padding: 8px 4px; align-self: start; }
   .meet.past .date { background: var(--track); color: var(--muted); }
   .meet .date b { display: block; font-size: 22px; line-height: 1.1; }
   .meet .date span { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }

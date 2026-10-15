@@ -79,7 +79,7 @@ const clean = (v) => String(v ?? "").replace(/\.$/, "");
 // Linha com nome, data e hora completas e os campos pedidos para cada bloco.
 function entry(href, r, fields, mail) {
   const state = mail ? Admin.mailState(r) : (r.visualizado_em ? "lida" : "");
-  const a = Admin.el("a", "entry" + (state ? " seen" : "") + (state === "respondida" || state === "reuniao" ? " answered" : "")); a.href = href;
+  const a = Admin.el("a", "entry" + (state ? " seen" : "") + (state === "respondida" ? " answered" : "") + (state === "reuniao" ? " meeting" : "")); a.href = href;
   const d = new Date(r.created_at);
   const when = Admin.el("div", "when");
   when.append(Admin.el("b", null, d.toLocaleDateString("pt-BR")), document.createTextNode(d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })));
