@@ -79,16 +79,6 @@
   .stage.zero .sv { color: var(--red); font-weight: 600; }
   .stages-foot { margin-top: 12px; font-size: 13px; color: var(--muted); }
   .stages-foot b { color: var(--dark); }
-  /* Régua remoto ↔ presencial */
-  .spec { position: relative; padding: 8px 0 0; }
-  .spec .line { position: absolute; left: 10%; right: 10%; top: 44px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--slate), var(--red)); opacity: .35; }
-  .spec .pts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: relative; }
-  .spec .pt { display: grid; justify-items: center; text-align: center; gap: 6px; }
-  .spec .pv { font-size: 20px; font-weight: 800; line-height: 1; height: 22px; }
-  .spec .pin { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 4px solid var(--c); }
-  .spec .pl { font-size: 11.5px; line-height: 1.3; color: var(--dark); }
-  .spec .pp { font-size: 11px; color: var(--muted); }
-  .spec-ends { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 10px; }
 
   /* Grade de blocos com ícone */
   .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
@@ -392,28 +382,6 @@ function stages(rows, id) {
   return wrap;
 }
 
-// Régua do 100% remoto ao presencial em qualquer região.
-function spectrum(rows, id) {
-  const t = rows.length;
-  const opts = optionsOf(id);
-  const cnt = new Map(counts(rows, id));
-  const short = ["100% remoto", "Híbrido", "Presencial na minha região", "Presencial em outras cidades", "Presencial em qualquer região do Brasil"];
-  const wrap = el("div", "spec");
-  wrap.appendChild(el("div", "line"));
-  const pts = el("div", "pts");
-  opts.forEach((o, i) => {
-    const n = cnt.get(o) || 0;
-    const p = el("div", "pt");
-    p.title = clean(o) + ": " + plural(n, "parceiro", "parceiros");
-    const pin = el("div", "pin"); pin.style.setProperty("--c", i < 2 ? "var(--slate)" : "var(--red)");
-    p.append(el("div", "pv", String(n)), pin, el("div", "pl", short[i] || clean(o)), el("div", "pp", pct(n, t) + "%"));
-    pts.appendChild(p);
-  });
-  wrap.appendChild(pts);
-  const ends = el("div", "spec-ends"); ends.append(el("span", null, "← Remoto"), el("span", null, "Presencial →"));
-  const outer = el("div"); outer.append(wrap, ends);
-  return outer;
-}
 
 // Grade de blocos com ícone por formato de contratação.
 const CONTRATO_ICONS = [
@@ -682,7 +650,11 @@ function dashboard(rows) {
     ["Precificação", "precificacao"],
     ["Projetos em parceria", "interesse_parceria"],
   ]);
-  addViz(dis, "Do remoto ao presencial", rows, () => spectrum(rows, "formatos_atuacao"), { cls: "span3", note: "Pergunta " + Q.formatos_atuacao.n + " · quantos parceiros aceitam cada formato." });
+  // Barras em % das candidaturas, na ordem do formulário (do remoto ao presencial em qualquer região).
+  addViz(dis, "Formatos de atuação aceitos", rows, () => {
+    const got = new Map(counts(rows, "formatos_atuacao"));
+    return columns(optionsOf("formatos_atuacao").map((o) => [o, got.get(o) || 0]), rows.length);
+  }, { cls: "span3", note: "Pergunta " + Q.formatos_atuacao.n + " · " + Q.formatos_atuacao.label + " Cada parceiro pode aceitar mais de um formato, por isso a soma passa de 100%." });
   addViz(dis, "Formatos de contratação aceitos", rows, () => tiles(rows, "formatos_contratacao"), { cls: "span3", note: "Pergunta " + Q.formatos_contratacao.n + " · cada parceiro pode aceitar vários." });
 
   const seg = document.getElementById("segmentos"); seg.replaceChildren();
