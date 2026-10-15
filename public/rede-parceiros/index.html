@@ -113,6 +113,8 @@
   }
   .btn-primary { background: var(--coral); color: #fff; margin-left: auto; border-radius: 999px; }
   .btn-primary:hover { background: #f04848; }
+  .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-arrow { width: 18px; height: 18px; flex-shrink: 0; }
   .btn-primary:disabled { opacity: .6; cursor: wait; }
   .btn-ghost { background: none; border-color: transparent; color: var(--coral); border-radius: 999px; }
   .btn-ghost:hover { text-decoration: underline; }
@@ -670,11 +672,14 @@ form.addEventListener("input", e => {
   validateQuestion(q);
 });
 
+// Botão de envio com seta.
+const SEND_LABEL = 'Enviar cadastro<svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
 function show(i) {
   steps.forEach((s, n) => s.classList.toggle("hidden", n !== i));
   current = i;
   document.getElementById("back").classList.toggle("hidden", i === 0);
-  document.getElementById("next").textContent = i === 0 ? "Quero fazer parte da rede" : i === total ? "Enviar cadastro" : "Próxima";
+  const next = document.getElementById("next");
+  if (i === total) next.innerHTML = SEND_LABEL; else next.textContent = i === 0 ? "Quero fazer parte da rede" : "Próxima";
   document.getElementById("progressBox").classList.toggle("hidden", i === 0);
   document.getElementById("progressBar").style.width = `${(i / total) * 100}%`;
   document.getElementById("stepLabel").textContent = `Etapa ${i} de ${total}`;
@@ -727,7 +732,7 @@ async function submit() {
     errBox.textContent = "Não foi possível enviar seu cadastro. Verifique sua conexão e tente novamente.";
     errBox.style.display = "block";
     btn.disabled = false;
-    btn.textContent = "Enviar cadastro";
+    btn.innerHTML = SEND_LABEL;
   }
 }
 
