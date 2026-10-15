@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Rede de parceiros | Área restrita</title>
+<link rel="icon" type="image/png" href="/favicon-dm.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/admin.css">
+<style>
+  .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; align-items: end; }
+  .filters label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+  .filters .search { grid-column: 1 / -1; }
+  .filters-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; font-size: 13px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 16px; }
+  .kpi .v { font-size: 30px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+  .kpi .k { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .kpi .p { font-size: 12px; color: var(--muted); }
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+  .groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px 32px; align-items: start; }
+  .chart .note { font-size: 12px; color: var(--muted); margin: -8px 0 12px; }
+  .bars { display: grid; gap: 8px; }
+  .bar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; font-size: 13px; }
+  .bar .lbl { overflow-wrap: anywhere; }
+  .bar .val { font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+  .bar .val b { color: var(--dark); font-weight: 700; }
+  .bar .track { grid-column: 1 / -1; height: 8px; border-radius: 4px; background: var(--track); overflow: hidden; }
+  .bar .fill { height: 100%; border-radius: 4px; background: var(--red); min-width: 0; }
+  .bar.zero .lbl, .bar.zero .val { color: #94a3b8; }
+  .group-title { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 14px 0 6px; }
+  .group-title:first-child, .groups .group-title { margin-top: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: 13px; background: var(--track); border-radius: 999px; padding: 4px 12px; }
+  .chip b { color: var(--red); margin-left: 4px; }
+  .span2 { grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a href="/"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
+    <button type="button" class="btn-ghost hidden" id="logout">Sair</button>
+  </header>
+
+  <section class="card login hidden" id="login">
+    <span class="tag">Área restrita</span>
+    <h1>Entrar</h1>
+    <p class="muted">Digite o e-mail de administrador para receber um link de acesso.</p>
+    <form id="login-form" novalidate>
+      <label class="l" for="login-email">E-mail</label>
+      <input type="email" id="login-email" autocomplete="email" required placeholder="seu@email.com">
+      <button type="submit" class="btn-primary" id="login-btn">Enviar link de acesso</button>
+      <p class="msg" id="login-msg" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <section class="card login hidden" id="denied">
+    <span class="tag">Área restrita</span>
+    <h1>Sem acesso</h1>
+    <p class="muted">O e-mail <strong id="denied-email"></strong> não tem permissão para ver esta área.</p>
+  </section>
+
+  <main class="hidden" id="app">
+    <nav class="menu" aria-label="Área restrita">
+      <a href="/admin/">Mensagens de contato</a>
+      <a href="/admin/parceiros/" aria-current="page">Rede de parceiros</a>
+    </nav>
+    <span class="tag">Área restrita</span>
+    <h1>Rede de parceiros</h1>
+    <p class="muted">Métricas, habilidades disponíveis e cadastros da rede.</p>
+    <p class="msg err hidden" id="load-err"></p>
+
+    <section class="card" style="margin-top:16px" aria-label="Filtros">
+      <div class="filters" id="filters">
+        <div class="search">
+          <label for="f-busca">Buscar</label>
+          <input type="search" id="f-busca" placeholder="Nome, e-mail, especialização, atividades, ferramentas, cidade…">
+        </div>
+      </div>
+      <div class="filters-foot">
+        <span class="muted" id="showing"></span>
+        <button type="button" class="btn-ghost" id="clear">Limpar filtros</button>
+      </div>
+    </section>
+
+    <div class="kpis" id="kpis"></div>
+
+    <h2>Habilidades disponíveis</h2>
+    <div class="grid2" id="sec-habilidades"></div>
+
+    <h2>Segmentos e conhecimento setorial</h2>
+    <div class="grid2" id="sec-segmentos"></div>
+
+    <h2>Perfil e senioridade</h2>
+    <div class="grid2" id="sec-perfil"></div>
+
+    <h2>Disponibilidade e formato</h2>
+    <div class="grid2" id="sec-disponibilidade"></div>
+
+    <h2>Localização e origem</h2>
+    <div class="grid2" id="sec-localizacao"></div>
+
+    <h2 id="lista-titulo">Parceiros</h2>
+    <div class="list" id="list"></div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/admin/admin.js"></script>
+<script src="/admin/form-parceiros.js"></script>
+<script>
+const { el } = Admin;
+const Q = Object.fromEntries(FORM_PARCEIROS.flatMap((s) => s.questions).map((q) => [q.id, q]));
+const optionsOf = (id) => Q[id].groups ? Q[id].groups.flatMap((g) => g.options) : Q[id].options;
+const SECOES = FORM_PARCEIROS.map((s) => ({ title: s.title, fields: s.questions.map((q) => [q.id, q.n + ". " + q.label]) }));
+
+// "Curitiba — PR" → "PR"; "São Paulo/SP" → "SP"
+const uf = (s) => ((s || "").toUpperCase().match(/\b([A-Z]{2})\s*\.?$/) || [])[1] || "Não informado";
+const cidade = (s) => (s || "").split(/[—–\-\/,]/)[0].trim().replace(/\s+/g, " ").toLowerCase().replace(/(^|\s)\S/g, (c) => c.toUpperCase()) || "Não informado";
+const startsSim = (v) => typeof v === "string" && v.startsWith("Sim");
+
+const FILTROS = [
+  { id: "areas_experiencia", label: "Área de experiência" },
+  { id: "segmentos", label: "Segmento de mercado" },
+  { id: "atuacao_pj", label: "Situação PJ" },
+  { id: "disponibilidade_colaborar", label: "Disponibilidade" },
+  { id: "horas_semanais", label: "Horas semanais" },
+  { id: "formatos_atuacao", label: "Formato de atuação" },
+  { id: "tempo_especialidade", label: "Tempo na especialidade" },
+  { id: "uf", label: "Estado", derived: true },
+];
+
+let ALL = [];
+
+function buildFilters() {
+  const box = document.getElementById("filters");
+  for (const f of FILTROS) {
+    const wrap = el("div");
+    const lab = el("label", null, f.label); lab.htmlFor = "f-" + f.id;
+    const sel = el("select"); sel.id = "f-" + f.id;
+    sel.append(new Option("Todos", ""));
+    const opts = f.derived ? [...new Set(ALL.map((r) => uf(r.cidade_estado)))].sort() : optionsOf(f.id);
+    for (const o of opts) sel.append(new Option(o.replace(/\.$/, ""), o));
+    sel.addEventListener("change", update);
+    wrap.append(lab, sel);
+    box.appendChild(wrap);
+  }
+  document.getElementById("f-busca").addEventListener("input", update);
+  document.getElementById("clear").addEventListener("click", () => {
+    document.getElementById("f-busca").value = "";
+    FILTROS.forEach((f) => (document.getElementById("f-" + f.id).value = ""));
+    update();
+  });
+}
+
+const BUSCA_CAMPOS = ["nome", "email", "cidade_estado", "apresentacao", "principal_especializacao", "atividades_entregaveis", "conhecimento_segmento", "formacao", "certificacoes", "ferramentas", "projeto_relevante"];
+const norm = (s) => String(s ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+function filtered() {
+  const q = norm(document.getElementById("f-busca").value.trim());
+  return ALL.filter((r) => {
+    for (const f of FILTROS) {
+      const v = document.getElementById("f-" + f.id).value;
+      if (!v) continue;
+      const rv = f.derived ? uf(r.cidade_estado) : r[f.id];
+      if (Array.isArray(rv) ? !rv.includes(v) : rv !== v) return false;
+    }
+    return !q || BUSCA_CAMPOS.some((k) => norm(r[k]).includes(q));
+  });
+}
+
+// Contagem por opção. Perguntas de escolha única mantêm a ordem do formulário (inclusive zeros);
+// as de múltipla escolha são ordenadas da mais para a menos frequente e omitem zeros.
+function counts(rows, getter, options) {
+  const m = new Map((options || []).map((o) => [o, 0]));
+  for (const r of rows) {
+    const v = getter(r);
+    for (const x of Array.isArray(v) ? v : [v]) if (x != null && x !== "") m.set(x, (m.get(x) || 0) + 1);
+  }
+  return [...m.entries()];
+}
+
+function barsNode(entries, total, max) {
+  const box = el("div", "bars");
+  for (const [label, n] of entries) {
+    const pct = total ? Math.round((n / total) * 100) : 0;
+    const b = el("div", "bar" + (n ? "" : " zero"));
+    b.title = label + ": " + n + (n === 1 ? " parceiro" : " parceiros") + " (" + pct + "%)";
+    const val = el("span", "val"); val.append(el("b", null, String(n)), document.createTextNode(" · " + pct + "%"));
+    const track = el("div", "track"); const fill = el("div", "fill");
+    fill.style.width = (max ? (n / max) * 100 : 0) + "%";
+    track.appendChild(fill);
+    b.append(el("span", "lbl", label.replace(/\.$/, "")), val, track);
+    box.appendChild(b);
+  }
+  return box;
+}
+
+function chart(container, title, rows, id, opts = {}) {
+  const q = Q[id];
+  const multi = q && q.type === "checkbox";
+  const getter = opts.getter || ((r) => r[id]);
+  let entries = counts(rows, getter, opts.noOptions ? null : (q && optionsOf(id)));
+  if (multi || opts.sort) entries = entries.filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
+  if (opts.limit) entries = entries.slice(0, opts.limit);
+  const card = el("div", "card chart" + (opts.span ? " span2" : ""));
+  card.appendChild(el("h3", null, title));
+  if (multi) card.appendChild(el("p", "note", "Cada parceiro pode marcar mais de uma opção."));
+  if (!rows.length || !entries.length) { card.appendChild(el("p", "muted", "Sem dados para os filtros atuais.")); container.appendChild(card); return; }
+  const max = Math.max(...entries.map(([, n]) => n));
+  if (q && q.groups && !opts.flat) {
+    const pos = new Map(entries);
+    const groups = el("div", "groups");
+    for (const g of q.groups) {
+      const ge = g.options.filter((o) => pos.has(o)).map((o) => [o, pos.get(o)]).sort((a, b) => b[1] - a[1]);
+      if (!ge.length) continue;
+      const col = el("div");
+      col.append(el("div", "group-title", g.title), barsNode(ge, rows.length, max));
+      groups.appendChild(col);
+    }
+    card.appendChild(groups);
+  } else card.appendChild(barsNode(entries, rows.length, max));
+  container.appendChild(card);
+}
+
+function kpis(rows) {
+  const box = document.getElementById("kpis");
+  box.replaceChildren();
+  const t = rows.length;
+  const items = [
+    ["Parceiros", t, null],
+    ["Com CNPJ ativo ou empresa própria", rows.filter((r) => startsSim(r.atuacao_pj)).length, t],
+    ["Disponibilidade imediata", rows.filter((r) => r.disponibilidade_colaborar === "Disponibilidade imediata.").length, t],
+    ["Lideram projetos ou frentes", rows.filter((r) => startsSim(r.lideranca)).length, t],
+    ["Podem atuar presencialmente em Curitiba", rows.filter((r) => startsSim(r.presencial_curitiba)).length, t],
+  ];
+  for (const [k, v, total] of items) {
+    const c = el("div", "card kpi");
+    c.append(el("div", "v", String(v)), el("div", "k", k));
+    if (total != null) c.appendChild(el("div", "p", (total ? Math.round((v / total) * 100) : 0) + "% dos parceiros filtrados"));
+    box.appendChild(c);
+  }
+}
+
+function especialidades(container, rows) {
+  const card = el("div", "card chart span2");
+  card.appendChild(el("h3", null, "Principais especializações declaradas"));
+  card.appendChild(el("p", "note", "Pergunta 12 (resposta livre), agrupada por texto igual."));
+  const m = new Map();
+  for (const r of rows) {
+    const raw = (r.principal_especializacao || "").trim();
+    if (!raw) continue;
+    const key = norm(raw);
+    const cur = m.get(key) || { label: raw, n: 0 };
+    cur.n++; m.set(key, cur);
+  }
+  const list = [...m.values()].sort((a, b) => b.n - a.n);
+  if (!list.length) card.appendChild(el("p", "muted", "Sem dados para os filtros atuais."));
+  else {
+    const chips = el("div", "chips");
+    for (const { label, n } of list) { const c = el("span", "chip", label); if (n > 1) c.appendChild(el("b", null, String(n))); chips.appendChild(c); }
+    card.appendChild(chips);
+  }
+  container.appendChild(card);
+}
+
+function update() {
+  const rows = filtered();
+  document.getElementById("showing").textContent = "Mostrando " + rows.length + " de " + ALL.length + (ALL.length === 1 ? " parceiro" : " parceiros");
+  kpis(rows);
+
+  const hab = document.getElementById("sec-habilidades"); hab.replaceChildren();
+  chart(hab, "Áreas de experiência", rows, "areas_experiencia", { span: true });
+  especialidades(hab, rows);
+  chart(hab, "Etapas de projeto em que atuam", rows, "etapas_projeto");
+  chart(hab, "Formas de colaboração de interesse", rows, "formas_colaboracao");
+
+  const seg = document.getElementById("sec-segmentos"); seg.replaceChildren();
+  chart(seg, "Segmentos de mercado", rows, "segmentos");
+  chart(seg, "Experiência em projetos multidisciplinares", rows, "colaboracao_multidisciplinar");
+
+  const per = document.getElementById("sec-perfil"); per.replaceChildren();
+  chart(per, "Situação PJ", rows, "atuacao_pj");
+  chart(per, "Modelo de atuação", rows, "modelo_atuacao");
+  chart(per, "Nível de formação", rows, "nivel_formacao");
+  chart(per, "Tempo na principal especialidade", rows, "tempo_especialidade");
+  chart(per, "Tempo atuando de forma independente", rows, "tempo_independente");
+  chart(per, "Experiência com liderança", rows, "lideranca");
+  chart(per, "Já atuou como especialista externo", rows, "servicos_especialista_externo");
+
+  const dis = document.getElementById("sec-disponibilidade"); dis.replaceChildren();
+  chart(dis, "Disponibilidade para projetos futuros", rows, "disponibilidade_colaborar");
+  chart(dis, "Horas semanais disponíveis", rows, "horas_semanais");
+  chart(dis, "Formatos de atuação", rows, "formatos_atuacao");
+  chart(dis, "Viagens e deslocamentos", rows, "viagens");
+  chart(dis, "Presencial em Curitiba / região", rows, "presencial_curitiba");
+  chart(dis, "Formatos de contratação aceitos", rows, "formatos_contratacao");
+  chart(dis, "Forma de precificação", rows, "precificacao");
+  chart(dis, "Equipe ou rede própria", rows, "equipe_propria");
+  chart(dis, "Interesse em projetos em parceria", rows, "interesse_parceria");
+
+  const loc = document.getElementById("sec-localizacao"); loc.replaceChildren();
+  chart(loc, "Estado", rows, "uf", { getter: (r) => uf(r.cidade_estado), noOptions: true, sort: true });
+  chart(loc, "Cidade", rows, "cidade", { getter: (r) => cidade(r.cidade_estado), noOptions: true, sort: true, limit: 15 });
+  chart(loc, "Como conheceu a iniciativa", rows, "como_conheceu");
+  chart(loc, "Interesse no grupo de WhatsApp", rows, "interesse_whatsapp");
+
+  document.getElementById("lista-titulo").textContent = "Parceiros (" + rows.length + ")";
+  Admin.renderList(rows, document.getElementById("list"), SECOES, (r) => [r.principal_especializacao, r.cidade_estado, r.email].filter(Boolean).join(" · "));
+}
+
+Admin.initAdmin(async () => {
+  const { data, error } = await Admin.sb.from("cadastros").select("*").order("created_at", { ascending: false });
+  const err = document.getElementById("load-err");
+  err.classList.toggle("hidden", !error);
+  if (error) { err.textContent = "Não foi possível carregar os cadastros: " + error.message; return; }
+  ALL = data;
+  if (!document.getElementById("f-areas_experiencia")) buildFilters();
+  update();
+});
+</script>
+</body>
+</html>
