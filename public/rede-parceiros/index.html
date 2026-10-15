@@ -697,6 +697,12 @@ function payload() {
     else data[q.id] = Array.isArray(v) ? v : (v === "" ? null : v);
   });
   data.autoriza_dados = data.autoriza_dados === CONSENT_YES;
+  // LGPD: guarda junto do cadastro o texto exato que a pessoa aceitou (a data do aceite é registrada pelo servidor).
+  if (data.autoriza_dados) {
+    const q = SECTIONS.flatMap(s => s.questions).find(q => q.id === "autoriza_dados");
+    const tmp = document.createElement("div"); tmp.innerHTML = q.infoHtml.replace(/<\/p>/g, "</p>\n\n");
+    data.consentimento_texto = q.label + "\n\n" + tmp.textContent.trim() + "\n\nResposta: " + CONSENT_YES;
+  }
   data.outros = {};
   SECTIONS.flatMap(s => s.questions).forEach(q => { if (otherChecked(q) && otherText(q)) data.outros[q.id] = otherText(q); });
   return data;
