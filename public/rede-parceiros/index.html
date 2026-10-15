@@ -557,7 +557,7 @@ form.querySelectorAll(".list-field").forEach((box) => {
 form.querySelectorAll(".acc").forEach((acc) => {
   const head = acc.querySelector(".acc-head"), body = acc.querySelector(".acc-body"), count = acc.querySelector("[data-count]");
   head.addEventListener("click", () => { const open = body.classList.toggle("hidden") === false; head.setAttribute("aria-expanded", String(open)); acc.classList.toggle("open", open); });
-  const update = () => { const n = body.querySelectorAll('input[type="checkbox"]:checked').length; count.textContent = n ? (n === 1 ? "1 selecionado" : n + " selecionados") : ""; acc.classList.toggle("has", n > 0); };
+  const update = () => { const n = body.querySelectorAll('input[type="checkbox"]:checked').length; count.textContent = n ? String(n) : ""; acc.classList.toggle("has", n > 0); };
   body.addEventListener("change", update);
   update();
 });
