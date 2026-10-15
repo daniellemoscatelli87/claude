@@ -507,14 +507,8 @@ window.FORM_PARCEIROS = [
     ]
    },
    {
-    "id": "referencia_valores",
-    "n": 36,
-    "label": "Deseja compartilhar uma referência de valores para contratação?",
-    "type": "paragraph"
-   },
-   {
     "id": "equipe_propria",
-    "n": 37,
+    "n": 36,
     "label": "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?",
     "type": "radio",
     "options": [
@@ -526,7 +520,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "interesse_parceria",
-    "n": 38,
+    "n": 37,
     "label": "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?",
     "type": "radio",
     "options": [
@@ -538,7 +532,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "condicoes",
-    "n": 39,
+    "n": 38,
     "label": "Existe alguma condição ou preferência importante para sua participação em projetos futuros?",
     "type": "paragraph"
    }
@@ -549,7 +543,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "como_conheceu",
-    "n": 40,
+    "n": 39,
     "label": "Como você conheceu esta iniciativa?",
     "type": "radio",
     "options": [
@@ -563,7 +557,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "autoriza_dados",
-    "n": 41,
+    "n": 40,
     "label": "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?",
     "type": "radio",
     "options": [
@@ -578,7 +572,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "interesse_whatsapp",
-    "n": 42,
+    "n": 41,
     "label": "Você gostaria de participar do nosso grupo de networking no WhatsApp?",
     "type": "radio",
     "options": [
