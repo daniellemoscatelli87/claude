@@ -50,14 +50,30 @@
   .kpi.hero { background: var(--dark); color: #fff; border-color: var(--dark); }
   .kpi.hero .k { color: #fff; } .kpi.hero .p { color: #cbd5e1; }
 
-  /* Barras horizontais */
-  .bars { display: grid; gap: 9px; }
-  .bar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 10px; font-size: 13px; }
-  .bar .val { font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
-  .bar .val b { color: var(--dark); }
-  .bar .track { grid-column: 1 / -1; height: 8px; border-radius: 4px; background: var(--track); overflow: hidden; }
-  .bar .fill { height: 100%; border-radius: 4px; background: var(--red); }
-  .bar.zero .lbl, .bar.zero .val { color: #94a3b8; }
+  /* Ranking em etiquetas (múltipla escolha) */
+  .rank { display: flex; flex-wrap: wrap; gap: 6px; }
+  .rk { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; border-radius: 999px; padding: 5px 6px 5px 12px; background: rgb(212 77 77 / var(--a)); color: var(--dark); }
+  .rk b { font-size: 12px; font-variant-numeric: tabular-nums; background: #fff; border-radius: 999px; padding: 1px 8px; color: var(--red); }
+  .more { margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--red); background: none; border: 0; padding: 0; }
+  .more:hover { text-decoration: underline; }
+
+  /* Cartões de destaque (resposta mais comum) */
+  .insights { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 1000px) { .insights { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 520px) { .insights { grid-template-columns: 1fr; } }
+  .ins .q { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); min-height: 32px; }
+  .ins .top { display: flex; align-items: center; gap: 12px; margin: 10px 0 8px; }
+  .ins .mini { width: 56px; height: 56px; flex-shrink: 0; }
+  .ins .mini svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ins .big { font-size: 28px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+  .ins .ans { font-size: 13.5px; font-weight: 600; line-height: 1.35; }
+  .ins details { margin-top: 8px; font-size: 12.5px; }
+  .ins summary { cursor: pointer; color: var(--red); font-weight: 700; list-style: none; }
+  .ins summary::-webkit-details-marker { display: none; }
+  .ins ul { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 4px; }
+  .ins li { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); }
+  .ins li.lead { color: var(--dark); font-weight: 600; }
+  .ins li span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   /* Grupos de habilidades */
   .skill-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -89,6 +105,8 @@
 
   /* Colunas */
   .cols { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px; align-items: end; height: 190px; padding-top: 18px; }
+  .colcard { display: flex; flex-direction: column; }
+  .colcard .cols { flex: 1; height: auto; min-height: 190px; }
   .col { display: grid; grid-template-rows: auto 1fr auto; height: 100%; text-align: center; }
   .col .cv { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .col .ct { display: flex; align-items: flex-end; justify-content: center; }
@@ -194,7 +212,8 @@ const pct = (n, t) => (t ? Math.round((n / t) * 100) : 0);
 const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
 const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const uf = (s) => ((s || "").toUpperCase().match(/\b([A-Z]{2})\s*\.?$/) || [])[1] || "—";
-const cidade = (s) => (s || "").split(/[—–\-\/,]/)[0].trim().replace(/\s+/g, " ").toLowerCase().replace(/(^|\s)\S/g, (c) => c.toUpperCase()) || "Não informado";
+const MINUSC = new Set(["de", "da", "do", "das", "dos", "e"]);
+const cidade = (s) => (s || "").split(/[—–\-\/,]/)[0].trim().replace(/\s+/g, " ").toLowerCase().split(" ").map((w, i) => (i && MINUSC.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(" ") || "Não informado";
 const startsSim = (v) => typeof v === "string" && v.startsWith("Sim");
 const svg = (tag, attrs) => { const e = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
 
@@ -273,21 +292,56 @@ function card(title, opts = {}) {
 }
 const emptyNote = () => el("p", "muted", "Sem dados para os filtros atuais.");
 
-function bars(entries, total, { limit } = {}) {
-  const box = el("div", "bars");
-  const list = limit ? entries.slice(0, limit) : entries;
-  const max = Math.max(1, ...list.map(([, n]) => n));
-  for (const [label, n] of list) {
-    const b = el("div", "bar" + (n ? "" : " zero"));
-    b.title = clean(label) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, total) + "%)";
-    const val = el("span", "val"); val.append(el("b", null, String(n)), document.createTextNode(" · " + pct(n, total) + "%"));
-    const track = el("div", "track"), fill = el("div", "fill");
-    fill.style.width = (n / max) * 100 + "%";
-    track.appendChild(fill);
-    b.append(el("span", "lbl", clean(label)), val, track);
-    box.appendChild(b);
+// Ranking em etiquetas: a intensidade do fundo acompanha a frequência (um só tom).
+function chipRank(entries, total, { limit = 8 } = {}) {
+  const wrap = el("div");
+  const box = el("div", "rank");
+  const max = Math.max(1, ...entries.map(([, n]) => n));
+  entries.forEach(([label, n], i) => {
+    const a = 0.07 + (n / max) * 0.3;
+    const c = el("span", "rk" + (i >= limit ? " hidden extra" : ""));
+    c.style.setProperty("--a", a.toFixed(2));
+    c.title = clean(label) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, total) + "%)";
+    c.append(document.createTextNode(clean(label)), el("b", null, String(n)));
+    box.appendChild(c);
+  });
+  wrap.appendChild(box);
+  if (entries.length > limit) {
+    const btn = el("button", "more", "Ver todas (" + entries.length + ")");
+    btn.type = "button";
+    btn.addEventListener("click", () => {
+      const open = btn.dataset.open !== "1";
+      box.querySelectorAll(".extra").forEach((x) => x.classList.toggle("hidden", !open));
+      btn.dataset.open = open ? "1" : "";
+      btn.textContent = open ? "Mostrar menos" : "Ver todas (" + entries.length + ")";
+    });
+    wrap.appendChild(btn);
   }
-  return box;
+  return wrap;
+}
+
+// Destaque: a resposta mais comum em evidência, com mini-rosca e a lista completa sob demanda.
+function insight(title, rows, id) {
+  const c = el("div", "card ins");
+  c.appendChild(el("div", "q", title));
+  const t = rows.length;
+  const e = counts(rows, id);
+  const lead = e.reduce((m, x) => (x[1] > m[1] ? x : m), ["", 0]);
+  if (!t || !lead[1]) { c.appendChild(emptyNote()); return c; }
+  const top = el("div", "top");
+  const mini = el("div", "mini");
+  const s = svg("svg", { viewBox: "0 0 42 42", "aria-hidden": "true" });
+  const R = 15.9155, C = 2 * Math.PI * R, len = (lead[1] / t) * C;
+  s.append(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#e2e8f0", "stroke-width": 7 }),
+    svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "var(--red)", "stroke-width": 7, "stroke-dasharray": len + " " + (C - len) }));
+  mini.appendChild(s);
+  const txt = el("div"); txt.append(el("div", "big", pct(lead[1], t) + "%"));
+  top.append(mini, txt);
+  c.append(top, el("div", "ans", clean(lead[0])));
+  const d = el("details"); const sm = el("summary", null, "Ver todas as respostas"); const ul = el("ul");
+  e.forEach(([label, n]) => { const li = el("li", label === lead[0] ? "lead" : ""); li.append(el("span", null, clean(label)), el("span", null, n + " · " + pct(n, t) + "%")); ul.appendChild(li); });
+  d.append(sm, ul); c.appendChild(d);
+  return c;
 }
 
 // Rosca: cor fixa por opção (ordem do formulário), números sempre visíveis na legenda.
@@ -403,10 +457,7 @@ function skills(rows) {
   });
 
   const more = document.getElementById("skills-more"); more.replaceChildren();
-  const c1 = card("Top 10 habilidades", { note: "Pergunta 11 · cada parceiro pode marcar várias." });
-  const e1 = counts(rows, "areas_experiencia");
-  c1.appendChild(e1.length ? bars(e1, t, { limit: 10 }) : emptyNote());
-  const c2 = card("Especializações declaradas", { note: "Pergunta 12 · resposta livre, agrupada por texto igual." });
+  const c2 = card("Especializações declaradas", { cls: "span2", note: "Pergunta 12 · resposta livre, agrupada por texto igual." });
   const m = new Map();
   for (const r of rows) { const raw = (r.principal_especializacao || "").trim(); if (!raw) continue; const k = norm(raw); const cur = m.get(k) || { label: raw, n: 0 }; cur.n++; m.set(k, cur); }
   const list = [...m.values()].sort((a, b) => b.n - a.n);
@@ -416,11 +467,9 @@ function skills(rows) {
     list.forEach(({ label, n }) => { const ch = el("span", "chip", label); ch.style.setProperty("--fs", 12 + (maxN > 1 ? ((n - 1) / (maxN - 1)) * 6 : 0) + "px"); if (n > 1) ch.appendChild(el("b", null, String(n))); cloud.appendChild(ch); });
     c2.appendChild(cloud);
   }
-  const c3 = card("Etapas de projeto em que atuam", { note: "Pergunta 14" });
-  const e3 = counts(rows, "etapas_projeto"); c3.appendChild(e3.length ? bars(e3, t) : emptyNote());
-  const c4 = card("Formas de colaboração de interesse", { note: "Pergunta 9" });
-  const e4 = counts(rows, "formas_colaboracao"); c4.appendChild(e4.length ? bars(e4, t) : emptyNote());
-  more.append(c1, c2, c3, c4);
+  more.appendChild(c2);
+  addRank(more, "Etapas de projeto em que atuam", rows, "etapas_projeto");
+  addRank(more, "Formas de colaboração de interesse", rows, "formas_colaboracao");
 }
 
 function addDonut(box, title, rows, id, center, cls) {
@@ -428,17 +477,28 @@ function addDonut(box, title, rows, id, center, cls) {
   c.appendChild(rows.length ? donut(counts(rows, id), rows.length, center) : emptyNote());
   box.appendChild(c);
 }
-function addBars(box, title, rows, id, opts = {}) {
-  const c = card(title, { cls: opts.cls, note: Q[id]?.type === "checkbox" ? "Cada parceiro pode marcar várias." : null });
+function addRank(box, title, rows, id, opts = {}) {
+  const c = card(title, { cls: opts.cls, note: Q[id]?.type === "checkbox" ? "Cada parceiro pode marcar várias opções." : null });
   const e = counts(rows, id, opts.getter);
-  c.appendChild(rows.length && e.length ? bars(e, rows.length, opts) : emptyNote());
+  c.appendChild(rows.length && e.length ? chipRank(e, rows.length, opts) : emptyNote());
   box.appendChild(c);
 }
 function addCols(box, title, rows, id, short, cls) {
-  const c = card(title, { cls });
+  const c = card(title, { cls: "colcard" + (cls ? " " + cls : "") });
   c.appendChild(rows.length ? columns(counts(rows, id), rows.length, short) : emptyNote());
   box.appendChild(c);
 }
+function addInsights(box, rows, items) {
+  const g = el("div", "insights span3");
+  items.forEach(([title, id]) => g.appendChild(insight(title, rows, id)));
+  box.appendChild(g);
+}
+
+const shortFormacao = (l) => ({
+  "Ensino técnico": "Técnico", "Graduação em andamento": "Graduação (cursando)", "Graduação completa": "Graduação",
+  "Especialização / MBA em andamento": "Espec./MBA (cursando)", "Especialização / MBA completo": "Espec./MBA",
+  "Formação predominantemente autodidata ou por cursos livres": "Autodidata",
+}[l] || l);
 
 function dashboard(rows) {
   kpis(rows);
@@ -447,26 +507,30 @@ function dashboard(rows) {
   const per = document.getElementById("perfil"); per.replaceChildren();
   addDonut(per, "Situação PJ", rows, "atuacao_pj", "candidaturas");
   addCols(per, "Tempo na principal especialidade", rows, "tempo_especialidade", shortTempo, "span2");
-  addBars(per, "Nível de formação", rows, "nivel_formacao");
-  addCols(per, "Tempo atuando de forma independente", rows, "tempo_independente", shortTempo);
-  addBars(per, "Experiência com liderança", rows, "lideranca");
-  addBars(per, "Modelo de atuação", rows, "modelo_atuacao", { cls: "span2" });
-  addBars(per, "Já atuou como especialista externo", rows, "servicos_especialista_externo");
+  addCols(per, "Nível de formação", rows, "nivel_formacao", shortFormacao, "span2");
+  addCols(per, "Tempo como independente", rows, "tempo_independente", shortTempo);
+  addInsights(per, rows, [
+    ["Liderança", "lideranca"],
+    ["Especialista externo", "servicos_especialista_externo"],
+    ["Projetos multidisciplinares", "colaboracao_multidisciplinar"],
+    ["Equipe ou rede própria", "equipe_propria"],
+  ]);
+  addRank(per, "Modelo de atuação", rows, "modelo_atuacao", { cls: "span3" });
 
   const dis = document.getElementById("disponibilidade"); dis.replaceChildren();
   addDonut(dis, "Disponibilidade para projetos", rows, "disponibilidade_colaborar", "candidaturas");
   addCols(dis, "Horas semanais disponíveis", rows, "horas_semanais", shortHoras, "span2");
-  addBars(dis, "Formatos de atuação", rows, "formatos_atuacao");
-  addBars(dis, "Presencial em Curitiba / região", rows, "presencial_curitiba");
-  addBars(dis, "Viagens e deslocamentos", rows, "viagens");
-  addBars(dis, "Formatos de contratação aceitos", rows, "formatos_contratacao");
-  addBars(dis, "Forma de precificação", rows, "precificacao");
-  addBars(dis, "Equipe ou rede própria", rows, "equipe_propria");
-  addBars(dis, "Interesse em projetos em parceria", rows, "interesse_parceria", { cls: "span3" });
+  addInsights(dis, rows, [
+    ["Presencial em Curitiba", "presencial_curitiba"],
+    ["Viagens", "viagens"],
+    ["Precificação", "precificacao"],
+    ["Projetos em parceria", "interesse_parceria"],
+  ]);
+  addRank(dis, "Formatos de atuação", rows, "formatos_atuacao");
+  addRank(dis, "Formatos de contratação aceitos", rows, "formatos_contratacao", { cls: "span2" });
 
   const seg = document.getElementById("segmentos"); seg.replaceChildren();
-  addBars(seg, "Segmentos de mercado", rows, "segmentos", { cls: "span2", limit: 12 });
-  addDonut(seg, "Projetos multidisciplinares", rows, "colaboracao_multidisciplinar", "candidaturas");
+  addRank(seg, "Segmentos de mercado", rows, "segmentos", { cls: "span3", limit: 12 });
 
   const loc = document.getElementById("localizacao"); loc.replaceChildren();
   const cu = card("Estados", { cls: "span2", note: "Identificado pela sigla no fim da pergunta 4 (ex.: “Curitiba — PR”)." });
@@ -477,8 +541,8 @@ function dashboard(rows) {
   const wa = card("Grupo de WhatsApp");
   wa.appendChild(rows.length ? ring(rows.filter((r) => startsSim(r.interesse_whatsapp)).length, rows.length, "querem participar do grupo de networking") : emptyNote());
   loc.appendChild(wa);
-  addBars(loc, "Cidades", rows, "cidade", { getter: (r) => cidade(r.cidade_estado), limit: 10 });
   addDonut(loc, "Como conheceram a iniciativa", rows, "como_conheceu", "respostas", "span2");
+  addRank(loc, "Cidades", rows, "cidade", { getter: (r) => cidade(r.cidade_estado) });
 }
 
 /* ---------- Candidaturas ---------- */
