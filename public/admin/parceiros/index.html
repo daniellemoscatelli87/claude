@@ -206,7 +206,9 @@ const { el } = Admin;
 const Q = Object.fromEntries(FORM_PARCEIROS.flatMap((s) => s.questions).map((q) => [q.id, q]));
 const optionsOf = (id) => Q[id].groups ? Q[id].groups.flatMap((g) => g.options) : Q[id].options;
 const SECOES = FORM_PARCEIROS.map((s) => ({ title: s.title, fields: s.questions.map((q) => [q.id, q.n + ". " + q.label]) }));
-const CAT = ["var(--s1)", "var(--s2)", "var(--s3)", "var(--s4)", "var(--s5)", "var(--s6)"];
+const CAT = ["var(--s1)", "var(--s2)", "var(--s3)", "var(--s4)", "var(--s5)"];
+// Cor por opção (ordem do formulário); "Outro" sempre no neutro da marca.
+const catColor = (label, i) => (/^Outro/.test(label) ? "var(--slate)" : CAT[i % CAT.length]);
 const clean = (s) => String(s).replace(/\.$/, "");
 const pct = (n, t) => (t ? Math.round((n / t) * 100) : 0);
 const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
@@ -355,7 +357,7 @@ function donut(entries, total, centerLabel) {
   entries.forEach(([label, n], i) => {
     if (!n || !total) return;
     const len = (n / total) * C;
-    const c = svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: CAT[i % CAT.length], "stroke-width": 6,
+    const c = svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: catColor(label, i), "stroke-width": 6,
       "stroke-dasharray": Math.max(len - GAP, 0.01) + " " + (C - Math.max(len - GAP, 0.01)), "stroke-dashoffset": -off });
     const t = svg("title", {}); t.textContent = clean(label) + ": " + n + " (" + pct(n, total) + "%)";
     c.appendChild(t); s.appendChild(c);
@@ -367,7 +369,7 @@ function donut(entries, total, centerLabel) {
   const lg = el("div", "legend");
   entries.forEach(([label, n], i) => {
     const li = el("div", "li" + (n ? "" : " zero"));
-    const dot = el("span", "dot"); dot.style.background = n ? CAT[i % CAT.length] : "#e2e8f0";
+    const dot = el("span", "dot"); dot.style.background = n ? catColor(label, i) : "#e2e8f0";
     const v = el("span", "n"); v.append(el("b", null, String(n)), document.createTextNode(" · " + pct(n, total) + "%"));
     li.append(dot, el("span", null, clean(label)), v);
     lg.appendChild(li);
@@ -399,7 +401,7 @@ function ring(n, total, text) {
   const s = svg("svg", { viewBox: "0 0 42 42", role: "img", "aria-label": text });
   const R = 15.9155, C = 2 * Math.PI * R, len = total ? (n / total) * C : 0;
   s.append(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#f1f5f9", "stroke-width": 5 }),
-    svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "var(--s3)", "stroke-width": 5, "stroke-linecap": "round", "stroke-dasharray": len + " " + (C - len) }));
+    svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "var(--red)", "stroke-width": 5, "stroke-linecap": "round", "stroke-dasharray": len + " " + (C - len) }));
   r.append(s, el("div", "ctr", pct(n, total) + "%"));
   const t = el("div"); t.append(el("div", null, text), el("div", "muted", plural(n, "parceiro", "parceiros") + " de " + total));
   wrap.append(r, t);
@@ -417,7 +419,7 @@ const KPI_ICONS = {
   flag: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
   pin: '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
 };
-const TINTS = [["#e8f0fb", "var(--s1)"], ["#fdece4", "var(--s2)"], ["#e3f5ee", "#12865c"], ["#fdf3dc", "#a06d00"]];
+const TINTS = [["var(--red-tint)", "var(--red)"], ["var(--slate-tint)", "var(--slate)"], ["var(--red-tint)", "var(--red)"], ["var(--slate-tint)", "var(--slate)"]];
 
 function kpis(rows) {
   const box = document.getElementById("kpis"); box.replaceChildren();
@@ -447,7 +449,7 @@ function skills(rows) {
   Q.areas_experiencia.groups.forEach((g, i) => {
     const people = rows.filter((r) => (r.areas_experiencia || []).some((x) => g.options.includes(x))).length;
     const top = counts(rows, "areas_experiencia").filter(([o]) => g.options.includes(o)).slice(0, 4);
-    const c = el("div", "card sg"); c.style.setProperty("--c", CAT[i % CAT.length]);
+    const c = el("div", "card sg"); c.style.setProperty("--c", i % 2 ? "var(--slate)" : "var(--red)");
     const gv = el("div", "gv"); gv.append(el("b", null, String(people)), el("span", null, (people === 1 ? "parceiro" : "parceiros") + " · " + pct(people, t) + "%"));
     const chips = el("div", "chips");
     top.forEach(([o, n]) => { const ch = el("span", "chip", clean(o)); ch.appendChild(el("b", null, String(n))); chips.appendChild(ch); });

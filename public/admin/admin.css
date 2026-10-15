@@ -1,8 +1,9 @@
 :root {
   --red:#d44d4d; --red-dark:#c13e3e; --red-tint:#fdeeee; --dark:#0f172a; --muted:#64748b; --line:#e2e8f0;
   --bg:#f6f7f9; --card:#fff; --track:#f1f5f9;
-  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
-  --seq:#2a78d6;
+  /* Escala da marca (vermelho, escuro → claro), validada para leitura e daltonismo; cinza-azulado do logo como neutro */
+  --s1:#6e1f1f; --s2:#9c3131; --s3:#c94444; --s4:#e06b63; --s5:#ec948c; --slate:#5c6986; --slate-tint:#eceef3;
+  --seq:#5c6986;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
