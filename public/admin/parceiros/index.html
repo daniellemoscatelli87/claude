@@ -430,7 +430,7 @@ function coverage(rows, id) {
 
   const left = el("div");
   left.appendChild(el("h4", null, "Onde a rede tem parceiros"));
-  left.appendChild(covered.length ? ranked(covered, t, { limit: 8, compact: true }) : el("p", "none-note", "Nenhum segmento marcado ainda."));
+  left.appendChild(covered.length ? ranked(covered, 0, { limit: 8, compact: true }) : el("p", "none-note", "Nenhum segmento marcado ainda."));
   wrap.appendChild(left);
 
   const right = el("div", "gaps-box" + (gaps.length > 8 ? " closed" : ""));
