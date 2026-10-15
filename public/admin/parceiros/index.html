@@ -148,6 +148,13 @@
   .ring { width: 120px; height: 120px; flex-shrink: 0; position: relative; }
   .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
   .card .note.after { margin: 14px 0 0; }
+  .uf-det { margin-top: 18px; border-top: 1px solid var(--track); padding-top: 14px; display: grid; gap: 12px; }
+  .uf-det-h { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .uf-head { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
+  .uf-head span { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+  .uf-cities { list-style: none; margin: 6px 0 0; padding: 0 0 0 12px; border-left: 2px solid var(--track); display: grid; gap: 4px; }
+  .uf-cities li { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--dark); }
+  .uf-cities li b { font-variant-numeric: tabular-nums; }
   .ring .ctr { position: absolute; inset: 0; display: grid; place-items: center; font-size: 24px; font-weight: 800; }
 
 
@@ -669,6 +676,19 @@ function dashboard(rows) {
     if (outros) top.push(["Outros estados", outros]);
     const tot = ufs.reduce((a, [, n]) => a + n, 0);
     cu.appendChild(donut(top, tot, "parceiros por estado", { pie: true }));
+    // Detalhamento: as cidades de cada estado, com a quantidade de parceiros.
+    const det = el("div", "uf-det");
+    det.appendChild(el("div", "uf-det-h", "Cidades por estado"));
+    ufs.forEach(([u, n]) => {
+      const cs = counts(rows.filter((r) => uf(r.cidade_estado) === u), "cidade", (r) => cidade(r.cidade_estado));
+      const row = el("div", "uf-row");
+      const head = el("div", "uf-head"); head.append(el("b", null, UF_NOME[u] + " (" + u + ")"), el("span", null, plural(n, "parceiro", "parceiros")));
+      const list = el("ul", "uf-cities");
+      cs.forEach(([c, k]) => { const li = el("li"); li.append(el("span", null, c), el("b", null, String(k))); list.appendChild(li); });
+      row.append(head, list);
+      det.appendChild(row);
+    });
+    cu.appendChild(det);
   }
   if (semUf > 0) cu.appendChild(el("p", "note after", plural(semUf, "candidatura", "candidaturas") + " sem estado identificado (formulário antigo, sem a sigla) não " + (semUf === 1 ? "entra" : "entram") + " no gráfico."));
   loc.appendChild(cu);
@@ -676,7 +696,6 @@ function dashboard(rows) {
   wa.appendChild(rows.length ? ring(rows.filter((r) => startsSim(r.interesse_whatsapp)).length, rows.length, "querem participar do grupo de networking") : emptyNote());
   loc.appendChild(wa);
   addDonut(loc, "Como conheceram a iniciativa", rows, "como_conheceu", "respostas", "span2");
-  addViz(loc, "Principais cidades", rows, () => ranked(counts(rows, "cidade", (r) => cidade(r.cidade_estado)), rows.length, { limit: 5, compact: true }));
 }
 
 /* ---------- Candidaturas ---------- */
