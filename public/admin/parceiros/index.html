@@ -147,14 +147,9 @@
   .ring-wrap { display: flex; gap: 18px; align-items: center; }
   .ring { width: 120px; height: 120px; flex-shrink: 0; position: relative; }
   .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .card .note.after { margin: 14px 0 0; }
   .ring .ctr { position: absolute; inset: 0; display: grid; place-items: center; font-size: 24px; font-weight: 800; }
 
-  /* Estados */
-  .uf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; }
-  .uf { border-radius: 12px; padding: 10px; background: var(--track); text-align: center; }
-  .uf b { display: block; font-size: 22px; font-weight: 800; line-height: 1.1; }
-  .uf span { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .06em; }
-  .uf.top { background: var(--red); color: #fff; } .uf.top span { color: #fde2e2; }
 
   /* Lista de candidaturas */
   .cand-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
@@ -242,6 +237,7 @@ const clean = (s) => String(s).replace(/\.$/, "");
 const pct = (n, t) => (t ? Math.round((n / t) * 100) : 0);
 const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
 const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const UF_NOME = { AC: "Acre", AL: "Alagoas", AP: "Amapá", AM: "Amazonas", BA: "Bahia", CE: "Ceará", DF: "Distrito Federal", ES: "Espírito Santo", GO: "Goiás", MA: "Maranhão", MT: "Mato Grosso", MS: "Mato Grosso do Sul", MG: "Minas Gerais", PA: "Pará", PB: "Paraíba", PR: "Paraná", PE: "Pernambuco", PI: "Piauí", RJ: "Rio de Janeiro", RN: "Rio Grande do Norte", RS: "Rio Grande do Sul", RO: "Rondônia", RR: "Roraima", SC: "Santa Catarina", SP: "São Paulo", SE: "Sergipe", TO: "Tocantins" };
 const uf = (s) => ((s || "").toUpperCase().match(/\b([A-Z]{2})\s*\.?$/) || [])[1] || "-";
 const MINUSC = new Set(["de", "da", "do", "das", "dos", "e"]);
 // Tira o estado do fim ("Curitiba - PR", "Curitiba/PR", "Curitiba, PR") sem cortar nomes com hífen ("Embu-Guaçu").
@@ -476,24 +472,25 @@ function insight(title, rows, id) {
 }
 
 // Rosca: cor fixa por opção (ordem do formulário), números sempre visíveis na legenda.
-function donut(entries, total, centerLabel) {
+// Com { pie: true } desenha a pizza cheia (sem o miolo e o total no centro).
+function donut(entries, total, centerLabel, { pie = false } = {}) {
   const wrap = el("div", "donut-wrap");
   const d = el("div", "donut");
   const s = svg("svg", { viewBox: "0 0 42 42", role: "img", "aria-label": centerLabel });
-  const R = 15.9155, C = 2 * Math.PI * R, GAP = entries.filter(([, n]) => n).length > 1 ? 0.6 : 0;
-  s.appendChild(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#f1f5f9", "stroke-width": 6 }));
+  const R = pie ? 10.5 : 15.9155, W = pie ? 21 : 6, C = 2 * Math.PI * R, GAP = !pie && entries.filter(([, n]) => n).length > 1 ? 0.6 : 0;
+  s.appendChild(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#f1f5f9", "stroke-width": W }));
   let off = 0;
   entries.forEach(([label, n], i) => {
     if (!n || !total) return;
     const len = (n / total) * C;
-    const c = svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: catColor(label, i), "stroke-width": 6,
+    const c = svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: catColor(label, i), "stroke-width": W,
       "stroke-dasharray": Math.max(len - GAP, 0.01) + " " + (C - Math.max(len - GAP, 0.01)), "stroke-dashoffset": -off });
     const t = svg("title", {}); t.textContent = clean(label) + ": " + n + " (" + pct(n, total) + "%)";
     c.appendChild(t); s.appendChild(c);
     off += len;
   });
   d.appendChild(s);
-  const ctr = el("div", "ctr"); const inner = el("div"); inner.append(el("b", null, String(total)), el("span", null, centerLabel)); ctr.appendChild(inner);
+  const ctr = el("div", "ctr" + (pie ? " hidden" : "")); const inner = el("div"); inner.append(el("b", null, String(total)), el("span", null, centerLabel)); ctr.appendChild(inner);
   d.appendChild(ctr);
   const lg = el("div", "legend");
   entries.forEach(([label, n], i) => {
@@ -661,10 +658,19 @@ function dashboard(rows) {
   addViz(seg, "Segmentos de mercado", rows, () => coverage(rows, "segmentos"), { cls: "span3", note: "Pergunta " + Q.segmentos.n + " · onde a rede tem conhecimento e onde ainda há lacunas." });
 
   const loc = document.getElementById("localizacao"); loc.replaceChildren();
-  const cu = card("Estados", { cls: "span2", note: "Identificado pela sigla no fim da pergunta " + Q.cidade_estado.n + " (ex.: “Curitiba - PR”)." });
-  const ufs = counts(rows, "uf", (r) => uf(r.cidade_estado));
+  // Pizza só com os estados identificados; os 5 maiores e o restante somado em "Outros estados".
+  const cu = card("Estados", { cls: "span2", note: "Pergunta " + Q.cidade_estado.n + " · estado onde o parceiro reside." });
+  const ufs = counts(rows, "uf", (r) => uf(r.cidade_estado)).filter(([u]) => UF_NOME[u]);
+  const semUf = rows.length - ufs.reduce((a, [, n]) => a + n, 0);
   if (!ufs.length) cu.appendChild(emptyNote());
-  else { const g = el("div", "uf-grid"); ufs.forEach(([u, n], i) => { const t = el("div", "uf" + (i === 0 ? " top" : "")); t.title = u + ": " + plural(n, "parceiro", "parceiros"); t.append(el("b", null, String(n)), el("span", null, u)); g.appendChild(t); }); cu.appendChild(g); }
+  else {
+    const top = ufs.slice(0, 5).map(([u, n]) => [UF_NOME[u] + " (" + u + ")", n]);
+    const outros = ufs.slice(5).reduce((a, [, n]) => a + n, 0);
+    if (outros) top.push(["Outros estados", outros]);
+    const tot = ufs.reduce((a, [, n]) => a + n, 0);
+    cu.appendChild(donut(top, tot, "parceiros por estado", { pie: true }));
+  }
+  if (semUf > 0) cu.appendChild(el("p", "note after", plural(semUf, "candidatura", "candidaturas") + " sem estado identificado (formulário antigo, sem a sigla) não " + (semUf === 1 ? "entra" : "entram") + " no gráfico."));
   loc.appendChild(cu);
   const wa = card("Grupo de WhatsApp");
   wa.appendChild(rows.length ? ring(rows.filter((r) => startsSim(r.interesse_whatsapp)).length, rows.length, "querem participar do grupo de networking") : emptyNote());
