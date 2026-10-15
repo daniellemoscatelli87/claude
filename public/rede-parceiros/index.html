@@ -345,68 +345,67 @@ const SECTIONS = [
     { id: "nivel_formacao", n: 20, label: "Qual é o seu nível de formação acadêmica?", type: "radio", required: true, options: [
       "Ensino técnico.", "Graduação em andamento.", "Graduação completa.", "Especialização / MBA em andamento.", "Especialização / MBA completo.", "Mestrado.", "Doutorado.", "Formação predominantemente autodidata ou por cursos livres.", "Outro.",
     ]},
-    { id: "formacao", n: 21, label: "Qual é a sua formação acadêmica e/ou técnica?", type: "paragraph", required: true, help: "Informe sua área de formação, instituições e principais qualificações relevantes para sua atuação." },
-    { id: "certificacoes", n: 22, label: "Possui certificações, cursos ou especializações relevantes?", type: "paragraph", required: false, help: "Informe as principais certificações, cursos ou especializações relacionadas às suas competências." },
-    { id: "tempo_especialidade", n: 23, label: "Há quanto tempo você atua profissionalmente em sua principal especialidade?", type: "radio", required: true, options: [
+    { id: "formacao", n: 21, label: "Quais são a sua formação e as certificações, cursos ou especializações relevantes?", type: "list", placeholder: "Ex.: Design Gráfico, Universidade X", required: true, help: "Inclua um item por linha: formação acadêmica ou técnica (área e instituição), certificações, cursos e especializações relacionadas à sua atuação." },
+    { id: "tempo_especialidade", n: 22, label: "Há quanto tempo você atua profissionalmente em sua principal especialidade?", type: "radio", required: true, options: [
       "Menos de 1 ano.", "Entre 1 e 2 anos.", "Entre 3 e 5 anos.", "Entre 6 e 10 anos.", "Entre 11 e 15 anos.", "Entre 16 e 20 anos.", "Mais de 20 anos.",
     ]},
-    { id: "tempo_independente", n: 24, label: "Há quanto tempo você presta serviços de forma independente ou atua como consultor(a)?", type: "radio", required: true, options: [
+    { id: "tempo_independente", n: 23, label: "Há quanto tempo você presta serviços de forma independente ou atua como consultor(a)?", type: "radio", required: true, options: [
       "Ainda não comecei, mas tenho interesse.", "Menos de 1 ano.", "Entre 1 e 2 anos.", "Entre 3 e 5 anos.", "Entre 6 e 10 anos.", "Mais de 10 anos.",
     ]},
-    { id: "lideranca", n: 25, label: "Você possui experiência liderando projetos ou frentes de trabalho?", type: "radio", required: true, options: [
+    { id: "lideranca", n: 24, label: "Você possui experiência liderando projetos ou frentes de trabalho?", type: "radio", required: true, options: [
       "Sim, lidero projetos completos.", "Sim, lidero frentes específicas de projetos.", "Já liderei projetos pontualmente.", "Ainda não, mas tenho interesse.", "Prefiro atuar como especialista ou executor(a).",
     ]},
   ]},
   { title: "Portfólio, cases e experiência prática", n: "Seção 6", questions: [
-    { id: "possui_portfolio", n: 26, label: "Você possui portfólio, site profissional ou cases publicados?", type: "radio", required: true, options: [
+    { id: "possui_portfolio", n: 25, label: "Você possui portfólio, site profissional ou cases publicados?", type: "radio", required: true, options: [
       "Sim, possuo portfólio online.", "Sim, possuo site profissional.", "Sim, possuo cases ou apresentações de projetos.", "Possuo trabalhos, mas não posso divulgá-los publicamente.", "Ainda não possuo portfólio estruturado.",
     ]},
-    { id: "link_portfolio", n: 27, label: "Compartilhe o link do seu portfólio, site ou cases profissionais.", type: "url", placeholder: "https://", required: false, help: "LinkedIn, Behance, Dribbble, GitHub, Notion, site próprio ou outro endereço relevante." },
-    { id: "projeto_relevante", n: 28, label: "Conte brevemente sobre um projeto relevante do qual participou.", type: "paragraph", required: true,
+    { id: "link_portfolio", n: 26, label: "Compartilhe o link do seu portfólio, site ou cases profissionais.", type: "url", placeholder: "https://", required: false, help: "LinkedIn, Behance, Dribbble, GitHub, Notion, site próprio ou outro endereço relevante." },
+    { id: "projeto_relevante", n: 27, label: "Conte brevemente sobre um projeto relevante do qual participou.", type: "paragraph", required: true,
       helpHtml: "Se possível, descreva:<ul><li>Qual era o desafio ou problema?</li><li>Qual foi sua responsabilidade?</li><li>Que abordagem ou metodologia utilizou?</li><li>Qual solução foi desenvolvida?</li><li>Quais resultados foram alcançados?</li></ul>Não compartilhe informações confidenciais de clientes ou empresas." },
-    { id: "servicos_especialista_externo", n: 29, label: "Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?", type: "radio", required: true, options: [
+    { id: "servicos_especialista_externo", n: 28, label: "Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?", type: "radio", required: true, options: [
       "Sim, frequentemente.", "Sim, ocasionalmente.", "Ainda não, mas tenho interesse.", "Não tenho interesse nesse modelo de colaboração.",
     ]},
-    { id: "ferramentas", n: 30, label: "Quais ferramentas, plataformas ou metodologias você domina?", type: "paragraph", required: false, help: "Exemplos: Figma, Miro, FigJam, Adobe, ferramentas de pesquisa, plataformas de automação, linguagens de programação, frameworks de Service Design, Design Thinking, métodos de pesquisa, inteligência artificial etc." },
+    { id: "ferramentas", n: 29, label: "Quais ferramentas, plataformas ou metodologias você domina?", type: "paragraph", required: false, help: "Exemplos: Figma, Miro, FigJam, Adobe, ferramentas de pesquisa, plataformas de automação, linguagens de programação, frameworks de Service Design, Design Thinking, métodos de pesquisa, inteligência artificial etc." },
   ]},
   { title: "Disponibilidade e modelo de colaboração", n: "Seção 7", questions: [
-    { id: "formatos_atuacao", n: 31, label: "Em quais formatos você tem disponibilidade para atuar?", type: "checkbox", required: true, options: [
+    { id: "formatos_atuacao", n: 30, label: "Em quais formatos você tem disponibilidade para atuar?", type: "checkbox", required: true, options: [
       "100% remoto.", "Híbrido, com encontros presenciais pontuais.", "Presencial na minha cidade/região.", "Presencial em outras cidades, mediante planejamento.", "Presencial em qualquer região do Brasil, mediante negociação.",
     ]},
-    { id: "viagens", n: 32, label: "Você possui disponibilidade para deslocamentos ou viagens profissionais?", type: "radio", required: true, options: [
+    { id: "viagens", n: 31, label: "Você possui disponibilidade para deslocamentos ou viagens profissionais?", type: "radio", required: true, options: [
       "Sim, tenho disponibilidade para viagens nacionais.", "Sim, mas apenas para viagens de curta duração.", "Sim, dependendo da localização e das condições.", "Apenas para deslocamentos dentro da minha região.", "Não tenho disponibilidade para viagens.",
     ]},
-    { id: "presencial_curitiba", n: 33, label: "Você teria disponibilidade para atuar presencialmente em Curitiba/PR ou região metropolitana?", type: "radio", required: true, options: [
+    { id: "presencial_curitiba", n: 32, label: "Você teria disponibilidade para atuar presencialmente em Curitiba/PR ou região metropolitana?", type: "radio", required: true, options: [
       "Sim, sem necessidade de deslocamento ou hospedagem.", "Sim, mediante negociação de deslocamento e/ou hospedagem.", "Sim, apenas para encontros ou atividades pontuais.", "Não, somente em formato remoto.",
     ]},
-    { id: "horas_semanais", n: 34, label: "Qual é sua disponibilidade média para dedicação a projetos?", type: "radio", required: true, options: [
+    { id: "horas_semanais", n: 33, label: "Qual é sua disponibilidade média para dedicação a projetos?", type: "radio", required: true, options: [
       "Até 5 horas semanais.", "De 6 a 10 horas semanais.", "De 11 a 20 horas semanais.", "De 21 a 30 horas semanais.", "Mais de 30 horas semanais.", "Disponibilidade variável conforme o projeto.",
     ]},
-    { id: "formatos_contratacao", n: 35, label: "Quais formatos de contratação você costuma aceitar?", type: "checkbox", required: true, options: [
+    { id: "formatos_contratacao", n: 34, label: "Quais formatos de contratação você costuma aceitar?", type: "checkbox", required: true, options: [
       "Projeto com escopo e valor fechado.", "Contratação por hora.", "Contratação por diária.", "Contratação por entregáveis.", "Contratação recorrente por período determinado.", "Consultoria ou mentoria pontual.", "Formato negociável conforme a demanda.",
     ]},
-    { id: "precificacao", n: 36, label: "Como você costuma precificar seus serviços?", type: "radio", required: true, options: [
+    { id: "precificacao", n: 35, label: "Como você costuma precificar seus serviços?", type: "radio", required: true, options: [
       "Valor por hora.", "Valor por diária.", "Valor por projeto.", "Valor por entregável.", "Mensalidade / contrato recorrente.", "Depende do escopo e da complexidade.",
     ]},
-    { id: "referencia_valores", n: 37, label: "Deseja compartilhar uma referência de valores para contratação?", type: "paragraph", required: false, help: "Campo opcional. Você pode informar valores por hora, diária, projeto ou outros parâmetros comerciais que considere relevantes. Os valores são apenas referenciais e não representam uma proposta contratual." },
-    { id: "equipe_propria", n: 38, label: "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?", type: "radio", required: true, options: [
+    { id: "referencia_valores", n: 36, label: "Deseja compartilhar uma referência de valores para contratação?", type: "paragraph", required: false, help: "Campo opcional. Você pode informar valores por hora, diária, projeto ou outros parâmetros comerciais que considere relevantes. Os valores são apenas referenciais e não representam uma proposta contratual." },
+    { id: "equipe_propria", n: 37, label: "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?", type: "radio", required: true, options: [
       "Sim, possuo equipe própria.", "Sim, possuo parceiros recorrentes.", "Não, atuo individualmente.", "Não, mas tenho interesse em formar parcerias.",
     ]},
-    { id: "interesse_parceria", n: 39, label: "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?", type: "radio", required: true, options: [
+    { id: "interesse_parceria", n: 38, label: "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?", type: "radio", required: true, options: [
       "Sim, tenho bastante interesse.", "Sim, dependendo do projeto e das responsabilidades.", "Prefiro atuar individualmente.", "Gostaria de entender melhor o formato de colaboração.",
     ]},
-    { id: "condicoes", n: 40, label: "Existe alguma condição ou preferência importante para sua participação em projetos futuros?", type: "paragraph", required: false, help: "Compartilhe restrições de agenda, disponibilidade, preferências de atuação, condições comerciais ou outras informações que considere relevantes." },
+    { id: "condicoes", n: 39, label: "Existe alguma condição ou preferência importante para sua participação em projetos futuros?", type: "paragraph", required: false, help: "Compartilhe restrições de agenda, disponibilidade, preferências de atuação, condições comerciais ou outras informações que considere relevantes." },
   ]},
   { title: "Conexão e autorizações", n: "Seção 8", questions: [
-    { id: "como_conheceu", n: 41, label: "Como você conheceu esta iniciativa?", type: "radio", required: false, options: [
+    { id: "como_conheceu", n: 40, label: "Como você conheceu esta iniciativa?", type: "radio", required: false, options: [
       "LinkedIn.", "Instagram.", "Indicação de outro profissional.", "Comunidade ou grupo profissional.", "Já conhecia o trabalho da Dani Moscatelli.", "Outro.",
     ]},
-    { id: "autoriza_dados", n: 42, label: "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?", type: "radio", required: true,
+    { id: "autoriza_dados", n: 41, label: "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?", type: "radio", required: true,
       infoHtml: "<p><strong>Informações sobre o tratamento de dados:</strong></p><p>Os dados fornecidos serão utilizados por Dani Moscatelli | Experience Design Studio para organização da rede de parceiros, análise de competências profissionais e contato relacionado a possíveis oportunidades de colaboração.</p><p>O preenchimento é voluntário. As informações não serão divulgadas publicamente nem compartilhadas com terceiros para finalidades incompatíveis com as descritas neste formulário.</p><p>Você poderá solicitar acesso, correção ou exclusão dos seus dados pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação.</p>",
       options: [CONSENT_YES, CONSENT_NO] },
   ]},
   { title: "Comunidade de networking", n: "Seção final", questions: [
-    { id: "interesse_whatsapp", n: 43, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
+    { id: "interesse_whatsapp", n: 42, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
       infoHtml: "<p>Estamos construindo uma comunidade para conectar profissionais de diferentes especialidades, promover a troca de conhecimentos, compartilhar referências e fortalecer conexões profissionais.</p><p>O espaço será voltado a conversas sobre Design, Experiência Humana, Negócios, Tecnologia e Inovação, além da troca de experiências e oportunidades de colaboração.</p><p>A participação é opcional e independente deste cadastro.</p>",
       afterHtml: "<div class=\"info\"><p>🔗 <strong>Link de acesso ao grupo:</strong><br><a href=\"" + WHATSAPP_GROUP + "\" target=\"_blank\" rel=\"noopener\">" + WHATSAPP_GROUP + "</a></p><p>Se tiver interesse, basta acessar o link acima. A participação no grupo não é necessária para concluir seu cadastro.</p></div>",
       options: ["Sim, tenho interesse em participar.", "Não, obrigado(a). Quero apenas fazer parte da rede de parceiros."] },
