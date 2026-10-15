@@ -686,6 +686,37 @@ function show(i) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+// Confete no topo da tela ao concluir o cadastro (respeita quem prefere menos movimento).
+function confetti() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv = document.createElement("canvas");
+  cv.style.cssText = "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50";
+  document.body.appendChild(cv);
+  const ctx = cv.getContext("2d"), dpr = window.devicePixelRatio || 1;
+  const W = innerWidth, H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+  const colors = ["#ff5656", "#fe6a62", "#ffb3ae", "#5c6986", "#a8afbd", "#ffd166"];
+  const ps = Array.from({ length: 160 }, () => ({
+    x: Math.random() * W, y: -20 - Math.random() * H * 0.4,
+    vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3,
+    w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
+    r: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3,
+    c: colors[Math.floor(Math.random() * colors.length)],
+  }));
+  const t0 = performance.now();
+  (function frame(t) {
+    const el = t - t0;
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalAlpha = el > 3000 ? Math.max(0, 1 - (el - 3000) / 1000) : 1;
+    ps.forEach((p) => {
+      p.x += p.vx + Math.sin((el / 300) + p.r) * 0.6; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r))); ctx.restore();
+    });
+    if (el < 4000) requestAnimationFrame(frame); else cv.remove();
+  })(t0);
+}
+
 function end(id) {
   form.classList.add("hidden");
   document.getElementById("progressBox").classList.add("hidden");
@@ -727,6 +758,7 @@ async function submit() {
     });
     if (!res.ok) throw new Error(await res.text());
     end("endSuccess");
+    confetti();
   } catch (err) {
     console.error(err);
     errBox.textContent = "Não foi possível enviar seu cadastro. Verifique sua conexão e tente novamente.";
