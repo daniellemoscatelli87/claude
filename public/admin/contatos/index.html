@@ -18,6 +18,17 @@
   .status-info, .status-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .status-meet { border-top: 1px solid var(--track); padding-top: 12px; }
   .status-meet .l { margin-top: 0; }
+  #historico { margin-bottom: 12px; }
+  .thread { display: grid; gap: 10px; margin: 12px 0 16px; }
+  .bubble { border-radius: 14px; padding: 12px 14px; max-width: 92%; }
+  .bubble.in { background: var(--track); justify-self: start; }
+  .bubble.out { background: var(--red-tint); justify-self: end; }
+  .bubble .who { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+  .bubble .txt { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; }
+  .reply textarea { width: 100%; min-height: 140px; font: inherit; font-size: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; color: var(--dark); resize: vertical; outline: none; }
+  .reply textarea:focus { border-color: var(--red); background: #fff; box-shadow: 0 0 0 3px rgb(212 77 77 / .15); }
+  .reply .row-end { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+  .reply .to { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
   .meet-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
   .meet-form input { width: auto; flex: 1 1 200px; font: inherit; font-size: 14px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; color: var(--dark); }
 </style>
@@ -35,6 +46,7 @@
   <div id="view-detail" class="hidden">
     <a class="back" href="/admin/contatos/">← Todas as mensagens</a>
     <div class="card status-bar" id="status"></div>
+    <section class="card" id="historico"></section>
     <div id="detail"></div>
   </div>
 </main>
@@ -97,6 +109,48 @@ function statusBar(r) {
   bar.appendChild(box);
 }
 
+// Histórico: a mensagem recebida e as respostas enviadas pela plataforma, com campo para responder.
+async function historico(r) {
+  const box = document.getElementById("historico");
+  box.replaceChildren(Admin.el("h2", null, "Histórico"), Admin.el("p", "muted", "Carregando…"));
+  const { data: respostas, error } = await Admin.sb.from("respostas").select("id, created_at, mensagem").eq("contato_id", r.id).order("created_at", { ascending: true });
+  const thread = Admin.el("div", "thread");
+  const bubble = (cls, who, text) => { const b = Admin.el("div", "bubble " + cls); b.append(Admin.el("div", "who", who), Admin.el("div", "txt", text || "")); return b; };
+  thread.appendChild(bubble("in", (r.nome || "Contato") + " · " + Admin.fmtDate(r.created_at), r.mensagem));
+  (respostas || []).forEach((x) => thread.appendChild(bubble("out", "Você · " + Admin.fmtDate(x.created_at), x.mensagem)));
+
+  const form = Admin.el("form", "reply");
+  const label = Admin.el("label", "l", "Responder"); label.htmlFor = "resposta";
+  const ta = Admin.el("textarea"); ta.id = "resposta"; ta.placeholder = "Escreva sua resposta…";
+  const to = Admin.el("span", "to", r.email ? "Para: " + r.email : "Este contato não informou e-mail.");
+  const btn = Admin.el("button", "btn-ok", "Enviar resposta"); btn.type = "submit"; btn.disabled = !r.email;
+  const msg = Admin.el("p", "msg"); msg.setAttribute("aria-live", "polite");
+  const end = Admin.el("div", "row-end"); end.append(to, btn);
+  form.append(label, ta, end, msg);
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const texto = ta.value.trim();
+    msg.className = "msg";
+    if (!texto) { msg.className = "msg err"; msg.textContent = "Escreva a resposta antes de enviar."; return; }
+    btn.disabled = true; btn.textContent = "Enviando…";
+    const { data, error } = await Admin.sb.functions.invoke("responder-contato", { body: { contato_id: r.id, mensagem: texto } });
+    btn.disabled = false; btn.textContent = "Enviar resposta";
+    if (error || !data?.resposta) {
+      let detail = "";
+      try { detail = (await error?.context?.json())?.error || ""; } catch {}
+      msg.className = "msg err"; msg.textContent = "Não foi possível enviar a resposta." + (detail ? " " + detail : " Tente novamente.");
+      return;
+    }
+    ta.value = "";
+    thread.appendChild(bubble("out", "Você · " + Admin.fmtDate(data.resposta.created_at), data.resposta.mensagem));
+    msg.textContent = "Resposta enviada para " + r.email + ".";
+    if (!r.respondido_em) { r.respondido_em = data.respondido_em; statusBar(r); }
+  });
+  box.replaceChildren(Admin.el("h2", null, "Histórico"), thread);
+  if (error) box.appendChild(Admin.el("p", "msg err", "Não foi possível carregar as respostas anteriores."));
+  box.appendChild(form);
+}
+
 Admin.init({ page: "contatos", onReady: async () => {
   const params = new URLSearchParams(location.search);
   const id = params.get("id");
@@ -108,6 +162,7 @@ Admin.init({ page: "contatos", onReady: async () => {
     const box = document.getElementById("detail");
     if (error || !data) { document.getElementById("status").classList.add("hidden"); box.replaceChildren(Admin.el("div", "card empty", error ? "Não foi possível carregar a mensagem." : "Mensagem não encontrada.")); return; }
     statusBar(data);
+    historico(data);
     Admin.markSeen("contatos", data);
     box.replaceChildren(Admin.detail(data, Admin.CONTATO_SECOES, "Recebida em " + Admin.fmtDate(data.created_at)));
     return;
