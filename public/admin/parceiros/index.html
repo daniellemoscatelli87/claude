@@ -132,7 +132,7 @@
   .meter > div { height: 100%; border-radius: 5px; background: var(--red); }
   .cov h4 { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
   .gaps { font-size: 13.5px; line-height: 1.7; color: var(--muted); margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
-  .gaps li::before { content: "— "; color: #cbd5e1; }
+  .gaps li::before { content: "• "; color: #cbd5e1; }
   @media (max-width: 520px) { .gaps { grid-template-columns: 1fr; } }
   .gaps-box.closed .gaps { max-height: 0; overflow: hidden; }
   .none-note { font-size: 13.5px; color: var(--muted); }
@@ -261,7 +261,7 @@ const clean = (s) => String(s).replace(/\.$/, "");
 const pct = (n, t) => (t ? Math.round((n / t) * 100) : 0);
 const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
 const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-const uf = (s) => ((s || "").toUpperCase().match(/\b([A-Z]{2})\s*\.?$/) || [])[1] || "—";
+const uf = (s) => ((s || "").toUpperCase().match(/\b([A-Z]{2})\s*\.?$/) || [])[1] || "-";
 const MINUSC = new Set(["de", "da", "do", "das", "dos", "e"]);
 const cidade = (s) => (s || "").split(/[—–\-\/,]/)[0].trim().replace(/\s+/g, " ").toLowerCase().split(" ").map((w, i) => (i && MINUSC.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(" ") || "Não informado";
 const startsSim = (v) => typeof v === "string" && v.startsWith("Sim");
@@ -760,7 +760,7 @@ function dashboard(rows) {
   addViz(seg, "Segmentos de mercado", rows, () => coverage(rows, "segmentos"), { cls: "span3", note: "Pergunta " + Q.segmentos.n + " · onde a rede tem conhecimento e onde ainda há lacunas." });
 
   const loc = document.getElementById("localizacao"); loc.replaceChildren();
-  const cu = card("Estados", { cls: "span2", note: "Identificado pela sigla no fim da pergunta " + Q.cidade_estado.n + " (ex.: “Curitiba — PR”)." });
+  const cu = card("Estados", { cls: "span2", note: "Identificado pela sigla no fim da pergunta " + Q.cidade_estado.n + " (ex.: “Curitiba - PR”)." });
   const ufs = counts(rows, "uf", (r) => uf(r.cidade_estado));
   if (!ufs.length) cu.appendChild(emptyNote());
   else { const g = el("div", "uf-grid"); ufs.forEach(([u, n], i) => { const t = el("div", "uf" + (i === 0 ? " top" : "")); t.title = u + ": " + plural(n, "parceiro", "parceiros"); t.append(el("b", null, String(n)), el("span", null, u)); g.appendChild(t); }); cu.appendChild(g); }
