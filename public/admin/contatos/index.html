@@ -13,6 +13,13 @@
 <style>
   .toolbar { display: flex; gap: 12px; align-items: center; margin: 20px 0 12px; flex-wrap: wrap; }
   .toolbar input { max-width: 420px; }
+  #status { display: grid; gap: 12px; }
+  .status-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .status-info, .status-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .status-meet { border-top: 1px solid var(--track); padding-top: 12px; }
+  .status-meet .l { margin-top: 0; }
+  .meet-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .meet-form input { width: auto; flex: 1 1 200px; font: inherit; font-size: 14px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; color: var(--dark); }
 </style>
 </head>
 <body>
@@ -21,7 +28,7 @@
     <h1>Contato</h1>
     <p class="muted" id="count"></p>
     <div class="toolbar"><input type="search" id="busca" placeholder="Buscar por nome, e-mail, empresa, assunto ou mensagem…" aria-label="Buscar mensagens">
-      <select id="situacao" aria-label="Situação" style="max-width:220px"><option value="">Todas as mensagens</option><option value="pendentes">Não respondidas</option><option value="respondidas">Respondidas</option></select></div>
+      <select id="situacao" aria-label="Situação" style="max-width:220px"><option value="">Todas as mensagens</option><option value="pendentes">Não respondidas</option><option value="respondidas">Respondidas</option><option value="reunioes">Reuniões agendadas</option></select></div>
     <p class="msg err hidden" id="load-err"></p>
     <div class="card"><div class="rows" id="list"></div></div>
   </div>
@@ -36,25 +43,58 @@
 <script>
 const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const badge = (r) => r.respondido_em ? Admin.el("span", "badge ok", "Respondida") : Admin.el("span", "badge pend", "Não respondida");
+const pad = (n) => String(n).padStart(2, "0");
+const toLocalInput = (iso) => { const d = new Date(iso); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`; };
 
-// Barra de situação no detalhe: marca/desmarca a mensagem como respondida.
+async function save(r, fields) {
+  const { data, error } = await Admin.sb.from("contatos").update(fields).eq("id", r.id).select("id, respondido_em, reuniao_em").maybeSingle();
+  if (error || !data) { alert("Não foi possível atualizar a mensagem. Tente novamente."); return false; }
+  r.respondido_em = data.respondido_em; r.reuniao_em = data.reuniao_em;
+  return true;
+}
+
+// Barra de situação no detalhe: respondida / não respondida e reunião agendada (com data e hora).
 function statusBar(r) {
   const bar = document.getElementById("status"); bar.replaceChildren();
-  const left = Admin.el("div"); left.style.display = "flex"; left.style.gap = "10px"; left.style.alignItems = "center"; left.style.flexWrap = "wrap";
-  left.appendChild(badge(r));
-  if (r.respondido_em) left.appendChild(Admin.el("span", "when", "em " + Admin.fmtDate(r.respondido_em)));
-  const btn = Admin.el("button", r.respondido_em ? "btn-ghost" : "btn-ok", r.respondido_em ? "Marcar como não respondida" : "Marcar como respondida");
-  btn.type = "button";
-  btn.addEventListener("click", async () => {
-    btn.disabled = true;
-    const value = r.respondido_em ? null : new Date().toISOString();
-    const { data, error } = await Admin.sb.from("contatos").update({ respondido_em: value }).eq("id", r.id).select("id, respondido_em").maybeSingle();
-    btn.disabled = false;
-    if (error || !data) { alert("Não foi possível atualizar a mensagem. Tente novamente."); return; }
-    r.respondido_em = data.respondido_em;
-    statusBar(r);
+  const line = (...kids) => { const d = Admin.el("div", "status-line"); d.append(...kids); return d; };
+  const button = (cls, text, onClick) => {
+    const b = Admin.el("button", cls, text); b.type = "button";
+    b.addEventListener("click", async () => { b.disabled = true; if (await onClick()) statusBar(r); else b.disabled = false; });
+    return b;
+  };
+
+  const info = Admin.el("div", "status-info"); info.appendChild(badge(r));
+  if (r.respondido_em) info.appendChild(Admin.el("span", "when", "em " + Admin.fmtDate(r.respondido_em)));
+  const respBtn = r.respondido_em
+    ? (r.reuniao_em ? null : button("btn-ghost", "Marcar como não respondida", () => save(r, { respondido_em: null })))
+    : button("btn-ok", "Marcar como respondida", () => save(r, { respondido_em: new Date().toISOString() }));
+  bar.appendChild(line(info, ...(respBtn ? [respBtn] : [])));
+
+  const meet = Admin.el("div", "status-info");
+  if (r.reuniao_em) {
+    meet.append(Admin.el("span", "badge meet", "Reunião agendada"), Admin.el("span", "when", "para " + Admin.fmtDate(r.reuniao_em)));
+    const edit = button("btn-ghost", "Alterar data", async () => { r._editMeeting = true; return true; });
+    const cancel = button("btn-ghost", "Cancelar reunião", () => save(r, { reuniao_em: null }));
+    if (!r._editMeeting) {
+      const actions = Admin.el("div", "status-actions"); actions.append(edit, cancel);
+      bar.appendChild(line(meet, actions));
+      return;
+    }
+  }
+  const label = Admin.el("label", "l", r.reuniao_em ? "Nova data e hora da reunião" : "Agendar reunião");
+  const input = Admin.el("input"); input.type = "datetime-local"; input.id = "reuniao"; label.htmlFor = "reuniao";
+  if (r.reuniao_em) input.value = toLocalInput(r.reuniao_em);
+  const ok = button("btn-ok", r.reuniao_em ? "Salvar nova data" : "Agendar reunião", async () => {
+    if (!input.value) { alert("Informe a data e a hora da reunião."); return false; }
+    const when = new Date(input.value).toISOString();
+    const done = await save(r, { reuniao_em: when, respondido_em: r.respondido_em || new Date().toISOString() });
+    if (done) r._editMeeting = false;
+    return done;
   });
-  bar.append(left, btn);
+  const form = Admin.el("div", "meet-form"); form.append(input, ok);
+  if (r._editMeeting) form.appendChild(button("btn-ghost", "Cancelar", async () => { r._editMeeting = false; return true; }));
+  const box = Admin.el("div", "status-meet"); box.append(label, form);
+  bar.appendChild(box);
 }
 
 Admin.init({ page: "contatos", onReady: async () => {
@@ -76,11 +116,12 @@ Admin.init({ page: "contatos", onReady: async () => {
   err.classList.toggle("hidden", !error);
   if (error) { err.textContent = "Não foi possível carregar as mensagens: " + error.message; return; }
   const sel = document.getElementById("situacao");
-  if (["pendentes", "respondidas"].includes(params.get("situacao"))) sel.value = params.get("situacao");
+  if (["pendentes", "respondidas", "reunioes"].includes(params.get("situacao"))) sel.value = params.get("situacao");
   const render = () => {
     const q = norm(document.getElementById("busca").value.trim());
     const sit = sel.value;
-    const rows = data.filter((r) => (!sit || (sit === "respondidas") === !!r.respondido_em) && (!q || ["nome", "email", "empresa", "assunto", "mensagem"].some((k) => norm(r[k]).includes(q))));
+    const match = (r) => !sit || (sit === "reunioes" ? !!r.reuniao_em : (sit === "respondidas") === !!r.respondido_em);
+    const rows = data.filter((r) => match(r) && (!q || ["nome", "email", "empresa", "assunto", "mensagem"].some((k) => norm(r[k]).includes(q))));
     document.getElementById("count").textContent = (q || sit ? rows.length + " de " : "") + data.length + (data.length === 1 ? " mensagem recebida" : " mensagens recebidas");
     const list = document.getElementById("list"); list.replaceChildren();
     if (!rows.length) return list.appendChild(Admin.el("div", "empty", data.length ? "Nenhuma mensagem encontrada." : "Nenhuma mensagem ainda."));

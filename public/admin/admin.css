@@ -105,6 +105,7 @@ dd a { color: var(--red); }
 .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .badge.pend { background: #fdf3dc; color: #a06d00; }
 .badge.ok { background: var(--slate-tint); color: var(--slate); }
+.badge.meet { background: #e6f4ea; color: #1e7b45; }
 .status-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
 .status-bar .when { font-size: 13px; color: var(--muted); }
 .btn-ok { background: var(--red); color: #fff; border-radius: 12px; padding: 10px 18px; font-size: 14px; }
