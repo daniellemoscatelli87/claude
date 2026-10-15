@@ -77,6 +77,9 @@ label.check input { width: 18px; height: 18px; accent-color: var(--red); margin:
 .rowlink .t { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rowlink .d { font-size: 12px; color: var(--muted); white-space: nowrap; }
 .ini.mail svg { width: 20px; height: 20px; }
+/* Mensagem respondida: verde */
+.rowlink.answered.seen .ini, .entry.answered.seen .ini { background: #e6f4ea; color: #1e7b45; }
+.rowlink.answered.seen .t, .entry.answered.seen .t { color: #1e7b45; }
 /* Já visualizado: cinza, mas continua clicável */
 .rowlink.seen .ini, .entry.seen .ini { background: var(--track); color: var(--muted); }
 .rowlink.seen .t, .entry.seen .t { color: var(--muted); font-weight: 600; }
