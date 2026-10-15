@@ -65,10 +65,32 @@
   @media (max-width: 480px) { .meet-form .fields { grid-template-columns: 1fr; } }
   .btn-meet { background: #1a56c4; color: #fff; border-radius: 12px; padding: 10px 18px; font-size: 14px; }
   .btn-meet:hover { background: #15479f; }
+  a.btn-meet { display: inline-flex; align-items: center; text-decoration: none; }
   .btn-meet:disabled { opacity: .6; cursor: wait; }
   .meet-form input { min-width: 0; width: 100%; font: inherit; font-size: 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--dark); min-height: 44px; }
   .meet-form input:focus { outline: none; border-color: #1a56c4; box-shadow: 0 0 0 3px rgb(26 86 196 / .15); }
   #historico { margin-bottom: 12px; }
+  /* Painel lateral da reunião */
+  .mt-drawer { width: min(460px, 94vw); }
+  .mt-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 22px 20px 32px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-content: start; }
+  .mt-body h2 { margin: 0; padding-right: 36px; }
+  .mt-who { margin: -8px 0 0; font-size: 13px; }
+  .mt-body .fields { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 10px; }
+  .mt-body .fld { display: block; min-width: 0; }
+  .mt-body .fld span, .mt-link .lbl { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .mt-body input, .mt-body select, .mt-body textarea { min-width: 0; width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--dark); min-height: 44px; }
+  .mt-body textarea { resize: vertical; }
+  .mt-body input:focus, .mt-body select:focus, .mt-body textarea:focus { outline: none; border-color: #1a56c4; box-shadow: 0 0 0 3px rgb(26 86 196 / .15); }
+  .mt-link { background: #f0f5ff; border-radius: 14px; padding: 12px 14px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .mt-link-row button { flex-shrink: 0; }
+  .mt-link p { margin: 0; font-size: 13px; }
+  .mt-link-row { display: flex; gap: 8px; align-items: center; }
+  .mt-link-row a { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #1a56c4; font-weight: 700; text-decoration: none; }
+  .mt-gcal { font-size: 13px; font-weight: 600; color: #1a56c4; text-decoration: none; }
+  .mt-acts { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+  .mt-foot { margin: 0; font-size: 12px; }
+  .mt-notice { background: #f0f5ff; border-radius: 14px; padding: 14px; display: grid; gap: 10px; }
+  .mt-notice p { margin: 0; font-size: 14px; }
   .thread { display: grid; gap: 10px; margin: 12px 0 16px; }
   .bubble { border-radius: 14px; padding: 12px 14px; max-width: 92%; }
   .bubble.in { background: var(--track); justify-self: start; }
@@ -116,6 +138,11 @@
     <section class="card" id="historico"></section>
   </div>
 </main>
+<div class="backdrop" id="mt-backdrop"></div>
+<aside class="drawer mt-drawer" id="mt-drawer" aria-label="Reunião">
+  <button type="button" class="close" id="mt-close" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <div class="mt-body" id="mt-body"></div>
+</aside>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/admin/admin.js"></script>
 <script>
@@ -162,14 +189,15 @@ function statusBar(r) {
 
   // Próxima ação
   const next = Admin.el("div", "next");
-  if (r.reuniao_em && !r._editMeeting) {
+  if (r.reuniao_em) {
     const card = Admin.el("div", "meet-card");
     const ic = Admin.el("span", "ic"); ic.innerHTML = Admin.icon("meeting");
     const txt = Admin.el("div"); txt.append(Admin.el("div", "k", "Reunião agendada"), Admin.el("div", "v", fmtMeeting(r.reuniao_em)));
     card.append(ic, txt);
     const acts = Admin.el("div", "acts");
-    const g = Admin.el("a", "btn-line", "Adicionar ao Google Agenda"); g.href = Admin.googleCalendarLink(r); g.target = "_blank"; g.rel = "noopener noreferrer";
-    acts.append(g, button("btn-line", "Alterar data", async () => { r._editMeeting = true; return true; }), button("link-danger", "Cancelar reunião", () => confirm("Cancelar esta reunião?") && save(r, { reuniao_em: null })));
+    if (r._reuniao?.meet_link) { const m = Admin.el("a", "btn-meet", "Entrar no Google Meet"); m.href = r._reuniao.meet_link; m.target = "_blank"; m.rel = "noopener noreferrer"; acts.appendChild(m); }
+    const ed = Admin.el("button", "btn-line", "Editar reunião"); ed.type = "button"; ed.addEventListener("click", () => openMeeting(r));
+    acts.appendChild(ed);
     next.append(card, acts);
   } else if (!r.respondido_em) {
     next.append(Admin.el("p", "hint", "Responda pelo histórico abaixo. A mensagem é marcada como respondida automaticamente."));
@@ -177,46 +205,124 @@ function statusBar(r) {
     acts.append(meetingToggle(r));
     next.appendChild(acts);
   } else {
-    if (!r._scheduling && !r._editMeeting) {
-      next.append(Admin.el("p", "hint", "Respondida em " + Admin.fmtDate(r.respondido_em) + ". Próximo passo: agendar a reunião."));
-      const acts = Admin.el("div", "acts");
-      acts.append(meetingToggle(r, "btn-ok"), button("link-muted", "Desfazer resposta", () => save(r, { respondido_em: null })));
-      next.appendChild(acts);
-    }
+    next.append(Admin.el("p", "hint", "Respondida em " + Admin.fmtDate(r.respondido_em) + ". Próximo passo: agendar a reunião."));
+    const acts = Admin.el("div", "acts");
+    acts.append(meetingToggle(r, "btn-ok"), button("link-muted", "Desfazer resposta", () => save(r, { respondido_em: null })));
+    next.appendChild(acts);
   }
-  if (r._scheduling || r._editMeeting) next.appendChild(meetingForm(r, button));
   bar.appendChild(next);
 }
 
 function meetingToggle(r, cls = "btn-line") {
-  const b = Admin.el("button", cls, "Agendar reunião"); b.type = "button";
-  b.addEventListener("click", () => { r._scheduling = true; statusBar(r); document.getElementById("meet-date")?.focus(); });
+  const b = Admin.el("button", cls, r._reuniao ? "Continuar agendamento" : "Agendar reunião"); b.type = "button";
+  b.addEventListener("click", () => openMeeting(r));
   return b;
 }
 
-function meetingForm(r, button) {
-  const f = Admin.el("div", "meet-form");
-  f.appendChild(Admin.el("div", "k", r._editMeeting ? "Nova data da reunião" : "Agendar reunião"));
-  const field = (id, label, type) => { const w = Admin.el("label", "fld"); w.htmlFor = id; const i = Admin.el("input"); i.type = type; i.id = id; w.append(Admin.el("span", null, label), i); return [w, i]; };
-  const [wd, date] = field("meet-date", "Data", "date");
-  const [wt, hour] = field("meet-time", "Horário", "time");
-  const now = new Date();
-  date.min = toLocalInput(now.toISOString()).slice(0, 10);
-  if (r.reuniao_em) { const v = toLocalInput(r.reuniao_em); date.value = v.slice(0, 10); hour.value = v.slice(11); } else hour.value = "10:00";
-  const grid = Admin.el("div", "fields"); grid.append(wd, wt);
-  const err = Admin.el("p", "msg err hidden");
-  const acts = Admin.el("div", "acts");
-  acts.append(
-    button("btn-meet", r._editMeeting ? "Salvar nova data" : "Confirmar reunião", async () => {
-      if (!date.value || !hour.value) { err.textContent = "Escolha a data e o horário."; err.classList.remove("hidden"); return false; }
-      const ok = await save(r, { reuniao_em: new Date(date.value + "T" + hour.value).toISOString(), respondido_em: r.respondido_em || new Date().toISOString() });
-      if (ok) { r._scheduling = false; r._editMeeting = false; }
-      return ok;
-    }),
-    button("link-muted", "Voltar", async () => { r._scheduling = false; r._editMeeting = false; return true; }),
-  );
-  f.append(grid, err, acts);
-  return f;
+/* ---------- Reunião no Google Agenda (painel lateral) ---------- */
+// Data/hora, duração, título, descrição e link do Meet gerado pelo Google; "Enviar convite" cria o evento
+// no Google Agenda com o contato como convidado. Alterar avisa o convidado; excluir cancela o evento.
+let GOOGLE = null;
+async function agenda(body) {
+  const { data, error } = await Admin.sb.functions.invoke("google-agenda", { body });
+  if (!error) return data || {};
+  let m = "falha"; try { m = (await error.context.json()).error || m; } catch {}
+  return { error: m };
+}
+const ERRO_AGENDA = {
+  google_desconectado: "Sua conta Google não está conectada ou a conexão expirou. Conecte novamente.",
+  sem_credenciais: "Falta configurar as credenciais do Google (GOOGLE_CLIENT_ID e GOOGLE_CLIENT_SECRET) no Supabase.",
+  falha: "Não foi possível falar com o Google Agenda. Tente novamente.",
+};
+const erroAgenda = (e) => ERRO_AGENDA[e] || e;
+let mtY = 0;
+function closeMeeting() {
+  const d = document.getElementById("mt-drawer"); if (!d.classList.contains("open")) return;
+  d.classList.remove("open"); document.getElementById("mt-backdrop").classList.remove("open");
+  document.body.classList.remove("scroll-lock"); document.body.style.top = ""; window.scrollTo(0, mtY);
+}
+async function openMeeting(r) {
+  const body = document.getElementById("mt-body"); body.replaceChildren(Admin.el("p", "muted", "Carregando…"));
+  mtY = window.scrollY; document.body.style.top = -mtY + "px"; document.body.classList.add("scroll-lock");
+  document.getElementById("mt-drawer").classList.add("open"); document.getElementById("mt-backdrop").classList.add("open");
+  if (!GOOGLE) GOOGLE = await agenda({ acao: "status" });
+  renderMeeting(r);
+}
+function renderMeeting(r) {
+  const body = document.getElementById("mt-body"); body.replaceChildren();
+  const reu = r._reuniao, agendada = reu?.status === "agendada" || (!!r.reuniao_em && !reu);
+  body.append(Admin.el("h2", null, agendada ? "Reunião agendada" : "Agendar reunião"), Admin.el("p", "muted mt-who", [r.nome, r.email].filter(Boolean).join(" · ")));
+  if (GOOGLE?.error || !GOOGLE?.conectado) {
+    const box = Admin.el("div", "mt-notice");
+    box.appendChild(Admin.el("p", null, GOOGLE?.configurado === false ? ERRO_AGENDA.sem_credenciais : "Conecte sua conta Google para gerar o link do Meet e enviar o convite pelo Google Agenda."));
+    if (GOOGLE?.configurado !== false) {
+      const c = Admin.el("button", "btn-meet", "Conectar Google Agenda"); c.type = "button";
+      c.addEventListener("click", async () => { c.disabled = true; const res = await agenda({ acao: "conectar" }); if (res.url) location.href = res.url; else { c.disabled = false; box.appendChild(Admin.el("p", "msg err", erroAgenda(res.error))); } });
+      box.appendChild(c);
+    }
+    body.appendChild(box);
+    return;
+  }
+  const field = (label, input) => { const w = Admin.el("label", "fld"); w.append(Admin.el("span", null, label), input); return w; };
+  const ini = reu?.inicio || r.reuniao_em;
+  const date = Admin.el("input"); date.type = "date"; date.min = toLocalInput(new Date().toISOString()).slice(0, 10);
+  const hour = Admin.el("input"); hour.type = "time";
+  if (ini) { const v = toLocalInput(ini); date.value = v.slice(0, 10); hour.value = v.slice(11); } else hour.value = "10:00";
+  const dur = Admin.el("select"); [[30, "30 min"], [45, "45 min"], [60, "1 hora"], [90, "1h30"], [120, "2 horas"]].forEach(([m, t]) => dur.append(new Option(t, String(m))));
+  dur.value = String(reu?.duracao_min || 60);
+  const title = Admin.el("input"); title.type = "text"; title.maxLength = 200; title.value = reu?.titulo || "Reunião com " + (r.nome || "contato") + (r.empresa ? " (" + r.empresa + ")" : "") + " | Dani Moscatelli";
+  const desc = Admin.el("textarea"); desc.rows = 5; desc.maxLength = 5000; desc.value = reu?.descricao ?? (r.assunto ? "Assunto: " + r.assunto : "");
+  const grid = Admin.el("div", "fields"); grid.append(field("Data", date), field("Horário", hour));
+  body.append(grid, field("Duração", dur), field("Título", title), field("Descrição", desc));
+  // Link do Meet
+  const linkBox = Admin.el("div", "mt-link");
+  linkBox.appendChild(Admin.el("span", "lbl", "Link da reunião (Google Meet)"));
+  const msg = Admin.el("p", "msg err hidden");
+  const values = () => {
+    if (!date.value || !hour.value) { msg.textContent = "Escolha a data e o horário."; msg.classList.remove("hidden"); return null; }
+    return { contato_id: r.id, inicio: new Date(date.value + "T" + hour.value).toISOString(), duracao_min: Number(dur.value), titulo: title.value.trim(), descricao: desc.value.trim() };
+  };
+  const run = async (btn, label, payload, after) => {
+    msg.classList.add("hidden"); btn.disabled = true; const old = btn.textContent; btn.textContent = label;
+    const res = await agenda(payload);
+    btn.disabled = false; btn.textContent = old;
+    if (res.error) { msg.textContent = erroAgenda(res.error); msg.classList.remove("hidden"); if (res.error === "google_desconectado") { GOOGLE = { configurado: true, conectado: false }; } return; }
+    after(res);
+  };
+  if (reu?.meet_link) {
+    const row = Admin.el("div", "mt-link-row");
+    const a = Admin.el("a", null, reu.meet_link.replace(/^https?:\/\//, "")); a.href = reu.meet_link; a.target = "_blank"; a.rel = "noopener noreferrer";
+    const cp = Admin.el("button", "btn-line", "Copiar"); cp.type = "button";
+    cp.addEventListener("click", async () => { try { await navigator.clipboard.writeText(reu.meet_link); cp.textContent = "Copiado"; setTimeout(() => (cp.textContent = "Copiar"), 1500); } catch {} });
+    row.append(a, cp); linkBox.appendChild(row);
+    if (reu.evento_link) { const g = Admin.el("a", "mt-gcal", "Abrir no Google Agenda →"); g.href = reu.evento_link; g.target = "_blank"; g.rel = "noopener noreferrer"; linkBox.appendChild(g); }
+  } else {
+    linkBox.appendChild(Admin.el("p", "muted", "O link é criado pelo Google ao gerar a reunião."));
+    const gen = Admin.el("button", "btn-line", "Gerar link do Meet"); gen.type = "button";
+    gen.addEventListener("click", () => { const v = values(); if (v) run(gen, "Gerando…", { acao: "salvar", ...v, enviar: false }, (res) => { r._reuniao = res.reuniao; renderMeeting(r); statusBar(r); }); });
+    linkBox.appendChild(gen);
+  }
+  body.append(linkBox, msg);
+  const acts = Admin.el("div", "mt-acts");
+  const send = Admin.el("button", "btn-meet", agendada ? "Salvar e avisar o convidado" : "Enviar convite"); send.type = "button";
+  send.addEventListener("click", () => {
+    const v = values(); if (!v) return;
+    run(send, agendada ? "Salvando…" : "Enviando…", { acao: "salvar", ...v, enviar: true }, (res) => {
+      r._reuniao = res.reuniao; r.reuniao_em = res.reuniao.inicio; r.respondido_em = r.respondido_em || res.reuniao.updated_at;
+      closeMeeting(); statusBar(r); historico(r);
+    });
+  });
+  acts.appendChild(send);
+  if (reu || r.reuniao_em) {
+    const del = Admin.el("button", "link-danger", agendada ? "Excluir reunião" : "Descartar"); del.type = "button";
+    del.addEventListener("click", () => {
+      if (!confirm(agendada ? "Excluir esta reunião? O convidado será avisado do cancelamento." : "Descartar este rascunho de reunião?")) return;
+      run(del, "Excluindo…", { acao: "excluir", contato_id: r.id }, () => { r._reuniao = null; r.reuniao_em = null; closeMeeting(); statusBar(r); historico(r); });
+    });
+    acts.appendChild(del);
+  }
+  body.appendChild(acts);
+  if (r.email) body.appendChild(Admin.el("p", "muted mt-foot", agendada ? "Ao salvar, " + r.email + " recebe a atualização pelo Google Agenda." : "Ao enviar, " + r.email + " recebe o convite do Google Agenda com o link do Meet."));
 }
 
 // Cabeçalho da mensagem em acordeão: fechado mostra nome, e-mail, data/hora e assunto;
@@ -397,8 +503,14 @@ Admin.init({ page: "contatos", onReady: async () => {
     if (error || !data) { document.getElementById("status").classList.add("hidden"); box.replaceChildren(Admin.el("div", "card empty", error ? "Não foi possível carregar a mensagem." : "Mensagem não encontrada.")); return; }
     Admin.markSeen("contatos", data);
     data.visualizado_em = data.visualizado_em || new Date().toISOString();
+    const { data: reu } = await Admin.sb.from("reunioes").select("*").eq("contato_id", data.id).maybeSingle();
+    data._reuniao = reu || null;
     statusBar(data);
     historico(data);
+    if (params.get("reuniao")) openMeeting(data);
+    document.getElementById("mt-close").addEventListener("click", closeMeeting);
+    document.getElementById("mt-backdrop").addEventListener("click", closeMeeting);
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMeeting(); });
     box.replaceChildren(contactHeader(data));
     return;
   }

@@ -49,6 +49,9 @@
   .meet .acts a:hover { border-color: var(--red); color: var(--red); }
   .meet .acts svg { width: 15px; height: 15px; }
   .past-toggle { margin-top: 16px; }
+  .g-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+  .g-t { font-weight: 700; }
+  .g-s { font-size: 13px; }
 </style>
 </head>
 <body>
@@ -56,6 +59,7 @@
   <h1>Reuniões</h1>
   <p class="muted" id="count"></p>
   <p class="msg err hidden" id="load-err"></p>
+  <div class="card g-card hidden" id="g-card"><div><div class="g-t" id="g-t"></div><div class="muted g-s" id="g-s"></div></div><button type="button" class="btn-ok hidden" id="g-btn">Conectar Google Agenda</button></div>
   <div class="layout">
     <section class="card">
       <div class="cal-head">
@@ -95,16 +99,43 @@ function meetingItem(r, past) {
   const date = el("div", "date");
   date.append(el("span", null, d.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "")), el("b", null, String(d.getDate())), el("span", null, d.toLocaleDateString("pt-BR", { month: "short" }).replace(".", "")), el("small", null, time(d)));
   const acts = el("div", "acts");
+  const reu = Array.isArray(r.reunioes) ? r.reunioes[0] : r.reunioes;
+  if (!past && reu?.meet_link) acts.append(action(reu.meet_link, "meeting", "Entrar no Meet", true));
+  acts.append(action("/admin/contatos/?id=" + r.id + "&reuniao=1", "meeting", "Editar reunião"));
   acts.append(action("/admin/contatos/?id=" + r.id, "mail", "Ver histórico"));
   if (r.email) acts.append(action("mailto:" + r.email + "?subject=" + encodeURIComponent("Nossa reunião em " + d.toLocaleDateString("pt-BR") + " às " + time(d)), "mailOpen", "Enviar e-mail"));
-  if (!past) acts.append(action(Admin.googleCalendarLink(r), "meeting", "Google Agenda", true));
+  if (!past && !reu?.google_event_id) acts.append(action(Admin.googleCalendarLink(r), "meeting", "Adicionar ao Google Agenda", true));
   item.append(date, el("div", "t", r.nome || "Sem nome"), el("div", "s", [r.empresa, r.assunto].filter(Boolean).join(" · ")), acts);
   return item;
 }
 
+// Conexão com o Google Agenda (link do Meet e convites automáticos).
+async function googleCard() {
+  const card = document.getElementById("g-card"), t = document.getElementById("g-t"), sub = document.getElementById("g-s"), btn = document.getElementById("g-btn");
+  const q = new URLSearchParams(location.search).get("google");
+  const { data } = await Admin.sb.functions.invoke("google-agenda", { body: { acao: "status" } });
+  card.classList.remove("hidden");
+  if (data?.conectado) {
+    t.textContent = "Google Agenda conectado";
+    sub.textContent = q === "ok" ? "Pronto! Agora as reuniões são criadas no seu Google Agenda com link do Meet." : "As reuniões são criadas no seu Google Agenda com link do Meet.";
+    btn.textContent = "Reconectar"; btn.className = "btn-ghost";
+  } else {
+    t.textContent = "Google Agenda não conectado";
+    sub.textContent = q === "erro" ? "Não foi possível concluir a conexão. Tente novamente." : data?.configurado === false ? "Falta salvar GOOGLE_CLIENT_ID e GOOGLE_CLIENT_SECRET nos secrets do Supabase." : "Conecte para gerar o link do Meet e enviar convites pelo Google Agenda.";
+  }
+  btn.classList.toggle("hidden", data?.configurado === false);
+  btn.onclick = async () => {
+    btn.disabled = true;
+    const { data: r } = await Admin.sb.functions.invoke("google-agenda", { body: { acao: "conectar" } });
+    if (r?.url) location.href = r.url; else { btn.disabled = false; sub.textContent = "Não foi possível iniciar a conexão. Tente novamente."; }
+  };
+  if (q) history.replaceState(null, "", location.pathname);
+}
+
 Admin.init({ page: "reunioes", onReady: async () => {
+  googleCard();
   const err = document.getElementById("load-err");
-  const { data, error } = await Admin.sb.from("contatos").select("id, nome, email, telefone, empresa, cargo, assunto, mensagem, reuniao_em").not("reuniao_em", "is", null).order("reuniao_em", { ascending: true });
+  const { data, error } = await Admin.sb.from("contatos").select("id, nome, email, telefone, empresa, cargo, assunto, mensagem, reuniao_em, reunioes(meet_link, google_event_id)").not("reuniao_em", "is", null).order("reuniao_em", { ascending: true });
   err.classList.toggle("hidden", !error);
   if (error) { err.textContent = "Não foi possível carregar as reuniões: " + error.message; return; }
   const now = new Date();
@@ -123,7 +154,7 @@ Admin.init({ page: "reunioes", onReady: async () => {
     const rows = selected ? byDay.get(selected) || [] : upcoming;
     document.getElementById("list-title").textContent = selected ? "Reuniões em " + new Date(rows[0].reuniao_em).toLocaleDateString("pt-BR", { day: "2-digit", month: "long" }) : "Próximas reuniões";
     document.getElementById("list-n").textContent = rows.length ? String(rows.length) : "";
-    if (!rows.length) list.appendChild(el("div", "empty", "Nenhuma reunião agendada. Para agendar, abra uma mensagem de contato e informe a data da reunião."));
+    if (!rows.length) list.appendChild(el("div", "empty", "Nenhuma reunião agendada. Para agendar, abra uma mensagem de contato e toque em Agendar reunião."));
     rows.forEach((r) => list.appendChild(meetingItem(r, new Date(r.reuniao_em) < now)));
     document.getElementById("past-box").classList.toggle("hidden", !!selected || !past.length);
     document.getElementById("clear").classList.toggle("hidden", !selected);
