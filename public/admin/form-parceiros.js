@@ -198,6 +198,20 @@ window.FORM_PARCEIROS = [
       ]
      },
      {
+      "title": "Saúde e Bem-estar",
+      "options": [
+       "Medicina.",
+       "Enfermagem.",
+       "Psicologia.",
+       "Nutrição.",
+       "Fisioterapia.",
+       "Farmácia.",
+       "Gestão hospitalar e de saúde.",
+       "Qualidade e segurança do paciente.",
+       "Saúde digital."
+      ]
+     },
+     {
       "title": "Outras Especialidades",
       "options": [
        "Comunicação e Marketing.",
@@ -205,6 +219,11 @@ window.FORM_PARCEIROS = [
        "Educação e aprendizagem.",
        "Arquitetura e ambientes.",
        "Consultoria regulatória e compliance.",
+       "Direito.",
+       "Engenharia.",
+       "Finanças e contabilidade.",
+       "Recursos humanos.",
+       "Hospitalidade e turismo.",
        "Outra especialidade."
       ]
      }
