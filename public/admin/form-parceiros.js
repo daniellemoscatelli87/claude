@@ -260,11 +260,48 @@ window.FORM_PARCEIROS = [
      "Mensuração de resultados e melhoria contínua.",
      "Atuação transversal em todas as etapas."
     ]
+   }
+  ]
+ },
+ {
+  "title": "Seção 4: Segmentos e conhecimento setorial",
+  "questions": [
+   {
+    "id": "segmentos",
+    "n": 16,
+    "label": "Em quais setores de mercado você já atuou ou atende clientes?",
+    "type": "checkbox",
+    "options": [
+     "Saúde e serviços hospitalares.",
+     "Clínicas e consultórios.",
+     "Operadoras de planos de saúde.",
+     "Saúde digital e Healthtechs.",
+     "Turismo e hospitalidade.",
+     "Hotelaria e meios de hospedagem.",
+     "Gastronomia e alimentação.",
+     "Varejo e comércio.",
+     "E-commerce e marketplaces.",
+     "Serviços financeiros e Fintechs.",
+     "Educação e Edtechs.",
+     "Tecnologia e software.",
+     "Indústria e manufatura.",
+     "Mobilidade e transportes.",
+     "Logística e distribuição.",
+     "Telecomunicações.",
+     "Mercado imobiliário.",
+     "Construção civil e arquitetura.",
+     "Entretenimento e eventos.",
+     "Setor público e serviços governamentais.",
+     "Terceiro setor e organizações sociais.",
+     "Agronegócio.",
+     "Energia e sustentabilidade.",
+     "Outros segmentos."
+    ]
    },
    {
     "id": "conhecimento_segmento",
     "n": 17,
-    "label": "Dentro dos segmentos que você marcou, em quais assuntos você tem domínio aprofundado?",
+    "label": "Dentro dos setores que você marcou, em quais assuntos você tem domínio aprofundado?",
     "type": "paragraph"
    },
    {
