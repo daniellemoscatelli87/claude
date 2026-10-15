@@ -17,18 +17,18 @@ a { color: inherit; }
 .topbar { position: sticky; top: 0; z-index: 20; background: rgb(246 247 249 / .9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); margin-bottom: 24px; }
 .topbar .in { max-width: 1160px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .topbar img { height: 40px; width: auto; display: block; }
-.burger { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: #fff; color: var(--red); cursor: pointer; padding: 0; }
-.burger:hover { border-color: var(--red); color: var(--red); }
+.burger { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; border: 0; background: none; color: var(--red); cursor: pointer; padding: 0; }
+.burger:hover { color: var(--red-dark); }
 .burger svg { width: 22px; height: 22px; }
 .burger { position: relative; }
-.burger-dot { position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: var(--red); color: #fff; font-size: 11px; font-weight: 800; display: grid; place-items: center; border: 2px solid var(--bg); }
+.burger-dot { position: absolute; top: 0; right: 0; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: var(--red); color: #fff; font-size: 11px; font-weight: 800; display: grid; place-items: center; border: 2px solid var(--bg); }
 .nav-count { margin-left: auto; min-width: 22px; height: 22px; padding: 0 7px; border-radius: 999px; background: var(--red); color: #fff; font-size: 12px; font-weight: 800; display: grid; place-items: center; }
 .top-actions { display: flex; gap: 8px; align-items: center; }
 .notif-drawer { width: min(400px, 92vw); }
 .notif-top { padding: 22px 20px 14px; border-bottom: 1px solid var(--line); }
 .notif-top h2 { margin: 0 0 2px; }
 .notif-top .muted { font-size: 13px; }
-.notif-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 8px 12px 24px; }
+.notif-scroll { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 8px 12px 24px; }
 .notif-item { display: flex; gap: 10px; align-items: center; padding: 8px; border-radius: 12px; text-decoration: none; }
 .notif-item:hover { background: var(--track); }
 .notif-item .ni { width: 32px; height: 32px; border-radius: 10px; background: var(--red-tint); color: var(--red); display: grid; place-items: center; flex-shrink: 0; }
@@ -141,3 +141,9 @@ dd a { color: var(--red); }
 /* Celular: campos com 16px evitam o zoom automático do iPhone ao tocar no campo; sem rolagem lateral. */
 html { overflow-x: clip; }
 @media (max-width: 767px) { input, select, textarea { font-size: 16px !important; } }
+
+/* Com menu ou notificações abertos, a página atrás fica travada. */
+body.scroll-lock { position: fixed; left: 0; right: 0; overflow: hidden; }
+.backdrop { touch-action: none; }
+/* Padrão dos campos de busca: lupa dentro do campo, à esquerda. */
+input[type=search] { padding-left: 40px; background: #f8fafc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 14px center / 18px; }

@@ -141,7 +141,7 @@
   function buildShell(page) {
     const top = el("div", "topbar hidden");
     top.id = "topbar";
-    top.innerHTML = `<div class="in"><a href="/admin/"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
+    top.innerHTML = `<div class="in"><a href="/admin/"><img src="/favicon-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
       <div class="top-actions">
         <button type="button" class="burger" id="bell" aria-label="Notificações" aria-expanded="false" aria-controls="notif-drawer">${icon("bell")}<span class="burger-dot hidden" id="bell-dot"></span></button>
         <button type="button" class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">${icon("menu")}</button>
@@ -216,9 +216,17 @@
     document.body.append(backdrop, drawer, notifDrawer);
 
     let openPanel = null;
+    // Trava a rolagem da página atrás do painel (no iPhone, overflow: hidden sozinho não basta).
+    let lockedY = 0;
+    const lockScroll = (on) => {
+      const b = document.body;
+      if (on && !b.classList.contains("scroll-lock")) { lockedY = window.scrollY; b.style.top = -lockedY + "px"; b.classList.add("scroll-lock"); }
+      else if (!on && b.classList.contains("scroll-lock")) { b.classList.remove("scroll-lock"); b.style.top = ""; window.scrollTo(0, lockedY); }
+    };
     const setOpen = (panel, trigger, closeBtn) => (open) => {
       panel.classList.toggle("open", open);
       backdrop.classList.toggle("open", open);
+      lockScroll(open);
       trigger.setAttribute("aria-expanded", String(open));
       openPanel = open ? { panel, close: () => setOpen(panel, trigger, closeBtn)(false) } : null;
       if (open) closeBtn.focus(); else trigger.focus();
