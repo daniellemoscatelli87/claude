@@ -680,6 +680,8 @@ form.addEventListener("input", e => {
   validateQuestion(q);
 });
 
+// Botão de entrada com ícone de rede (pontos conectados).
+const JOIN_LABEL = '<svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M10.8 7.2 6.2 15.8M13.2 7.2l4.6 8.6M7.5 18h9"/></svg>Quero fazer parte da rede';
 // Botão de envio com seta.
 const SEND_LABEL = 'Enviar cadastro<svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
 function show(i) {
@@ -687,7 +689,7 @@ function show(i) {
   current = i;
   document.getElementById("back").classList.toggle("hidden", i === 0);
   const next = document.getElementById("next");
-  if (i === total) next.innerHTML = SEND_LABEL; else next.textContent = i === 0 ? "Quero fazer parte da rede" : "Próxima";
+  if (i === total) next.innerHTML = SEND_LABEL; else if (i === 0) next.innerHTML = JOIN_LABEL; else next.textContent = "Próxima";
   document.getElementById("progressBox").classList.toggle("hidden", i === 0);
   document.getElementById("progressBar").style.width = `${(i / total) * 100}%`;
   document.getElementById("stepLabel").textContent = `Etapa ${i} de ${total}`;
