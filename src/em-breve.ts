@@ -13,21 +13,6 @@ async function insert(table: string, row: Record<string, unknown>) {
   if (!res.ok) throw new Error(await res.text());
 }
 
-/* Envia o contato ao Netlify Forms, que dispara o e-mail de notificação. */
-async function notifyByEmail(row: Record<string, unknown>) {
-  const fields: Record<string, string> = { 'form-name': 'contato' };
-  for (const [k, v] of Object.entries(row)) {
-    if (k === 'dias_preferidos') fields.dias = (v as string[]).join(', ');
-    else if (v != null) fields[k] = String(v);
-  }
-  const res = await fetch('/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams(fields).toString(),
-  });
-  if (!res.ok) throw new Error(`Netlify Forms: ${res.status}`);
-}
-
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
 /* ---------- Notificar lançamento ---------- */
@@ -187,9 +172,7 @@ contactForm.addEventListener('submit', async (e) => {
   submitBtn.disabled = true;
   submitLabel.textContent = 'Enviando…';
   try {
-    const results = await Promise.allSettled([insert('contatos', row), notifyByEmail(row)]);
-    results.forEach((r) => r.status === 'rejected' && console.error(r.reason));
-    if (results.every((r) => r.status === 'rejected')) throw new Error('Falha no envio');
+    await insert('contatos', row);
     contactForm.reset();
     contactForm.classList.add('hidden');
     submitBar.classList.add('hidden');

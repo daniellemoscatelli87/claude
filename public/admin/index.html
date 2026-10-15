@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Início | Área restrita</title>
+<link rel="icon" type="image/png" href="/favicon-dm.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/admin.css">
+<style>
+  .home { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+  .totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+  @media (max-width: 900px) { .totals { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .total .sub { font-size: 12px; color: var(--muted); margin-top: -4px; }
+  .total { display: flex; flex-direction: column; gap: 6px; text-decoration: none; }
+  .total .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--red-tint); color: var(--red); margin-bottom: 4px; }
+  .total .ic svg { width: 20px; height: 20px; }
+  .total .v { font-size: 32px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+  .total .k { font-size: 13px; font-weight: 600; color: var(--muted); }
+  a.total:hover { border-color: var(--red); }
+  .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  .panel-head .ttl { display: flex; align-items: center; gap: 10px; }
+  .panel-head .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--red-tint); color: var(--red); }
+  .panel-head .ic svg { width: 20px; height: 20px; }
+  .panel-head .cnt { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .seeall { font-size: 13px; font-weight: 700; color: var(--red); text-decoration: none; white-space: nowrap; }
+  .seeall:hover { text-decoration: underline; }
+  .entry { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 2px 12px; padding: 14px 10px; border-radius: 12px; text-decoration: none; align-items: start; }
+  .entry + .entry { border-top: 1px solid var(--track); }
+  .entry:hover { background: var(--track); }
+  .entry .ini { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; background: var(--red-tint); color: var(--red); grid-row: span 4; }
+  .entry .t { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .entry .when { text-align: right; font-size: 12px; color: var(--muted); white-space: nowrap; line-height: 1.35; }
+  .entry .when b { display: block; color: var(--dark); font-weight: 600; }
+  .entry .f { grid-column: 2 / -1; font-size: 13px; color: var(--dark); line-height: 1.45; overflow-wrap: anywhere; }
+  .entry .f span { color: var(--muted); }
+</style>
+</head>
+<body>
+<main class="wrap hidden" id="app">
+  <span class="tag">Área restrita</span>
+  <h1 id="hello">Olá!</h1>
+  <p class="muted">Veja as últimas mensagens de contato e candidaturas à Rede de Parceiros.</p>
+  <p class="msg err hidden" id="load-err"></p>
+  <div class="totals" id="totals">
+    <a class="card total" href="/admin/contatos/"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><span class="v" id="tot-novas">—</span><span class="k">Novas mensagens</span><span class="sub">nos últimos 7 dias</span></a>
+    <a class="card total" href="/admin/contatos/?situacao=pendentes"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="v" id="tot-pendentes">—</span><span class="k">Mensagens não respondidas</span><span class="sub">aguardando retorno</span></a>
+    <a class="card total" href="/admin/contatos/?situacao=respondidas"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg></span><span class="v" id="tot-reunioes">—</span><span class="k">Reuniões agendadas</span><span class="sub">mensagens respondidas</span></a>
+    <a class="card total" href="/admin/parceiros/?aba=candidaturas"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></svg></span><span class="v" id="tot-parceiros-7d">—</span><span class="k">Novos parceiros</span><span class="sub">nos últimos 7 dias</span></a>
+  </div>
+  <div class="home">
+    <section class="card" aria-labelledby="h-contato">
+      <div class="panel-head">
+        <div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+          <div><h2 id="h-contato">Contato</h2><div class="cnt" id="cnt-contatos"></div></div></div>
+        <a class="seeall" href="/admin/contatos/">Ver todos →</a>
+      </div>
+      <div class="rows" id="last-contatos"></div>
+    </section>
+    <section class="card" aria-labelledby="h-parceiros">
+      <div class="panel-head">
+        <div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></svg></span>
+          <div><h2 id="h-parceiros">Parceiros</h2><div class="cnt" id="cnt-parceiros"></div></div></div>
+        <a class="seeall" href="/admin/parceiros/?aba=candidaturas">Ver todos →</a>
+      </div>
+      <div class="rows" id="last-parceiros"></div>
+    </section>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/admin/admin.js"></script>
+<script>
+const LIMIT = 15;
+const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
+const clean = (v) => String(v ?? "").replace(/\.$/, "");
+
+// Linha com nome, data e hora completas e os campos pedidos para cada bloco.
+function entry(href, r, fields) {
+  const a = Admin.el("a", "entry"); a.href = href;
+  const d = new Date(r.created_at);
+  const when = Admin.el("div", "when");
+  when.append(Admin.el("b", null, d.toLocaleDateString("pt-BR")), document.createTextNode(d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })));
+  a.append(Admin.el("span", "ini", Admin.initials(r.nome)), Admin.el("span", "t", r.nome || "Sem nome"), when);
+  for (const [label, value] of fields) {
+    const f = Admin.el("div", "f");
+    f.append(Admin.el("span", null, label + ": "), document.createTextNode(value || "—"));
+    a.appendChild(f);
+  }
+  return a;
+}
+
+const segs = (list) => { const l = (list || []).map(clean); return l.length > 2 ? l.slice(0, 2).join(", ") + " +" + (l.length - 2) : l.join(", "); };
+
+Admin.init({ page: "inicio", onReady: async () => {
+  const h = new Date().getHours();
+  document.getElementById("hello").textContent = (h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite") + ", Dani!";
+  const [c, p] = await Promise.all([
+    Admin.sb.from("contatos").select("id, created_at, nome, empresa, cargo, assunto", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
+    Admin.sb.from("cadastros").select("id, created_at, nome, empresa, principal_especializacao, segmentos", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
+  ]);
+  const err = c.error || p.error, box = document.getElementById("load-err");
+  box.classList.toggle("hidden", !err);
+  if (err) { box.textContent = "Não foi possível carregar os dados: " + err.message; return; }
+  const since = new Date(Date.now() - 7 * 864e5).toISOString();
+  const cnt = async (q) => { const r = await q; return r.error ? "—" : r.count; };
+  const head = (t) => Admin.sb.from(t).select("id", { count: "exact", head: true });
+  const [novas, pend, resp, parc7] = await Promise.all([
+    cnt(head("contatos").gte("created_at", since)),
+    cnt(head("contatos").is("respondido_em", null)),
+    cnt(head("contatos").not("respondido_em", "is", null)),
+    cnt(head("cadastros").gte("created_at", since)),
+  ]);
+  document.getElementById("tot-novas").textContent = novas;
+  document.getElementById("tot-pendentes").textContent = pend;
+  document.getElementById("tot-reunioes").textContent = resp;
+  document.getElementById("tot-parceiros-7d").textContent = parc7;
+  document.getElementById("cnt-contatos").textContent = plural(c.count, "mensagem recebida", "mensagens recebidas") + (c.count > LIMIT ? " · últimas " + LIMIT : "");
+  document.getElementById("cnt-parceiros").textContent = plural(p.count, "candidatura", "candidaturas") + (p.count > LIMIT ? " · últimas " + LIMIT : "");
+  const fill = (id, rows, make, empty) => {
+    const el = document.getElementById(id); el.replaceChildren();
+    if (!rows.length) return el.appendChild(Admin.el("div", "empty", empty));
+    rows.forEach((r) => el.appendChild(make(r)));
+  };
+  fill("last-contatos", c.data, (r) => entry("/admin/contatos/?id=" + r.id, r, [["Empresa", r.empresa], ["Cargo", r.cargo], ["Assunto", r.assunto]]), "Nenhuma mensagem ainda.");
+  fill("last-parceiros", p.data, (r) => entry("/admin/parceiros/?id=" + r.id, r, [["Empresa", r.empresa], ["Serviço", r.principal_especializacao], ["Segmento", segs(r.segmentos)]]), "Nenhuma candidatura ainda.");
+}});
+</script>
+</body>
+</html>

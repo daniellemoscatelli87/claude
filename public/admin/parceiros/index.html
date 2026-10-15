@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Parceiros | Área restrita</title>
+<link rel="icon" type="image/png" href="/favicon-dm.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/admin.css">
+<style>
+  .tabs { display: inline-flex; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 14px; margin: 20px 0 16px; }
+  .tab { background: none; border: 0; border-radius: 10px; padding: 9px 18px; color: var(--muted); font-size: 14px; }
+  .tab[aria-selected=true] { background: var(--dark); color: #fff; }
+  .tab .n { display: inline-block; margin-left: 6px; padding: 0 7px; border-radius: 999px; background: rgb(148 163 184 / .25); font-size: 12px; }
+  .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; align-items: end; }
+  .filters label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+  .filters .search { grid-column: 1 / -1; }
+  .filters-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; font-size: 13px; }
+  .fold summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+  .fold summary::-webkit-details-marker { display: none; }
+  .fold summary .chev { transition: transform .2s; color: var(--muted); }
+  .fold[open] summary .chev { transform: rotate(180deg); }
+  .fold[open] summary { margin-bottom: 14px; }
+  .active-count { font-size: 12px; font-weight: 600; color: var(--red); margin-left: 8px; }
+
+  .block { margin-top: 32px; }
+  .block-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+  .block-head .num { font-size: 12px; font-weight: 800; color: var(--red); letter-spacing: .1em; }
+  .g { display: grid; gap: 12px; }
+  .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .span2 { grid-column: span 2; } .span3 { grid-column: 1 / -1; }
+  @media (max-width: 900px) { .g3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .g2, .g3 { grid-template-columns: 1fr; } .span2 { grid-column: auto; } }
+  .note { font-size: 12px; color: var(--muted); margin: -8px 0 12px; }
+
+  /* Indicadores */
+  .kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 1000px) { .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .kpi { position: relative; overflow: hidden; }
+  .kpi .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; margin-bottom: 12px; }
+  .kpi .ic svg { width: 20px; height: 20px; }
+  .kpi .v { font-size: 32px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+  .kpi .k { font-size: 13px; color: var(--dark); margin-top: 6px; font-weight: 600; line-height: 1.35; }
+  .kpi .p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .kpi.hero { background: var(--dark); color: #fff; border-color: var(--dark); }
+  .kpi.hero .k { color: #fff; } .kpi.hero .p { color: #cbd5e1; }
+
+  .more { margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--red); background: none; border: 0; padding: 0; }
+  .more:hover { text-decoration: underline; }
+
+  /* Lista numerada (rankings) */
+  .ranked { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .ranked li { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px dashed var(--line); font-size: 14px; }
+  .ranked li:last-child { border-bottom: 0; }
+  .ranked .pos { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; background: var(--track); color: var(--muted); }
+  .ranked li:first-child .pos { background: var(--red); color: #fff; }
+  .ranked .cnt { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ranked .cnt b { color: var(--dark); }
+  .ranked.compact li { font-size: 13px; padding: 5px 0; grid-template-columns: 22px minmax(0, 1fr) auto; }
+  .ranked.compact .pos { width: 20px; height: 20px; font-size: 11px; }
+
+  /* Linha do tempo do projeto */
+  .tl { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); position: relative; padding-top: 6px; }
+  .tl::before { content: ""; position: absolute; left: 4%; right: 4%; top: 34px; height: 2px; background: var(--line); }
+  .tl .st { display: grid; justify-items: center; text-align: center; gap: 8px; position: relative; padding: 0 2px; }
+  .tl .dot { width: var(--d); height: var(--d); border-radius: 50%; background: rgb(212 77 77 / var(--a)); border: 2px solid #fff; box-shadow: 0 0 0 1px rgb(212 77 77 / .35); display: grid; place-items: center; font-size: 12px; font-weight: 800; color: var(--dark); margin-top: calc((56px - var(--d)) / 2); }
+  .tl .dot.hi { color: #fff; }
+  .tl .stn { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: .06em; margin-top: calc((56px - var(--d)) / 2); }
+  .tl .stl { font-size: 11.5px; line-height: 1.3; color: var(--dark); }
+  .tl-foot { margin-top: 14px; font-size: 13px; color: var(--muted); }
+  .tl-foot b { color: var(--dark); }
+  @media (max-width: 760px) {
+    .tl { grid-auto-flow: row; grid-auto-columns: auto; gap: 6px; }
+    .tl::before { left: 27px; right: auto; top: 10px; bottom: 10px; width: 2px; height: auto; }
+    .tl .st { grid-template-columns: 56px auto minmax(0, 1fr); justify-items: start; text-align: left; align-items: center; }
+    .tl .dot, .tl .stn { margin-top: 0; justify-self: center; }
+    .tl .stn { order: -1; display: none; }
+  }
+
+  /* Pódio */
+  .podium { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 10px; align-items: end; }
+  .pd { border-radius: 14px 14px 6px 6px; padding: 14px 12px; text-align: center; display: grid; gap: 6px; align-content: end; }
+  .pd .medal { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto; font-weight: 800; font-size: 14px; }
+  .pd .pv { font-size: 26px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+  .pd .pl { font-size: 12.5px; line-height: 1.3; }
+  .pd.p1 { background: var(--red); color: #fff; min-height: 190px; } .pd.p1 .medal { background: #fff; color: var(--red); }
+  .pd.p2 { background: var(--red-tint); min-height: 160px; } .pd.p2 .medal { background: var(--red); color: #fff; }
+  .pd.p3 { background: var(--track); min-height: 135px; } .pd.p3 .medal { background: var(--slate); color: #fff; }
+  .pd .pp { font-size: 11px; opacity: .8; }
+
+  /* Régua remoto ↔ presencial */
+  .spec { position: relative; padding: 8px 0 0; }
+  .spec .line { position: absolute; left: 10%; right: 10%; top: 44px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--slate), var(--red)); opacity: .35; }
+  .spec .pts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: relative; }
+  .spec .pt { display: grid; justify-items: center; text-align: center; gap: 6px; }
+  .spec .pv { font-size: 20px; font-weight: 800; line-height: 1; height: 22px; }
+  .spec .pin { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 4px solid var(--c); }
+  .spec .pl { font-size: 11.5px; line-height: 1.3; color: var(--dark); }
+  .spec .pp { font-size: 11px; color: var(--muted); }
+  .spec-ends { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 10px; }
+
+  /* Grade de blocos com ícone */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+  .tile { border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 8px; align-content: start; }
+  .tile .ti { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--red-tint); color: var(--red); }
+  .tile .ti svg { width: 18px; height: 18px; }
+  .tile .tv { font-size: 24px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+  .tile .tv small { font-size: 12px; font-weight: 600; color: var(--muted); margin-left: 4px; }
+  .tile .tl2 { font-size: 12.5px; line-height: 1.3; }
+  .tile.lead { border-color: var(--red); }
+
+  /* Mosaico proporcional */
+  .treemap { position: relative; height: 260px; border-radius: 12px; overflow: hidden; }
+  .tm { position: absolute; padding: 10px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid #fff; border-radius: 10px; }
+  .tm .tml { font-size: 12.5px; line-height: 1.25; font-weight: 600; }
+  .tm .tmv { font-size: 20px; font-weight: 800; line-height: 1; }
+  .tm .tmv small { font-size: 11px; font-weight: 600; opacity: .85; margin-left: 4px; }
+
+  /* Cobertura de segmentos */
+  .cov { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
+  @media (max-width: 760px) { .cov { grid-template-columns: 1fr; gap: 18px; } }
+  .cov-head { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .cov-head .big { font-size: 34px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+  .cov-head .big small { font-size: 16px; font-weight: 700; color: var(--muted); }
+  .cov-head .txt { font-size: 13px; color: var(--muted); }
+  .meter { flex: 1; min-width: 160px; height: 10px; border-radius: 5px; background: var(--track); overflow: hidden; }
+  .meter > div { height: 100%; border-radius: 5px; background: var(--red); }
+  .cov h4 { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+  .gaps { font-size: 13.5px; line-height: 1.7; color: var(--muted); margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+  .gaps li::before { content: "— "; color: #cbd5e1; }
+  @media (max-width: 520px) { .gaps { grid-template-columns: 1fr; } }
+  .gaps-box.closed .gaps { max-height: 0; overflow: hidden; }
+  .none-note { font-size: 13.5px; color: var(--muted); }
+
+  /* Rosca */
+  .donut-wrap { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .donut { width: 150px; height: 150px; flex-shrink: 0; position: relative; }
+  .donut svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .donut .ctr { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+  .donut .ctr b { font-size: 26px; font-weight: 800; display: block; line-height: 1; }
+  .donut .ctr span { font-size: 11px; color: var(--muted); }
+  .legend { display: grid; gap: 7px; flex: 1; min-width: 180px; font-size: 13px; }
+  .legend .li { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; gap: 8px; align-items: start; }
+  .legend .dot { width: 12px; height: 12px; border-radius: 3px; margin-top: 3px; }
+  .legend .n { font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+  .legend .n b { color: var(--dark); }
+  .legend .li.zero { color: #94a3b8; }
+
+  /* Colunas */
+  .cols { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px; align-items: end; height: 190px; padding-top: 18px; }
+  .colcard { display: flex; flex-direction: column; }
+  .colcard .cols { flex: 1; height: auto; min-height: 190px; }
+  .col { display: grid; grid-template-rows: auto 1fr auto; height: 100%; text-align: center; }
+  .col .cv { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .col .ct { display: flex; align-items: flex-end; justify-content: center; }
+  .col .cb { width: min(100%, 36px); border-radius: 4px 4px 0 0; background: var(--seq); min-height: 2px; }
+  .col .cl { font-size: 11px; color: var(--muted); line-height: 1.25; margin-top: 6px; min-height: 28px; }
+
+  /* Anel de porcentagem */
+  .ring-wrap { display: flex; gap: 18px; align-items: center; }
+  .ring { width: 120px; height: 120px; flex-shrink: 0; position: relative; }
+  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring .ctr { position: absolute; inset: 0; display: grid; place-items: center; font-size: 24px; font-weight: 800; }
+
+  /* Estados */
+  .uf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; }
+  .uf { border-radius: 12px; padding: 10px; background: var(--track); text-align: center; }
+  .uf b { display: block; font-size: 22px; font-weight: 800; line-height: 1.1; }
+  .uf span { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .06em; }
+  .uf.top { background: var(--red); color: #fff; } .uf.top span { color: #fde2e2; }
+
+  /* Lista de candidaturas */
+  .cand-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<main class="wrap hidden" id="app">
+  <div id="view-main">
+    <span class="tag">Área restrita</span>
+    <h1>Parceiros</h1>
+    <p class="muted">Métricas, habilidades disponíveis e candidaturas à Rede de Parceiros.</p>
+    <p class="msg err hidden" id="load-err"></p>
+
+    <div class="tabs" role="tablist" aria-label="Seções de parceiros">
+      <button type="button" class="tab" role="tab" id="tab-dashboard" aria-controls="panel-dashboard" aria-selected="true">Dashboard</button>
+      <button type="button" class="tab" role="tab" id="tab-candidaturas" aria-controls="panel-candidaturas" aria-selected="false">Candidaturas <span class="n" id="n-cand">0</span></button>
+    </div>
+
+    <details class="card fold" id="filters-box">
+      <summary><span>Filtros<span class="active-count" id="active-count"></span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+      <div class="filters" id="filters">
+        <div class="search">
+          <label for="f-busca">Buscar</label>
+          <input type="search" id="f-busca" placeholder="Nome, empresa, e-mail, especialização, atividades, ferramentas, cidade…">
+        </div>
+      </div>
+      <div class="filters-foot">
+        <span class="muted" id="showing"></span>
+        <button type="button" class="btn-ghost" id="clear">Limpar filtros</button>
+      </div>
+    </details>
+
+    <section id="panel-dashboard" role="tabpanel" aria-labelledby="tab-dashboard">
+      <div class="block"><div class="kpis" id="kpis"></div></div>
+
+      <div class="block">
+        <div class="block-head"><span class="num">01</span><h2>Habilidades disponíveis</h2></div>
+        <div class="skill-groups" id="skill-groups"></div>
+        <div class="g g3" style="margin-top:12px" id="skills-more"></div>
+      </div>
+
+      <div class="block">
+        <div class="block-head"><span class="num">02</span><h2>Perfil e senioridade</h2></div>
+        <div class="g g3" id="perfil"></div>
+      </div>
+
+      <div class="block">
+        <div class="block-head"><span class="num">03</span><h2>Disponibilidade e formato</h2></div>
+        <div class="g g3" id="disponibilidade"></div>
+      </div>
+
+      <div class="block">
+        <div class="block-head"><span class="num">04</span><h2>Segmentos e conhecimento setorial</h2></div>
+        <div class="g g3" id="segmentos"></div>
+      </div>
+
+      <div class="block">
+        <div class="block-head"><span class="num">05</span><h2>Localização e origem</h2></div>
+        <div class="g g3" id="localizacao"></div>
+      </div>
+    </section>
+
+    <section id="panel-candidaturas" role="tabpanel" aria-labelledby="tab-candidaturas" class="hidden">
+      <div class="cand-meta"><span id="cand-count"></span></div>
+      <div class="card"><div class="rows" id="list"></div></div>
+    </section>
+  </div>
+
+  <div id="view-detail" class="hidden">
+    <a class="back" id="back" href="/admin/parceiros/?aba=candidaturas">← Todas as candidaturas</a>
+    <div id="detail"></div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/admin/admin.js"></script>
+<script src="/admin/form-parceiros.js"></script>
+<script>
+const { el } = Admin;
+const Q = Object.fromEntries(FORM_PARCEIROS.flatMap((s) => s.questions).map((q) => [q.id, q]));
+const optionsOf = (id) => Q[id].groups ? Q[id].groups.flatMap((g) => g.options) : Q[id].options;
+const SECOES = FORM_PARCEIROS.map((s) => ({ title: s.title, fields: s.questions.map((q) => [q.id, q.n + ". " + q.label]) }));
+const CAT = ["var(--s1)", "var(--s2)", "var(--s3)", "var(--s4)", "var(--s5)", "var(--s6)"];
+// Cor por opção (ordem do formulário); "Outro" sempre no cinza claro.
+const catColor = (label, i) => (/^Outro/.test(label) ? "var(--s6)" : CAT[i % CAT.length]);
+const clean = (s) => String(s).replace(/\.$/, "");
+const pct = (n, t) => (t ? Math.round((n / t) * 100) : 0);
+const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
+const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const uf = (s) => ((s || "").toUpperCase().match(/\b([A-Z]{2})\s*\.?$/) || [])[1] || "—";
+const MINUSC = new Set(["de", "da", "do", "das", "dos", "e"]);
+const cidade = (s) => (s || "").split(/[—–\-\/,]/)[0].trim().replace(/\s+/g, " ").toLowerCase().split(" ").map((w, i) => (i && MINUSC.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(" ") || "Não informado";
+const startsSim = (v) => typeof v === "string" && v.startsWith("Sim");
+const svg = (tag, attrs) => { const e = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+
+/* ---------- Filtros ---------- */
+const FILTROS = [
+  { id: "areas_experiencia", label: "Área de experiência" },
+  { id: "segmentos", label: "Segmento de mercado" },
+  { id: "atuacao_pj", label: "Situação PJ" },
+  { id: "disponibilidade_colaborar", label: "Disponibilidade" },
+  { id: "horas_semanais", label: "Horas semanais" },
+  { id: "formatos_atuacao", label: "Formato de atuação" },
+  { id: "tempo_especialidade", label: "Tempo na especialidade" },
+  { id: "uf", label: "Estado", derived: true },
+];
+const BUSCA = ["nome", "email", "cidade_estado", "apresentacao", "empresa", "principal_especializacao", "atividades_entregaveis", "conhecimento_segmento", "formacao", "certificacoes", "ferramentas", "projeto_relevante"];
+let ALL = [];
+
+function buildFilters() {
+  const box = document.getElementById("filters");
+  for (const f of FILTROS) {
+    const wrap = el("div");
+    const lab = el("label", null, f.label); lab.htmlFor = "f-" + f.id;
+    const sel = el("select"); sel.id = "f-" + f.id;
+    sel.append(new Option("Todos", ""));
+    const opts = f.derived ? [...new Set(ALL.map((r) => uf(r.cidade_estado)))].sort() : optionsOf(f.id);
+    for (const o of opts) sel.append(new Option(clean(o), o));
+    sel.addEventListener("change", update);
+    wrap.append(lab, sel);
+    box.appendChild(wrap);
+  }
+  document.getElementById("f-busca").addEventListener("input", update);
+  document.getElementById("clear").addEventListener("click", () => {
+    document.getElementById("f-busca").value = "";
+    FILTROS.forEach((f) => (document.getElementById("f-" + f.id).value = ""));
+    update();
+  });
+}
+
+function filtered() {
+  const q = norm(document.getElementById("f-busca").value.trim());
+  return ALL.filter((r) => {
+    for (const f of FILTROS) {
+      const v = document.getElementById("f-" + f.id).value;
+      if (!v) continue;
+      const rv = f.derived ? uf(r.cidade_estado) : r[f.id];
+      if (Array.isArray(rv) ? !rv.includes(v) : rv !== v) return false;
+    }
+    return !q || BUSCA.some((k) => norm(r[k]).includes(q));
+  });
+}
+
+function activeFilters() {
+  return FILTROS.filter((f) => document.getElementById("f-" + f.id).value).length + (document.getElementById("f-busca").value.trim() ? 1 : 0);
+}
+
+/* ---------- Contagens ---------- */
+// Escolha única: ordem do formulário (inclui zeros). Múltipla escolha: da mais para a menos frequente, sem zeros.
+function counts(rows, id, getter) {
+  const opts = getter ? [] : optionsOf(id);
+  const m = new Map(opts.map((o) => [o, 0]));
+  for (const r of rows) {
+    const v = getter ? getter(r) : r[id];
+    for (const x of Array.isArray(v) ? v : [v]) if (x != null && x !== "") m.set(x, (m.get(x) || 0) + 1);
+  }
+  let e = [...m.entries()];
+  if (getter || Q[id]?.type === "checkbox") e = e.filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
+  return e;
+}
+
+/* ---------- Componentes visuais ---------- */
+function card(title, opts = {}) {
+  const c = el("div", "card" + (opts.cls ? " " + opts.cls : ""));
+  c.appendChild(el("h3", null, title));
+  if (opts.note) c.appendChild(el("p", "note", opts.note));
+  return c;
+}
+const emptyNote = () => el("p", "muted", "Sem dados para os filtros atuais.");
+
+// Escala da marca (escuro → claro) e a cor do texto que contrasta com cada passo.
+const RAMP = ["#6e1f1f", "#9c3131", "#c94444", "#e06b63", "#ec948c"];
+const rampFor = (n, max) => { const i = Math.min(RAMP.length - 1, Math.floor((1 - n / max) * RAMP.length)); return { bg: RAMP[i], fg: i <= 2 ? "#fff" : "var(--dark)" }; };
+
+// Lista numerada (1º, 2º…); "Ver todas" abre o restante.
+function ranked(entries, total, { limit = 5, compact = false } = {}) {
+  const wrap = el("div");
+  const ol = el("ol", "ranked" + (compact ? " compact" : ""));
+  entries.forEach(([label, n], i) => {
+    const li = el("li", i >= limit ? "hidden extra" : "");
+    const cnt = el("span", "cnt"); cnt.append(el("b", null, String(n)));
+    if (total) cnt.append(document.createTextNode(" · " + pct(n, total) + "%"));
+    li.append(el("span", "pos", String(i + 1)), el("span", null, clean(label)), cnt);
+    ol.appendChild(li);
+  });
+  wrap.appendChild(ol);
+  if (entries.length > limit) wrap.appendChild(toggleMore(ol, entries.length));
+  return wrap;
+}
+
+function toggleMore(box, n) {
+  const btn = el("button", "more", "Ver todas (" + n + ")");
+  btn.type = "button";
+  btn.addEventListener("click", () => {
+    const open = btn.dataset.open !== "1";
+    box.querySelectorAll(".extra").forEach((x) => x.classList.toggle("hidden", !open));
+    btn.dataset.open = open ? "1" : "";
+    btn.textContent = open ? "Mostrar menos" : "Ver todas (" + n + ")";
+  });
+  return btn;
+}
+
+// Linha do tempo: as etapas do projeto na ordem do formulário; o círculo cresce com a quantidade.
+function timeline(rows, id) {
+  const t = rows.length;
+  const opts = optionsOf(id).filter((o) => o !== "Atuação transversal em todas as etapas.");
+  const cnt = new Map(counts(rows, id));
+  const max = Math.max(1, ...opts.map((o) => cnt.get(o) || 0));
+  const wrap = el("div");
+  const tl = el("div", "tl");
+  opts.forEach((o, i) => {
+    const n = cnt.get(o) || 0;
+    const st = el("div", "st");
+    st.title = clean(o) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, t) + "%)";
+    const d = el("div", "dot" + (n / max > 0.6 ? " hi" : ""), String(n));
+    d.style.setProperty("--d", (26 + (n / max) * 30) + "px");
+    d.style.setProperty("--a", (0.12 + (n / max) * 0.88).toFixed(2));
+    st.append(el("div", "stn", String(i + 1).padStart(2, "0")), d, el("div", "stl", clean(o)));
+    tl.appendChild(st);
+  });
+  wrap.appendChild(tl);
+  const all = cnt.get("Atuação transversal em todas as etapas.") || 0;
+  const foot = el("div", "tl-foot"); foot.append(el("b", null, plural(all, "parceiro", "parceiros")), document.createTextNode(" atuam de forma transversal, em todas as etapas."));
+  wrap.appendChild(foot);
+  return wrap;
+}
+
+// Pódio: as 3 opções mais escolhidas; o restante abre em lista numerada.
+function podium(rows, id) {
+  const t = rows.length;
+  const e = counts(rows, id);
+  const wrap = el("div");
+  const top = e.slice(0, 3);
+  const pod = el("div", "podium");
+  [1, 0, 2].forEach((k) => {
+    const x = top[k];
+    if (!x) { pod.appendChild(el("div")); return; }
+    const d = el("div", "pd p" + (k + 1));
+    d.title = clean(x[0]) + ": " + plural(x[1], "parceiro", "parceiros");
+    d.append(el("div", "medal", (k + 1) + "º"), el("div", "pv", String(x[1])), el("div", "pp", pct(x[1], t) + "% das candidaturas"), el("div", "pl", clean(x[0])));
+    pod.appendChild(d);
+  });
+  wrap.appendChild(pod);
+  const rest = e.slice(3);
+  if (rest.length) {
+    const box = el("div"); box.style.marginTop = "14px";
+    const ol = el("ol", "ranked compact hidden");
+    rest.forEach(([label, n], i) => { const li = el("li"); const c = el("span", "cnt"); c.append(el("b", null, String(n)), document.createTextNode(" · " + pct(n, t) + "%")); li.append(el("span", "pos", String(i + 4)), el("span", null, clean(label)), c); ol.appendChild(li); });
+    const btn = el("button", "more", "Ver as outras " + rest.length);
+    btn.type = "button";
+    btn.addEventListener("click", () => { const open = ol.classList.toggle("hidden"); btn.textContent = open ? "Ver as outras " + rest.length : "Mostrar menos"; });
+    box.append(btn, ol);
+    wrap.appendChild(box);
+  }
+  return wrap;
+}
+
+// Régua do 100% remoto ao presencial em qualquer região.
+function spectrum(rows, id) {
+  const t = rows.length;
+  const opts = optionsOf(id);
+  const cnt = new Map(counts(rows, id));
+  const short = ["100% remoto", "Híbrido", "Presencial na minha região", "Presencial em outras cidades", "Presencial em qualquer região do Brasil"];
+  const wrap = el("div", "spec");
+  wrap.appendChild(el("div", "line"));
+  const pts = el("div", "pts");
+  opts.forEach((o, i) => {
+    const n = cnt.get(o) || 0;
+    const p = el("div", "pt");
+    p.title = clean(o) + ": " + plural(n, "parceiro", "parceiros");
+    const pin = el("div", "pin"); pin.style.setProperty("--c", i < 2 ? "var(--slate)" : "var(--red)");
+    p.append(el("div", "pv", String(n)), pin, el("div", "pl", short[i] || clean(o)), el("div", "pp", pct(n, t) + "%"));
+    pts.appendChild(p);
+  });
+  wrap.appendChild(pts);
+  const ends = el("div", "spec-ends"); ends.append(el("span", null, "← Remoto"), el("span", null, "Presencial →"));
+  const outer = el("div"); outer.append(wrap, ends);
+  return outer;
+}
+
+// Grade de blocos com ícone por formato de contratação.
+const CONTRATO_ICONS = [
+  [/escopo/, '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'],
+  [/hora/, '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'],
+  [/diária/, '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
+  [/entregáveis/, '<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/>'],
+  [/recorrente/, '<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>'],
+  [/mentoria/, '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'],
+  [/negociável/, '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>'],
+];
+function tiles(rows, id) {
+  const t = rows.length;
+  const cnt = new Map(counts(rows, id));
+  const opts = optionsOf(id).slice().sort((a, b) => (cnt.get(b) || 0) - (cnt.get(a) || 0));
+  const g = el("div", "tiles");
+  opts.forEach((o, i) => {
+    const n = cnt.get(o) || 0;
+    const tl = el("div", "tile" + (i === 0 && n ? " lead" : ""));
+    tl.title = clean(o) + ": " + plural(n, "parceiro", "parceiros");
+    const ic = el("div", "ti");
+    const path = (CONTRATO_ICONS.find(([re]) => re.test(o)) || [null, '<circle cx="12" cy="12" r="9"/>'])[1];
+    ic.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
+    const v = el("div", "tv", pct(n, t) + "%"); v.appendChild(el("small", null, "(" + n + ")"));
+    tl.append(ic, v, el("div", "tl2", clean(o)));
+    g.appendChild(tl);
+  });
+  return g;
+}
+
+// Mosaico proporcional (treemap "squarified"): a área de cada bloco é a quantidade de parceiros.
+function treemap(rows, id) {
+  const t = rows.length;
+  const e = counts(rows, id);
+  const box = el("div", "treemap");
+  if (!e.length) return box;
+  const max = e[0][1];
+  const total = e.reduce((s, [, n]) => s + n, 0);
+  const W = 1000, H = 1000;
+  const items = e.map(([label, n]) => ({ label, n, area: (n / total) * W * H }));
+  const rects = [];
+  (function squarify(list, x, y, w, h) {
+    if (!list.length) return;
+    if (list.length === 1) { rects.push({ ...list[0], x, y, w, h }); return; }
+    const short = Math.min(w, h);
+    let row = [], best = Infinity, i = 0;
+    const worst = (r) => { const s = r.reduce((a, b) => a + b.area, 0); const mx = Math.max(...r.map((z) => z.area)), mn = Math.min(...r.map((z) => z.area)); return Math.max((short * short * mx) / (s * s), (s * s) / (short * short * mn)); };
+    while (i < list.length) { const cand = row.concat(list[i]); const wv = worst(cand); if (wv > best) break; row = cand; best = wv; i++; }
+    const s = row.reduce((a, b) => a + b.area, 0);
+    if (w >= h) { const cw = s / h; let cy = y; row.forEach((r) => { const rh = r.area / cw; rects.push({ ...r, x, y: cy, w: cw, h: rh }); cy += rh; }); squarify(list.slice(i), x + cw, y, w - cw, h); }
+    else { const ch = s / w; let cx = x; row.forEach((r) => { const rw = r.area / ch; rects.push({ ...r, x: cx, y, w: rw, h: ch }); cx += rw; }); squarify(list.slice(i), x, y + ch, w, h - ch); }
+  })(items, 0, 0, W, H);
+  rects.forEach((r) => {
+    const c = rampFor(r.n, max);
+    const d = el("div", "tm");
+    Object.assign(d.style, { left: r.x / 10 + "%", top: r.y / 10 + "%", width: r.w / 10 + "%", height: r.h / 10 + "%", background: c.bg, color: c.fg });
+    d.title = clean(r.label) + ": " + plural(r.n, "parceiro", "parceiros") + " (" + pct(r.n, t) + "%)";
+    const v = el("div", "tmv", String(r.n)); v.appendChild(el("small", null, pct(r.n, t) + "%"));
+    d.append(el("div", "tml", clean(r.label)), v);
+    box.appendChild(d);
+  });
+  return box;
+}
+
+// Cobertura de segmentos: quantos dos 24 têm parceiros, ranking dos cobertos e lista das lacunas.
+function coverage(rows, id) {
+  const t = rows.length;
+  const cnt = new Map(counts(rows, id));
+  const opts = optionsOf(id);
+  const covered = opts.filter((o) => cnt.get(o)).map((o) => [o, cnt.get(o)]).sort((a, b) => b[1] - a[1]);
+  const gaps = opts.filter((o) => !cnt.get(o));
+  const wrap = el("div", "cov");
+
+  const head = el("div", "cov-head");
+  const big = el("div", "big", String(covered.length)); big.appendChild(el("small", null, " / " + opts.length));
+  const meter = el("div", "meter"); const fill = el("div"); fill.style.width = pct(covered.length, opts.length) + "%"; meter.appendChild(fill);
+  head.append(big, el("div", "txt", "segmentos com pelo menos um parceiro"), meter);
+  wrap.appendChild(head);
+
+  const left = el("div");
+  left.appendChild(el("h4", null, "Onde a rede tem parceiros"));
+  left.appendChild(covered.length ? ranked(covered, t, { limit: 8, compact: true }) : el("p", "none-note", "Nenhum segmento marcado ainda."));
+  wrap.appendChild(left);
+
+  const right = el("div", "gaps-box" + (gaps.length > 8 ? " closed" : ""));
+  right.appendChild(el("h4", null, "Lacunas · " + plural(gaps.length, "segmento", "segmentos") + " sem parceiros"));
+  if (!gaps.length) right.appendChild(el("p", "none-note", "Nenhuma lacuna: todos os segmentos têm parceiros."));
+  else {
+    const ul = el("ul", "gaps");
+    gaps.forEach((o) => ul.appendChild(el("li", null, clean(o))));
+    right.appendChild(ul);
+    if (gaps.length > 8) {
+      const btn = el("button", "more", "Ver as " + gaps.length + " lacunas");
+      btn.type = "button";
+      btn.addEventListener("click", () => { const closed = right.classList.toggle("closed"); btn.textContent = closed ? "Ver as " + gaps.length + " lacunas" : "Mostrar menos"; });
+      right.appendChild(btn);
+    }
+  }
+  wrap.appendChild(right);
+  return wrap;
+}
+
+// Destaque: a resposta mais comum em evidência, com mini-rosca e a lista completa sob demanda.
+function insight(title, rows, id) {
+  const c = el("div", "card ins");
+  c.appendChild(el("div", "q", title));
+  const t = rows.length;
+  const e = counts(rows, id);
+  const lead = e.reduce((m, x) => (x[1] > m[1] ? x : m), ["", 0]);
+  if (!t || !lead[1]) { c.appendChild(emptyNote()); return c; }
+  const top = el("div", "top");
+  const mini = el("div", "mini");
+  const s = svg("svg", { viewBox: "0 0 42 42", "aria-hidden": "true" });
+  const R = 15.9155, C = 2 * Math.PI * R, len = (lead[1] / t) * C;
+  s.append(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#e2e8f0", "stroke-width": 7 }),
+    svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "var(--red)", "stroke-width": 7, "stroke-dasharray": len + " " + (C - len) }));
+  mini.appendChild(s);
+  const txt = el("div"); txt.append(el("div", "big", pct(lead[1], t) + "%"));
+  top.append(mini, txt);
+  c.append(top, el("div", "ans", clean(lead[0])));
+  const d = el("details"); const sm = el("summary", null, "Ver todas as respostas"); const ul = el("ul");
+  e.forEach(([label, n]) => { const li = el("li", label === lead[0] ? "lead" : ""); li.append(el("span", null, clean(label)), el("span", null, n + " · " + pct(n, t) + "%")); ul.appendChild(li); });
+  d.append(sm, ul); c.appendChild(d);
+  return c;
+}
+
+// Rosca: cor fixa por opção (ordem do formulário), números sempre visíveis na legenda.
+function donut(entries, total, centerLabel) {
+  const wrap = el("div", "donut-wrap");
+  const d = el("div", "donut");
+  const s = svg("svg", { viewBox: "0 0 42 42", role: "img", "aria-label": centerLabel });
+  const R = 15.9155, C = 2 * Math.PI * R, GAP = entries.filter(([, n]) => n).length > 1 ? 0.6 : 0;
+  s.appendChild(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#f1f5f9", "stroke-width": 6 }));
+  let off = 0;
+  entries.forEach(([label, n], i) => {
+    if (!n || !total) return;
+    const len = (n / total) * C;
+    const c = svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: catColor(label, i), "stroke-width": 6,
+      "stroke-dasharray": Math.max(len - GAP, 0.01) + " " + (C - Math.max(len - GAP, 0.01)), "stroke-dashoffset": -off });
+    const t = svg("title", {}); t.textContent = clean(label) + ": " + n + " (" + pct(n, total) + "%)";
+    c.appendChild(t); s.appendChild(c);
+    off += len;
+  });
+  d.appendChild(s);
+  const ctr = el("div", "ctr"); const inner = el("div"); inner.append(el("b", null, String(total)), el("span", null, centerLabel)); ctr.appendChild(inner);
+  d.appendChild(ctr);
+  const lg = el("div", "legend");
+  entries.forEach(([label, n], i) => {
+    const li = el("div", "li" + (n ? "" : " zero"));
+    const dot = el("span", "dot"); dot.style.background = n ? catColor(label, i) : "#e2e8f0";
+    const v = el("span", "n"); v.append(el("b", null, String(n)), document.createTextNode(" · " + pct(n, total) + "%"));
+    li.append(dot, el("span", null, clean(label)), v);
+    lg.appendChild(li);
+  });
+  wrap.append(d, lg);
+  return wrap;
+}
+
+// Colunas para respostas em escala (tempo, horas): mantém a ordem da escala.
+function columns(entries, total, shortLabel) {
+  const box = el("div", "cols");
+  const max = Math.max(1, ...entries.map(([, n]) => n));
+  for (const [label, n] of entries) {
+    const c = el("div", "col");
+    c.title = clean(label) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, total) + "%)";
+    const t = el("div", "ct"), b = el("div", "cb");
+    b.style.height = (n / max) * 100 + "%";
+    if (!n) b.style.background = "#e2e8f0";
+    t.appendChild(b);
+    c.append(el("div", "cv", String(n)), t, el("div", "cl", shortLabel(clean(label))));
+    box.appendChild(c);
+  }
+  return box;
+}
+
+function ring(n, total, text) {
+  const wrap = el("div", "ring-wrap");
+  const r = el("div", "ring");
+  const s = svg("svg", { viewBox: "0 0 42 42", role: "img", "aria-label": text });
+  const R = 15.9155, C = 2 * Math.PI * R, len = total ? (n / total) * C : 0;
+  s.append(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#f1f5f9", "stroke-width": 5 }),
+    svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "var(--red)", "stroke-width": 5, "stroke-linecap": "round", "stroke-dasharray": len + " " + (C - len) }));
+  r.append(s, el("div", "ctr", pct(n, total) + "%"));
+  const t = el("div"); t.append(el("div", null, text), el("div", "muted", plural(n, "parceiro", "parceiros") + " de " + total));
+  wrap.append(r, t);
+  return wrap;
+}
+
+const shortTempo = (l) => l.replace("Entre ", "").replace(" anos", "a").replace("Menos de 1 ano", "<1a").replace("Mais de ", ">").replace(" e ", "–").replace("Ainda não comecei, mas tenho interesse", "Ainda não");
+const shortHoras = (l) => l.replace(" horas semanais", "h").replace("Até ", "≤").replace("Mais de ", ">").replace("De ", "").replace(" a ", "–").replace("Disponibilidade variável conforme o projeto", "Variável");
+
+/* ---------- Dashboard ---------- */
+const KPI_ICONS = {
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/>',
+  doc: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+  bolt: '<path d="M13 3L5 13h6l-1 8 8-10h-6z"/>',
+  flag: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+  pin: '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+};
+const TINTS = [["var(--red-tint)", "var(--red)"], ["#fdf3dc", "#a06d00"], ["var(--slate-tint)", "var(--slate)"], ["#fdece4", "#c2501f"]];
+
+function kpis(rows) {
+  const box = document.getElementById("kpis"); box.replaceChildren();
+  const t = rows.length;
+  const items = [
+    ["Candidaturas na rede", t, "users"],
+    ["Com CNPJ ativo ou empresa própria", rows.filter((r) => startsSim(r.atuacao_pj)).length, "doc"],
+    ["Disponibilidade imediata", rows.filter((r) => r.disponibilidade_colaborar === "Disponibilidade imediata.").length, "bolt"],
+    ["Lideram projetos ou frentes", rows.filter((r) => startsSim(r.lideranca)).length, "flag"],
+    ["Podem atuar presencialmente em Curitiba", rows.filter((r) => startsSim(r.presencial_curitiba)).length, "pin"],
+  ];
+  items.forEach(([k, v, ic], i) => {
+    const c = el("div", "card kpi" + (i === 0 ? " hero" : ""));
+    const badge = el("div", "ic");
+    if (i === 0) { badge.style.background = "rgb(255 255 255 / .12)"; badge.style.color = "#fff"; }
+    else { badge.style.background = TINTS[i - 1][0]; badge.style.color = TINTS[i - 1][1]; }
+    badge.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${KPI_ICONS[ic]}</svg>`;
+    c.append(badge, el("div", "v", String(v)), el("div", "k", k));
+    c.appendChild(el("div", "p", i === 0 ? (t === ALL.length ? "Total recebido" : "de " + ALL.length + " no total") : pct(v, t) + "% das candidaturas"));
+    box.appendChild(c);
+  });
+}
+
+function skills(rows) {
+  const t = rows.length;
+  const groups = document.getElementById("skill-groups"); groups.replaceChildren();
+  Q.areas_experiencia.groups.forEach((g, i) => {
+    const people = rows.filter((r) => (r.areas_experiencia || []).some((x) => g.options.includes(x))).length;
+    const top = counts(rows, "areas_experiencia").filter(([o]) => g.options.includes(o)).slice(0, 4);
+    const c = el("div", "card sg"); c.style.setProperty("--c", CAT[i % CAT.length]);
+    const gv = el("div", "gv"); gv.append(el("b", null, String(people)), el("span", null, (people === 1 ? "parceiro" : "parceiros") + " · " + pct(people, t) + "%"));
+    c.append(el("div", "gn", g.title), gv, top.length ? ranked(top.slice(0, 3), 0, { limit: 3, compact: true }) : el("span", "muted", "Nenhuma habilidade nesta área."));
+    groups.appendChild(c);
+  });
+
+  const more = document.getElementById("skills-more"); more.replaceChildren();
+  const c2 = card("Especializações declaradas", { note: "Pergunta " + Q.principal_especializacao.n + " · resposta livre, agrupada por texto igual." });
+  const m = new Map();
+  for (const r of rows) { const raw = (r.principal_especializacao || "").trim(); if (!raw) continue; const k = norm(raw); const cur = m.get(k) || { label: raw, n: 0 }; cur.n++; m.set(k, cur); }
+  const list = [...m.values()].sort((a, b) => b.n - a.n).map((x) => [x.label, x.n]);
+  c2.appendChild(list.length ? ranked(list, t, { limit: 6 }) : emptyNote());
+  const c3 = card("Formas de colaboração de interesse", { cls: "span2", note: "Pergunta " + Q.formas_colaboracao.n + " · as três mais escolhidas." });
+  c3.appendChild(t ? podium(rows, "formas_colaboracao") : emptyNote());
+  more.append(c2, c3);
+  const c4 = card("Etapas de projeto em que atuam", { cls: "span3", note: "Pergunta " + Q.etapas_projeto.n + " · em que fases do projeto a rede está presente." });
+  c4.appendChild(t ? timeline(rows, "etapas_projeto") : emptyNote());
+  more.appendChild(c4);
+}
+
+function addDonut(box, title, rows, id, center, cls) {
+  const c = card(title, { cls });
+  c.appendChild(rows.length ? donut(counts(rows, id), rows.length, center) : emptyNote());
+  box.appendChild(c);
+}
+function addViz(box, title, rows, fn, opts = {}) {
+  const c = card(title, { cls: opts.cls, note: opts.note });
+  c.appendChild(rows.length ? fn() : emptyNote());
+  box.appendChild(c);
+}
+function addCols(box, title, rows, id, short, cls) {
+  const c = card(title, { cls: "colcard" + (cls ? " " + cls : "") });
+  c.appendChild(rows.length ? columns(counts(rows, id), rows.length, short) : emptyNote());
+  box.appendChild(c);
+}
+function addInsights(box, rows, items) {
+  const g = el("div", "insights span3");
+  items.forEach(([title, id]) => g.appendChild(insight(title, rows, id)));
+  box.appendChild(g);
+}
+
+const shortFormacao = (l) => ({
+  "Ensino técnico": "Técnico", "Graduação em andamento": "Graduação (cursando)", "Graduação completa": "Graduação",
+  "Especialização / MBA em andamento": "Espec./MBA (cursando)", "Especialização / MBA completo": "Espec./MBA",
+  "Formação predominantemente autodidata ou por cursos livres": "Autodidata",
+}[l] || l);
+
+function dashboard(rows) {
+  kpis(rows);
+  skills(rows);
+
+  const per = document.getElementById("perfil"); per.replaceChildren();
+  addDonut(per, "Situação PJ", rows, "atuacao_pj", "candidaturas");
+  addCols(per, "Tempo na principal especialidade", rows, "tempo_especialidade", shortTempo, "span2");
+  addCols(per, "Nível de formação", rows, "nivel_formacao", shortFormacao, "span2");
+  addCols(per, "Tempo como independente", rows, "tempo_independente", shortTempo);
+  addInsights(per, rows, [
+    ["Liderança", "lideranca"],
+    ["Especialista externo", "servicos_especialista_externo"],
+    ["Projetos multidisciplinares", "colaboracao_multidisciplinar"],
+    ["Equipe ou rede própria", "equipe_propria"],
+  ]);
+  addViz(per, "Modelo de atuação", rows, () => treemap(rows, "modelo_atuacao"), { cls: "span3", note: "Pergunta " + Q.modelo_atuacao.n + " · o tamanho de cada bloco é a quantidade de parceiros." });
+
+  const dis = document.getElementById("disponibilidade"); dis.replaceChildren();
+  addDonut(dis, "Disponibilidade para projetos", rows, "disponibilidade_colaborar", "candidaturas");
+  addCols(dis, "Horas semanais disponíveis", rows, "horas_semanais", shortHoras, "span2");
+  addInsights(dis, rows, [
+    ["Presencial em Curitiba", "presencial_curitiba"],
+    ["Viagens", "viagens"],
+    ["Precificação", "precificacao"],
+    ["Projetos em parceria", "interesse_parceria"],
+  ]);
+  addViz(dis, "Do remoto ao presencial", rows, () => spectrum(rows, "formatos_atuacao"), { cls: "span3", note: "Pergunta " + Q.formatos_atuacao.n + " · quantos parceiros aceitam cada formato." });
+  addViz(dis, "Formatos de contratação aceitos", rows, () => tiles(rows, "formatos_contratacao"), { cls: "span3", note: "Pergunta " + Q.formatos_contratacao.n + " · cada parceiro pode aceitar vários." });
+
+  const seg = document.getElementById("segmentos"); seg.replaceChildren();
+  addViz(seg, "Segmentos de mercado", rows, () => coverage(rows, "segmentos"), { cls: "span3", note: "Pergunta " + Q.segmentos.n + " · onde a rede tem conhecimento e onde ainda há lacunas." });
+
+  const loc = document.getElementById("localizacao"); loc.replaceChildren();
+  const cu = card("Estados", { cls: "span2", note: "Identificado pela sigla no fim da pergunta " + Q.cidade_estado.n + " (ex.: “Curitiba — PR”)." });
+  const ufs = counts(rows, "uf", (r) => uf(r.cidade_estado));
+  if (!ufs.length) cu.appendChild(emptyNote());
+  else { const g = el("div", "uf-grid"); ufs.forEach(([u, n], i) => { const t = el("div", "uf" + (i === 0 ? " top" : "")); t.title = u + ": " + plural(n, "parceiro", "parceiros"); t.append(el("b", null, String(n)), el("span", null, u)); g.appendChild(t); }); cu.appendChild(g); }
+  loc.appendChild(cu);
+  const wa = card("Grupo de WhatsApp");
+  wa.appendChild(rows.length ? ring(rows.filter((r) => startsSim(r.interesse_whatsapp)).length, rows.length, "querem participar do grupo de networking") : emptyNote());
+  loc.appendChild(wa);
+  addDonut(loc, "Como conheceram a iniciativa", rows, "como_conheceu", "respostas", "span2");
+  addViz(loc, "Principais cidades", rows, () => ranked(counts(rows, "cidade", (r) => cidade(r.cidade_estado)), rows.length, { limit: 5, compact: true }));
+}
+
+/* ---------- Candidaturas ---------- */
+function candidaturas(rows) {
+  document.getElementById("cand-count").textContent = rows.length === ALL.length ? plural(ALL.length, "candidatura", "candidaturas") : rows.length + " de " + plural(ALL.length, "candidatura", "candidaturas");
+  const list = document.getElementById("list"); list.replaceChildren();
+  if (!rows.length) return list.appendChild(el("div", "empty", ALL.length ? "Nenhuma candidatura para os filtros atuais." : "Nenhuma candidatura ainda."));
+  rows.forEach((r) => list.appendChild(Admin.rowLink("/admin/parceiros/?id=" + r.id, r.nome, [r.principal_especializacao, r.cidade_estado, r.email].filter(Boolean).join(" · "), r.created_at)));
+}
+
+function update() {
+  const rows = filtered();
+  const n = activeFilters();
+  document.getElementById("active-count").textContent = n ? "· " + plural(n, "ativo", "ativos") : "";
+  document.getElementById("showing").textContent = "Mostrando " + rows.length + " de " + plural(ALL.length, "candidatura", "candidaturas");
+  document.getElementById("n-cand").textContent = rows.length;
+  dashboard(rows);
+  candidaturas(rows);
+}
+
+function setTab(name) {
+  const dash = name !== "candidaturas";
+  document.getElementById("tab-dashboard").setAttribute("aria-selected", String(dash));
+  document.getElementById("tab-candidaturas").setAttribute("aria-selected", String(!dash));
+  document.getElementById("panel-dashboard").classList.toggle("hidden", !dash);
+  document.getElementById("panel-candidaturas").classList.toggle("hidden", dash);
+  const url = new URL(location.href);
+  if (dash) url.searchParams.delete("aba"); else url.searchParams.set("aba", "candidaturas");
+  history.replaceState(null, "", url);
+}
+document.getElementById("tab-dashboard").addEventListener("click", () => setTab("dashboard"));
+document.getElementById("tab-candidaturas").addEventListener("click", () => setTab("candidaturas"));
+
+Admin.init({ page: "parceiros", onReady: async () => {
+  const params = new URLSearchParams(location.search);
+  const id = params.get("id");
+  if (id) {
+    document.getElementById("view-main").classList.add("hidden");
+    document.getElementById("view-detail").classList.remove("hidden");
+    const { data, error } = await Admin.sb.from("cadastros").select("*").eq("id", id).maybeSingle();
+    const box = document.getElementById("detail");
+    if (error || !data) { box.replaceChildren(el("div", "card empty", error ? "Não foi possível carregar a candidatura." : "Candidatura não encontrada.")); return; }
+    box.replaceChildren(Admin.detail(data, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)));
+    return;
+  }
+  const { data, error } = await Admin.sb.from("cadastros").select("*").order("created_at", { ascending: false });
+  const err = document.getElementById("load-err");
+  err.classList.toggle("hidden", !error);
+  if (error) { err.textContent = "Não foi possível carregar as candidaturas: " + error.message; return; }
+  ALL = data;
+  if (!document.getElementById("f-areas_experiencia")) buildFilters();
+  if (window.matchMedia("(min-width: 800px)").matches) document.getElementById("filters-box").open = true;
+  setTab(params.get("aba"));
+  update();
+}});
+</script>
+</body>
+</html>
