@@ -129,6 +129,27 @@
   .end .sign .motto { color: var(--coral); font-weight: 600; }
   .hidden { display: none !important; }
   .other { margin: -2px 0 8px 34px; }
+  /* Lista com um item por linha */
+  .list-rows { display: grid; gap: 8px; }
+  .list-row { display: flex; gap: 8px; align-items: center; }
+  .list-row input { flex: 1; min-width: 0; }
+  .list-rm { flex-shrink: 0; width: 40px; height: 40px; padding: 0; border-radius: 10px; border: 1px solid var(--line); background: #fff; color: var(--muted); font-size: 20px; line-height: 1; }
+  .list-rm:hover { border-color: var(--error); color: var(--error); }
+  .list-add { margin-top: 10px; background: none; border: 1px dashed var(--coral); color: var(--coral); padding: 9px 16px; font-size: 14px; }
+  .list-add:hover { background: var(--coral-tint); }
+  .q.invalid .list-row input { border-color: var(--error); }
+  /* Categorias em acordeão */
+  .acc-groups { display: grid; gap: 10px; }
+  .acc { border: 1px solid var(--line); border-radius: 12px; background: #fff; overflow: hidden; }
+  .acc.has { border-color: var(--coral); }
+  .acc-head { width: 100%; display: flex; align-items: center; gap: 10px; border: 0; border-radius: 0; background: none; padding: 14px 16px; text-align: left; color: var(--ink); }
+  .acc-title { flex: 1; font-weight: 700; font-size: 15px; }
+  .acc-count { font-size: 12px; font-weight: 700; color: #fff; background: var(--coral); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+  .acc-count:empty { display: none; }
+  .acc-chev { width: 10px; height: 10px; border-right: 2px solid var(--slate); border-bottom: 2px solid var(--slate); transform: rotate(45deg); margin: -4px 4px 0; transition: transform .2s; flex-shrink: 0; }
+  .acc.open .acc-chev { transform: rotate(-135deg); margin-top: 4px; }
+  .acc-body { padding: 0 12px 12px; }
+  .q.invalid .acc { border-color: var(--error); }
   .other input { width: 100%; font: inherit; font-size: 15px; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
   .other input:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px var(--coral-tint); }
   /* Celular: campos com 16px evitam o zoom automático do iPhone ao tocar no campo; sem rolagem lateral. */
@@ -292,7 +313,7 @@ const SECTIONS = [
       ]},
     ]},
     { id: "principal_especializacao", n: 13, label: "Qual é a sua principal área de especialização?", type: "text", required: true, help: "Indique a competência pela qual você gostaria de ser reconhecido(a) e eventualmente convidado(a) a participar de projetos." },
-    { id: "atividades_entregaveis", n: 14, label: "Quais são as principais atividades ou entregáveis que você consegue desenvolver?", type: "paragraph", required: true, help: "Exemplos: condução de pesquisas, mapeamento de jornadas, elaboração de service blueprints, prototipação, construção de interfaces, desenvolvimento de plataformas, automações, diagnóstico de serviços, facilitação de workshops, planejamento estratégico etc." },
+    { id: "atividades_entregaveis", n: 14, label: "Quais são as principais atividades ou entregáveis que você consegue desenvolver?", type: "list", placeholder: "Ex.: Mapeamento de jornadas", required: true, help: "Exemplos: condução de pesquisas, mapeamento de jornadas, elaboração de service blueprints, prototipação, construção de interfaces, desenvolvimento de plataformas, automações, diagnóstico de serviços, facilitação de workshops, planejamento estratégico etc." },
     { id: "etapas_projeto", n: 15, label: "Em quais etapas de um projeto você costuma atuar?", type: "checkbox", required: true, options: [
       "Descoberta e entendimento do problema.",
       "Pesquisa e diagnóstico.",
@@ -311,7 +332,7 @@ const SECTIONS = [
     { id: "segmentos", n: 16, label: "Em quais segmentos de mercado você possui experiência ou conhecimento especializado?", type: "checkbox", required: true, options: [
       "Saúde e serviços hospitalares.", "Clínicas e consultórios.", "Operadoras de planos de saúde.", "Saúde digital e Healthtechs.", "Turismo e hospitalidade.", "Hotelaria e meios de hospedagem.", "Gastronomia e alimentação.", "Varejo e comércio.", "E-commerce e marketplaces.", "Serviços financeiros e Fintechs.", "Educação e Edtechs.", "Tecnologia e software.", "Indústria e manufatura.", "Mobilidade e transportes.", "Logística e distribuição.", "Telecomunicações.", "Mercado imobiliário.", "Construção civil e arquitetura.", "Entretenimento e eventos.", "Setor público e serviços governamentais.", "Terceiro setor e organizações sociais.", "Agronegócio.", "Energia e sustentabilidade.", "Outros segmentos.",
     ]},
-    { id: "conhecimento_segmento", n: 17, label: "Você possui conhecimento aprofundado sobre algum segmento, público ou contexto específico?", type: "paragraph", required: false, help: "Exemplos: jornada hospitalar, atendimento de urgência e emergência, operação hoteleira, comportamento do consumidor, serviços públicos, jornada de compra no varejo, experiência de pessoas idosas, acessibilidade etc." },
+    { id: "conhecimento_segmento", n: 17, label: "Você possui conhecimento aprofundado sobre algum segmento, público ou contexto específico?", type: "list", placeholder: "Ex.: Jornada hospitalar", required: false, help: "Exemplos: jornada hospitalar, atendimento de urgência e emergência, operação hoteleira, comportamento do consumidor, serviços públicos, jornada de compra no varejo, experiência de pessoas idosas, acessibilidade etc." },
     { id: "colaboracao_multidisciplinar", n: 18, label: "Você já participou de projetos que envolveram colaboração entre diferentes áreas ou especialidades?", type: "radio", required: true, options: [
       "Sim, frequentemente.",
       "Sim, em algumas ocasiões.",
@@ -416,15 +437,21 @@ function questionHtml(q) {
     field = `<input type="url" inputmode="url" autocapitalize="off" spellcheck="false" id="${q.id}" name="${q.id}" placeholder="${esc(q.placeholder || "https://")}" autocomplete="url">`;
   else if (q.type === "text" || q.type === "email" || q.type === "tel")
     field = `<input type="${q.type}" id="${q.id}" name="${q.id}" autocomplete="${{ nome: "name", email: "email", telefone: "tel" }[q.id] || "off"}">`;
+  else if (q.type === "list")
+    field = `<div class="list-field" data-list="${q.id}" data-placeholder="${esc(q.placeholder || "")}"><div class="list-rows"></div>
+      <button type="button" class="list-add"><span aria-hidden="true">+</span> Adicionar item</button></div>`;
   else if (q.type === "uf_cidade")
     field = `<div class="uf-cidade">
       <label><span>Estado</span><select id="${q.id}_uf" name="${q.id}_uf"><option value="">Selecione</option>${ESTADOS.map(([uf, nome]) => `<option value="${uf}">${esc(nome)}</option>`).join("")}</select></label>
       <label><span>Cidade</span><select id="${q.id}_cidade" name="${q.id}_cidade" disabled><option value="">Escolha o estado primeiro</option></select></label>
     </div>`;
   else if (q.groups)
-    field = `<div class="options">${q.groups.map(g => `<div class="group-title">${esc(g.title)}</div>${g.options.map(o => optionHtml(q, o)).join("")}`).join("")}</div>`;
+    field = `<div class="acc-groups">${q.groups.map((g, gi) => `<div class="acc">
+        <button type="button" class="acc-head" aria-expanded="false" aria-controls="${q.id}-g${gi}"><span class="acc-title">${esc(g.title)}</span><span class="acc-count" data-count></span><span class="acc-chev" aria-hidden="true"></span></button>
+        <div class="acc-body options hidden" id="${q.id}-g${gi}">${g.options.map(o => optionHtml(q, o)).join("")}</div>
+      </div>`).join("")}</div>`;
   else field = `<div class="options">${q.options.map(o => optionHtml(q, o)).join("")}</div>`;
-  const errMsg = q.type === "url" ? (q.urlHost === "linkedin.com" ? "Informe o link do seu perfil no LinkedIn (ex.: https://www.linkedin.com/in/seu-perfil)." : "Informe um link válido (ex.: https://seusite.com.br).") : q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
+  const errMsg = q.type === "list" ? "Inclua ao menos um item." : q.type === "url" ? (q.urlHost === "linkedin.com" ? "Informe o link do seu perfil no LinkedIn (ex.: https://www.linkedin.com/in/seu-perfil)." : "Informe um link válido (ex.: https://seusite.com.br).") : q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
   return `<div class="q" data-q="${q.id}">
     <label class="q-label" ${["text", "email", "tel", "url", "paragraph"].includes(q.type) ? `for="${q.id}"` : ""}>${q.n}. ${esc(q.label)}${req}</label>
     ${help}${info}${field}${q.afterHtml || ""}
@@ -456,6 +483,7 @@ let current = 0;
 function value(q) {
   if (q.type === "checkbox") return [...form.querySelectorAll(`input[name="${q.id}"]:checked`)].map(i => i.value);
   if (q.type === "radio") return form.querySelector(`input[name="${q.id}"]:checked`)?.value || "";
+  if (q.type === "list") return [...form.querySelectorAll(`[data-list="${q.id}"] input`)].map((i) => i.value.trim()).filter(Boolean).join("\n");
   if (q.type === "url") { const v = form.elements[q.id].value.trim(); return v === "https://" || v === "http://" ? "" : withScheme(v); }
   if (q.type === "uf_cidade") {
     const uf = form.elements[q.id + "_uf"].value, cidade = form.elements[q.id + "_cidade"].value.trim();
@@ -493,6 +521,39 @@ function maskPhone(value) {
   const split = d.length === 11 ? 5 : 4;
   return `(${d.slice(0, 2)}) ${rest.slice(0, split)}-${rest.slice(split)}`;
 }
+// Lista: um item por linha, com botão para remover cada linha.
+form.querySelectorAll(".list-field").forEach((box) => {
+  const rows = box.querySelector(".list-rows");
+  const addRow = (focus) => {
+    const row = document.createElement("div"); row.className = "list-row";
+    const input = document.createElement("input"); input.type = "text"; input.maxLength = 200; input.placeholder = box.dataset.placeholder;
+    input.setAttribute("aria-label", "Item " + (rows.children.length + 1));
+    const rm = document.createElement("button"); rm.type = "button"; rm.className = "list-rm"; rm.setAttribute("aria-label", "Remover item"); rm.textContent = "×";
+    rm.addEventListener("click", () => {
+      if (rows.children.length > 1) row.remove(); else input.value = "";
+      (rows.lastElementChild?.querySelector("input"))?.focus();
+      box.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); if (input.value.trim()) addRow(true); } });
+    row.append(input, rm); rows.appendChild(row);
+    if (focus) input.focus();
+  };
+  addRow(false);
+  box.querySelector(".list-add").addEventListener("click", () => {
+    const empty = [...rows.querySelectorAll("input")].find((i) => !i.value.trim());
+    if (empty) empty.focus(); else addRow(true);
+  });
+});
+
+// Áreas em acordeão: cada categoria abre/fecha e mostra quantos itens foram marcados.
+form.querySelectorAll(".acc").forEach((acc) => {
+  const head = acc.querySelector(".acc-head"), body = acc.querySelector(".acc-body"), count = acc.querySelector("[data-count]");
+  head.addEventListener("click", () => { const open = body.classList.toggle("hidden") === false; head.setAttribute("aria-expanded", String(open)); acc.classList.toggle("open", open); });
+  const update = () => { const n = body.querySelectorAll('input[type="checkbox"]:checked').length; count.textContent = n ? (n === 1 ? "1 selecionado" : n + " selecionados") : ""; acc.classList.toggle("has", n > 0); };
+  body.addEventListener("change", update);
+  update();
+});
+
 form.addEventListener("change", (e) => {
   const name = e.target.name;
   if (!name || !e.target.matches('input[type="radio"], input[type="checkbox"]')) return;
