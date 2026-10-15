@@ -138,6 +138,15 @@
   .legend .n b { color: var(--dark); }
   .legend .li.zero { color: #94a3b8; }
 
+  /* Destaques (percentual + conclusão) */
+  .insights { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .ins { display: grid; gap: 6px; align-content: start; }
+  .ins .q { font-size: 15px; font-weight: 700; }
+  .ins .qn { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .ins .big { font-size: 34px; font-weight: 800; letter-spacing: -.03em; color: var(--red); line-height: 1; margin-top: 8px; }
+  .ins .concl { margin: 0; font-size: 14px; color: var(--dark); line-height: 1.45; }
+  .ins .next, .ins .base { margin: 0; font-size: 12.5px; color: var(--muted); }
+
   /* Barras horizontais (escalas) */
   .hbars { display: grid; gap: 12px; }
   .hb { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px 12px; align-items: baseline; }
@@ -514,26 +523,26 @@ function coverage(rows, id) {
 }
 
 // Destaque: a resposta mais comum em evidência, com mini-rosca e a lista completa sob demanda.
+// Destaque: em vez de gráfico, o percentual da resposta mais comum e uma conclusão em uma frase.
 function insight(title, rows, id) {
   const c = el("div", "card ins");
   c.appendChild(el("div", "q", title));
+  if (Q[id]) c.appendChild(el("div", "qn", "Pergunta " + Q[id].n + " · " + Q[id].label));
   const t = rows.length;
-  const e = counts(rows, id);
-  const lead = e.reduce((m, x) => (x[1] > m[1] ? x : m), ["", 0]);
-  if (!t || !lead[1]) { c.appendChild(emptyNote()); return c; }
-  const top = el("div", "top");
-  const mini = el("div", "mini");
-  const s = svg("svg", { viewBox: "0 0 42 42", "aria-hidden": "true" });
-  const R = 15.9155, C = 2 * Math.PI * R, len = (lead[1] / t) * C;
-  s.append(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#e2e8f0", "stroke-width": 7 }),
-    svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "var(--red)", "stroke-width": 7, "stroke-dasharray": len + " " + (C - len) }));
-  mini.appendChild(s);
-  const txt = el("div"); txt.append(el("div", "big", pct(lead[1], t) + "%"));
-  top.append(mini, txt);
-  c.append(top, el("div", "ans", clean(lead[0])));
-  const d = el("details"); const sm = el("summary", null, "Ver todas as respostas"); const ul = el("ul");
-  e.forEach(([label, n]) => { const li = el("li", label === lead[0] ? "lead" : ""); li.append(el("span", null, clean(label)), el("span", null, n + " · " + pct(n, t) + "%")); ul.appendChild(li); });
-  d.append(sm, ul); c.appendChild(d);
+  const e = counts(rows, id).filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
+  if (!t || !e.length) { c.appendChild(emptyNote()); return c; }
+  const [label, n] = e[0];
+  const p = pct(n, t);
+  const tie = e[1] && e[1][1] === n;
+  const ans = "“" + clean(label) + "”";
+  const sentence = tie ? "Empate entre " + ans + " e “" + clean(e[1][0]) + "”, com " + p + "% cada."
+    : p === 100 ? "Todos os parceiros responderam " + ans + "."
+    : p > 50 ? "A maioria da rede respondeu " + ans + "."
+    : "A resposta mais comum foi " + ans + ".";
+  c.append(el("div", "big", p + "%"), el("p", "concl", sentence));
+  const rest = e.slice(tie ? 2 : 1, tie ? 3 : 2)[0];
+  if (rest && !tie) c.appendChild(el("p", "next", "Em seguida: " + clean(rest[0]) + " (" + pct(rest[1], t) + "%)."));
+  c.appendChild(el("p", "base", "Base: " + plural(t, "candidatura", "candidaturas") + "."));
   return c;
 }
 
