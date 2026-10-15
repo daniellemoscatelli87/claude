@@ -128,6 +128,9 @@
   .end .sign p { margin: 0; }
   .end .sign .motto { color: var(--coral); font-weight: 600; }
   .hidden { display: none !important; }
+  .other { margin: -2px 0 8px 34px; }
+  .other input { width: 100%; font: inherit; font-size: 15px; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+  .other input:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px var(--coral-tint); }
   /* Celular: campos com 16px evitam o zoom automático do iPhone ao tocar no campo; sem rolagem lateral. */
   html { overflow-x: clip; }
   @media (max-width: 767px) { input, select, textarea { font-size: 16px !important; } }
@@ -393,9 +396,13 @@ const SECTIONS = [
 const form = document.getElementById("form");
 const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+// Opções "Outro", "Outra especialidade", "Outros segmentos": ao marcar, abre um campo para a pessoa escrever.
+const isOther = (o) => /^Outr[oa]s?\b/.test(o);
 function optionHtml(q, value) {
   const type = q.type === "checkbox" ? "checkbox" : "radio";
-  return `<label class="opt"><input type="${type}" name="${q.id}" value="${esc(value)}"><span>${esc(value)}</span></label>`;
+  const opt = `<label class="opt"><input type="${type}" name="${q.id}" value="${esc(value)}"><span>${esc(value)}</span></label>`;
+  if (!isOther(value)) return opt;
+  return opt + `<div class="other hidden" data-other="${q.id}"><input type="text" name="${q.id}__outro" maxlength="200" placeholder="Qual? Escreva aqui" aria-label="Descreva a opção ${esc(value.replace(/\.$/, ""))}"></div>`;
 }
 
 function questionHtml(q) {
@@ -487,6 +494,18 @@ function maskPhone(value) {
   const split = d.length === 11 ? 5 : 4;
   return `(${d.slice(0, 2)}) ${rest.slice(0, split)}-${rest.slice(split)}`;
 }
+form.addEventListener("change", (e) => {
+  const name = e.target.name;
+  if (!name || !e.target.matches('input[type="radio"], input[type="checkbox"]')) return;
+  form.querySelectorAll(`[data-other="${name}"]`).forEach((box) => {
+    const checked = !!form.querySelector(`input[name="${name}"][value="${CSS.escape(box.previousElementSibling.querySelector("input").value)}"]:checked`);
+    box.classList.toggle("hidden", !checked);
+    if (checked && e.target === box.previousElementSibling.querySelector("input")) box.querySelector("input").focus();
+  });
+});
+const otherText = (q) => (form.elements[q.id + "__outro"]?.value || "").trim();
+const otherChecked = (q) => [...form.querySelectorAll(`input[name="${q.id}"]:checked`)].some((i) => isOther(i.value));
+
 // Máscara de link: começa com https://, sem espaços; completa o https:// se a pessoa colar só o endereço.
 const withScheme = (v) => (v && !/^[a-z][a-z0-9+.-]*:\/\//i.test(v) ? "https://" + v.replace(/^\/+/, "") : v);
 function validUrl(v, host) {
@@ -505,6 +524,10 @@ function validateQuestion(q) {
   if (q.required) ok = Array.isArray(v) ? v.length > 0 : v !== "";
   if (ok && q.type === "email" && v) ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   if (ok && q.type === "tel" && v) ok = v.replace(/\D/g, "").length >= 10;
+  const otherBad = ok && (q.type === "checkbox" || q.type === "radio") && otherChecked(q) && !otherText(q);
+  if (otherBad) ok = false;
+  const err = form.querySelector(`[data-q="${q.id}"] .err`);
+  if (err) { err.dataset.base ??= err.textContent; err.textContent = otherBad ? "Escreva qual é a opção “Outro”." : err.dataset.base; }
   if (ok && q.type === "url" && v && v !== "https://") ok = validUrl(withScheme(v), q.urlHost);
   form.querySelector(`[data-q="${q.id}"]`).classList.toggle("invalid", !ok);
   return ok;
@@ -550,6 +573,8 @@ function payload() {
     data[q.id] = Array.isArray(v) ? v : (v === "" ? null : v);
   });
   data.autoriza_dados = data.autoriza_dados === CONSENT_YES;
+  data.outros = {};
+  SECTIONS.flatMap(s => s.questions).forEach(q => { if (otherChecked(q) && otherText(q)) data.outros[q.id] = otherText(q); });
   return data;
 }
 

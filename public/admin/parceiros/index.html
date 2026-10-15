@@ -813,7 +813,13 @@ Admin.init({ page: "parceiros", onReady: async () => {
     const box = document.getElementById("detail");
     if (error || !data) { box.replaceChildren(el("div", "card empty", error ? "Não foi possível carregar a candidatura." : "Candidatura não encontrada.")); return; }
     Admin.markSeen("cadastros", data);
-    box.replaceChildren(Admin.detail(data, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)));
+    // Junta à opção "Outro" o texto que a pessoa escreveu.
+    const shown = { ...data };
+    for (const [k, txt] of Object.entries(data.outros || {})) {
+      const addTxt = (v) => (/^Outr[oa]s?\b/.test(v) ? v.replace(/\.$/, "") + ": " + txt : v);
+      shown[k] = Array.isArray(shown[k]) ? shown[k].map(addTxt) : addTxt(shown[k] || "");
+    }
+    box.replaceChildren(Admin.detail(shown, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)));
     return;
   }
   const { data, error } = await Admin.sb.from("cadastros").select("*").order("created_at", { ascending: false });
