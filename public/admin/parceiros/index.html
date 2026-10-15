@@ -708,6 +708,15 @@ const CONTRATACAO_LEGADO = {
   "Valor por projeto.": "Projeto com escopo e valor fechado.", "Mensalidade / contrato recorrente.": "Contrato recorrente (mensal ou por período determinado).",
   "Depende do escopo e da complexidade.": "Negociável conforme escopo e complexidade.",
 };
+// Etapas do projeto: opções antigas da pergunta 15 passam para as atuais.
+const ETAPAS_LEGADO = {
+  "Descoberta e entendimento do problema.": "Diagnóstico e entendimento do problema.", "Pesquisa e diagnóstico.": "Pesquisa e levantamento de informações.",
+  "Definição de estratégias.": "Planejamento e definição de estratégias.", "Ideação e cocriação.": "Ideação e cocriação de soluções.",
+  "Prototipação e validação.": "Prototipação, testes e validação.", "Desenho de soluções.": "Ideação e cocriação de soluções.",
+  "Desenvolvimento e implementação.": "Execução e desenvolvimento das entregas.", "Capacitação e gestão da mudança.": "Capacitação de equipes e gestão da mudança.",
+  "Mensuração e acompanhamento de resultados.": "Mensuração de resultados e melhoria contínua.",
+};
+const etapasAtuais = (r) => [...new Set((r.etapas_projeto || []).map((v) => ETAPAS_LEGADO[v] || v))];
 function contratacaoAtual(r) {
   const all = [...(r.formatos_contratacao || []), ...(r.precificacao ? [r.precificacao] : [])].map((v) => CONTRATACAO_LEGADO[v] || v);
   return [...new Set(all)];
@@ -724,7 +733,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
     if (error || !data) { box.replaceChildren(el("div", "card empty", error ? "Não foi possível carregar a candidatura." : "Candidatura não encontrada.")); return; }
     Admin.markSeen("cadastros", data);
     // Junta à opção "Outro" o texto que a pessoa escreveu.
-    const shown = { ...data, formatos_contratacao: contratacaoAtual(data) };
+    const shown = { ...data, formatos_contratacao: contratacaoAtual(data), etapas_projeto: etapasAtuais(data) };
     // Candidaturas antigas tinham certificações em pergunta separada; agora fica junto da formação.
     if (data.certificacoes) shown.formacao = [data.formacao, data.certificacoes].filter(Boolean).join("\n");
     for (const [k, txt] of Object.entries(data.outros || {})) {
@@ -738,7 +747,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
   const err = document.getElementById("load-err");
   err.classList.toggle("hidden", !error);
   if (error) { err.textContent = "Não foi possível carregar as candidaturas: " + error.message; return; }
-  for (const r of data) r.formatos_contratacao = contratacaoAtual(r);
+  for (const r of data) { r.formatos_contratacao = contratacaoAtual(r); r.etapas_projeto = etapasAtuais(r); }
   // Respostas de versões antigas do formulário passam a contar na opção atual equivalente.
   const LEGADO = {
     atuacao_pj: { "Sim, tenho CNPJ ativo.": "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria).", "Sim, atuo por meio de uma empresa ou consultoria própria.": "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria)." },
