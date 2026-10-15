@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Rede de Parceiros | Dani Moscatelli</title>
 <meta name="description" content="Cadastro na Rede de Parceiros da Dani Moscatelli | Experience Design Studio.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -110,6 +110,13 @@
   .btn-ghost { background: #fff; color: var(--coral); }
   .btn-ghost:hover { background: var(--coral-tint); }
   .form-error { display: none; color: var(--error); font-size: 14px; margin-top: 12px; text-align: right; }
+  /* No celular, os botões ficam fixos no rodapé da tela */
+  @media (max-width: 560px) {
+    .nav-bar { position: sticky; bottom: 0; z-index: 10; margin: 24px -16px -64px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--card); border-top: 1px solid var(--line); box-shadow: 0 -6px 16px -8px rgb(17 17 17 / .12); }
+    .nav-bar .nav { margin-top: 0; }
+    .nav-bar .btn-primary { flex: 1; }
+    .nav-bar .form-error { text-align: center; margin-top: 8px; }
+  }
   .end p { margin: 0 0 14px; }
   .end .sign { margin-top: 20px; }
   .end .sign p { margin: 0; }
@@ -407,6 +414,7 @@ SECTIONS.forEach((s, i) => {
 });
 
 const nav = document.createElement("div");
+nav.className = "nav-bar";
 nav.innerHTML = `<div class="nav">
     <button type="button" class="btn-ghost hidden" id="back">Voltar</button>
     <button type="button" class="btn-primary" id="next">Quero fazer parte da rede</button>
