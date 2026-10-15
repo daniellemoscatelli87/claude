@@ -478,20 +478,8 @@ window.FORM_PARCEIROS = [
     ]
    },
    {
-    "id": "presencial_curitiba",
-    "n": 33,
-    "label": "Você teria disponibilidade para atuar presencialmente em Curitiba/PR ou região metropolitana?",
-    "type": "radio",
-    "options": [
-     "Sim, sem necessidade de deslocamento ou hospedagem.",
-     "Sim, mediante negociação de deslocamento e/ou hospedagem.",
-     "Sim, apenas para encontros ou atividades pontuais.",
-     "Não, somente em formato remoto."
-    ]
-   },
-   {
     "id": "horas_semanais",
-    "n": 34,
+    "n": 33,
     "label": "Qual é sua disponibilidade média para dedicação a projetos?",
     "type": "radio",
     "options": [
@@ -505,7 +493,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "formatos_contratacao",
-    "n": 35,
+    "n": 34,
     "label": "Quais formatos de contratação e cobrança você aceita?",
     "type": "checkbox",
     "options": [
@@ -520,7 +508,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "equipe_propria",
-    "n": 36,
+    "n": 35,
     "label": "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?",
     "type": "radio",
     "options": [
@@ -532,7 +520,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "interesse_parceria",
-    "n": 37,
+    "n": 36,
     "label": "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?",
     "type": "radio",
     "options": [
@@ -544,7 +532,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "condicoes",
-    "n": 38,
+    "n": 37,
     "label": "Existe alguma condição ou preferência importante para sua participação em projetos futuros?",
     "type": "paragraph"
    }
@@ -555,7 +543,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "como_conheceu",
-    "n": 39,
+    "n": 38,
     "label": "Como você conheceu esta iniciativa?",
     "type": "radio",
     "options": [
@@ -569,7 +557,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "autoriza_dados",
-    "n": 40,
+    "n": 39,
     "label": "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?",
     "type": "radio",
     "options": [
@@ -584,7 +572,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "interesse_whatsapp",
-    "n": 41,
+    "n": 40,
     "label": "Você gostaria de participar do nosso grupo de networking no WhatsApp?",
     "type": "radio",
     "options": [
