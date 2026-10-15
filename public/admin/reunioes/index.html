@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Reuniões | Área restrita</title>
+<link rel="icon" type="image/png" href="/favicon-dm.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/admin.css">
+<style>
+  .layout { display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 16px; margin-top: 20px; align-items: start; }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+  /* Calendário do mês */
+  .cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .cal-nav { display: flex; gap: 6px; }
+  .cal-nav button { width: 36px; height: 36px; padding: 0; border-radius: 10px; border: 1px solid var(--line); background: #fff; color: var(--red); font-size: 18px; line-height: 1; }
+  .cal-nav button:hover { border-color: var(--red); }
+  .cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+  .cal .wd { font-size: 11px; font-weight: 700; color: var(--muted); text-align: center; text-transform: uppercase; letter-spacing: .04em; padding-bottom: 4px; }
+  .cal .day { aspect-ratio: 1; border: 0; border-radius: 10px; background: none; padding: 0; font-size: 14px; font-weight: 600; color: var(--dark); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; position: relative; }
+  .cal .day.out { color: #cbd5e1; }
+  .cal .day.today { box-shadow: inset 0 0 0 1.5px var(--red); }
+  .cal .day.has { background: #e6f4ea; color: #1e7b45; cursor: pointer; }
+  .cal .day.has:hover { background: #d3ecdb; }
+  .cal .day.has.past { background: var(--track); color: var(--muted); }
+  .cal .day.sel, .cal .day.sel:hover, .cal .day.has.past.sel { background: #1e7b45; color: #fff; }
+  .cal .day .dots { display: flex; gap: 2px; height: 5px; }
+  .cal .day .dots i { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+  .cal .day:not(.has) { cursor: default; }
+  .cal-foot { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); }
+  .link-btn { background: none; border: 0; padding: 0; color: var(--red); font-size: 13px; font-weight: 700; }
+  /* Lista de reuniões */
+  .sec-title { display: flex; align-items: baseline; gap: 8px; margin: 0 0 8px; }
+  .sec-title .n { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .meet { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 4px 14px; padding: 14px 4px; }
+  .meet + .meet { border-top: 1px solid var(--track); }
+  .meet .date { grid-row: span 3; text-align: center; border-radius: 12px; background: #e6f4ea; color: #1e7b45; padding: 8px 4px; align-self: start; }
+  .meet.past .date { background: var(--track); color: var(--muted); }
+  .meet .date b { display: block; font-size: 22px; line-height: 1.1; }
+  .meet .date span { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+  .meet .date small { display: block; font-size: 12px; font-weight: 700; margin-top: 4px; }
+  .meet .t { font-weight: 700; }
+  .meet .s { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+  .meet .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .meet .acts a { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; text-decoration: none; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--dark); background: #fff; }
+  .meet .acts a:hover { border-color: var(--red); color: var(--red); }
+  .meet .acts svg { width: 15px; height: 15px; }
+  .past-toggle { margin-top: 16px; }
+</style>
+</head>
+<body>
+<main class="wrap hidden" id="app">
+  <h1>Reuniões</h1>
+  <p class="muted" id="count"></p>
+  <p class="msg err hidden" id="load-err"></p>
+  <div class="layout">
+    <section class="card">
+      <div class="cal-head">
+        <h2 id="cal-title"></h2>
+        <div class="cal-nav"><button type="button" id="prev" aria-label="Mês anterior">‹</button><button type="button" id="next" aria-label="Próximo mês">›</button></div>
+      </div>
+      <div class="cal" id="cal" role="grid"></div>
+      <div class="cal-foot"><span id="cal-sel">Toque em um dia marcado para ver as reuniões.</span><button type="button" class="link-btn hidden" id="clear">Ver todas</button></div>
+    </section>
+    <section class="card">
+      <div class="sec-title"><h2 id="list-title">Próximas reuniões</h2><span class="n" id="list-n"></span></div>
+      <div id="list"></div>
+      <div id="past-box" class="past-toggle hidden">
+        <button type="button" class="btn-ghost" id="past-btn">Mostrar reuniões anteriores</button>
+        <div id="past" class="hidden" style="margin-top:12px"></div>
+      </div>
+    </section>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/admin/admin.js"></script>
+<script>
+const el = Admin.el;
+const MEETING_MINUTES = 60; // duração usada no convite do Google Agenda
+const dayKey = (d) => d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+const time = (d) => d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+const gcalDate = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+
+// Link que abre o Google Agenda com o evento preenchido e o contato como convidado.
+function googleLink(r, start) {
+  const end = new Date(start.getTime() + MEETING_MINUTES * 6e4);
+  const details = ["Reunião agendada a partir de mensagem de contato do site.", r.assunto && "Assunto: " + r.assunto, r.empresa && "Empresa: " + r.empresa, r.cargo && "Cargo: " + r.cargo, r.telefone && "Telefone: " + r.telefone, r.mensagem && "\nMensagem:\n" + r.mensagem].filter(Boolean).join("\n");
+  const q = new URLSearchParams({ action: "TEMPLATE", text: "Reunião com " + (r.nome || "contato") + (r.empresa ? " (" + r.empresa + ")" : ""), dates: gcalDate(start) + "/" + gcalDate(end), details });
+  if (r.email) q.set("add", r.email);
+  return "https://calendar.google.com/calendar/render?" + q.toString();
+}
+
+function action(href, iconName, text, external) {
+  const a = el("a"); a.href = href;
+  if (external) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+  a.innerHTML = Admin.icon(iconName); a.append(text);
+  return a;
+}
+
+function meetingItem(r, past) {
+  const d = new Date(r.reuniao_em);
+  const item = el("div", "meet" + (past ? " past" : ""));
+  const date = el("div", "date");
+  date.append(el("span", null, d.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "")), el("b", null, String(d.getDate())), el("span", null, d.toLocaleDateString("pt-BR", { month: "short" }).replace(".", "")), el("small", null, time(d)));
+  const acts = el("div", "acts");
+  acts.append(action("/admin/contatos/?id=" + r.id, "mail", "Ver mensagem"));
+  if (r.email) acts.append(action("mailto:" + r.email + "?subject=" + encodeURIComponent("Nossa reunião em " + d.toLocaleDateString("pt-BR") + " às " + time(d)), "mailOpen", "Enviar e-mail"));
+  if (!past) acts.append(action(googleLink(r, d), "meeting", "Google Agenda", true));
+  item.append(date, el("div", "t", r.nome || "Sem nome"), el("div", "s", [r.empresa, r.assunto].filter(Boolean).join(" · ")), acts);
+  return item;
+}
+
+Admin.init({ page: "reunioes", onReady: async () => {
+  const err = document.getElementById("load-err");
+  const { data, error } = await Admin.sb.from("contatos").select("id, nome, email, telefone, empresa, cargo, assunto, mensagem, reuniao_em").not("reuniao_em", "is", null).order("reuniao_em", { ascending: true });
+  err.classList.toggle("hidden", !error);
+  if (error) { err.textContent = "Não foi possível carregar as reuniões: " + error.message; return; }
+  const now = new Date();
+  const upcoming = data.filter((r) => new Date(r.reuniao_em) >= now);
+  const past = data.filter((r) => new Date(r.reuniao_em) < now).reverse();
+  document.getElementById("count").textContent = upcoming.length === 1 ? "1 reunião agendada" : upcoming.length + " reuniões agendadas";
+
+  const byDay = new Map();
+  for (const r of data) { const k = dayKey(new Date(r.reuniao_em)); byDay.set(k, [...(byDay.get(k) || []), r]); }
+
+  let month = new Date(now.getFullYear(), now.getMonth(), 1);
+  let selected = null;
+
+  const renderList = () => {
+    const list = document.getElementById("list"); list.replaceChildren();
+    const rows = selected ? byDay.get(selected) || [] : upcoming;
+    document.getElementById("list-title").textContent = selected ? "Reuniões em " + new Date(rows[0].reuniao_em).toLocaleDateString("pt-BR", { day: "2-digit", month: "long" }) : "Próximas reuniões";
+    document.getElementById("list-n").textContent = rows.length ? String(rows.length) : "";
+    if (!rows.length) list.appendChild(el("div", "empty", "Nenhuma reunião agendada. Para agendar, abra uma mensagem de contato e informe a data da reunião."));
+    rows.forEach((r) => list.appendChild(meetingItem(r, new Date(r.reuniao_em) < now)));
+    document.getElementById("past-box").classList.toggle("hidden", !!selected || !past.length);
+    document.getElementById("clear").classList.toggle("hidden", !selected);
+    document.getElementById("cal-sel").textContent = selected ? "Mostrando o dia selecionado." : "Toque em um dia marcado para ver as reuniões.";
+  };
+
+  const renderCal = () => {
+    const title = month.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+    document.getElementById("cal-title").textContent = title.charAt(0).toUpperCase() + title.slice(1);
+    const cal = document.getElementById("cal"); cal.replaceChildren();
+    ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].forEach((w) => cal.appendChild(el("div", "wd", w)));
+    const start = new Date(month); start.setDate(1 - month.getDay());
+    for (let i = 0; i < 42; i++) {
+      const d = new Date(start); d.setDate(start.getDate() + i);
+      if (i === 35 && d.getMonth() !== month.getMonth()) break;
+      const k = dayKey(d), items = byDay.get(k) || [];
+      const b = el("button", "day" + (d.getMonth() !== month.getMonth() ? " out" : "") + (k === dayKey(now) ? " today" : "") + (items.length ? " has" : "") + (items.length && items.every((r) => new Date(r.reuniao_em) < now) ? " past" : "") + (k === selected ? " sel" : ""));
+      b.type = "button";
+      b.append(el("span", null, String(d.getDate())));
+      if (items.length) {
+        const dots = el("span", "dots"); items.slice(0, 3).forEach(() => dots.appendChild(el("i")));
+        b.appendChild(dots);
+        b.setAttribute("aria-label", d.toLocaleDateString("pt-BR") + ": " + items.length + (items.length === 1 ? " reunião" : " reuniões"));
+        b.addEventListener("click", () => { selected = selected === k ? null : k; renderCal(); renderList(); });
+      } else b.tabIndex = -1;
+      cal.appendChild(b);
+    }
+  };
+
+  document.getElementById("prev").addEventListener("click", () => { month = new Date(month.getFullYear(), month.getMonth() - 1, 1); renderCal(); });
+  document.getElementById("next").addEventListener("click", () => { month = new Date(month.getFullYear(), month.getMonth() + 1, 1); renderCal(); });
+  document.getElementById("clear").addEventListener("click", () => { selected = null; renderCal(); renderList(); });
+  document.getElementById("past-btn").addEventListener("click", () => {
+    const box = document.getElementById("past"), open = box.classList.toggle("hidden") === false;
+    document.getElementById("past-btn").textContent = open ? "Ocultar reuniões anteriores" : "Mostrar reuniões anteriores (" + past.length + ")";
+    if (open && !box.childElementCount) past.forEach((r) => box.appendChild(meetingItem(r, true)));
+  });
+  document.getElementById("past-btn").textContent = "Mostrar reuniões anteriores (" + past.length + ")";
+  renderCal(); renderList();
+}});
+</script>
+</body>
+</html>

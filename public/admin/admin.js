@@ -40,6 +40,7 @@
   const PAGES = [
     { id: "inicio", href: "/admin/", label: "Início", icon: "home" },
     { id: "contatos", href: "/admin/contatos/", label: "Contato", icon: "mail" },
+    { id: "reunioes", href: "/admin/reunioes/", label: "Reuniões", icon: "meeting" },
     { id: "parceiros", href: "/admin/parceiros/", label: "Parceiros", icon: "users" },
   ];
 
@@ -298,5 +299,5 @@
     ["dias_preferidos", "Melhor dia da semana"], ["periodo", "Período de preferência"],
   ]}];
 
-  window.Admin = { sb, el, init, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES };
+  window.Admin = { sb, el, init, icon, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES };
 })();
