@@ -527,13 +527,14 @@ function donut(entries, total, centerLabel, { pie = false } = {}) {
 
 // Barras horizontais para respostas em escala (tempo, formação, horas): mantém a ordem da escala
 // e mostra a porcentagem das candidaturas; a quantidade fica ao lado.
-function columns(entries, total) {
+// onlyCount: mostra só a quantidade de parceiros (sem porcentagem).
+function columns(entries, total, onlyCount) {
   const box = el("div", "hbars");
   for (const [label, n] of entries) {
     const p = pct(n, total);
     const row = el("div", "hb" + (n ? "" : " zero"));
-    row.title = clean(label) + ": " + plural(n, "parceiro", "parceiros") + " (" + p + "%)";
-    const v = el("span", "hv"); v.append(el("b", null, p + "%"), el("small", null, String(n)));
+    row.title = clean(label) + ": " + plural(n, "parceiro", "parceiros") + (onlyCount ? "" : " (" + p + "%)");
+    const v = el("span", "hv"); if (onlyCount) v.append(el("b", null, String(n))); else v.append(el("b", null, p + "%"), el("small", null, String(n)));
     const bar = el("span", "hbar"); const fill = el("i"); fill.style.width = p + "%"; bar.appendChild(fill);
     row.append(el("span", "hl", clean(label)), v, bar);
     box.appendChild(row);
@@ -624,10 +625,10 @@ function addViz(box, title, rows, fn, opts = {}) {
   c.appendChild(rows.length ? fn() : emptyNote());
   box.appendChild(c);
 }
-function addCols(box, title, rows, id, cls) {
+function addCols(box, title, rows, id, cls, onlyCount) {
   // A nota liga o gráfico à pergunta do formulário (número e enunciado).
   const c = card(title, { cls: "colcard" + (cls ? " " + cls : ""), note: "Pergunta " + Q[id].n + " · " + Q[id].label });
-  c.appendChild(rows.length ? columns(counts(rows, id), rows.length) : emptyNote());
+  c.appendChild(rows.length ? columns(counts(rows, id), rows.length, onlyCount) : emptyNote());
   box.appendChild(c);
 }
 function addInsights(box, rows, items) {
@@ -643,9 +644,9 @@ function dashboard(rows) {
 
   const per = document.getElementById("perfil"); per.replaceChildren();
   addDonut(per, "Situação PJ", rows, "atuacao_pj", "candidaturas");
-  addCols(per, "Tempo de atuação na principal especialidade", rows, "tempo_especialidade", "span2");
-  addCols(per, "Nível de formação acadêmica", rows, "nivel_formacao", "span2");
-  addCols(per, "Tempo como prestador(a) independente ou consultor(a)", rows, "tempo_independente");
+  addCols(per, "Tempo de atuação na principal especialidade", rows, "tempo_especialidade", "span2", true);
+  addCols(per, "Nível de formação acadêmica", rows, "nivel_formacao", "span2", true);
+  addCols(per, "Tempo como prestador(a) independente ou consultor(a)", rows, "tempo_independente", null, true);
   addInsights(per, rows, [
     ["Liderança", "lideranca"],
     ["Especialista externo", "servicos_especialista_externo"],
