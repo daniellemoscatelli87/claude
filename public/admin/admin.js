@@ -333,9 +333,13 @@
   let notifPromise = null;
   function loadNotifications() {
     notifPromise = (async () => {
-      const [c, p] = await Promise.all([
+      const desde = new Date(Date.now() - 30 * 864e5).toISOString();
+      const [c, p, cv, pv] = await Promise.all([
         sb.from("contatos").select("id, nome, assunto, created_at", { count: "exact" }).is("visualizado_em", null).order("created_at", { ascending: false }).limit(200),
         sb.from("cadastros").select("id, nome, principal_especializacao, created_at", { count: "exact" }).is("visualizado_em", null).order("created_at", { ascending: false }).limit(200),
+        // Já vistas nos últimos 30 dias, para aparecerem abaixo das novas.
+        sb.from("contatos").select("id, nome, assunto, created_at").not("visualizado_em", "is", null).gte("created_at", desde).order("created_at", { ascending: false }).limit(30),
+        sb.from("cadastros").select("id, nome, principal_especializacao, created_at").not("visualizado_em", "is", null).gte("created_at", desde).order("created_at", { ascending: false }).limit(30),
       ]);
       const contatos = c.data || [], parceiros = p.data || [];
       const ids = contatos.map((x) => x.id);
@@ -349,6 +353,10 @@
         ...contatos.map((x) => ({ href: "/admin/contatos/?id=" + x.id, at: respostas.get(x.id) || x.created_at, text: (respostas.has(x.id) ? "Nova resposta de " : "Nova mensagem de ") + (x.nome || "contato"), sub: x.assunto, icon: "mail" })),
         ...parceiros.map((x) => ({ href: "/admin/parceiros/?id=" + x.id, at: x.created_at, text: "Nova candidatura de " + (x.nome || "parceiro"), sub: x.principal_especializacao, icon: "users" })),
       ].sort((a, b) => new Date(b.at) - new Date(a.at));
+      const vistas = [
+        ...(cv.data || []).map((x) => ({ href: "/admin/contatos/?id=" + x.id, at: x.created_at, text: "Mensagem de " + (x.nome || "contato"), sub: x.assunto, icon: "mail" })),
+        ...(pv.data || []).map((x) => ({ href: "/admin/parceiros/?id=" + x.id, at: x.created_at, text: "Candidatura de " + (x.nome || "parceiro"), sub: x.principal_especializacao, icon: "users" })),
+      ].sort((a, b) => new Date(b.at) - new Date(a.at)).slice(0, 30);
 
       const total = n.contatos + n.parceiros;
       const dot = $("bell-dot");
@@ -361,15 +369,19 @@
         if (s) { s.textContent = String(v); s.classList.toggle("hidden", !v); }
       }
       const list = $("notif-list"); list.replaceChildren();
-      items.forEach((it) => {
-        const a = el("a", "notif-item"); a.href = it.href;
+      const item = (it, nova) => {
+        const a = el("a", "notif-item" + (nova ? " new" : " seen")); a.href = it.href;
         const ic = el("span", "ni"); ic.innerHTML = icon(it.icon);
         const t = el("span", "nt"); t.append(el("b", null, it.text));
         if (it.sub) t.append(el("span", "ns", it.sub));
         t.append(el("small", null, fmtDay(it.at)));
-        a.append(ic, t); list.appendChild(a);
-      });
-      if (!items.length) list.appendChild(el("div", "empty", "Nenhuma notificação nova. Mensagens e candidaturas ainda não abertas aparecem aqui."));
+        a.append(ic, t);
+        if (nova) { const d = el("span", "nd"); d.setAttribute("aria-label", "Não lida"); a.appendChild(d); }
+        return a;
+      };
+      if (items.length) { list.appendChild(el("div", "notif-sec", "Novas")); items.forEach((it) => list.appendChild(item(it, true))); }
+      else list.appendChild(el("div", "empty", "Nenhuma notificação nova. Mensagens e candidaturas ainda não abertas aparecem aqui."));
+      if (vistas.length) { list.appendChild(el("div", "notif-sec", "Já visualizadas")); vistas.forEach((it) => list.appendChild(item(it, false))); }
       return n;
     })().catch(() => ({ contatos: 0, parceiros: 0 }));
     return notifPromise;

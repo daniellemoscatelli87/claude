@@ -38,6 +38,14 @@ a { color: inherit; }
 .notif-item small { font-size: 12px; color: var(--muted); }
 .notif-item .ns { font-size: 12.5px; color: var(--dark); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .notif-item + .notif-item { border-top: 1px solid var(--track); }
+.notif-sec { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 14px 8px 6px; }
+.notif-item.new { background: #fff7f6; }
+.notif-item.new:hover { background: var(--red-tint); }
+.notif-item.new b { font-weight: 800; }
+.notif-item .nd { width: 8px; height: 8px; border-radius: 50%; background: var(--red); margin-left: auto; flex-shrink: 0; }
+.notif-item.seen .ni { background: var(--track); color: var(--muted); }
+.notif-item.seen b { font-weight: 500; color: var(--muted); }
+.notif-item.seen .ns { color: var(--muted); }
 /* Selo de novidade (Início) */
 .flag { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: #fff; background: var(--red); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
 .flag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: flag-pulse 1.6s ease-in-out infinite; }
