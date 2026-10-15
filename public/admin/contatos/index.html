@@ -13,6 +13,9 @@
 <style>
   .toolbar { display: flex; gap: 12px; align-items: center; margin: 20px 0 12px; flex-wrap: wrap; }
   .toolbar input { max-width: 420px; }
+  .groups { display: grid; gap: 16px; }
+  .group-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .group-head .n { font-size: 13px; color: var(--muted); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -23,7 +26,7 @@
     <div class="toolbar"><input type="search" id="busca" placeholder="Buscar por nome, e-mail, empresa, assunto ou mensagem…" aria-label="Buscar mensagens">
       <select id="situacao" aria-label="Situação" style="max-width:220px"><option value="">Todas as mensagens</option><option value="pendentes">Não respondidas</option><option value="respondidas">Respondidas</option></select></div>
     <p class="msg err hidden" id="load-err"></p>
-    <div class="card"><div class="rows" id="list"></div></div>
+    <div id="list" class="groups"></div>
   </div>
   <div id="view-detail" class="hidden">
     <a class="back" href="/admin/contatos/">← Todas as mensagens</a>
@@ -83,12 +86,19 @@ Admin.init({ page: "contatos", onReady: async () => {
     const rows = data.filter((r) => (!sit || (sit === "respondidas") === !!r.respondido_em) && (!q || ["nome", "email", "empresa", "assunto", "mensagem"].some((k) => norm(r[k]).includes(q))));
     document.getElementById("count").textContent = (q || sit ? rows.length + " de " : "") + data.length + (data.length === 1 ? " mensagem recebida" : " mensagens recebidas");
     const list = document.getElementById("list"); list.replaceChildren();
-    if (!rows.length) return list.appendChild(Admin.el("div", "empty", data.length ? "Nenhuma mensagem encontrada." : "Nenhuma mensagem ainda."));
-    rows.forEach((r) => {
-      const a = Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em);
-      const s = a.querySelector(".s"); s.prepend(badge(r), document.createTextNode(" "));
-      list.appendChild(a);
-    });
+    if (!rows.length) return list.appendChild(Admin.el("div", "card empty", data.length ? "Nenhuma mensagem encontrada." : "Nenhuma mensagem ainda."));
+    // Separa em dois grupos em vez de repetir a etiqueta de situação em cada linha.
+    for (const [title, answered] of [["Não respondidas", false], ["Respondidas", true]]) {
+      const items = rows.filter((r) => !!r.respondido_em === answered);
+      if (!items.length) continue;
+      const card = Admin.el("section", "card");
+      const head = Admin.el("div", "group-head");
+      head.append(Admin.el("h2", null, title), Admin.el("span", "n", String(items.length)));
+      const box = Admin.el("div", "rows");
+      items.forEach((r) => box.appendChild(Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em)));
+      card.append(head, box);
+      list.appendChild(card);
+    }
   };
   document.getElementById("busca").addEventListener("input", render);
   sel.addEventListener("change", render);
