@@ -281,7 +281,7 @@ window.FORM_PARCEIROS = [
    {
     "id": "conhecimento_segmento",
     "n": 17,
-    "label": "Você possui conhecimento aprofundado sobre algum segmento, público ou contexto específico?",
+    "label": "Dentro dos segmentos que você marcou, em quais assuntos você tem domínio aprofundado?",
     "type": "paragraph"
    },
    {
