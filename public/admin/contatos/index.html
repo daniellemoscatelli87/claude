@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Contato | Área restrita</title>
+<link rel="icon" type="image/png" href="/favicon-dm.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/admin.css">
+<style>
+  .toolbar { display: flex; gap: 12px; align-items: center; margin: 20px 0 12px; flex-wrap: wrap; }
+  .toolbar input { max-width: 420px; }
+</style>
+</head>
+<body>
+<main class="wrap hidden" id="app">
+  <div id="view-list">
+    <span class="tag">Área restrita</span>
+    <h1>Contato</h1>
+    <p class="muted" id="count"></p>
+    <div class="toolbar"><input type="search" id="busca" placeholder="Buscar por nome, e-mail, empresa, assunto ou mensagem…" aria-label="Buscar mensagens"></div>
+    <p class="msg err hidden" id="load-err"></p>
+    <div class="card"><div class="rows" id="list"></div></div>
+  </div>
+  <div id="view-detail" class="hidden">
+    <a class="back" href="/admin/contatos/">← Todas as mensagens</a>
+    <div id="detail"></div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/admin/admin.js"></script>
+<script>
+const norm = (s) => String(s ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+Admin.init({ page: "contatos", onReady: async () => {
+  const id = new URLSearchParams(location.search).get("id");
+  const err = document.getElementById("load-err");
+  if (id) {
+    document.getElementById("view-list").classList.add("hidden");
+    document.getElementById("view-detail").classList.remove("hidden");
+    const { data, error } = await Admin.sb.from("contatos").select("*").eq("id", id).maybeSingle();
+    const box = document.getElementById("detail");
+    if (error || !data) { box.replaceChildren(Admin.el("div", "card empty", error ? "Não foi possível carregar a mensagem." : "Mensagem não encontrada.")); return; }
+    box.replaceChildren(Admin.detail(data, Admin.CONTATO_SECOES, "Recebida em " + Admin.fmtDate(data.created_at)));
+    return;
+  }
+  const { data, error } = await Admin.sb.from("contatos").select("*").order("created_at", { ascending: false });
+  err.classList.toggle("hidden", !error);
+  if (error) { err.textContent = "Não foi possível carregar as mensagens: " + error.message; return; }
+  const render = () => {
+    const q = norm(document.getElementById("busca").value.trim());
+    const rows = data.filter((r) => !q || ["nome", "email", "empresa", "assunto", "mensagem"].some((k) => norm(r[k]).includes(q)));
+    document.getElementById("count").textContent = (q ? rows.length + " de " : "") + data.length + (data.length === 1 ? " mensagem recebida" : " mensagens recebidas");
+    const list = document.getElementById("list"); list.replaceChildren();
+    if (!rows.length) return list.appendChild(Admin.el("div", "empty", data.length ? "Nenhuma mensagem encontrada." : "Nenhuma mensagem ainda."));
+    rows.forEach((r) => list.appendChild(Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at)));
+  };
+  document.getElementById("busca").addEventListener("input", render);
+  render();
+}});
+</script>
+</body>
+</html>
