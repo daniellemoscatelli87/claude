@@ -28,7 +28,7 @@ a { color: inherit; }
 .notif-top { padding: 22px 20px 14px; border-bottom: 1px solid var(--line); }
 .notif-top h2 { margin: 0 0 2px; }
 .notif-top .muted { font-size: 13px; }
-.notif-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 8px 12px 24px; }
+.notif-scroll { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 8px 12px 24px; }
 .notif-item { display: flex; gap: 10px; align-items: center; padding: 8px; border-radius: 12px; text-decoration: none; }
 .notif-item:hover { background: var(--track); }
 .notif-item .ni { width: 32px; height: 32px; border-radius: 10px; background: var(--red-tint); color: var(--red); display: grid; place-items: center; flex-shrink: 0; }
@@ -141,3 +141,7 @@ dd a { color: var(--red); }
 /* Celular: campos com 16px evitam o zoom automático do iPhone ao tocar no campo; sem rolagem lateral. */
 html { overflow-x: clip; }
 @media (max-width: 767px) { input, select, textarea { font-size: 16px !important; } }
+
+/* Com menu ou notificações abertos, a página atrás fica travada. */
+body.scroll-lock { position: fixed; left: 0; right: 0; overflow: hidden; }
+.backdrop { touch-action: none; }
