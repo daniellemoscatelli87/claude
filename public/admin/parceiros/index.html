@@ -138,15 +138,17 @@
   .legend .n b { color: var(--dark); }
   .legend .li.zero { color: #94a3b8; }
 
-  /* Colunas */
-  .cols { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px; align-items: end; height: 190px; padding-top: 18px; }
-  .colcard { display: flex; flex-direction: column; }
-  .colcard .cols { flex: 1; height: auto; min-height: 190px; }
-  .col { display: grid; grid-template-rows: auto 1fr auto; height: 100%; text-align: center; }
-  .col .cv { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .col .ct { display: flex; align-items: flex-end; justify-content: center; }
-  .col .cb { width: min(100%, 36px); border-radius: 4px 4px 0 0; background: var(--seq); min-height: 2px; }
-  .col .cl { font-size: 11px; color: var(--muted); line-height: 1.25; margin-top: 6px; min-height: 28px; }
+  /* Barras horizontais (escalas) */
+  .hbars { display: grid; gap: 12px; }
+  .hb { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px 12px; align-items: baseline; }
+  .hb .hl { font-size: 13px; color: var(--dark); }
+  .hb .hv { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .hb .hv b { font-size: 14px; }
+  .hb .hv small { font-size: 12px; color: var(--muted); margin-left: 6px; }
+  .hb .hv small::before { content: "· "; }
+  .hb .hbar { grid-column: 1 / -1; height: 8px; border-radius: 999px; background: var(--track); overflow: hidden; }
+  .hb .hbar i { display: block; height: 100%; border-radius: 999px; background: var(--seq); }
+  .hb.zero .hl, .hb.zero .hv b { color: #94a3b8; }
 
   /* Anel de porcentagem */
   .ring-wrap { display: flex; gap: 18px; align-items: center; }
@@ -567,19 +569,18 @@ function donut(entries, total, centerLabel) {
   return wrap;
 }
 
-// Colunas para respostas em escala (tempo, horas): mantém a ordem da escala.
-function columns(entries, total, shortLabel) {
-  const box = el("div", "cols");
-  const max = Math.max(1, ...entries.map(([, n]) => n));
+// Barras horizontais para respostas em escala (tempo, formação, horas): mantém a ordem da escala
+// e mostra a porcentagem das candidaturas; a quantidade fica ao lado.
+function columns(entries, total) {
+  const box = el("div", "hbars");
   for (const [label, n] of entries) {
-    const c = el("div", "col");
-    c.title = clean(label) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, total) + "%)";
-    const t = el("div", "ct"), b = el("div", "cb");
-    b.style.height = (n / max) * 100 + "%";
-    if (!n) b.style.background = "#e2e8f0";
-    t.appendChild(b);
-    c.append(el("div", "cv", String(n)), t, el("div", "cl", shortLabel(clean(label))));
-    box.appendChild(c);
+    const p = pct(n, total);
+    const row = el("div", "hb" + (n ? "" : " zero"));
+    row.title = clean(label) + ": " + plural(n, "parceiro", "parceiros") + " (" + p + "%)";
+    const v = el("span", "hv"); v.append(el("b", null, p + "%"), el("small", null, String(n)));
+    const bar = el("span", "hbar"); const fill = el("i"); fill.style.width = p + "%"; bar.appendChild(fill);
+    row.append(el("span", "hl", clean(label)), v, bar);
+    box.appendChild(row);
   }
   return box;
 }
@@ -597,8 +598,6 @@ function ring(n, total, text) {
   return wrap;
 }
 
-const shortTempo = (l) => l.replace("Entre ", "").replace(" anos", "a").replace("Menos de 1 ano", "<1a").replace("Mais de ", ">").replace(" e ", "–").replace("Ainda não comecei, mas tenho interesse", "Ainda não");
-const shortHoras = (l) => l.replace(" horas semanais", "h").replace("Até ", "≤").replace("Mais de ", ">").replace("De ", "").replace(" a ", "–").replace("Disponibilidade variável conforme o projeto", "Variável");
 
 /* ---------- Dashboard ---------- */
 const KPI_ICONS = {
@@ -669,9 +668,9 @@ function addViz(box, title, rows, fn, opts = {}) {
   c.appendChild(rows.length ? fn() : emptyNote());
   box.appendChild(c);
 }
-function addCols(box, title, rows, id, short, cls) {
+function addCols(box, title, rows, id, cls) {
   const c = card(title, { cls: "colcard" + (cls ? " " + cls : "") });
-  c.appendChild(rows.length ? columns(counts(rows, id), rows.length, short) : emptyNote());
+  c.appendChild(rows.length ? columns(counts(rows, id), rows.length) : emptyNote());
   box.appendChild(c);
 }
 function addInsights(box, rows, items) {
@@ -680,11 +679,6 @@ function addInsights(box, rows, items) {
   box.appendChild(g);
 }
 
-const shortFormacao = (l) => ({
-  "Ensino técnico": "Técnico", "Graduação em andamento": "Graduação (cursando)", "Graduação completa": "Graduação",
-  "Especialização / MBA em andamento": "Espec./MBA (cursando)", "Especialização / MBA completo": "Espec./MBA",
-  "Formação predominantemente autodidata ou por cursos livres": "Autodidata",
-}[l] || l);
 
 function dashboard(rows) {
   kpis(rows);
@@ -692,9 +686,9 @@ function dashboard(rows) {
 
   const per = document.getElementById("perfil"); per.replaceChildren();
   addDonut(per, "Situação PJ", rows, "atuacao_pj", "candidaturas");
-  addCols(per, "Tempo na principal especialidade", rows, "tempo_especialidade", shortTempo, "span2");
-  addCols(per, "Nível de formação", rows, "nivel_formacao", shortFormacao, "span2");
-  addCols(per, "Tempo como independente", rows, "tempo_independente", shortTempo);
+  addCols(per, "Tempo na principal especialidade", rows, "tempo_especialidade", "span2");
+  addCols(per, "Nível de formação", rows, "nivel_formacao", "span2");
+  addCols(per, "Tempo como independente", rows, "tempo_independente");
   addInsights(per, rows, [
     ["Liderança", "lideranca"],
     ["Especialista externo", "servicos_especialista_externo"],
@@ -705,7 +699,7 @@ function dashboard(rows) {
 
   const dis = document.getElementById("disponibilidade"); dis.replaceChildren();
   addDonut(dis, "Disponibilidade para projetos", rows, "disponibilidade_colaborar", "candidaturas");
-  addCols(dis, "Horas semanais disponíveis", rows, "horas_semanais", shortHoras, "span2");
+  addCols(dis, "Horas semanais disponíveis", rows, "horas_semanais", "span2");
   addInsights(dis, rows, [
     ["Presencial em Curitiba", "presencial_curitiba"],
     ["Viagens", "viagens"],
