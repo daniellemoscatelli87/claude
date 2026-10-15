@@ -124,13 +124,14 @@
   .none-note { font-size: 13.5px; color: var(--muted); }
 
   /* Rosca */
-  .donut-wrap { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .donut-wrap { display: flex; flex-direction: column; gap: 18px; align-items: stretch; }
+  .donut-wrap .donut { align-self: center; }
   .donut { width: 150px; height: 150px; flex-shrink: 0; position: relative; }
   .donut svg { width: 100%; height: 100%; transform: rotate(-90deg); }
   .donut .ctr { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
   .donut .ctr b { font-size: 26px; font-weight: 800; display: block; line-height: 1; }
   .donut .ctr span { font-size: 11px; color: var(--muted); }
-  .legend { display: grid; gap: 7px; flex: 1; min-width: 180px; font-size: 13px; }
+  .legend { display: grid; gap: 7px; width: 100%; font-size: 13px; }
   .legend .li { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; gap: 8px; align-items: start; }
   .legend .dot { width: 12px; height: 12px; border-radius: 3px; margin-top: 3px; }
   .legend .n { font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
@@ -786,6 +787,12 @@ Admin.init({ page: "parceiros", onReady: async () => {
   const err = document.getElementById("load-err");
   err.classList.toggle("hidden", !error);
   if (error) { err.textContent = "Não foi possível carregar as candidaturas: " + error.message; return; }
+  // Respostas de versões antigas do formulário passam a contar na opção atual equivalente.
+  const LEGADO = {
+    atuacao_pj: { "Sim, tenho CNPJ ativo.": "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria).", "Sim, atuo por meio de uma empresa ou consultoria própria.": "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria)." },
+    como_conheceu: { "Já conhecia o trabalho da Dani Moscatelli.": "Indicação da Dani Moscatelli." },
+  };
+  for (const r of data) for (const [k, map] of Object.entries(LEGADO)) if (map[r[k]]) r[k] = map[r[k]];
   ALL = data;
   if (!document.getElementById("f-areas_experiencia")) buildFilters();
   if (window.matchMedia("(min-width: 800px)").matches) document.getElementById("filters-box").open = true;
