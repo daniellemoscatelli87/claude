@@ -776,7 +776,7 @@ function candidaturas(rows) {
   document.getElementById("cand-count").textContent = rows.length === ALL.length ? plural(ALL.length, "candidatura", "candidaturas") : rows.length + " de " + plural(ALL.length, "candidatura", "candidaturas");
   const list = document.getElementById("list"); list.replaceChildren();
   if (!rows.length) return list.appendChild(el("div", "empty", ALL.length ? "Nenhuma candidatura para os filtros atuais." : "Nenhuma candidatura ainda."));
-  rows.forEach((r) => list.appendChild(Admin.rowLink("/admin/parceiros/?id=" + r.id, r.nome, [r.principal_especializacao, r.cidade_estado, r.email].filter(Boolean).join(" · "), r.created_at)));
+  rows.forEach((r) => list.appendChild(Admin.rowLink("/admin/parceiros/?id=" + r.id, r.nome, [r.principal_especializacao, r.cidade_estado, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em)));
 }
 
 function update() {
@@ -811,6 +811,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
     const { data, error } = await Admin.sb.from("cadastros").select("*").eq("id", id).maybeSingle();
     const box = document.getElementById("detail");
     if (error || !data) { box.replaceChildren(el("div", "card empty", error ? "Não foi possível carregar a candidatura." : "Candidatura não encontrada.")); return; }
+    Admin.markSeen("cadastros", data);
     box.replaceChildren(Admin.detail(data, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)));
     return;
   }

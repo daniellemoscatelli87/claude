@@ -60,11 +60,18 @@
   };
 
   // Linha clicável com iniciais, título, data e resumo.
-  function rowLink(href, title, sub, date) {
-    const a = el("a", "rowlink");
+  function rowLink(href, title, sub, date, seen) {
+    const a = el("a", "rowlink" + (seen ? " seen" : ""));
     a.href = href;
     a.append(el("span", "ini", initials(title)), el("span", "t", title || "Sem nome"), el("span", "d", fmtDay(date)), el("span", "s", sub || ""));
     return a;
+  }
+
+  // Ao abrir um registro pela primeira vez, guarda quando foi visto (a lista passa a mostrá-lo em cinza).
+  async function markSeen(table, r) {
+    if (!r || r.visualizado_em) return;
+    const { error } = await sb.from(table).update({ visualizado_em: new Date().toISOString() }).eq("id", r.id);
+    if (error) console.error(error);
   }
 
   function valueNode(v) {
@@ -275,5 +282,5 @@
     ["dias_preferidos", "Melhor dia da semana"], ["periodo", "Período de preferência"],
   ]}];
 
-  window.Admin = { sb, el, init, rowLink, detail, fmtDate, fmtDay, initials, CONTATO_SECOES };
+  window.Admin = { sb, el, init, rowLink, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES };
 })();

@@ -78,7 +78,7 @@ const clean = (v) => String(v ?? "").replace(/\.$/, "");
 
 // Linha com nome, data e hora completas e os campos pedidos para cada bloco.
 function entry(href, r, fields) {
-  const a = Admin.el("a", "entry"); a.href = href;
+  const a = Admin.el("a", "entry" + (r.visualizado_em ? " seen" : "")); a.href = href;
   const d = new Date(r.created_at);
   const when = Admin.el("div", "when");
   when.append(Admin.el("b", null, d.toLocaleDateString("pt-BR")), document.createTextNode(d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })));
@@ -97,8 +97,8 @@ Admin.init({ page: "inicio", onReady: async () => {
   const h = new Date().getHours();
   document.getElementById("hello").textContent = (h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite") + ", Dani!";
   const [c, p] = await Promise.all([
-    Admin.sb.from("contatos").select("id, created_at, nome, empresa, cargo, assunto", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
-    Admin.sb.from("cadastros").select("id, created_at, nome, empresa, principal_especializacao, segmentos", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
+    Admin.sb.from("contatos").select("id, created_at, nome, empresa, cargo, assunto, visualizado_em", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
+    Admin.sb.from("cadastros").select("id, created_at, nome, empresa, principal_especializacao, segmentos, visualizado_em", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
   ]);
   const err = c.error || p.error, box = document.getElementById("load-err");
   box.classList.toggle("hidden", !err);

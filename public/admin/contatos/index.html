@@ -68,6 +68,7 @@ Admin.init({ page: "contatos", onReady: async () => {
     const box = document.getElementById("detail");
     if (error || !data) { document.getElementById("status").classList.add("hidden"); box.replaceChildren(Admin.el("div", "card empty", error ? "Não foi possível carregar a mensagem." : "Mensagem não encontrada.")); return; }
     statusBar(data);
+    Admin.markSeen("contatos", data);
     box.replaceChildren(Admin.detail(data, Admin.CONTATO_SECOES, "Recebida em " + Admin.fmtDate(data.created_at)));
     return;
   }
@@ -84,7 +85,7 @@ Admin.init({ page: "contatos", onReady: async () => {
     const list = document.getElementById("list"); list.replaceChildren();
     if (!rows.length) return list.appendChild(Admin.el("div", "empty", data.length ? "Nenhuma mensagem encontrada." : "Nenhuma mensagem ainda."));
     rows.forEach((r) => {
-      const a = Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at);
+      const a = Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em);
       const s = a.querySelector(".s"); s.prepend(badge(r), document.createTextNode(" "));
       list.appendChild(a);
     });
