@@ -17,7 +17,7 @@ a { color: inherit; }
 .topbar { position: sticky; top: 0; z-index: 20; background: rgb(246 247 249 / .9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); margin-bottom: 24px; }
 .topbar .in { max-width: 1160px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .topbar img { height: 40px; width: auto; display: block; }
-.burger { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: #fff; cursor: pointer; padding: 0; }
+.burger { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: #fff; color: var(--red); cursor: pointer; padding: 0; }
 .burger:hover { border-color: var(--red); color: var(--red); }
 .burger svg { width: 22px; height: 22px; }
 .backdrop { position: fixed; inset: 0; background: rgb(15 23 42 / .35); z-index: 40; opacity: 0; pointer-events: none; transition: opacity .25s; }
@@ -55,12 +55,16 @@ h3 { font-size: 14px; font-weight: 700; margin: 0 0 12px; }
 /* Login */
 .login { max-width: 440px; margin: 48px auto; }
 label.l { display: block; font-size: 13px; font-weight: 600; margin: 16px 0 6px; }
-input[type=email], input[type=search], select { width: 100%; font: inherit; font-size: 14px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; color: var(--dark); outline: none; }
+input[type=email], input[type=password], input[type=search], select { width: 100%; font: inherit; font-size: 14px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; color: var(--dark); outline: none; }
 input:focus, select:focus { border-color: var(--red); background: #fff; box-shadow: 0 0 0 3px rgb(212 77 77 / .15); }
 button { font: inherit; font-weight: 600; cursor: pointer; border-radius: 999px; border: 1px solid transparent; padding: 10px 20px; }
 .btn-primary { background: var(--red); color: #fff; width: 100%; margin-top: 14px; border-radius: 12px; padding: 12px; }
 .btn-primary:hover { background: var(--red-dark); }
 .btn-primary:disabled { opacity: .6; cursor: wait; }
+label.check { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 14px; cursor: pointer; }
+label.check input { width: 18px; height: 18px; accent-color: var(--red); margin: 0; }
+.link { display: block; margin: 14px auto 0; background: none; border: 0; padding: 4px; color: var(--muted); font-size: 13px; font-weight: 600; text-decoration: underline; }
+.link:hover { color: var(--red); }
 .btn-ghost { background: #fff; border-color: var(--line); color: var(--dark); font-size: 13px; padding: 8px 16px; }
 .btn-ghost:hover { border-color: var(--red); color: var(--red); }
 

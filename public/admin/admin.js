@@ -4,10 +4,24 @@
 (function () {
   const ADMIN_EMAIL = "contato@danimoscatelli.com.br";
   const ADMIN_NAME = "Dani Moscatelli";
-  // A sessão fica guardada no navegador e é renovada automaticamente: a administradora
-  // permanece conectada até clicar em "Sair".
+  // "Permanecer conectado" marcado: a sessão fica no localStorage e é renovada automaticamente
+  // até clicar em "Sair". Desmarcado: fica no sessionStorage e termina ao fechar o navegador.
+  const REMEMBER_KEY = "dm-admin-remember";
+  const safe = (fn, fallback) => { try { return fn(); } catch { return fallback; } };
+  const remember = () => safe(() => localStorage.getItem(REMEMBER_KEY) !== "0", true);
+  const setRemember = (on) => safe(() => localStorage.setItem(REMEMBER_KEY, on ? "1" : "0"));
+  const storage = {
+    getItem: (k) => safe(() => localStorage.getItem(k) ?? sessionStorage.getItem(k), null),
+    setItem: (k, v) => safe(() => {
+      const [keep, drop] = remember() ? [localStorage, sessionStorage] : [sessionStorage, localStorage];
+      keep.setItem(k, v); drop.removeItem(k);
+    }),
+    removeItem: (k) => safe(() => { localStorage.removeItem(k); sessionStorage.removeItem(k); }),
+  };
+  // Chegou pelo link de "definir senha": mostra o formulário de nova senha em vez da área logada.
+  let recovering = /type=recovery/.test(location.hash);
   const sb = supabase.createClient("https://lipfvnerohkaajegqvwr.supabase.co", "sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej", {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: "dm-admin-auth", storage: window.localStorage },
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: "dm-admin-auth", storage },
   });
 
   const ICONS = {
@@ -106,12 +120,44 @@
         <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:44px;margin-bottom:20px">
         <span class="tag">Área restrita</span>
         <h1>Entrar</h1>
-        <p class="muted">Digite o e-mail de administrador para receber um link de acesso.</p>
+        <p class="muted">Use o e-mail e a senha de administrador.</p>
         <form id="login-form" novalidate>
           <label class="l" for="login-email">E-mail</label>
-          <input type="email" id="login-email" autocomplete="email" required placeholder="seu@email.com">
-          <button type="submit" class="btn-primary" id="login-btn">Enviar link de acesso</button>
+          <input type="email" id="login-email" autocomplete="username" required placeholder="seu@email.com">
+          <label class="l" for="login-pass">Senha</label>
+          <input type="password" id="login-pass" autocomplete="current-password" required>
+          <label class="check"><input type="checkbox" id="login-remember" checked> Permanecer conectado</label>
+          <button type="submit" class="btn-primary" id="login-btn">Entrar</button>
           <p class="msg" id="login-msg" aria-live="polite"></p>
+          <button type="button" class="link" id="forgot-open">Esqueci minha senha ou ainda não tenho senha</button>
+        </form>
+      </section>
+      <section class="card login hidden" id="forgot">
+        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:44px;margin-bottom:20px">
+        <span class="tag">Área restrita</span>
+        <h1>Definir senha</h1>
+        <p class="muted">Enviaremos um link para o e-mail de administrador. Ao abrir o link, você cria uma nova senha.</p>
+        <form id="forgot-form" novalidate>
+          <label class="l" for="forgot-email">E-mail</label>
+          <input type="email" id="forgot-email" autocomplete="username" required placeholder="seu@email.com">
+          <button type="submit" class="btn-primary" id="forgot-btn">Enviar link</button>
+          <p class="msg" id="forgot-msg" aria-live="polite"></p>
+          <button type="button" class="link" id="forgot-back">Voltar para o login</button>
+        </form>
+      </section>
+      <section class="card login hidden" id="newpass">
+        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:44px;margin-bottom:20px">
+        <span class="tag">Área restrita</span>
+        <h1>Nova senha</h1>
+        <p class="muted">Crie uma senha com pelo menos 8 caracteres.</p>
+        <form id="newpass-form" novalidate>
+          <label class="l" for="newpass-1">Nova senha</label>
+          <input type="password" id="newpass-1" autocomplete="new-password" required minlength="8">
+          <label class="l" for="newpass-2">Confirme a nova senha</label>
+          <input type="password" id="newpass-2" autocomplete="new-password" required minlength="8">
+          <label class="check"><input type="checkbox" id="newpass-remember" checked> Permanecer conectado</label>
+          <button type="submit" class="btn-primary" id="newpass-btn">Salvar senha e entrar</button>
+          <p class="msg" id="newpass-msg" aria-live="polite"></p>
         </form>
       </section>
       <section class="card login hidden" id="denied">
@@ -140,8 +186,7 @@
     buildShell(page);
     const app = $("app");
     const show = (id) => {
-      $("login").classList.toggle("hidden", id !== "login");
-      $("denied").classList.toggle("hidden", id !== "denied");
+      for (const s of ["login", "forgot", "newpass", "denied"]) $(s).classList.toggle("hidden", id !== s);
       $("gate").classList.toggle("hidden", id === "app");
       $("topbar").classList.toggle("hidden", id !== "app");
       app.classList.toggle("hidden", id !== "app");
@@ -150,6 +195,7 @@
     let current;
     async function render(session) {
       if (!session) return show("login");
+      if (recovering) return show("newpass");
       const email = (session.user.email || "").toLowerCase();
       if (email !== ADMIN_EMAIL) { $("denied-email").textContent = email; return show("denied"); }
       $("who-email").textContent = email;
@@ -157,30 +203,64 @@
       await onReady();
     }
 
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const setMsg = (id, text, err) => { const m = $(id); m.className = "msg" + (err ? " err" : ""); m.textContent = text; };
+    const authError = (error) => /rate limit/i.test(error.message)
+      ? "Muitos e-mails pedidos em pouco tempo. Aguarde alguns minutos e tente de novo."
+      : /invalid login credentials/i.test(error.message)
+        ? "E-mail ou senha incorretos."
+        : "Não foi possível concluir: " + error.message;
+
     $("login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = $("login-email").value.trim().toLowerCase();
-      const msg = $("login-msg");
-      msg.className = "msg";
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = "msg err"; msg.textContent = "Informe um e-mail válido."; return; }
+      const password = $("login-pass").value;
+      if (!EMAIL_RE.test(email) || !password) return setMsg("login-msg", "Informe o e-mail e a senha.", true);
+      setMsg("login-msg", "");
+      setRemember($("login-remember").checked);
       $("login-btn").disabled = true;
-      const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + "/admin/" } });
+      const { error } = await sb.auth.signInWithPassword({ email, password });
       $("login-btn").disabled = false;
-      if (error) {
-        msg.className = "msg err";
-        msg.textContent = /rate limit/i.test(error.message)
-          ? "Muitos links pedidos em pouco tempo. Aguarde alguns minutos e tente de novo. O último link enviado continua válido."
-          : "Não foi possível enviar o link: " + error.message;
-        return;
-      }
-      msg.textContent = "Pronto! Abra o link enviado para " + email + " neste mesmo navegador.";
+      if (error) setMsg("login-msg", authError(error), true);
+    });
+
+    $("forgot-open").addEventListener("click", () => { $("forgot-email").value = $("login-email").value; setMsg("forgot-msg", ""); show("forgot"); });
+    $("forgot-back").addEventListener("click", () => show("login"));
+    $("forgot-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = $("forgot-email").value.trim().toLowerCase();
+      if (!EMAIL_RE.test(email)) return setMsg("forgot-msg", "Informe um e-mail válido.", true);
+      $("forgot-btn").disabled = true;
+      const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/admin/" });
+      $("forgot-btn").disabled = false;
+      if (error) return setMsg("forgot-msg", authError(error), true);
+      setMsg("forgot-msg", "Pronto! Abra o link enviado para " + email + " neste mesmo navegador.");
+    });
+
+    $("newpass-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const p1 = $("newpass-1").value, p2 = $("newpass-2").value;
+      if (p1.length < 8) return setMsg("newpass-msg", "A senha precisa ter pelo menos 8 caracteres.", true);
+      if (p1 !== p2) return setMsg("newpass-msg", "As senhas não são iguais.", true);
+      $("newpass-btn").disabled = true;
+      const { error } = await sb.auth.updateUser({ password: p1 });
+      $("newpass-btn").disabled = false;
+      if (error) return setMsg("newpass-msg", authError(error), true);
+      // Regrava a sessão no armazenamento escolhido em "Permanecer conectado".
+      setRemember($("newpass-remember").checked);
+      const { data } = await sb.auth.getSession();
+      if (data.session) storage.setItem("dm-admin-auth", JSON.stringify(data.session));
+      recovering = false;
+      history.replaceState(null, "", location.pathname + location.search);
+      render(data.session);
     });
 
     const logout = async () => { await sb.auth.signOut(); location.href = "/admin/"; };
     $("logout").addEventListener("click", logout);
     $("denied-logout").addEventListener("click", logout);
 
-    sb.auth.onAuthStateChange((_event, session) => {
+    sb.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY") { recovering = true; current = session?.user?.id ?? null; return render(session); }
       const id = session?.user?.id ?? null;
       if (id === current) return;
       current = id;
