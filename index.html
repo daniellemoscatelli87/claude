@@ -10,13 +10,17 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script type="module" src="/src/em-breve.ts"></script>
+<style>
+  #site-header.is-scrolled { background: rgb(255 255 255 / .85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 rgb(15 23 42 / .06), 0 8px 24px -16px rgb(15 23 42 / .25); }
+</style>
 </head>
-<body class="min-h-dvh bg-ambient-gradient font-sans text-brand-dark antialiased flex flex-col justify-between selection:bg-red-100 selection:text-brand-red relative overflow-x-hidden">
+<body class="min-h-dvh bg-ambient-gradient font-sans text-brand-dark antialiased flex flex-col justify-between selection:bg-red-100 selection:text-brand-red relative overflow-x-clip">
 <div aria-hidden="true" class="absolute inset-0 grid-pattern-subtle pointer-events-none -z-10"></div>
 <div aria-hidden="true" class="absolute top-1/4 right-5 w-[650px] max-w-full h-[650px] bg-gradient-to-tr from-red-100/40 via-red-50/30 to-amber-50/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
 
 <!-- Cabeçalho -->
-<header class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 md:py-8 flex items-center justify-between gap-3 sm:gap-4 z-20">
+<div id="site-header" class="sticky top-0 z-30 w-full transition-[background-color,box-shadow,backdrop-filter] duration-200">
+<header class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 md:py-8 flex items-center justify-between gap-3 sm:gap-4">
   <a href="/" class="flex items-center shrink-0">
     <img alt="Dani Moscatelli - Experience Design Studio" class="h-10 w-auto object-contain sm:hidden" src="/favicon-dm.png">
     <img alt="Dani Moscatelli - Experience Design Studio" class="hidden sm:block sm:h-12 md:h-16 w-auto object-contain" src="/logo-dm.png">
@@ -26,6 +30,7 @@
   <button type="button" data-open-contact class="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 rounded-full bg-brand-red hover:bg-[#c13e3e] text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer">Contato</button>
   </div>
 </header>
+</div>
 
 <!-- Conteúdo principal -->
 <main class="flex-1 w-full max-w-7xl mx-auto px-6 lg:px-10 py-6 md:py-10 z-10 flex flex-col justify-center">
@@ -224,5 +229,9 @@
     <span class="font-medium text-brand-charcoal">Dani Moscatelli Studio</span>
   </div>
 </aside>
+<script>
+  // Header fixo: ganha fundo e sombra quando a página rola.
+  (() => { const h = document.getElementById("site-header"); const f = () => h.classList.toggle("is-scrolled", window.scrollY > 8); f(); window.addEventListener("scroll", f, { passive: true }); })();
+</script>
 </body>
 </html>
