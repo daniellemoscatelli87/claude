@@ -201,14 +201,25 @@
   button.chip { cursor: pointer; }
   .chip.on { background: var(--red); border-color: var(--red); color: #fff; }
   .chip.more { color: var(--muted); }
-  /* Carrossel de perfis */
-  .pc-bar { justify-content: space-between; align-items: center; }
-  .pc-nav { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-  .pc-btn { width: 36px; height: 36px; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--dark); display: grid; place-items: center; cursor: pointer; padding: 0; }
-  .pc-btn svg { width: 18px; height: 18px; }
-  .pc-btn:disabled { opacity: .35; cursor: default; }
-  .pc-track { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 2px 2px 12px; scrollbar-width: thin; }
-  .pc { flex: 0 0 min(380px, 86%); scroll-snap-align: start; display: flex; flex-direction: column; gap: 14px; }
+  /* Perfis: cards resumidos + painel lateral */
+  .pc-bar { justify-content: space-between; align-items: baseline; }
+  .pc-bar .muted { font-size: 13px; }
+  .pcs-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 1000px) { .pcs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .pcs-grid { grid-template-columns: 1fr; } }
+  .pcs { display: flex; flex-direction: column; gap: 12px; }
+  .pcs-dl { margin: 0; display: grid; gap: 8px; }
+  .pcs-dl dt { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .pcs-dl dd { margin: 2px 0 0; font-size: 14px; color: var(--dark); line-height: 1.4; }
+  .pcs-more { margin-top: auto; align-self: flex-start; font: inherit; font-size: 13px; font-weight: 700; color: var(--red); background: var(--red-tint); border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+  .pcs-more:hover { background: #fbdcdc; }
+  .pcs-fit { display: inline-block; margin-top: 4px; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 2px 8px; background: #fdf3dc; color: #7a5300; }
+  .pcs-fit.full { background: #e7f5ec; color: #1f6b3a; }
+  .pcs-fit.none { background: var(--track, #f1f5f9); color: var(--muted); }
+  .pd-drawer { width: min(480px, 94vw); }
+  .pd-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 20px 20px 32px; }
+  .pc-detail { display: flex; flex-direction: column; gap: 14px; }
+  .pc-detail .pc-head { padding-right: 36px; }
   .pc-head { display: flex; gap: 12px; align-items: center; }
   .pc-head .ini { width: 44px; height: 44px; border-radius: 999px; background: var(--red-tint); color: var(--red); display: grid; place-items: center; font-weight: 800; flex-shrink: 0; }
   .pc-head h3 { margin: 0; font-size: 17px; }
@@ -222,7 +233,7 @@
   .pc-sec p { margin: 4px 0 0; font-size: 13px; color: var(--dark); line-height: 1.45; }
   .pc-sec .pc-main { font-size: 15px; font-weight: 700; }
   .pc-sec .chips { margin-top: 6px; }
-  .pc-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+  .pc-links { display: flex; flex-wrap: wrap; gap: 6px; }
   .pc-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 999px; background: var(--track, #f1f5f9); color: var(--dark); text-decoration: none; }
   .pc-link svg { width: 14px; height: 14px; }
   .pc-more { font-size: 13px; font-weight: 700; color: var(--red); text-decoration: none; }
@@ -274,13 +285,8 @@
       </div>
 
       <div class="block">
-        <div class="block-head pc-bar"><h2>Perfis dos parceiros</h2>
-          <div class="pc-nav"><span class="muted" id="pc-pos"></span>
-            <button type="button" class="pc-btn" id="pc-prev" aria-label="Perfil anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
-            <button type="button" class="pc-btn" id="pc-next" aria-label="Próximo perfil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
-          </div>
-        </div>
-        <div class="pc-track" id="pc-track"></div>
+        <div class="block-head pc-bar"><h2>Perfis dos parceiros</h2><span class="muted" id="pc-count"></span></div>
+        <div class="pcs-grid" id="pc-grid"></div>
       </div>
     </section>
 
@@ -296,6 +302,11 @@
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/admin/admin.js"></script>
+<div class="backdrop" id="pd-backdrop"></div>
+<aside class="drawer pd-drawer" id="pd-drawer" aria-label="Perfil do parceiro">
+  <button type="button" class="close" id="pd-close" aria-label="Fechar perfil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <div class="pd-body" id="pd-body"></div>
+</aside>
 <script src="/admin/form-parceiros.js"></script>
 <script>
 const { el } = Admin;
@@ -480,8 +491,9 @@ function section(title, ...nodes) {
 }
 const ICON = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 function linkBtn(href, label, d) { const a = el("a", "pc-link"); a.href = href; a.target = "_blank"; a.rel = "noopener"; a.innerHTML = ICON(d); a.append(label); return a; }
-function personCard(r, crit) {
-  const c = el("article", "card pc");
+// Perfil completo (abre no painel lateral pelo "Ver mais").
+function profileDetail(r, crit) {
+  const c = el("div", "pc pc-detail");
   const head = el("div", "pc-head");
   const who = el("div", "pc-who");
   who.append(el("h3", null, r.nome || "Sem nome"), el("div", "pc-sub", [r.empresa, cidade(r.cidade_estado) + (UF_NOME[uf(r.cidade_estado)] ? " - " + uf(r.cidade_estado) : "")].filter(Boolean).join(" · ")));
@@ -501,8 +513,8 @@ function personCard(r, crit) {
   c.appendChild(section("Especialidade e senioridade",
     el("p", "pc-main", r.principal_especializacao || "Não informada"),
     [r.tempo_especialidade && clean(r.tempo_especialidade) + " na especialidade", r.lideranca && curto("lideranca", r.lideranca), r.nivel_formacao && clean(r.nivel_formacao)].filter(Boolean).join(" · ")));
-  if ((r.areas_experiencia || []).length) c.appendChild(section("Áreas de experiência", chipsLine(r.areas_experiencia, 4)));
-  if ((r.segmentos || []).length) c.appendChild(section("Segmentos", chipsLine(r.segmentos, 3)));
+  if ((r.areas_experiencia || []).length) c.appendChild(section("Áreas de experiência", chipsLine(r.areas_experiencia, 99)));
+  if ((r.segmentos || []).length) c.appendChild(section("Segmentos", chipsLine(r.segmentos, 99)));
   const fmt = (r.formatos_atuacao || []).map((v) => curto("formatos_atuacao", v));
   c.appendChild(section("Disponibilidade e formato",
     [r.disponibilidade_colaborar && clean(r.disponibilidade_colaborar), r.horas_semanais && clean(r.horas_semanais).toLowerCase()].filter(Boolean).join(", "),
@@ -521,38 +533,71 @@ function personCard(r, crit) {
   c.appendChild(more);
   return c;
 }
-function carousel(rows) {
+// Senioridade pelo tempo na principal especialidade.
+const NIVEL = { "Menos de 1 ano.": "Júnior", "Entre 1 e 2 anos.": "Júnior", "Entre 3 e 5 anos.": "Pleno", "Entre 6 e 10 anos.": "Sênior", "Entre 11 e 15 anos.": "Especialista", "Entre 16 e 20 anos.": "Especialista", "Mais de 20 anos.": "Especialista" };
+// Áreas de atuação: os grupos de áreas em que a pessoa mais marcou opções.
+function areasAtuacao(r) {
+  return Q.areas_experiencia.groups.map((g) => [g.title, (r.areas_experiencia || []).filter((x) => g.options.includes(x)).length])
+    .filter(([, n]) => n).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([t]) => t);
+}
+function fitBadge(r, crit) {
+  const ok = crit.filter((x) => x.test(r)).length;
+  return el("span", "pcs-fit" + (ok === crit.length ? " full" : ok ? "" : " none"), "Atende " + ok + " de " + crit.length);
+}
+function summaryCard(r, crit) {
+  const c = el("article", "card pcs");
+  const head = el("div", "pc-head");
+  const who = el("div", "pc-who"); who.append(el("h3", null, r.nome || "Sem nome"));
+  if (crit.length) who.appendChild(fitBadge(r, crit));
+  head.append(el("span", "ini", Admin.initials(r.nome)), who);
+  const dl = el("dl", "pcs-dl");
+  const row = (k, v) => { if (!v) return; const d = el("div"); d.append(el("dt", null, k), el("dd", null, v)); dl.appendChild(d); };
+  row("Especialidade", r.principal_especializacao || "Não informada");
+  row("Área de atuação", areasAtuacao(r).join(" · ") || "Não informada");
+  row("Senioridade", [NIVEL[r.tempo_especialidade], r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase()].filter(Boolean).join(" · ") || "Não informada");
+  const btn = el("button", "pcs-more", "Ver mais"); btn.type = "button";
+  btn.addEventListener("click", () => openProfile(r, crit, btn));
+  c.append(head, dl, btn);
+  return c;
+}
+let lastTrigger = null;
+function openProfile(r, crit, trigger) {
+  lastTrigger = trigger;
+  const body = document.getElementById("pd-body"); body.replaceChildren(profileDetail(r, crit)); body.scrollTop = 0;
+  document.getElementById("pd-drawer").classList.add("open");
+  document.getElementById("pd-backdrop").classList.add("open");
+  const b = document.body;
+  if (!b.classList.contains("scroll-lock")) { b.dataset.y = String(window.scrollY); b.style.top = -window.scrollY + "px"; b.classList.add("scroll-lock"); }
+  document.getElementById("pd-close").focus();
+}
+function closeProfile() {
+  const d = document.getElementById("pd-drawer");
+  if (!d.classList.contains("open")) return;
+  d.classList.remove("open"); document.getElementById("pd-backdrop").classList.remove("open");
+  const b = document.body; b.classList.remove("scroll-lock"); b.style.top = ""; window.scrollTo(0, Number(b.dataset.y || 0));
+  lastTrigger?.focus();
+}
+function initProfiles() {
+  document.getElementById("pd-close").addEventListener("click", closeProfile);
+  document.getElementById("pd-backdrop").addEventListener("click", closeProfile);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeProfile(); });
+}
+function profiles(rows) {
   const crit = needCriteria();
   const score = (r) => crit.filter((x) => x.test(r)).length;
   const list = [...rows].sort((a, b) => (score(b) - score(a)) || (TEMPO_ORDEM(b.tempo_especialidade) - TEMPO_ORDEM(a.tempo_especialidade)));
   document.getElementById("need-count").textContent = crit.length
     ? plural(list.filter((r) => score(r) === crit.length).length, "parceiro atende", "parceiros atendem") + " a todos os itens · perfis ordenados por aderência"
     : "Marque o que o projeto precisa para ordenar os perfis por aderência.";
-  const track = document.getElementById("pc-track"); track.replaceChildren();
-  if (!list.length) { track.appendChild(el("div", "card empty", "Nenhum parceiro para os filtros atuais.")); updatePos(); return; }
-  list.forEach((r) => track.appendChild(personCard(r, crit)));
-  track.scrollLeft = 0;
-  updatePos();
-}
-function updatePos() {
-  const track = document.getElementById("pc-track"), cards = track.querySelectorAll(".pc");
-  const w = cards[0] ? cards[0].getBoundingClientRect().width + 12 : 1;
-  const i = Math.min(cards.length, Math.round(track.scrollLeft / w) + 1);
-  document.getElementById("pc-pos").textContent = cards.length ? i + " de " + cards.length : "";
-  document.getElementById("pc-prev").disabled = !cards.length || track.scrollLeft <= 2;
-  document.getElementById("pc-next").disabled = !cards.length || track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
-}
-function initCarousel() {
-  const track = document.getElementById("pc-track");
-  const step = (d) => { const card = track.querySelector(".pc"); track.scrollBy({ left: d * (card ? card.getBoundingClientRect().width + 12 : 300), behavior: "smooth" }); };
-  document.getElementById("pc-prev").addEventListener("click", () => step(-1));
-  document.getElementById("pc-next").addEventListener("click", () => step(1));
-  track.addEventListener("scroll", () => requestAnimationFrame(updatePos), { passive: true });
+  document.getElementById("pc-count").textContent = plural(list.length, "parceiro", "parceiros");
+  const grid = document.getElementById("pc-grid"); grid.replaceChildren();
+  if (!list.length) return grid.appendChild(el("div", "card empty", "Nenhum parceiro para os filtros atuais."));
+  list.forEach((r) => grid.appendChild(summaryCard(r, crit)));
 }
 
 function dashboard(rows) {
   kpis(rows);
-  carousel(rows);
+  profiles(rows);
 }
 
 /* ---------- Candidaturas ---------- */
@@ -604,7 +649,7 @@ async function loadAnalysis() {
     Object.entries(IA.perfis || {}).forEach(([id, t]) => PERFIS_IA.set(id, t));
   }
   fillAnalysis();
-  if (!IA.error) carousel(filtered());
+  if (!IA.error) profiles(filtered());
 }
 
 function update() {
@@ -700,7 +745,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
   };
   for (const r of data) for (const [k, map] of Object.entries(LEGADO)) if (map[r[k]]) r[k] = map[r[k]];
   ALL = data;
-  if (!document.getElementById("f-areas_experiencia")) { buildFilters(); buildNeed(); initCarousel(); }
+  if (!document.getElementById("f-areas_experiencia")) { buildFilters(); buildNeed(); initProfiles(); }
   if (window.matchMedia("(min-width: 800px)").matches) document.getElementById("filters-box").open = true;
   setTab(params.get("aba"));
   update();
