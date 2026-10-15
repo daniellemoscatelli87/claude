@@ -13,6 +13,72 @@
 <style>
   .toolbar { display: flex; gap: 12px; align-items: center; margin: 20px 0 12px; flex-wrap: wrap; }
   .toolbar input { max-width: 420px; }
+  #status { display: grid; gap: 18px; }
+  /* Etapas */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); position: relative; }
+  .step { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; position: relative; }
+  .step:not(:first-child)::before { content: ""; position: absolute; top: 13px; right: 50%; width: 100%; height: 2px; background: var(--line); z-index: 0; }
+  .step.done:not(:first-child)::before { background: var(--c); }
+  .step .dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--line); background: #fff; display: grid; place-items: center; position: relative; z-index: 1; color: #fff; }
+  .step .dot svg { width: 14px; height: 14px; }
+  .step.done .dot { background: var(--c); border-color: var(--c); }
+  .step .lbl { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .step.done .lbl { color: var(--c); }
+  .step .dt { font-size: 11px; color: var(--muted); min-height: 14px; }
+  .s-new { --c: var(--red); } .s-read { --c: #64748b; } .s-ans { --c: #1e7b45; } .s-meet { --c: #1a56c4; }
+  /* Próxima ação */
+  .next { border-top: 1px solid var(--track); padding-top: 16px; display: grid; gap: 12px; }
+  .next .hint { margin: 0; font-size: 14px; color: var(--muted); }
+  .next .acts { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn-line { background: #fff; border: 1px solid var(--line); color: var(--dark); border-radius: 12px; padding: 10px 16px; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; }
+  .btn-line:hover { border-color: var(--red); color: var(--red); }
+  .link-muted, .link-danger { background: none; border: 0; padding: 8px 4px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: underline; }
+  .link-danger { color: var(--red); }
+  .meet-card { display: flex; gap: 12px; align-items: center; background: #e8f0fe; color: #1a56c4; border-radius: 14px; padding: 14px 16px; }
+  .meet-card .ic { width: 40px; height: 40px; border-radius: 12px; background: #fff; display: grid; place-items: center; flex-shrink: 0; }
+  .meet-card .ic svg { width: 22px; height: 22px; }
+  .meet-card .k, .meet-form > .k { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .meet-card .v { font-size: 16px; font-weight: 700; color: var(--dark); }
+  .meet-card .v::first-letter { text-transform: uppercase; }
+  .meet-form { display: grid; gap: 12px; background: #f8fafc; border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+  .meet-form > .k { color: #1a56c4; }
+  .meet-form .fields { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 10px; }
+  .meet-form .fld { display: block; min-width: 0; }
+  .meet-form .fld span { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  @media (max-width: 480px) { .meet-form .fields { grid-template-columns: 1fr; } }
+  .btn-meet { background: #1a56c4; color: #fff; border-radius: 12px; padding: 10px 18px; font-size: 14px; }
+  .btn-meet:hover { background: #15479f; }
+  .btn-meet:disabled { opacity: .6; cursor: wait; }
+  .meet-form input { min-width: 0; width: 100%; font: inherit; font-size: 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--dark); min-height: 44px; }
+  .meet-form input:focus { outline: none; border-color: #1a56c4; box-shadow: 0 0 0 3px rgb(26 86 196 / .15); }
+  #historico { margin-bottom: 12px; }
+  .thread { display: grid; gap: 10px; margin: 12px 0 16px; }
+  .bubble { border-radius: 14px; padding: 12px 14px; max-width: 92%; }
+  .bubble.in { background: var(--track); justify-self: start; }
+  .bubble.out { background: var(--red-tint); justify-self: end; }
+  .bubble .who { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+  .bubble .txt { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; }
+  .reply textarea { width: 100%; min-height: 140px; font: inherit; font-size: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; color: var(--dark); resize: vertical; outline: none; }
+  .reply textarea:focus { border-color: var(--red); background: #fff; box-shadow: 0 0 0 3px rgb(212 77 77 / .15); }
+  .reply .row-end { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+  .reply .to { display: block; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; margin-top: 8px; }
+  .ev { justify-self: center; font-size: 12px; color: var(--muted); background: #fff; border: 1px dashed var(--line); border-radius: 999px; padding: 4px 12px; text-align: center; }
+  .bubble .imgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 6px; margin-top: 8px; }
+  .bubble .imgs img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; display: block; background: #fff; }
+  .bubble .full { margin-top: 8px; font-size: 13px; color: var(--muted); }
+  .bubble .full summary { cursor: pointer; font-weight: 600; }
+  .bubble .full .txt { margin-top: 6px; font-size: 13px; }
+  .bubble .files { display: grid; gap: 4px; margin-top: 8px; font-size: 13px; }
+  .bubble .files a { color: var(--red); overflow-wrap: anywhere; }
+  .attach { gap: 8px; cursor: pointer; }
+  .attach svg { width: 18px; height: 18px; }
+  .chips { display: grid; gap: 6px; margin-top: 8px; }
+  .chips:empty { display: none; }
+  .chip { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 12px; padding: 6px 8px; background: #fff; font-size: 13px; }
+  .chip img { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+  .chip span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chip button { border: 0; background: var(--track); color: var(--muted); width: 28px; height: 28px; padding: 0; border-radius: 50%; font-size: 18px; line-height: 1; }
+  .chip button:hover { color: var(--red); }
 </style>
 </head>
 <body>
@@ -21,13 +87,14 @@
     <h1>Contato</h1>
     <p class="muted" id="count"></p>
     <div class="toolbar"><input type="search" id="busca" placeholder="Buscar por nome, e-mail, empresa, assunto ou mensagem…" aria-label="Buscar mensagens">
-      <select id="situacao" aria-label="Situação" style="max-width:220px"><option value="">Todas as mensagens</option><option value="pendentes">Não respondidas</option><option value="respondidas">Respondidas</option></select></div>
+      <select id="situacao" aria-label="Situação" style="max-width:220px"><option value="">Todas as mensagens</option><option value="pendentes">Não respondidas</option><option value="respondidas">Respondidas</option><option value="reunioes">Reuniões agendadas</option></select></div>
     <p class="msg err hidden" id="load-err"></p>
     <div class="card"><div class="rows" id="list"></div></div>
   </div>
   <div id="view-detail" class="hidden">
     <a class="back" href="/admin/contatos/">← Todas as mensagens</a>
     <div class="card status-bar" id="status"></div>
+    <section class="card" id="historico"></section>
     <div id="detail"></div>
   </div>
 </main>
@@ -35,26 +102,246 @@
 <script src="/admin/admin.js"></script>
 <script>
 const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-const badge = (r) => r.respondido_em ? Admin.el("span", "badge ok", "Respondida") : Admin.el("span", "badge pend", "Não respondida");
+const pad = (n) => String(n).padStart(2, "0");
+const toLocalInput = (iso) => { const d = new Date(iso); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`; };
 
-// Barra de situação no detalhe: marca/desmarca a mensagem como respondida.
+async function save(r, fields) {
+  const { data, error } = await Admin.sb.from("contatos").update(fields).eq("id", r.id).select("id, respondido_em, reuniao_em").maybeSingle();
+  if (error || !data) { alert("Não foi possível atualizar a mensagem. Tente novamente."); return false; }
+  r.respondido_em = data.respondido_em; r.reuniao_em = data.reuniao_em;
+  historico(r); // mostra a mudança registrada no histórico
+  return true;
+}
+
+// Situação da mensagem: etapas (recebida, lida, respondida, reunião) e a próxima ação, uma de cada vez.
+const fmtMeeting = (iso) => { const d = new Date(iso); return d.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" }) + " às " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }); };
+const STEPS = [
+  { key: "created_at", label: "Recebida", cls: "s-new" },
+  { key: "visualizado_em", label: "Lida", cls: "s-read" },
+  { key: "respondido_em", label: "Respondida", cls: "s-ans" },
+  { key: "reuniao_em", label: "Reunião", cls: "s-meet" },
+];
+
 function statusBar(r) {
   const bar = document.getElementById("status"); bar.replaceChildren();
-  const left = Admin.el("div"); left.style.display = "flex"; left.style.gap = "10px"; left.style.alignItems = "center"; left.style.flexWrap = "wrap";
-  left.appendChild(badge(r));
-  if (r.respondido_em) left.appendChild(Admin.el("span", "when", "em " + Admin.fmtDate(r.respondido_em)));
-  const btn = Admin.el("button", r.respondido_em ? "btn-ghost" : "btn-ok", r.respondido_em ? "Marcar como não respondida" : "Marcar como respondida");
-  btn.type = "button";
-  btn.addEventListener("click", async () => {
-    btn.disabled = true;
-    const value = r.respondido_em ? null : new Date().toISOString();
-    const { data, error } = await Admin.sb.from("contatos").update({ respondido_em: value }).eq("id", r.id).select("id, respondido_em").maybeSingle();
-    btn.disabled = false;
-    if (error || !data) { alert("Não foi possível atualizar a mensagem. Tente novamente."); return; }
-    r.respondido_em = data.respondido_em;
-    statusBar(r);
+  const button = (cls, text, onClick) => {
+    const b = Admin.el("button", cls, text); b.type = "button";
+    b.addEventListener("click", async () => { b.disabled = true; if (await onClick()) statusBar(r); else b.disabled = false; });
+    return b;
+  };
+
+  // Linha de etapas
+  const steps = Admin.el("ol", "steps");
+  STEPS.forEach((st) => {
+    const done = !!r[st.key];
+    const li = Admin.el("li", "step " + st.cls + (done ? " done" : ""));
+    const dot = Admin.el("span", "dot"); dot.innerHTML = done ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>' : "";
+    const when = done ? (st.key === "reuniao_em" ? new Date(r.reuniao_em).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }) : new Date(r[st.key]).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })) : "";
+    li.append(dot, Admin.el("span", "lbl", st.label), Admin.el("span", "dt", when));
+    steps.appendChild(li);
   });
-  bar.append(left, btn);
+  bar.appendChild(steps);
+
+  // Próxima ação
+  const next = Admin.el("div", "next");
+  if (r.reuniao_em && !r._editMeeting) {
+    const card = Admin.el("div", "meet-card");
+    const ic = Admin.el("span", "ic"); ic.innerHTML = Admin.icon("meeting");
+    const txt = Admin.el("div"); txt.append(Admin.el("div", "k", "Reunião agendada"), Admin.el("div", "v", fmtMeeting(r.reuniao_em)));
+    card.append(ic, txt);
+    const acts = Admin.el("div", "acts");
+    const g = Admin.el("a", "btn-line", "Adicionar ao Google Agenda"); g.href = Admin.googleCalendarLink(r); g.target = "_blank"; g.rel = "noopener noreferrer";
+    acts.append(g, button("btn-line", "Alterar data", async () => { r._editMeeting = true; return true; }), button("link-danger", "Cancelar reunião", () => confirm("Cancelar esta reunião?") && save(r, { reuniao_em: null })));
+    next.append(card, acts);
+  } else if (!r.respondido_em) {
+    next.append(Admin.el("p", "hint", "Responda pelo histórico abaixo ou, se já respondeu por fora, marque aqui."));
+    const acts = Admin.el("div", "acts");
+    acts.append(button("btn-ok", "Marcar como respondida", () => save(r, { respondido_em: new Date().toISOString() })), meetingToggle(r));
+    next.appendChild(acts);
+  } else {
+    if (!r._scheduling && !r._editMeeting) {
+      next.append(Admin.el("p", "hint", "Respondida em " + Admin.fmtDate(r.respondido_em) + ". Próximo passo: agendar a reunião."));
+      const acts = Admin.el("div", "acts");
+      acts.append(meetingToggle(r, "btn-ok"), button("link-muted", "Desfazer resposta", () => save(r, { respondido_em: null })));
+      next.appendChild(acts);
+    }
+  }
+  if (r._scheduling || r._editMeeting) next.appendChild(meetingForm(r, button));
+  bar.appendChild(next);
+}
+
+function meetingToggle(r, cls = "btn-line") {
+  const b = Admin.el("button", cls, "Agendar reunião"); b.type = "button";
+  b.addEventListener("click", () => { r._scheduling = true; statusBar(r); document.getElementById("meet-date")?.focus(); });
+  return b;
+}
+
+function meetingForm(r, button) {
+  const f = Admin.el("div", "meet-form");
+  f.appendChild(Admin.el("div", "k", r._editMeeting ? "Nova data da reunião" : "Agendar reunião"));
+  const field = (id, label, type) => { const w = Admin.el("label", "fld"); w.htmlFor = id; const i = Admin.el("input"); i.type = type; i.id = id; w.append(Admin.el("span", null, label), i); return [w, i]; };
+  const [wd, date] = field("meet-date", "Data", "date");
+  const [wt, hour] = field("meet-time", "Horário", "time");
+  const now = new Date();
+  date.min = toLocalInput(now.toISOString()).slice(0, 10);
+  if (r.reuniao_em) { const v = toLocalInput(r.reuniao_em); date.value = v.slice(0, 10); hour.value = v.slice(11); } else hour.value = "10:00";
+  const grid = Admin.el("div", "fields"); grid.append(wd, wt);
+  const err = Admin.el("p", "msg err hidden");
+  const acts = Admin.el("div", "acts");
+  acts.append(
+    button("btn-meet", r._editMeeting ? "Salvar nova data" : "Confirmar reunião", async () => {
+      if (!date.value || !hour.value) { err.textContent = "Escolha a data e o horário."; err.classList.remove("hidden"); return false; }
+      const ok = await save(r, { reuniao_em: new Date(date.value + "T" + hour.value).toISOString(), respondido_em: r.respondido_em || new Date().toISOString() });
+      if (ok) { r._scheduling = false; r._editMeeting = false; }
+      return ok;
+    }),
+    button("link-muted", "Voltar", async () => { r._scheduling = false; r._editMeeting = false; return true; }),
+  );
+  f.append(grid, err, acts);
+  return f;
+}
+
+// Histórico completo: mensagem recebida, respostas enviadas (com imagens) e cada mudança de situação,
+// em ordem cronológica. Abaixo, o campo para responder com anexos de imagem.
+const EVENTOS = {
+  lida: () => "Mensagem aberta",
+  respondida: () => "Marcada como respondida",
+  resposta_desfeita: () => "Resposta desfeita",
+  reuniao_agendada: (d) => "Reunião agendada para " + fmtMeeting(d),
+  reuniao_alterada: (d) => "Reunião remarcada para " + fmtMeeting(d),
+  reuniao_cancelada: () => "Reunião cancelada",
+};
+const MAX_ANEXOS = 10, MAX_MB = 10;
+const fmtSize = (n) => (n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB");
+const safeName = (n) => n.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^\w.-]+/g, "-").slice(-80);
+
+async function historico(r) {
+  const box = document.getElementById("historico");
+  box.replaceChildren(Admin.el("h2", null, "Histórico"), Admin.el("p", "muted", "Carregando…"));
+  const [resp, evs, rec] = await Promise.all([
+    Admin.sb.from("respostas").select("id, created_at, mensagem, anexos").eq("contato_id", r.id).order("created_at", { ascending: true }),
+    Admin.sb.from("contato_eventos").select("id, created_at, tipo, detalhe").eq("contato_id", r.id).order("created_at", { ascending: true }),
+    Admin.sb.from("mensagens_recebidas").select("id, created_at, texto, texto_completo, anexos").eq("contato_id", r.id).order("created_at", { ascending: true }),
+  ]);
+  const respostas = resp.data || [], eventos = evs.data || [], recebidas = rec.data || [];
+
+  // Links temporários para ver as imagens enviadas (o bucket é privado).
+  const paths = [...respostas, ...recebidas].flatMap((x) => (x.anexos || []).map((a) => a.path));
+  const urls = {};
+  if (paths.length) {
+    const { data } = await Admin.sb.storage.from("anexos").createSignedUrls(paths, 3600);
+    (data || []).forEach((u) => { if (u.signedUrl) urls[u.path] = u.signedUrl; });
+  }
+
+  const items = [
+    { at: r.created_at, kind: "in" },
+    ...respostas.map((x) => ({ at: x.created_at, kind: "out", x })),
+    ...recebidas.map((x) => ({ at: x.created_at, kind: "in", x })),
+    ...eventos.map((x) => ({ at: x.created_at, kind: "ev", x })),
+  ].sort((a, b) => new Date(a.at) - new Date(b.at));
+
+  const thread = Admin.el("div", "thread");
+  for (const it of items) {
+    if (it.kind === "ev") {
+      const f = EVENTOS[it.x.tipo];
+      thread.appendChild(Admin.el("div", "ev", (f ? f(it.x.detalhe) : it.x.tipo) + " · " + Admin.fmtDate(it.at)));
+      continue;
+    }
+    const b = Admin.el("div", "bubble " + it.kind);
+    b.appendChild(Admin.el("div", "who", (it.kind === "in" ? r.nome || "Contato" : "Você") + " · " + Admin.fmtDate(it.at)));
+    const text = !it.x ? r.mensagem : it.kind === "in" ? it.x.texto : it.x.mensagem;
+    if (text) b.appendChild(Admin.el("div", "txt", text));
+    // Resposta recebida por e-mail: permite ver o e-mail inteiro, com o trecho citado.
+    if (it.x?.texto_completo && it.x.texto_completo.trim() !== (it.x.texto || "").trim()) {
+      const more = Admin.el("details", "full");
+      more.append(Admin.el("summary", null, "Ver e-mail completo"), Admin.el("div", "txt", it.x.texto_completo));
+      b.appendChild(more);
+    }
+    const anexos = it.x?.anexos || [];
+    const imagens = anexos.filter((a) => (a.type || "").startsWith("image/"));
+    const outros = anexos.filter((a) => !(a.type || "").startsWith("image/"));
+    if (outros.length) {
+      const l = Admin.el("div", "files");
+      outros.forEach((a) => { const link = Admin.el("a", null, "📎 " + a.name); link.href = urls[a.path] || "#"; link.target = "_blank"; link.rel = "noopener"; l.appendChild(link); });
+      b.appendChild(l);
+    }
+    if (imagens.length) {
+      const g = Admin.el("div", "imgs");
+      imagens.forEach((a) => {
+        const link = Admin.el("a"); link.href = urls[a.path] || "#"; link.target = "_blank"; link.rel = "noopener"; link.title = a.name;
+        const img = Admin.el("img"); img.src = urls[a.path] || ""; img.alt = a.name; img.loading = "lazy";
+        link.appendChild(img); g.appendChild(link);
+      });
+      b.appendChild(g);
+    }
+    thread.appendChild(b);
+  }
+
+  // Formulário de resposta
+  const form = Admin.el("form", "reply");
+  const label = Admin.el("label", "l", "Responder"); label.htmlFor = "resposta";
+  const ta = Admin.el("textarea"); ta.id = "resposta"; ta.placeholder = "Escreva sua resposta…";
+  const files = [];
+  const picker = Admin.el("input"); picker.type = "file"; picker.accept = "image/*"; picker.multiple = true; picker.id = "anexos"; picker.className = "hidden";
+  const attach = Admin.el("label", "btn-line attach"); attach.htmlFor = "anexos"; attach.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>Anexar imagem';
+  const chips = Admin.el("div", "chips");
+  const msg = Admin.el("p", "msg"); msg.setAttribute("aria-live", "polite");
+  const renderChips = () => {
+    chips.replaceChildren();
+    files.forEach((f, i) => {
+      const c = Admin.el("div", "chip");
+      const im = Admin.el("img"); im.src = URL.createObjectURL(f); im.alt = "";
+      const rm = Admin.el("button", null, "×"); rm.type = "button"; rm.setAttribute("aria-label", "Remover " + f.name);
+      rm.addEventListener("click", () => { files.splice(i, 1); renderChips(); });
+      c.append(im, Admin.el("span", null, f.name + " · " + fmtSize(f.size)), rm);
+      chips.appendChild(c);
+    });
+  };
+  picker.addEventListener("change", () => {
+    msg.className = "msg"; msg.textContent = "";
+    for (const f of picker.files) {
+      if (!f.type.startsWith("image/")) { msg.className = "msg err"; msg.textContent = "Só é possível anexar imagens."; continue; }
+      if (f.size > MAX_MB * 1048576) { msg.className = "msg err"; msg.textContent = f.name + " passa de " + MAX_MB + " MB."; continue; }
+      if (files.length >= MAX_ANEXOS) { msg.className = "msg err"; msg.textContent = "Máximo de " + MAX_ANEXOS + " imagens por resposta."; break; }
+      files.push(f);
+    }
+    picker.value = "";
+    renderChips();
+  });
+  const to = Admin.el("span", "to", r.email ? "Para: " + r.email + " · Sua assinatura é incluída automaticamente no final do e-mail." : "Este contato não informou e-mail.");
+  const btn = Admin.el("button", "btn-ok", "Enviar resposta"); btn.type = "submit"; btn.disabled = !r.email;
+  const tools = Admin.el("div", "row-end"); tools.append(attach, btn);
+  form.append(label, ta, picker, chips, tools, to, msg);
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const texto = ta.value.trim();
+    msg.className = "msg";
+    if (!texto && !files.length) { msg.className = "msg err"; msg.textContent = "Escreva a resposta ou anexe uma imagem."; return; }
+    btn.disabled = true;
+    const fail = (t) => { btn.disabled = false; btn.textContent = "Enviar resposta"; msg.className = "msg err"; msg.textContent = t; };
+    const anexos = [];
+    for (const [i, f] of files.entries()) {
+      btn.textContent = "Enviando imagem " + (i + 1) + " de " + files.length + "…";
+      const path = "respostas/" + r.id + "/" + Date.now() + "-" + i + "-" + safeName(f.name);
+      const { error } = await Admin.sb.storage.from("anexos").upload(path, f, { contentType: f.type, upsert: false });
+      if (error) return fail("Não foi possível enviar a imagem " + f.name + ". Tente novamente.");
+      anexos.push({ path, name: f.name, type: f.type, size: f.size });
+    }
+    btn.textContent = "Enviando…";
+    const { data, error } = await Admin.sb.functions.invoke("responder-contato", { body: { contato_id: r.id, mensagem: texto, anexos } });
+    if (error || !data?.resposta) {
+      let detail = "";
+      try { detail = (await error?.context?.json())?.error || ""; } catch {}
+      return fail("Não foi possível enviar a resposta." + (detail ? " " + detail : " Tente novamente."));
+    }
+    if (!r.respondido_em) { r.respondido_em = data.respondido_em; statusBar(r); }
+    await historico(r);
+    const m = document.querySelector("#historico .reply .msg"); if (m) m.textContent = "Resposta enviada para " + r.email + ".";
+  });
+
+  box.replaceChildren(Admin.el("h2", null, "Histórico"), thread);
+  if (resp.error || evs.error || rec.error) box.appendChild(Admin.el("p", "msg err", "Parte do histórico não pôde ser carregada."));
+  box.appendChild(form);
 }
 
 Admin.init({ page: "contatos", onReady: async () => {
@@ -67,7 +354,10 @@ Admin.init({ page: "contatos", onReady: async () => {
     const { data, error } = await Admin.sb.from("contatos").select("*").eq("id", id).maybeSingle();
     const box = document.getElementById("detail");
     if (error || !data) { document.getElementById("status").classList.add("hidden"); box.replaceChildren(Admin.el("div", "card empty", error ? "Não foi possível carregar a mensagem." : "Mensagem não encontrada.")); return; }
+    Admin.markSeen("contatos", data);
+    data.visualizado_em = data.visualizado_em || new Date().toISOString();
     statusBar(data);
+    historico(data);
     box.replaceChildren(Admin.detail(data, Admin.CONTATO_SECOES, "Recebida em " + Admin.fmtDate(data.created_at)));
     return;
   }
@@ -75,19 +365,16 @@ Admin.init({ page: "contatos", onReady: async () => {
   err.classList.toggle("hidden", !error);
   if (error) { err.textContent = "Não foi possível carregar as mensagens: " + error.message; return; }
   const sel = document.getElementById("situacao");
-  if (["pendentes", "respondidas"].includes(params.get("situacao"))) sel.value = params.get("situacao");
+  if (["pendentes", "respondidas", "reunioes"].includes(params.get("situacao"))) sel.value = params.get("situacao");
   const render = () => {
     const q = norm(document.getElementById("busca").value.trim());
     const sit = sel.value;
-    const rows = data.filter((r) => (!sit || (sit === "respondidas") === !!r.respondido_em) && (!q || ["nome", "email", "empresa", "assunto", "mensagem"].some((k) => norm(r[k]).includes(q))));
+    const match = (r) => !sit || (sit === "reunioes" ? !!r.reuniao_em : (sit === "respondidas") === !!r.respondido_em);
+    const rows = data.filter((r) => match(r) && (!q || ["nome", "email", "empresa", "assunto", "mensagem"].some((k) => norm(r[k]).includes(q))));
     document.getElementById("count").textContent = (q || sit ? rows.length + " de " : "") + data.length + (data.length === 1 ? " mensagem recebida" : " mensagens recebidas");
     const list = document.getElementById("list"); list.replaceChildren();
     if (!rows.length) return list.appendChild(Admin.el("div", "empty", data.length ? "Nenhuma mensagem encontrada." : "Nenhuma mensagem ainda."));
-    rows.forEach((r) => {
-      const a = Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at);
-      const s = a.querySelector(".s"); s.prepend(badge(r), document.createTextNode(" "));
-      list.appendChild(a);
-    });
+    rows.forEach((r) => list.appendChild(Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at, Admin.mailState(r), true)));
   };
   document.getElementById("busca").addEventListener("input", render);
   sel.addEventListener("change", render);
