@@ -123,6 +123,8 @@
     .nav-bar .nav { margin-top: 0; }
     .nav-bar .btn-primary { flex: 1; }
     .nav-bar .form-error { text-align: center; margin-top: 8px; }
+    /* Com o teclado aberto, a barra volta para o fim da etapa para não ficar solta no meio da tela */
+    body.kb .nav-bar { position: static; box-shadow: none; }
   }
   .end p { margin: 0 0 14px; }
   .end .sign { margin-top: 20px; }
@@ -691,6 +693,10 @@ document.getElementById("next").addEventListener("click", () => {
 document.getElementById("back").addEventListener("click", () => show(current - 1));
 
 show(0);
+// Teclado aberto no celular: marca o body enquanto um campo de texto está em foco.
+const isText = (t) => t.matches && t.matches('textarea, input:not([type="checkbox"]):not([type="radio"]), select');
+document.addEventListener("focusin", (e) => { if (isText(e.target)) document.body.classList.add("kb"); });
+document.addEventListener("focusout", (e) => { if (isText(e.target)) document.body.classList.remove("kb"); });
 </script>
 </body>
 </html>
