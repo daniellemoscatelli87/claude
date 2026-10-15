@@ -68,7 +68,7 @@
   .info a { overflow-wrap: anywhere; word-break: break-all; }
   .info p { margin: 0 0 8px; }
   .info p:last-child { margin: 0; }
-  input[type=text], input[type=email], input[type=tel], input[type=url], textarea, .uf-cidade select {
+  input[type=text], input[type=email], input[type=tel], input[type=url], textarea, .uf-cidade select, .lang-row select {
     width: 100%;
     font: inherit;
     font-size: 15px;
@@ -83,10 +83,10 @@
   .uf-cidade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 12px; }
   @media (max-width: 560px) { .uf-cidade { grid-template-columns: 1fr; } }
   .uf-cidade label span { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
-  .uf-cidade select { appearance: none; -webkit-appearance: none; padding-right: 36px; cursor: pointer; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c6986' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center / 16px; }
+  .uf-cidade select, .lang-row select { appearance: none; -webkit-appearance: none; padding-right: 36px; cursor: pointer; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c6986' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center / 16px; }
   .uf-cidade select:disabled { color: var(--muted); background-color: var(--bg); cursor: not-allowed; }
   .q.invalid .uf-cidade select { border-color: var(--error); }
-  input:focus, textarea:focus, .uf-cidade select:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px var(--coral-tint); }
+  input:focus, textarea:focus, .uf-cidade select:focus, .lang-row select:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px var(--coral-tint); }
   .options { display: grid; gap: 8px; }
   .group-title { font-size: 13px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; margin: 18px 0 4px; }
   .group-title:first-child { margin-top: 4px; }
@@ -141,6 +141,9 @@
   .list-add { margin-top: 10px; background: none; border: 1px dashed var(--coral); color: var(--coral); padding: 9px 16px; font-size: 14px; }
   .list-add:hover { background: var(--coral-tint); }
   .q.invalid .list-row input { border-color: var(--error); }
+  .lang-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) 40px; gap: 8px; align-items: center; }
+  .lang-row select { padding-left: 12px; padding-right: 30px; background-position: right 10px center; }
+  .q.invalid .lang-row.bad input, .q.invalid .lang-row.bad select { border-color: var(--error); }
   /* Categorias em acordeão */
   .acc-groups { display: grid; gap: 10px; }
   .acc { border: 1px solid var(--line); border-radius: 12px; background: #fff; overflow: hidden; }
@@ -350,27 +353,28 @@ const SECTIONS = [
       "Ensino técnico.", "Graduação em andamento.", "Graduação completa.", "Especialização / MBA em andamento.", "Especialização / MBA completo.", "Mestrado.", "Doutorado.", "Formação predominantemente autodidata ou por cursos livres.", "Outro.",
     ]},
     { id: "formacao", n: 21, label: "Quais são a sua formação e as certificações, cursos ou especializações relevantes?", type: "list", placeholder: "Ex.: Design Gráfico, Universidade X", required: true, help: "Inclua um item por linha: formação acadêmica ou técnica (área e instituição), certificações, cursos e especializações relacionadas à sua atuação." },
-    { id: "tempo_especialidade", n: 22, label: "Há quanto tempo você atua profissionalmente em sua principal especialidade?", type: "radio", required: true, options: [
+    { id: "idiomas", n: 22, label: "Você fala outros idiomas além do português? Qual o seu nível de fluência?", type: "idiomas", required: false, levels: ["Básico", "Intermediário", "Avançado", "Fluente", "Nativo"], help: "Inclua o idioma, escolha o nível e adicione quantos idiomas quiser. Se não fala outro idioma, deixe em branco." },
+    { id: "tempo_especialidade", n: 23, label: "Há quanto tempo você atua profissionalmente em sua principal especialidade?", type: "radio", required: true, options: [
       "Menos de 1 ano.", "Entre 1 e 2 anos.", "Entre 3 e 5 anos.", "Entre 6 e 10 anos.", "Entre 11 e 15 anos.", "Entre 16 e 20 anos.", "Mais de 20 anos.",
     ]},
-    { id: "tempo_independente", n: 23, label: "Há quanto tempo você presta serviços de forma independente ou atua como consultor(a)?", type: "radio", required: true, options: [
+    { id: "tempo_independente", n: 24, label: "Há quanto tempo você presta serviços de forma independente ou atua como consultor(a)?", type: "radio", required: true, options: [
       "Ainda não comecei, mas tenho interesse.", "Menos de 1 ano.", "Entre 1 e 2 anos.", "Entre 3 e 5 anos.", "Entre 6 e 10 anos.", "Mais de 10 anos.",
     ]},
-    { id: "lideranca", n: 24, label: "Você possui experiência liderando projetos ou frentes de trabalho?", type: "radio", required: true, options: [
+    { id: "lideranca", n: 25, label: "Você possui experiência liderando projetos ou frentes de trabalho?", type: "radio", required: true, options: [
       "Sim, lidero projetos completos.", "Sim, lidero frentes específicas de projetos.", "Já liderei projetos pontualmente.", "Ainda não, mas tenho interesse.", "Prefiro atuar como especialista ou executor(a).",
     ]},
   ]},
   { title: "Portfólio, cases e experiência prática", n: "Seção 6", questions: [
-    { id: "possui_portfolio", n: 25, label: "Você possui portfólio, site profissional ou cases publicados?", type: "radio", required: true, options: [
+    { id: "possui_portfolio", n: 26, label: "Você possui portfólio, site profissional ou cases publicados?", type: "radio", required: true, options: [
       "Sim, possuo portfólio online.", "Sim, possuo site profissional.", "Sim, possuo cases ou apresentações de projetos.", "Possuo trabalhos, mas não posso divulgá-los publicamente.", "Ainda não possuo portfólio estruturado.",
     ]},
-    { id: "link_portfolio", n: 26, showIf: { id: "possui_portfolio", test: (v) => /^Sim/.test(v) }, label: "Compartilhe o link do seu portfólio, site ou cases profissionais.", type: "url", placeholder: "https://", required: false, help: "LinkedIn, Behance, Dribbble, GitHub, Notion, site próprio ou outro endereço relevante." },
-    { id: "projeto_relevante", n: 27, label: "Conte brevemente sobre um projeto relevante do qual participou.", type: "paragraph", required: true,
+    { id: "link_portfolio", n: 27, showIf: { id: "possui_portfolio", test: (v) => /^Sim/.test(v) }, label: "Compartilhe o link do seu portfólio, site ou cases profissionais.", type: "url", placeholder: "https://", required: false, help: "LinkedIn, Behance, Dribbble, GitHub, Notion, site próprio ou outro endereço relevante." },
+    { id: "projeto_relevante", n: 28, label: "Conte brevemente sobre um projeto relevante do qual participou.", type: "paragraph", required: true,
       helpHtml: "Se possível, descreva:<ul><li>Qual era o desafio ou problema?</li><li>Qual foi sua responsabilidade?</li><li>Que abordagem ou metodologia utilizou?</li><li>Qual solução foi desenvolvida?</li><li>Quais resultados foram alcançados?</li></ul>Não compartilhe informações confidenciais de clientes ou empresas." },
-    { id: "servicos_especialista_externo", n: 28, label: "Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?", type: "radio", required: true, options: [
+    { id: "servicos_especialista_externo", n: 29, label: "Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?", type: "radio", required: true, options: [
       "Sim, frequentemente.", "Sim, ocasionalmente.", "Ainda não, mas tenho interesse.", "Não tenho interesse nesse modelo de colaboração.",
     ]},
-    { id: "ferramentas", n: 29, label: "Quais ferramentas, plataformas ou metodologias você domina?", type: "checkbox", store: "lines", required: false, help: "Abra cada categoria e marque o que você domina.", groups: [
+    { id: "ferramentas", n: 30, label: "Quais ferramentas, plataformas ou metodologias você domina?", type: "checkbox", store: "lines", required: false, help: "Abra cada categoria e marque o que você domina.", groups: [
       { title: "Design e prototipação", options: ["Figma.", "Adobe (Photoshop, Illustrator, XD).", "Sketch.", "Framer.", "Canva."] },
       { title: "Colaboração e facilitação", options: ["Miro.", "FigJam.", "Mural.", "Notion.", "Trello.", "Jira / Confluence."] },
       { title: "Pesquisa e análise", options: ["Ferramentas de pesquisa e testes (Maze, Optimal Workshop etc.).", "Formulários e questionários (Typeform, Google Forms etc.).", "Análise de comportamento (Hotjar, Clarity etc.).", "Google Analytics.", "Dovetail ou repositórios de pesquisa."] },
@@ -381,42 +385,42 @@ const SECTIONS = [
     ]},
   ]},
   { title: "Disponibilidade e modelo de colaboração", n: "Seção 7", questions: [
-    { id: "formatos_atuacao", n: 30, label: "Em quais formatos você tem disponibilidade para atuar?", type: "checkbox", required: true, options: [
+    { id: "formatos_atuacao", n: 31, label: "Em quais formatos você tem disponibilidade para atuar?", type: "checkbox", required: true, options: [
       "100% remoto.", "Híbrido, com encontros presenciais pontuais.", "Presencial na minha cidade/região.", "Presencial em outras cidades, mediante planejamento.", "Presencial em qualquer região do Brasil, mediante negociação.",
     ]},
-    { id: "viagens", n: 31, label: "Você possui disponibilidade para deslocamentos ou viagens profissionais?", type: "radio", required: true, options: [
+    { id: "viagens", n: 32, label: "Você possui disponibilidade para deslocamentos ou viagens profissionais?", type: "radio", required: true, options: [
       "Sim, tenho disponibilidade para viagens nacionais.", "Sim, mas apenas para viagens de curta duração.", "Sim, dependendo da localização e das condições.", "Apenas para deslocamentos dentro da minha região.", "Não tenho disponibilidade para viagens.",
     ]},
-    { id: "presencial_curitiba", n: 32, label: "Você teria disponibilidade para atuar presencialmente em Curitiba/PR ou região metropolitana?", type: "radio", required: true, options: [
+    { id: "presencial_curitiba", n: 33, label: "Você teria disponibilidade para atuar presencialmente em Curitiba/PR ou região metropolitana?", type: "radio", required: true, options: [
       "Sim, sem necessidade de deslocamento ou hospedagem.", "Sim, mediante negociação de deslocamento e/ou hospedagem.", "Sim, apenas para encontros ou atividades pontuais.", "Não, somente em formato remoto.",
     ]},
-    { id: "horas_semanais", n: 33, label: "Qual é sua disponibilidade média para dedicação a projetos?", type: "radio", required: true, options: [
+    { id: "horas_semanais", n: 34, label: "Qual é sua disponibilidade média para dedicação a projetos?", type: "radio", required: true, options: [
       "Até 5 horas semanais.", "De 6 a 10 horas semanais.", "De 11 a 20 horas semanais.", "De 21 a 30 horas semanais.", "Mais de 30 horas semanais.", "Disponibilidade variável conforme o projeto.",
     ]},
-    { id: "formatos_contratacao", n: 34, label: "Quais formatos de contratação você costuma aceitar?", type: "checkbox", required: true, options: [
+    { id: "formatos_contratacao", n: 35, label: "Quais formatos de contratação você costuma aceitar?", type: "checkbox", required: true, options: [
       "Projeto com escopo e valor fechado.", "Contratação por hora.", "Contratação por diária.", "Contratação por entregáveis.", "Contratação recorrente por período determinado.", "Consultoria ou mentoria pontual.", "Formato negociável conforme a demanda.",
     ]},
-    { id: "precificacao", n: 35, label: "Como você costuma precificar seus serviços?", type: "radio", required: true, options: [
+    { id: "precificacao", n: 36, label: "Como você costuma precificar seus serviços?", type: "radio", required: true, options: [
       "Valor por hora.", "Valor por diária.", "Valor por projeto.", "Valor por entregável.", "Mensalidade / contrato recorrente.", "Depende do escopo e da complexidade.",
     ]},
-    { id: "equipe_propria", n: 36, label: "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?", type: "radio", required: true, options: [
+    { id: "equipe_propria", n: 37, label: "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?", type: "radio", required: true, options: [
       "Sim, possuo equipe própria.", "Sim, possuo parceiros recorrentes.", "Não, atuo individualmente.", "Não, mas tenho interesse em formar parcerias.",
     ]},
-    { id: "interesse_parceria", n: 37, label: "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?", type: "radio", required: true, options: [
+    { id: "interesse_parceria", n: 38, label: "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?", type: "radio", required: true, options: [
       "Sim, tenho bastante interesse.", "Sim, dependendo do projeto e das responsabilidades.", "Prefiro atuar individualmente.", "Gostaria de entender melhor o formato de colaboração.",
     ]},
-    { id: "condicoes", n: 38, label: "Existe alguma condição ou preferência importante para sua participação em projetos futuros?", type: "paragraph", required: false, help: "Compartilhe restrições de agenda, disponibilidade, preferências de atuação, condições comerciais ou outras informações que considere relevantes." },
+    { id: "condicoes", n: 39, label: "Existe alguma condição ou preferência importante para sua participação em projetos futuros?", type: "paragraph", required: false, help: "Compartilhe restrições de agenda, disponibilidade, preferências de atuação, condições comerciais ou outras informações que considere relevantes." },
   ]},
   { title: "Conexão e autorizações", n: "Seção 8", questions: [
-    { id: "como_conheceu", n: 39, label: "Como você conheceu esta iniciativa?", type: "radio", required: false, options: [
+    { id: "como_conheceu", n: 40, label: "Como você conheceu esta iniciativa?", type: "radio", required: false, options: [
       "LinkedIn.", "Instagram.", "Indicação de outro profissional.", "Comunidade ou grupo profissional.", "Indicação da Dani Moscatelli.", "Outro.",
     ]},
-    { id: "autoriza_dados", n: 40, label: "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?", type: "radio", required: true,
+    { id: "autoriza_dados", n: 41, label: "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?", type: "radio", required: true,
       infoHtml: "<p><strong>Informações sobre o tratamento de dados:</strong></p><p>Os dados fornecidos serão utilizados por Dani Moscatelli | Experience Design Studio para organização da rede de parceiros, análise de competências profissionais e contato relacionado a possíveis oportunidades de colaboração.</p><p>O preenchimento é voluntário. As informações não serão divulgadas publicamente nem compartilhadas com terceiros para finalidades incompatíveis com as descritas neste formulário.</p><p>Você poderá solicitar acesso, correção ou exclusão dos seus dados pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação.</p>",
       options: [CONSENT_YES, CONSENT_NO] },
   ]},
   { title: "Comunidade de networking", n: "Seção final", questions: [
-    { id: "interesse_whatsapp", n: 41, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
+    { id: "interesse_whatsapp", n: 42, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
       infoHtml: "<p>Estamos construindo uma comunidade para conectar profissionais de diferentes especialidades, promover a troca de conhecimentos, compartilhar referências e fortalecer conexões profissionais.</p><p>O espaço será voltado a conversas sobre Design, Experiência Humana, Negócios, Tecnologia e Inovação, além da troca de experiências e oportunidades de colaboração.</p><p>A participação é opcional e independente deste cadastro.</p>",
       afterHtml: "<div class=\"info\"><p>🔗 <strong>Link de acesso ao grupo:</strong><br><a href=\"" + WHATSAPP_GROUP + "\" target=\"_blank\" rel=\"noopener\">" + WHATSAPP_GROUP + "</a></p><p>Se tiver interesse, basta acessar o link acima. A participação no grupo não é necessária para concluir seu cadastro.</p></div>",
       options: ["Sim, tenho interesse em participar.", "Não, obrigado(a). Quero apenas fazer parte da rede de parceiros."] },
@@ -450,6 +454,9 @@ function questionHtml(q) {
   else if (q.type === "list")
     field = `<div class="list-field" data-list="${q.id}" data-placeholder="${esc(q.placeholder || "")}"><div class="list-rows"></div>
       <button type="button" class="list-add"><span aria-hidden="true">+</span> Adicionar item</button></div>`;
+  else if (q.type === "idiomas")
+    field = `<div class="lang-field" data-lang="${q.id}"><div class="list-rows"></div>
+      <button type="button" class="list-add"><span aria-hidden="true">+</span> Adicionar idioma</button></div>`;
   else if (q.type === "uf_cidade")
     field = `<div class="uf-cidade">
       <label><span>Estado</span><select id="${q.id}_uf" name="${q.id}_uf"><option value="">Selecione</option>${ESTADOS.map(([uf, nome]) => `<option value="${uf}">${esc(nome)}</option>`).join("")}</select></label>
@@ -461,7 +468,7 @@ function questionHtml(q) {
         <div class="acc-body options hidden" id="${q.id}-g${gi}">${g.options.map(o => optionHtml(q, o)).join("")}</div>
       </div>`).join("")}</div>`;
   else field = `<div class="options">${q.options.map(o => optionHtml(q, o)).join("")}</div>`;
-  const errMsg = q.type === "list" ? "Inclua ao menos um item." : q.type === "url" ? (q.urlHost === "linkedin.com" ? "Informe o link do seu perfil no LinkedIn (ex.: https://www.linkedin.com/in/seu-perfil)." : "Informe um link válido (ex.: https://seusite.com.br).") : q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
+  const errMsg = q.type === "idiomas" ? "Informe o idioma e o nível de fluência em cada linha." : q.type === "list" ? "Inclua ao menos um item." : q.type === "url" ? (q.urlHost === "linkedin.com" ? "Informe o link do seu perfil no LinkedIn (ex.: https://www.linkedin.com/in/seu-perfil)." : "Informe um link válido (ex.: https://seusite.com.br).") : q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
   return `<div class="q" data-q="${q.id}">
     <label class="q-label" ${["text", "email", "tel", "url", "paragraph"].includes(q.type) ? `for="${q.id}"` : ""}>${q.n}. ${esc(q.label)}${req}</label>
     ${help}${info}${field}${q.afterHtml || ""}
@@ -494,6 +501,7 @@ function value(q) {
   if (q.type === "checkbox") return [...form.querySelectorAll(`input[name="${q.id}"]:checked`)].map(i => i.value);
   if (q.type === "radio") return form.querySelector(`input[name="${q.id}"]:checked`)?.value || "";
   if (q.type === "list") return [...form.querySelectorAll(`[data-list="${q.id}"] input`)].map((i) => i.value.trim()).filter(Boolean).join("\n");
+  if (q.type === "idiomas") return langRows(q).filter((r) => r.idioma && r.nivel).map((r) => r.idioma + ": " + r.nivel).join("\n");
   if (q.type === "url") { const v = form.elements[q.id].value.trim(); return v === "https://" || v === "http://" ? "" : withScheme(v); }
   if (q.type === "uf_cidade") {
     const uf = form.elements[q.id + "_uf"].value, cidade = form.elements[q.id + "_cidade"].value.trim();
@@ -555,6 +563,35 @@ form.querySelectorAll(".list-field").forEach((box) => {
   });
 });
 
+// Idiomas: cada linha tem o idioma e o nível de fluência; dá para incluir vários.
+const langRows = (q) => [...form.querySelectorAll(`[data-lang="${q.id}"] .lang-row`)].map((row) => ({ row, idioma: row.querySelector("input").value.trim(), nivel: row.querySelector("select").value }));
+form.querySelectorAll(".lang-field").forEach((box) => {
+  const q = SECTIONS.flatMap((s) => s.questions).find((x) => x.id === box.dataset.lang);
+  const rows = box.querySelector(".list-rows");
+  const addRow = (focus) => {
+    const n = rows.children.length + 1;
+    const row = document.createElement("div"); row.className = "lang-row";
+    const input = document.createElement("input"); input.type = "text"; input.maxLength = 60; input.placeholder = "Ex.: Inglês"; input.setAttribute("aria-label", "Idioma " + n);
+    const sel = document.createElement("select"); sel.setAttribute("aria-label", "Nível de fluência do idioma " + n);
+    sel.innerHTML = `<option value="">Nível</option>` + q.levels.map((l) => `<option>${esc(l)}</option>`).join("");
+    const rm = document.createElement("button"); rm.type = "button"; rm.className = "list-rm"; rm.setAttribute("aria-label", "Remover idioma"); rm.textContent = "×";
+    rm.addEventListener("click", () => {
+      if (rows.children.length > 1) row.remove(); else { input.value = ""; sel.value = ""; }
+      (rows.lastElementChild?.querySelector("input"))?.focus();
+      box.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); sel.focus(); } });
+    sel.addEventListener("change", () => box.dispatchEvent(new Event("input", { bubbles: true })));
+    row.append(input, sel, rm); rows.appendChild(row);
+    if (focus) input.focus();
+  };
+  addRow(false);
+  box.querySelector(".list-add").addEventListener("click", () => {
+    const empty = [...rows.querySelectorAll(".lang-row")].find((r) => !r.querySelector("input").value.trim());
+    if (empty) empty.querySelector("input").focus(); else addRow(true);
+  });
+});
+
 // Áreas em acordeão: cada categoria abre/fecha e mostra quantos itens foram marcados.
 form.querySelectorAll(".acc").forEach((acc) => {
   const head = acc.querySelector(".acc-head"), body = acc.querySelector(".acc-body"), count = acc.querySelector("[data-count]");
@@ -603,6 +640,11 @@ function validateQuestion(q) {
   let ok = true;
   if (q.required) ok = Array.isArray(v) ? v.length > 0 : v !== "";
   if (ok && q.type === "email" && v) ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  if (ok && q.type === "idiomas") {
+    const rs = langRows(q);
+    rs.forEach((r) => r.row.classList.toggle("bad", !r.idioma !== !r.nivel));
+    ok = !rs.some((r) => !r.idioma !== !r.nivel);
+  }
   if (ok && q.type === "tel" && v) ok = v.replace(/\D/g, "").length >= 10;
   const otherBad = ok && (q.type === "checkbox" || q.type === "radio") && otherChecked(q) && !otherText(q);
   if (otherBad) ok = false;

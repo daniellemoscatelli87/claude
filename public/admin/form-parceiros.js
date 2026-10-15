@@ -331,8 +331,14 @@ window.FORM_PARCEIROS = [
     "type": "paragraph"
    },
    {
-    "id": "tempo_especialidade",
+    "id": "idiomas",
     "n": 22,
+    "label": "Você fala outros idiomas além do português? Qual o seu nível de fluência?",
+    "type": "paragraph"
+   },
+   {
+    "id": "tempo_especialidade",
+    "n": 23,
     "label": "Há quanto tempo você atua profissionalmente em sua principal especialidade?",
     "type": "radio",
     "options": [
@@ -347,7 +353,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "tempo_independente",
-    "n": 23,
+    "n": 24,
     "label": "Há quanto tempo você presta serviços de forma independente ou atua como consultor(a)?",
     "type": "radio",
     "options": [
@@ -361,7 +367,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "lideranca",
-    "n": 24,
+    "n": 25,
     "label": "Você possui experiência liderando projetos ou frentes de trabalho?",
     "type": "radio",
     "options": [
@@ -379,7 +385,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "possui_portfolio",
-    "n": 25,
+    "n": 26,
     "label": "Você possui portfólio, site profissional ou cases publicados?",
     "type": "radio",
     "options": [
@@ -392,19 +398,19 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "link_portfolio",
-    "n": 26,
+    "n": 27,
     "label": "Compartilhe o link do seu portfólio, site ou cases profissionais.",
     "type": "text"
    },
    {
     "id": "projeto_relevante",
-    "n": 27,
+    "n": 28,
     "label": "Conte brevemente sobre um projeto relevante do qual participou.",
     "type": "paragraph"
    },
    {
     "id": "servicos_especialista_externo",
-    "n": 28,
+    "n": 29,
     "label": "Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?",
     "type": "radio",
     "options": [
@@ -416,7 +422,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "ferramentas",
-    "n": 29,
+    "n": 30,
     "label": "Quais ferramentas, plataformas ou metodologias você domina?",
     "type": "checkbox"
    }
@@ -427,7 +433,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "formatos_atuacao",
-    "n": 30,
+    "n": 31,
     "label": "Em quais formatos você tem disponibilidade para atuar?",
     "type": "checkbox",
     "options": [
@@ -440,7 +446,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "viagens",
-    "n": 31,
+    "n": 32,
     "label": "Você possui disponibilidade para deslocamentos ou viagens profissionais?",
     "type": "radio",
     "options": [
@@ -453,7 +459,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "presencial_curitiba",
-    "n": 32,
+    "n": 33,
     "label": "Você teria disponibilidade para atuar presencialmente em Curitiba/PR ou região metropolitana?",
     "type": "radio",
     "options": [
@@ -465,7 +471,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "horas_semanais",
-    "n": 33,
+    "n": 34,
     "label": "Qual é sua disponibilidade média para dedicação a projetos?",
     "type": "radio",
     "options": [
@@ -479,7 +485,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "formatos_contratacao",
-    "n": 34,
+    "n": 35,
     "label": "Quais formatos de contratação você costuma aceitar?",
     "type": "checkbox",
     "options": [
@@ -494,7 +500,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "precificacao",
-    "n": 35,
+    "n": 36,
     "label": "Como você costuma precificar seus serviços?",
     "type": "radio",
     "options": [
@@ -508,7 +514,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "equipe_propria",
-    "n": 36,
+    "n": 37,
     "label": "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?",
     "type": "radio",
     "options": [
@@ -520,7 +526,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "interesse_parceria",
-    "n": 37,
+    "n": 38,
     "label": "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?",
     "type": "radio",
     "options": [
@@ -532,7 +538,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "condicoes",
-    "n": 38,
+    "n": 39,
     "label": "Existe alguma condição ou preferência importante para sua participação em projetos futuros?",
     "type": "paragraph"
    }
@@ -543,7 +549,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "como_conheceu",
-    "n": 39,
+    "n": 40,
     "label": "Como você conheceu esta iniciativa?",
     "type": "radio",
     "options": [
@@ -557,7 +563,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "autoriza_dados",
-    "n": 40,
+    "n": 41,
     "label": "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?",
     "type": "radio",
     "options": [
@@ -572,7 +578,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "interesse_whatsapp",
-    "n": 41,
+    "n": 42,
     "label": "Você gostaria de participar do nosso grupo de networking no WhatsApp?",
     "type": "radio",
     "options": [
