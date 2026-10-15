@@ -67,7 +67,7 @@
   .info { font-size: 14px; color: var(--muted); background: var(--bg); border-radius: 8px; padding: 14px 16px; margin: 10px 0 12px; }
   .info p { margin: 0 0 8px; }
   .info p:last-child { margin: 0; }
-  input[type=text], input[type=email], input[type=tel], textarea {
+  input[type=text], input[type=email], input[type=tel], textarea, .uf-cidade select {
     width: 100%;
     font: inherit;
     font-size: 15px;
@@ -79,7 +79,13 @@
     transition: border-color .15s, box-shadow .15s;
   }
   textarea { min-height: 120px; resize: vertical; }
-  input:focus, textarea:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px var(--coral-tint); }
+  .uf-cidade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 12px; }
+  @media (max-width: 560px) { .uf-cidade { grid-template-columns: 1fr; } }
+  .uf-cidade label span { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+  .uf-cidade select { appearance: none; -webkit-appearance: none; padding-right: 36px; cursor: pointer; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c6986' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center / 16px; }
+  .uf-cidade select:disabled { color: var(--muted); background-color: var(--bg); cursor: not-allowed; }
+  .q.invalid .uf-cidade select { border-color: var(--error); }
+  input:focus, textarea:focus, .uf-cidade select:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px var(--coral-tint); }
   .options { display: grid; gap: 8px; }
   .group-title { font-size: 13px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; margin: 18px 0 4px; }
   .group-title:first-child { margin-top: 4px; }
@@ -211,13 +217,15 @@ const PJ_NO = "Não tenho interesse em atuar como PJ.";
 const CONSENT_YES = "Sim, autorizo.";
 const CONSENT_NO = "Não autorizo.";
 
+const ESTADOS = [["AC","Acre"],["AL","Alagoas"],["AP","Amapá"],["AM","Amazonas"],["BA","Bahia"],["CE","Ceará"],["DF","Distrito Federal"],["ES","Espírito Santo"],["GO","Goiás"],["MA","Maranhão"],["MT","Mato Grosso"],["MS","Mato Grosso do Sul"],["MG","Minas Gerais"],["PA","Pará"],["PB","Paraíba"],["PR","Paraná"],["PE","Pernambuco"],["PI","Piauí"],["RJ","Rio de Janeiro"],["RN","Rio Grande do Norte"],["RS","Rio Grande do Sul"],["RO","Rondônia"],["RR","Roraima"],["SC","Santa Catarina"],["SP","São Paulo"],["SE","Sergipe"],["TO","Tocantins"]];
+
 const SECTIONS = [
   { title: "Informações profissionais e contato", n: "Seção 1", questions: [
     { id: "nome", n: 1, label: "Qual é o seu nome completo?", type: "text", required: true },
     { id: "empresa", n: 2, label: "Qual é o nome da sua empresa?", type: "text", required: false, help: "Se você atua por meio de uma empresa, consultoria ou estúdio próprio." },
     { id: "email", n: 3, label: "Qual é o seu e-mail profissional?", type: "email", required: true },
     { id: "telefone", n: 4, label: "Qual é o seu telefone/WhatsApp para contato?", type: "tel", required: true, help: "Informe o número com DDD." },
-    { id: "cidade_estado", n: 5, label: "Em qual cidade e estado você reside atualmente?", type: "text", required: true, help: "Exemplo: Curitiba - PR." },
+    { id: "cidade_estado", n: 5, label: "Em qual cidade e estado você reside atualmente?", type: "uf_cidade", required: true, help: "Escolha o estado para carregar as cidades." },
     { id: "linkedin", n: 6, label: "Qual é o seu perfil no LinkedIn?", type: "text", required: false, help: "Insira o link completo." },
     { id: "apresentacao", n: 7, label: "Como você se apresenta profissionalmente?", type: "paragraph", required: true, help: "Descreva brevemente sua atuação, suas principais competências e o tipo de contribuição que costuma oferecer aos projetos." },
   ]},
@@ -401,10 +409,15 @@ function questionHtml(q) {
   if (q.type === "paragraph") field = `<textarea id="${q.id}" name="${q.id}"></textarea>`;
   else if (q.type === "text" || q.type === "email" || q.type === "tel")
     field = `<input type="${q.type}" id="${q.id}" name="${q.id}" autocomplete="${{ nome: "name", email: "email", telefone: "tel" }[q.id] || "off"}">`;
+  else if (q.type === "uf_cidade")
+    field = `<div class="uf-cidade">
+      <label><span>Estado</span><select id="${q.id}_uf" name="${q.id}_uf"><option value="">Selecione</option>${ESTADOS.map(([uf, nome]) => `<option value="${uf}">${esc(nome)}</option>`).join("")}</select></label>
+      <label><span>Cidade</span><select id="${q.id}_cidade" name="${q.id}_cidade" disabled><option value="">Escolha o estado primeiro</option></select></label>
+    </div>`;
   else if (q.groups)
     field = `<div class="options">${q.groups.map(g => `<div class="group-title">${esc(g.title)}</div>${g.options.map(o => optionHtml(q, o)).join("")}`).join("")}</div>`;
   else field = `<div class="options">${q.options.map(o => optionHtml(q, o)).join("")}</div>`;
-  const errMsg = q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
+  const errMsg = q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
   return `<div class="q" data-q="${q.id}">
     <label class="q-label" ${["text", "email", "tel", "paragraph"].includes(q.type) ? `for="${q.id}"` : ""}>${q.n}. ${esc(q.label)}${req}</label>
     ${help}${info}${field}${q.afterHtml || ""}
@@ -436,8 +449,32 @@ let current = 0;
 function value(q) {
   if (q.type === "checkbox") return [...form.querySelectorAll(`input[name="${q.id}"]:checked`)].map(i => i.value);
   if (q.type === "radio") return form.querySelector(`input[name="${q.id}"]:checked`)?.value || "";
+  if (q.type === "uf_cidade") {
+    const uf = form.elements[q.id + "_uf"].value, cidade = form.elements[q.id + "_cidade"].value.trim();
+    return uf && cidade ? `${cidade} - ${uf}` : "";
+  }
   return form.elements[q.id].value.trim();
 }
+
+// Estado e cidade: a lista de cidades (IBGE) do estado escolhido é carregada de /data/municipios/<UF>.json.
+form.querySelectorAll(".uf-cidade").forEach((box) => {
+  const [ufSel, cidSel] = box.querySelectorAll("select");
+  const cache = {};
+  ufSel.addEventListener("change", async () => {
+    const uf = ufSel.value;
+    cidSel.disabled = true;
+    cidSel.innerHTML = `<option value="">${uf ? "Carregando cidades…" : "Escolha o estado primeiro"}</option>`;
+    if (!uf) return;
+    try {
+      cache[uf] = cache[uf] || await fetch(`/data/municipios/${uf}.json`).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+      if (ufSel.value !== uf) return;
+      cidSel.innerHTML = `<option value="">Selecione a cidade</option>` + cache[uf].map((c) => `<option>${esc(c)}</option>`).join("");
+      cidSel.disabled = false;
+    } catch {
+      cidSel.innerHTML = `<option value="">Não foi possível carregar as cidades. Tente de novo.</option>`;
+    }
+  });
+});
 
 // Máscara de telefone: (41) 99999-9999 ou (41) 3333-4444
 function maskPhone(value) {

@@ -262,7 +262,8 @@ const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
 const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const uf = (s) => ((s || "").toUpperCase().match(/\b([A-Z]{2})\s*\.?$/) || [])[1] || "-";
 const MINUSC = new Set(["de", "da", "do", "das", "dos", "e"]);
-const cidade = (s) => (s || "").split(/[—–\-\/,]/)[0].trim().replace(/\s+/g, " ").toLowerCase().split(" ").map((w, i) => (i && MINUSC.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(" ") || "Não informado";
+// Tira o estado do fim ("Curitiba - PR", "Curitiba/PR", "Curitiba, PR") sem cortar nomes com hífen ("Embu-Guaçu").
+const cidade = (s) => (s || "").replace(/\s*([—–\/,]|\s-)\s*[A-Za-z]{2}\s*\.?$/, "").split(/\s[—–-]\s|[\/,]/)[0].trim().replace(/\s+/g, " ").toLowerCase().split(" ").map((w, i) => (i && MINUSC.has(w) ? w : w.split("-").map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join("-"))).join(" ") || "Não informado";
 const startsSim = (v) => typeof v === "string" && v.startsWith("Sim");
 const svg = (tag, attrs) => { const e = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
 
