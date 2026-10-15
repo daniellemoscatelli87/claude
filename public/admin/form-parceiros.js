@@ -1,7 +1,7 @@
 // Estrutura do formulário da Rede de Parceiros (gerada de /rede-parceiros/index.html).
 window.FORM_PARCEIROS = [
  {
-  "title": "Seção 1 — Informações profissionais e contato",
+  "title": "Seção 1: Informações profissionais e contato",
   "questions": [
    {
     "id": "nome",
@@ -48,7 +48,7 @@ window.FORM_PARCEIROS = [
   ]
  },
  {
-  "title": "Seção 2 — Modelo de atuação e contratação",
+  "title": "Seção 2: Modelo de atuação e contratação",
   "questions": [
    {
     "id": "atuacao_pj",
@@ -115,7 +115,7 @@ window.FORM_PARCEIROS = [
   ]
  },
  {
-  "title": "Seção 3 — Áreas de especialização",
+  "title": "Seção 3: Áreas de especialização",
   "questions": [
    {
     "id": "areas_experiencia",
@@ -246,7 +246,7 @@ window.FORM_PARCEIROS = [
   ]
  },
  {
-  "title": "Seção 4 — Segmentos e conhecimento setorial",
+  "title": "Seção 4: Segmentos e conhecimento setorial",
   "questions": [
    {
     "id": "segmentos",
@@ -307,7 +307,7 @@ window.FORM_PARCEIROS = [
   ]
  },
  {
-  "title": "Seção 5 — Formação e experiência",
+  "title": "Seção 5: Formação e experiência",
   "questions": [
    {
     "id": "nivel_formacao",
@@ -383,7 +383,7 @@ window.FORM_PARCEIROS = [
   ]
  },
  {
-  "title": "Seção 6 — Portfólio, cases e experiência prática",
+  "title": "Seção 6: Portfólio, cases e experiência prática",
   "questions": [
    {
     "id": "possui_portfolio",
@@ -431,7 +431,7 @@ window.FORM_PARCEIROS = [
   ]
  },
  {
-  "title": "Seção 7 — Disponibilidade e modelo de colaboração",
+  "title": "Seção 7: Disponibilidade e modelo de colaboração",
   "questions": [
    {
     "id": "formatos_atuacao",
@@ -553,7 +553,7 @@ window.FORM_PARCEIROS = [
   ]
  },
  {
-  "title": "Seção 8 — Conexão e autorizações",
+  "title": "Seção 8: Conexão e autorizações",
   "questions": [
    {
     "id": "como_conheceu",
@@ -582,7 +582,7 @@ window.FORM_PARCEIROS = [
   ]
  },
  {
-  "title": "Seção final — Comunidade de networking",
+  "title": "Seção final: Comunidade de networking",
   "questions": [
    {
     "id": "interesse_whatsapp",

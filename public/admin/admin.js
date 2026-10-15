@@ -55,7 +55,7 @@
 
   function valueNode(v) {
     const dd = el("dd");
-    if (v == null || v === "" || (Array.isArray(v) && !v.length)) { dd.textContent = "—"; dd.className = "muted"; return dd; }
+    if (v == null || v === "" || (Array.isArray(v) && !v.length)) { dd.textContent = "-"; dd.className = "muted"; return dd; }
     if (typeof v === "boolean") { dd.textContent = v ? "Sim" : "Não"; return dd; }
     const text = Array.isArray(v) ? v.join("\n") : String(v);
     if (/^(https?:\/\/|www\.|linkedin\.com)/i.test(text) && !text.includes(" ")) {
@@ -169,7 +169,7 @@
       if (error) {
         msg.className = "msg err";
         msg.textContent = /rate limit/i.test(error.message)
-          ? "Muitos links pedidos em pouco tempo. Aguarde alguns minutos e tente de novo — o último link enviado continua válido."
+          ? "Muitos links pedidos em pouco tempo. Aguarde alguns minutos e tente de novo. O último link enviado continua válido."
           : "Não foi possível enviar o link: " + error.message;
         return;
       }
