@@ -82,17 +82,6 @@
     .tl .stn { order: -1; display: none; }
   }
 
-  /* Pódio */
-  .podium { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 10px; align-items: end; }
-  .pd { border-radius: 14px 14px 6px 6px; padding: 14px 12px; text-align: center; display: grid; gap: 6px; align-content: end; }
-  .pd .medal { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto; font-weight: 800; font-size: 14px; }
-  .pd .pv { font-size: 26px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
-  .pd .pl { font-size: 12.5px; line-height: 1.3; }
-  .pd.p1 { background: var(--red); color: #fff; min-height: 190px; } .pd.p1 .medal { background: #fff; color: var(--red); }
-  .pd.p2 { background: var(--red-tint); min-height: 160px; } .pd.p2 .medal { background: var(--red); color: #fff; }
-  .pd.p3 { background: var(--track); min-height: 135px; } .pd.p3 .medal { background: var(--slate); color: #fff; }
-  .pd .pp { font-size: 11px; opacity: .8; }
-
   /* Régua remoto ↔ presencial */
   .spec { position: relative; padding: 8px 0 0; }
   .spec .line { position: absolute; left: 10%; right: 10%; top: 44px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--slate), var(--red)); opacity: .35; }
@@ -399,36 +388,6 @@ function timeline(rows, id) {
   return wrap;
 }
 
-// Pódio: as 3 opções mais escolhidas; o restante abre em lista numerada.
-function podium(rows, id) {
-  const t = rows.length;
-  const e = counts(rows, id);
-  const wrap = el("div");
-  const top = e.slice(0, 3);
-  const pod = el("div", "podium");
-  [1, 0, 2].forEach((k) => {
-    const x = top[k];
-    if (!x) { pod.appendChild(el("div")); return; }
-    const d = el("div", "pd p" + (k + 1));
-    d.title = clean(x[0]) + ": " + plural(x[1], "parceiro", "parceiros");
-    d.append(el("div", "medal", (k + 1) + "º"), el("div", "pv", String(x[1])), el("div", "pp", pct(x[1], t) + "% das candidaturas"), el("div", "pl", clean(x[0])));
-    pod.appendChild(d);
-  });
-  wrap.appendChild(pod);
-  const rest = e.slice(3);
-  if (rest.length) {
-    const box = el("div"); box.style.marginTop = "14px";
-    const ol = el("ol", "ranked compact hidden");
-    rest.forEach(([label, n], i) => { const li = el("li"); const c = el("span", "cnt"); c.append(el("b", null, String(n)), document.createTextNode(" · " + pct(n, t) + "%")); li.append(el("span", "pos", String(i + 4)), el("span", null, clean(label)), c); ol.appendChild(li); });
-    const btn = el("button", "more", "Ver as outras " + rest.length);
-    btn.type = "button";
-    btn.addEventListener("click", () => { const open = ol.classList.toggle("hidden"); btn.textContent = open ? "Ver as outras " + rest.length : "Mostrar menos"; });
-    box.append(btn, ol);
-    wrap.appendChild(box);
-  }
-  return wrap;
-}
-
 // Régua do 100% remoto ao presencial em qualquer região.
 function spectrum(rows, id) {
   const t = rows.length;
@@ -692,8 +651,9 @@ function skills(rows) {
   for (const r of rows) { const raw = (r.principal_especializacao || "").trim(); if (!raw) continue; const k = norm(raw); const cur = m.get(k) || { label: raw, n: 0 }; cur.n++; m.set(k, cur); }
   const list = [...m.values()].sort((a, b) => b.n - a.n).map((x) => [x.label, x.n]);
   c2.appendChild(list.length ? ranked(list, t, { limit: 6 }) : emptyNote());
-  const c3 = card("Tipos de serviço prestados", { cls: "span2", note: "Pergunta " + Q.formas_colaboracao.n + " · as três mais escolhidas." });
-  c3.appendChild(t ? podium(rows, "formas_colaboracao") : emptyNote());
+  const c3 = card("Tipos de serviço prestados", { cls: "span2", note: "Pergunta " + Q.formas_colaboracao.n + " · ranking dos mais oferecidos, com a quantidade de parceiros e o % das candidaturas." });
+  const servicos = counts(rows, "formas_colaboracao");
+  c3.appendChild(t && servicos.length ? ranked(servicos, t, { limit: 6 }) : emptyNote());
   more.append(c2, c3);
   const c4 = card("Etapas de projeto em que atuam", { cls: "span3", note: "Pergunta " + Q.etapas_projeto.n + " · em que fases do projeto a rede está presente." });
   c4.appendChild(t ? timeline(rows, "etapas_projeto") : emptyNote());
