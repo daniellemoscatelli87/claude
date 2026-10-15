@@ -33,6 +33,7 @@
     mailCheck: '<path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8"/><path d="m3 7 9 6 9-6"/><path d="m16 19 2 2 4-4"/>',
     meeting: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/>',
     users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/>',
+    bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
     logout: '<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 16l-4-4 4-4M6 12h10"/>',
   };
   const icon = (name) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -141,13 +142,15 @@
     const top = el("div", "topbar hidden");
     top.id = "topbar";
     top.innerHTML = `<div class="in"><a href="/admin/"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
-      <button type="button" class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">${icon("menu")}<span class="burger-dot hidden" id="burger-dot"></span></button></div>`;
+      <div class="top-actions">
+        <button type="button" class="burger" id="bell" aria-label="Notificações" aria-expanded="false" aria-controls="notif-drawer">${icon("bell")}<span class="burger-dot hidden" id="bell-dot"></span></button>
+        <button type="button" class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">${icon("menu")}</button>
+      </div></div>`;
     const backdrop = el("div", "backdrop"); backdrop.id = "backdrop";
     const drawer = el("aside", "drawer"); drawer.id = "drawer";
     drawer.setAttribute("aria-label", "Menu");
     drawer.innerHTML = `<button type="button" class="close" id="drawer-close" aria-label="Fechar menu">${icon("close")}</button>
       <div class="who"><span class="avatar">${initials(ADMIN_NAME)}</span><div><div class="n">${ADMIN_NAME}</div><div class="e" id="who-email"></div></div></div>
-      <section class="notif hidden" id="notif" aria-label="Notificações"><div class="notif-h">Notificações</div><div id="notif-list"></div></section>
       <nav>${PAGES.map((p) => `<a href="${p.href}"${p.id === page ? ' aria-current="page"' : ""}>${icon(p.icon)}${p.label}<span class="nav-count hidden" data-count="${p.id}"></span></a>`).join("")}</nav>
       <div class="foot"><button type="button" class="logout" id="logout">${icon("logout")}Sair</button></div>`;
 
@@ -204,18 +207,30 @@
       </section>`;
 
     document.body.prepend(top, wrap);
-    document.body.append(backdrop, drawer);
+    // Barra lateral de notificações: abre pelo sino, com a lista inteira rolando dentro dela.
+    const notifDrawer = el("aside", "drawer notif-drawer"); notifDrawer.id = "notif-drawer";
+    notifDrawer.setAttribute("aria-label", "Notificações");
+    notifDrawer.innerHTML = `<button type="button" class="close" id="notif-close" aria-label="Fechar notificações">${icon("close")}</button>
+      <div class="notif-top"><h2>Notificações</h2><div class="muted" id="notif-sub">Carregando…</div></div>
+      <div class="notif-scroll" id="notif-list"></div>`;
+    document.body.append(backdrop, drawer, notifDrawer);
 
-    const setOpen = (open) => {
-      drawer.classList.toggle("open", open);
+    let openPanel = null;
+    const setOpen = (panel, trigger, closeBtn) => (open) => {
+      panel.classList.toggle("open", open);
       backdrop.classList.toggle("open", open);
-      $("burger").setAttribute("aria-expanded", String(open));
-      if (open) $("drawer-close").focus(); else $("burger").focus();
+      trigger.setAttribute("aria-expanded", String(open));
+      openPanel = open ? { panel, close: () => setOpen(panel, trigger, closeBtn)(false) } : null;
+      if (open) closeBtn.focus(); else trigger.focus();
     };
-    $("burger").addEventListener("click", () => setOpen(true));
-    $("drawer-close").addEventListener("click", () => setOpen(false));
-    backdrop.addEventListener("click", () => setOpen(false));
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && drawer.classList.contains("open")) setOpen(false); });
+    const menu = setOpen(drawer, $("burger"), $("drawer-close"));
+    const notif = setOpen(notifDrawer, $("bell"), $("notif-close"));
+    $("burger").addEventListener("click", () => menu(true));
+    $("drawer-close").addEventListener("click", () => menu(false));
+    $("bell").addEventListener("click", () => notif(true));
+    $("notif-close").addEventListener("click", () => notif(false));
+    backdrop.addEventListener("click", () => openPanel?.close());
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && openPanel) openPanel.close(); });
   }
 
   function init({ page, onReady }) {
@@ -311,8 +326,8 @@
   function loadNotifications() {
     notifPromise = (async () => {
       const [c, p] = await Promise.all([
-        sb.from("contatos").select("id, nome, created_at", { count: "exact" }).is("visualizado_em", null).order("created_at", { ascending: false }).limit(5),
-        sb.from("cadastros").select("id, nome, created_at", { count: "exact" }).is("visualizado_em", null).order("created_at", { ascending: false }).limit(5),
+        sb.from("contatos").select("id, nome, assunto, created_at", { count: "exact" }).is("visualizado_em", null).order("created_at", { ascending: false }).limit(200),
+        sb.from("cadastros").select("id, nome, principal_especializacao, created_at", { count: "exact" }).is("visualizado_em", null).order("created_at", { ascending: false }).limit(200),
       ]);
       const contatos = c.data || [], parceiros = p.data || [];
       const ids = contatos.map((x) => x.id);
@@ -323,15 +338,16 @@
       }
       const n = { contatos: c.count || 0, parceiros: p.count || 0 };
       const items = [
-        ...contatos.map((x) => ({ href: "/admin/contatos/?id=" + x.id, at: respostas.get(x.id) || x.created_at, text: (respostas.has(x.id) ? "Nova resposta de " : "Nova mensagem de ") + (x.nome || "contato"), icon: "mail" })),
-        ...parceiros.map((x) => ({ href: "/admin/parceiros/?id=" + x.id, at: x.created_at, text: "Nova candidatura de " + (x.nome || "parceiro"), icon: "users" })),
-      ].sort((a, b) => new Date(b.at) - new Date(a.at)).slice(0, 6);
+        ...contatos.map((x) => ({ href: "/admin/contatos/?id=" + x.id, at: respostas.get(x.id) || x.created_at, text: (respostas.has(x.id) ? "Nova resposta de " : "Nova mensagem de ") + (x.nome || "contato"), sub: x.assunto, icon: "mail" })),
+        ...parceiros.map((x) => ({ href: "/admin/parceiros/?id=" + x.id, at: x.created_at, text: "Nova candidatura de " + (x.nome || "parceiro"), sub: x.principal_especializacao, icon: "users" })),
+      ].sort((a, b) => new Date(b.at) - new Date(a.at));
 
       const total = n.contatos + n.parceiros;
-      const dot = $("burger-dot");
+      const dot = $("bell-dot");
       dot.textContent = total > 99 ? "99+" : String(total);
       dot.classList.toggle("hidden", !total);
-      $("burger").setAttribute("aria-label", total ? "Abrir menu, " + total + (total === 1 ? " notificação" : " notificações") : "Abrir menu");
+      $("bell").setAttribute("aria-label", total ? "Notificações, " + total + (total === 1 ? " não lida" : " não lidas") : "Notificações");
+      $("notif-sub").textContent = total ? (total === 1 ? "1 item não lido" : total + " itens não lidos") : "Tudo em dia";
       for (const [id, v] of Object.entries(n)) {
         const s = document.querySelector(`[data-count="${id}"]`);
         if (s) { s.textContent = String(v); s.classList.toggle("hidden", !v); }
@@ -340,10 +356,12 @@
       items.forEach((it) => {
         const a = el("a", "notif-item"); a.href = it.href;
         const ic = el("span", "ni"); ic.innerHTML = icon(it.icon);
-        const t = el("span", "nt"); t.append(el("b", null, it.text), el("small", null, fmtDay(it.at)));
+        const t = el("span", "nt"); t.append(el("b", null, it.text));
+        if (it.sub) t.append(el("span", "ns", it.sub));
+        t.append(el("small", null, fmtDay(it.at)));
         a.append(ic, t); list.appendChild(a);
       });
-      $("notif").classList.toggle("hidden", !items.length);
+      if (!items.length) list.appendChild(el("div", "empty", "Nenhuma notificação nova. Mensagens e candidaturas ainda não abertas aparecem aqui."));
       return n;
     })().catch(() => ({ contatos: 0, parceiros: 0 }));
     return notifPromise;
