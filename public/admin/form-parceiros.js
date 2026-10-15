@@ -56,8 +56,7 @@ window.FORM_PARCEIROS = [
     "label": "Atualmente, você atua como prestador(a) de serviços PJ?",
     "type": "radio",
     "options": [
-     "Sim, tenho CNPJ ativo.",
-     "Sim, atuo por meio de uma empresa ou consultoria própria.",
+     "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria).",
      "Estou em processo de formalização.",
      "Atualmente não tenho CNPJ, mas tenho interesse em atuar como PJ.",
      "Não tenho interesse em atuar como PJ."
