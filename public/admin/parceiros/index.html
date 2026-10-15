@@ -415,13 +415,13 @@ function stages(rows, id) {
 
 // Grade de blocos com ícone por formato de contratação.
 const CONTRATO_ICONS = [
+  [/negociável/i, '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>'],
   [/escopo/, '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'],
   [/hora/, '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'],
   [/diária/, '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
-  [/entregáveis/, '<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/>'],
+  [/entregáve/, '<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/>'],
   [/recorrente/, '<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>'],
   [/mentoria/, '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'],
-  [/negociável/, '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>'],
 ];
 function tiles(rows, id) {
   const t = rows.length;
@@ -678,7 +678,6 @@ function dashboard(rows) {
   addInsights(dis, rows, [
     ["Presencial em Curitiba", "presencial_curitiba"],
     ["Viagens", "viagens"],
-    ["Precificação", "precificacao"],
     ["Projetos em parceria", "interesse_parceria"],
   ]);
   // Barras em % das candidaturas, na ordem do formulário (do remoto ao presencial em qualquer região).
@@ -823,6 +822,20 @@ function lgpdCard(data) {
   return c;
 }
 
+// As perguntas antigas "formatos de contratação" e "precificação" viraram uma só: as respostas antigas
+// das duas passam para as opções atuais, sem repetir.
+const CONTRATACAO_LEGADO = {
+  "Contratação por hora.": "Valor por hora.", "Contratação por diária.": "Valor por diária.",
+  "Contratação por entregáveis.": "Valor por entregável.", "Contratação recorrente por período determinado.": "Contrato recorrente (mensal ou por período determinado).",
+  "Formato negociável conforme a demanda.": "Negociável conforme escopo e complexidade.",
+  "Valor por projeto.": "Projeto com escopo e valor fechado.", "Mensalidade / contrato recorrente.": "Contrato recorrente (mensal ou por período determinado).",
+  "Depende do escopo e da complexidade.": "Negociável conforme escopo e complexidade.",
+};
+function contratacaoAtual(r) {
+  const all = [...(r.formatos_contratacao || []), ...(r.precificacao ? [r.precificacao] : [])].map((v) => CONTRATACAO_LEGADO[v] || v);
+  return [...new Set(all)];
+}
+
 Admin.init({ page: "parceiros", onReady: async () => {
   const params = new URLSearchParams(location.search);
   const id = params.get("id");
@@ -834,7 +847,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
     if (error || !data) { box.replaceChildren(el("div", "card empty", error ? "Não foi possível carregar a candidatura." : "Candidatura não encontrada.")); return; }
     Admin.markSeen("cadastros", data);
     // Junta à opção "Outro" o texto que a pessoa escreveu.
-    const shown = { ...data };
+    const shown = { ...data, formatos_contratacao: contratacaoAtual(data) };
     // Candidaturas antigas tinham certificações em pergunta separada; agora fica junto da formação.
     if (data.certificacoes) shown.formacao = [data.formacao, data.certificacoes].filter(Boolean).join("\n");
     for (const [k, txt] of Object.entries(data.outros || {})) {
@@ -848,6 +861,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
   const err = document.getElementById("load-err");
   err.classList.toggle("hidden", !error);
   if (error) { err.textContent = "Não foi possível carregar as candidaturas: " + error.message; return; }
+  for (const r of data) r.formatos_contratacao = contratacaoAtual(r);
   // Respostas de versões antigas do formulário passam a contar na opção atual equivalente.
   const LEGADO = {
     atuacao_pj: { "Sim, tenho CNPJ ativo.": "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria).", "Sim, atuo por meio de uma empresa ou consultoria própria.": "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria)." },

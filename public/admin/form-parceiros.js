@@ -486,35 +486,21 @@ window.FORM_PARCEIROS = [
    {
     "id": "formatos_contratacao",
     "n": 35,
-    "label": "Quais formatos de contratação você costuma aceitar?",
+    "label": "Quais formatos de contratação e cobrança você aceita?",
     "type": "checkbox",
     "options": [
      "Projeto com escopo e valor fechado.",
-     "Contratação por hora.",
-     "Contratação por diária.",
-     "Contratação por entregáveis.",
-     "Contratação recorrente por período determinado.",
-     "Consultoria ou mentoria pontual.",
-     "Formato negociável conforme a demanda."
-    ]
-   },
-   {
-    "id": "precificacao",
-    "n": 36,
-    "label": "Como você costuma precificar seus serviços?",
-    "type": "radio",
-    "options": [
      "Valor por hora.",
      "Valor por diária.",
-     "Valor por projeto.",
      "Valor por entregável.",
-     "Mensalidade / contrato recorrente.",
-     "Depende do escopo e da complexidade."
+     "Contrato recorrente (mensal ou por período determinado).",
+     "Consultoria ou mentoria pontual.",
+     "Negociável conforme escopo e complexidade."
     ]
    },
    {
     "id": "equipe_propria",
-    "n": 37,
+    "n": 36,
     "label": "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?",
     "type": "radio",
     "options": [
@@ -526,7 +512,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "interesse_parceria",
-    "n": 38,
+    "n": 37,
     "label": "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?",
     "type": "radio",
     "options": [
@@ -538,7 +524,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "condicoes",
-    "n": 39,
+    "n": 38,
     "label": "Existe alguma condição ou preferência importante para sua participação em projetos futuros?",
     "type": "paragraph"
    }
@@ -549,7 +535,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "como_conheceu",
-    "n": 40,
+    "n": 39,
     "label": "Como você conheceu esta iniciativa?",
     "type": "radio",
     "options": [
@@ -563,7 +549,7 @@ window.FORM_PARCEIROS = [
    },
    {
     "id": "autoriza_dados",
-    "n": 41,
+    "n": 40,
     "label": "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?",
     "type": "radio",
     "options": [
@@ -578,7 +564,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "interesse_whatsapp",
-    "n": 42,
+    "n": 41,
     "label": "Você gostaria de participar do nosso grupo de networking no WhatsApp?",
     "type": "radio",
     "options": [

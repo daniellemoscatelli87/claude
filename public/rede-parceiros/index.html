@@ -407,30 +407,27 @@ const SECTIONS = [
     { id: "horas_semanais", n: 34, label: "Qual é sua disponibilidade média para dedicação a projetos?", type: "radio", required: true, options: [
       "Até 5 horas semanais.", "De 6 a 10 horas semanais.", "De 11 a 20 horas semanais.", "De 21 a 30 horas semanais.", "Mais de 30 horas semanais.", "Disponibilidade variável conforme o projeto.",
     ]},
-    { id: "formatos_contratacao", n: 35, label: "Quais formatos de contratação você costuma aceitar?", type: "checkbox", required: true, options: [
-      "Projeto com escopo e valor fechado.", "Contratação por hora.", "Contratação por diária.", "Contratação por entregáveis.", "Contratação recorrente por período determinado.", "Consultoria ou mentoria pontual.", "Formato negociável conforme a demanda.",
+    { id: "formatos_contratacao", n: 35, label: "Quais formatos de contratação e cobrança você aceita?", type: "checkbox", required: true, help: "Marque todos que se aplicam.", options: [
+      "Projeto com escopo e valor fechado.", "Valor por hora.", "Valor por diária.", "Valor por entregável.", "Contrato recorrente (mensal ou por período determinado).", "Consultoria ou mentoria pontual.", "Negociável conforme escopo e complexidade."
     ]},
-    { id: "precificacao", n: 36, label: "Como você costuma precificar seus serviços?", type: "radio", required: true, options: [
-      "Valor por hora.", "Valor por diária.", "Valor por projeto.", "Valor por entregável.", "Mensalidade / contrato recorrente.", "Depende do escopo e da complexidade.",
-    ]},
-    { id: "equipe_propria", n: 37, label: "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?", type: "radio", required: true, options: [
+    { id: "equipe_propria", n: 36, label: "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?", type: "radio", required: true, options: [
       "Sim, possuo equipe própria.", "Sim, possuo parceiros recorrentes.", "Não, atuo individualmente.", "Não, mas tenho interesse em formar parcerias.",
     ]},
-    { id: "interesse_parceria", n: 38, label: "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?", type: "radio", required: true, options: [
+    { id: "interesse_parceria", n: 37, label: "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?", type: "radio", required: true, options: [
       "Sim, tenho bastante interesse.", "Sim, dependendo do projeto e das responsabilidades.", "Prefiro atuar individualmente.", "Gostaria de entender melhor o formato de colaboração.",
     ]},
-    { id: "condicoes", n: 39, label: "Existe alguma condição ou preferência importante para sua participação em projetos futuros?", type: "paragraph", required: false, help: "Compartilhe restrições de agenda, disponibilidade, preferências de atuação, condições comerciais ou outras informações que considere relevantes." },
+    { id: "condicoes", n: 38, label: "Existe alguma condição ou preferência importante para sua participação em projetos futuros?", type: "paragraph", required: false, help: "Compartilhe restrições de agenda, disponibilidade, preferências de atuação, condições comerciais ou outras informações que considere relevantes." },
   ]},
   { title: "Conexão e autorizações", n: "Seção 8", questions: [
-    { id: "como_conheceu", n: 40, label: "Como você conheceu esta iniciativa?", type: "radio", required: false, options: [
+    { id: "como_conheceu", n: 39, label: "Como você conheceu esta iniciativa?", type: "radio", required: false, options: [
       "LinkedIn.", "Instagram.", "Indicação de outro profissional.", "Comunidade ou grupo profissional.", "Indicação da Dani Moscatelli.", "Outro.",
     ]},
-    { id: "autoriza_dados", n: 41, label: "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?", type: "radio", required: true,
+    { id: "autoriza_dados", n: 40, label: "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?", type: "radio", required: true,
       infoHtml: "<p><strong>Informações sobre o tratamento de dados:</strong></p><p>Os dados fornecidos serão utilizados por Dani Moscatelli | Experience Design Studio para organização da rede de parceiros, análise de competências profissionais e contato relacionado a possíveis oportunidades de colaboração.</p><p>O preenchimento é voluntário. As informações não serão divulgadas publicamente nem compartilhadas com terceiros para finalidades incompatíveis com as descritas neste formulário.</p><p>Você poderá solicitar acesso, correção ou exclusão dos seus dados pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação.</p>",
       options: [CONSENT_YES, CONSENT_NO] },
   ]},
   { title: "Comunidade de networking", n: "Seção final", questions: [
-    { id: "interesse_whatsapp", n: 42, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
+    { id: "interesse_whatsapp", n: 41, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
       infoHtml: "<p>Estamos construindo uma comunidade para conectar profissionais de diferentes especialidades, promover a troca de conhecimentos, compartilhar referências e fortalecer conexões profissionais.</p><p>O espaço será voltado a conversas sobre Design, Experiência Humana, Negócios, Tecnologia e Inovação, além da troca de experiências e oportunidades de colaboração.</p><p>A participação é opcional e independente deste cadastro.</p>",
       afterHtml: "<div class=\"info\"><p>🔗 <strong>Link de acesso ao grupo:</strong><br><a href=\"" + WHATSAPP_GROUP + "\" target=\"_blank\" rel=\"noopener\">" + WHATSAPP_GROUP + "</a></p><p>Se tiver interesse, basta acessar o link acima. A participação no grupo não é necessária para concluir seu cadastro.</p></div>",
       options: ["Sim, tenho interesse em participar.", "Não, obrigado(a). Quero apenas fazer parte da rede de parceiros."] },
