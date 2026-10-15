@@ -17,7 +17,7 @@
   .total .sub { font-size: 12px; color: var(--muted); margin-top: -4px; }
   .total { display: flex; flex-direction: column; gap: 6px; text-decoration: none; position: relative; }
   .total .sub.alert { color: var(--red); font-weight: 600; }
-  .panel-head .flag { margin-top: 4px; }
+  .panel-head .unread { display: block; color: var(--red); font-weight: 600; }
   .total .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--red-tint); color: var(--red); margin-bottom: 4px; }
   .total .ic svg { width: 20px; height: 20px; }
   .total .v { font-size: 32px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
@@ -121,16 +121,15 @@ Admin.init({ page: "inicio", onReady: async () => {
   document.getElementById("tot-parceiros-7d").textContent = parc7;
   // Sinaliza o que chegou e ainda não foi aberto.
   Admin.notifications().then((n) => {
-    const flag = (text) => Admin.el("span", "flag", text);
     const totals = document.querySelectorAll("#totals .total");
     // Nos blocos, o que ainda não foi aberto entra na própria descrição.
     if (n.contatos) {
       totals[0].appendChild(Admin.el("span", "sub alert", n.contatos === 1 ? "1 não lida" : n.contatos + " não lidas"));
-      document.getElementById("cnt-contatos").after(flag(n.contatos === 1 ? "1 não lida" : n.contatos + " não lidas"));
+      document.getElementById("cnt-contatos").append(Admin.el("span", "unread", n.contatos === 1 ? "1 não lida" : n.contatos + " não lidas"));
     }
     if (n.parceiros) {
       totals[3].appendChild(Admin.el("span", "sub alert", n.parceiros === 1 ? "1 não vista" : n.parceiros + " não vistas"));
-      document.getElementById("cnt-parceiros").after(flag(n.parceiros === 1 ? "1 nova" : n.parceiros + " novas"));
+      document.getElementById("cnt-parceiros").append(Admin.el("span", "unread", n.parceiros === 1 ? "1 não vista" : n.parceiros + " não vistas"));
     }
   });
   document.getElementById("cnt-contatos").textContent = plural(c.count, "mensagem recebida", "mensagens recebidas") + (c.count > LIMIT ? " · últimas " + LIMIT : "");
