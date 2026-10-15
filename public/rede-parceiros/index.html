@@ -67,7 +67,7 @@
   .info { font-size: 14px; color: var(--muted); background: var(--bg); border-radius: 8px; padding: 14px 16px; margin: 10px 0 12px; }
   .info p { margin: 0 0 8px; }
   .info p:last-child { margin: 0; }
-  input[type=text], input[type=email], input[type=tel], textarea, .uf-cidade select {
+  input[type=text], input[type=email], input[type=tel], input[type=url], textarea, .uf-cidade select {
     width: 100%;
     font: inherit;
     font-size: 15px;
@@ -226,7 +226,7 @@ const SECTIONS = [
     { id: "email", n: 3, label: "Qual é o seu e-mail profissional?", type: "email", required: true },
     { id: "telefone", n: 4, label: "Qual é o seu telefone/WhatsApp para contato?", type: "tel", required: true, help: "Informe o número com DDD." },
     { id: "cidade_estado", n: 5, label: "Em qual cidade e estado você reside atualmente?", type: "uf_cidade", required: true, help: "Escolha o estado para carregar as cidades." },
-    { id: "linkedin", n: 6, label: "Qual é o seu perfil no LinkedIn?", type: "text", required: false, help: "Insira o link completo." },
+    { id: "linkedin", n: 6, label: "Qual é o seu perfil no LinkedIn?", type: "url", urlHost: "linkedin.com", placeholder: "https://www.linkedin.com/in/seu-perfil", required: false, help: "Insira o link completo." },
     { id: "apresentacao", n: 7, label: "Como você se apresenta profissionalmente?", type: "paragraph", required: true, help: "Descreva brevemente sua atuação, suas principais competências e o tipo de contribuição que costuma oferecer aos projetos." },
   ]},
   { title: "Modelo de atuação e contratação", n: "Seção 2", questions: [
@@ -339,7 +339,7 @@ const SECTIONS = [
     { id: "possui_portfolio", n: 26, label: "Você possui portfólio, site profissional ou cases publicados?", type: "radio", required: true, options: [
       "Sim, possuo portfólio online.", "Sim, possuo site profissional.", "Sim, possuo cases ou apresentações de projetos.", "Possuo trabalhos, mas não posso divulgá-los publicamente.", "Ainda não possuo portfólio estruturado.",
     ]},
-    { id: "link_portfolio", n: 27, label: "Compartilhe o link do seu portfólio, site ou cases profissionais.", type: "text", required: false, help: "LinkedIn, Behance, Dribbble, GitHub, Notion, site próprio ou outro endereço relevante." },
+    { id: "link_portfolio", n: 27, label: "Compartilhe o link do seu portfólio, site ou cases profissionais.", type: "url", placeholder: "https://", required: false, help: "LinkedIn, Behance, Dribbble, GitHub, Notion, site próprio ou outro endereço relevante." },
     { id: "projeto_relevante", n: 28, label: "Conte brevemente sobre um projeto relevante do qual participou.", type: "paragraph", required: true,
       helpHtml: "Se possível, descreva:<ul><li>Qual era o desafio ou problema?</li><li>Qual foi sua responsabilidade?</li><li>Que abordagem ou metodologia utilizou?</li><li>Qual solução foi desenvolvida?</li><li>Quais resultados foram alcançados?</li></ul>Não compartilhe informações confidenciais de clientes ou empresas." },
     { id: "servicos_especialista_externo", n: 29, label: "Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?", type: "radio", required: true, options: [
@@ -407,6 +407,8 @@ function questionHtml(q) {
   const info = q.infoHtml ? `<div class="info">${q.infoHtml}</div>` : "";
   let field = "";
   if (q.type === "paragraph") field = `<textarea id="${q.id}" name="${q.id}"></textarea>`;
+  else if (q.type === "url")
+    field = `<input type="url" inputmode="url" autocapitalize="off" spellcheck="false" id="${q.id}" name="${q.id}" placeholder="${esc(q.placeholder || "https://")}" autocomplete="url">`;
   else if (q.type === "text" || q.type === "email" || q.type === "tel")
     field = `<input type="${q.type}" id="${q.id}" name="${q.id}" autocomplete="${{ nome: "name", email: "email", telefone: "tel" }[q.id] || "off"}">`;
   else if (q.type === "uf_cidade")
@@ -417,9 +419,9 @@ function questionHtml(q) {
   else if (q.groups)
     field = `<div class="options">${q.groups.map(g => `<div class="group-title">${esc(g.title)}</div>${g.options.map(o => optionHtml(q, o)).join("")}`).join("")}</div>`;
   else field = `<div class="options">${q.options.map(o => optionHtml(q, o)).join("")}</div>`;
-  const errMsg = q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
+  const errMsg = q.type === "url" ? (q.urlHost === "linkedin.com" ? "Informe o link do seu perfil no LinkedIn (ex.: https://www.linkedin.com/in/seu-perfil)." : "Informe um link válido (ex.: https://seusite.com.br).") : q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
   return `<div class="q" data-q="${q.id}">
-    <label class="q-label" ${["text", "email", "tel", "paragraph"].includes(q.type) ? `for="${q.id}"` : ""}>${q.n}. ${esc(q.label)}${req}</label>
+    <label class="q-label" ${["text", "email", "tel", "url", "paragraph"].includes(q.type) ? `for="${q.id}"` : ""}>${q.n}. ${esc(q.label)}${req}</label>
     ${help}${info}${field}${q.afterHtml || ""}
     <div class="err">${errMsg}</div>
   </div>`;
@@ -449,6 +451,7 @@ let current = 0;
 function value(q) {
   if (q.type === "checkbox") return [...form.querySelectorAll(`input[name="${q.id}"]:checked`)].map(i => i.value);
   if (q.type === "radio") return form.querySelector(`input[name="${q.id}"]:checked`)?.value || "";
+  if (q.type === "url") { const v = form.elements[q.id].value.trim(); return v === "https://" || v === "http://" ? "" : withScheme(v); }
   if (q.type === "uf_cidade") {
     const uf = form.elements[q.id + "_uf"].value, cidade = form.elements[q.id + "_cidade"].value.trim();
     return uf && cidade ? `${cidade} - ${uf}` : "";
@@ -485,6 +488,16 @@ function maskPhone(value) {
   const split = d.length === 11 ? 5 : 4;
   return `(${d.slice(0, 2)}) ${rest.slice(0, split)}-${rest.slice(split)}`;
 }
+// Máscara de link: começa com https://, sem espaços; completa o https:// se a pessoa colar só o endereço.
+const withScheme = (v) => (v && !/^[a-z][a-z0-9+.-]*:\/\//i.test(v) ? "https://" + v.replace(/^\/+/, "") : v);
+function validUrl(v, host) {
+  try { const u = new URL(v); return /^https?:$/.test(u.protocol) && u.hostname.includes(".") && (!host || u.hostname === host || u.hostname.endsWith("." + host)); } catch { return false; }
+}
+form.querySelectorAll('input[type="url"]').forEach((i) => {
+  i.addEventListener("focus", () => { if (!i.value) i.value = "https://"; });
+  i.addEventListener("input", () => { i.value = i.value.replace(/\s+/g, ""); });
+  i.addEventListener("blur", () => { i.value = i.value === "https://" || i.value === "http://" ? "" : withScheme(i.value); });
+});
 form.querySelectorAll('input[type="tel"]').forEach((i) => i.addEventListener("input", () => { i.value = maskPhone(i.value); }));
 
 function validateQuestion(q) {
@@ -493,6 +506,7 @@ function validateQuestion(q) {
   if (q.required) ok = Array.isArray(v) ? v.length > 0 : v !== "";
   if (ok && q.type === "email" && v) ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   if (ok && q.type === "tel" && v) ok = v.replace(/\D/g, "").length >= 10;
+  if (ok && q.type === "url" && v && v !== "https://") ok = validUrl(withScheme(v), q.urlHost);
   form.querySelector(`[data-q="${q.id}"]`).classList.toggle("invalid", !ok);
   return ok;
 }
