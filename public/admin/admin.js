@@ -156,7 +156,7 @@
 
     const wrap = el("div", "wrap"); wrap.id = "gate";
     wrap.innerHTML = `<section class="card login hidden" id="login">
-        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:44px;margin-bottom:20px">
+        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:72px;margin:0 auto 28px">
         <span class="tag">Área restrita</span>
         <h1>Entrar</h1>
         <p class="muted">Use o e-mail e a senha de administrador.</p>
@@ -172,7 +172,7 @@
         </form>
       </section>
       <section class="card login hidden" id="forgot">
-        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:44px;margin-bottom:20px">
+        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:72px;margin:0 auto 28px">
         <span class="tag">Área restrita</span>
         <h1>Definir senha</h1>
         <p class="muted">Enviaremos um link para o e-mail de administrador. Ao abrir o link, você cria uma nova senha.</p>
@@ -185,7 +185,7 @@
         </form>
       </section>
       <section class="card login hidden" id="newpass">
-        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:44px;margin-bottom:20px">
+        <img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio" style="display:block;height:72px;margin:0 auto 28px">
         <span class="tag">Área restrita</span>
         <h1>Nova senha</h1>
         <p class="muted">Crie uma senha com pelo menos 8 caracteres.</p>
