@@ -107,8 +107,7 @@ window.FORM_PARCEIROS = [
      "Disponibilidade imediata.",
      "Disponibilidade mediante agendamento.",
      "Disponibilidade parcial, conciliando com outros projetos.",
-     "Disponibilidade apenas para projetos pontuais.",
-     "Sem disponibilidade atualmente, mas tenho interesse em oportunidades futuras."
+     "Disponibilidade apenas para projetos pontuais."
     ]
    }
   ]
