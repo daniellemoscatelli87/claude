@@ -176,6 +176,7 @@ contactForm.addEventListener('submit', async (e) => {
     contactForm.reset();
     contactForm.classList.add('hidden');
     submitBar.classList.add('hidden');
+    $('drawer-header').classList.add('hidden');
     success.classList.remove('hidden');
     success.classList.add('flex');
   } catch (err) {
