@@ -367,7 +367,7 @@ const SECTIONS = [
     { id: "servicos_especialista_externo", n: 28, label: "Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?", type: "radio", required: true, options: [
       "Sim, frequentemente.", "Sim, ocasionalmente.", "Ainda não, mas tenho interesse.", "Não tenho interesse nesse modelo de colaboração.",
     ]},
-    { id: "ferramentas", n: 29, label: "Quais ferramentas, plataformas ou metodologias você domina?", type: "checkbox", required: false, help: "Abra cada categoria e marque o que você domina.", groups: [
+    { id: "ferramentas", n: 29, label: "Quais ferramentas, plataformas ou metodologias você domina?", type: "checkbox", store: "lines", required: false, help: "Abra cada categoria e marque o que você domina.", groups: [
       { title: "Design e prototipação", options: ["Figma.", "Adobe (Photoshop, Illustrator, XD).", "Sketch.", "Framer.", "Canva."] },
       { title: "Colaboração e facilitação", options: ["Miro.", "FigJam.", "Mural.", "Notion.", "Trello.", "Jira / Confluence."] },
       { title: "Pesquisa e análise", options: ["Ferramentas de pesquisa e testes (Maze, Optimal Workshop etc.).", "Formulários e questionários (Typeform, Google Forms etc.).", "Análise de comportamento (Hotjar, Clarity etc.).", "Google Analytics.", "Dovetail ou repositórios de pesquisa."] },
@@ -647,7 +647,9 @@ function payload() {
   const data = {};
   SECTIONS.flatMap(s => s.questions).forEach(q => {
     const v = visible(q) ? value(q) : "";
-    data[q.id] = Array.isArray(v) ? v : (v === "" ? null : v);
+    // store "lines": a coluna é texto; os itens marcados vão um por linha.
+    if (q.store === "lines" && Array.isArray(v)) data[q.id] = v.length ? v.join("\n") : null;
+    else data[q.id] = Array.isArray(v) ? v : (v === "" ? null : v);
   });
   data.autoriza_dados = data.autoriza_dados === CONSENT_YES;
   data.outros = {};
