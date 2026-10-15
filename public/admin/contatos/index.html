@@ -155,9 +155,9 @@ function statusBar(r) {
     acts.append(g, button("btn-line", "Alterar data", async () => { r._editMeeting = true; return true; }), button("link-danger", "Cancelar reunião", () => confirm("Cancelar esta reunião?") && save(r, { reuniao_em: null })));
     next.append(card, acts);
   } else if (!r.respondido_em) {
-    next.append(Admin.el("p", "hint", "Responda pelo histórico abaixo ou, se já respondeu por fora, marque aqui."));
+    next.append(Admin.el("p", "hint", "Responda pelo histórico abaixo. A mensagem é marcada como respondida automaticamente."));
     const acts = Admin.el("div", "acts");
-    acts.append(button("btn-ok", "Marcar como respondida", () => save(r, { respondido_em: new Date().toISOString() })), meetingToggle(r));
+    acts.append(meetingToggle(r));
     next.appendChild(acts);
   } else {
     if (!r._scheduling && !r._editMeeting) {
