@@ -120,12 +120,41 @@ outroInput.addEventListener('focus', () => {
   $<HTMLInputElement>('radio-business-outro').checked = true;
 });
 
+/* Máscara de telefone: (41) 99999-9999 ou (41) 3333-4444 */
+const phoneInput = contactForm.querySelector<HTMLInputElement>('input[name="telefone"]')!;
+function maskPhone(value: string) {
+  const d = value.replace(/\D/g, '').slice(0, 11);
+  if (d.length <= 2) return d ? `(${d}` : '';
+  const ddd = `(${d.slice(0, 2)}) `;
+  const rest = d.slice(2);
+  if (rest.length <= 4) return ddd + rest;
+  const split = d.length === 11 ? 5 : 4;
+  return ddd + rest.slice(0, split) + '-' + rest.slice(split);
+}
+phoneInput.addEventListener('input', () => {
+  phoneInput.value = maskPhone(phoneInput.value);
+});
+const phoneDigits = () => phoneInput.value.replace(/\D/g, '').length;
+
 /* Validação e envio */
+const scroller = drawer.querySelector<HTMLElement>('.overflow-y-auto')!;
+
+// Leva o primeiro campo com erro para a área visível da gaveta, se ele estiver fora dela.
+function revealFirstInvalid() {
+  const first = contactForm.querySelector<HTMLElement>('.invalid, .box-invalid');
+  if (!first) return;
+  const box = scroller.getBoundingClientRect();
+  const r = first.getBoundingClientRect();
+  if (r.top < box.top || r.bottom > box.bottom) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const focusable = first.matches('input, select, textarea') ? first : first.querySelector<HTMLElement>('input, button');
+  focusable?.focus({ preventScroll: true });
+}
+
 function validate(): boolean {
   let ok = true;
   contactForm.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('.field').forEach((f) => {
     const v = f.value.trim();
-    const bad = (f.required && !v) || (f.type === 'email' && !!v && !EMAIL_RE.test(v));
+    const bad = (f.required && !v) || (f.type === 'email' && !!v && !EMAIL_RE.test(v)) || (f === phoneInput && !!v && phoneDigits() < 10);
     f.classList.toggle('invalid', bad);
     if (bad) ok = false;
   });
@@ -148,8 +177,9 @@ contactForm.addEventListener('change', () => {
 contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (!validate()) {
-    contactError.textContent = 'Preencha os campos obrigatórios (*) e confira o e-mail.';
+    contactError.textContent = 'Preencha os campos obrigatórios (*) e confira o e-mail e o telefone.';
     contactError.classList.remove('hidden');
+    revealFirstInvalid();
     return;
   }
   contactError.classList.add('hidden');
