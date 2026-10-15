@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Parceiros | Área restrita</title>
-<link rel="icon" type="image/png" href="/favicon-dm.png">
+<link rel="icon" type="image/png" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -64,45 +64,21 @@
   .ranked.compact li { font-size: 13px; padding: 5px 0; grid-template-columns: 22px minmax(0, 1fr) auto; }
   .ranked.compact .pos { width: 20px; height: 20px; font-size: 11px; }
 
-  /* Linha do tempo do projeto */
-  .tl { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); position: relative; padding-top: 6px; }
-  .tl::before { content: ""; position: absolute; left: 4%; right: 4%; top: 34px; height: 2px; background: var(--line); }
-  .tl .st { display: grid; justify-items: center; text-align: center; gap: 8px; position: relative; padding: 0 2px; }
-  .tl .dot { width: var(--d); height: var(--d); border-radius: 50%; background: rgb(212 77 77 / var(--a)); border: 2px solid #fff; box-shadow: 0 0 0 1px rgb(212 77 77 / .35); display: grid; place-items: center; font-size: 12px; font-weight: 800; color: var(--dark); margin-top: calc((56px - var(--d)) / 2); }
-  .tl .dot.hi { color: #fff; }
-  .tl .stn { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: .06em; margin-top: calc((56px - var(--d)) / 2); }
-  .tl .stl { font-size: 11.5px; line-height: 1.3; color: var(--dark); }
-  .tl-foot { margin-top: 14px; font-size: 13px; color: var(--muted); }
-  .tl-foot b { color: var(--dark); }
-  @media (max-width: 760px) {
-    .tl { grid-auto-flow: row; grid-auto-columns: auto; gap: 6px; }
-    .tl::before { left: 27px; right: auto; top: 10px; bottom: 10px; width: 2px; height: auto; }
-    .tl .st { grid-template-columns: 56px auto minmax(0, 1fr); justify-items: start; text-align: left; align-items: center; }
-    .tl .dot, .tl .stn { margin-top: 0; justify-self: center; }
-    .tl .stn { order: -1; display: none; }
-  }
 
-  /* Pódio */
-  .podium { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 10px; align-items: end; }
-  .pd { border-radius: 14px 14px 6px 6px; padding: 14px 12px; text-align: center; display: grid; gap: 6px; align-content: end; }
-  .pd .medal { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto; font-weight: 800; font-size: 14px; }
-  .pd .pv { font-size: 26px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
-  .pd .pl { font-size: 12.5px; line-height: 1.3; }
-  .pd.p1 { background: var(--red); color: #fff; min-height: 190px; } .pd.p1 .medal { background: #fff; color: var(--red); }
-  .pd.p2 { background: var(--red-tint); min-height: 160px; } .pd.p2 .medal { background: var(--red); color: #fff; }
-  .pd.p3 { background: var(--track); min-height: 135px; } .pd.p3 .medal { background: var(--slate); color: #fff; }
-  .pd .pp { font-size: 11px; opacity: .8; }
-
-  /* Régua remoto ↔ presencial */
-  .spec { position: relative; padding: 8px 0 0; }
-  .spec .line { position: absolute; left: 10%; right: 10%; top: 44px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--slate), var(--red)); opacity: .35; }
-  .spec .pts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: relative; }
-  .spec .pt { display: grid; justify-items: center; text-align: center; gap: 6px; }
-  .spec .pv { font-size: 20px; font-weight: 800; line-height: 1; height: 22px; }
-  .spec .pin { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 4px solid var(--c); }
-  .spec .pl { font-size: 11.5px; line-height: 1.3; color: var(--dark); }
-  .spec .pp { font-size: 11px; color: var(--muted); }
-  .spec-ends { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 10px; }
+  /* Etapas do projeto: lista na ordem das fases, com barra de cobertura */
+  .stages { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .stage { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--track); }
+  .stage:last-child { border-bottom: 0; }
+  .stage .sn { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .stage .sl { font-size: 14px; color: var(--dark); }
+  .stage .sv { font-size: 13px; color: var(--muted); white-space: nowrap; text-align: right; }
+  .stage .sv b { color: var(--dark); font-size: 15px; }
+  .stage .bar { grid-column: 2 / -1; height: 6px; border-radius: 999px; background: var(--track); overflow: hidden; }
+  .stage .bar i { display: block; height: 100%; border-radius: 999px; background: var(--red); }
+  .stage.zero .sl { color: var(--muted); }
+  .stage.zero .sv { color: var(--red); font-weight: 600; }
+  .stages-foot { margin-top: 12px; font-size: 13px; color: var(--muted); }
+  .stages-foot b { color: var(--dark); }
 
   /* Grade de blocos com ícone */
   .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
@@ -114,12 +90,6 @@
   .tile .tl2 { font-size: 12.5px; line-height: 1.3; }
   .tile.lead { border-color: var(--red); }
 
-  /* Mosaico proporcional */
-  .treemap { position: relative; height: 260px; border-radius: 12px; overflow: hidden; }
-  .tm { position: absolute; padding: 10px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid #fff; border-radius: 10px; }
-  .tm .tml { font-size: 12.5px; line-height: 1.25; font-weight: 600; }
-  .tm .tmv { font-size: 20px; font-weight: 800; line-height: 1; }
-  .tm .tmv small { font-size: 11px; font-weight: 600; opacity: .85; margin-left: 4px; }
 
   /* Cobertura de segmentos */
   .cov { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
@@ -138,44 +108,66 @@
   .none-note { font-size: 13.5px; color: var(--muted); }
 
   /* Rosca */
-  .donut-wrap { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .donut-wrap { display: flex; flex-direction: column; gap: 18px; align-items: stretch; }
+  .donut-wrap .donut { align-self: center; }
   .donut { width: 150px; height: 150px; flex-shrink: 0; position: relative; }
   .donut svg { width: 100%; height: 100%; transform: rotate(-90deg); }
   .donut .ctr { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
   .donut .ctr b { font-size: 26px; font-weight: 800; display: block; line-height: 1; }
   .donut .ctr span { font-size: 11px; color: var(--muted); }
-  .legend { display: grid; gap: 7px; flex: 1; min-width: 180px; font-size: 13px; }
+  .legend { display: grid; gap: 7px; width: 100%; font-size: 13px; }
   .legend .li { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; gap: 8px; align-items: start; }
   .legend .dot { width: 12px; height: 12px; border-radius: 3px; margin-top: 3px; }
   .legend .n { font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
   .legend .n b { color: var(--dark); }
   .legend .li.zero { color: #94a3b8; }
 
-  /* Colunas */
-  .cols { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px; align-items: end; height: 190px; padding-top: 18px; }
-  .colcard { display: flex; flex-direction: column; }
-  .colcard .cols { flex: 1; height: auto; min-height: 190px; }
-  .col { display: grid; grid-template-rows: auto 1fr auto; height: 100%; text-align: center; }
-  .col .cv { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .col .ct { display: flex; align-items: flex-end; justify-content: center; }
-  .col .cb { width: min(100%, 36px); border-radius: 4px 4px 0 0; background: var(--seq); min-height: 2px; }
-  .col .cl { font-size: 11px; color: var(--muted); line-height: 1.25; margin-top: 6px; min-height: 28px; }
+  /* Destaques (percentual + conclusão) */
+  .insights { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .ins { display: grid; gap: 6px; align-content: start; }
+  .ins .q { font-size: 15px; font-weight: 700; }
+  .ins .qn { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .ins .big { font-size: 34px; font-weight: 800; letter-spacing: -.03em; color: var(--red); line-height: 1; margin-top: 8px; }
+  .ins .concl { margin: 0; font-size: 14px; color: var(--dark); line-height: 1.45; }
+  .ins .next, .ins .base { margin: 0; font-size: 12.5px; color: var(--muted); }
+
+  /* Barras horizontais (escalas) */
+  .hbars { display: grid; gap: 12px; }
+  .hb { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px 12px; align-items: baseline; }
+  .hb .hl { font-size: 13px; color: var(--dark); }
+  .hb .hv { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .hb .hv b { font-size: 14px; }
+  .hb .hv small { font-size: 12px; color: var(--muted); margin-left: 6px; }
+  .hb .hv small::before { content: "· "; }
+  .hb .hbar { grid-column: 1 / -1; height: 8px; border-radius: 999px; background: var(--track); overflow: hidden; }
+  .hb .hbar i { display: block; height: 100%; border-radius: 999px; background: var(--seq); }
+  .hb.zero .hl, .hb.zero .hv b { color: #94a3b8; }
 
   /* Anel de porcentagem */
   .ring-wrap { display: flex; gap: 18px; align-items: center; }
   .ring { width: 120px; height: 120px; flex-shrink: 0; position: relative; }
   .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .card .note.after { margin: 14px 0 0; }
+  .uf-det { margin-top: 18px; border-top: 1px solid var(--track); padding-top: 14px; display: grid; gap: 12px; }
+  .uf-det-h { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .uf-head { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
+  .uf-head span { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+  .uf-cities { list-style: none; margin: 6px 0 0; padding: 0 0 0 12px; border-left: 2px solid var(--track); display: grid; gap: 4px; }
+  .uf-cities li { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--dark); }
+  .uf-cities li b { font-variant-numeric: tabular-nums; }
   .ring .ctr { position: absolute; inset: 0; display: grid; place-items: center; font-size: 24px; font-weight: 800; }
 
-  /* Estados */
-  .uf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; }
-  .uf { border-radius: 12px; padding: 10px; background: var(--track); text-align: center; }
-  .uf b { display: block; font-size: 22px; font-weight: 800; line-height: 1.1; }
-  .uf span { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .06em; }
-  .uf.top { background: var(--red); color: #fff; } .uf.top span { color: #fde2e2; }
 
   /* Lista de candidaturas */
   .cand-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+.lgpd { margin-top: 16px; }
+  .lgpd p { margin: 8px 0; }
+  .lgpd summary { cursor: pointer; color: var(--red); font-weight: 600; font-size: 14px; }
+  .lgpd-txt { white-space: pre-line; font-size: 13px; color: var(--muted); background: var(--bg, #f8fafc); border-radius: 10px; padding: 12px; }
+  .lgpd-help { font-size: 13px; }
+  .btn-danger { background: #fff; color: var(--red); border: 1px solid var(--red); border-radius: 999px; padding: 10px 18px; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .btn-danger:hover { background: var(--red-tint); }
+  .btn-danger:disabled { opacity: .6; cursor: wait; }
 </style>
 </head>
 <body>
@@ -260,6 +252,7 @@ const clean = (s) => String(s).replace(/\.$/, "");
 const pct = (n, t) => (t ? Math.round((n / t) * 100) : 0);
 const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
 const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const UF_NOME = { AC: "Acre", AL: "Alagoas", AP: "Amapá", AM: "Amazonas", BA: "Bahia", CE: "Ceará", DF: "Distrito Federal", ES: "Espírito Santo", GO: "Goiás", MA: "Maranhão", MT: "Mato Grosso", MS: "Mato Grosso do Sul", MG: "Minas Gerais", PA: "Pará", PB: "Paraíba", PR: "Paraná", PE: "Pernambuco", PI: "Piauí", RJ: "Rio de Janeiro", RN: "Rio Grande do Norte", RS: "Rio Grande do Sul", RO: "Rondônia", RR: "Roraima", SC: "Santa Catarina", SP: "São Paulo", SE: "Sergipe", TO: "Tocantins" };
 const uf = (s) => ((s || "").toUpperCase().match(/\b([A-Z]{2})\s*\.?$/) || [])[1] || "-";
 const MINUSC = new Set(["de", "da", "do", "das", "dos", "e"]);
 // Tira o estado do fim ("Curitiba - PR", "Curitiba/PR", "Curitiba, PR") sem cortar nomes com hífen ("Embu-Guaçu").
@@ -374,83 +367,32 @@ function toggleMore(box, n) {
   return btn;
 }
 
-// Linha do tempo: as etapas do projeto na ordem do formulário; o círculo cresce com a quantidade.
-function timeline(rows, id) {
+// Etapas do projeto: uma linha por fase, na ordem do projeto. Quem atua em todas as etapas
+// conta em cada uma; a barra mostra a parte das candidaturas que cobre a fase.
+function stages(rows, id) {
   const t = rows.length;
-  const opts = optionsOf(id).filter((o) => o !== "Atuação transversal em todas as etapas.");
-  const cnt = new Map(counts(rows, id));
-  const max = Math.max(1, ...opts.map((o) => cnt.get(o) || 0));
+  const ALL = "Atuação transversal em todas as etapas.";
+  const opts = optionsOf(id).filter((o) => o !== ALL);
+  const all = rows.filter((r) => (r[id] || []).includes(ALL)).length;
   const wrap = el("div");
-  const tl = el("div", "tl");
+  const ol = el("ol", "stages");
   opts.forEach((o, i) => {
-    const n = cnt.get(o) || 0;
-    const st = el("div", "st");
-    st.title = clean(o) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, t) + "%)";
-    const d = el("div", "dot" + (n / max > 0.6 ? " hi" : ""), String(n));
-    d.style.setProperty("--d", (26 + (n / max) * 30) + "px");
-    d.style.setProperty("--a", (0.12 + (n / max) * 0.88).toFixed(2));
-    st.append(el("div", "stn", String(i + 1).padStart(2, "0")), d, el("div", "stl", clean(o)));
-    tl.appendChild(st);
+    const n = rows.filter((r) => (r[id] || []).includes(o) || (r[id] || []).includes(ALL)).length;
+    const li = el("li", "stage" + (n ? "" : " zero"));
+    li.title = clean(o) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, t) + "%)";
+    const sv = el("span", "sv");
+    if (n) { sv.append(el("b", null, String(n)), document.createTextNode(" · " + pct(n, t) + "%")); } else sv.textContent = "Ninguém ainda";
+    const bar = el("span", "bar"); const fill = el("i"); fill.style.width = pct(n, t) + "%"; bar.appendChild(fill);
+    li.append(el("span", "sn", String(i + 1).padStart(2, "0")), el("span", "sl", clean(o)), sv, bar);
+    ol.appendChild(li);
   });
-  wrap.appendChild(tl);
-  const all = cnt.get("Atuação transversal em todas as etapas.") || 0;
-  const foot = el("div", "tl-foot"); foot.append(el("b", null, plural(all, "parceiro", "parceiros")), document.createTextNode(" atuam de forma transversal, em todas as etapas."));
+  wrap.appendChild(ol);
+  const foot = el("p", "stages-foot");
+  foot.append(document.createTextNode("Cada número é a quantidade de parceiros que atuam na etapa. "), el("b", null, plural(all, "parceiro", "parceiros")), document.createTextNode(all === 1 ? " atua em todas as etapas e entra em cada uma." : " atuam em todas as etapas e entram em cada uma."));
   wrap.appendChild(foot);
   return wrap;
 }
 
-// Pódio: as 3 opções mais escolhidas; o restante abre em lista numerada.
-function podium(rows, id) {
-  const t = rows.length;
-  const e = counts(rows, id);
-  const wrap = el("div");
-  const top = e.slice(0, 3);
-  const pod = el("div", "podium");
-  [1, 0, 2].forEach((k) => {
-    const x = top[k];
-    if (!x) { pod.appendChild(el("div")); return; }
-    const d = el("div", "pd p" + (k + 1));
-    d.title = clean(x[0]) + ": " + plural(x[1], "parceiro", "parceiros");
-    d.append(el("div", "medal", (k + 1) + "º"), el("div", "pv", String(x[1])), el("div", "pp", pct(x[1], t) + "% das candidaturas"), el("div", "pl", clean(x[0])));
-    pod.appendChild(d);
-  });
-  wrap.appendChild(pod);
-  const rest = e.slice(3);
-  if (rest.length) {
-    const box = el("div"); box.style.marginTop = "14px";
-    const ol = el("ol", "ranked compact hidden");
-    rest.forEach(([label, n], i) => { const li = el("li"); const c = el("span", "cnt"); c.append(el("b", null, String(n)), document.createTextNode(" · " + pct(n, t) + "%")); li.append(el("span", "pos", String(i + 4)), el("span", null, clean(label)), c); ol.appendChild(li); });
-    const btn = el("button", "more", "Ver as outras " + rest.length);
-    btn.type = "button";
-    btn.addEventListener("click", () => { const open = ol.classList.toggle("hidden"); btn.textContent = open ? "Ver as outras " + rest.length : "Mostrar menos"; });
-    box.append(btn, ol);
-    wrap.appendChild(box);
-  }
-  return wrap;
-}
-
-// Régua do 100% remoto ao presencial em qualquer região.
-function spectrum(rows, id) {
-  const t = rows.length;
-  const opts = optionsOf(id);
-  const cnt = new Map(counts(rows, id));
-  const short = ["100% remoto", "Híbrido", "Presencial na minha região", "Presencial em outras cidades", "Presencial em qualquer região do Brasil"];
-  const wrap = el("div", "spec");
-  wrap.appendChild(el("div", "line"));
-  const pts = el("div", "pts");
-  opts.forEach((o, i) => {
-    const n = cnt.get(o) || 0;
-    const p = el("div", "pt");
-    p.title = clean(o) + ": " + plural(n, "parceiro", "parceiros");
-    const pin = el("div", "pin"); pin.style.setProperty("--c", i < 2 ? "var(--slate)" : "var(--red)");
-    p.append(el("div", "pv", String(n)), pin, el("div", "pl", short[i] || clean(o)), el("div", "pp", pct(n, t) + "%"));
-    pts.appendChild(p);
-  });
-  wrap.appendChild(pts);
-  const ends = el("div", "spec-ends"); ends.append(el("span", null, "← Remoto"), el("span", null, "Presencial →"));
-  const outer = el("div"); outer.append(wrap, ends);
-  return outer;
-}
 
 // Grade de blocos com ícone por formato de contratação.
 const CONTRATO_ICONS = [
@@ -481,39 +423,6 @@ function tiles(rows, id) {
   return g;
 }
 
-// Mosaico proporcional (treemap "squarified"): a área de cada bloco é a quantidade de parceiros.
-function treemap(rows, id) {
-  const t = rows.length;
-  const e = counts(rows, id);
-  const box = el("div", "treemap");
-  if (!e.length) return box;
-  const max = e[0][1];
-  const total = e.reduce((s, [, n]) => s + n, 0);
-  const W = 1000, H = 1000;
-  const items = e.map(([label, n]) => ({ label, n, area: (n / total) * W * H }));
-  const rects = [];
-  (function squarify(list, x, y, w, h) {
-    if (!list.length) return;
-    if (list.length === 1) { rects.push({ ...list[0], x, y, w, h }); return; }
-    const short = Math.min(w, h);
-    let row = [], best = Infinity, i = 0;
-    const worst = (r) => { const s = r.reduce((a, b) => a + b.area, 0); const mx = Math.max(...r.map((z) => z.area)), mn = Math.min(...r.map((z) => z.area)); return Math.max((short * short * mx) / (s * s), (s * s) / (short * short * mn)); };
-    while (i < list.length) { const cand = row.concat(list[i]); const wv = worst(cand); if (wv > best) break; row = cand; best = wv; i++; }
-    const s = row.reduce((a, b) => a + b.area, 0);
-    if (w >= h) { const cw = s / h; let cy = y; row.forEach((r) => { const rh = r.area / cw; rects.push({ ...r, x, y: cy, w: cw, h: rh }); cy += rh; }); squarify(list.slice(i), x + cw, y, w - cw, h); }
-    else { const ch = s / w; let cx = x; row.forEach((r) => { const rw = r.area / ch; rects.push({ ...r, x: cx, y, w: rw, h: ch }); cx += rw; }); squarify(list.slice(i), x, y + ch, w, h - ch); }
-  })(items, 0, 0, W, H);
-  rects.forEach((r) => {
-    const c = rampFor(r.n, max);
-    const d = el("div", "tm");
-    Object.assign(d.style, { left: r.x / 10 + "%", top: r.y / 10 + "%", width: r.w / 10 + "%", height: r.h / 10 + "%", background: c.bg, color: c.fg });
-    d.title = clean(r.label) + ": " + plural(r.n, "parceiro", "parceiros") + " (" + pct(r.n, t) + "%)";
-    const v = el("div", "tmv", String(r.n)); v.appendChild(el("small", null, pct(r.n, t) + "%"));
-    d.append(el("div", "tml", clean(r.label)), v);
-    box.appendChild(d);
-  });
-  return box;
-}
 
 // Cobertura de segmentos: quantos dos 24 têm parceiros, ranking dos cobertos e lista das lacunas.
 function coverage(rows, id) {
@@ -532,7 +441,7 @@ function coverage(rows, id) {
 
   const left = el("div");
   left.appendChild(el("h4", null, "Onde a rede tem parceiros"));
-  left.appendChild(covered.length ? ranked(covered, t, { limit: 8, compact: true }) : el("p", "none-note", "Nenhum segmento marcado ainda."));
+  left.appendChild(covered.length ? ranked(covered, 0, { limit: 8, compact: true }) : el("p", "none-note", "Nenhum segmento marcado ainda."));
   wrap.appendChild(left);
 
   const right = el("div", "gaps-box" + (gaps.length > 8 ? " closed" : ""));
@@ -554,48 +463,49 @@ function coverage(rows, id) {
 }
 
 // Destaque: a resposta mais comum em evidência, com mini-rosca e a lista completa sob demanda.
+// Destaque: em vez de gráfico, o percentual da resposta mais comum e uma conclusão em uma frase.
 function insight(title, rows, id) {
   const c = el("div", "card ins");
   c.appendChild(el("div", "q", title));
+  if (Q[id]) c.appendChild(el("div", "qn", "Pergunta " + Q[id].n + " · " + Q[id].label));
   const t = rows.length;
-  const e = counts(rows, id);
-  const lead = e.reduce((m, x) => (x[1] > m[1] ? x : m), ["", 0]);
-  if (!t || !lead[1]) { c.appendChild(emptyNote()); return c; }
-  const top = el("div", "top");
-  const mini = el("div", "mini");
-  const s = svg("svg", { viewBox: "0 0 42 42", "aria-hidden": "true" });
-  const R = 15.9155, C = 2 * Math.PI * R, len = (lead[1] / t) * C;
-  s.append(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#e2e8f0", "stroke-width": 7 }),
-    svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "var(--red)", "stroke-width": 7, "stroke-dasharray": len + " " + (C - len) }));
-  mini.appendChild(s);
-  const txt = el("div"); txt.append(el("div", "big", pct(lead[1], t) + "%"));
-  top.append(mini, txt);
-  c.append(top, el("div", "ans", clean(lead[0])));
-  const d = el("details"); const sm = el("summary", null, "Ver todas as respostas"); const ul = el("ul");
-  e.forEach(([label, n]) => { const li = el("li", label === lead[0] ? "lead" : ""); li.append(el("span", null, clean(label)), el("span", null, n + " · " + pct(n, t) + "%")); ul.appendChild(li); });
-  d.append(sm, ul); c.appendChild(d);
+  const e = counts(rows, id).filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
+  if (!t || !e.length) { c.appendChild(emptyNote()); return c; }
+  const [label, n] = e[0];
+  const p = pct(n, t);
+  const tie = e[1] && e[1][1] === n;
+  const ans = "“" + clean(label) + "”";
+  const sentence = tie ? "Empate entre " + ans + " e “" + clean(e[1][0]) + "”, com " + p + "% cada."
+    : p === 100 ? "Todos os parceiros responderam " + ans + "."
+    : p > 50 ? "A maioria da rede respondeu " + ans + "."
+    : "A resposta mais comum foi " + ans + ".";
+  c.append(el("div", "big", p + "%"), el("p", "concl", sentence));
+  const rest = e.slice(tie ? 2 : 1, tie ? 3 : 2)[0];
+  if (rest && !tie) c.appendChild(el("p", "next", "Em seguida: " + clean(rest[0]) + " (" + pct(rest[1], t) + "%)."));
+  c.appendChild(el("p", "base", "Base: " + plural(t, "candidatura", "candidaturas") + "."));
   return c;
 }
 
 // Rosca: cor fixa por opção (ordem do formulário), números sempre visíveis na legenda.
-function donut(entries, total, centerLabel) {
+// Com { pie: true } desenha a pizza cheia (sem o miolo e o total no centro).
+function donut(entries, total, centerLabel, { pie = false } = {}) {
   const wrap = el("div", "donut-wrap");
   const d = el("div", "donut");
   const s = svg("svg", { viewBox: "0 0 42 42", role: "img", "aria-label": centerLabel });
-  const R = 15.9155, C = 2 * Math.PI * R, GAP = entries.filter(([, n]) => n).length > 1 ? 0.6 : 0;
-  s.appendChild(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#f1f5f9", "stroke-width": 6 }));
+  const R = pie ? 10.5 : 15.9155, W = pie ? 21 : 6, C = 2 * Math.PI * R, GAP = !pie && entries.filter(([, n]) => n).length > 1 ? 0.6 : 0;
+  s.appendChild(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#f1f5f9", "stroke-width": W }));
   let off = 0;
   entries.forEach(([label, n], i) => {
     if (!n || !total) return;
     const len = (n / total) * C;
-    const c = svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: catColor(label, i), "stroke-width": 6,
+    const c = svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: catColor(label, i), "stroke-width": W,
       "stroke-dasharray": Math.max(len - GAP, 0.01) + " " + (C - Math.max(len - GAP, 0.01)), "stroke-dashoffset": -off });
     const t = svg("title", {}); t.textContent = clean(label) + ": " + n + " (" + pct(n, total) + "%)";
     c.appendChild(t); s.appendChild(c);
     off += len;
   });
   d.appendChild(s);
-  const ctr = el("div", "ctr"); const inner = el("div"); inner.append(el("b", null, String(total)), el("span", null, centerLabel)); ctr.appendChild(inner);
+  const ctr = el("div", "ctr" + (pie ? " hidden" : "")); const inner = el("div"); inner.append(el("b", null, String(total)), el("span", null, centerLabel)); ctr.appendChild(inner);
   d.appendChild(ctr);
   const lg = el("div", "legend");
   entries.forEach(([label, n], i) => {
@@ -609,19 +519,18 @@ function donut(entries, total, centerLabel) {
   return wrap;
 }
 
-// Colunas para respostas em escala (tempo, horas): mantém a ordem da escala.
-function columns(entries, total, shortLabel) {
-  const box = el("div", "cols");
-  const max = Math.max(1, ...entries.map(([, n]) => n));
+// Barras horizontais para respostas em escala (tempo, formação, horas): mantém a ordem da escala
+// e mostra a porcentagem das candidaturas; a quantidade fica ao lado.
+function columns(entries, total) {
+  const box = el("div", "hbars");
   for (const [label, n] of entries) {
-    const c = el("div", "col");
-    c.title = clean(label) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, total) + "%)";
-    const t = el("div", "ct"), b = el("div", "cb");
-    b.style.height = (n / max) * 100 + "%";
-    if (!n) b.style.background = "#e2e8f0";
-    t.appendChild(b);
-    c.append(el("div", "cv", String(n)), t, el("div", "cl", shortLabel(clean(label))));
-    box.appendChild(c);
+    const p = pct(n, total);
+    const row = el("div", "hb" + (n ? "" : " zero"));
+    row.title = clean(label) + ": " + plural(n, "parceiro", "parceiros") + " (" + p + "%)";
+    const v = el("span", "hv"); v.append(el("b", null, p + "%"), el("small", null, String(n)));
+    const bar = el("span", "hbar"); const fill = el("i"); fill.style.width = p + "%"; bar.appendChild(fill);
+    row.append(el("span", "hl", clean(label)), v, bar);
+    box.appendChild(row);
   }
   return box;
 }
@@ -639,8 +548,6 @@ function ring(n, total, text) {
   return wrap;
 }
 
-const shortTempo = (l) => l.replace("Entre ", "").replace(" anos", "a").replace("Menos de 1 ano", "<1a").replace("Mais de ", ">").replace(" e ", "–").replace("Ainda não comecei, mas tenho interesse", "Ainda não");
-const shortHoras = (l) => l.replace(" horas semanais", "h").replace("Até ", "≤").replace("Mais de ", ">").replace("De ", "").replace(" a ", "–").replace("Disponibilidade variável conforme o projeto", "Variável");
 
 /* ---------- Dashboard ---------- */
 const KPI_ICONS = {
@@ -692,11 +599,12 @@ function skills(rows) {
   for (const r of rows) { const raw = (r.principal_especializacao || "").trim(); if (!raw) continue; const k = norm(raw); const cur = m.get(k) || { label: raw, n: 0 }; cur.n++; m.set(k, cur); }
   const list = [...m.values()].sort((a, b) => b.n - a.n).map((x) => [x.label, x.n]);
   c2.appendChild(list.length ? ranked(list, t, { limit: 6 }) : emptyNote());
-  const c3 = card("Tipos de serviço prestados", { cls: "span2", note: "Pergunta " + Q.formas_colaboracao.n + " · as três mais escolhidas." });
-  c3.appendChild(t ? podium(rows, "formas_colaboracao") : emptyNote());
+  const c3 = card("Tipos de serviço prestados", { cls: "span2", note: "Pergunta " + Q.formas_colaboracao.n + " · ranking dos mais oferecidos, com a quantidade de parceiros e o % das candidaturas." });
+  const servicos = counts(rows, "formas_colaboracao");
+  c3.appendChild(t && servicos.length ? ranked(servicos, t, { limit: 6 }) : emptyNote());
   more.append(c2, c3);
-  const c4 = card("Etapas de projeto em que atuam", { cls: "span3", note: "Pergunta " + Q.etapas_projeto.n + " · em que fases do projeto a rede está presente." });
-  c4.appendChild(t ? timeline(rows, "etapas_projeto") : emptyNote());
+  const c4 = card("Etapas de projeto em que atuam", { cls: "span3", note: "Pergunta " + Q.etapas_projeto.n + " · fases do projeto, na ordem, e quantos parceiros cobrem cada uma." });
+  c4.appendChild(t ? stages(rows, "etapas_projeto") : emptyNote());
   more.appendChild(c4);
 }
 
@@ -710,9 +618,10 @@ function addViz(box, title, rows, fn, opts = {}) {
   c.appendChild(rows.length ? fn() : emptyNote());
   box.appendChild(c);
 }
-function addCols(box, title, rows, id, short, cls) {
-  const c = card(title, { cls: "colcard" + (cls ? " " + cls : "") });
-  c.appendChild(rows.length ? columns(counts(rows, id), rows.length, short) : emptyNote());
+function addCols(box, title, rows, id, cls) {
+  // A nota liga o gráfico à pergunta do formulário (número e enunciado).
+  const c = card(title, { cls: "colcard" + (cls ? " " + cls : ""), note: "Pergunta " + Q[id].n + " · " + Q[id].label });
+  c.appendChild(rows.length ? columns(counts(rows, id), rows.length) : emptyNote());
   box.appendChild(c);
 }
 function addInsights(box, rows, items) {
@@ -721,11 +630,6 @@ function addInsights(box, rows, items) {
   box.appendChild(g);
 }
 
-const shortFormacao = (l) => ({
-  "Ensino técnico": "Técnico", "Graduação em andamento": "Graduação (cursando)", "Graduação completa": "Graduação",
-  "Especialização / MBA em andamento": "Espec./MBA (cursando)", "Especialização / MBA completo": "Espec./MBA",
-  "Formação predominantemente autodidata ou por cursos livres": "Autodidata",
-}[l] || l);
 
 function dashboard(rows) {
   kpis(rows);
@@ -733,43 +637,73 @@ function dashboard(rows) {
 
   const per = document.getElementById("perfil"); per.replaceChildren();
   addDonut(per, "Situação PJ", rows, "atuacao_pj", "candidaturas");
-  addCols(per, "Tempo na principal especialidade", rows, "tempo_especialidade", shortTempo, "span2");
-  addCols(per, "Nível de formação", rows, "nivel_formacao", shortFormacao, "span2");
-  addCols(per, "Tempo como independente", rows, "tempo_independente", shortTempo);
+  addCols(per, "Tempo de atuação na principal especialidade", rows, "tempo_especialidade", "span2");
+  addCols(per, "Nível de formação acadêmica", rows, "nivel_formacao", "span2");
+  addCols(per, "Tempo como prestador(a) independente ou consultor(a)", rows, "tempo_independente");
   addInsights(per, rows, [
     ["Liderança", "lideranca"],
     ["Especialista externo", "servicos_especialista_externo"],
     ["Projetos multidisciplinares", "colaboracao_multidisciplinar"],
     ["Equipe ou rede própria", "equipe_propria"],
   ]);
-  addViz(per, "Modelo de atuação", rows, () => treemap(rows, "modelo_atuacao"), { cls: "span3", note: "Pergunta " + Q.modelo_atuacao.n + " · o tamanho de cada bloco é a quantidade de parceiros." });
+  // Múltipla escolha: barras em % das candidaturas, da mais comum para a menos; opções sem resposta ficam no fim.
+  addViz(per, "Modelo de atuação profissional", rows, () => {
+    const got = new Map(counts(rows, "modelo_atuacao"));
+    const all = [...got.entries(), ...optionsOf("modelo_atuacao").filter((o) => !got.has(o)).map((o) => [o, 0])];
+    return columns(all, rows.length);
+  }, { cls: "span3", note: "Pergunta " + Q.modelo_atuacao.n + " · " + Q.modelo_atuacao.label + " Cada parceiro pode marcar mais de um modelo, por isso a soma passa de 100%." });
 
   const dis = document.getElementById("disponibilidade"); dis.replaceChildren();
   addDonut(dis, "Disponibilidade para projetos", rows, "disponibilidade_colaborar", "candidaturas");
-  addCols(dis, "Horas semanais disponíveis", rows, "horas_semanais", shortHoras, "span2");
+  addCols(dis, "Horas semanais disponíveis para projetos", rows, "horas_semanais", "span2");
   addInsights(dis, rows, [
     ["Presencial em Curitiba", "presencial_curitiba"],
     ["Viagens", "viagens"],
     ["Precificação", "precificacao"],
     ["Projetos em parceria", "interesse_parceria"],
   ]);
-  addViz(dis, "Do remoto ao presencial", rows, () => spectrum(rows, "formatos_atuacao"), { cls: "span3", note: "Pergunta " + Q.formatos_atuacao.n + " · quantos parceiros aceitam cada formato." });
+  // Barras em % das candidaturas, na ordem do formulário (do remoto ao presencial em qualquer região).
+  addViz(dis, "Formatos de atuação aceitos", rows, () => {
+    const got = new Map(counts(rows, "formatos_atuacao"));
+    return columns(optionsOf("formatos_atuacao").map((o) => [o, got.get(o) || 0]), rows.length);
+  }, { cls: "span3", note: "Pergunta " + Q.formatos_atuacao.n + " · " + Q.formatos_atuacao.label + " Cada parceiro pode aceitar mais de um formato, por isso a soma passa de 100%." });
   addViz(dis, "Formatos de contratação aceitos", rows, () => tiles(rows, "formatos_contratacao"), { cls: "span3", note: "Pergunta " + Q.formatos_contratacao.n + " · cada parceiro pode aceitar vários." });
 
   const seg = document.getElementById("segmentos"); seg.replaceChildren();
   addViz(seg, "Segmentos de mercado", rows, () => coverage(rows, "segmentos"), { cls: "span3", note: "Pergunta " + Q.segmentos.n + " · onde a rede tem conhecimento e onde ainda há lacunas." });
 
   const loc = document.getElementById("localizacao"); loc.replaceChildren();
-  const cu = card("Estados", { cls: "span2", note: "Identificado pela sigla no fim da pergunta " + Q.cidade_estado.n + " (ex.: “Curitiba - PR”)." });
-  const ufs = counts(rows, "uf", (r) => uf(r.cidade_estado));
+  // Pizza só com os estados identificados; os 5 maiores e o restante somado em "Outros estados".
+  const cu = card("Estados", { cls: "span2", note: "Pergunta " + Q.cidade_estado.n + " · estado onde o parceiro reside." });
+  const ufs = counts(rows, "uf", (r) => uf(r.cidade_estado)).filter(([u]) => UF_NOME[u]);
+  const semUf = rows.length - ufs.reduce((a, [, n]) => a + n, 0);
   if (!ufs.length) cu.appendChild(emptyNote());
-  else { const g = el("div", "uf-grid"); ufs.forEach(([u, n], i) => { const t = el("div", "uf" + (i === 0 ? " top" : "")); t.title = u + ": " + plural(n, "parceiro", "parceiros"); t.append(el("b", null, String(n)), el("span", null, u)); g.appendChild(t); }); cu.appendChild(g); }
+  else {
+    const top = ufs.slice(0, 5).map(([u, n]) => [UF_NOME[u] + " (" + u + ")", n]);
+    const outros = ufs.slice(5).reduce((a, [, n]) => a + n, 0);
+    if (outros) top.push(["Outros estados", outros]);
+    const tot = ufs.reduce((a, [, n]) => a + n, 0);
+    cu.appendChild(donut(top, tot, "parceiros por estado", { pie: true }));
+    // Detalhamento: as cidades de cada estado, com a quantidade de parceiros.
+    const det = el("div", "uf-det");
+    det.appendChild(el("div", "uf-det-h", "Cidades por estado"));
+    ufs.forEach(([u, n]) => {
+      const cs = counts(rows.filter((r) => uf(r.cidade_estado) === u), "cidade", (r) => cidade(r.cidade_estado));
+      const row = el("div", "uf-row");
+      const head = el("div", "uf-head"); head.append(el("b", null, UF_NOME[u] + " (" + u + ")"), el("span", null, plural(n, "parceiro", "parceiros")));
+      const list = el("ul", "uf-cities");
+      cs.forEach(([c, k]) => { const li = el("li"); li.append(el("span", null, c), el("b", null, String(k))); list.appendChild(li); });
+      row.append(head, list);
+      det.appendChild(row);
+    });
+    cu.appendChild(det);
+  }
+  if (semUf > 0) cu.appendChild(el("p", "note after", plural(semUf, "candidatura", "candidaturas") + " sem estado identificado (formulário antigo, sem a sigla) não " + (semUf === 1 ? "entra" : "entram") + " no gráfico."));
   loc.appendChild(cu);
   const wa = card("Grupo de WhatsApp");
   wa.appendChild(rows.length ? ring(rows.filter((r) => startsSim(r.interesse_whatsapp)).length, rows.length, "querem participar do grupo de networking") : emptyNote());
   loc.appendChild(wa);
   addDonut(loc, "Como conheceram a iniciativa", rows, "como_conheceu", "respostas", "span2");
-  addViz(loc, "Principais cidades", rows, () => ranked(counts(rows, "cidade", (r) => cidade(r.cidade_estado)), rows.length, { limit: 5, compact: true }));
 }
 
 /* ---------- Candidaturas ---------- */
@@ -803,6 +737,28 @@ function setTab(name) {
 document.getElementById("tab-dashboard").addEventListener("click", () => setTab("dashboard"));
 document.getElementById("tab-candidaturas").addEventListener("click", () => setTab("candidaturas"));
 
+// LGPD: comprovante do consentimento e exclusão do cadastro a pedido da pessoa.
+function lgpdCard(data) {
+  const c = el("div", "card lgpd");
+  c.appendChild(el("div", "sec", "Consentimento LGPD"));
+  c.appendChild(el("p", null, data.consentimento_em ? "Autorizado em " + Admin.fmtDate(data.consentimento_em) + "." : "Sem registro de consentimento."));
+  if (data.consentimento_texto) {
+    const d = el("details"); d.append(el("summary", null, "Ver texto aceito"), el("p", "lgpd-txt", data.consentimento_texto));
+    c.appendChild(d);
+  }
+  const btn = el("button", "btn-danger", "Excluir cadastro"); btn.type = "button";
+  const msg = el("p", "msg");
+  btn.addEventListener("click", async () => {
+    if (!confirm("Excluir definitivamente o cadastro de " + (data.nome || "esta pessoa") + "? Essa ação não pode ser desfeita.")) return;
+    btn.disabled = true; btn.textContent = "Excluindo…";
+    const { data: del, error } = await Admin.sb.from("cadastros").delete().eq("id", data.id).select("id");
+    if (error || !del || !del.length) { btn.disabled = false; btn.textContent = "Excluir cadastro"; msg.textContent = "Não foi possível excluir o cadastro" + (error ? ": " + error.message : "."); return; }
+    location.replace("/admin/parceiros/?aba=candidaturas");
+  });
+  c.append(el("p", "muted lgpd-help", "Use quando a pessoa pedir a exclusão dos dados. Todas as respostas são apagadas."), btn, msg);
+  return c;
+}
+
 Admin.init({ page: "parceiros", onReady: async () => {
   const params = new URLSearchParams(location.search);
   const id = params.get("id");
@@ -821,13 +777,19 @@ Admin.init({ page: "parceiros", onReady: async () => {
       const addTxt = (v) => (/^Outr[oa]s?\b/.test(v) ? v.replace(/\.$/, "") + ": " + txt : v);
       shown[k] = Array.isArray(shown[k]) ? shown[k].map(addTxt) : addTxt(shown[k] || "");
     }
-    box.replaceChildren(Admin.detail(shown, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)));
+    box.replaceChildren(Admin.detail(shown, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)), lgpdCard(data));
     return;
   }
   const { data, error } = await Admin.sb.from("cadastros").select("*").order("created_at", { ascending: false });
   const err = document.getElementById("load-err");
   err.classList.toggle("hidden", !error);
   if (error) { err.textContent = "Não foi possível carregar as candidaturas: " + error.message; return; }
+  // Respostas de versões antigas do formulário passam a contar na opção atual equivalente.
+  const LEGADO = {
+    atuacao_pj: { "Sim, tenho CNPJ ativo.": "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria).", "Sim, atuo por meio de uma empresa ou consultoria própria.": "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria)." },
+    como_conheceu: { "Já conhecia o trabalho da Dani Moscatelli.": "Indicação da Dani Moscatelli." },
+  };
+  for (const r of data) for (const [k, map] of Object.entries(LEGADO)) if (map[r[k]]) r[k] = map[r[k]];
   ALL = data;
   if (!document.getElementById("f-areas_experiencia")) buildFilters();
   if (window.matchMedia("(min-width: 800px)").matches) document.getElementById("filters-box").open = true;

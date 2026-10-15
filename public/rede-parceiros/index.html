@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Rede de Parceiros | Dani Moscatelli</title>
+<link rel="icon" type="image/png" href="/favicon.png">
 <meta name="description" content="Cadastro na Rede de Parceiros da Dani Moscatelli | Experience Design Studio.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,16 +35,15 @@
   .topbar { max-width: 1280px; margin: 0 auto; padding: 24px 24px 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
   .topbar img { height: 48px; width: auto; display: block; }
   @media (min-width: 768px) { .topbar { padding: 32px 40px 0; } .topbar img { height: 64px; } }
-  .btn-back { display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; border-radius: 999px; background: #d44d4d; color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; box-shadow: 0 1px 2px rgb(0 0 0 / .05); transition: background .2s, transform .2s, box-shadow .2s; }
-  .btn-back:hover { background: #c13e3e; transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgb(0 0 0 / .1); }
-  .btn-back svg { width: 16px; height: 16px; }
+  .btn-back { display: inline-flex; align-items: center; padding: 10px 8px; border-radius: 999px; color: var(--coral); font-size: 15px; font-weight: 600; text-decoration: none; }
+  .btn-back:hover { text-decoration: underline; }
   .progress { height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
   .progress > div { height: 100%; width: 0; background: var(--coral); transition: width .3s ease; }
   .step-label { font-size: 13px; color: var(--muted); margin-bottom: 16px; letter-spacing: .02em; }
   .card {
     background: var(--card);
     border: 1px solid var(--line);
-    border-top: 4px solid var(--coral);
+    border-top: 4px solid #a8afbd;
     border-radius: 12px;
     padding: 32px 28px;
   }
@@ -57,6 +57,7 @@
   .intro p { margin: 0 0 14px; }
   .contact { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 15px; }
   .contact p { margin: 0 0 4px; }
+  .contact .sig-photo { display: block; width: 96px; height: 96px; border-radius: 50%; margin: 4px 0 12px; }
   a { color: var(--coral); }
   .q { margin-bottom: 28px; }
   .q:last-child { margin-bottom: 0; }
@@ -68,7 +69,7 @@
   .info a { overflow-wrap: anywhere; word-break: break-all; }
   .info p { margin: 0 0 8px; }
   .info p:last-child { margin: 0; }
-  input[type=text], input[type=email], input[type=tel], input[type=url], textarea, .uf-cidade select {
+  input[type=text], input[type=email], input[type=tel], input[type=url], textarea, .uf-cidade select, .lang-row select {
     width: 100%;
     font: inherit;
     font-size: 15px;
@@ -83,10 +84,10 @@
   .uf-cidade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 12px; }
   @media (max-width: 560px) { .uf-cidade { grid-template-columns: 1fr; } }
   .uf-cidade label span { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
-  .uf-cidade select { appearance: none; -webkit-appearance: none; padding-right: 36px; cursor: pointer; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c6986' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center / 16px; }
+  .uf-cidade select, .lang-row select { appearance: none; -webkit-appearance: none; padding-right: 36px; cursor: pointer; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c6986' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center / 16px; }
   .uf-cidade select:disabled { color: var(--muted); background-color: var(--bg); cursor: not-allowed; }
   .q.invalid .uf-cidade select { border-color: var(--error); }
-  input:focus, textarea:focus, .uf-cidade select:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px var(--coral-tint); }
+  input:focus, textarea:focus, .uf-cidade select:focus, .lang-row select:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px var(--coral-tint); }
   .options { display: grid; gap: 8px; }
   .group-title { font-size: 13px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; margin: 18px 0 4px; }
   .group-title:first-child { margin-top: 4px; }
@@ -111,11 +112,13 @@
     border-radius: 8px; padding: 12px 24px; cursor: pointer;
     border: 1px solid var(--coral);
   }
-  .btn-primary { background: var(--coral); color: #fff; margin-left: auto; }
+  .btn-primary { background: var(--coral); color: #fff; margin-left: auto; border-radius: 999px; }
   .btn-primary:hover { background: #f04848; }
+  .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-arrow { width: 18px; height: 18px; flex-shrink: 0; }
   .btn-primary:disabled { opacity: .6; cursor: wait; }
-  .btn-ghost { background: #fff; color: var(--coral); }
-  .btn-ghost:hover { background: var(--coral-tint); }
+  .btn-ghost { background: none; border-color: transparent; color: var(--coral); border-radius: 999px; }
+  .btn-ghost:hover { text-decoration: underline; }
   .form-error { display: none; color: var(--error); font-size: 14px; margin-top: 12px; text-align: right; }
   /* No celular, os botões ficam fixos no rodapé da tela */
   @media (max-width: 560px) {
@@ -123,6 +126,8 @@
     .nav-bar .nav { margin-top: 0; }
     .nav-bar .btn-primary { flex: 1; }
     .nav-bar .form-error { text-align: center; margin-top: 8px; }
+    /* Com o teclado aberto, a barra volta para o fim da etapa para não ficar solta no meio da tela */
+    body.kb .nav-bar { position: static; box-shadow: none; }
   }
   .end p { margin: 0 0 14px; }
   .end .sign { margin-top: 20px; }
@@ -139,6 +144,9 @@
   .list-add { margin-top: 10px; background: none; border: 1px dashed var(--coral); color: var(--coral); padding: 9px 16px; font-size: 14px; }
   .list-add:hover { background: var(--coral-tint); }
   .q.invalid .list-row input { border-color: var(--error); }
+  .lang-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) 40px; gap: 8px; align-items: center; }
+  .lang-row select { padding-left: 12px; padding-right: 30px; background-position: right 10px center; }
+  .q.invalid .lang-row.bad input, .q.invalid .lang-row.bad select { border-color: var(--error); }
   /* Categorias em acordeão */
   .acc-groups { display: grid; gap: 10px; }
   .acc { border: 1px solid var(--line); border-radius: 12px; background: #fff; overflow: hidden; }
@@ -161,7 +169,7 @@
 <body>
 <header class="topbar">
   <a href="/"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
-  <a href="/" class="btn-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Voltar</a>
+  <a href="/" class="btn-back">Sair</a>
 </header>
 <div class="wrap">
 
@@ -188,6 +196,7 @@
       <p>O cadastro não representa oferta de trabalho ou garantia de contratação. As parcerias serão estabelecidas conforme as demandas do estúdio e a aderência de cada perfil.</p>
 
       <div class="contact">
+        <img class="sig-photo" src="/dani-assinatura.webp" alt="Dani Moscatelli" width="96" height="96">
         <p><strong>Dani Moscatelli</strong><br>Experience Design Studio</p>
         <p>E-mail: <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a></p>
         <p>WhatsApp: (41) 99748-5414</p>
@@ -198,11 +207,12 @@
 
   <!-- Telas finais -->
   <section class="card end hidden" id="endSuccess">
-    <h2>Cadastro recebido com sucesso!</h2>
-    <p>Obrigada pelo interesse em fazer parte da Rede de Parceiros da Dani Moscatelli | Experience Design Studio.</p>
-    <p>Suas informações serão consideradas para possíveis oportunidades de colaboração em projetos futuros, de acordo com suas especialidades, experiências e disponibilidade.</p>
-    <p>Este cadastro não representa uma contratação ou compromisso de participação em projetos.</p>
-    <p>Espero que possamos construir conexões e experiências de alto valor!</p>
+    <h2>Parabéns! Você agora faz parte do nosso ecossistema de parceiros! 🎉</h2>
+    <p>É um prazer receber você na rede de profissionais da Dani Moscatelli | Experience Design Studio.</p>
+    <p>Acreditamos que grandes ideias ganham força quando diferentes talentos, conhecimentos e perspectivas se conectam. Por isso, estamos construindo um ecossistema colaborativo que valoriza conexões estratégicas, troca de experiências e novas oportunidades de negócios.</p>
+    <p>A partir de agora, seu perfil integra nossa base de parceiros e poderá ser considerado para futuras oportunidades de colaboração, de acordo com suas especialidades, experiências e disponibilidade.</p>
+    <p>Vale lembrar que o cadastro não estabelece vínculo contratual nem garante participação em projetos.</p>
+    <p>Que esta seja a primeira de muitas conexões capazes de transformar ideias em experiências de alto valor!</p>
     <div class="sign">
       <p><strong>Dani Moscatelli</strong></p>
       <p>Experience Design Studio</p>
@@ -333,7 +343,7 @@ const SECTIONS = [
     { id: "segmentos", n: 16, label: "Em quais segmentos de mercado você possui experiência ou conhecimento especializado?", type: "checkbox", required: true, options: [
       "Saúde e serviços hospitalares.", "Clínicas e consultórios.", "Operadoras de planos de saúde.", "Saúde digital e Healthtechs.", "Turismo e hospitalidade.", "Hotelaria e meios de hospedagem.", "Gastronomia e alimentação.", "Varejo e comércio.", "E-commerce e marketplaces.", "Serviços financeiros e Fintechs.", "Educação e Edtechs.", "Tecnologia e software.", "Indústria e manufatura.", "Mobilidade e transportes.", "Logística e distribuição.", "Telecomunicações.", "Mercado imobiliário.", "Construção civil e arquitetura.", "Entretenimento e eventos.", "Setor público e serviços governamentais.", "Terceiro setor e organizações sociais.", "Agronegócio.", "Energia e sustentabilidade.", "Outros segmentos.",
     ]},
-    { id: "conhecimento_segmento", n: 17, label: "Você possui conhecimento aprofundado sobre algum segmento, público ou contexto específico?", type: "list", placeholder: "Ex.: Jornada hospitalar", required: false, help: "Exemplos: jornada hospitalar, atendimento de urgência e emergência, operação hoteleira, comportamento do consumidor, serviços públicos, jornada de compra no varejo, experiência de pessoas idosas, acessibilidade etc." },
+    { id: "conhecimento_segmento", n: 17, label: "Dentro dos segmentos que você marcou, em quais assuntos você tem domínio aprofundado?", type: "list", placeholder: "Ex.: Jornada hospitalar", required: false, help: "Cite temas específicos que você conhece a fundo em cada segmento. Exemplos: jornada hospitalar, atendimento de urgência e emergência, operação hoteleira, comportamento do consumidor, serviços públicos, jornada de compra no varejo, experiência de pessoas idosas, acessibilidade etc." },
     { id: "colaboracao_multidisciplinar", n: 18, label: "Você já participou de projetos que envolveram colaboração entre diferentes áreas ou especialidades?", type: "radio", required: true, options: [
       "Sim, frequentemente.",
       "Sim, em algumas ocasiões.",
@@ -347,27 +357,28 @@ const SECTIONS = [
       "Ensino técnico.", "Graduação em andamento.", "Graduação completa.", "Especialização / MBA em andamento.", "Especialização / MBA completo.", "Mestrado.", "Doutorado.", "Formação predominantemente autodidata ou por cursos livres.", "Outro.",
     ]},
     { id: "formacao", n: 21, label: "Quais são a sua formação e as certificações, cursos ou especializações relevantes?", type: "list", placeholder: "Ex.: Design Gráfico, Universidade X", required: true, help: "Inclua um item por linha: formação acadêmica ou técnica (área e instituição), certificações, cursos e especializações relacionadas à sua atuação." },
-    { id: "tempo_especialidade", n: 22, label: "Há quanto tempo você atua profissionalmente em sua principal especialidade?", type: "radio", required: true, options: [
+    { id: "idiomas", n: 22, label: "Você fala outros idiomas além do português? Qual o seu nível de fluência?", type: "idiomas", required: false, levels: ["Básico", "Intermediário", "Avançado", "Fluente", "Nativo"], help: "Inclua o idioma, escolha o nível e adicione quantos idiomas quiser. Se não fala outro idioma, deixe em branco." },
+    { id: "tempo_especialidade", n: 23, label: "Há quanto tempo você atua profissionalmente em sua principal especialidade?", type: "radio", required: true, options: [
       "Menos de 1 ano.", "Entre 1 e 2 anos.", "Entre 3 e 5 anos.", "Entre 6 e 10 anos.", "Entre 11 e 15 anos.", "Entre 16 e 20 anos.", "Mais de 20 anos.",
     ]},
-    { id: "tempo_independente", n: 23, label: "Há quanto tempo você presta serviços de forma independente ou atua como consultor(a)?", type: "radio", required: true, options: [
+    { id: "tempo_independente", n: 24, label: "Há quanto tempo você presta serviços de forma independente ou atua como consultor(a)?", type: "radio", required: true, options: [
       "Ainda não comecei, mas tenho interesse.", "Menos de 1 ano.", "Entre 1 e 2 anos.", "Entre 3 e 5 anos.", "Entre 6 e 10 anos.", "Mais de 10 anos.",
     ]},
-    { id: "lideranca", n: 24, label: "Você possui experiência liderando projetos ou frentes de trabalho?", type: "radio", required: true, options: [
+    { id: "lideranca", n: 25, label: "Você possui experiência liderando projetos ou frentes de trabalho?", type: "radio", required: true, options: [
       "Sim, lidero projetos completos.", "Sim, lidero frentes específicas de projetos.", "Já liderei projetos pontualmente.", "Ainda não, mas tenho interesse.", "Prefiro atuar como especialista ou executor(a).",
     ]},
   ]},
   { title: "Portfólio, cases e experiência prática", n: "Seção 6", questions: [
-    { id: "possui_portfolio", n: 25, label: "Você possui portfólio, site profissional ou cases publicados?", type: "radio", required: true, options: [
+    { id: "possui_portfolio", n: 26, label: "Você possui portfólio, site profissional ou cases publicados?", type: "radio", required: true, options: [
       "Sim, possuo portfólio online.", "Sim, possuo site profissional.", "Sim, possuo cases ou apresentações de projetos.", "Possuo trabalhos, mas não posso divulgá-los publicamente.", "Ainda não possuo portfólio estruturado.",
     ]},
-    { id: "link_portfolio", n: 26, showIf: { id: "possui_portfolio", test: (v) => /^Sim/.test(v) }, label: "Compartilhe o link do seu portfólio, site ou cases profissionais.", type: "url", placeholder: "https://", required: false, help: "LinkedIn, Behance, Dribbble, GitHub, Notion, site próprio ou outro endereço relevante." },
-    { id: "projeto_relevante", n: 27, label: "Conte brevemente sobre um projeto relevante do qual participou.", type: "paragraph", required: true,
+    { id: "link_portfolio", n: 27, showIf: { id: "possui_portfolio", test: (v) => /^Sim/.test(v) }, label: "Compartilhe o link do seu portfólio, site ou cases profissionais.", type: "url", placeholder: "https://", required: false, help: "LinkedIn, Behance, Dribbble, GitHub, Notion, site próprio ou outro endereço relevante." },
+    { id: "projeto_relevante", n: 28, label: "Conte brevemente sobre um projeto relevante do qual participou.", type: "paragraph", required: true,
       helpHtml: "Se possível, descreva:<ul><li>Qual era o desafio ou problema?</li><li>Qual foi sua responsabilidade?</li><li>Que abordagem ou metodologia utilizou?</li><li>Qual solução foi desenvolvida?</li><li>Quais resultados foram alcançados?</li></ul>Não compartilhe informações confidenciais de clientes ou empresas." },
-    { id: "servicos_especialista_externo", n: 28, label: "Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?", type: "radio", required: true, options: [
+    { id: "servicos_especialista_externo", n: 29, label: "Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?", type: "radio", required: true, options: [
       "Sim, frequentemente.", "Sim, ocasionalmente.", "Ainda não, mas tenho interesse.", "Não tenho interesse nesse modelo de colaboração.",
     ]},
-    { id: "ferramentas", n: 29, label: "Quais ferramentas, plataformas ou metodologias você domina?", type: "checkbox", store: "lines", required: false, help: "Abra cada categoria e marque o que você domina.", groups: [
+    { id: "ferramentas", n: 30, label: "Quais ferramentas, plataformas ou metodologias você domina?", type: "checkbox", store: "lines", required: false, help: "Abra cada categoria e marque o que você domina.", groups: [
       { title: "Design e prototipação", options: ["Figma.", "Adobe (Photoshop, Illustrator, XD).", "Sketch.", "Framer.", "Canva."] },
       { title: "Colaboração e facilitação", options: ["Miro.", "FigJam.", "Mural.", "Notion.", "Trello.", "Jira / Confluence."] },
       { title: "Pesquisa e análise", options: ["Ferramentas de pesquisa e testes (Maze, Optimal Workshop etc.).", "Formulários e questionários (Typeform, Google Forms etc.).", "Análise de comportamento (Hotjar, Clarity etc.).", "Google Analytics.", "Dovetail ou repositórios de pesquisa."] },
@@ -378,42 +389,42 @@ const SECTIONS = [
     ]},
   ]},
   { title: "Disponibilidade e modelo de colaboração", n: "Seção 7", questions: [
-    { id: "formatos_atuacao", n: 30, label: "Em quais formatos você tem disponibilidade para atuar?", type: "checkbox", required: true, options: [
+    { id: "formatos_atuacao", n: 31, label: "Em quais formatos você tem disponibilidade para atuar?", type: "checkbox", required: true, options: [
       "100% remoto.", "Híbrido, com encontros presenciais pontuais.", "Presencial na minha cidade/região.", "Presencial em outras cidades, mediante planejamento.", "Presencial em qualquer região do Brasil, mediante negociação.",
     ]},
-    { id: "viagens", n: 31, label: "Você possui disponibilidade para deslocamentos ou viagens profissionais?", type: "radio", required: true, options: [
+    { id: "viagens", n: 32, label: "Você possui disponibilidade para deslocamentos ou viagens profissionais?", type: "radio", required: true, options: [
       "Sim, tenho disponibilidade para viagens nacionais.", "Sim, mas apenas para viagens de curta duração.", "Sim, dependendo da localização e das condições.", "Apenas para deslocamentos dentro da minha região.", "Não tenho disponibilidade para viagens.",
     ]},
-    { id: "presencial_curitiba", n: 32, label: "Você teria disponibilidade para atuar presencialmente em Curitiba/PR ou região metropolitana?", type: "radio", required: true, options: [
+    { id: "presencial_curitiba", n: 33, label: "Você teria disponibilidade para atuar presencialmente em Curitiba/PR ou região metropolitana?", type: "radio", required: true, options: [
       "Sim, sem necessidade de deslocamento ou hospedagem.", "Sim, mediante negociação de deslocamento e/ou hospedagem.", "Sim, apenas para encontros ou atividades pontuais.", "Não, somente em formato remoto.",
     ]},
-    { id: "horas_semanais", n: 33, label: "Qual é sua disponibilidade média para dedicação a projetos?", type: "radio", required: true, options: [
+    { id: "horas_semanais", n: 34, label: "Qual é sua disponibilidade média para dedicação a projetos?", type: "radio", required: true, options: [
       "Até 5 horas semanais.", "De 6 a 10 horas semanais.", "De 11 a 20 horas semanais.", "De 21 a 30 horas semanais.", "Mais de 30 horas semanais.", "Disponibilidade variável conforme o projeto.",
     ]},
-    { id: "formatos_contratacao", n: 34, label: "Quais formatos de contratação você costuma aceitar?", type: "checkbox", required: true, options: [
+    { id: "formatos_contratacao", n: 35, label: "Quais formatos de contratação você costuma aceitar?", type: "checkbox", required: true, options: [
       "Projeto com escopo e valor fechado.", "Contratação por hora.", "Contratação por diária.", "Contratação por entregáveis.", "Contratação recorrente por período determinado.", "Consultoria ou mentoria pontual.", "Formato negociável conforme a demanda.",
     ]},
-    { id: "precificacao", n: 35, label: "Como você costuma precificar seus serviços?", type: "radio", required: true, options: [
+    { id: "precificacao", n: 36, label: "Como você costuma precificar seus serviços?", type: "radio", required: true, options: [
       "Valor por hora.", "Valor por diária.", "Valor por projeto.", "Valor por entregável.", "Mensalidade / contrato recorrente.", "Depende do escopo e da complexidade.",
     ]},
-    { id: "equipe_propria", n: 36, label: "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?", type: "radio", required: true, options: [
+    { id: "equipe_propria", n: 37, label: "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?", type: "radio", required: true, options: [
       "Sim, possuo equipe própria.", "Sim, possuo parceiros recorrentes.", "Não, atuo individualmente.", "Não, mas tenho interesse em formar parcerias.",
     ]},
-    { id: "interesse_parceria", n: 37, label: "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?", type: "radio", required: true, options: [
+    { id: "interesse_parceria", n: 38, label: "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?", type: "radio", required: true, options: [
       "Sim, tenho bastante interesse.", "Sim, dependendo do projeto e das responsabilidades.", "Prefiro atuar individualmente.", "Gostaria de entender melhor o formato de colaboração.",
     ]},
-    { id: "condicoes", n: 38, label: "Existe alguma condição ou preferência importante para sua participação em projetos futuros?", type: "paragraph", required: false, help: "Compartilhe restrições de agenda, disponibilidade, preferências de atuação, condições comerciais ou outras informações que considere relevantes." },
+    { id: "condicoes", n: 39, label: "Existe alguma condição ou preferência importante para sua participação em projetos futuros?", type: "paragraph", required: false, help: "Compartilhe restrições de agenda, disponibilidade, preferências de atuação, condições comerciais ou outras informações que considere relevantes." },
   ]},
   { title: "Conexão e autorizações", n: "Seção 8", questions: [
-    { id: "como_conheceu", n: 39, label: "Como você conheceu esta iniciativa?", type: "radio", required: false, options: [
+    { id: "como_conheceu", n: 40, label: "Como você conheceu esta iniciativa?", type: "radio", required: false, options: [
       "LinkedIn.", "Instagram.", "Indicação de outro profissional.", "Comunidade ou grupo profissional.", "Indicação da Dani Moscatelli.", "Outro.",
     ]},
-    { id: "autoriza_dados", n: 40, label: "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?", type: "radio", required: true,
+    { id: "autoriza_dados", n: 41, label: "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?", type: "radio", required: true,
       infoHtml: "<p><strong>Informações sobre o tratamento de dados:</strong></p><p>Os dados fornecidos serão utilizados por Dani Moscatelli | Experience Design Studio para organização da rede de parceiros, análise de competências profissionais e contato relacionado a possíveis oportunidades de colaboração.</p><p>O preenchimento é voluntário. As informações não serão divulgadas publicamente nem compartilhadas com terceiros para finalidades incompatíveis com as descritas neste formulário.</p><p>Você poderá solicitar acesso, correção ou exclusão dos seus dados pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação.</p>",
       options: [CONSENT_YES, CONSENT_NO] },
   ]},
   { title: "Comunidade de networking", n: "Seção final", questions: [
-    { id: "interesse_whatsapp", n: 41, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
+    { id: "interesse_whatsapp", n: 42, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
       infoHtml: "<p>Estamos construindo uma comunidade para conectar profissionais de diferentes especialidades, promover a troca de conhecimentos, compartilhar referências e fortalecer conexões profissionais.</p><p>O espaço será voltado a conversas sobre Design, Experiência Humana, Negócios, Tecnologia e Inovação, além da troca de experiências e oportunidades de colaboração.</p><p>A participação é opcional e independente deste cadastro.</p>",
       afterHtml: "<div class=\"info\"><p>🔗 <strong>Link de acesso ao grupo:</strong><br><a href=\"" + WHATSAPP_GROUP + "\" target=\"_blank\" rel=\"noopener\">" + WHATSAPP_GROUP + "</a></p><p>Se tiver interesse, basta acessar o link acima. A participação no grupo não é necessária para concluir seu cadastro.</p></div>",
       options: ["Sim, tenho interesse em participar.", "Não, obrigado(a). Quero apenas fazer parte da rede de parceiros."] },
@@ -447,6 +458,9 @@ function questionHtml(q) {
   else if (q.type === "list")
     field = `<div class="list-field" data-list="${q.id}" data-placeholder="${esc(q.placeholder || "")}"><div class="list-rows"></div>
       <button type="button" class="list-add"><span aria-hidden="true">+</span> Adicionar item</button></div>`;
+  else if (q.type === "idiomas")
+    field = `<div class="lang-field" data-lang="${q.id}"><div class="list-rows"></div>
+      <button type="button" class="list-add"><span aria-hidden="true">+</span> Adicionar idioma</button></div>`;
   else if (q.type === "uf_cidade")
     field = `<div class="uf-cidade">
       <label><span>Estado</span><select id="${q.id}_uf" name="${q.id}_uf"><option value="">Selecione</option>${ESTADOS.map(([uf, nome]) => `<option value="${uf}">${esc(nome)}</option>`).join("")}</select></label>
@@ -458,7 +472,7 @@ function questionHtml(q) {
         <div class="acc-body options hidden" id="${q.id}-g${gi}">${g.options.map(o => optionHtml(q, o)).join("")}</div>
       </div>`).join("")}</div>`;
   else field = `<div class="options">${q.options.map(o => optionHtml(q, o)).join("")}</div>`;
-  const errMsg = q.type === "list" ? "Inclua ao menos um item." : q.type === "url" ? (q.urlHost === "linkedin.com" ? "Informe o link do seu perfil no LinkedIn (ex.: https://www.linkedin.com/in/seu-perfil)." : "Informe um link válido (ex.: https://seusite.com.br).") : q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
+  const errMsg = q.type === "idiomas" ? "Informe o idioma e o nível de fluência em cada linha." : q.type === "list" ? "Inclua ao menos um item." : q.type === "url" ? (q.urlHost === "linkedin.com" ? "Informe o link do seu perfil no LinkedIn (ex.: https://www.linkedin.com/in/seu-perfil)." : "Informe um link válido (ex.: https://seusite.com.br).") : q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
   return `<div class="q" data-q="${q.id}">
     <label class="q-label" ${["text", "email", "tel", "url", "paragraph"].includes(q.type) ? `for="${q.id}"` : ""}>${q.n}. ${esc(q.label)}${req}</label>
     ${help}${info}${field}${q.afterHtml || ""}
@@ -491,6 +505,7 @@ function value(q) {
   if (q.type === "checkbox") return [...form.querySelectorAll(`input[name="${q.id}"]:checked`)].map(i => i.value);
   if (q.type === "radio") return form.querySelector(`input[name="${q.id}"]:checked`)?.value || "";
   if (q.type === "list") return [...form.querySelectorAll(`[data-list="${q.id}"] input`)].map((i) => i.value.trim()).filter(Boolean).join("\n");
+  if (q.type === "idiomas") return langRows(q).filter((r) => r.idioma && r.nivel).map((r) => r.idioma + ": " + r.nivel).join("\n");
   if (q.type === "url") { const v = form.elements[q.id].value.trim(); return v === "https://" || v === "http://" ? "" : withScheme(v); }
   if (q.type === "uf_cidade") {
     const uf = form.elements[q.id + "_uf"].value, cidade = form.elements[q.id + "_cidade"].value.trim();
@@ -552,11 +567,40 @@ form.querySelectorAll(".list-field").forEach((box) => {
   });
 });
 
+// Idiomas: cada linha tem o idioma e o nível de fluência; dá para incluir vários.
+const langRows = (q) => [...form.querySelectorAll(`[data-lang="${q.id}"] .lang-row`)].map((row) => ({ row, idioma: row.querySelector("input").value.trim(), nivel: row.querySelector("select").value }));
+form.querySelectorAll(".lang-field").forEach((box) => {
+  const q = SECTIONS.flatMap((s) => s.questions).find((x) => x.id === box.dataset.lang);
+  const rows = box.querySelector(".list-rows");
+  const addRow = (focus) => {
+    const n = rows.children.length + 1;
+    const row = document.createElement("div"); row.className = "lang-row";
+    const input = document.createElement("input"); input.type = "text"; input.maxLength = 60; input.placeholder = "Ex.: Inglês"; input.setAttribute("aria-label", "Idioma " + n);
+    const sel = document.createElement("select"); sel.setAttribute("aria-label", "Nível de fluência do idioma " + n);
+    sel.innerHTML = `<option value="">Nível</option>` + q.levels.map((l) => `<option>${esc(l)}</option>`).join("");
+    const rm = document.createElement("button"); rm.type = "button"; rm.className = "list-rm"; rm.setAttribute("aria-label", "Remover idioma"); rm.textContent = "×";
+    rm.addEventListener("click", () => {
+      if (rows.children.length > 1) row.remove(); else { input.value = ""; sel.value = ""; }
+      (rows.lastElementChild?.querySelector("input"))?.focus();
+      box.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); sel.focus(); } });
+    sel.addEventListener("change", () => box.dispatchEvent(new Event("input", { bubbles: true })));
+    row.append(input, sel, rm); rows.appendChild(row);
+    if (focus) input.focus();
+  };
+  addRow(false);
+  box.querySelector(".list-add").addEventListener("click", () => {
+    const empty = [...rows.querySelectorAll(".lang-row")].find((r) => !r.querySelector("input").value.trim());
+    if (empty) empty.querySelector("input").focus(); else addRow(true);
+  });
+});
+
 // Áreas em acordeão: cada categoria abre/fecha e mostra quantos itens foram marcados.
 form.querySelectorAll(".acc").forEach((acc) => {
   const head = acc.querySelector(".acc-head"), body = acc.querySelector(".acc-body"), count = acc.querySelector("[data-count]");
   head.addEventListener("click", () => { const open = body.classList.toggle("hidden") === false; head.setAttribute("aria-expanded", String(open)); acc.classList.toggle("open", open); });
-  const update = () => { const n = body.querySelectorAll('input[type="checkbox"]:checked').length; count.textContent = n ? (n === 1 ? "1 selecionado" : n + " selecionados") : ""; acc.classList.toggle("has", n > 0); };
+  const update = () => { const n = body.querySelectorAll('input[type="checkbox"]:checked').length; count.textContent = n ? String(n) : ""; acc.classList.toggle("has", n > 0); };
   body.addEventListener("change", update);
   update();
 });
@@ -600,6 +644,11 @@ function validateQuestion(q) {
   let ok = true;
   if (q.required) ok = Array.isArray(v) ? v.length > 0 : v !== "";
   if (ok && q.type === "email" && v) ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  if (ok && q.type === "idiomas") {
+    const rs = langRows(q);
+    rs.forEach((r) => r.row.classList.toggle("bad", !r.idioma !== !r.nivel));
+    ok = !rs.some((r) => !r.idioma !== !r.nivel);
+  }
   if (ok && q.type === "tel" && v) ok = v.replace(/\D/g, "").length >= 10;
   const otherBad = ok && (q.type === "checkbox" || q.type === "radio") && otherChecked(q) && !otherText(q);
   if (otherBad) ok = false;
@@ -625,15 +674,49 @@ form.addEventListener("input", e => {
   validateQuestion(q);
 });
 
+// Botão de envio com seta.
+const SEND_LABEL = 'Enviar cadastro<svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
 function show(i) {
   steps.forEach((s, n) => s.classList.toggle("hidden", n !== i));
   current = i;
   document.getElementById("back").classList.toggle("hidden", i === 0);
-  document.getElementById("next").textContent = i === 0 ? "Quero fazer parte da rede" : i === total ? "Enviar cadastro" : "Próxima";
+  const next = document.getElementById("next");
+  if (i === total) next.innerHTML = SEND_LABEL; else next.textContent = i === 0 ? "Quero fazer parte da rede" : "Próxima";
   document.getElementById("progressBox").classList.toggle("hidden", i === 0);
   document.getElementById("progressBar").style.width = `${(i / total) * 100}%`;
   document.getElementById("stepLabel").textContent = `Etapa ${i} de ${total}`;
   window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// Confete no topo da tela ao concluir o cadastro (respeita quem prefere menos movimento).
+function confetti() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv = document.createElement("canvas");
+  cv.style.cssText = "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50";
+  document.body.appendChild(cv);
+  const ctx = cv.getContext("2d"), dpr = window.devicePixelRatio || 1;
+  const W = innerWidth, H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+  const colors = ["#ff5656", "#fe6a62", "#ffb3ae", "#5c6986", "#a8afbd", "#ffd166"];
+  const ps = Array.from({ length: 160 }, () => ({
+    x: Math.random() * W, y: -20 - Math.random() * H * 0.4,
+    vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3,
+    w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
+    r: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3,
+    c: colors[Math.floor(Math.random() * colors.length)],
+  }));
+  const t0 = performance.now();
+  (function frame(t) {
+    const el = t - t0;
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalAlpha = el > 3000 ? Math.max(0, 1 - (el - 3000) / 1000) : 1;
+    ps.forEach((p) => {
+      p.x += p.vx + Math.sin((el / 300) + p.r) * 0.6; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r))); ctx.restore();
+    });
+    if (el < 4000) requestAnimationFrame(frame); else cv.remove();
+  })(t0);
 }
 
 function end(id) {
@@ -652,6 +735,12 @@ function payload() {
     else data[q.id] = Array.isArray(v) ? v : (v === "" ? null : v);
   });
   data.autoriza_dados = data.autoriza_dados === CONSENT_YES;
+  // LGPD: guarda junto do cadastro o texto exato que a pessoa aceitou (a data do aceite é registrada pelo servidor).
+  if (data.autoriza_dados) {
+    const q = SECTIONS.flatMap(s => s.questions).find(q => q.id === "autoriza_dados");
+    const tmp = document.createElement("div"); tmp.innerHTML = q.infoHtml.replace(/<\/p>/g, "</p>\n\n");
+    data.consentimento_texto = q.label + "\n\n" + tmp.textContent.trim() + "\n\nResposta: " + CONSENT_YES;
+  }
   data.outros = {};
   SECTIONS.flatMap(s => s.questions).forEach(q => { if (otherChecked(q) && otherText(q)) data.outros[q.id] = otherText(q); });
   return data;
@@ -671,12 +760,13 @@ async function submit() {
     });
     if (!res.ok) throw new Error(await res.text());
     end("endSuccess");
+    confetti();
   } catch (err) {
     console.error(err);
     errBox.textContent = "Não foi possível enviar seu cadastro. Verifique sua conexão e tente novamente.";
     errBox.style.display = "block";
     btn.disabled = false;
-    btn.textContent = "Enviar cadastro";
+    btn.innerHTML = SEND_LABEL;
   }
 }
 
@@ -690,6 +780,10 @@ document.getElementById("next").addEventListener("click", () => {
 document.getElementById("back").addEventListener("click", () => show(current - 1));
 
 show(0);
+// Teclado aberto no celular: marca o body enquanto um campo de texto está em foco.
+const isText = (t) => t.matches && t.matches('textarea, input:not([type="checkbox"]):not([type="radio"]), select');
+document.addEventListener("focusin", (e) => { if (isText(e.target)) document.body.classList.add("kb"); });
+document.addEventListener("focusout", (e) => { if (isText(e.target)) document.body.classList.remove("kb"); });
 </script>
 </body>
 </html>
