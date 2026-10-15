@@ -76,7 +76,7 @@
   .stage .bar { grid-column: 2 / -1; height: 6px; border-radius: 999px; background: var(--track); overflow: hidden; }
   .stage .bar i { display: block; height: 100%; border-radius: 999px; background: var(--red); }
   .stage.zero .sl { color: var(--muted); }
-  .stage.zero .sv { color: var(--red); font-weight: 600; }
+  .stage.zero .sv b { color: var(--muted); }
   .stages-foot { margin-top: 12px; font-size: 13px; color: var(--muted); }
   .stages-foot b { color: var(--dark); }
 
@@ -386,9 +386,8 @@ function stages(rows, id) {
   opts.forEach((o, i) => {
     const n = rows.filter((r) => (r[id] || []).includes(o) || (r[id] || []).includes(ALL)).length;
     const li = el("li", "stage" + (n ? "" : " zero"));
-    li.title = clean(o) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, t) + "%)";
-    const sv = el("span", "sv");
-    if (n) { sv.append(el("b", null, String(n)), document.createTextNode(" · " + pct(n, t) + "%")); } else sv.textContent = "Ninguém ainda";
+    li.title = clean(o) + ": " + plural(n, "parceiro", "parceiros");
+    const sv = el("span", "sv"); sv.appendChild(el("b", null, String(n)));
     const bar = el("span", "bar"); const fill = el("i"); fill.style.width = pct(n, t) + "%"; bar.appendChild(fill);
     li.append(el("span", "sn", String(i + 1).padStart(2, "0")), el("span", "sl", clean(o)), sv, bar);
     ol.appendChild(li);
