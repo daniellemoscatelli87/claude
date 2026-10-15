@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Área restrita | Dani Moscatelli</title>
+<link rel="icon" type="image/png" href="/favicon-dm.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --red:#d44d4d; --red-tint:#fdeeee; --dark:#0f172a; --muted:#64748b; --line:#e2e8f0; --bg:#fbfbfd; --card:#fff; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { font-family: "Plus Jakarta Sans", system-ui, sans-serif; background: var(--bg); color: var(--dark); font-size: 15px; line-height: 1.55; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 24px 16px 64px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 28px; }
+  header img { height: 44px; width: auto; }
+  .tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--red); background: var(--red-tint); border-radius: 999px; padding: 4px 12px; }
+  .tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+  h1 { font-size: 26px; font-weight: 800; letter-spacing: -.02em; margin: 10px 0 4px; }
+  .muted { color: var(--muted); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px; }
+  .login { max-width: 440px; margin: 40px auto; }
+  label.l { display: block; font-size: 13px; font-weight: 600; margin: 16px 0 6px; }
+  input[type=email] { width: 100%; font: inherit; padding: 11px 14px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; outline: none; }
+  input[type=email]:focus { border-color: var(--red); background: #fff; box-shadow: 0 0 0 3px rgb(212 77 77 / .15); }
+  button { font: inherit; font-weight: 600; cursor: pointer; border-radius: 999px; border: 1px solid transparent; padding: 10px 20px; }
+  .btn-primary { background: var(--red); color: #fff; width: 100%; margin-top: 14px; border-radius: 12px; padding: 12px; }
+  .btn-primary:hover { background: #c13e3e; }
+  .btn-primary:disabled { opacity: .6; cursor: wait; }
+  .btn-ghost { background: #fff; border-color: var(--line); color: var(--dark); font-size: 13px; padding: 8px 16px; }
+  .btn-ghost:hover { border-color: var(--red); color: var(--red); }
+  .msg { font-size: 13px; margin-top: 12px; }
+  .msg.err { color: var(--red); }
+  .tabs { display: flex; gap: 8px; margin: 20px 0 16px; flex-wrap: wrap; }
+  .tab { background: #fff; border-color: var(--line); color: var(--muted); font-size: 14px; }
+  .tab[aria-selected=true] { background: var(--dark); border-color: var(--dark); color: #fff; }
+  .tab .n { display: inline-block; min-width: 22px; margin-left: 6px; padding: 0 6px; border-radius: 999px; background: rgb(148 163 184 / .25); font-size: 12px; }
+  .list { display: grid; gap: 10px; }
+  details.item { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  details.item[open] { border-color: #cbd5e1; }
+  summary { list-style: none; cursor: pointer; padding: 14px 18px; display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; }
+  summary::-webkit-details-marker { display: none; }
+  summary .t { font-weight: 700; }
+  summary .d { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  summary .s { grid-column: 1 / -1; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .body { border-top: 1px solid var(--line); padding: 6px 18px 18px; }
+  .sec { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--red); margin: 18px 0 4px; }
+  dl { margin: 0; }
+  .row { padding: 8px 0; border-bottom: 1px dashed var(--line); }
+  .row:last-child { border-bottom: 0; }
+  dt { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+  dd { margin: 0; white-space: pre-wrap; word-break: break-word; }
+  dd a { color: var(--red); }
+  .empty { text-align: center; padding: 40px 16px; color: var(--muted); }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a href="/"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
+    <button type="button" class="btn-ghost hidden" id="logout">Sair</button>
+  </header>
+
+  <section class="card login hidden" id="login">
+    <span class="tag">Área restrita</span>
+    <h1>Entrar</h1>
+    <p class="muted">Digite o e-mail de administrador para receber um link de acesso.</p>
+    <form id="login-form" novalidate>
+      <label class="l" for="login-email">E-mail</label>
+      <input type="email" id="login-email" autocomplete="email" required placeholder="seu@email.com">
+      <button type="submit" class="btn-primary" id="login-btn">Enviar link de acesso</button>
+      <p class="msg" id="login-msg" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <section class="card login hidden" id="denied">
+    <span class="tag">Área restrita</span>
+    <h1>Sem acesso</h1>
+    <p class="muted">O e-mail <strong id="denied-email"></strong> não tem permissão para ver esta área.</p>
+  </section>
+
+  <main class="hidden" id="app">
+    <span class="tag">Área restrita</span>
+    <h1>Respostas recebidas</h1>
+    <p class="muted" id="who"></p>
+    <div class="tabs" role="tablist">
+      <button type="button" class="tab" role="tab" data-tab="contatos" aria-selected="true">Mensagens de contato <span class="n" id="n-contatos">0</span></button>
+      <button type="button" class="tab" role="tab" data-tab="cadastros" aria-selected="false">Rede de parceiros <span class="n" id="n-cadastros">0</span></button>
+    </div>
+    <p class="msg err hidden" id="load-err"></p>
+    <div class="list" id="list-contatos"></div>
+    <div class="list hidden" id="list-cadastros"></div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const ADMIN_EMAIL = "contato@danimoscatelli.com.br";
+const sb = supabase.createClient("https://lipfvnerohkaajegqvwr.supabase.co", "sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej");
+
+const CONTATO_SECOES = [{ title: "Contato", fields: [
+  ["nome", "Nome completo"], ["email", "E-mail corporativo"], ["telefone", "Telefone / WhatsApp"],
+  ["empresa", "Empresa"], ["cargo", "Cargo / Função"], ["tipo_negocio", "Meu negócio é..."],
+  ["tipo_negocio_outro", "Outro (descrição)"], ["assunto", "Assunto"], ["mensagem", "Mensagem"],
+  ["dias_preferidos", "Melhor dia da semana"], ["periodo", "Período de preferência"],
+]}];
+const CADASTRO_SECOES = [{"title":"Seção 1 — Informações profissionais e contato","fields":[["nome","1. Qual é o seu nome completo?"],["email","2. Qual é o seu e-mail profissional?"],["telefone","3. Qual é o seu telefone/WhatsApp para contato?"],["cidade_estado","4. Em qual cidade e estado você reside atualmente?"],["linkedin","5. Qual é o seu perfil no LinkedIn?"],["apresentacao","6. Como você se apresenta profissionalmente?"]]},{"title":"Seção 2 — Modelo de atuação e contratação","fields":[["atuacao_pj","7. Atualmente, você atua como prestador(a) de serviços PJ?"],["modelo_atuacao","8. Qual é o seu modelo de atuação profissional?"],["formas_colaboracao","9. De que forma você teria interesse em colaborar?"],["disponibilidade_colaborar","10. Qual seria sua disponibilidade para colaborar em projetos futuros?"]]},{"title":"Seção 3 — Áreas de especialização","fields":[["areas_experiencia","11. Em quais áreas você possui experiência profissional?"],["principal_especializacao","12. Qual é a sua principal área de especialização?"],["atividades_entregaveis","13. Quais são as principais atividades ou entregáveis que você consegue desenvolver?"],["etapas_projeto","14. Em quais etapas de um projeto você costuma atuar?"]]},{"title":"Seção 4 — Segmentos e conhecimento setorial","fields":[["segmentos","15. Em quais segmentos de mercado você possui experiência ou conhecimento especializado?"],["conhecimento_segmento","16. Você possui conhecimento aprofundado sobre algum segmento, público ou contexto específico?"],["colaboracao_multidisciplinar","17. Você já participou de projetos que envolveram colaboração entre diferentes áreas ou especialidades?"],["experiencia_colaboracao","18. Caso tenha respondido sim, conte brevemente sobre essa experiência."]]},{"title":"Seção 5 — Formação e experiência","fields":[["nivel_formacao","19. Qual é o seu nível de formação acadêmica?"],["formacao","20. Qual é a sua formação acadêmica e/ou técnica?"],["certificacoes","21. Possui certificações, cursos ou especializações relevantes?"],["tempo_especialidade","22. Há quanto tempo você atua profissionalmente em sua principal especialidade?"],["tempo_independente","23. Há quanto tempo você presta serviços de forma independente ou atua como consultor(a)?"],["lideranca","24. Você possui experiência liderando projetos ou frentes de trabalho?"]]},{"title":"Seção 6 — Portfólio, cases e experiência prática","fields":[["possui_portfolio","25. Você possui portfólio, site profissional ou cases publicados?"],["link_portfolio","26. Compartilhe o link do seu portfólio, site ou cases profissionais."],["projeto_relevante","27. Conte brevemente sobre um projeto relevante do qual participou."],["servicos_especialista_externo","28. Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?"],["ferramentas","29. Quais ferramentas, plataformas ou metodologias você domina?"]]},{"title":"Seção 7 — Disponibilidade e modelo de colaboração","fields":[["formatos_atuacao","30. Em quais formatos você tem disponibilidade para atuar?"],["viagens","31. Você possui disponibilidade para deslocamentos ou viagens profissionais?"],["presencial_curitiba","32. Você teria disponibilidade para atuar presencialmente em Curitiba/PR ou região metropolitana?"],["horas_semanais","33. Qual é sua disponibilidade média para dedicação a projetos?"],["formatos_contratacao","34. Quais formatos de contratação você costuma aceitar?"],["precificacao","35. Como você costuma precificar seus serviços?"],["referencia_valores","36. Deseja compartilhar uma referência de valores para contratação?"],["equipe_propria","37. Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?"],["interesse_parceria","38. Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?"],["condicoes","39. Existe alguma condição ou preferência importante para sua participação em projetos futuros?"]]},{"title":"Seção 8 — Conexão e autorizações","fields":[["como_conheceu","40. Como você conheceu esta iniciativa?"],["autoriza_dados","41. Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?"]]},{"title":"Seção final — Comunidade de networking","fields":[["interesse_whatsapp","42. Você gostaria de participar do nosso grupo de networking no WhatsApp?"]]}];
+
+const $ = (id) => document.getElementById(id);
+const show = (id) => ["login", "denied", "app"].forEach((s) => $(s).classList.toggle("hidden", s !== id));
+const fmtDate = (iso) => new Date(iso).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+
+function valueNode(v) {
+  const dd = el("dd");
+  if (v == null || v === "" || (Array.isArray(v) && !v.length)) { dd.textContent = "—"; dd.className = "muted"; return dd; }
+  if (typeof v === "boolean") { dd.textContent = v ? "Sim" : "Não"; return dd; }
+  const text = Array.isArray(v) ? v.join("\n") : String(v);
+  if (/^(https?:\/\/|www\.|linkedin\.com)/i.test(text) && !text.includes(" ")) {
+    const a = el("a", null, text);
+    a.href = /^https?:\/\//i.test(text) ? text : "https://" + text;
+    a.target = "_blank"; a.rel = "noopener noreferrer";
+    dd.appendChild(a);
+  } else dd.textContent = text;
+  return dd;
+}
+
+function renderList(rows, container, secoes, summaryText) {
+  container.replaceChildren();
+  if (!rows.length) { container.appendChild(el("div", "empty card", "Nenhuma resposta ainda.")); return; }
+  for (const r of rows) {
+    const d = el("details", "item");
+    const s = el("summary");
+    s.append(el("span", "t", r.nome || "Sem nome"), el("span", "d", fmtDate(r.created_at)), el("span", "s", summaryText(r)));
+    const body = el("div", "body");
+    for (const sec of secoes) {
+      if (secoes.length > 1) body.appendChild(el("div", "sec", sec.title));
+      const dl = el("dl");
+      for (const [k, label] of sec.fields) {
+        const row = el("div", "row");
+        row.append(el("dt", null, label), valueNode(r[k]));
+        dl.appendChild(row);
+      }
+      body.appendChild(dl);
+    }
+    d.append(s, body);
+    container.appendChild(d);
+  }
+}
+
+async function load() {
+  const [c, p] = await Promise.all([
+    sb.from("contatos").select("*").order("created_at", { ascending: false }),
+    sb.from("cadastros").select("*").order("created_at", { ascending: false }),
+  ]);
+  const err = c.error || p.error;
+  $("load-err").classList.toggle("hidden", !err);
+  if (err) { $("load-err").textContent = "Não foi possível carregar os dados: " + err.message; return; }
+  $("n-contatos").textContent = c.data.length;
+  $("n-cadastros").textContent = p.data.length;
+  renderList(c.data, $("list-contatos"), CONTATO_SECOES, (r) => [r.email, r.assunto].filter(Boolean).join(" · "));
+  renderList(p.data, $("list-cadastros"), CADASTRO_SECOES, (r) => [r.email, r.principal_especializacao, r.cidade_estado].filter(Boolean).join(" · "));
+}
+
+async function render(session) {
+  $("logout").classList.toggle("hidden", !session);
+  if (!session) return show("login");
+  const email = (session.user.email || "").toLowerCase();
+  if (email !== ADMIN_EMAIL) { $("denied-email").textContent = email; return show("denied"); }
+  $("who").textContent = "Conectada como " + email;
+  show("app");
+  await load();
+}
+
+document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => {
+  document.querySelectorAll(".tab").forEach((x) => x.setAttribute("aria-selected", String(x === t)));
+  $("list-contatos").classList.toggle("hidden", t.dataset.tab !== "contatos");
+  $("list-cadastros").classList.toggle("hidden", t.dataset.tab !== "cadastros");
+}));
+
+$("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = $("login-email").value.trim().toLowerCase();
+  const msg = $("login-msg");
+  msg.className = "msg";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = "msg err"; msg.textContent = "Informe um e-mail válido."; return; }
+  $("login-btn").disabled = true;
+  const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + "/admin/" } });
+  $("login-btn").disabled = false;
+  if (error) { msg.className = "msg err"; msg.textContent = "Não foi possível enviar o link: " + error.message; return; }
+  msg.textContent = "Pronto! Abra o link enviado para " + email + " neste mesmo navegador.";
+});
+
+$("logout").addEventListener("click", async () => { await sb.auth.signOut(); });
+
+let current;
+sb.auth.onAuthStateChange((_event, session) => {
+  const id = session?.user?.id ?? null;
+  if (id === current) return;
+  current = id;
+  render(session);
+});
+</script>
+</body>
+</html>
