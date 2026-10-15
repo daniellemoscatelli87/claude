@@ -11,8 +11,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
-  .tabs { display: inline-flex; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 14px; margin: 20px 0 16px; }
-  .tab { background: none; border: 0; border-radius: 10px; padding: 9px 18px; color: var(--muted); font-size: 14px; }
+  .tabs { display: flex; width: 100%; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 14px; margin: 20px 0 16px; }
+  .tab { flex: 1; background: none; border: 0; border-radius: 10px; padding: 9px 18px; color: var(--muted); font-size: 14px; }
   .tab[aria-selected=true] { background: var(--dark); color: #fff; }
   .tab .n { display: inline-block; margin-left: 6px; padding: 0 7px; border-radius: 999px; background: rgb(148 163 184 / .25); font-size: 12px; }
   .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; align-items: end; }
@@ -260,7 +260,7 @@
       <button type="button" class="tab" role="tab" id="tab-candidaturas" aria-controls="panel-candidaturas" aria-selected="false">Candidaturas <span class="n" id="n-cand">0</span></button>
     </div>
 
-    <div class="filter-row">
+    <div class="filter-row hidden" id="filter-row">
     <div class="card total-chip hidden" id="cand-total"></div>
     <details class="card fold" id="filters-box">
       <summary><span>Filtros<span class="active-count" id="active-count"></span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
@@ -428,7 +428,7 @@ function buildAreaChips() {
   const sel = document.getElementById("area-sel"); sel.replaceChildren(new Option("Todas as áreas", ""));
   Q.areas_experiencia.groups.forEach((g) => sel.append(new Option(g.title, g.title)));
   sel.value = AREA_SEL;
-  sel.onchange = () => { AREA_SEL = sel.value; profiles(filtered()); };
+  sel.onchange = () => { AREA_SEL = sel.value; profiles(ALL); };
 }
 
 /* ---------- Desafio do projeto (IA) ---------- */
@@ -438,7 +438,7 @@ function initDesafio() {
   const dlg = document.getElementById("desafio-dlg"), txt = document.getElementById("desafio-txt"), msg = document.getElementById("desafio-msg"), go = document.getElementById("desafio-go");
   document.getElementById("desafio-open").addEventListener("click", () => { txt.value = DESAFIO ? DESAFIO.texto : txt.value; msg.textContent = ""; dlg.showModal(); txt.focus(); });
   document.getElementById("desafio-cancel").addEventListener("click", () => dlg.close());
-  document.getElementById("desafio-clear").addEventListener("click", () => { DESAFIO = null; drawDesafioBar(); profiles(filtered()); });
+  document.getElementById("desafio-clear").addEventListener("click", () => { DESAFIO = null; drawDesafioBar(); profiles(ALL); });
   go.addEventListener("click", async () => {
     const texto = txt.value.trim();
     if (texto.length < 20) { msg.textContent = "Descreva o desafio com um pouco mais de detalhe."; return; }
@@ -452,7 +452,7 @@ function initDesafio() {
       return;
     }
     DESAFIO = { texto, ranking: new Map(data.ranking.map((x) => [x.id, { aderencia: Math.max(0, Math.min(100, Math.round(+x.aderencia || 0))), motivo: x.motivo || "" }])) };
-    dlg.close(); drawDesafioBar(); profiles(filtered());
+    dlg.close(); drawDesafioBar(); profiles(ALL);
     document.getElementById("pc-grid").scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
@@ -647,7 +647,7 @@ async function loadAnalysis() {
     Object.entries(IA.perfis || {}).forEach(([id, t]) => PERFIS_IA.set(id, t));
   }
   fillAnalysis();
-  if (!IA.error) profiles(filtered());
+  if (!IA.error) profiles(ALL);
 }
 
 function update() {
@@ -656,7 +656,7 @@ function update() {
   document.getElementById("active-count").textContent = n ? "· " + plural(n, "ativo", "ativos") : "";
   document.getElementById("showing").textContent = "Mostrando " + rows.length + " de " + plural(ALL.length, "candidatura", "candidaturas");
   document.getElementById("n-cand").textContent = rows.length;
-  dashboard(rows);
+  dashboard(ALL);
   candidaturas(rows);
 }
 
@@ -667,6 +667,8 @@ function setTab(name) {
   document.getElementById("panel-dashboard").classList.toggle("hidden", !dash);
   document.getElementById("panel-candidaturas").classList.toggle("hidden", dash);
   document.getElementById("cand-total").classList.toggle("hidden", dash);
+  // O bloco de filtros só aparece em Candidaturas; no Dashboard, a busca é pelo Desafio.
+  document.getElementById("filter-row").classList.toggle("hidden", dash);
   const url = new URL(location.href);
   if (dash) url.searchParams.delete("aba"); else url.searchParams.set("aba", "candidaturas");
   history.replaceState(null, "", url);
