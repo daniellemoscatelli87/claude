@@ -81,7 +81,7 @@ window.FORM_PARCEIROS = [
    {
     "id": "formas_colaboracao",
     "n": 10,
-    "label": "De que forma você teria interesse em colaborar?",
+    "label": "Quais tipos de serviço você presta?",
     "type": "checkbox",
     "options": [
      "Consultoria estratégica.",

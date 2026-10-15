@@ -692,7 +692,7 @@ function skills(rows) {
   for (const r of rows) { const raw = (r.principal_especializacao || "").trim(); if (!raw) continue; const k = norm(raw); const cur = m.get(k) || { label: raw, n: 0 }; cur.n++; m.set(k, cur); }
   const list = [...m.values()].sort((a, b) => b.n - a.n).map((x) => [x.label, x.n]);
   c2.appendChild(list.length ? ranked(list, t, { limit: 6 }) : emptyNote());
-  const c3 = card("Formas de colaboração de interesse", { cls: "span2", note: "Pergunta " + Q.formas_colaboracao.n + " · as três mais escolhidas." });
+  const c3 = card("Tipos de serviço prestados", { cls: "span2", note: "Pergunta " + Q.formas_colaboracao.n + " · as três mais escolhidas." });
   c3.appendChild(t ? podium(rows, "formas_colaboracao") : emptyNote());
   more.append(c2, c3);
   const c4 = card("Etapas de projeto em que atuam", { cls: "span3", note: "Pergunta " + Q.etapas_projeto.n + " · em que fases do projeto a rede está presente." });
