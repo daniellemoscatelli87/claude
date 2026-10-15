@@ -72,11 +72,12 @@
   .bubble .files a { color: var(--red); overflow-wrap: anywhere; }
   .attach { gap: 8px; cursor: pointer; }
   .attach svg { width: 18px; height: 18px; }
-  .chips { display: grid; gap: 6px; margin-top: 8px; }
+  .chips { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; margin-top: 8px; }
   .chips:empty { display: none; }
-  .chip { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 12px; padding: 6px 8px; background: #fff; font-size: 13px; }
+  .chip { display: flex; align-items: center; gap: 10px; min-width: 0; border: 1px solid var(--line); border-radius: 12px; padding: 6px 8px; background: #fff; font-size: 13px; }
   .chip img { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
-  .chip span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chip .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chip .sz { flex-shrink: 0; color: var(--muted); font-size: 12px; }
   .chip button { border: 0; background: var(--track); color: var(--muted); width: 28px; height: 28px; padding: 0; border-radius: 50%; font-size: 18px; line-height: 1; }
   .chip button:hover { color: var(--red); }
 </style>
@@ -293,7 +294,7 @@ async function historico(r) {
       const im = Admin.el("img"); im.src = URL.createObjectURL(f); im.alt = "";
       const rm = Admin.el("button", null, "×"); rm.type = "button"; rm.setAttribute("aria-label", "Remover " + f.name);
       rm.addEventListener("click", () => { files.splice(i, 1); renderChips(); });
-      c.append(im, Admin.el("span", null, f.name + " · " + fmtSize(f.size)), rm);
+      c.append(im, Admin.el("span", "nm", f.name), Admin.el("span", "sz", fmtSize(f.size)), rm);
       chips.appendChild(c);
     });
   };
