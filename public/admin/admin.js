@@ -383,5 +383,19 @@
     ["dias_preferidos", "Melhor dia da semana"], ["periodo", "Período de preferência"],
   ]}];
 
-  window.Admin = { sb, el, init, icon, notifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES };
+  // Confirmação em janela (modal) antes de ações que não podem ser desfeitas.
+  function confirmDialog({ title, message, ok = "Excluir", danger = true }) {
+    return new Promise((resolve) => {
+      const dlg = document.createElement("dialog"); dlg.className = "confirm-dlg";
+      dlg.setAttribute("aria-labelledby", "cd-title");
+      dlg.innerHTML = `<h2 id="cd-title"></h2><p class="muted"></p><div class="cd-acts"><button type="button" class="btn-ghost" data-v="0">Cancelar</button><button type="button" class="${danger ? "btn-danger-solid" : "btn-ok"}" data-v="1"></button></div>`;
+      dlg.querySelector("h2").textContent = title; dlg.querySelector("p").textContent = message; dlg.querySelector('[data-v="1"]').textContent = ok;
+      const done = (v) => { dlg.close(); dlg.remove(); resolve(v); };
+      dlg.addEventListener("click", (e) => { const b = e.target.closest("button[data-v]"); if (b) done(b.dataset.v === "1"); else if (e.target === dlg) done(false); });
+      dlg.addEventListener("cancel", (e) => { e.preventDefault(); done(false); });
+      document.body.appendChild(dlg); dlg.showModal(); dlg.querySelector('[data-v="0"]').focus();
+    });
+  }
+
+  window.Admin = { sb, el, init, icon, notifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES, confirmDialog };
 })();

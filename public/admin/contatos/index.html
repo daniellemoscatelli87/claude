@@ -70,6 +70,11 @@
   .meet-form input { min-width: 0; width: 100%; font: inherit; font-size: 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--dark); min-height: 44px; }
   .meet-form input:focus { outline: none; border-color: #1a56c4; box-shadow: 0 0 0 3px rgb(26 86 196 / .15); }
   #historico { margin-bottom: 12px; }
+  .del-card .k { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--red); }
+  .del-card p { margin: 6px 0 12px; font-size: 13px; }
+  .btn-danger { background: #fff; color: var(--red); border: 1px solid var(--red); border-radius: 999px; padding: 10px 18px; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .btn-danger:hover { background: var(--red-tint); }
+  .btn-danger:disabled { opacity: .6; cursor: wait; }
   /* Painel lateral da reunião */
   .mt-drawer { width: min(460px, 94vw); }
   .mt-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 22px 20px 32px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-content: start; }
@@ -219,6 +224,32 @@ function meetingToggle(r, cls = "btn-line") {
   return b;
 }
 
+// Exclusão da mensagem de contato (e de tudo ligado a ela: histórico, respostas, anexos e reunião).
+function deleteCard(r) {
+  const c = Admin.el("section", "card del-card");
+  c.append(Admin.el("div", "k", "Excluir mensagem"), Admin.el("p", "muted", "Apaga a mensagem, o histórico de respostas, os anexos e a reunião agendada (o convidado é avisado do cancelamento)."));
+  const btn = Admin.el("button", "btn-danger", "Excluir mensagem"); btn.type = "button";
+  const msg = Admin.el("p", "msg err hidden");
+  btn.addEventListener("click", async () => {
+    if (!(await Admin.confirmDialog({ title: "Excluir mensagem?", message: "A mensagem de " + (r.nome || "este contato") + " e todo o histórico serão apagados definitivamente. Essa ação não pode ser desfeita.", ok: "Excluir mensagem" }))) return;
+    btn.disabled = true; btn.textContent = "Excluindo…"; msg.classList.add("hidden");
+    const fail = (t) => { btn.disabled = false; btn.textContent = "Excluir mensagem"; msg.textContent = t; msg.classList.remove("hidden"); };
+    if (r._reuniao || r.reuniao_em) {
+      const res = await agenda({ acao: "excluir", contato_id: r.id });
+      if (res.error && res.error !== "google_desconectado") return fail("Não foi possível cancelar a reunião no Google Agenda: " + erroAgenda(res.error));
+    }
+    for (const pasta of ["respostas", "recebidas"]) {
+      const { data: files } = await Admin.sb.storage.from("anexos").list(pasta + "/" + r.id, { limit: 1000 });
+      if (files?.length) await Admin.sb.storage.from("anexos").remove(files.map((f) => pasta + "/" + r.id + "/" + f.name));
+    }
+    const { data: del, error } = await Admin.sb.from("contatos").delete().eq("id", r.id).select("id");
+    if (error || !del?.length) return fail("Não foi possível excluir a mensagem" + (error ? ": " + error.message : "."));
+    location.replace("/admin/contatos/");
+  });
+  c.append(btn, msg);
+  return c;
+}
+
 /* ---------- Reunião no Google Agenda (painel lateral) ---------- */
 // Data/hora, duração, título, descrição e link do Meet gerado pelo Google; "Enviar convite" cria o evento
 // no Google Agenda com o contato como convidado. Alterar avisa o convidado; excluir cancela o evento.
@@ -315,8 +346,8 @@ function renderMeeting(r) {
   acts.appendChild(send);
   if (reu || r.reuniao_em) {
     const del = Admin.el("button", "link-danger", agendada ? "Excluir reunião" : "Descartar"); del.type = "button";
-    del.addEventListener("click", () => {
-      if (!confirm(agendada ? "Excluir esta reunião? O convidado será avisado do cancelamento." : "Descartar este rascunho de reunião?")) return;
+    del.addEventListener("click", async () => {
+      if (!(await Admin.confirmDialog(agendada ? { title: "Excluir reunião?", message: "O evento será cancelado no Google Agenda e o convidado será avisado.", ok: "Excluir reunião" } : { title: "Descartar rascunho?", message: "O rascunho e o link do Meet gerado serão apagados.", ok: "Descartar" }))) return;
       run(del, "Excluindo…", { acao: "excluir", contato_id: r.id }, () => { r._reuniao = null; r.reuniao_em = null; closeMeeting(); statusBar(r); historico(r); });
     });
     acts.appendChild(del);
@@ -507,6 +538,7 @@ Admin.init({ page: "contatos", onReady: async () => {
     data._reuniao = reu || null;
     statusBar(data);
     historico(data);
+    document.getElementById("view-detail").appendChild(deleteCard(data));
     if (params.get("reuniao")) openMeeting(data);
     document.getElementById("mt-close").addEventListener("click", closeMeeting);
     document.getElementById("mt-backdrop").addEventListener("click", closeMeeting);

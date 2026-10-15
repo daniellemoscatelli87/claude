@@ -699,7 +699,7 @@ function lgpdCard(data) {
   const btn = el("button", "btn-danger", "Excluir cadastro"); btn.type = "button";
   const msg = el("p", "msg");
   btn.addEventListener("click", async () => {
-    if (!confirm("Excluir definitivamente o cadastro de " + (data.nome || "esta pessoa") + "? Essa ação não pode ser desfeita.")) return;
+    if (!(await Admin.confirmDialog({ title: "Excluir cadastro?", message: "O cadastro de " + (data.nome || "esta pessoa") + " e todas as respostas serão apagados definitivamente. Essa ação não pode ser desfeita.", ok: "Excluir cadastro" }))) return;
     btn.disabled = true; btn.textContent = "Excluindo…";
     const { data: del, error } = await Admin.sb.from("cadastros").delete().eq("id", data.id).select("id");
     if (error || !del || !del.length) { btn.disabled = false; btn.textContent = "Excluir cadastro"; msg.textContent = "Não foi possível excluir o cadastro" + (error ? ": " + error.message : "."); return; }

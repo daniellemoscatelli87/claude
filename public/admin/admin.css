@@ -147,3 +147,11 @@ body.scroll-lock { position: fixed; left: 0; right: 0; overflow: hidden; }
 .backdrop { touch-action: none; }
 /* Padrão dos campos de busca: lupa dentro do campo, à esquerda. */
 input[type=search] { padding-left: 40px; background: #f8fafc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 14px center / 18px; }
+/* Janela de confirmação */
+.confirm-dlg { width: min(420px, 92vw); border: 0; border-radius: 18px; padding: 22px; box-shadow: 0 20px 60px -10px rgb(15 23 42 / .35); }
+.confirm-dlg::backdrop { background: rgb(15 23 42 / .45); }
+.confirm-dlg h2 { margin: 0 0 8px; font-size: 18px; }
+.confirm-dlg p { margin: 0 0 18px; font-size: 14px; line-height: 1.5; }
+.cd-acts { display: flex; justify-content: flex-end; gap: 8px; }
+.btn-danger-solid { background: #c0392b; color: #fff; border: 0; border-radius: 12px; padding: 10px 18px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.btn-danger-solid:hover { background: #a93226; }
