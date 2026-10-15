@@ -749,7 +749,7 @@ function fillInsights(res) {
   if (res && res.error) {
     block.classList.remove("hidden");
     meta.textContent = res.error === "sem_chave" ? "A análise por IA ainda não está ativa: falta salvar a chave do Google Gemini (GEMINI_API_KEY) nos secrets do Supabase."
-      : res.error === "limite" ? "O limite gratuito de análises por IA foi atingido por hoje. Tente novamente mais tarde."
+      : res.error === "limite" || res.error === "ocupado" ? "A IA gratuita está ocupada ou no limite de uso agora. Recarregue a página em alguns minutos."
       : "Não foi possível gerar a análise agora. Tente recarregar a página.";
     return;
   }
