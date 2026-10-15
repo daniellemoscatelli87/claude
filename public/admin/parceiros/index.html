@@ -280,9 +280,9 @@ const { el } = Admin;
 const Q = Object.fromEntries(FORM_PARCEIROS.flatMap((s) => s.questions).map((q) => [q.id, q]));
 const optionsOf = (id) => Q[id].groups ? Q[id].groups.flatMap((g) => g.options) : Q[id].options;
 const SECOES = FORM_PARCEIROS.map((s) => ({ title: s.title, fields: s.questions.map((q) => [q.id, q.n + ". " + q.label]) }));
-const CAT = ["var(--s1)", "var(--s2)", "var(--s3)", "var(--s4)", "var(--s5)"];
-// Cor por opção (ordem do formulário); "Outro" sempre no neutro da marca.
-const catColor = (label, i) => (/^Outro/.test(label) ? "var(--slate)" : CAT[i % CAT.length]);
+const CAT = ["var(--s1)", "var(--s2)", "var(--s3)", "var(--s4)", "var(--s5)", "var(--s6)"];
+// Cor por opção (ordem do formulário); "Outro" sempre no cinza claro.
+const catColor = (label, i) => (/^Outro/.test(label) ? "var(--s6)" : CAT[i % CAT.length]);
 const clean = (s) => String(s).replace(/\.$/, "");
 const pct = (n, t) => (t ? Math.round((n / t) * 100) : 0);
 const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
@@ -661,7 +661,7 @@ const KPI_ICONS = {
   flag: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
   pin: '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
 };
-const TINTS = [["var(--red-tint)", "var(--red)"], ["var(--slate-tint)", "var(--slate)"], ["var(--red-tint)", "var(--red)"], ["var(--slate-tint)", "var(--slate)"]];
+const TINTS = [["var(--red-tint)", "var(--red)"], ["#fdf3dc", "#a06d00"], ["var(--slate-tint)", "var(--slate)"], ["#fdece4", "#c2501f"]];
 
 function kpis(rows) {
   const box = document.getElementById("kpis"); box.replaceChildren();
@@ -691,7 +691,7 @@ function skills(rows) {
   Q.areas_experiencia.groups.forEach((g, i) => {
     const people = rows.filter((r) => (r.areas_experiencia || []).some((x) => g.options.includes(x))).length;
     const top = counts(rows, "areas_experiencia").filter(([o]) => g.options.includes(o)).slice(0, 4);
-    const c = el("div", "card sg"); c.style.setProperty("--c", i % 2 ? "var(--slate)" : "var(--red)");
+    const c = el("div", "card sg"); c.style.setProperty("--c", CAT[i % CAT.length]);
     const gv = el("div", "gv"); gv.append(el("b", null, String(people)), el("span", null, (people === 1 ? "parceiro" : "parceiros") + " · " + pct(people, t) + "%"));
     c.append(el("div", "gn", g.title), gv, top.length ? ranked(top.slice(0, 3), 0, { limit: 3, compact: true }) : el("span", "muted", "Nenhuma habilidade nesta área."));
     groups.appendChild(c);

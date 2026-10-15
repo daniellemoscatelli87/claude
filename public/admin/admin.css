@@ -1,8 +1,8 @@
 :root {
   --red:#d44d4d; --red-dark:#c13e3e; --red-tint:#fdeeee; --dark:#0f172a; --muted:#64748b; --line:#e2e8f0;
   --bg:#f6f7f9; --card:#fff; --track:#f1f5f9;
-  /* Escala da marca (vermelho, escuro → claro), validada para leitura e daltonismo; cinza-azulado do logo como neutro */
-  --s1:#6e1f1f; --s2:#9c3131; --s3:#c94444; --s4:#e06b63; --s5:#ec948c; --slate:#5c6986; --slate-tint:#eceef3;
+  /* Categorias: vermelho, âmbar, cinza-azulado, laranja, vinho e cinza claro — ordem validada para daltonismo e visão normal */
+  --s1:#d44d4d; --s2:#eda100; --s3:#5c6986; --s4:#eb6834; --s5:#8e2f2f; --s6:#a3a9b5; --slate:#5c6986; --slate-tint:#eceef3;
   --seq:#5c6986;
 }
 * { box-sizing: border-box; }
