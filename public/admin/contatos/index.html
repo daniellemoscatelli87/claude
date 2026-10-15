@@ -11,8 +11,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
-  .toolbar { display: flex; gap: 12px; align-items: center; margin: 20px 0 12px; flex-wrap: wrap; }
-  .toolbar input { max-width: 420px; }
+  .toolbar { display: flex; gap: 10px; align-items: center; margin: 20px 0 12px; }
+  .toolbar input { flex: 1 1 auto; min-width: 0; max-width: 420px; }
+  .toolbar select { flex: 0 1 auto; width: auto; max-width: 58%; }
   #status { display: grid; gap: 18px; }
   /* Cabeçalho da mensagem (acordeão) */
   #detail { margin-bottom: 12px; }
@@ -103,8 +104,8 @@
   <div id="view-list">
     <h1>Contato</h1>
     <p class="muted" id="count"></p>
-    <div class="toolbar"><input type="search" id="busca" placeholder="Buscar por nome, e-mail, empresa, assunto ou mensagem…" aria-label="Buscar mensagens">
-      <select id="situacao" aria-label="Situação" style="max-width:220px"><option value="">Todas as mensagens</option><option value="pendentes">Não respondidas</option><option value="respondidas">Respondidas</option><option value="reunioes">Reuniões agendadas</option></select></div>
+    <div class="toolbar"><input type="search" id="busca" placeholder="Buscar" title="Buscar por nome, e-mail, empresa, assunto ou mensagem" aria-label="Buscar por nome, e-mail, empresa, assunto ou mensagem">
+      <select id="situacao" aria-label="Situação"><option value="">Todas as mensagens</option><option value="pendentes">Não respondidas</option><option value="respondidas">Respondidas</option><option value="reunioes">Reuniões agendadas</option></select></div>
     <p class="msg err hidden" id="load-err"></p>
     <div class="card"><div class="rows" id="list"></div></div>
   </div>
