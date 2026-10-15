@@ -555,6 +555,8 @@ function summaryCard(r) {
   const c = el("article", "card pcs");
   const head = el("div", "pc-head");
   const who = el("div", "pc-who"); who.append(el("h3", null, r.nome || "Sem nome"));
+  const senior = [NIVEL[r.tempo_especialidade], r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase() + " de carreira"].filter(Boolean).join(" · ");
+  if (senior) who.appendChild(el("div", "pc-sub", senior));
   const m = matchOf(r);
   if (m) who.appendChild(el("span", "pcs-fit " + nivelAderencia(m.aderencia), "Aderência " + m.aderencia + "%"));
   head.append(el("span", "ini", Admin.initials(r.nome)), who);
@@ -562,7 +564,7 @@ function summaryCard(r) {
   const row = (k, v) => { if (!v) return; const d = el("div"); d.append(el("dt", null, k), el("dd", null, v)); dl.appendChild(d); };
   row("Especialidade", r.principal_especializacao || "Não informada");
   row("Área de atuação", areasAtuacao(r).join(" · ") || "Não informada");
-  row("Senioridade", [NIVEL[r.tempo_especialidade], r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase()].filter(Boolean).join(" · ") || "Não informada");
+  row("Entrega de valor", PERFIS_IA.get(r.id) || contribFallback(r));
   if (m && m.motivo) row("Por que atende", m.motivo);
   const btn = el("button", "pcs-more", "Ver mais"); btn.type = "button";
   btn.addEventListener("click", () => openProfile(r, btn));
