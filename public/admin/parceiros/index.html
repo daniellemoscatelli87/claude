@@ -181,6 +181,70 @@
   .btn-danger { background: #fff; color: var(--red); border: 1px solid var(--red); border-radius: 999px; padding: 10px 18px; font-size: 14px; font-weight: 600; cursor: pointer; }
   .btn-danger:hover { background: var(--red-tint); }
   .btn-danger:disabled { opacity: .6; cursor: wait; }
+  /* Análise da IA */
+  .ai-resumo { margin: 0 0 14px; font-size: 15px; line-height: 1.55; }
+  .ai-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 800px) { .ai-grid { grid-template-columns: 1fr; } }
+  .ai-col .pc-h { margin-bottom: 6px; }
+  .ai-col.lacunas .pc-h { color: #a06d00; }
+  .ai-col.recomendacoes .pc-h { color: var(--slate); }
+  .ai-loading { font-style: italic; margin: 0; }
+  /* Filtro por área e desafio */
+  .area-filter { margin-bottom: 8px; }
+  .area-lbl { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .area-filter .chips { margin-top: 6px; }
+  .pc-count { font-size: 13px; margin: 6px 0 10px; }
+  .btn-desafio { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 14px; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 9px 18px; cursor: pointer; }
+  .btn-desafio:hover { background: var(--red-dark); }
+  .btn-desafio svg { width: 16px; height: 16px; }
+  .desafio-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; background: var(--red-tint); border-color: transparent; flex-wrap: wrap; }
+  .desafio-bar p { margin: 4px 0 0; font-size: 14px; color: var(--dark); }
+  .desafio-dlg { width: min(560px, 92vw); border: 0; border-radius: 18px; padding: 24px; box-shadow: 0 20px 60px -10px rgb(15 23 42 / .35); }
+  .desafio-dlg::backdrop { background: rgb(15 23 42 / .45); }
+  .desafio-dlg h2 { margin: 0 0 6px; font-size: 20px; }
+  .desafio-dlg .muted { font-size: 13px; margin: 0 0 12px; }
+  .desafio-dlg textarea { width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; resize: vertical; }
+  .desafio-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+  .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
+  .chip { display: inline-flex; align-items: center; font: inherit; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--dark); line-height: 1.3; }
+  button.chip { cursor: pointer; }
+  .chip.on { background: var(--red); border-color: var(--red); color: #fff; }
+  .chip.more { color: var(--muted); }
+  /* Perfis: cards resumidos + painel lateral */
+  .pc-bar { justify-content: space-between; align-items: center; }
+  .pcs-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 1000px) { .pcs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .pcs-grid { grid-template-columns: 1fr; } }
+  .pcs { display: flex; flex-direction: column; gap: 12px; }
+  .pcs-dl { margin: 0; display: grid; gap: 8px; }
+  .pcs-dl dt { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .pcs-dl dd { margin: 2px 0 0; font-size: 14px; color: var(--dark); line-height: 1.4; }
+  .pcs-more { margin-top: auto; align-self: flex-start; font: inherit; font-size: 13px; font-weight: 700; color: var(--red); background: var(--red-tint); border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+  .pcs-more:hover { background: #fbdcdc; }
+  .pcs-fit { display: inline-block; margin-top: 4px; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 2px 8px; background: #fdf3dc; color: #7a5300; }
+  .pcs-fit.full { background: #e7f5ec; color: #1f6b3a; }
+  .pcs-fit.none { background: var(--track, #f1f5f9); color: var(--muted); }
+  .pd-drawer { width: min(480px, 94vw); }
+  .pd-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 20px 20px 32px; }
+  .pc-detail { display: flex; flex-direction: column; gap: 14px; }
+  .pc-detail .pc-head { padding-right: 36px; }
+  .pc-head { display: flex; gap: 12px; align-items: center; }
+  .pc-head .ini { width: 44px; height: 44px; border-radius: 999px; background: var(--red-tint); color: var(--red); display: grid; place-items: center; font-weight: 800; flex-shrink: 0; }
+  .pc-head h3 { margin: 0; font-size: 17px; }
+  .pc-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .pc-fit { font-size: 12px; background: #fdf3dc; color: #7a5300; border-radius: 10px; padding: 8px 10px; display: grid; gap: 2px; }
+  .pc-fit.full { background: #e7f5ec; color: #1f6b3a; }
+  .pc-fit.none { background: var(--track, #f1f5f9); color: var(--muted); }
+  .pc-contrib { background: var(--red-tint); border-radius: 12px; padding: 12px; }
+  .pc-contrib p { margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: var(--dark); }
+  .pc-h { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--red); }
+  .pc-sec p { margin: 4px 0 0; font-size: 13px; color: var(--dark); line-height: 1.45; }
+  .pc-sec .pc-main { font-size: 15px; font-weight: 700; }
+  .pc-sec .chips { margin-top: 6px; }
+  .pc-links { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pc-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 999px; background: var(--track, #f1f5f9); color: var(--dark); text-decoration: none; }
+  .pc-link svg { width: 14px; height: 14px; }
+  .pc-more { font-size: 13px; font-weight: 700; color: var(--red); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -214,33 +278,19 @@
 
     <section id="panel-dashboard" role="tabpanel" aria-labelledby="tab-dashboard">
       <div class="block"><div class="kpis" id="kpis"></div></div>
-      <div class="block hidden" id="ai-block"><div class="card ai-card"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>Análise da rede</h3><ul class="ai-list" id="ai-geral"></ul><p class="ai-meta" id="ai-meta"></p></div></div>
 
       <div class="block">
-        <div class="block-head"><span class="num">01</span><h2>Habilidades disponíveis</h2></div>
-        <p class="note ins-line" data-ins="areas" id="areas-ins"></p>
-        <div class="skill-groups" id="skill-groups"></div>
-        <div class="g g3" style="margin-top:12px" id="skills-more"></div>
+        <div class="card ai-card"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>Análise da rede</h3><div id="ai-body"></div><p class="ai-meta" id="ai-meta"></p></div>
       </div>
 
       <div class="block">
-        <div class="block-head"><span class="num">02</span><h2>Perfil e senioridade</h2></div>
-        <div class="g g3" id="perfil"></div>
-      </div>
-
-      <div class="block">
-        <div class="block-head"><span class="num">03</span><h2>Disponibilidade e formato</h2></div>
-        <div class="g g3" id="disponibilidade"></div>
-      </div>
-
-      <div class="block">
-        <div class="block-head"><span class="num">04</span><h2>Segmentos e conhecimento setorial</h2></div>
-        <div class="g g3" id="segmentos"></div>
-      </div>
-
-      <div class="block">
-        <div class="block-head"><span class="num">05</span><h2>Localização e origem</h2></div>
-        <div class="g g3" id="localizacao"></div>
+        <div class="block-head pc-bar"><h2>Perfis dos parceiros</h2>
+          <button type="button" class="btn-desafio" id="desafio-open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>Desafio</button>
+        </div>
+        <div class="card desafio-bar hidden" id="desafio-bar"><div><div class="pc-h">Desafio do projeto</div><p id="desafio-resumo"></p></div><button type="button" class="btn-ghost" id="desafio-clear">Limpar desafio</button></div>
+        <div class="area-filter"><span class="area-lbl">Área de atuação</span><div class="chips" id="area-chips"></div></div>
+        <p class="muted pc-count" id="pc-count"></p>
+        <div class="pcs-grid" id="pc-grid"></div>
       </div>
     </section>
 
@@ -256,6 +306,18 @@
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/admin/admin.js"></script>
+<dialog class="desafio-dlg" id="desafio-dlg" aria-labelledby="desafio-h">
+  <h2 id="desafio-h">Qual é o desafio do projeto?</h2>
+  <p class="muted">Descreva o projeto, o cliente ou segmento, o que precisa ser entregue e as condições (prazo, presencial ou remoto). A IA analisa todos os perfis e mostra os mais aderentes primeiro.</p>
+  <textarea id="desafio-txt" rows="7" maxlength="3000" placeholder="Ex.: Redesenhar a jornada de pacientes de um hospital em Curitiba, com pesquisa com usuários, service blueprint e protótipos. Projeto de 3 meses, com encontros presenciais."></textarea>
+  <p class="msg err" id="desafio-msg" aria-live="polite"></p>
+  <div class="desafio-actions"><button type="button" class="btn-ghost" id="desafio-cancel">Cancelar</button><button type="button" class="btn-ok" id="desafio-go">Buscar parceiros</button></div>
+</dialog>
+<div class="backdrop" id="pd-backdrop"></div>
+<aside class="drawer pd-drawer" id="pd-drawer" aria-label="Perfil do parceiro">
+  <button type="button" class="close" id="pd-close" aria-label="Fechar perfil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <div class="pd-body" id="pd-body"></div>
+</aside>
 <script src="/admin/form-parceiros.js"></script>
 <script>
 const { el } = Admin;
@@ -329,262 +391,19 @@ function activeFilters() {
   return FILTROS.filter((f) => document.getElementById("f-" + f.id).value).length + (document.getElementById("f-busca").value.trim() ? 1 : 0);
 }
 
-/* ---------- Contagens ---------- */
-// Escolha única: ordem do formulário (inclui zeros). Múltipla escolha: da mais para a menos frequente, sem zeros.
-function counts(rows, id, getter) {
-  const opts = getter ? [] : optionsOf(id);
-  const m = new Map(opts.map((o) => [o, 0]));
-  for (const r of rows) {
-    const v = getter ? getter(r) : r[id];
-    for (const x of Array.isArray(v) ? v : [v]) if (x != null && x !== "") m.set(x, (m.get(x) || 0) + 1);
-  }
-  let e = [...m.entries()];
-  if (getter || Q[id]?.type === "checkbox") e = e.filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
-  return e;
-}
-
-/* ---------- Componentes visuais ---------- */
-function card(title, opts = {}) {
-  const c = el("div", "card" + (opts.cls ? " " + opts.cls : ""));
-  c.appendChild(el("h3", null, title));
-  if (opts.note) c.appendChild(el("p", "note", opts.note));
-  if (opts.key) c.appendChild(insLine(opts.key));
-  return c;
-}
-// Linha de conclusão gerada pela IA (preenchida por loadInsights depois que o gráfico aparece).
-function insLine(key) { const p = el("p", "note ins-line"); p.dataset.ins = key; return p; }
-const emptyNote = () => el("p", "muted", "Sem dados para os filtros atuais.");
-
-// Escala da marca (escuro → claro) e a cor do texto que contrasta com cada passo.
-const RAMP = ["#6e1f1f", "#9c3131", "#c94444", "#e06b63", "#ec948c"];
-const rampFor = (n, max) => { const i = Math.min(RAMP.length - 1, Math.floor((1 - n / max) * RAMP.length)); return { bg: RAMP[i], fg: i <= 2 ? "#fff" : "var(--dark)" }; };
-
-// Lista numerada (1º, 2º…); "Ver todas" abre o restante.
-function ranked(entries, total, { limit = 5, compact = false } = {}) {
-  const wrap = el("div");
-  const ol = el("ol", "ranked" + (compact ? " compact" : ""));
-  entries.forEach(([label, n], i) => {
-    const li = el("li", i >= limit ? "hidden extra" : "");
-    const cnt = el("span", "cnt"); cnt.append(el("b", null, String(n)));
-    if (total) cnt.append(document.createTextNode(" · " + pct(n, total) + "%"));
-    li.append(el("span", "pos", String(i + 1)), el("span", null, clean(label)), cnt);
-    ol.appendChild(li);
-  });
-  wrap.appendChild(ol);
-  if (entries.length > limit) wrap.appendChild(toggleMore(ol, entries.length));
-  return wrap;
-}
-
-function toggleMore(box, n) {
-  const btn = el("button", "more", "Ver todas (" + n + ")");
-  btn.type = "button";
-  btn.addEventListener("click", () => {
-    const open = btn.dataset.open !== "1";
-    box.querySelectorAll(".extra").forEach((x) => x.classList.toggle("hidden", !open));
-    btn.dataset.open = open ? "1" : "";
-    btn.textContent = open ? "Mostrar menos" : "Ver todas (" + n + ")";
-  });
-  return btn;
-}
-
-// Etapas do projeto: uma linha por fase, na ordem do projeto. Quem atua em todas as etapas
-// conta em cada uma; a barra mostra a parte das candidaturas que cobre a fase.
-function stages(rows, id) {
-  const t = rows.length;
-  const ALL = "Atuação transversal em todas as etapas.";
-  const opts = optionsOf(id).filter((o) => o !== ALL);
-  const all = rows.filter((r) => (r[id] || []).includes(ALL)).length;
-  const wrap = el("div");
-  const ol = el("ol", "stages");
-  opts.forEach((o, i) => {
-    const n = rows.filter((r) => (r[id] || []).includes(o) || (r[id] || []).includes(ALL)).length;
-    const li = el("li", "stage" + (n ? "" : " zero"));
-    li.title = clean(o) + ": " + plural(n, "parceiro", "parceiros");
-    const sv = el("span", "sv"); sv.appendChild(el("b", null, String(n)));
-    const bar = el("span", "bar"); const fill = el("i"); fill.style.width = pct(n, t) + "%"; bar.appendChild(fill);
-    li.append(el("span", "sn", String(i + 1).padStart(2, "0")), el("span", "sl", clean(o)), sv, bar);
-    ol.appendChild(li);
-  });
-  wrap.appendChild(ol);
-  const foot = el("p", "stages-foot");
-  foot.append(document.createTextNode("Cada número é a quantidade de parceiros que atuam na etapa. "), el("b", null, plural(all, "parceiro", "parceiros")), document.createTextNode(all === 1 ? " atua em todas as etapas e entra em cada uma." : " atuam em todas as etapas e entram em cada uma."));
-  wrap.appendChild(foot);
-  return wrap;
-}
-
-
-// Grade de blocos com ícone por formato de contratação.
-const CONTRATO_ICONS = [
-  [/escopo/, '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'],
-  [/hora/, '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'],
-  [/diária/, '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
-  [/entregáveis/, '<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/>'],
-  [/recorrente/, '<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>'],
-  [/mentoria/, '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'],
-  [/negociável/, '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>'],
-];
-function tiles(rows, id) {
-  const t = rows.length;
-  const cnt = new Map(counts(rows, id));
-  const opts = optionsOf(id).slice().sort((a, b) => (cnt.get(b) || 0) - (cnt.get(a) || 0));
-  const g = el("div", "tiles");
-  opts.forEach((o, i) => {
-    const n = cnt.get(o) || 0;
-    const tl = el("div", "tile" + (i === 0 && n ? " lead" : ""));
-    tl.title = clean(o) + ": " + plural(n, "parceiro", "parceiros");
-    const ic = el("div", "ti");
-    const path = (CONTRATO_ICONS.find(([re]) => re.test(o)) || [null, '<circle cx="12" cy="12" r="9"/>'])[1];
-    ic.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
-    const v = el("div", "tv", pct(n, t) + "%"); v.appendChild(el("small", null, "(" + n + ")"));
-    tl.append(ic, v, el("div", "tl2", clean(o)));
-    g.appendChild(tl);
-  });
-  return g;
-}
-
-
-// Cobertura de segmentos: quantos dos 24 têm parceiros, ranking dos cobertos e lista das lacunas.
-function coverage(rows, id) {
-  const t = rows.length;
-  const cnt = new Map(counts(rows, id));
-  const opts = optionsOf(id);
-  const covered = opts.filter((o) => cnt.get(o)).map((o) => [o, cnt.get(o)]).sort((a, b) => b[1] - a[1]);
-  const gaps = opts.filter((o) => !cnt.get(o));
-  const wrap = el("div", "cov");
-
-  const head = el("div", "cov-head");
-  const big = el("div", "big", String(covered.length)); big.appendChild(el("small", null, " / " + opts.length));
-  const meter = el("div", "meter"); const fill = el("div"); fill.style.width = pct(covered.length, opts.length) + "%"; meter.appendChild(fill);
-  head.append(big, el("div", "txt", "segmentos com pelo menos um parceiro"), meter);
-  wrap.appendChild(head);
-
-  const left = el("div");
-  left.appendChild(el("h4", null, "Onde a rede tem parceiros"));
-  left.appendChild(covered.length ? ranked(covered, 0, { limit: 8, compact: true }) : el("p", "none-note", "Nenhum segmento marcado ainda."));
-  wrap.appendChild(left);
-
-  const right = el("div", "gaps-box" + (gaps.length > 8 ? " closed" : ""));
-  right.appendChild(el("h4", null, "Lacunas · " + plural(gaps.length, "segmento", "segmentos") + " sem parceiros"));
-  if (!gaps.length) right.appendChild(el("p", "none-note", "Nenhuma lacuna: todos os segmentos têm parceiros."));
-  else {
-    const ul = el("ul", "gaps");
-    gaps.forEach((o) => ul.appendChild(el("li", null, clean(o))));
-    right.appendChild(ul);
-    if (gaps.length > 8) {
-      const btn = el("button", "more", "Ver as " + gaps.length + " lacunas");
-      btn.type = "button";
-      btn.addEventListener("click", () => { const closed = right.classList.toggle("closed"); btn.textContent = closed ? "Ver as " + gaps.length + " lacunas" : "Mostrar menos"; });
-      right.appendChild(btn);
-    }
-  }
-  wrap.appendChild(right);
-  return wrap;
-}
-
-// Destaque: a resposta mais comum em evidência, com mini-rosca e a lista completa sob demanda.
-// Destaque: em vez de gráfico, o percentual da resposta mais comum e uma conclusão em uma frase.
-function insight(title, rows, id) {
-  const c = el("div", "card ins");
-  c.appendChild(el("div", "q", title));
-  const t = rows.length;
-  const e = counts(rows, id).filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
-  if (!t || !e.length) { c.appendChild(emptyNote()); return c; }
-  const [label, n] = e[0];
-  const p = pct(n, t);
-  const tie = e[1] && e[1][1] === n;
-  const ans = "“" + clean(label) + "”";
-  const sentence = tie ? "Empate entre " + ans + " e “" + clean(e[1][0]) + "”, com " + p + "% cada."
-    : p === 100 ? "Todos os parceiros responderam " + ans + "."
-    : p > 50 ? "A maioria da rede respondeu " + ans + "."
-    : "A resposta mais comum foi " + ans + ".";
-  const concl = el("p", "concl", sentence); concl.dataset.ins = id; concl.dataset.keep = "1";
-  c.append(el("div", "big", p + "%"), concl);
-  const rest = e.slice(tie ? 2 : 1, tie ? 3 : 2)[0];
-  if (rest && !tie) c.appendChild(el("p", "next", "Em seguida: " + clean(rest[0]) + " (" + pct(rest[1], t) + "%)."));
-  c.appendChild(el("p", "base", "Base: " + plural(t, "candidatura", "candidaturas") + "."));
-  return c;
-}
-
-// Rosca: cor fixa por opção (ordem do formulário), números sempre visíveis na legenda.
-// Com { pie: true } desenha a pizza cheia (sem o miolo e o total no centro).
-function donut(entries, total, centerLabel, { pie = false } = {}) {
-  const wrap = el("div", "donut-wrap");
-  const d = el("div", "donut");
-  const s = svg("svg", { viewBox: "0 0 42 42", role: "img", "aria-label": centerLabel });
-  const R = pie ? 10.5 : 15.9155, W = pie ? 21 : 6, C = 2 * Math.PI * R, GAP = !pie && entries.filter(([, n]) => n).length > 1 ? 0.6 : 0;
-  s.appendChild(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#f1f5f9", "stroke-width": W }));
-  let off = 0;
-  entries.forEach(([label, n], i) => {
-    if (!n || !total) return;
-    const len = (n / total) * C;
-    const c = svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: catColor(label, i), "stroke-width": W,
-      "stroke-dasharray": Math.max(len - GAP, 0.01) + " " + (C - Math.max(len - GAP, 0.01)), "stroke-dashoffset": -off });
-    const t = svg("title", {}); t.textContent = clean(label) + ": " + n + " (" + pct(n, total) + "%)";
-    c.appendChild(t); s.appendChild(c);
-    off += len;
-  });
-  d.appendChild(s);
-  const ctr = el("div", "ctr" + (pie ? " hidden" : "")); const inner = el("div"); inner.append(el("b", null, String(total)), el("span", null, centerLabel)); ctr.appendChild(inner);
-  d.appendChild(ctr);
-  const lg = el("div", "legend");
-  entries.forEach(([label, n], i) => {
-    const li = el("div", "li" + (n ? "" : " zero"));
-    const dot = el("span", "dot"); dot.style.background = n ? catColor(label, i) : "#e2e8f0";
-    const v = el("span", "n"); v.append(el("b", null, String(n)), document.createTextNode(" · " + pct(n, total) + "%"));
-    li.append(dot, el("span", null, clean(label)), v);
-    lg.appendChild(li);
-  });
-  wrap.append(d, lg);
-  return wrap;
-}
-
-// Barras horizontais para respostas em escala (tempo, formação, horas): mantém a ordem da escala
-// e mostra a porcentagem das candidaturas; a quantidade fica ao lado.
-// onlyCount: mostra só a quantidade de parceiros (sem porcentagem).
-function columns(entries, total, onlyCount) {
-  const box = el("div", "hbars");
-  for (const [label, n] of entries) {
-    const p = pct(n, total);
-    const row = el("div", "hb" + (n ? "" : " zero"));
-    row.title = clean(label) + ": " + plural(n, "parceiro", "parceiros") + (onlyCount ? "" : " (" + p + "%)");
-    const v = el("span", "hv"); if (onlyCount) v.append(el("b", null, String(n))); else v.append(el("b", null, p + "%"), el("small", null, String(n)));
-    const bar = el("span", "hbar"); const fill = el("i"); fill.style.width = p + "%"; bar.appendChild(fill);
-    row.append(el("span", "hl", clean(label)), v, bar);
-    box.appendChild(row);
-  }
-  return box;
-}
-
-function ring(n, total, text) {
-  const wrap = el("div", "ring-wrap");
-  const r = el("div", "ring");
-  const s = svg("svg", { viewBox: "0 0 42 42", role: "img", "aria-label": text });
-  const R = 15.9155, C = 2 * Math.PI * R, len = total ? (n / total) * C : 0;
-  s.append(svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "#f1f5f9", "stroke-width": 5 }),
-    svg("circle", { cx: 21, cy: 21, r: R, fill: "none", stroke: "var(--red)", "stroke-width": 5, "stroke-linecap": "round", "stroke-dasharray": len + " " + (C - len) }));
-  r.append(s, el("div", "ctr", pct(n, total) + "%"));
-  const t = el("div"); t.append(el("div", null, text), el("div", "muted", plural(n, "parceiro", "parceiros") + " de " + total));
-  wrap.append(r, t);
-  return wrap;
-}
-
-
-/* ---------- Dashboard ---------- */
+/* ---------- Números do topo ---------- */
 const KPI_ICONS = {
   users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/>',
-  doc: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/>',
   bolt: '<path d="M13 3L5 13h6l-1 8 8-10h-6z"/>',
   flag: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
   pin: '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
 };
-const TINTS = [["var(--red-tint)", "var(--red)"], ["#fdf3dc", "#a06d00"], ["var(--slate-tint)", "var(--slate)"], ["#fdece4", "#c2501f"]];
-
+const TINTS = [["#fdf3dc", "#a06d00"], ["var(--slate-tint)", "var(--slate)"], ["#fdece4", "#c2501f"]];
 function kpis(rows) {
   const box = document.getElementById("kpis"); box.replaceChildren();
   const t = rows.length;
   const items = [
-    ["Candidaturas na rede", t, "users"],
-    ["Com CNPJ ativo ou empresa própria", rows.filter((r) => startsSim(r.atuacao_pj)).length, "doc"],
+    ["Parceiros na rede", t, "users"],
     ["Disponibilidade imediata", rows.filter((r) => r.disponibilidade_colaborar === "Disponibilidade imediata.").length, "bolt"],
     ["Lideram projetos ou frentes", rows.filter((r) => startsSim(r.lideranca)).length, "flag"],
     ["Podem atuar presencialmente em Curitiba", rows.filter((r) => startsSim(r.presencial_curitiba)).length, "pin"],
@@ -596,133 +415,190 @@ function kpis(rows) {
     else { badge.style.background = TINTS[i - 1][0]; badge.style.color = TINTS[i - 1][1]; }
     badge.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${KPI_ICONS[ic]}</svg>`;
     c.append(badge, el("div", "v", String(v)), el("div", "k", k));
-    c.appendChild(el("div", "p", i === 0 ? (t === ALL.length ? "Total recebido" : "de " + ALL.length + " no total") : pct(v, t) + "% das candidaturas"));
+    c.appendChild(el("div", "p", i === 0 ? (t === ALL.length ? "Total recebido" : "de " + ALL.length + " no total") : pct(v, t) + "% dos parceiros"));
     box.appendChild(c);
   });
 }
 
-function skills(rows) {
-  const t = rows.length;
-  const groups = document.getElementById("skill-groups"); groups.replaceChildren();
-  Q.areas_experiencia.groups.forEach((g, i) => {
-    const people = rows.filter((r) => (r.areas_experiencia || []).some((x) => g.options.includes(x))).length;
-    const top = counts(rows, "areas_experiencia").filter(([o]) => g.options.includes(o)).slice(0, 4);
-    const c = el("div", "card sg"); c.style.setProperty("--c", CAT[i % CAT.length]);
-    const gv = el("div", "gv"); gv.append(el("b", null, String(people)), el("span", null, (people === 1 ? "parceiro" : "parceiros") + " · " + pct(people, t) + "%"));
-    c.append(el("div", "gn", g.title), gv, top.length ? ranked(top.slice(0, 3), 0, { limit: 3, compact: true }) : el("span", "muted", "Nenhuma habilidade nesta área."));
-    groups.appendChild(c);
+/* ---------- Filtro por área de atuação ---------- */
+let AREA_SEL = ""; // título do grupo de áreas escolhido ("" = todas)
+const temArea = (r, g) => (r.areas_experiencia || []).some((x) => g.options.includes(x));
+function buildAreaChips() {
+  const box = document.getElementById("area-chips"); box.replaceChildren();
+  const groups = [{ title: "" }, ...Q.areas_experiencia.groups];
+  groups.forEach((g) => {
+    const b = el("button", "chip" + (AREA_SEL === g.title ? " on" : ""), g.title || "Todas as áreas"); b.type = "button";
+    b.setAttribute("aria-pressed", String(AREA_SEL === g.title));
+    b.addEventListener("click", () => { AREA_SEL = g.title; buildAreaChips(); profiles(filtered()); });
+    box.appendChild(b);
   });
-
-  const more = document.getElementById("skills-more"); more.replaceChildren();
-  const c2 = card("Especializações declaradas", { key: "especializacao" });
-  const m = new Map();
-  for (const r of rows) { const raw = (r.principal_especializacao || "").trim(); if (!raw) continue; const k = norm(raw); const cur = m.get(k) || { label: raw, n: 0 }; cur.n++; m.set(k, cur); }
-  const list = [...m.values()].sort((a, b) => b.n - a.n).map((x) => [x.label, x.n]);
-  c2.appendChild(list.length ? ranked(list, t, { limit: 6 }) : emptyNote());
-  const c3 = card("Tipos de serviço prestados", { cls: "span2", key: "formas_colaboracao" });
-  const servicos = counts(rows, "formas_colaboracao");
-  c3.appendChild(t && servicos.length ? ranked(servicos, t, { limit: 6 }) : emptyNote());
-  more.append(c2, c3);
-  const c4 = card("Etapas de projeto em que atuam", { cls: "span3", key: "etapas_projeto" });
-  c4.appendChild(t ? stages(rows, "etapas_projeto") : emptyNote());
-  more.appendChild(c4);
 }
 
-function addDonut(box, title, rows, id, center, cls) {
-  const c = card(title, { cls, key: id });
-  c.appendChild(rows.length ? donut(counts(rows, id), rows.length, center) : emptyNote());
-  box.appendChild(c);
+/* ---------- Desafio do projeto (IA) ---------- */
+// A pessoa descreve o desafio; a IA lê todos os perfis e devolve a aderência (0 a 100) e o motivo de cada um.
+let DESAFIO = null; // { texto, ranking: Map(id -> { aderencia, motivo }) }
+function initDesafio() {
+  const dlg = document.getElementById("desafio-dlg"), txt = document.getElementById("desafio-txt"), msg = document.getElementById("desafio-msg"), go = document.getElementById("desafio-go");
+  document.getElementById("desafio-open").addEventListener("click", () => { txt.value = DESAFIO ? DESAFIO.texto : txt.value; msg.textContent = ""; dlg.showModal(); txt.focus(); });
+  document.getElementById("desafio-cancel").addEventListener("click", () => dlg.close());
+  document.getElementById("desafio-clear").addEventListener("click", () => { DESAFIO = null; drawDesafioBar(); profiles(filtered()); });
+  go.addEventListener("click", async () => {
+    const texto = txt.value.trim();
+    if (texto.length < 20) { msg.textContent = "Descreva o desafio com um pouco mais de detalhe."; return; }
+    go.disabled = true; go.textContent = "Analisando os perfis…"; msg.textContent = "";
+    const { data, error } = await Admin.sb.functions.invoke("insights-parceiros", { body: { desafio: texto } });
+    go.disabled = false; go.textContent = "Buscar parceiros";
+    if (error || !data || !Array.isArray(data.ranking)) {
+      let code = "falha";
+      try { code = (await error.context.json()).error || code; } catch {}
+      msg.textContent = code === "ocupado" ? "A IA gratuita está ocupada agora. Tente de novo em alguns minutos." : code === "sem_chave" ? "Falta salvar a chave do Gemini (GEMINI_API_KEY) no Supabase." : "Não foi possível analisar agora. Tente de novo.";
+      return;
+    }
+    DESAFIO = { texto, ranking: new Map(data.ranking.map((x) => [x.id, { aderencia: Math.max(0, Math.min(100, Math.round(+x.aderencia || 0))), motivo: x.motivo || "" }])) };
+    dlg.close(); drawDesafioBar(); profiles(filtered());
+    document.getElementById("pc-grid").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 }
-function addViz(box, title, rows, fn, opts = {}) {
-  const c = card(title, { cls: opts.cls, note: opts.note, key: opts.key });
-  c.appendChild(rows.length ? fn() : emptyNote());
-  box.appendChild(c);
+function drawDesafioBar() {
+  const bar = document.getElementById("desafio-bar");
+  bar.classList.toggle("hidden", !DESAFIO);
+  if (DESAFIO) document.getElementById("desafio-resumo").textContent = "“" + (DESAFIO.texto.length > 140 ? DESAFIO.texto.slice(0, 140) + "…" : DESAFIO.texto) + "”";
 }
-function addCols(box, title, rows, id, cls, onlyCount) {
-  const c = card(title, { cls: "colcard" + (cls ? " " + cls : ""), key: id });
-  c.appendChild(rows.length ? columns(counts(rows, id), rows.length, onlyCount) : emptyNote());
-  box.appendChild(c);
-}
-function addInsights(box, rows, items) {
-  const g = el("div", "insights span3");
-  items.forEach(([title, id]) => g.appendChild(insight(title, rows, id)));
-  box.appendChild(g);
-}
+const matchOf = (r) => (DESAFIO ? DESAFIO.ranking.get(r.id) || { aderencia: 0, motivo: "" } : null);
+const nivelAderencia = (n) => (n >= 75 ? "full" : n >= 40 ? "" : "none");
 
+/* ---------- Carrossel de perfis ---------- */
+const TEMPO_ORDEM = (v) => optionsOf("tempo_especialidade").indexOf(v);
+// Textos curtos, em terceira pessoa, para o card.
+const CURTO = {
+  lideranca: { "Sim, lidero projetos completos.": "Lidera projetos completos", "Sim, lidero frentes específicas de projetos.": "Lidera frentes específicas", "Já liderei projetos pontualmente.": "Já liderou pontualmente", "Ainda não, mas tenho interesse.": "Quer começar a liderar", "Prefiro atuar como especialista ou executor(a).": "Prefere atuar como especialista" },
+  viagens: { "Sim, tenho disponibilidade para viagens nacionais.": "viaja pelo Brasil", "Sim, mas apenas para viagens de curta duração.": "só viagens curtas", "Sim, dependendo da localização e das condições.": "viaja conforme local e condições", "Apenas para deslocamentos dentro da minha região.": "só na própria região", "Não tenho disponibilidade para viagens.": "não viaja" },
+  presencial_curitiba: { "Sim, sem necessidade de deslocamento ou hospedagem.": "Presencial em Curitiba sem custo extra", "Sim, mediante negociação de deslocamento e/ou hospedagem.": "Presencial em Curitiba com custo de deslocamento", "Sim, apenas para encontros ou atividades pontuais.": "Presencial em Curitiba só pontualmente", "Não, somente em formato remoto.": "Sem presencial em Curitiba" },
+  formatos_atuacao: { "100% remoto.": "remoto", "Híbrido, com encontros presenciais pontuais.": "híbrido", "Presencial na minha cidade/região.": "presencial na região", "Presencial em outras cidades, mediante planejamento.": "presencial em outras cidades", "Presencial em qualquer região do Brasil, mediante negociação.": "presencial em todo o Brasil" },
+};
+const curto = (id, v) => CURTO[id][v] || clean(v || "");
+const PERFIS_IA = new Map(); // id -> "como pode contribuir" (IA)
+function contribFallback(r) {
+  const p = [r.principal_especializacao, r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase() + " na especialidade"].filter(Boolean).join(", ");
+  const areas = (r.areas_experiencia || []).slice(0, 3).map(clean).join(", ");
+  return [p, startsSim(r.lideranca) ? "pode liderar" : "", areas && "atua com " + areas].filter(Boolean).join("; ") + ".";
+}
+function chipsLine(items, max) {
+  const box = el("div", "chips");
+  items.slice(0, max).forEach((t) => box.appendChild(el("span", "chip", clean(t))));
+  if (items.length > max) box.appendChild(el("span", "chip more", "+" + (items.length - max)));
+  return box;
+}
+function section(title, ...nodes) {
+  const s = el("div", "pc-sec"); s.appendChild(el("div", "pc-h", title));
+  nodes.filter(Boolean).forEach((n) => s.appendChild(typeof n === "string" ? el("p", null, n) : n));
+  return s;
+}
+const ICON = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+function linkBtn(href, label, d) { const a = el("a", "pc-link"); a.href = href; a.target = "_blank"; a.rel = "noopener"; a.innerHTML = ICON(d); a.append(label); return a; }
+// Perfil completo (abre no painel lateral pelo "Ver mais").
+function profileDetail(r) {
+  const c = el("div", "pc pc-detail");
+  const head = el("div", "pc-head");
+  const who = el("div", "pc-who");
+  who.append(el("h3", null, r.nome || "Sem nome"), el("div", "pc-sub", [r.empresa, cidade(r.cidade_estado) + (UF_NOME[uf(r.cidade_estado)] ? " - " + uf(r.cidade_estado) : "")].filter(Boolean).join(" · ")));
+  head.append(el("span", "ini", Admin.initials(r.nome)), who);
+  c.appendChild(head);
+  const m = matchOf(r);
+  if (m) {
+    const fit = el("div", "pc-fit " + nivelAderencia(m.aderencia));
+    fit.append(el("b", null, "Aderência ao desafio: " + m.aderencia + "%"));
+    if (m.motivo) fit.append(el("span", null, m.motivo));
+    c.appendChild(fit);
+  }
+  const ia = PERFIS_IA.get(r.id);
+  const contrib = el("div", "pc-contrib");
+  contrib.append(el("div", "pc-h", "Como pode contribuir"), el("p", null, ia || contribFallback(r)));
+  c.appendChild(contrib);
+  c.appendChild(section("Especialidade e senioridade",
+    el("p", "pc-main", r.principal_especializacao || "Não informada"),
+    [r.tempo_especialidade && clean(r.tempo_especialidade) + " na especialidade", r.lideranca && curto("lideranca", r.lideranca), r.nivel_formacao && clean(r.nivel_formacao)].filter(Boolean).join(" · ")));
+  if ((r.areas_experiencia || []).length) c.appendChild(section("Áreas de experiência", chipsLine(r.areas_experiencia, 99)));
+  if ((r.segmentos || []).length) c.appendChild(section("Segmentos", chipsLine(r.segmentos, 99)));
+  const fmt = (r.formatos_atuacao || []).map((v) => curto("formatos_atuacao", v));
+  c.appendChild(section("Disponibilidade e formato",
+    [r.disponibilidade_colaborar && clean(r.disponibilidade_colaborar), r.horas_semanais && clean(r.horas_semanais).toLowerCase()].filter(Boolean).join(", "),
+    [fmt.length && "Atua: " + fmt.join(", "), r.viagens && curto("viagens", r.viagens)].filter(Boolean).join(" · "),
+    r.presencial_curitiba && curto("presencial_curitiba", r.presencial_curitiba)));
+  if ((r.formatos_contratacao || []).length) c.appendChild(section("Contratação", r.formatos_contratacao.map(clean).join(" · ")));
+  if (r.idiomas) c.appendChild(section("Idiomas", r.idiomas.split("\n").join(" · ")));
+  const links = el("div", "pc-links");
+  if (r.link_portfolio) links.appendChild(linkBtn(r.link_portfolio, "Portfólio", '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'));
+  if (r.linkedin) links.appendChild(linkBtn(r.linkedin, "LinkedIn", '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>'));
+  const tel = (r.telefone || "").replace(/\D/g, "");
+  if (tel.length >= 10) links.appendChild(linkBtn("https://wa.me/55" + tel, "WhatsApp", '<path d="M21 11.5a8.4 8.4 0 0 1-12.5 7.3L3 20l1.3-5.3A8.4 8.4 0 1 1 21 11.5z"/>'));
+  if (r.email) links.appendChild(linkBtn("mailto:" + r.email, "E-mail", '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>'));
+  c.appendChild(links);
+  const more = el("a", "pc-more", "Ver candidatura completa →"); more.href = "/admin/parceiros/?id=" + r.id;
+  c.appendChild(more);
+  return c;
+}
+// Senioridade pelo tempo na principal especialidade.
+const NIVEL = { "Menos de 1 ano.": "Júnior", "Entre 1 e 2 anos.": "Júnior", "Entre 3 e 5 anos.": "Pleno", "Entre 6 e 10 anos.": "Sênior", "Entre 11 e 15 anos.": "Especialista", "Entre 16 e 20 anos.": "Especialista", "Mais de 20 anos.": "Especialista" };
+// Áreas de atuação: os grupos de áreas em que a pessoa mais marcou opções.
+function areasAtuacao(r) {
+  return Q.areas_experiencia.groups.map((g) => [g.title, (r.areas_experiencia || []).filter((x) => g.options.includes(x)).length])
+    .filter(([, n]) => n).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([t]) => t);
+}
+function summaryCard(r) {
+  const c = el("article", "card pcs");
+  const head = el("div", "pc-head");
+  const who = el("div", "pc-who"); who.append(el("h3", null, r.nome || "Sem nome"));
+  const m = matchOf(r);
+  if (m) who.appendChild(el("span", "pcs-fit " + nivelAderencia(m.aderencia), "Aderência " + m.aderencia + "%"));
+  head.append(el("span", "ini", Admin.initials(r.nome)), who);
+  const dl = el("dl", "pcs-dl");
+  const row = (k, v) => { if (!v) return; const d = el("div"); d.append(el("dt", null, k), el("dd", null, v)); dl.appendChild(d); };
+  row("Especialidade", r.principal_especializacao || "Não informada");
+  row("Área de atuação", areasAtuacao(r).join(" · ") || "Não informada");
+  row("Senioridade", [NIVEL[r.tempo_especialidade], r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase()].filter(Boolean).join(" · ") || "Não informada");
+  if (m && m.motivo) row("Por que atende", m.motivo);
+  const btn = el("button", "pcs-more", "Ver mais"); btn.type = "button";
+  btn.addEventListener("click", () => openProfile(r, btn));
+  c.append(head, dl, btn);
+  return c;
+}
+let lastTrigger = null;
+function openProfile(r, trigger) {
+  lastTrigger = trigger;
+  const body = document.getElementById("pd-body"); body.replaceChildren(profileDetail(r)); body.scrollTop = 0;
+  document.getElementById("pd-drawer").classList.add("open");
+  document.getElementById("pd-backdrop").classList.add("open");
+  const b = document.body;
+  if (!b.classList.contains("scroll-lock")) { b.dataset.y = String(window.scrollY); b.style.top = -window.scrollY + "px"; b.classList.add("scroll-lock"); }
+  document.getElementById("pd-close").focus();
+}
+function closeProfile() {
+  const d = document.getElementById("pd-drawer");
+  if (!d.classList.contains("open")) return;
+  d.classList.remove("open"); document.getElementById("pd-backdrop").classList.remove("open");
+  const b = document.body; b.classList.remove("scroll-lock"); b.style.top = ""; window.scrollTo(0, Number(b.dataset.y || 0));
+  lastTrigger?.focus();
+}
+function initProfiles() {
+  document.getElementById("pd-close").addEventListener("click", closeProfile);
+  document.getElementById("pd-backdrop").addEventListener("click", closeProfile);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeProfile(); });
+}
+function profiles(rows) {
+  const g = Q.areas_experiencia.groups.find((x) => x.title === AREA_SEL);
+  const base = g ? rows.filter((r) => temArea(r, g)) : rows;
+  const ad = (r) => (DESAFIO ? matchOf(r).aderencia : 0);
+  const list = [...base].sort((a, b) => (ad(b) - ad(a)) || (TEMPO_ORDEM(b.tempo_especialidade) - TEMPO_ORDEM(a.tempo_especialidade)));
+  document.getElementById("pc-count").textContent = plural(list.length, "parceiro", "parceiros") + (DESAFIO ? " · ordenados por aderência ao desafio" : "");
+  const grid = document.getElementById("pc-grid"); grid.replaceChildren();
+  if (!list.length) return grid.appendChild(el("div", "card empty", "Nenhum parceiro para os filtros atuais."));
+  list.forEach((r) => grid.appendChild(summaryCard(r)));
+}
 
 function dashboard(rows) {
   kpis(rows);
-  skills(rows);
-
-  const per = document.getElementById("perfil"); per.replaceChildren();
-  addDonut(per, "Situação PJ", rows, "atuacao_pj", "candidaturas");
-  addCols(per, "Tempo de atuação na principal especialidade", rows, "tempo_especialidade", "span2", true);
-  addCols(per, "Nível de formação acadêmica", rows, "nivel_formacao", "span2", true);
-  addCols(per, "Tempo como prestador(a) independente ou consultor(a)", rows, "tempo_independente", null, true);
-  addInsights(per, rows, [
-    ["Liderança", "lideranca"],
-    ["Especialista externo", "servicos_especialista_externo"],
-    ["Projetos multidisciplinares", "colaboracao_multidisciplinar"],
-    ["Equipe ou rede própria", "equipe_propria"],
-  ]);
-  // Múltipla escolha: barras em % das candidaturas, da mais comum para a menos; opções sem resposta ficam no fim.
-  addViz(per, "Modelo de atuação profissional", rows, () => {
-    const got = new Map(counts(rows, "modelo_atuacao"));
-    const all = [...got.entries(), ...optionsOf("modelo_atuacao").filter((o) => !got.has(o)).map((o) => [o, 0])];
-    return columns(all, rows.length);
-  }, { cls: "span3", key: "modelo_atuacao" });
-
-  const dis = document.getElementById("disponibilidade"); dis.replaceChildren();
-  addDonut(dis, "Disponibilidade para projetos", rows, "disponibilidade_colaborar", "candidaturas");
-  addCols(dis, "Horas semanais disponíveis para projetos", rows, "horas_semanais", "span2");
-  addInsights(dis, rows, [
-    ["Presencial em Curitiba", "presencial_curitiba"],
-    ["Viagens", "viagens"],
-    ["Precificação", "precificacao"],
-    ["Projetos em parceria", "interesse_parceria"],
-  ]);
-  // Barras em % das candidaturas, na ordem do formulário (do remoto ao presencial em qualquer região).
-  addViz(dis, "Formatos de atuação aceitos", rows, () => {
-    const got = new Map(counts(rows, "formatos_atuacao"));
-    return columns(optionsOf("formatos_atuacao").map((o) => [o, got.get(o) || 0]), rows.length);
-  }, { cls: "span3", key: "formatos_atuacao" });
-  addViz(dis, "Formatos de contratação aceitos", rows, () => tiles(rows, "formatos_contratacao"), { cls: "span3", key: "formatos_contratacao" });
-
-  const seg = document.getElementById("segmentos"); seg.replaceChildren();
-  addViz(seg, "Segmentos de mercado", rows, () => coverage(rows, "segmentos"), { cls: "span3", key: "segmentos" });
-
-  const loc = document.getElementById("localizacao"); loc.replaceChildren();
-  // Pizza só com os estados identificados; os 5 maiores e o restante somado em "Outros estados".
-  const cu = card("Estados", { cls: "span2", key: "estados" });
-  const ufs = counts(rows, "uf", (r) => uf(r.cidade_estado)).filter(([u]) => UF_NOME[u]);
-  const semUf = rows.length - ufs.reduce((a, [, n]) => a + n, 0);
-  if (!ufs.length) cu.appendChild(emptyNote());
-  else {
-    const top = ufs.slice(0, 5).map(([u, n]) => [UF_NOME[u] + " (" + u + ")", n]);
-    const outros = ufs.slice(5).reduce((a, [, n]) => a + n, 0);
-    if (outros) top.push(["Outros estados", outros]);
-    const tot = ufs.reduce((a, [, n]) => a + n, 0);
-    cu.appendChild(donut(top, tot, "parceiros por estado", { pie: true }));
-    // Detalhamento: as cidades de cada estado, com a quantidade de parceiros.
-    const det = el("div", "uf-det");
-    det.appendChild(el("div", "uf-det-h", "Cidades por estado"));
-    ufs.forEach(([u, n]) => {
-      const cs = counts(rows.filter((r) => uf(r.cidade_estado) === u), "cidade", (r) => cidade(r.cidade_estado));
-      const row = el("div", "uf-row");
-      const head = el("div", "uf-head"); head.append(el("b", null, UF_NOME[u] + " (" + u + ")"), el("span", null, plural(n, "parceiro", "parceiros")));
-      const list = el("ul", "uf-cities");
-      cs.forEach(([c, k]) => { const li = el("li"); li.append(el("span", null, c), el("b", null, String(k))); list.appendChild(li); });
-      row.append(head, list);
-      det.appendChild(row);
-    });
-    cu.appendChild(det);
-  }
-  if (semUf > 0) cu.appendChild(el("p", "note after", plural(semUf, "candidatura", "candidaturas") + " sem estado identificado (formulário antigo, sem a sigla) não " + (semUf === 1 ? "entra" : "entram") + " no gráfico."));
-  loc.appendChild(cu);
-  const wa = card("Grupo de WhatsApp", { key: "whatsapp" });
-  wa.appendChild(rows.length ? ring(rows.filter((r) => startsSim(r.interesse_whatsapp)).length, rows.length, "querem participar do grupo de networking") : emptyNote());
-  loc.appendChild(wa);
-  addDonut(loc, "Como conheceram a iniciativa", rows, "como_conheceu", "respostas", "span2");
+  profiles(rows);
 }
 
 /* ---------- Candidaturas ---------- */
@@ -733,47 +609,48 @@ function candidaturas(rows) {
   rows.forEach((r) => list.appendChild(Admin.rowLink("/admin/parceiros/?id=" + r.id, r.nome, [r.principal_especializacao, r.cidade_estado, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em)));
 }
 
-/* ---------- Conclusões por IA ---------- */
-// Pede à função insights-parceiros as conclusões do recorte atual (todos ou os filtrados) e preenche
-// as linhas [data-ins] de cada gráfico e o bloco "Análise da rede". Resultados ficam guardados por recorte.
-const INS_CACHE = new Map();
-let insTimer = null, insSeq = 0;
-function fillInsights(res) {
-  document.querySelectorAll("[data-ins]").forEach((p) => {
-    const t = res && res.graficos ? res.graficos[p.dataset.ins] : "";
-    p.classList.remove("loading");
-    if (t) p.textContent = t;
-    else if (!p.dataset.keep) p.textContent = "";
-  });
-  const block = document.getElementById("ai-block"), list = document.getElementById("ai-geral"), meta = document.getElementById("ai-meta");
-  list.replaceChildren();
-  if (res && res.error) {
-    block.classList.remove("hidden");
-    meta.textContent = res.error === "sem_chave" ? "A análise por IA ainda não está ativa: falta salvar a chave da Anthropic (ANTHROPIC_API_KEY) nos secrets do Supabase." : "Não foi possível gerar a análise agora. Tente recarregar a página.";
+/* ---------- Análise por IA ---------- */
+// Uma análise da base inteira de parceiros (não muda com os filtros) e uma frase de
+// "como pode contribuir" para cada pessoa. A função guarda o resultado e só gera de novo quando os dados mudam.
+let IA = null;
+function fillAnalysis() {
+  const box = document.getElementById("ai-body"), meta = document.getElementById("ai-meta");
+  box.replaceChildren();
+  if (!IA) { box.appendChild(el("p", "muted ai-loading", "Gerando a análise da rede…")); meta.textContent = ""; return; }
+  if (IA.error) {
+    meta.textContent = IA.error === "sem_chave" ? "A análise por IA ainda não está ativa: falta salvar a chave do Google Gemini (GEMINI_API_KEY) nos secrets do Supabase."
+      : IA.error === "limite" || IA.error === "ocupado" ? "A IA gratuita está ocupada ou no limite de uso agora. Recarregue a página em alguns minutos."
+      : "Não foi possível gerar a análise agora. Tente recarregar a página.";
     return;
   }
-  const geral = (res && res.geral) || [];
-  block.classList.toggle("hidden", !geral.length);
-  geral.forEach((g) => list.appendChild(el("li", null, g)));
-  meta.textContent = res && res.gerado_em ? "Gerada por IA com base em " + plural(res.base, "candidatura", "candidaturas") + " · " + Admin.fmtDate(res.gerado_em) : "";
+  const a = IA.analise || {};
+  if (a.resumo) box.appendChild(el("p", "ai-resumo", a.resumo));
+  const grupos = [["forcas", "Pontos fortes da rede"], ["lacunas", "Lacunas"], ["recomendacoes", "Recomendações"]];
+  const g = el("div", "ai-grid");
+  grupos.forEach(([k, t]) => {
+    const itens = a[k] || [];
+    if (!itens.length) return;
+    const col = el("div", "ai-col " + k); col.appendChild(el("div", "pc-h", t));
+    const ul = el("ul", "ai-list"); itens.forEach((x) => ul.appendChild(el("li", null, x)));
+    col.appendChild(ul); g.appendChild(col);
+  });
+  box.appendChild(g);
+  meta.textContent = IA.gerado_em ? "Gerada por IA com base em " + plural(IA.base, "parceiro", "parceiros") + " · " + Admin.fmtDate(IA.gerado_em) : "";
 }
-function loadInsights(rows) {
-  const key = rows.length === ALL.length ? "all" : rows.map((r) => r.id).sort().join(",");
-  if (INS_CACHE.has(key)) return fillInsights(INS_CACHE.get(key));
-  document.querySelectorAll("[data-ins]").forEach((p) => { if (!p.dataset.keep) { p.textContent = "Gerando análise…"; p.classList.add("loading"); } });
-  clearTimeout(insTimer);
-  const seq = ++insSeq;
-  insTimer = setTimeout(async () => {
-    const body = key === "all" ? {} : { ids: rows.map((r) => r.id) };
-    const { data, error } = await Admin.sb.functions.invoke("insights-parceiros", { body });
-    let res = data;
-    if (error) {
-      let code = "falha";
-      try { code = (await error.context.json()).error || code; } catch {}
-      res = { error: code };
-    } else INS_CACHE.set(key, res);
-    if (seq === insSeq) fillInsights(res);
-  }, 600);
+async function loadAnalysis() {
+  fillAnalysis();
+  const { data, error } = await Admin.sb.functions.invoke("insights-parceiros", { body: {} });
+  if (error) {
+    let code = "falha";
+    try { code = (await error.context.json()).error || code; } catch {}
+    IA = { error: code };
+  } else {
+    IA = data || {};
+    PERFIS_IA.clear();
+    Object.entries(IA.perfis || {}).forEach(([id, t]) => PERFIS_IA.set(id, t));
+  }
+  fillAnalysis();
+  if (!IA.error) profiles(filtered());
 }
 
 function update() {
@@ -783,7 +660,6 @@ function update() {
   document.getElementById("showing").textContent = "Mostrando " + rows.length + " de " + plural(ALL.length, "candidatura", "candidaturas");
   document.getElementById("n-cand").textContent = rows.length;
   dashboard(rows);
-  loadInsights(rows);
   candidaturas(rows);
 }
 
@@ -823,6 +699,20 @@ function lgpdCard(data) {
   return c;
 }
 
+// As perguntas antigas "formatos de contratação" e "precificação" viraram uma só: as respostas antigas
+// das duas passam para as opções atuais, sem repetir.
+const CONTRATACAO_LEGADO = {
+  "Contratação por hora.": "Valor por hora.", "Contratação por diária.": "Valor por diária.",
+  "Contratação por entregáveis.": "Valor por entregável.", "Contratação recorrente por período determinado.": "Contrato recorrente (mensal ou por período determinado).",
+  "Formato negociável conforme a demanda.": "Negociável conforme escopo e complexidade.",
+  "Valor por projeto.": "Projeto com escopo e valor fechado.", "Mensalidade / contrato recorrente.": "Contrato recorrente (mensal ou por período determinado).",
+  "Depende do escopo e da complexidade.": "Negociável conforme escopo e complexidade.",
+};
+function contratacaoAtual(r) {
+  const all = [...(r.formatos_contratacao || []), ...(r.precificacao ? [r.precificacao] : [])].map((v) => CONTRATACAO_LEGADO[v] || v);
+  return [...new Set(all)];
+}
+
 Admin.init({ page: "parceiros", onReady: async () => {
   const params = new URLSearchParams(location.search);
   const id = params.get("id");
@@ -834,7 +724,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
     if (error || !data) { box.replaceChildren(el("div", "card empty", error ? "Não foi possível carregar a candidatura." : "Candidatura não encontrada.")); return; }
     Admin.markSeen("cadastros", data);
     // Junta à opção "Outro" o texto que a pessoa escreveu.
-    const shown = { ...data };
+    const shown = { ...data, formatos_contratacao: contratacaoAtual(data) };
     // Candidaturas antigas tinham certificações em pergunta separada; agora fica junto da formação.
     if (data.certificacoes) shown.formacao = [data.formacao, data.certificacoes].filter(Boolean).join("\n");
     for (const [k, txt] of Object.entries(data.outros || {})) {
@@ -848,6 +738,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
   const err = document.getElementById("load-err");
   err.classList.toggle("hidden", !error);
   if (error) { err.textContent = "Não foi possível carregar as candidaturas: " + error.message; return; }
+  for (const r of data) r.formatos_contratacao = contratacaoAtual(r);
   // Respostas de versões antigas do formulário passam a contar na opção atual equivalente.
   const LEGADO = {
     atuacao_pj: { "Sim, tenho CNPJ ativo.": "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria).", "Sim, atuo por meio de uma empresa ou consultoria própria.": "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria)." },
@@ -855,10 +746,11 @@ Admin.init({ page: "parceiros", onReady: async () => {
   };
   for (const r of data) for (const [k, map] of Object.entries(LEGADO)) if (map[r[k]]) r[k] = map[r[k]];
   ALL = data;
-  if (!document.getElementById("f-areas_experiencia")) buildFilters();
+  if (!document.getElementById("f-areas_experiencia")) { buildFilters(); buildAreaChips(); initDesafio(); initProfiles(); }
   if (window.matchMedia("(min-width: 800px)").matches) document.getElementById("filters-box").open = true;
   setTab(params.get("aba"));
   update();
+  loadAnalysis();
 }});
 </script>
 </body>
