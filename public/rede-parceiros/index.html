@@ -404,7 +404,7 @@ function questionHtml(q) {
   else if (q.groups)
     field = `<div class="options">${q.groups.map(g => `<div class="group-title">${esc(g.title)}</div>${g.options.map(o => optionHtml(q, o)).join("")}`).join("")}</div>`;
   else field = `<div class="options">${q.options.map(o => optionHtml(q, o)).join("")}</div>`;
-  const errMsg = q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
+  const errMsg = q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
   return `<div class="q" data-q="${q.id}">
     <label class="q-label" ${["text", "email", "tel", "paragraph"].includes(q.type) ? `for="${q.id}"` : ""}>${q.n}. ${esc(q.label)}${req}</label>
     ${help}${info}${field}${q.afterHtml || ""}
@@ -439,11 +439,23 @@ function value(q) {
   return form.elements[q.id].value.trim();
 }
 
+// Máscara de telefone: (41) 99999-9999 ou (41) 3333-4444
+function maskPhone(value) {
+  const d = value.replace(/\D/g, "").slice(0, 11);
+  if (d.length <= 2) return d ? `(${d}` : "";
+  const rest = d.slice(2);
+  if (rest.length <= 4) return `(${d.slice(0, 2)}) ${rest}`;
+  const split = d.length === 11 ? 5 : 4;
+  return `(${d.slice(0, 2)}) ${rest.slice(0, split)}-${rest.slice(split)}`;
+}
+form.querySelectorAll('input[type="tel"]').forEach((i) => i.addEventListener("input", () => { i.value = maskPhone(i.value); }));
+
 function validateQuestion(q) {
   const v = value(q);
   let ok = true;
   if (q.required) ok = Array.isArray(v) ? v.length > 0 : v !== "";
   if (ok && q.type === "email" && v) ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  if (ok && q.type === "tel" && v) ok = v.replace(/\D/g, "").length >= 10;
   form.querySelector(`[data-q="${q.id}"]`).classList.toggle("invalid", !ok);
   return ok;
 }
