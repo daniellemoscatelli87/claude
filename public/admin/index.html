@@ -11,8 +11,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
-  .home { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 20px; align-items: start; }
-  @media (max-width: 800px) { .home { grid-template-columns: 1fr; } }
+  .home { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+  .totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+  @media (max-width: 800px) { .totals { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .total { display: flex; flex-direction: column; gap: 6px; text-decoration: none; }
+  .total .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--red-tint); color: var(--red); margin-bottom: 4px; }
+  .total .ic svg { width: 20px; height: 20px; }
+  .total .v { font-size: 32px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+  .total .k { font-size: 13px; font-weight: 600; color: var(--muted); }
+  a.total:hover { border-color: var(--red); }
   .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
   .panel-head .ttl { display: flex; align-items: center; gap: 10px; }
   .panel-head .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--red-tint); color: var(--red); }
@@ -37,6 +44,10 @@
   <h1 id="hello">Olá!</h1>
   <p class="muted">Veja as últimas mensagens de contato e candidaturas à Rede de Parceiros.</p>
   <p class="msg err hidden" id="load-err"></p>
+  <div class="totals" id="totals">
+    <a class="card total" href="/admin/contatos/"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><span class="v" id="tot-contatos">—</span><span class="k">Contatos recebidos</span></a>
+    <a class="card total" href="/admin/parceiros/?aba=candidaturas"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></svg></span><span class="v" id="tot-parceiros">—</span><span class="k">Parceiros registrados</span></a>
+  </div>
   <div class="home">
     <section class="card" aria-labelledby="h-contato">
       <div class="panel-head">
@@ -90,6 +101,8 @@ Admin.init({ page: "inicio", onReady: async () => {
   const err = c.error || p.error, box = document.getElementById("load-err");
   box.classList.toggle("hidden", !err);
   if (err) { box.textContent = "Não foi possível carregar os dados: " + err.message; return; }
+  document.getElementById("tot-contatos").textContent = c.count;
+  document.getElementById("tot-parceiros").textContent = p.count;
   document.getElementById("cnt-contatos").textContent = plural(c.count, "mensagem recebida", "mensagens recebidas") + (c.count > LIMIT ? " · últimas " + LIMIT : "");
   document.getElementById("cnt-parceiros").textContent = plural(p.count, "candidatura", "candidaturas") + (p.count > LIMIT ? " · últimas " + LIMIT : "");
   const fill = (id, rows, make, empty) => {
