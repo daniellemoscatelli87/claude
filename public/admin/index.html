@@ -85,7 +85,7 @@ Admin.init({ page: "inicio", onReady: async () => {
   document.getElementById("hello").textContent = (h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite") + ", Dani!";
   const [c, p] = await Promise.all([
     Admin.sb.from("contatos").select("id, created_at, nome, empresa, cargo, assunto", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
-    Admin.sb.from("cadastros").select("id, created_at, nome, principal_especializacao, segmentos", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
+    Admin.sb.from("cadastros").select("id, created_at, nome, empresa, principal_especializacao, segmentos", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
   ]);
   const err = c.error || p.error, box = document.getElementById("load-err");
   box.classList.toggle("hidden", !err);
@@ -98,7 +98,7 @@ Admin.init({ page: "inicio", onReady: async () => {
     rows.forEach((r) => el.appendChild(make(r)));
   };
   fill("last-contatos", c.data, (r) => entry("/admin/contatos/?id=" + r.id, r, [["Empresa", r.empresa], ["Cargo", r.cargo], ["Assunto", r.assunto]]), "Nenhuma mensagem ainda.");
-  fill("last-parceiros", p.data, (r) => entry("/admin/parceiros/?id=" + r.id, r, [["Serviço", r.principal_especializacao], ["Segmento", segs(r.segmentos)]]), "Nenhuma candidatura ainda.");
+  fill("last-parceiros", p.data, (r) => entry("/admin/parceiros/?id=" + r.id, r, [["Empresa", r.empresa], ["Serviço", r.principal_especializacao], ["Segmento", segs(r.segmentos)]]), "Nenhuma candidatura ainda.");
 }});
 </script>
 </body>

@@ -196,7 +196,7 @@
       <div class="filters" id="filters">
         <div class="search">
           <label for="f-busca">Buscar</label>
-          <input type="search" id="f-busca" placeholder="Nome, e-mail, especialização, atividades, ferramentas, cidade…">
+          <input type="search" id="f-busca" placeholder="Nome, empresa, e-mail, especialização, atividades, ferramentas, cidade…">
         </div>
       </div>
       <div class="filters-foot">
@@ -278,7 +278,7 @@ const FILTROS = [
   { id: "tempo_especialidade", label: "Tempo na especialidade" },
   { id: "uf", label: "Estado", derived: true },
 ];
-const BUSCA = ["nome", "email", "cidade_estado", "apresentacao", "principal_especializacao", "atividades_entregaveis", "conhecimento_segmento", "formacao", "certificacoes", "ferramentas", "projeto_relevante"];
+const BUSCA = ["nome", "email", "cidade_estado", "apresentacao", "empresa", "principal_especializacao", "atividades_entregaveis", "conhecimento_segmento", "formacao", "certificacoes", "ferramentas", "projeto_relevante"];
 let ALL = [];
 
 function buildFilters() {
@@ -687,15 +687,15 @@ function skills(rows) {
   });
 
   const more = document.getElementById("skills-more"); more.replaceChildren();
-  const c2 = card("Especializações declaradas", { note: "Pergunta 12 · resposta livre, agrupada por texto igual." });
+  const c2 = card("Especializações declaradas", { note: "Pergunta " + Q.principal_especializacao.n + " · resposta livre, agrupada por texto igual." });
   const m = new Map();
   for (const r of rows) { const raw = (r.principal_especializacao || "").trim(); if (!raw) continue; const k = norm(raw); const cur = m.get(k) || { label: raw, n: 0 }; cur.n++; m.set(k, cur); }
   const list = [...m.values()].sort((a, b) => b.n - a.n).map((x) => [x.label, x.n]);
   c2.appendChild(list.length ? ranked(list, t, { limit: 6 }) : emptyNote());
-  const c3 = card("Formas de colaboração de interesse", { cls: "span2", note: "Pergunta 9 · as três mais escolhidas." });
+  const c3 = card("Formas de colaboração de interesse", { cls: "span2", note: "Pergunta " + Q.formas_colaboracao.n + " · as três mais escolhidas." });
   c3.appendChild(t ? podium(rows, "formas_colaboracao") : emptyNote());
   more.append(c2, c3);
-  const c4 = card("Etapas de projeto em que atuam", { cls: "span3", note: "Pergunta 14 · em que fases do projeto a rede está presente." });
+  const c4 = card("Etapas de projeto em que atuam", { cls: "span3", note: "Pergunta " + Q.etapas_projeto.n + " · em que fases do projeto a rede está presente." });
   c4.appendChild(t ? timeline(rows, "etapas_projeto") : emptyNote());
   more.appendChild(c4);
 }
@@ -742,7 +742,7 @@ function dashboard(rows) {
     ["Projetos multidisciplinares", "colaboracao_multidisciplinar"],
     ["Equipe ou rede própria", "equipe_propria"],
   ]);
-  addViz(per, "Modelo de atuação", rows, () => treemap(rows, "modelo_atuacao"), { cls: "span3", note: "Pergunta 8 · o tamanho de cada bloco é a quantidade de parceiros." });
+  addViz(per, "Modelo de atuação", rows, () => treemap(rows, "modelo_atuacao"), { cls: "span3", note: "Pergunta " + Q.modelo_atuacao.n + " · o tamanho de cada bloco é a quantidade de parceiros." });
 
   const dis = document.getElementById("disponibilidade"); dis.replaceChildren();
   addDonut(dis, "Disponibilidade para projetos", rows, "disponibilidade_colaborar", "candidaturas");
@@ -753,14 +753,14 @@ function dashboard(rows) {
     ["Precificação", "precificacao"],
     ["Projetos em parceria", "interesse_parceria"],
   ]);
-  addViz(dis, "Do remoto ao presencial", rows, () => spectrum(rows, "formatos_atuacao"), { cls: "span3", note: "Pergunta 30 · quantos parceiros aceitam cada formato." });
-  addViz(dis, "Formatos de contratação aceitos", rows, () => tiles(rows, "formatos_contratacao"), { cls: "span3", note: "Pergunta 34 · cada parceiro pode aceitar vários." });
+  addViz(dis, "Do remoto ao presencial", rows, () => spectrum(rows, "formatos_atuacao"), { cls: "span3", note: "Pergunta " + Q.formatos_atuacao.n + " · quantos parceiros aceitam cada formato." });
+  addViz(dis, "Formatos de contratação aceitos", rows, () => tiles(rows, "formatos_contratacao"), { cls: "span3", note: "Pergunta " + Q.formatos_contratacao.n + " · cada parceiro pode aceitar vários." });
 
   const seg = document.getElementById("segmentos"); seg.replaceChildren();
-  addViz(seg, "Segmentos de mercado", rows, () => coverage(rows, "segmentos"), { cls: "span3", note: "Pergunta 15 · onde a rede tem conhecimento e onde ainda há lacunas." });
+  addViz(seg, "Segmentos de mercado", rows, () => coverage(rows, "segmentos"), { cls: "span3", note: "Pergunta " + Q.segmentos.n + " · onde a rede tem conhecimento e onde ainda há lacunas." });
 
   const loc = document.getElementById("localizacao"); loc.replaceChildren();
-  const cu = card("Estados", { cls: "span2", note: "Identificado pela sigla no fim da pergunta 4 (ex.: “Curitiba — PR”)." });
+  const cu = card("Estados", { cls: "span2", note: "Identificado pela sigla no fim da pergunta " + Q.cidade_estado.n + " (ex.: “Curitiba — PR”)." });
   const ufs = counts(rows, "uf", (r) => uf(r.cidade_estado));
   if (!ufs.length) cu.appendChild(emptyNote());
   else { const g = el("div", "uf-grid"); ufs.forEach(([u, n], i) => { const t = el("div", "uf" + (i === 0 ? " top" : "")); t.title = u + ": " + plural(n, "parceiro", "parceiros"); t.append(el("b", null, String(n)), el("span", null, u)); g.appendChild(t); }); cu.appendChild(g); }

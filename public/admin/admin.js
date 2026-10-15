@@ -4,7 +4,11 @@
 (function () {
   const ADMIN_EMAIL = "contato@danimoscatelli.com.br";
   const ADMIN_NAME = "Dani Moscatelli";
-  const sb = supabase.createClient("https://lipfvnerohkaajegqvwr.supabase.co", "sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej");
+  // A sessão fica guardada no navegador e é renovada automaticamente: a administradora
+  // permanece conectada até clicar em "Sair".
+  const sb = supabase.createClient("https://lipfvnerohkaajegqvwr.supabase.co", "sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej", {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: "dm-admin-auth", storage: window.localStorage },
+  });
 
   const ICONS = {
     menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
