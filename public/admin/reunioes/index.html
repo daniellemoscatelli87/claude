@@ -79,19 +79,8 @@
 <script src="/admin/admin.js"></script>
 <script>
 const el = Admin.el;
-const MEETING_MINUTES = 60; // duração usada no convite do Google Agenda
 const dayKey = (d) => d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 const time = (d) => d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-const gcalDate = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-
-// Link que abre o Google Agenda com o evento preenchido e o contato como convidado.
-function googleLink(r, start) {
-  const end = new Date(start.getTime() + MEETING_MINUTES * 6e4);
-  const details = ["Reunião agendada a partir de mensagem de contato do site.", r.assunto && "Assunto: " + r.assunto, r.empresa && "Empresa: " + r.empresa, r.cargo && "Cargo: " + r.cargo, r.telefone && "Telefone: " + r.telefone, r.mensagem && "\nMensagem:\n" + r.mensagem].filter(Boolean).join("\n");
-  const q = new URLSearchParams({ action: "TEMPLATE", text: "Reunião com " + (r.nome || "contato") + (r.empresa ? " (" + r.empresa + ")" : ""), dates: gcalDate(start) + "/" + gcalDate(end), details });
-  if (r.email) q.set("add", r.email);
-  return "https://calendar.google.com/calendar/render?" + q.toString();
-}
 
 function action(href, iconName, text, external) {
   const a = el("a"); a.href = href;
@@ -108,7 +97,7 @@ function meetingItem(r, past) {
   const acts = el("div", "acts");
   acts.append(action("/admin/contatos/?id=" + r.id, "mail", "Ver histórico"));
   if (r.email) acts.append(action("mailto:" + r.email + "?subject=" + encodeURIComponent("Nossa reunião em " + d.toLocaleDateString("pt-BR") + " às " + time(d)), "mailOpen", "Enviar e-mail"));
-  if (!past) acts.append(action(googleLink(r, d), "meeting", "Google Agenda", true));
+  if (!past) acts.append(action(Admin.googleCalendarLink(r), "meeting", "Google Agenda", true));
   item.append(date, el("div", "t", r.nome || "Sem nome"), el("div", "s", [r.empresa, r.assunto].filter(Boolean).join(" · ")), acts);
   return item;
 }

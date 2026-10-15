@@ -91,6 +91,16 @@
     if (error) console.error(error);
   }
 
+  // Link que abre o Google Agenda com a reunião preenchida e o contato como convidado (duração de 1 hora).
+  const gcalDate = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  function googleCalendarLink(r) {
+    const start = new Date(r.reuniao_em), end = new Date(start.getTime() + 60 * 6e4);
+    const details = ["Reunião agendada a partir de mensagem de contato do site.", r.assunto && "Assunto: " + r.assunto, r.empresa && "Empresa: " + r.empresa, r.cargo && "Cargo: " + r.cargo, r.telefone && "Telefone: " + r.telefone, r.mensagem && "\nMensagem:\n" + r.mensagem].filter(Boolean).join("\n");
+    const q = new URLSearchParams({ action: "TEMPLATE", text: "Reunião com " + (r.nome || "contato") + (r.empresa ? " (" + r.empresa + ")" : ""), dates: gcalDate(start) + "/" + gcalDate(end), details });
+    if (r.email) q.set("add", r.email);
+    return "https://calendar.google.com/calendar/render?" + q.toString();
+  }
+
   function valueNode(v) {
     const dd = el("dd");
     if (v == null || v === "" || (Array.isArray(v) && !v.length)) { dd.textContent = "-"; dd.className = "muted"; return dd; }
@@ -299,5 +309,5 @@
     ["dias_preferidos", "Melhor dia da semana"], ["periodo", "Período de preferência"],
   ]}];
 
-  window.Admin = { sb, el, init, icon, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES };
+  window.Admin = { sb, el, init, icon, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES };
 })();

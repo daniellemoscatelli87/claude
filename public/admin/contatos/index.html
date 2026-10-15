@@ -13,11 +13,44 @@
 <style>
   .toolbar { display: flex; gap: 12px; align-items: center; margin: 20px 0 12px; flex-wrap: wrap; }
   .toolbar input { max-width: 420px; }
-  #status { display: grid; gap: 12px; }
-  .status-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .status-info, .status-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .status-meet { border-top: 1px solid var(--track); padding-top: 12px; }
-  .status-meet .l { margin-top: 0; }
+  #status { display: grid; gap: 18px; }
+  /* Etapas */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); position: relative; }
+  .step { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; position: relative; }
+  .step:not(:first-child)::before { content: ""; position: absolute; top: 13px; right: 50%; width: 100%; height: 2px; background: var(--line); z-index: 0; }
+  .step.done:not(:first-child)::before { background: var(--c); }
+  .step .dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--line); background: #fff; display: grid; place-items: center; position: relative; z-index: 1; color: #fff; }
+  .step .dot svg { width: 14px; height: 14px; }
+  .step.done .dot { background: var(--c); border-color: var(--c); }
+  .step .lbl { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .step.done .lbl { color: var(--c); }
+  .step .dt { font-size: 11px; color: var(--muted); min-height: 14px; }
+  .s-new { --c: var(--red); } .s-read { --c: #64748b; } .s-ans { --c: #1e7b45; } .s-meet { --c: #1a56c4; }
+  /* Próxima ação */
+  .next { border-top: 1px solid var(--track); padding-top: 16px; display: grid; gap: 12px; }
+  .next .hint { margin: 0; font-size: 14px; color: var(--muted); }
+  .next .acts { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn-line { background: #fff; border: 1px solid var(--line); color: var(--dark); border-radius: 12px; padding: 10px 16px; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; }
+  .btn-line:hover { border-color: var(--red); color: var(--red); }
+  .link-muted, .link-danger { background: none; border: 0; padding: 8px 4px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: underline; }
+  .link-danger { color: var(--red); }
+  .meet-card { display: flex; gap: 12px; align-items: center; background: #e8f0fe; color: #1a56c4; border-radius: 14px; padding: 14px 16px; }
+  .meet-card .ic { width: 40px; height: 40px; border-radius: 12px; background: #fff; display: grid; place-items: center; flex-shrink: 0; }
+  .meet-card .ic svg { width: 22px; height: 22px; }
+  .meet-card .k, .meet-form > .k { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .meet-card .v { font-size: 16px; font-weight: 700; color: var(--dark); }
+  .meet-card .v::first-letter { text-transform: uppercase; }
+  .meet-form { display: grid; gap: 12px; background: #f8fafc; border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+  .meet-form > .k { color: #1a56c4; }
+  .meet-form .fields { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 10px; }
+  .meet-form .fld { display: block; min-width: 0; }
+  .meet-form .fld span { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  @media (max-width: 480px) { .meet-form .fields { grid-template-columns: 1fr; } }
+  .btn-meet { background: #1a56c4; color: #fff; border-radius: 12px; padding: 10px 18px; font-size: 14px; }
+  .btn-meet:hover { background: #15479f; }
+  .btn-meet:disabled { opacity: .6; cursor: wait; }
+  .meet-form input { min-width: 0; width: 100%; font: inherit; font-size: 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--dark); min-height: 44px; }
+  .meet-form input:focus { outline: none; border-color: #1a56c4; box-shadow: 0 0 0 3px rgb(26 86 196 / .15); }
   #historico { margin-bottom: 12px; }
   .thread { display: grid; gap: 10px; margin: 12px 0 16px; }
   .bubble { border-radius: 14px; padding: 12px 14px; max-width: 92%; }
@@ -29,8 +62,6 @@
   .reply textarea:focus { border-color: var(--red); background: #fff; box-shadow: 0 0 0 3px rgb(212 77 77 / .15); }
   .reply .row-end { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
   .reply .to { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
-  .meet-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-  .meet-form input { width: auto; flex: 1 1 200px; font: inherit; font-size: 14px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; color: var(--dark); }
 </style>
 </head>
 <body>
@@ -54,7 +85,6 @@
 <script src="/admin/admin.js"></script>
 <script>
 const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-const badge = (r) => r.respondido_em ? Admin.el("span", "badge ok", "Respondida") : Admin.el("span", "badge pend", "Não respondida");
 const pad = (n) => String(n).padStart(2, "0");
 const toLocalInput = (iso) => { const d = new Date(iso); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`; };
 
@@ -65,48 +95,92 @@ async function save(r, fields) {
   return true;
 }
 
-// Barra de situação no detalhe: respondida / não respondida e reunião agendada (com data e hora).
+// Situação da mensagem: etapas (recebida, lida, respondida, reunião) e a próxima ação, uma de cada vez.
+const fmtMeeting = (iso) => { const d = new Date(iso); return d.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" }) + " às " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }); };
+const STEPS = [
+  { key: "created_at", label: "Recebida", cls: "s-new" },
+  { key: "visualizado_em", label: "Lida", cls: "s-read" },
+  { key: "respondido_em", label: "Respondida", cls: "s-ans" },
+  { key: "reuniao_em", label: "Reunião", cls: "s-meet" },
+];
+
 function statusBar(r) {
   const bar = document.getElementById("status"); bar.replaceChildren();
-  const line = (...kids) => { const d = Admin.el("div", "status-line"); d.append(...kids); return d; };
   const button = (cls, text, onClick) => {
     const b = Admin.el("button", cls, text); b.type = "button";
     b.addEventListener("click", async () => { b.disabled = true; if (await onClick()) statusBar(r); else b.disabled = false; });
     return b;
   };
 
-  const info = Admin.el("div", "status-info"); info.appendChild(badge(r));
-  if (r.respondido_em) info.appendChild(Admin.el("span", "when", "em " + Admin.fmtDate(r.respondido_em)));
-  const respBtn = r.respondido_em
-    ? (r.reuniao_em ? null : button("btn-ghost", "Marcar como não respondida", () => save(r, { respondido_em: null })))
-    : button("btn-ok", "Marcar como respondida", () => save(r, { respondido_em: new Date().toISOString() }));
-  bar.appendChild(line(info, ...(respBtn ? [respBtn] : [])));
+  // Linha de etapas
+  const steps = Admin.el("ol", "steps");
+  STEPS.forEach((st) => {
+    const done = !!r[st.key];
+    const li = Admin.el("li", "step " + st.cls + (done ? " done" : ""));
+    const dot = Admin.el("span", "dot"); dot.innerHTML = done ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>' : "";
+    const when = done ? (st.key === "reuniao_em" ? new Date(r.reuniao_em).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }) : new Date(r[st.key]).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })) : "";
+    li.append(dot, Admin.el("span", "lbl", st.label), Admin.el("span", "dt", when));
+    steps.appendChild(li);
+  });
+  bar.appendChild(steps);
 
-  const meet = Admin.el("div", "status-info");
-  if (r.reuniao_em) {
-    meet.append(Admin.el("span", "badge meet", "Reunião agendada"), Admin.el("span", "when", "para " + Admin.fmtDate(r.reuniao_em)));
-    const edit = button("btn-ghost", "Alterar data", async () => { r._editMeeting = true; return true; });
-    const cancel = button("btn-ghost", "Cancelar reunião", () => save(r, { reuniao_em: null }));
-    if (!r._editMeeting) {
-      const actions = Admin.el("div", "status-actions"); actions.append(edit, cancel);
-      bar.appendChild(line(meet, actions));
-      return;
+  // Próxima ação
+  const next = Admin.el("div", "next");
+  if (r.reuniao_em && !r._editMeeting) {
+    const card = Admin.el("div", "meet-card");
+    const ic = Admin.el("span", "ic"); ic.innerHTML = Admin.icon("meeting");
+    const txt = Admin.el("div"); txt.append(Admin.el("div", "k", "Reunião agendada"), Admin.el("div", "v", fmtMeeting(r.reuniao_em)));
+    card.append(ic, txt);
+    const acts = Admin.el("div", "acts");
+    const g = Admin.el("a", "btn-line", "Adicionar ao Google Agenda"); g.href = Admin.googleCalendarLink(r); g.target = "_blank"; g.rel = "noopener noreferrer";
+    acts.append(g, button("btn-line", "Alterar data", async () => { r._editMeeting = true; return true; }), button("link-danger", "Cancelar reunião", () => confirm("Cancelar esta reunião?") && save(r, { reuniao_em: null })));
+    next.append(card, acts);
+  } else if (!r.respondido_em) {
+    next.append(Admin.el("p", "hint", "Responda pelo histórico abaixo ou, se já respondeu por fora, marque aqui."));
+    const acts = Admin.el("div", "acts");
+    acts.append(button("btn-ok", "Marcar como respondida", () => save(r, { respondido_em: new Date().toISOString() })), meetingToggle(r));
+    next.appendChild(acts);
+  } else {
+    if (!r._scheduling && !r._editMeeting) {
+      next.append(Admin.el("p", "hint", "Respondida em " + Admin.fmtDate(r.respondido_em) + ". Próximo passo: agendar a reunião."));
+      const acts = Admin.el("div", "acts");
+      acts.append(meetingToggle(r, "btn-ok"), button("link-muted", "Desfazer resposta", () => save(r, { respondido_em: null })));
+      next.appendChild(acts);
     }
   }
-  const label = Admin.el("label", "l", r.reuniao_em ? "Nova data e hora da reunião" : "Agendar reunião");
-  const input = Admin.el("input"); input.type = "datetime-local"; input.id = "reuniao"; label.htmlFor = "reuniao";
-  if (r.reuniao_em) input.value = toLocalInput(r.reuniao_em);
-  const ok = button("btn-ok", r.reuniao_em ? "Salvar nova data" : "Agendar reunião", async () => {
-    if (!input.value) { alert("Informe a data e a hora da reunião."); return false; }
-    const when = new Date(input.value).toISOString();
-    const done = await save(r, { reuniao_em: when, respondido_em: r.respondido_em || new Date().toISOString() });
-    if (done) r._editMeeting = false;
-    return done;
-  });
-  const form = Admin.el("div", "meet-form"); form.append(input, ok);
-  if (r._editMeeting) form.appendChild(button("btn-ghost", "Cancelar", async () => { r._editMeeting = false; return true; }));
-  const box = Admin.el("div", "status-meet"); box.append(label, form);
-  bar.appendChild(box);
+  if (r._scheduling || r._editMeeting) next.appendChild(meetingForm(r, button));
+  bar.appendChild(next);
+}
+
+function meetingToggle(r, cls = "btn-line") {
+  const b = Admin.el("button", cls, "Agendar reunião"); b.type = "button";
+  b.addEventListener("click", () => { r._scheduling = true; statusBar(r); document.getElementById("meet-date")?.focus(); });
+  return b;
+}
+
+function meetingForm(r, button) {
+  const f = Admin.el("div", "meet-form");
+  f.appendChild(Admin.el("div", "k", r._editMeeting ? "Nova data da reunião" : "Agendar reunião"));
+  const field = (id, label, type) => { const w = Admin.el("label", "fld"); w.htmlFor = id; const i = Admin.el("input"); i.type = type; i.id = id; w.append(Admin.el("span", null, label), i); return [w, i]; };
+  const [wd, date] = field("meet-date", "Data", "date");
+  const [wt, hour] = field("meet-time", "Horário", "time");
+  const now = new Date();
+  date.min = toLocalInput(now.toISOString()).slice(0, 10);
+  if (r.reuniao_em) { const v = toLocalInput(r.reuniao_em); date.value = v.slice(0, 10); hour.value = v.slice(11); } else hour.value = "10:00";
+  const grid = Admin.el("div", "fields"); grid.append(wd, wt);
+  const err = Admin.el("p", "msg err hidden");
+  const acts = Admin.el("div", "acts");
+  acts.append(
+    button("btn-meet", r._editMeeting ? "Salvar nova data" : "Confirmar reunião", async () => {
+      if (!date.value || !hour.value) { err.textContent = "Escolha a data e o horário."; err.classList.remove("hidden"); return false; }
+      const ok = await save(r, { reuniao_em: new Date(date.value + "T" + hour.value).toISOString(), respondido_em: r.respondido_em || new Date().toISOString() });
+      if (ok) { r._scheduling = false; r._editMeeting = false; }
+      return ok;
+    }),
+    button("link-muted", "Voltar", async () => { r._scheduling = false; r._editMeeting = false; return true; }),
+  );
+  f.append(grid, err, acts);
+  return f;
 }
 
 // Histórico: a mensagem recebida e as respostas enviadas pela plataforma, com campo para responder.
@@ -161,9 +235,10 @@ Admin.init({ page: "contatos", onReady: async () => {
     const { data, error } = await Admin.sb.from("contatos").select("*").eq("id", id).maybeSingle();
     const box = document.getElementById("detail");
     if (error || !data) { document.getElementById("status").classList.add("hidden"); box.replaceChildren(Admin.el("div", "card empty", error ? "Não foi possível carregar a mensagem." : "Mensagem não encontrada.")); return; }
+    Admin.markSeen("contatos", data);
+    data.visualizado_em = data.visualizado_em || new Date().toISOString();
     statusBar(data);
     historico(data);
-    Admin.markSeen("contatos", data);
     box.replaceChildren(Admin.detail(data, Admin.CONTATO_SECOES, "Recebida em " + Admin.fmtDate(data.created_at)));
     return;
   }
