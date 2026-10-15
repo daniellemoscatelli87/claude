@@ -29,6 +29,7 @@
     close: '<path d="M6 6l12 12M18 6L6 18"/>',
     home: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
     mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+    mailOpen: '<path d="M3 10.5 12 4l9 6.5V19a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="m3 10.5 9 6 9-6"/>',
     users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/>',
     logout: '<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 16l-4-4 4-4M6 12h10"/>',
   };
@@ -60,10 +61,18 @@
   };
 
   // Linha clicável com iniciais, título, data e resumo.
-  function rowLink(href, title, sub, date, seen) {
+  // Mensagem de contato: envelope fechado (não lida) ou aberto (lida) no lugar das iniciais.
+  function mailIcon(seen) {
+    const s = el("span", "ini mail");
+    s.innerHTML = icon(seen ? "mailOpen" : "mail");
+    s.setAttribute("aria-label", seen ? "Lida" : "Não lida");
+    return s;
+  }
+
+  function rowLink(href, title, sub, date, seen, mail) {
     const a = el("a", "rowlink" + (seen ? " seen" : ""));
     a.href = href;
-    a.append(el("span", "ini", initials(title)), el("span", "t", title || "Sem nome"), el("span", "d", fmtDay(date)), el("span", "s", sub || ""));
+    a.append(mail ? mailIcon(seen) : el("span", "ini", initials(title)), el("span", "t", title || "Sem nome"), el("span", "d", fmtDay(date)), el("span", "s", sub || ""));
     return a;
   }
 
@@ -282,5 +291,5 @@
     ["dias_preferidos", "Melhor dia da semana"], ["periodo", "Período de preferência"],
   ]}];
 
-  window.Admin = { sb, el, init, rowLink, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES };
+  window.Admin = { sb, el, init, rowLink, mailIcon, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES };
 })();

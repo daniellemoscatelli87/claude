@@ -95,7 +95,7 @@ Admin.init({ page: "contatos", onReady: async () => {
       const head = Admin.el("div", "group-head");
       head.append(Admin.el("h2", null, title), Admin.el("span", "n", String(items.length)));
       const box = Admin.el("div", "rows");
-      items.forEach((r) => box.appendChild(Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em)));
+      items.forEach((r) => box.appendChild(Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em, true)));
       card.append(head, box);
       list.appendChild(card);
     }

@@ -77,12 +77,12 @@ const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
 const clean = (v) => String(v ?? "").replace(/\.$/, "");
 
 // Linha com nome, data e hora completas e os campos pedidos para cada bloco.
-function entry(href, r, fields) {
+function entry(href, r, fields, mail) {
   const a = Admin.el("a", "entry" + (r.visualizado_em ? " seen" : "")); a.href = href;
   const d = new Date(r.created_at);
   const when = Admin.el("div", "when");
   when.append(Admin.el("b", null, d.toLocaleDateString("pt-BR")), document.createTextNode(d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })));
-  a.append(Admin.el("span", "ini", Admin.initials(r.nome)), Admin.el("span", "t", r.nome || "Sem nome"), when);
+  a.append(mail ? Admin.mailIcon(!!r.visualizado_em) : Admin.el("span", "ini", Admin.initials(r.nome)), Admin.el("span", "t", r.nome || "Sem nome"), when);
   for (const [label, value] of fields) {
     const f = Admin.el("div", "f");
     f.append(Admin.el("span", null, label + ": "), document.createTextNode(value || "-"));
@@ -123,7 +123,7 @@ Admin.init({ page: "inicio", onReady: async () => {
     if (!rows.length) return el.appendChild(Admin.el("div", "empty", empty));
     rows.forEach((r) => el.appendChild(make(r)));
   };
-  fill("last-contatos", c.data, (r) => entry("/admin/contatos/?id=" + r.id, r, [["Empresa", r.empresa], ["Cargo", r.cargo], ["Assunto", r.assunto]]), "Nenhuma mensagem ainda.");
+  fill("last-contatos", c.data, (r) => entry("/admin/contatos/?id=" + r.id, r, [["Empresa", r.empresa], ["Cargo", r.cargo], ["Assunto", r.assunto]], true), "Nenhuma mensagem ainda.");
   fill("last-parceiros", p.data, (r) => entry("/admin/parceiros/?id=" + r.id, r, [["Empresa", r.empresa], ["Serviço", r.principal_especializacao], ["Segmento", segs(r.segmentos)]]), "Nenhuma candidatura ainda.");
 }});
 </script>
