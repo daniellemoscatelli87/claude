@@ -369,7 +369,7 @@ const SECTIONS = [
       "Ainda não, mas tenho interesse.",
       "Não tenho experiência ou interesse nesse formato.",
     ]},
-    { id: "experiencia_colaboracao", n: 19, label: "Caso tenha respondido sim, conte brevemente sobre essa experiência.", type: "paragraph", required: false, help: "Descreva o contexto, sua contribuição e como ocorreu a colaboração entre os profissionais." },
+    { id: "experiencia_colaboracao", n: 19, showIf: { id: "colaboracao_multidisciplinar", test: (v) => /^Sim/.test(v) }, label: "Conte brevemente sobre essa experiência.", type: "paragraph", required: false, help: "Descreva o contexto, sua contribuição e como ocorreu a colaboração entre os profissionais." },
   ]},
   { title: "Formação e experiência", n: "Seção 5", questions: [
     { id: "nivel_formacao", n: 20, label: "Qual é o seu nível de formação acadêmica?", type: "radio", required: true, options: [

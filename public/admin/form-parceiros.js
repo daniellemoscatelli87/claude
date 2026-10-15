@@ -319,7 +319,7 @@ window.FORM_PARCEIROS = [
    {
     "id": "experiencia_colaboracao",
     "n": 19,
-    "label": "Caso tenha respondido sim, conte brevemente sobre essa experiência.",
+    "label": "Conte brevemente sobre essa experiência.",
     "type": "paragraph"
    }
   ]
