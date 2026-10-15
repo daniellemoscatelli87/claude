@@ -192,7 +192,8 @@
   /* Filtro por área e desafio */
   .area-filter { margin-bottom: 8px; }
   .area-lbl { font-size: 12px; font-weight: 600; color: var(--muted); }
-  .area-filter .chips { margin-top: 6px; }
+  .area-filter { max-width: 360px; }
+  .area-filter label { display: block; margin-bottom: 4px; }
   .pc-count { font-size: 13px; margin: 6px 0 10px; }
   .btn-desafio { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 14px; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 9px 18px; cursor: pointer; }
   .btn-desafio:hover { background: var(--red-dark); }
@@ -288,7 +289,7 @@
           <button type="button" class="btn-desafio" id="desafio-open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>Desafio</button>
         </div>
         <div class="card desafio-bar hidden" id="desafio-bar"><div><div class="pc-h">Desafio do projeto</div><p id="desafio-resumo"></p></div><button type="button" class="btn-ghost" id="desafio-clear">Limpar desafio</button></div>
-        <div class="area-filter"><span class="area-lbl">Área de atuação</span><div class="chips" id="area-chips"></div></div>
+        <div class="area-filter"><label class="area-lbl" for="area-sel">Área de atuação</label><select id="area-sel"></select></div>
         <p class="muted pc-count" id="pc-count"></p>
         <div class="pcs-grid" id="pc-grid"></div>
       </div>
@@ -424,14 +425,10 @@ function kpis(rows) {
 let AREA_SEL = ""; // título do grupo de áreas escolhido ("" = todas)
 const temArea = (r, g) => (r.areas_experiencia || []).some((x) => g.options.includes(x));
 function buildAreaChips() {
-  const box = document.getElementById("area-chips"); box.replaceChildren();
-  const groups = [{ title: "" }, ...Q.areas_experiencia.groups];
-  groups.forEach((g) => {
-    const b = el("button", "chip" + (AREA_SEL === g.title ? " on" : ""), g.title || "Todas as áreas"); b.type = "button";
-    b.setAttribute("aria-pressed", String(AREA_SEL === g.title));
-    b.addEventListener("click", () => { AREA_SEL = g.title; buildAreaChips(); profiles(filtered()); });
-    box.appendChild(b);
-  });
+  const sel = document.getElementById("area-sel"); sel.replaceChildren(new Option("Todas as áreas", ""));
+  Q.areas_experiencia.groups.forEach((g) => sel.append(new Option(g.title, g.title)));
+  sel.value = AREA_SEL;
+  sel.onchange = () => { AREA_SEL = sel.value; profiles(filtered()); };
 }
 
 /* ---------- Desafio do projeto (IA) ---------- */
