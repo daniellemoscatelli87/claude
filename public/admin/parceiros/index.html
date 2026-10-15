@@ -50,17 +50,91 @@
   .kpi.hero { background: var(--dark); color: #fff; border-color: var(--dark); }
   .kpi.hero .k { color: #fff; } .kpi.hero .p { color: #cbd5e1; }
 
-  /* Ranking em etiquetas (múltipla escolha) */
-  .rank { display: flex; flex-wrap: wrap; gap: 6px; }
-  .rk { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; border-radius: 999px; padding: 5px 6px 5px 12px; background: rgb(212 77 77 / var(--a)); color: var(--dark); }
-  .rk b { font-size: 12px; font-variant-numeric: tabular-nums; background: #fff; border-radius: 999px; padding: 1px 8px; color: var(--red); }
-  .more { margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--red); background: none; border: 0; padding: 0; }
+  .more { margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--red); background: none; border: 0; padding: 0; }
   .more:hover { text-decoration: underline; }
+
+  /* Lista numerada (rankings) */
+  .ranked { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .ranked li { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px dashed var(--line); font-size: 14px; }
+  .ranked li:last-child { border-bottom: 0; }
+  .ranked .pos { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; background: var(--track); color: var(--muted); }
+  .ranked li:first-child .pos { background: var(--red); color: #fff; }
+  .ranked .cnt { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ranked .cnt b { color: var(--dark); }
+  .ranked.compact li { font-size: 13px; padding: 5px 0; grid-template-columns: 22px minmax(0, 1fr) auto; }
+  .ranked.compact .pos { width: 20px; height: 20px; font-size: 11px; }
+
+  /* Linha do tempo do projeto */
+  .tl { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); position: relative; padding-top: 6px; }
+  .tl::before { content: ""; position: absolute; left: 4%; right: 4%; top: 34px; height: 2px; background: var(--line); }
+  .tl .st { display: grid; justify-items: center; text-align: center; gap: 8px; position: relative; padding: 0 2px; }
+  .tl .dot { width: var(--d); height: var(--d); border-radius: 50%; background: rgb(212 77 77 / var(--a)); border: 2px solid #fff; box-shadow: 0 0 0 1px rgb(212 77 77 / .35); display: grid; place-items: center; font-size: 12px; font-weight: 800; color: var(--dark); margin-top: calc((56px - var(--d)) / 2); }
+  .tl .dot.hi { color: #fff; }
+  .tl .stn { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: .06em; margin-top: calc((56px - var(--d)) / 2); }
+  .tl .stl { font-size: 11.5px; line-height: 1.3; color: var(--dark); }
+  .tl-foot { margin-top: 14px; font-size: 13px; color: var(--muted); }
+  .tl-foot b { color: var(--dark); }
+  @media (max-width: 760px) {
+    .tl { grid-auto-flow: row; grid-auto-columns: auto; gap: 6px; }
+    .tl::before { left: 27px; right: auto; top: 10px; bottom: 10px; width: 2px; height: auto; }
+    .tl .st { grid-template-columns: 56px auto minmax(0, 1fr); justify-items: start; text-align: left; align-items: center; }
+    .tl .dot, .tl .stn { margin-top: 0; justify-self: center; }
+    .tl .stn { order: -1; display: none; }
+  }
+
+  /* Pódio */
+  .podium { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 10px; align-items: end; }
+  .pd { border-radius: 14px 14px 6px 6px; padding: 14px 12px; text-align: center; display: grid; gap: 6px; align-content: end; }
+  .pd .medal { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto; font-weight: 800; font-size: 14px; }
+  .pd .pv { font-size: 26px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+  .pd .pl { font-size: 12.5px; line-height: 1.3; }
+  .pd.p1 { background: var(--red); color: #fff; min-height: 190px; } .pd.p1 .medal { background: #fff; color: var(--red); }
+  .pd.p2 { background: var(--red-tint); min-height: 160px; } .pd.p2 .medal { background: var(--red); color: #fff; }
+  .pd.p3 { background: var(--track); min-height: 135px; } .pd.p3 .medal { background: var(--slate); color: #fff; }
+  .pd .pp { font-size: 11px; opacity: .8; }
+
+  /* Régua remoto ↔ presencial */
+  .spec { position: relative; padding: 8px 0 0; }
+  .spec .line { position: absolute; left: 10%; right: 10%; top: 44px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--slate), var(--red)); opacity: .35; }
+  .spec .pts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: relative; }
+  .spec .pt { display: grid; justify-items: center; text-align: center; gap: 6px; }
+  .spec .pv { font-size: 20px; font-weight: 800; line-height: 1; height: 22px; }
+  .spec .pin { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 4px solid var(--c); }
+  .spec .pl { font-size: 11.5px; line-height: 1.3; color: var(--dark); }
+  .spec .pp { font-size: 11px; color: var(--muted); }
+  .spec-ends { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 10px; }
+
+  /* Grade de blocos com ícone */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+  .tile { border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 8px; align-content: start; }
+  .tile .ti { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--red-tint); color: var(--red); }
+  .tile .ti svg { width: 18px; height: 18px; }
+  .tile .tv { font-size: 24px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+  .tile .tv small { font-size: 12px; font-weight: 600; color: var(--muted); margin-left: 4px; }
+  .tile .tl2 { font-size: 12.5px; line-height: 1.3; }
+  .tile.lead { border-color: var(--red); }
+
+  /* Mosaico proporcional */
+  .treemap { position: relative; height: 260px; border-radius: 12px; overflow: hidden; }
+  .tm { position: absolute; padding: 10px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid #fff; border-radius: 10px; }
+  .tm .tml { font-size: 12.5px; line-height: 1.25; font-weight: 600; }
+  .tm .tmv { font-size: 20px; font-weight: 800; line-height: 1; }
+  .tm .tmv small { font-size: 11px; font-weight: 600; opacity: .85; margin-left: 4px; }
+
+  /* Mapa de calor */
+  .heat { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+  .hc { border-radius: 10px; padding: 10px 12px; min-height: 64px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; font-size: 12.5px; line-height: 1.25; }
+  .hc b { font-size: 18px; line-height: 1; }
+  .hc.zero { background: repeating-linear-gradient(135deg, #f8fafc 0 6px, #f1f5f9 6px 12px) !important; color: #94a3b8; }
+  .heat-legend { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+  .heat-legend .scale { display: flex; gap: 2px; }
+  .heat-legend .scale span { width: 22px; height: 10px; border-radius: 3px; }
+  .heat-legend .gap { width: 22px; height: 10px; border-radius: 3px; background: repeating-linear-gradient(135deg, #f8fafc 0 3px, #e2e8f0 3px 6px); }
 
   /* Cartões de destaque (resposta mais comum) */
   .insights { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
   @media (max-width: 1000px) { .insights { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 520px) { .insights { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .insights { gap: 8px; } .ins { padding: 14px; } .ins .q { min-height: 0; font-size: 11px; } .ins .mini { width: 40px; height: 40px; } .ins .big { font-size: 22px; } .ins .ans { font-size: 12.5px; } }
   .ins .q { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); min-height: 32px; }
   .ins .top { display: flex; align-items: center; gap: 12px; margin: 10px 0 8px; }
   .ins .mini { width: 56px; height: 56px; flex-shrink: 0; }
@@ -163,7 +237,7 @@
       <div class="block">
         <div class="block-head"><span class="num">01</span><h2>Habilidades disponíveis</h2></div>
         <div class="skill-groups" id="skill-groups"></div>
-        <div class="g g2" style="margin-top:12px" id="skills-more"></div>
+        <div class="g g3" style="margin-top:12px" id="skills-more"></div>
       </div>
 
       <div class="block">
@@ -294,31 +368,199 @@ function card(title, opts = {}) {
 }
 const emptyNote = () => el("p", "muted", "Sem dados para os filtros atuais.");
 
-// Ranking em etiquetas: a intensidade do fundo acompanha a frequência (um só tom).
-function chipRank(entries, total, { limit = 8 } = {}) {
+// Escala da marca (escuro → claro) e a cor do texto que contrasta com cada passo.
+const RAMP = ["#6e1f1f", "#9c3131", "#c94444", "#e06b63", "#ec948c"];
+const rampFor = (n, max) => { const i = Math.min(RAMP.length - 1, Math.floor((1 - n / max) * RAMP.length)); return { bg: RAMP[i], fg: i <= 2 ? "#fff" : "var(--dark)" }; };
+
+// Lista numerada (1º, 2º…); "Ver todas" abre o restante.
+function ranked(entries, total, { limit = 5, compact = false } = {}) {
   const wrap = el("div");
-  const box = el("div", "rank");
-  const max = Math.max(1, ...entries.map(([, n]) => n));
+  const ol = el("ol", "ranked" + (compact ? " compact" : ""));
   entries.forEach(([label, n], i) => {
-    const a = 0.07 + (n / max) * 0.3;
-    const c = el("span", "rk" + (i >= limit ? " hidden extra" : ""));
-    c.style.setProperty("--a", a.toFixed(2));
-    c.title = clean(label) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, total) + "%)";
-    c.append(document.createTextNode(clean(label)), el("b", null, String(n)));
-    box.appendChild(c);
+    const li = el("li", i >= limit ? "hidden extra" : "");
+    const cnt = el("span", "cnt"); cnt.append(el("b", null, String(n)));
+    if (total) cnt.append(document.createTextNode(" · " + pct(n, total) + "%"));
+    li.append(el("span", "pos", String(i + 1)), el("span", null, clean(label)), cnt);
+    ol.appendChild(li);
   });
-  wrap.appendChild(box);
-  if (entries.length > limit) {
-    const btn = el("button", "more", "Ver todas (" + entries.length + ")");
+  wrap.appendChild(ol);
+  if (entries.length > limit) wrap.appendChild(toggleMore(ol, entries.length));
+  return wrap;
+}
+
+function toggleMore(box, n) {
+  const btn = el("button", "more", "Ver todas (" + n + ")");
+  btn.type = "button";
+  btn.addEventListener("click", () => {
+    const open = btn.dataset.open !== "1";
+    box.querySelectorAll(".extra").forEach((x) => x.classList.toggle("hidden", !open));
+    btn.dataset.open = open ? "1" : "";
+    btn.textContent = open ? "Mostrar menos" : "Ver todas (" + n + ")";
+  });
+  return btn;
+}
+
+// Linha do tempo: as etapas do projeto na ordem do formulário; o círculo cresce com a quantidade.
+function timeline(rows, id) {
+  const t = rows.length;
+  const opts = optionsOf(id).filter((o) => o !== "Atuação transversal em todas as etapas.");
+  const cnt = new Map(counts(rows, id));
+  const max = Math.max(1, ...opts.map((o) => cnt.get(o) || 0));
+  const wrap = el("div");
+  const tl = el("div", "tl");
+  opts.forEach((o, i) => {
+    const n = cnt.get(o) || 0;
+    const st = el("div", "st");
+    st.title = clean(o) + ": " + plural(n, "parceiro", "parceiros") + " (" + pct(n, t) + "%)";
+    const d = el("div", "dot" + (n / max > 0.6 ? " hi" : ""), String(n));
+    d.style.setProperty("--d", (26 + (n / max) * 30) + "px");
+    d.style.setProperty("--a", (0.12 + (n / max) * 0.88).toFixed(2));
+    st.append(el("div", "stn", String(i + 1).padStart(2, "0")), d, el("div", "stl", clean(o)));
+    tl.appendChild(st);
+  });
+  wrap.appendChild(tl);
+  const all = cnt.get("Atuação transversal em todas as etapas.") || 0;
+  const foot = el("div", "tl-foot"); foot.append(el("b", null, plural(all, "parceiro", "parceiros")), document.createTextNode(" atuam de forma transversal, em todas as etapas."));
+  wrap.appendChild(foot);
+  return wrap;
+}
+
+// Pódio: as 3 opções mais escolhidas; o restante abre em lista numerada.
+function podium(rows, id) {
+  const t = rows.length;
+  const e = counts(rows, id);
+  const wrap = el("div");
+  const top = e.slice(0, 3);
+  const pod = el("div", "podium");
+  [1, 0, 2].forEach((k) => {
+    const x = top[k];
+    if (!x) { pod.appendChild(el("div")); return; }
+    const d = el("div", "pd p" + (k + 1));
+    d.title = clean(x[0]) + ": " + plural(x[1], "parceiro", "parceiros");
+    d.append(el("div", "medal", (k + 1) + "º"), el("div", "pv", String(x[1])), el("div", "pp", pct(x[1], t) + "% das candidaturas"), el("div", "pl", clean(x[0])));
+    pod.appendChild(d);
+  });
+  wrap.appendChild(pod);
+  const rest = e.slice(3);
+  if (rest.length) {
+    const box = el("div"); box.style.marginTop = "14px";
+    const ol = el("ol", "ranked compact hidden");
+    rest.forEach(([label, n], i) => { const li = el("li"); const c = el("span", "cnt"); c.append(el("b", null, String(n)), document.createTextNode(" · " + pct(n, t) + "%")); li.append(el("span", "pos", String(i + 4)), el("span", null, clean(label)), c); ol.appendChild(li); });
+    const btn = el("button", "more", "Ver as outras " + rest.length);
     btn.type = "button";
-    btn.addEventListener("click", () => {
-      const open = btn.dataset.open !== "1";
-      box.querySelectorAll(".extra").forEach((x) => x.classList.toggle("hidden", !open));
-      btn.dataset.open = open ? "1" : "";
-      btn.textContent = open ? "Mostrar menos" : "Ver todas (" + entries.length + ")";
-    });
-    wrap.appendChild(btn);
+    btn.addEventListener("click", () => { const open = ol.classList.toggle("hidden"); btn.textContent = open ? "Ver as outras " + rest.length : "Mostrar menos"; });
+    box.append(btn, ol);
+    wrap.appendChild(box);
   }
+  return wrap;
+}
+
+// Régua do 100% remoto ao presencial em qualquer região.
+function spectrum(rows, id) {
+  const t = rows.length;
+  const opts = optionsOf(id);
+  const cnt = new Map(counts(rows, id));
+  const short = ["100% remoto", "Híbrido", "Presencial na minha região", "Presencial em outras cidades", "Presencial em qualquer região do Brasil"];
+  const wrap = el("div", "spec");
+  wrap.appendChild(el("div", "line"));
+  const pts = el("div", "pts");
+  opts.forEach((o, i) => {
+    const n = cnt.get(o) || 0;
+    const p = el("div", "pt");
+    p.title = clean(o) + ": " + plural(n, "parceiro", "parceiros");
+    const pin = el("div", "pin"); pin.style.setProperty("--c", i < 2 ? "var(--slate)" : "var(--red)");
+    p.append(el("div", "pv", String(n)), pin, el("div", "pl", short[i] || clean(o)), el("div", "pp", pct(n, t) + "%"));
+    pts.appendChild(p);
+  });
+  wrap.appendChild(pts);
+  const ends = el("div", "spec-ends"); ends.append(el("span", null, "← Remoto"), el("span", null, "Presencial →"));
+  const outer = el("div"); outer.append(wrap, ends);
+  return outer;
+}
+
+// Grade de blocos com ícone por formato de contratação.
+const CONTRATO_ICONS = [
+  [/escopo/, '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'],
+  [/hora/, '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'],
+  [/diária/, '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
+  [/entregáveis/, '<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/>'],
+  [/recorrente/, '<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>'],
+  [/mentoria/, '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'],
+  [/negociável/, '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>'],
+];
+function tiles(rows, id) {
+  const t = rows.length;
+  const cnt = new Map(counts(rows, id));
+  const opts = optionsOf(id).slice().sort((a, b) => (cnt.get(b) || 0) - (cnt.get(a) || 0));
+  const g = el("div", "tiles");
+  opts.forEach((o, i) => {
+    const n = cnt.get(o) || 0;
+    const tl = el("div", "tile" + (i === 0 && n ? " lead" : ""));
+    tl.title = clean(o) + ": " + plural(n, "parceiro", "parceiros");
+    const ic = el("div", "ti");
+    const path = (CONTRATO_ICONS.find(([re]) => re.test(o)) || [null, '<circle cx="12" cy="12" r="9"/>'])[1];
+    ic.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
+    const v = el("div", "tv", pct(n, t) + "%"); v.appendChild(el("small", null, "(" + n + ")"));
+    tl.append(ic, v, el("div", "tl2", clean(o)));
+    g.appendChild(tl);
+  });
+  return g;
+}
+
+// Mosaico proporcional (treemap "squarified"): a área de cada bloco é a quantidade de parceiros.
+function treemap(rows, id) {
+  const t = rows.length;
+  const e = counts(rows, id);
+  const box = el("div", "treemap");
+  if (!e.length) return box;
+  const max = e[0][1];
+  const total = e.reduce((s, [, n]) => s + n, 0);
+  const W = 1000, H = 1000;
+  const items = e.map(([label, n]) => ({ label, n, area: (n / total) * W * H }));
+  const rects = [];
+  (function squarify(list, x, y, w, h) {
+    if (!list.length) return;
+    if (list.length === 1) { rects.push({ ...list[0], x, y, w, h }); return; }
+    const short = Math.min(w, h);
+    let row = [], best = Infinity, i = 0;
+    const worst = (r) => { const s = r.reduce((a, b) => a + b.area, 0); const mx = Math.max(...r.map((z) => z.area)), mn = Math.min(...r.map((z) => z.area)); return Math.max((short * short * mx) / (s * s), (s * s) / (short * short * mn)); };
+    while (i < list.length) { const cand = row.concat(list[i]); const wv = worst(cand); if (wv > best) break; row = cand; best = wv; i++; }
+    const s = row.reduce((a, b) => a + b.area, 0);
+    if (w >= h) { const cw = s / h; let cy = y; row.forEach((r) => { const rh = r.area / cw; rects.push({ ...r, x, y: cy, w: cw, h: rh }); cy += rh; }); squarify(list.slice(i), x + cw, y, w - cw, h); }
+    else { const ch = s / w; let cx = x; row.forEach((r) => { const rw = r.area / ch; rects.push({ ...r, x: cx, y, w: rw, h: ch }); cx += rw; }); squarify(list.slice(i), x, y + ch, w, h - ch); }
+  })(items, 0, 0, W, H);
+  rects.forEach((r) => {
+    const c = rampFor(r.n, max);
+    const d = el("div", "tm");
+    Object.assign(d.style, { left: r.x / 10 + "%", top: r.y / 10 + "%", width: r.w / 10 + "%", height: r.h / 10 + "%", background: c.bg, color: c.fg });
+    d.title = clean(r.label) + ": " + plural(r.n, "parceiro", "parceiros") + " (" + pct(r.n, t) + "%)";
+    const v = el("div", "tmv", String(r.n)); v.appendChild(el("small", null, pct(r.n, t) + "%"));
+    d.append(el("div", "tml", clean(r.label)), v);
+    box.appendChild(d);
+  });
+  return box;
+}
+
+// Mapa de calor: todos os segmentos, mais escuros onde há mais parceiros; lacunas hachuradas.
+function heatmap(rows, id) {
+  const cnt = new Map(counts(rows, id));
+  const opts = optionsOf(id);
+  const max = Math.max(1, ...opts.map((o) => cnt.get(o) || 0));
+  const wrap = el("div");
+  const g = el("div", "heat");
+  opts.forEach((o) => {
+    const n = cnt.get(o) || 0;
+    const c = el("div", "hc" + (n ? "" : " zero"));
+    if (n) { const k = rampFor(n, max); c.style.background = k.bg; c.style.color = k.fg; }
+    c.title = clean(o) + ": " + plural(n, "parceiro", "parceiros");
+    c.append(el("span", null, clean(o)), el("b", null, String(n)));
+    g.appendChild(c);
+  });
+  wrap.appendChild(g);
+  const lg = el("div", "heat-legend");
+  const sc = el("div", "scale"); RAMP.slice().reverse().forEach((col) => { const sp = el("span"); sp.style.background = col; sc.appendChild(sp); });
+  lg.append(el("span", null, "Menos"), sc, el("span", null, "Mais parceiros"), el("span", "gap"), el("span", null, "Lacuna (nenhum parceiro)"));
+  wrap.appendChild(lg);
   return wrap;
 }
 
@@ -451,27 +693,22 @@ function skills(rows) {
     const top = counts(rows, "areas_experiencia").filter(([o]) => g.options.includes(o)).slice(0, 4);
     const c = el("div", "card sg"); c.style.setProperty("--c", i % 2 ? "var(--slate)" : "var(--red)");
     const gv = el("div", "gv"); gv.append(el("b", null, String(people)), el("span", null, (people === 1 ? "parceiro" : "parceiros") + " · " + pct(people, t) + "%"));
-    const chips = el("div", "chips");
-    top.forEach(([o, n]) => { const ch = el("span", "chip", clean(o)); ch.appendChild(el("b", null, String(n))); chips.appendChild(ch); });
-    if (!top.length) chips.appendChild(el("span", "muted", "Nenhuma habilidade nesta área."));
-    c.append(el("div", "gn", g.title), gv, chips);
+    c.append(el("div", "gn", g.title), gv, top.length ? ranked(top.slice(0, 3), 0, { limit: 3, compact: true }) : el("span", "muted", "Nenhuma habilidade nesta área."));
     groups.appendChild(c);
   });
 
   const more = document.getElementById("skills-more"); more.replaceChildren();
-  const c2 = card("Especializações declaradas", { cls: "span2", note: "Pergunta 12 · resposta livre, agrupada por texto igual." });
+  const c2 = card("Especializações declaradas", { note: "Pergunta 12 · resposta livre, agrupada por texto igual." });
   const m = new Map();
   for (const r of rows) { const raw = (r.principal_especializacao || "").trim(); if (!raw) continue; const k = norm(raw); const cur = m.get(k) || { label: raw, n: 0 }; cur.n++; m.set(k, cur); }
-  const list = [...m.values()].sort((a, b) => b.n - a.n);
-  if (!list.length) c2.appendChild(emptyNote());
-  else {
-    const maxN = list[0].n, cloud = el("div", "chips cloud");
-    list.forEach(({ label, n }) => { const ch = el("span", "chip", label); ch.style.setProperty("--fs", 12 + (maxN > 1 ? ((n - 1) / (maxN - 1)) * 6 : 0) + "px"); if (n > 1) ch.appendChild(el("b", null, String(n))); cloud.appendChild(ch); });
-    c2.appendChild(cloud);
-  }
-  more.appendChild(c2);
-  addRank(more, "Etapas de projeto em que atuam", rows, "etapas_projeto");
-  addRank(more, "Formas de colaboração de interesse", rows, "formas_colaboracao");
+  const list = [...m.values()].sort((a, b) => b.n - a.n).map((x) => [x.label, x.n]);
+  c2.appendChild(list.length ? ranked(list, t, { limit: 6 }) : emptyNote());
+  const c3 = card("Formas de colaboração de interesse", { cls: "span2", note: "Pergunta 9 · as três mais escolhidas." });
+  c3.appendChild(t ? podium(rows, "formas_colaboracao") : emptyNote());
+  more.append(c2, c3);
+  const c4 = card("Etapas de projeto em que atuam", { cls: "span3", note: "Pergunta 14 · em que fases do projeto a rede está presente." });
+  c4.appendChild(t ? timeline(rows, "etapas_projeto") : emptyNote());
+  more.appendChild(c4);
 }
 
 function addDonut(box, title, rows, id, center, cls) {
@@ -479,10 +716,9 @@ function addDonut(box, title, rows, id, center, cls) {
   c.appendChild(rows.length ? donut(counts(rows, id), rows.length, center) : emptyNote());
   box.appendChild(c);
 }
-function addRank(box, title, rows, id, opts = {}) {
-  const c = card(title, { cls: opts.cls, note: Q[id]?.type === "checkbox" ? "Cada parceiro pode marcar várias opções." : null });
-  const e = counts(rows, id, opts.getter);
-  c.appendChild(rows.length && e.length ? chipRank(e, rows.length, opts) : emptyNote());
+function addViz(box, title, rows, fn, opts = {}) {
+  const c = card(title, { cls: opts.cls, note: opts.note });
+  c.appendChild(rows.length ? fn() : emptyNote());
   box.appendChild(c);
 }
 function addCols(box, title, rows, id, short, cls) {
@@ -517,7 +753,7 @@ function dashboard(rows) {
     ["Projetos multidisciplinares", "colaboracao_multidisciplinar"],
     ["Equipe ou rede própria", "equipe_propria"],
   ]);
-  addRank(per, "Modelo de atuação", rows, "modelo_atuacao", { cls: "span3" });
+  addViz(per, "Modelo de atuação", rows, () => treemap(rows, "modelo_atuacao"), { cls: "span3", note: "Pergunta 8 · o tamanho de cada bloco é a quantidade de parceiros." });
 
   const dis = document.getElementById("disponibilidade"); dis.replaceChildren();
   addDonut(dis, "Disponibilidade para projetos", rows, "disponibilidade_colaborar", "candidaturas");
@@ -528,11 +764,11 @@ function dashboard(rows) {
     ["Precificação", "precificacao"],
     ["Projetos em parceria", "interesse_parceria"],
   ]);
-  addRank(dis, "Formatos de atuação", rows, "formatos_atuacao");
-  addRank(dis, "Formatos de contratação aceitos", rows, "formatos_contratacao", { cls: "span2" });
+  addViz(dis, "Do remoto ao presencial", rows, () => spectrum(rows, "formatos_atuacao"), { cls: "span3", note: "Pergunta 30 · quantos parceiros aceitam cada formato." });
+  addViz(dis, "Formatos de contratação aceitos", rows, () => tiles(rows, "formatos_contratacao"), { cls: "span3", note: "Pergunta 34 · cada parceiro pode aceitar vários." });
 
   const seg = document.getElementById("segmentos"); seg.replaceChildren();
-  addRank(seg, "Segmentos de mercado", rows, "segmentos", { cls: "span3", limit: 12 });
+  addViz(seg, "Segmentos de mercado", rows, () => heatmap(rows, "segmentos"), { cls: "span3", note: "Pergunta 15 · onde a rede tem mais conhecimento e onde há lacunas." });
 
   const loc = document.getElementById("localizacao"); loc.replaceChildren();
   const cu = card("Estados", { cls: "span2", note: "Identificado pela sigla no fim da pergunta 4 (ex.: “Curitiba — PR”)." });
@@ -544,7 +780,7 @@ function dashboard(rows) {
   wa.appendChild(rows.length ? ring(rows.filter((r) => startsSim(r.interesse_whatsapp)).length, rows.length, "querem participar do grupo de networking") : emptyNote());
   loc.appendChild(wa);
   addDonut(loc, "Como conheceram a iniciativa", rows, "como_conheceu", "respostas", "span2");
-  addRank(loc, "Cidades", rows, "cidade", { getter: (r) => cidade(r.cidade_estado) });
+  addViz(loc, "Principais cidades", rows, () => ranked(counts(rows, "cidade", (r) => cidade(r.cidade_estado)), rows.length, { limit: 5, compact: true }));
 }
 
 /* ---------- Candidaturas ---------- */
