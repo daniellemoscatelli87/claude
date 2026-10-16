@@ -85,6 +85,8 @@
   .mt-body .fld span, .mt-link .lbl { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
   .mt-body input, .mt-body select, .mt-body textarea { min-width: 0; width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--dark); min-height: 44px; }
   .mt-body textarea { resize: vertical; }
+  .mt-body .invalid { border-color: var(--red) !important; box-shadow: 0 0 0 3px rgb(212 77 77 / .15) !important; }
+  .mt-body .fld-err { margin: 6px 0 0; font-size: 13px; color: var(--red); }
   .mt-fmt { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--track); padding: 4px; border-radius: 999px; }
   .mt-fmt button { border: 0; background: none; font: inherit; font-size: 14px; font-weight: 600; color: var(--muted); padding: 9px 8px; border-radius: 999px; cursor: pointer; min-height: 40px; }
   .mt-fmt button[aria-pressed="true"] { background: #fff; color: var(--dark); box-shadow: 0 1px 3px rgb(15 23 42 / .12); }
@@ -173,14 +175,6 @@ const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toL
 const pad = (n) => String(n).padStart(2, "0");
 const toLocalInput = (iso) => { const d = new Date(iso); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`; };
 
-async function save(r, fields) {
-  const { data, error } = await Admin.sb.from("contatos").update(fields).eq("id", r.id).select("id, respondido_em, reuniao_em").maybeSingle();
-  if (error || !data) { alert("Não foi possível atualizar a mensagem. Tente novamente."); return false; }
-  r.respondido_em = data.respondido_em; r.reuniao_em = data.reuniao_em;
-  historico(r); // mostra a mudança registrada no histórico
-  return true;
-}
-
 // Situação da mensagem: etapas (recebida, lida, respondida, reunião) e a próxima ação, uma de cada vez.
 const fmtMeeting = (iso) => { const d = new Date(iso); return d.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" }) + " às " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }); };
 const STEPS = [
@@ -192,11 +186,7 @@ const STEPS = [
 
 function statusBar(r) {
   const bar = document.getElementById("status"); bar.replaceChildren();
-  const button = (cls, text, onClick) => {
-    const b = Admin.el("button", cls, text); b.type = "button";
-    b.addEventListener("click", async () => { b.disabled = true; if (await onClick()) statusBar(r); else b.disabled = false; });
-    return b;
-  };
+
 
   // Linha de etapas
   const steps = Admin.el("ol", "steps");
@@ -221,7 +211,7 @@ function statusBar(r) {
     if (r._reuniao?.formato === "presencial" && r._reuniao.endereco) { txt.appendChild(Admin.el("div", "muted", "Presencial: " + r._reuniao.endereco)); const m = Admin.el("a", "btn-meet", "Ver no mapa"); m.href = mapsLink(r._reuniao.endereco); m.target = "_blank"; m.rel = "noopener noreferrer"; acts.appendChild(m); }
     else if (r._reuniao?.meet_link) { const m = Admin.el("a", "btn-meet", "Entrar no Google Meet"); m.href = r._reuniao.meet_link; m.target = "_blank"; m.rel = "noopener noreferrer"; acts.appendChild(m); }
     const ed = Admin.el("button", "btn-line", "Editar reunião"); ed.type = "button"; ed.addEventListener("click", () => openMeeting(r));
-    acts.appendChild(ed);
+    acts.prepend(ed); // Editar à esquerda, ação principal à direita
     next.append(card, acts);
   } else if (!r.respondido_em) {
     next.append(Admin.el("p", "hint", "Responda pelo histórico abaixo. A mensagem é marcada como respondida automaticamente."));
@@ -231,7 +221,7 @@ function statusBar(r) {
   } else {
     next.append(Admin.el("p", "hint", "Respondida em " + Admin.fmtDate(r.respondido_em) + ". Próximo passo: agendar a reunião."));
     const acts = Admin.el("div", "acts");
-    acts.append(meetingToggle(r, "btn-ok"), button("link-muted", "Desfazer resposta", () => save(r, { respondido_em: null })));
+    acts.append(meetingToggle(r, "btn-ok"));
     next.appendChild(acts);
   }
   bar.appendChild(next);
@@ -387,10 +377,27 @@ function renderMeeting(r) {
   const linkBox = Admin.el("div", "mt-link");
   linkBox.appendChild(Admin.el("span", "lbl", "Link da reunião (Google Meet)"));
   const msg = Admin.el("p", "msg err hidden");
+  // Erro de preenchimento: campo em vermelho, mensagem logo abaixo dele e a tela rola até o campo.
+  const fieldError = (input, text) => {
+    msg.classList.add("hidden");
+    input.classList.add("invalid"); input.setAttribute("aria-invalid", "true");
+    const box = input.parentElement;
+    let e = box.querySelector(".fld-err");
+    if (!e) { e = Admin.el("p", "fld-err"); input.after(e); }
+    e.textContent = text;
+    input.focus({ preventScroll: true });
+    const alvo = input.closest(".fld, .mt-addr") || input, sc = document.getElementById("mt-body");
+    requestAnimationFrame(() => sc.scrollTo({ top: Math.max(0, sc.scrollTop + alvo.getBoundingClientRect().top - sc.getBoundingClientRect().top - 24), behavior: "smooth" }));
+    return null;
+  };
+  [date, hour, addr].forEach((i) => ["input", "change"].forEach((ev) => i.addEventListener(ev, () => {
+    i.classList.remove("invalid"); i.removeAttribute("aria-invalid"); i.parentElement.querySelector(".fld-err")?.remove();
+  })));
   const values = () => {
-    if (!date.value || !hour.value) { msg.textContent = "Escolha a data e o horário."; msg.classList.remove("hidden"); return null; }
-    if (date.value < toLocalInput(new Date().toISOString()).slice(0, 10)) { msg.textContent = "Escolha uma data a partir de hoje."; msg.classList.remove("hidden"); return null; }
-    if (formato === "presencial" && !addr.value.trim()) { msg.textContent = "Informe o endereço da reunião presencial."; msg.classList.remove("hidden"); addr.focus(); return null; }
+    if (!date.value) return fieldError(date, "Escolha a data da reunião.");
+    if (date.value < toLocalInput(new Date().toISOString()).slice(0, 10)) return fieldError(date, "Escolha uma data a partir de hoje.");
+    if (!hour.value) return fieldError(hour, "Escolha o horário.");
+    if (formato === "presencial" && !addr.value.trim()) return fieldError(addr, "Informe o endereço da reunião presencial.");
     return { contato_id: r.id, inicio: new Date(date.value + "T" + hour.value).toISOString(), duracao_min: Number(dur.value), titulo: title.value.trim(), assunto: subj.value.trim(), descricao: desc.value.trim(), formato, endereco: formato === "presencial" ? addr.value.trim() : "" };
   };
   const run = async (btn, label, payload, after) => {
