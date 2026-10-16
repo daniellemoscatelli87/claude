@@ -221,6 +221,8 @@
   .pcs-dl { margin: 0; display: grid; gap: 8px; }
   .pcs-dl dt { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
   .pcs-dl dd { margin: 2px 0 0; font-size: 14px; color: var(--dark); line-height: 1.4; }
+  .pcs-dl .pcs-why { background: #e7f5ec; border-radius: 12px; padding: 10px 12px; margin-top: 2px; }
+  .pcs-dl .pcs-why dt { color: #1f6b3a; }
   .pcs-more { margin-top: auto; align-self: flex-end; text-decoration: none; font: inherit; font-size: 13px; font-weight: 700; color: var(--red); background: var(--red-tint); border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer; }
   .pcs-more:hover { background: #fbdcdc; }
   .pcs-fit { display: inline-block; margin-top: 4px; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 2px 8px; background: #fdf3dc; color: #7a5300; }
@@ -580,11 +582,11 @@ function summaryCard(r) {
   const m = matchOf(r);
   head.append(el("span", "ini", Admin.initials(r.nome)), who);
   const dl = el("dl", "pcs-dl");
-  const row = (k, v) => { if (!v) return; const d = el("div"); d.append(el("dt", null, k), el("dd", null, v)); dl.appendChild(d); };
+  const row = (k, v, cls) => { if (!v) return; const d = el("div", cls); d.append(el("dt", null, k), el("dd", null, v)); dl.appendChild(d); };
   row("Especialidade", r.principal_especializacao || "Não informada");
   row("Área de atuação", areasAtuacao(r).join(" · ") || "Não informada");
   row("Entrega de valor", PERFIS_IA.get(r.id) || contribFallback(r));
-  if (m && m.motivo) row("Por que atende", m.motivo);
+  if (m && m.motivo) row("Por que atende", m.motivo, "pcs-why");
   // Leva direto para a ficha completa do parceiro.
   const btn = el("a", "pcs-more", "Ver mais"); btn.href = "/admin/parceiros/?id=" + r.id;
   c.append(head, dl, btn);
