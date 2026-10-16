@@ -16,6 +16,8 @@
   .totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
   @media (max-width: 900px) { .totals { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .total .sub { font-size: 12px; color: var(--muted); margin-top: -4px; }
+  .total .state { font-size: 12px; font-weight: 700; color: var(--muted); padding-top: 6px; margin-top: 2px; border-top: 1px solid var(--track); }
+  .total.alert .state { color: var(--red); border-top-color: #f6d4d1; }
   .total { display: flex; flex-direction: column; gap: 6px; text-decoration: none; position: relative; }
   .total .corner { position: absolute; top: 16px; right: 16px; color: var(--red); font-size: 12px; font-weight: 700; text-align: right; max-width: 55%; line-height: 1.3; }
   .total.zero .ic { background: var(--track); color: var(--muted); }
@@ -51,10 +53,10 @@
   <p class="muted">Veja as últimas mensagens de contato, candidaturas à Rede de Parceiros e cadastros para o lançamento.</p>
   <p class="msg err hidden" id="load-err"></p>
   <div class="totals" id="totals">
-    <a class="card total" href="/admin/contatos/"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><span class="v" id="tot-novas">-</span><span class="k">Novas mensagens</span><span class="sub">nos últimos 7 dias</span></a>
-    <a class="card total" href="/admin/contatos/?situacao=pendentes"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="v" id="tot-pendentes">-</span><span class="k">Mensagens não respondidas</span></a>
+    <a class="card total" href="/admin/contatos/" id="card-msgs"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><span class="v" id="tot-novas">-</span><span class="k">Novas mensagens</span><span class="sub">nos últimos 7 dias</span><span class="state" id="tot-pendentes"></span></a>
     <a class="card total" href="/admin/reunioes/"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg></span><span class="v" id="tot-reunioes">-</span><span class="k">Reuniões agendadas</span><span class="sub">a partir das mensagens</span></a>
     <a class="card total" href="/admin/parceiros/?aba=candidaturas"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></svg></span><span class="v" id="tot-parceiros-7d">-</span><span class="k">Novos parceiros</span><span class="sub">nos últimos 7 dias</span></a>
+    <a class="card total" href="/admin/lancamento/"><span class="ic" id="ic-lanc-total"></span><span class="v" id="tot-lancamento">-</span><span class="k">Usuários aguardando lançamento</span></a>
   </div>
   <div class="home">
     <section class="card" aria-labelledby="h-contato">
@@ -124,20 +126,23 @@ Admin.init({ page: "inicio", onReady: async () => {
   const since = new Date(Date.now() - 7 * 864e5).toISOString();
   const cnt = async (q) => { const r = await q; return r.error ? "-" : r.count; };
   const head = (t) => Admin.sb.from(t).select("id", { count: "exact", head: true });
-  const [novas, pend, resp, parc7] = await Promise.all([
+  const [novas, pend, resp, parc7, lanc] = await Promise.all([
     cnt(head("contatos").gte("created_at", since)),
     cnt(head("contatos").is("respondido_em", null)),
     cnt(head("contatos").not("reuniao_em", "is", null)),
     cnt(head("cadastros").gte("created_at", since)),
+    cnt(head("notificacoes_lancamento").is("avisado_em", null)),
   ]);
+  document.getElementById("ic-lanc-total").innerHTML = Admin.icon("rocket");
   document.getElementById("tot-novas").textContent = novas;
-  document.getElementById("tot-pendentes").textContent = pend;
   document.getElementById("tot-reunioes").textContent = resp;
   document.getElementById("tot-parceiros-7d").textContent = parc7;
-  // Indicador zerado: ícone em cinza. Mensagens não respondidas: bloco inteiro em vermelho claro.
+  document.getElementById("tot-lancamento").textContent = lanc;
+  // Mensagens: novas nos últimos 7 dias e, embaixo, quantas aguardam resposta (bloco em vermelho claro quando há).
+  document.getElementById("tot-pendentes").textContent = pend === "-" ? "" : pend === 0 ? "Todas respondidas" : pend === 1 ? "1 não respondida" : pend + " não respondidas";
   const cards = document.querySelectorAll("#totals .total");
-  [novas, pend, resp, parc7].forEach((v, i) => cards[i].classList.toggle("zero", v === 0));
-  if (pend > 0) { cards[1].classList.add("alert"); cards[1].appendChild(Admin.el("span", "corner", "aguardando retorno")); }
+  [novas, resp, parc7, lanc].forEach((v, i) => cards[i].classList.toggle("zero", v === 0 && !(i === 0 && pend > 0)));
+  if (pend > 0) { cards[0].classList.add("alert"); cards[0].href = "/admin/contatos/?situacao=pendentes"; }
   // Sinaliza o que chegou e ainda não foi aberto.
   Admin.notifications().then((n) => {
     const totals = document.querySelectorAll("#totals .total");
@@ -147,7 +152,7 @@ Admin.init({ page: "inicio", onReady: async () => {
       document.getElementById("unread-contatos").textContent = n.contatos === 1 ? "1 não lida" : n.contatos + " não lidas";
     }
     if (n.parceiros) {
-      totals[3].appendChild(Admin.el("span", "corner", n.parceiros === 1 ? "1 não vista" : n.parceiros + " não vistas"));
+      totals[2].appendChild(Admin.el("span", "corner", n.parceiros === 1 ? "1 não vista" : n.parceiros + " não vistas"));
       document.getElementById("unread-parceiros").textContent = n.parceiros === 1 ? "1 não vista" : n.parceiros + " não vistas";
     }
   });
