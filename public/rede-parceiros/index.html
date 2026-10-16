@@ -77,7 +77,10 @@
   .intro .icon-list li { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 500; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
   .intro .icon-list span { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--coral-tint); color: var(--coral); }
   .intro .icon-list svg { width: 18px; height: 18px; }
-  .intro .note { font-size: 14px; color: var(--muted); }
+  .intro .note-box { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--slate); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 0 0 14px; }
+  .intro .note-box svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--slate); margin-top: 1px; }
+  .intro .note-box p { margin: 0 0 8px; }
+  .intro .note-box p:last-child { margin: 0; }
   .contact { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 15px; }
   .contact p { margin: 0 0 4px; }
   .contact .sig-photo, .sign .sig-photo { display: block; width: 96px; height: 96px; border-radius: 50%; margin: 4px 0 12px; }
@@ -247,7 +250,13 @@
         <span class="hl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></span>
         <p><strong>Quanto mais completo for o seu cadastro, melhor.</strong> A plataforma usa inteligência artificial para analisar os perfis e encontrar os profissionais certos para cada demanda, por isso cada resposta faz diferença.</p>
       </div>
-      <p class="note">O cadastro não representa oferta de trabalho ou garantia de contratação. As parcerias serão estabelecidas conforme as demandas do estúdio e a aderência de cada perfil.</p>
+      <div class="note-box" role="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        <div>
+          <p>O cadastro não representa oferta de trabalho ou garantia de contratação. As parcerias serão estabelecidas conforme as demandas do estúdio e a aderência de cada perfil.</p>
+          <p>Além das oportunidades do estúdio, a rede também é um espaço para a troca de oportunidades entre os próprios profissionais.</p>
+        </div>
+      </div>
 
       <div class="contact">
         <p><strong>Dani Moscatelli</strong><br>Experience Design Studio</p>
