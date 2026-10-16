@@ -20,29 +20,70 @@
   .lc-row .tx { min-width: 0; display: grid; gap: 2px; }
   .lc-row a { color: var(--dark); font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
   .lc-row a:hover { color: var(--red); }
-  .lc-row .d { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .lc-row .d { font-size: 12px; color: var(--muted); }
+  .lc-row .ok { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: #1f6b3a; }
+  .lc-row .ok svg { width: 14px; height: 14px; }
+  .lc-row.done .ic { background: #e7f5ec; color: #1f9d55; }
+  .lc-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+  .lc-head h1 { margin: 0; }
+  .btn-launch { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 14px; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 10px 18px; cursor: pointer; }
+  .btn-launch svg { width: 18px; height: 18px; }
+  .btn-launch:disabled { opacity: .5; cursor: not-allowed; }
+  .lc-dlg { width: min(640px, 94vw); max-height: 92vh; border: 0; border-radius: 18px; padding: 0; box-shadow: 0 20px 60px -10px rgb(15 23 42 / .35); }
+  .lc-dlg::backdrop { background: rgb(15 23 42 / .45); }
+  .lc-in { position: relative; padding: 22px; display: grid; gap: 14px; }
+  .lc-in h2 { margin: 0; font-size: 20px; padding-right: 40px; }
+  .lc-in label { display: grid; gap: 6px; font-size: 13px; font-weight: 600; }
+  .lc-in input, .lc-in textarea { width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--dark); }
+  .lc-in textarea { resize: vertical; min-height: 160px; }
+  .lc-in .hint { font-size: 12px; color: var(--muted); font-weight: 400; }
+  .lc-prev { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #f4f5f8; }
+  .lc-prev iframe { display: block; width: 100%; height: 520px; border: 0; }
+  .lc-acts { display: flex; flex-wrap: wrap-reverse; gap: 8px; justify-content: space-between; align-items: center; }
+  .lc-acts .btn-launch { margin-left: auto; }
+  .lc-x { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; background: none; border-radius: 10px; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
+  .lc-x svg { width: 22px; height: 22px; }
 </style>
 </head>
 <body>
 <main class="wrap hidden" id="app">
-  <h1>Lançamento</h1>
+  <div class="lc-head"><h1>Lançamento</h1>
+    <button type="button" class="btn-launch" id="abrir" disabled><span id="ic-abrir"></span>Disparar lançamento</button></div>
   <p class="muted" id="count"></p>
   <p class="msg err hidden" id="load-err"></p>
   <div class="toolbar"><input type="search" id="busca" placeholder="Buscar e-mail" aria-label="Buscar e-mail"></div>
   <section class="card"><div id="list"></div></section>
 </main>
+<dialog class="lc-dlg" id="dlg" aria-labelledby="dlg-t">
+  <div class="lc-in">
+    <button type="button" class="lc-x" id="fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <h2 id="dlg-t">Disparar lançamento</h2>
+    <p class="muted" id="dlg-s" style="margin:-6px 0 0;font-size:14px"></p>
+    <label>Título (também é o assunto do e-mail)<input type="text" id="titulo" maxlength="200" placeholder="Ex.: O novo site do estúdio está no ar!"></label>
+    <label>Mensagem<textarea id="mensagem" maxlength="10000" placeholder="Escreva a mensagem do lançamento. Deixe uma linha em branco para separar os parágrafos."></textarea>
+      <span class="hint">O e-mail já leva a logo, um botão "Conhecer o novo site" e a sua assinatura.</span></label>
+    <div class="lc-prev hidden" id="prev"><iframe title="Pré-visualização do e-mail" id="prev-frame"></iframe></div>
+    <p class="msg err hidden" id="dlg-err"></p>
+    <div class="lc-acts">
+      <button type="button" class="btn-ghost" id="btn-prev">Pré-visualizar e-mail</button>
+      <button type="button" class="btn-launch" id="btn-send">Enviar em massa</button>
+    </div>
+  </div>
+</dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/admin/admin.js"></script>
 <script>
 // Pessoas que cadastraram o e-mail para receber o aviso de lançamento do novo site (formulário da home).
 const el = Admin.el;
 let ALL = [];
+const fmt = (iso) => { const d = new Date(iso); return d.toLocaleDateString("pt-BR") + ", " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }); };
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
 function linha(r) {
-  const row = el("div", "lc-row");
+  const row = el("div", "lc-row" + (r.avisado_em ? " done" : ""));
   const ic = el("span", "ic"); ic.innerHTML = Admin.icon("rocket");
   const a = el("a", null, r.email); a.href = "mailto:" + r.email;
-  const d = new Date(r.created_at);
-  const tx = el("div", "tx"); tx.append(a, el("span", "d", "Cadastrado em " + d.toLocaleDateString("pt-BR") + ", " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })));
+  const tx = el("div", "tx"); tx.append(a, el("span", "d", "Cadastrado em " + fmt(r.created_at)));
+  if (r.avisado_em) { const ok = el("span", "ok"); ok.innerHTML = CHECK; ok.append("Avisado em " + fmt(r.avisado_em)); tx.appendChild(ok); }
   row.append(ic, tx);
   return row;
 }
@@ -53,14 +94,61 @@ function render() {
   if (!rows.length) return list.appendChild(el("div", "empty", ALL.length ? "Nenhum e-mail encontrado." : "Ninguém se cadastrou para o lançamento ainda."));
   rows.forEach((r) => list.appendChild(linha(r)));
 }
-Admin.init({ page: "lancamento", onReady: async () => {
-  const { data, error } = await Admin.sb.from("notificacoes_lancamento").select("id, created_at, email").order("created_at", { ascending: false });
+const pendentes = () => ALL.filter((r) => !r.avisado_em).length;
+async function carregar() {
+  const { data, error } = await Admin.sb.from("notificacoes_lancamento").select("id, created_at, email, avisado_em").order("created_at", { ascending: false });
   const err = document.getElementById("load-err");
   err.classList.toggle("hidden", !error);
   if (error) { err.textContent = "Não foi possível carregar a lista: " + error.message; return; }
   ALL = data;
-  document.getElementById("count").textContent = data.length === 1 ? "1 pessoa cadastrada para o aviso de lançamento" : data.length + " pessoas cadastradas para o aviso de lançamento";
+  const n = pendentes(), av = data.length - n;
+  document.getElementById("count").textContent = (data.length === 1 ? "1 pessoa cadastrada" : data.length + " pessoas cadastradas") + " para o aviso de lançamento" + (av ? " · " + av + (av === 1 ? " já avisada" : " já avisadas") : "");
+  document.getElementById("abrir").disabled = !n;
   render();
+}
+async function chamar(body) {
+  const { data, error } = await Admin.sb.functions.invoke("lancamento", { body });
+  if (!error) return data || {};
+  let m = "Não foi possível falar com o servidor. Tente novamente."; try { m = (await error.context.json()).error || m; } catch {}
+  return { error: m };
+}
+function initDisparo() {
+  const dlg = document.getElementById("dlg"), t = document.getElementById("titulo"), m = document.getElementById("mensagem");
+  const err = document.getElementById("dlg-err"), prev = document.getElementById("prev"), frame = document.getElementById("prev-frame");
+  const bPrev = document.getElementById("btn-prev"), bSend = document.getElementById("btn-send");
+  document.getElementById("ic-abrir").innerHTML = Admin.icon("rocket");
+  const erro = (x) => { err.textContent = x; err.classList.toggle("hidden", !x); };
+  const campos = () => { const v = { titulo: t.value.trim(), mensagem: m.value.trim() }; if (!v.titulo || !v.mensagem) { erro("Preencha o título e a mensagem."); (v.titulo ? m : t).focus(); return null; } erro(""); return v; };
+  [t, m].forEach((i) => i.addEventListener("input", () => { prev.classList.add("hidden"); erro(""); }));
+  document.getElementById("abrir").addEventListener("click", () => {
+    const n = pendentes();
+    document.getElementById("dlg-s").textContent = "O e-mail vai para " + (n === 1 ? "1 pessoa que ainda não foi avisada." : n + " pessoas que ainda não foram avisadas.");
+    erro(""); prev.classList.add("hidden"); dlg.showModal(); t.focus();
+  });
+  document.getElementById("fechar").addEventListener("click", () => dlg.close());
+  bPrev.addEventListener("click", async () => {
+    const v = campos(); if (!v) return;
+    bPrev.disabled = true; bPrev.textContent = "Gerando…";
+    const res = await chamar({ acao: "preview", ...v });
+    bPrev.disabled = false; bPrev.textContent = "Pré-visualizar e-mail";
+    if (res.error) return erro(res.error);
+    frame.srcdoc = res.html; prev.classList.remove("hidden"); prev.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+  bSend.addEventListener("click", async () => {
+    const v = campos(); if (!v) return;
+    const n = pendentes();
+    if (!(await Admin.confirmDialog({ title: "Enviar o lançamento?", message: "O e-mail \u201c" + v.titulo + "\u201d será enviado para " + (n === 1 ? "1 pessoa." : n + " pessoas.") + " Essa ação não pode ser desfeita.", ok: "Enviar em massa", danger: false }))) return;
+    bSend.disabled = true; bSend.textContent = "Enviando…";
+    const res = await chamar({ acao: "enviar", ...v });
+    bSend.disabled = false; bSend.textContent = "Enviar em massa";
+    if (res.error) return erro(res.error);
+    dlg.close(); await carregar();
+    Admin.toast(res.falhas ? res.enviados + " enviados e " + res.falhas + " não enviados. Tente de novo para quem ficou sem o check." : (res.enviados === 1 ? "Lançamento enviado para 1 pessoa." : "Lançamento enviado para " + res.enviados + " pessoas."));
+  });
+}
+Admin.init({ page: "lancamento", onReady: async () => {
+  initDisparo();
+  await carregar();
   document.getElementById("busca").addEventListener("input", render);
 }});
 </script>
