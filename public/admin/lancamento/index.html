@@ -24,6 +24,11 @@
   .lc-row .ok { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: #1f6b3a; }
   .lc-row .ok svg { width: 14px; height: 14px; }
   .lc-row.done .ic { background: #e7f5ec; color: #1f9d55; }
+  .tabs { display: flex; width: 100%; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 999px; margin: 20px 0 0; }
+  .tab { flex: 1; background: none; border: 0; border-radius: 999px; padding: 9px 14px; color: var(--muted); font-size: 14px; font-weight: 600; cursor: pointer; }
+  .tab[aria-selected=true] { background: var(--red); color: #fff; }
+  .tab .n { display: inline-block; margin-left: 6px; padding: 0 7px; border-radius: 999px; background: rgb(148 163 184 / .25); font-size: 12px; }
+  .tab[aria-selected=true] .n { background: rgb(255 255 255 / .25); }
   .lc-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
   .lc-head h1 { margin: 0; }
   .btn-launch { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 14px; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 10px 18px; cursor: pointer; }
@@ -51,6 +56,10 @@
     <button type="button" class="btn-launch" id="abrir" disabled><span id="ic-abrir"></span>Disparar lançamento</button></div>
   <p class="muted" id="count"></p>
   <p class="msg err hidden" id="load-err"></p>
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab" role="tab" id="tab-novas" aria-selected="true">Novas<span class="n" id="n-novas">0</span></button>
+    <button type="button" class="tab" role="tab" id="tab-avisadas" aria-selected="false">Notificadas<span class="n" id="n-avisadas">0</span></button>
+  </div>
   <div class="toolbar"><input type="search" id="busca" placeholder="Buscar e-mail" aria-label="Buscar e-mail"></div>
   <section class="card"><div id="list"></div></section>
 </main>
@@ -87,11 +96,17 @@ function linha(r) {
   row.append(ic, tx);
   return row;
 }
+// Abas: "Novas" (ainda não avisadas, onde fica o disparo) e "Notificadas".
+let ABA = "novas";
 function render() {
   const q = document.getElementById("busca").value.trim().toLowerCase();
-  const rows = q ? ALL.filter((r) => r.email.toLowerCase().includes(q)) : ALL;
+  const daAba = ALL.filter((r) => (ABA === "novas") === !r.avisado_em);
+  const rows = q ? daAba.filter((r) => r.email.toLowerCase().includes(q)) : daAba;
+  document.getElementById("tab-novas").setAttribute("aria-selected", String(ABA === "novas"));
+  document.getElementById("tab-avisadas").setAttribute("aria-selected", String(ABA !== "novas"));
+  document.getElementById("abrir").classList.toggle("hidden", ABA !== "novas");
   const list = document.getElementById("list"); list.replaceChildren();
-  if (!rows.length) return list.appendChild(el("div", "empty", ALL.length ? "Nenhum e-mail encontrado." : "Ninguém se cadastrou para o lançamento ainda."));
+  if (!rows.length) return list.appendChild(el("div", "empty", q ? "Nenhum e-mail encontrado." : ABA === "novas" ? (ALL.length ? "Todas as pessoas já foram notificadas." : "Ninguém se cadastrou para o lançamento ainda.") : "Ninguém foi notificado ainda."));
   rows.forEach((r) => list.appendChild(linha(r)));
 }
 const pendentes = () => ALL.filter((r) => !r.avisado_em).length;
@@ -104,6 +119,8 @@ async function carregar() {
   const n = pendentes(), av = data.length - n;
   document.getElementById("count").textContent = (data.length === 1 ? "1 pessoa cadastrada" : data.length + " pessoas cadastradas") + " para o aviso de lançamento" + (av ? " · " + av + (av === 1 ? " já avisada" : " já avisadas") : "");
   document.getElementById("abrir").disabled = !n;
+  document.getElementById("n-novas").textContent = n;
+  document.getElementById("n-avisadas").textContent = av;
   render();
 }
 async function chamar(body) {
@@ -148,6 +165,8 @@ function initDisparo() {
 }
 Admin.init({ page: "lancamento", onReady: async () => {
   initDisparo();
+  document.getElementById("tab-novas").addEventListener("click", () => { ABA = "novas"; render(); });
+  document.getElementById("tab-avisadas").addEventListener("click", () => { ABA = "avisadas"; render(); });
   await carregar();
   document.getElementById("busca").addEventListener("input", render);
 }});
