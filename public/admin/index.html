@@ -171,7 +171,7 @@ Admin.init({ page: "inicio", onReady: async () => {
   document.getElementById("ic-lancamento").innerHTML = Admin.icon("rocket");
   document.getElementById("cnt-lancamento").textContent = plural(l.count, "pessoa cadastrada", "pessoas cadastradas") + (l.count > LIMIT ? " · últimas " + LIMIT : "");
   fill("last-lancamento", l.data, (r) => {
-    const a = Admin.el("a", "entry seen"); a.href = "mailto:" + r.email;
+    const a = Admin.el("a", "entry seen"); a.href = "/admin/lancamento/";
     // E-mail e, logo abaixo, a data e a hora do cadastro numa linha só.
     const d = new Date(r.created_at);
     const ic = Admin.el("span", "ini"); ic.innerHTML = Admin.icon("rocket");
