@@ -14,6 +14,12 @@
   .toolbar { display: flex; gap: 10px; align-items: center; margin: 20px 0 12px; }
   .toolbar input { flex: 1 1 auto; min-width: 0; max-width: 420px; }
   .toolbar select { flex: 0 1 auto; width: auto; max-width: 58%; }
+  .toolbar input, .toolbar select { transition: flex-basis .2s, max-width .2s, width .2s; }
+  /* Ao buscar, a busca ocupa o espaço e o filtro vira só o ícone (continua clicável). */
+  .toolbar.searching input { max-width: none; }
+  .toolbar.searching select { flex: 0 0 44px; width: 44px; max-width: 44px; height: 44px; padding: 0; color: transparent; -webkit-appearance: none; appearance: none; background: #f8fafc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 3H2l8 9.46V19l4 2v-8.54L22 3z'/%3E%3C/svg%3E") center / 18px no-repeat; cursor: pointer; }
+  .toolbar.searching select.on { border-color: var(--red); background-color: var(--red-tint); }
+  .toolbar select option { color: var(--dark); }
   #status { display: grid; gap: 18px; }
   /* Cabeçalho da mensagem (acordeão) */
   #detail { margin-bottom: 12px; }
@@ -670,6 +676,17 @@ Admin.init({ page: "contatos", onReady: async () => {
     rows.forEach((r) => list.appendChild(Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at, Admin.mailState(r), true)));
   };
   document.getElementById("busca").addEventListener("input", render);
+  // Busca expandida enquanto está em uso (com foco ou com texto); o filtro vira ícone.
+  {
+    const bar = document.querySelector(".toolbar"), busca = document.getElementById("busca"), sel = document.getElementById("situacao");
+    const upd = () => setTimeout(() => {
+      const ativo = document.activeElement;
+      bar.classList.toggle("searching", ativo === busca || !!busca.value || (ativo === sel && bar.classList.contains("searching")));
+      sel.classList.toggle("on", !!sel.value);
+    }, 0);
+    ["focus", "blur", "input"].forEach((ev) => busca.addEventListener(ev, upd));
+    ["blur", "change"].forEach((ev) => sel.addEventListener(ev, upd));
+  }
   sel.addEventListener("change", render);
   render();
 }});

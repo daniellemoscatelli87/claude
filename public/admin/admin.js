@@ -150,7 +150,7 @@
     const drawer = el("aside", "drawer"); drawer.id = "drawer";
     drawer.setAttribute("aria-label", "Menu");
     drawer.innerHTML = `<button type="button" class="close" id="drawer-close" aria-label="Fechar menu">${icon("close")}</button>
-      <div class="who"><span class="avatar">${initials(ADMIN_NAME)}</span><div><div class="n">${ADMIN_NAME}</div><div class="e" id="who-email"></div></div></div>
+      <div class="who"><img class="avatar" src="/admin/avatar-dani.webp" alt="${ADMIN_NAME}" width="44" height="44"><div><div class="n">${ADMIN_NAME}</div><div class="e" id="who-email"></div></div></div>
       <nav>${PAGES.map((p) => `<a href="${p.href}"${p.id === page ? ' aria-current="page"' : ""}>${icon(p.icon)}${p.label}<span class="nav-count hidden" data-count="${p.id}"></span></a>`).join("")}</nav>
       <div class="foot"><button type="button" class="logout" id="logout">${icon("logout")}Sair</button></div>`;
 

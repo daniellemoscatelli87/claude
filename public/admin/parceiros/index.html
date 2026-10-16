@@ -13,7 +13,8 @@
 <style>
   .tabs { display: flex; width: 100%; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 999px; margin: 20px 0 16px; }
   .tab { flex: 1; background: none; border: 0; border-radius: 999px; padding: 9px 18px; color: var(--muted); font-size: 14px; }
-  .tab[aria-selected=true] { background: var(--dark); color: #fff; }
+  .tab[aria-selected=true] { background: var(--red); color: #fff; }
+  .tab[aria-selected=true] .n { background: rgb(255 255 255 / .25); }
   .tab .n { display: inline-block; margin-left: 6px; padding: 0 7px; border-radius: 999px; background: rgb(148 163 184 / .25); font-size: 12px; }
   .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; align-items: end; }
   .filters label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
@@ -171,7 +172,6 @@
   .filter-row { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 12px; }
   .filter-row .fold { flex: 1 1 200px; min-width: 0; }
   .filter-row .fold[open] { flex-basis: 100%; }
-  .total-chip { flex: 0 0 auto; font-weight: 700; white-space: nowrap; }
   .cand-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
 .lgpd { margin-top: 16px; }
   .lgpd p { margin: 8px 0; }
@@ -283,7 +283,6 @@
     </div>
 
     <div class="filter-row hidden" id="filter-row">
-    <div class="card total-chip hidden" id="cand-total"></div>
     <details class="card fold" id="filters-box">
       <summary><span>Filtros<span class="active-count" id="active-count"></span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
       <div class="filters" id="filters">
@@ -640,7 +639,6 @@ function dashboard(rows) {
 
 /* ---------- Candidaturas ---------- */
 function candidaturas(rows) {
-  document.getElementById("cand-total").textContent = "Total: " + String(rows.length).padStart(2, "0");
   const list = document.getElementById("list"); list.replaceChildren();
   if (!rows.length) return list.appendChild(el("div", "empty", ALL.length ? "Nenhuma candidatura para os filtros atuais." : "Nenhuma candidatura ainda."));
   rows.forEach((r) => list.appendChild(Admin.rowLink("/admin/parceiros/?id=" + r.id, r.nome, [r.principal_especializacao, r.cidade_estado, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em)));
@@ -706,7 +704,6 @@ function setTab(name) {
   document.getElementById("tab-candidaturas").setAttribute("aria-selected", String(!dash));
   document.getElementById("panel-dashboard").classList.toggle("hidden", !dash);
   document.getElementById("panel-candidaturas").classList.toggle("hidden", dash);
-  document.getElementById("cand-total").classList.toggle("hidden", dash);
   // O bloco de filtros só aparece em Candidaturas; no Dashboard, a busca é pelo Desafio.
   document.getElementById("filter-row").classList.toggle("hidden", dash);
   const url = new URL(location.href);
