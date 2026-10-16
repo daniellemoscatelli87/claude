@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Lançamento | Área restrita</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/admin.css">
+<style>
+  .toolbar { display: flex; gap: 10px; align-items: center; margin: 20px 0 12px; }
+  .toolbar input { flex: 1 1 auto; min-width: 0; max-width: 420px; }
+  .lc-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px 10px; border-radius: 12px; }
+  .lc-row + .lc-row { border-top: 1px solid var(--track); }
+  .lc-row .ic { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--red-tint); color: var(--red); }
+  .lc-row .ic svg { width: 18px; height: 18px; }
+  .lc-row .tx { min-width: 0; display: grid; gap: 2px; }
+  .lc-row a { color: var(--dark); font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
+  .lc-row a:hover { color: var(--red); }
+  .lc-row .d { font-size: 12px; color: var(--muted); white-space: nowrap; }
+</style>
+</head>
+<body>
+<main class="wrap hidden" id="app">
+  <h1>Lançamento</h1>
+  <p class="muted" id="count"></p>
+  <p class="msg err hidden" id="load-err"></p>
+  <div class="toolbar"><input type="search" id="busca" placeholder="Buscar e-mail" aria-label="Buscar e-mail"></div>
+  <section class="card"><div id="list"></div></section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/admin/admin.js"></script>
+<script>
+// Pessoas que cadastraram o e-mail para receber o aviso de lançamento do novo site (formulário da home).
+const el = Admin.el;
+let ALL = [];
+function linha(r) {
+  const row = el("div", "lc-row");
+  const ic = el("span", "ic"); ic.innerHTML = Admin.icon("rocket");
+  const a = el("a", null, r.email); a.href = "mailto:" + r.email;
+  const d = new Date(r.created_at);
+  const tx = el("div", "tx"); tx.append(a, el("span", "d", "Cadastrado em " + d.toLocaleDateString("pt-BR") + ", " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })));
+  row.append(ic, tx);
+  return row;
+}
+function render() {
+  const q = document.getElementById("busca").value.trim().toLowerCase();
+  const rows = q ? ALL.filter((r) => r.email.toLowerCase().includes(q)) : ALL;
+  const list = document.getElementById("list"); list.replaceChildren();
+  if (!rows.length) return list.appendChild(el("div", "empty", ALL.length ? "Nenhum e-mail encontrado." : "Ninguém se cadastrou para o lançamento ainda."));
+  rows.forEach((r) => list.appendChild(linha(r)));
+}
+Admin.init({ page: "lancamento", onReady: async () => {
+  const { data, error } = await Admin.sb.from("notificacoes_lancamento").select("id, created_at, email").order("created_at", { ascending: false });
+  const err = document.getElementById("load-err");
+  err.classList.toggle("hidden", !error);
+  if (error) { err.textContent = "Não foi possível carregar a lista: " + error.message; return; }
+  ALL = data;
+  document.getElementById("count").textContent = data.length === 1 ? "1 pessoa cadastrada para o aviso de lançamento" : data.length + " pessoas cadastradas para o aviso de lançamento";
+  render();
+  document.getElementById("busca").addEventListener("input", render);
+}});
+</script>
+</body>
+</html>
