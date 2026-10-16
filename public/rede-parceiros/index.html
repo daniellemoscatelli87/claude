@@ -59,6 +59,24 @@
   .subtitle { color: var(--slate); font-weight: 500; margin: 0 0 4px; }
   .tagline { color: var(--coral); font-weight: 600; margin: 0 0 24px; }
   .intro p { margin: 0 0 14px; }
+  .intro .lead { font-size: 17px; }
+  .intro .ih { display: flex; align-items: center; gap: 10px; margin: 28px 0 10px; }
+  .intro .ih svg { width: 22px; height: 22px; color: var(--coral); flex-shrink: 0; }
+  .intro .hl { display: flex; gap: 14px; align-items: flex-start; background: var(--bg); border-radius: 12px; padding: 16px; margin: 6px 0 14px; }
+  .intro .hl p { margin: 0; }
+  .intro .hl-ic { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: var(--coral); box-shadow: 0 1px 3px rgb(17 17 17 / .08); }
+  .intro .hl-ic svg { width: 20px; height: 20px; }
+  .intro .hl.ai { background: var(--coral-tint); }
+  .intro .mini { font-size: 14px; color: var(--muted); margin: 0 0 8px; }
+  .intro .tags { list-style: none; padding: 0; margin: 0 0 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .intro .tags li { font-size: 14px; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: var(--coral-tint); color: #c43c3c; }
+  .intro .tags.alt li { background: var(--bg); color: var(--slate); border: 1px solid var(--line); }
+  .intro .icon-list { list-style: none; padding: 0; margin: 0 0 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 560px) { .intro .icon-list { grid-template-columns: minmax(0, 1fr); } }
+  .intro .icon-list li { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 500; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+  .intro .icon-list span { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--coral-tint); color: var(--coral); }
+  .intro .icon-list svg { width: 18px; height: 18px; }
+  .intro .note { font-size: 14px; color: var(--muted); }
   .contact { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 15px; }
   .contact p { margin: 0 0 4px; }
   .contact .sig-photo, .sign .sig-photo { display: block; width: 96px; height: 96px; border-radius: 50%; margin: 4px 0 12px; }
@@ -194,15 +212,41 @@
       <p class="subtitle">Dani Moscatelli | Experience Design Studio</p>
       <p class="tagline">Conectando competências. Ampliando possibilidades. Transformando negócios.</p>
 
-      <p>O Dani Moscatelli | Experience Design Studio está ampliando sua atuação e construindo um ecossistema multidisciplinar de profissionais independentes (PJ) para colaborar em projetos de Design, Experiência Humana, Negócios, Tecnologia e Inovação.</p>
-      <p>Com mais de 20 anos de experiência em Design e especialização em Service Design, minha atuação conecta estratégia, pesquisa e tecnologia para transformar desafios de negócio em soluções e experiências de valor.</p>
-      <p>O objetivo desta rede é reunir profissionais com competências complementares para apoiar diferentes etapas dos projetos, desde pesquisas, diagnósticos e recomendações estratégicas até o desenvolvimento e a implementação de produtos, serviços e soluções digitais.</p>
-      <p>Buscamos profissionais de Design, UX/UI, Pesquisa, Tecnologia, Desenvolvimento, Dados, IA e Inovação, além de especialistas em setores como saúde, hospitalidade, educação, varejo, serviços financeiros e indústria.</p>
-      <p>As parcerias poderão envolver consultorias especializadas, construção de estratégias, metodologias e frameworks, desenvolvimento de soluções e execução de entregas específicas.</p>
+      <p class="lead">O Dani Moscatelli | Experience Design Studio está ampliando sua atuação e construindo um <strong>ecossistema multidisciplinar de profissionais independentes (PJ)</strong> para colaborar em projetos de Design, Experiência Humana, Negócios, Tecnologia e Inovação.</p>
 
-      <h3>Sobre este cadastro</h3>
+      <div class="hl">
+        <span class="hl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M8.2 12.4 7 22l5-3 5 3-1.2-9.6"/></svg></span>
+        <p>Com <strong>mais de 20 anos de experiência em Design</strong> e especialização em Service Design, minha atuação conecta estratégia, pesquisa e tecnologia para transformar desafios de negócio em soluções e experiências de valor.</p>
+      </div>
+
+      <h3 class="ih"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Objetivo da rede</h3>
+      <p>Reunir profissionais com competências complementares para apoiar diferentes etapas dos projetos, desde pesquisas, diagnósticos e recomendações estratégicas até o desenvolvimento e a implementação de produtos, serviços e soluções digitais.</p>
+
+      <h3 class="ih"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17.5" cy="9" r="2.5"/><path d="M16 14.2A5 5 0 0 1 21.5 19"/></svg>Quem buscamos</h3>
+      <p class="mini">Profissionais de:</p>
+      <ul class="tags">
+        <li>Design</li><li>UX/UI</li><li>Pesquisa</li><li>Tecnologia</li><li>Desenvolvimento</li><li>Dados</li><li>IA</li><li>Inovação</li>
+      </ul>
+      <p class="mini">Especialistas em setores como:</p>
+      <ul class="tags alt">
+        <li>Saúde</li><li>Hospitalidade</li><li>Educação</li><li>Varejo</li><li>Serviços financeiros</li><li>Indústria</li>
+      </ul>
+
+      <h3 class="ih"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>Formatos de parceria</h3>
+      <ul class="icon-list">
+        <li><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>Consultorias especializadas</li>
+        <li><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></span>Construção de estratégias, metodologias e frameworks</li>
+        <li><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span>Desenvolvimento de soluções</li>
+        <li><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>Execução de entregas específicas</li>
+      </ul>
+
+      <h3 class="ih"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>Sobre este cadastro</h3>
       <p>Este cadastro tem como finalidade conhecer profissionais e mapear competências para futuras oportunidades de colaboração.</p>
-      <p>O cadastro não representa oferta de trabalho ou garantia de contratação. As parcerias serão estabelecidas conforme as demandas do estúdio e a aderência de cada perfil.</p>
+      <div class="hl ai">
+        <span class="hl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></span>
+        <p><strong>Quanto mais completo for o seu cadastro, melhor.</strong> A plataforma usa inteligência artificial para analisar os perfis e encontrar os profissionais certos para cada demanda, por isso cada resposta faz diferença.</p>
+      </div>
+      <p class="note">O cadastro não representa oferta de trabalho ou garantia de contratação. As parcerias serão estabelecidas conforme as demandas do estúdio e a aderência de cada perfil.</p>
 
       <div class="contact">
         <img class="sig-photo" src="/dani-assinatura.webp" alt="Dani Moscatelli" width="96" height="96">
@@ -402,7 +446,7 @@ const SECTIONS = [
       { title: "Colaboração e facilitação", options: ["Miro.", "FigJam.", "Mural.", "Notion.", "Trello.", "Jira / Confluence."] },
       { title: "Pesquisa e análise", options: ["Ferramentas de pesquisa e testes (Maze, Optimal Workshop etc.).", "Formulários e questionários (Typeform, Google Forms etc.).", "Análise de comportamento (Hotjar, Clarity etc.).", "Google Analytics.", "Dovetail ou repositórios de pesquisa."] },
       { title: "Dados e inteligência artificial", options: ["Excel / Google Sheets.", "Power BI / Looker Studio.", "Python ou R para análise de dados.", "Ferramentas de IA generativa (ChatGPT, Claude, Gemini etc.).", "IA para imagem e vídeo (Midjourney, Runway etc.)."] },
-      { title: "Desenvolvimento e automação", options: ["HTML, CSS e JavaScript.", "Frameworks front-end (React, Vue, Angular etc.).", "Back-end e APIs.", "Plataformas no-code / low-code (Webflow, Bubble, WordPress etc.).", "Automação (Zapier, Make, n8n etc.).", "Versionamento (Git / GitHub)."] },
+      { title: "Desenvolvimento e automação", options: ["HTML, CSS e JavaScript.", "Frameworks front-end (React, Vue, Angular etc.).", "Back-end e APIs.", "Plataformas no-code / low-code (Webflow, Bubble, WordPress etc.).", "Automação (Zapier, Make, n8n etc.).", "Versionamento (Git / GitHub).", "Criação de apps com IA / vibe coding (Lovable, Bolt, v0, Replit etc.).", "Assistentes de código com IA (Cursor, Claude Code, GitHub Copilot etc.)."] },
       { title: "Gestão e produtividade", options: ["Pacote Office / Google Workspace.", "Gestão de projetos (Asana, Monday, ClickUp etc.).", "CRM (Salesforce, HubSpot etc.).", "ERP (SAP, TOTVS etc.)."] },
       { title: "Ferramentas setoriais", options: ["Prontuário eletrônico e sistemas hospitalares.", "Softwares jurídicos.", "CAD / BIM (AutoCAD, Revit etc.).", "Softwares contábeis e financeiros.", "Sistemas de RH e gestão de pessoas."] },
       { title: "Metodologias", options: ["Design Thinking.", "Frameworks de Service Design (blueprint, jornadas etc.).", "Métodos de pesquisa com usuários.", "Métodos ágeis (Scrum, Kanban).", "Lean / Lean UX.", "Jobs to be Done.", "OKRs e gestão por indicadores.", "Gestão de projetos (PMI / PMBOK).", "Lean Six Sigma.", "Gestão de processos (BPM)."] },
