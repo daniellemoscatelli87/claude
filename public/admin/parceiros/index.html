@@ -45,6 +45,11 @@
   .ai-card h3 svg { width: 18px; height: 18px; color: var(--red); }
   .ai-list { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 14px; line-height: 1.45; }
   .ai-meta { margin: 12px 0 0; font-size: 12px; color: var(--muted); }
+  .btn-ai { display: inline-flex; align-items: center; font: inherit; font-size: 14px; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 9px 18px; cursor: pointer; margin-top: 4px; }
+  .btn-ai:disabled { opacity: .6; cursor: wait; }
+  .ai-stale { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; background: #fdf3dc; color: #7a5300; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; }
+  .ai-stale p { margin: 0; font-size: 14px; font-weight: 600; }
+  .ai-stale .btn-ai { margin-top: 0; }
 
   /* Indicadores */
   .kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
@@ -647,16 +652,33 @@ function candidaturas(rows) {
 /* ---------- Análise por IA ---------- */
 // Uma análise da base inteira de parceiros (não muda com os filtros) e uma frase de
 // "como pode contribuir" para cada pessoa. A função guarda o resultado e só gera de novo quando os dados mudam.
-let IA = null;
+// A análise só chama a IA quando você clica em Gerar/Atualizar; ao abrir, vem a última análise guardada.
+let IA = null, GERANDO = false;
 function fillAnalysis() {
   const box = document.getElementById("ai-body"), meta = document.getElementById("ai-meta");
-  box.replaceChildren();
-  if (!IA) { box.appendChild(el("p", "muted ai-loading", "Gerando a análise da rede…")); meta.textContent = ""; return; }
+  box.replaceChildren(); meta.textContent = "";
+  const botao = (texto) => {
+    const b = el("button", "btn-ai", GERANDO ? "Gerando…" : texto); b.type = "button"; b.disabled = GERANDO;
+    b.addEventListener("click", () => loadAnalysis(true));
+    return b;
+  };
+  if (GERANDO) { box.appendChild(el("p", "muted ai-loading", "Gerando a análise da rede…")); return; }
+  if (!IA) { box.appendChild(el("p", "muted ai-loading", "Carregando…")); return; }
   if (IA.error) {
-    meta.textContent = IA.error === "sem_chave" ? "A análise por IA ainda não está ativa: falta salvar a chave do Google Gemini (GEMINI_API_KEY) nos secrets do Supabase."
-      : IA.error === "limite" || IA.error === "ocupado" ? "A IA gratuita está ocupada ou no limite de uso agora. Recarregue a página em alguns minutos."
-      : "Não foi possível gerar a análise agora. Tente recarregar a página.";
+    box.appendChild(el("p", "muted", IA.error === "sem_chave" ? "A análise por IA ainda não está ativa: falta salvar a chave do Google Gemini (GEMINI_API_KEY) nos secrets do Supabase."
+      : IA.error === "limite" || IA.error === "ocupado" ? "A IA gratuita está ocupada ou no limite de uso agora. Tente de novo em alguns minutos."
+      : "Não foi possível gerar a análise agora."));
+    if (IA.error !== "sem_chave") box.appendChild(botao("Tentar de novo"));
     return;
+  }
+  if (!ALL.length) { box.appendChild(el("p", "muted", "Nenhum parceiro cadastrado ainda.")); return; }
+  if (IA.vazio) {
+    box.append(el("p", "muted", "Ainda não há análise da rede. A IA analisa os cadastros e também escreve a Entrega de valor de cada parceiro."), botao("Gerar análise"));
+    return;
+  }
+  if (IA.desatualizada) {
+    const av = el("div", "ai-stale"); av.append(el("p", null, "Há cadastros novos ou alterados desde a última análise."), botao("Atualizar análise"));
+    box.appendChild(av);
   }
   const a = IA.analise || {};
   if (a.resumo) box.appendChild(el("p", "ai-resumo", a.resumo));
@@ -672,9 +694,11 @@ function fillAnalysis() {
   box.appendChild(g);
   meta.textContent = IA.gerado_em ? "Gerada por IA com base em " + plural(IA.base, "parceiro", "parceiros") + " · " + Admin.fmtDate(IA.gerado_em) : "";
 }
-async function loadAnalysis() {
+async function loadAnalysis(gerar = false) {
+  if (gerar) GERANDO = true;
   fillAnalysis();
-  const { data, error } = await Admin.sb.functions.invoke("insights-parceiros", { body: {} });
+  const { data, error } = await Admin.sb.functions.invoke("insights-parceiros", { body: gerar ? {} : { somente_cache: true } });
+  GERANDO = false;
   if (error) {
     let code = "falha";
     try { code = (await error.context.json()).error || code; } catch {}

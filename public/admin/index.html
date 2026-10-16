@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
   .home { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+  .entry .ini svg { width: 18px; height: 18px; }
   .totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
   @media (max-width: 900px) { .totals { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .total .sub { font-size: 12px; color: var(--muted); margin-top: -4px; }
@@ -47,7 +48,7 @@
 <body>
 <main class="wrap hidden" id="app">
   <h1 id="hello">Olá!</h1>
-  <p class="muted">Veja as últimas mensagens de contato e candidaturas à Rede de Parceiros.</p>
+  <p class="muted">Veja as últimas mensagens de contato, candidaturas à Rede de Parceiros e cadastros para o lançamento.</p>
   <p class="msg err hidden" id="load-err"></p>
   <div class="totals" id="totals">
     <a class="card total" href="/admin/contatos/"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><span class="v" id="tot-novas">-</span><span class="k">Novas mensagens</span><span class="sub">nos últimos 7 dias</span></a>
@@ -73,6 +74,14 @@
       </div>
       <div class="rows" id="last-parceiros"></div>
       <a class="seeall" href="/admin/parceiros/?aba=candidaturas">Ver todos →</a>
+    </section>
+    <section class="card" aria-labelledby="h-lancamento">
+      <div class="panel-head">
+        <div class="ttl"><span class="ic" id="ic-lancamento"></span>
+          <div><h2 id="h-lancamento">Lançamento</h2><div class="cnt" id="cnt-lancamento"></div></div></div>
+      </div>
+      <div class="rows" id="last-lancamento"></div>
+      <a class="seeall" href="/admin/lancamento/">Ver todos →</a>
     </section>
   </div>
 </main>
@@ -104,11 +113,12 @@ const segs = (list) => { const l = (list || []).map(clean); return l.length > 2 
 Admin.init({ page: "inicio", onReady: async () => {
   const h = new Date().getHours();
   document.getElementById("hello").textContent = (h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite") + ", Dani!";
-  const [c, p] = await Promise.all([
+  const [c, p, l] = await Promise.all([
     Admin.sb.from("contatos").select("id, created_at, nome, empresa, cargo, assunto, visualizado_em, respondido_em, reuniao_em", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
     Admin.sb.from("cadastros").select("id, created_at, nome, empresa, principal_especializacao, segmentos, visualizado_em", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
+    Admin.sb.from("notificacoes_lancamento").select("id, created_at, email", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
   ]);
-  const err = c.error || p.error, box = document.getElementById("load-err");
+  const err = c.error || p.error || l.error, box = document.getElementById("load-err");
   box.classList.toggle("hidden", !err);
   if (err) { box.textContent = "Não foi possível carregar os dados: " + err.message; return; }
   const since = new Date(Date.now() - 7 * 864e5).toISOString();
@@ -149,6 +159,17 @@ Admin.init({ page: "inicio", onReady: async () => {
     rows.forEach((r) => el.appendChild(make(r)));
   };
   fill("last-contatos", c.data, (r) => entry("/admin/contatos/?id=" + r.id, r, [["Empresa", r.empresa], ["Cargo", r.cargo], ["Assunto", r.assunto]], true), "Nenhuma mensagem ainda.");
+  // Aviso de lançamento: e-mail e data de cadastro.
+  document.getElementById("ic-lancamento").innerHTML = Admin.icon("rocket");
+  document.getElementById("cnt-lancamento").textContent = plural(l.count, "pessoa cadastrada", "pessoas cadastradas") + (l.count > LIMIT ? " · últimas " + LIMIT : "");
+  fill("last-lancamento", l.data, (r) => {
+    const a = Admin.el("a", "entry seen"); a.href = "mailto:" + r.email;
+    const d = new Date(r.created_at), when = Admin.el("div", "when");
+    when.append(Admin.el("b", null, d.toLocaleDateString("pt-BR")), document.createTextNode(d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })));
+    const ic = Admin.el("span", "ini"); ic.innerHTML = Admin.icon("rocket");
+    a.append(ic, Admin.el("span", "t", r.email), when);
+    return a;
+  }, "Ninguém se cadastrou para o lançamento ainda.");
   fill("last-parceiros", p.data, (r) => entry("/admin/parceiros/?id=" + r.id, r, [["Empresa", r.empresa], ["Serviço", r.principal_especializacao], ["Segmento", segs(r.segmentos)]]), "Nenhuma candidatura ainda.");
 }});
 </script>
