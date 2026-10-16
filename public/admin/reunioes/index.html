@@ -44,6 +44,7 @@
   .meet .date small { display: block; font-size: 12px; font-weight: 700; margin-top: 4px; }
   .meet .t { font-weight: 700; }
   .meet .s { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+  .meet > :not(.date) { grid-column: 2; }
   .meet .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
   .meet .acts a { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; text-decoration: none; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--dark); background: #fff; }
   .meet .acts a:hover { border-color: var(--red); color: var(--red); }
@@ -100,12 +101,16 @@ function meetingItem(r, past) {
   date.append(el("span", null, d.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "")), el("b", null, String(d.getDate())), el("span", null, d.toLocaleDateString("pt-BR", { month: "short" }).replace(".", "")), el("small", null, time(d)));
   const acts = el("div", "acts");
   const reu = Array.isArray(r.reunioes) ? r.reunioes[0] : r.reunioes;
-  if (!past && reu?.meet_link) acts.append(action(reu.meet_link, "meeting", "Entrar no Meet", true));
+  const presencial = reu?.formato === "presencial" && reu.endereco;
+  if (!past && presencial) acts.append(action("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(reu.endereco), "meeting", "Ver no mapa", true));
+  else if (!past && reu?.meet_link) acts.append(action(reu.meet_link, "meeting", "Entrar no Meet", true));
   acts.append(action("/admin/contatos/?id=" + r.id + "&reuniao=1", "meeting", "Editar reunião"));
   acts.append(action("/admin/contatos/?id=" + r.id, "mail", "Ver histórico"));
   if (r.email) acts.append(action("mailto:" + r.email + "?subject=" + encodeURIComponent("Nossa reunião em " + d.toLocaleDateString("pt-BR") + " às " + time(d)), "mailOpen", "Enviar e-mail"));
   if (!past && !reu?.google_event_id) acts.append(action(Admin.googleCalendarLink(r), "meeting", "Adicionar ao Google Agenda", true));
-  item.append(date, el("div", "t", r.nome || "Sem nome"), el("div", "s", [r.empresa, r.assunto].filter(Boolean).join(" · ")), acts);
+  item.append(date, el("div", "t", r.nome || "Sem nome"), el("div", "s", [r.empresa, r.assunto].filter(Boolean).join(" · ")));
+  if (presencial) item.appendChild(el("div", "s", "Presencial: " + reu.endereco));
+  item.appendChild(acts);
   return item;
 }
 
@@ -135,7 +140,7 @@ async function googleCard() {
 Admin.init({ page: "reunioes", onReady: async () => {
   googleCard();
   const err = document.getElementById("load-err");
-  const { data, error } = await Admin.sb.from("contatos").select("id, nome, email, telefone, empresa, cargo, assunto, mensagem, reuniao_em, reunioes(meet_link, google_event_id)").not("reuniao_em", "is", null).order("reuniao_em", { ascending: true });
+  const { data, error } = await Admin.sb.from("contatos").select("id, nome, email, telefone, empresa, cargo, assunto, mensagem, reuniao_em, reunioes(meet_link, google_event_id, formato, endereco)").not("reuniao_em", "is", null).order("reuniao_em", { ascending: true });
   err.classList.toggle("hidden", !error);
   if (error) { err.textContent = "Não foi possível carregar as reuniões: " + error.message; return; }
   const now = new Date();
