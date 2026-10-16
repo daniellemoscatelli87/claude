@@ -415,7 +415,7 @@ function renderMeeting(r) {
   }
   body.append(linkBox, msg);
   const acts = Admin.el("div", "mt-acts");
-  const send = Admin.el("button", "btn-meet", agendada ? "Salvar e avisar o convidado" : "Enviar convite"); send.type = "button";
+  const send = Admin.el("button", "btn-meet", agendada ? "Salvar" : "Enviar convite"); send.type = "button";
   send.addEventListener("click", () => {
     const v = values(); if (!v) return;
     run(send, agendada ? "Salvando…" : "Enviando…", { acao: "salvar", ...v, enviar: true }, (res) => {
