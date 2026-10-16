@@ -140,6 +140,15 @@ function initDisparo() {
   const err = document.getElementById("dlg-err"), prev = document.getElementById("prev"), frame = document.getElementById("prev-frame");
   const bPrev = document.getElementById("btn-prev"), bSend = document.getElementById("btn-send");
   document.getElementById("ic-abrir").innerHTML = Admin.icon("rocket");
+  // Texto padrão do lançamento (pode ser editado na janela antes de enviar).
+  t.value = "Um novo espaço para transformar negócios por meio de experiências.";
+  m.value = [
+    "Olá,",
+    "É com entusiasmo que compartilho o lançamento do novo site da Dani Moscatelli | Experience Design Studio.",
+    "Mais do que uma nova presença digital, este espaço representa um novo capítulo de uma trajetória de mais de 20 anos dedicada a conectar pessoas, estratégia, design e tecnologia.",
+    "Um ambiente para compartilhar conhecimentos, apresentar soluções e explorar novas possibilidades de inovação, criando experiências de alto valor para negócios físicos e digitais.",
+    "Convido você a conhecer esse novo capítulo e descobrir o que podemos construir juntos.",
+  ].join("\n\n");
   const erro = (x) => { err.textContent = x; err.classList.toggle("hidden", !x); };
   const campos = () => { const v = { titulo: t.value.trim(), mensagem: m.value.trim() }; if (!v.titulo || !v.mensagem) { erro("Preencha o título e a mensagem."); (v.titulo ? m : t).focus(); return null; } erro(""); return v; };
   [t, m].forEach((i) => i.addEventListener("input", () => { prev.classList.add("hidden"); erro(""); }));
