@@ -249,7 +249,7 @@ function deleteCard(r) {
     }
     const { data: del, error } = await Admin.sb.from("contatos").delete().eq("id", r.id).select("id");
     if (error || !del?.length) return fail("Não foi possível excluir a mensagem" + (error ? ": " + error.message : "."));
-    location.replace("/admin/contatos/");
+    Admin.toast("Mensagem excluída com sucesso.", "/admin/contatos/");
   });
   c.append(btn, msg);
   return c;
@@ -353,8 +353,22 @@ function renderMeeting(r) {
   if (reu || r.reuniao_em) {
     const del = Admin.el("button", "link-danger", agendada ? "Excluir reunião" : "Descartar"); del.type = "button";
     del.addEventListener("click", async () => {
-      if (!(await Admin.confirmDialog(agendada ? { title: "Excluir reunião?", message: "O evento será cancelado no Google Agenda e o convidado será avisado.", ok: "Excluir reunião" } : { title: "Descartar rascunho?", message: "O rascunho e o link do Meet gerado serão apagados.", ok: "Descartar" }))) return;
-      run(del, "Excluindo…", { acao: "excluir", contato_id: r.id }, () => { r._reuniao = null; r.reuniao_em = null; closeMeeting(); statusBar(r); historico(r); });
+      const motivo = await Admin.confirmDialog(agendada
+        ? { title: "Excluir reunião?", message: "O evento será cancelado no Google Agenda e " + (r.email || "o convidado") + " receberá um e-mail com o motivo do cancelamento.", ok: "Excluir reunião", field: { label: "Motivo do cancelamento", placeholder: "Ex.: precisei remarcar por um imprevisto na agenda.", required: true } }
+        : { title: "Descartar rascunho?", message: "O rascunho e o link do Meet gerado serão apagados.", ok: "Descartar" });
+      if (motivo === false) return;
+      const quando = reu?.inicio || r.reuniao_em, tituloReu = reu?.titulo || "";
+      run(del, "Excluindo…", { acao: "excluir", contato_id: r.id }, async () => {
+        r._reuniao = null; r.reuniao_em = null; closeMeeting(); statusBar(r);
+        let aviso = agendada ? "Reunião excluída com sucesso." : "Rascunho descartado com sucesso.";
+        if (agendada && r.email && typeof motivo === "string") {
+          const nome = (r.nome || "").trim().split(/\s+/)[0];
+          const texto = (nome ? "Olá, " + nome + ".\n\n" : "") + "A reunião" + (tituloReu ? " \u201c" + tituloReu + "\u201d" : "") + (quando ? ", marcada para " + new Date(quando).toLocaleString("pt-BR", { dateStyle: "long", timeStyle: "short" }) + "," : "") + " foi cancelada.\n\nMotivo: " + motivo;
+          const { data, error } = await Admin.sb.functions.invoke("responder-contato", { body: { contato_id: r.id, mensagem: texto, anexos: [] } });
+          aviso = error || !data?.resposta ? "Reunião excluída, mas não foi possível enviar o e-mail com o motivo." : "Reunião excluída com sucesso. O motivo foi enviado para " + r.email + ".";
+        }
+        historico(r); Admin.toast(aviso);
+      });
     });
     acts.appendChild(del);
   }
