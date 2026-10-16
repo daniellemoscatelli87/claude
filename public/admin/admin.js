@@ -396,18 +396,38 @@
   ]}];
 
   // Confirmação em janela (modal) antes de ações que não podem ser desfeitas.
-  function confirmDialog({ title, message, ok = "Excluir", danger = true }) {
+  // Com field ({ label, placeholder, required }), mostra um campo de texto e devolve o que foi digitado.
+  function confirmDialog({ title, message, ok = "Excluir", danger = true, field }) {
     return new Promise((resolve) => {
       const dlg = document.createElement("dialog"); dlg.className = "confirm-dlg";
       dlg.setAttribute("aria-labelledby", "cd-title");
-      dlg.innerHTML = `<h2 id="cd-title"></h2><p class="muted"></p><div class="cd-acts"><button type="button" class="btn-ghost" data-v="0">Cancelar</button><button type="button" class="${danger ? "btn-danger-solid" : "btn-ok"}" data-v="1"></button></div>`;
+      dlg.innerHTML = `<h2 id="cd-title"></h2><p class="muted"></p>${field ? '<label class="cd-field"><span></span><textarea rows="3" maxlength="1000"></textarea><em class="cd-err hidden">Preencha o motivo para continuar.</em></label>' : ""}<div class="cd-acts"><button type="button" class="btn-ghost" data-v="0">Cancelar</button><button type="button" class="${danger ? "btn-danger-solid" : "btn-ok"}" data-v="1"></button></div>`;
       dlg.querySelector("h2").textContent = title; dlg.querySelector("p").textContent = message; dlg.querySelector('[data-v="1"]').textContent = ok;
+      const ta = dlg.querySelector("textarea");
+      if (field) { dlg.querySelector(".cd-field span").textContent = field.label; ta.placeholder = field.placeholder || ""; ta.addEventListener("input", () => dlg.querySelector(".cd-err").classList.add("hidden")); }
       const done = (v) => { dlg.close(); dlg.remove(); resolve(v); };
-      dlg.addEventListener("click", (e) => { const b = e.target.closest("button[data-v]"); if (b) done(b.dataset.v === "1"); else if (e.target === dlg) done(false); });
+      dlg.addEventListener("click", (e) => {
+        const b = e.target.closest("button[data-v]");
+        if (b && b.dataset.v === "1" && field) {
+          const v = ta.value.trim();
+          if (field.required && !v) { dlg.querySelector(".cd-err").classList.remove("hidden"); ta.focus(); return; }
+          return done(v || "");
+        }
+        if (b) done(b.dataset.v === "1"); else if (e.target === dlg) done(false);
+      });
       dlg.addEventListener("cancel", (e) => { e.preventDefault(); done(false); });
-      document.body.appendChild(dlg); dlg.showModal(); dlg.querySelector('[data-v="0"]').focus();
+      document.body.appendChild(dlg); dlg.showModal(); (ta || dlg.querySelector('[data-v="0"]')).focus();
     });
   }
 
-  window.Admin = { sb, el, init, icon, notifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES, confirmDialog };
+  // Aviso rápido de sucesso no rodapé da tela. Com next, mostra o aviso na página para onde vai.
+  function toast(text, next) {
+    if (next) { try { sessionStorage.setItem("admin-toast", text); } catch {} location.replace(next); return; }
+    const t = el("div", "toast", text); t.setAttribute("role", "status");
+    document.body.appendChild(t); requestAnimationFrame(() => t.classList.add("show"));
+    setTimeout(() => { t.classList.remove("show"); setTimeout(() => t.remove(), 300); }, 3200);
+  }
+  try { const t = sessionStorage.getItem("admin-toast"); if (t) { sessionStorage.removeItem("admin-toast"); if (document.readyState === "loading") addEventListener("DOMContentLoaded", () => toast(t)); else toast(t); } } catch {}
+
+  window.Admin = { sb, el, init, icon, notifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES, confirmDialog, toast };
 })();

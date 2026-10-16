@@ -703,7 +703,7 @@ function lgpdCard(data) {
     btn.disabled = true; btn.textContent = "Excluindo…";
     const { data: del, error } = await Admin.sb.from("cadastros").delete().eq("id", data.id).select("id");
     if (error || !del || !del.length) { btn.disabled = false; btn.textContent = "Excluir cadastro"; msg.textContent = "Não foi possível excluir o cadastro" + (error ? ": " + error.message : "."); return; }
-    location.replace("/admin/parceiros/?aba=candidaturas");
+    Admin.toast("Cadastro excluído com sucesso.", "/admin/parceiros/?aba=candidaturas");
   });
   c.append(el("p", "muted lgpd-help", "Use quando a pessoa pedir a exclusão dos dados. Todas as respostas são apagadas."), btn, msg);
   return c;
