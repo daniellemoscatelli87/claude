@@ -504,7 +504,7 @@ const CURTO = {
 const curto = (id, v) => CURTO[id][v] || clean(v || "");
 const PERFIS_IA = new Map(); // id -> "como pode contribuir" (IA)
 function contribFallback(r) {
-  const p = [r.principal_especializacao, r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase() + " na especialidade"].filter(Boolean).join(", ");
+  const p = r.principal_especializacao || "";
   const areas = (r.areas_experiencia || []).slice(0, 3).map(clean).join(", ");
   return [p, startsSim(r.lideranca) ? "pode liderar" : "", areas && "atua com " + areas].filter(Boolean).join("; ") + ".";
 }
