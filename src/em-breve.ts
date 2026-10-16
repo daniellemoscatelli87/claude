@@ -204,6 +204,7 @@ contactForm.addEventListener('submit', async (e) => {
   try {
     await insert('contatos', row);
     contactForm.reset();
+    try { localStorage.removeItem('dm-contato-rascunho'); } catch { /* sem armazenamento */ }
     contactForm.classList.add('hidden');
     submitBar.classList.add('hidden');
     $('drawer-header').classList.add('hidden');
@@ -218,3 +219,66 @@ contactForm.addEventListener('submit', async (e) => {
     submitLabel.textContent = 'Solicitar reunião';
   }
 });
+
+/* ---------- Sugestão de domínio nos campos de e-mail ---------- */
+const DOMINIOS = ['gmail.com', 'outlook.com', 'hotmail.com', 'icloud.com', 'yahoo.com.br', 'live.com', 'uol.com.br', 'terra.com.br'];
+function sugerirEmail(inp: HTMLInputElement, flutuante: boolean) {
+  const box = document.createElement('div');
+  box.className = flutuante
+    ? 'hidden absolute left-0 right-0 top-full mt-2 z-20 flex flex-wrap gap-1.5 p-2 bg-white rounded-xl shadow-lg border border-slate-100'
+    : 'hidden flex flex-wrap gap-1.5 mt-2';
+  box.setAttribute('aria-label', 'Sugestões de e-mail');
+  inp.after(box);
+  const atualizar = () => {
+    const v = inp.value.trim(), at = v.indexOf('@');
+    const usuario = at < 0 ? v : v.slice(0, at), dom = at < 0 ? '' : v.slice(at + 1).toLowerCase();
+    const opcoes = usuario && !/\s/.test(usuario) ? DOMINIOS.filter((d) => d.startsWith(dom) && d !== dom).slice(0, 4) : [];
+    box.replaceChildren(...opcoes.map((d) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 rounded-full px-3 py-1.5 hover:border-brand-red hover:text-brand-red cursor-pointer';
+      b.textContent = usuario + '@' + d;
+      b.addEventListener('mousedown', (e) => e.preventDefault());
+      b.addEventListener('click', () => {
+        inp.value = usuario + '@' + d;
+        box.classList.add('hidden');
+        inp.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+      return b;
+    }));
+    box.classList.toggle('hidden', !opcoes.length || document.activeElement !== inp);
+  };
+  inp.addEventListener('input', atualizar);
+  inp.addEventListener('focus', atualizar);
+  inp.addEventListener('blur', () => setTimeout(() => box.classList.add('hidden'), 150));
+}
+sugerirEmail(notifyEmail, true);
+sugerirEmail(contactForm.querySelector<HTMLInputElement>('input[name="email"]')!, false);
+
+/* ---------- Rascunho do formulário de contato (fica só neste navegador) ---------- */
+const RASCUNHO = 'dm-contato-rascunho';
+function salvarRascunho() {
+  const r: Record<string, string | string[]> = {};
+  contactForm.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input[name], select[name], textarea[name]').forEach((el) => {
+    if (el instanceof HTMLInputElement && (el.type === 'checkbox' || el.type === 'radio')) {
+      const atual = (r[el.name] as string[]) || [];
+      r[el.name] = el.checked ? [...atual, el.value] : atual;
+    } else r[el.name] = el.value;
+  });
+  try { localStorage.setItem(RASCUNHO, JSON.stringify(r)); } catch { /* sem armazenamento */ }
+}
+function restaurarRascunho() {
+  let r: Record<string, string | string[]> | null = null;
+  try { r = JSON.parse(localStorage.getItem(RASCUNHO) || 'null'); } catch { r = null; }
+  if (!r) return;
+  contactForm.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input[name], select[name], textarea[name]').forEach((el) => {
+    const v = r![el.name];
+    if (v == null) return;
+    if (el instanceof HTMLInputElement && (el.type === 'checkbox' || el.type === 'radio')) el.checked = Array.isArray(v) && v.includes(el.value);
+    else el.value = String(v);
+  });
+  if (contactForm.querySelector<HTMLInputElement>('input[name="tipo_negocio"]:checked')) setAccordion(true);
+}
+restaurarRascunho();
+contactForm.addEventListener('input', salvarRascunho);
+contactForm.addEventListener('change', salvarRascunho);
