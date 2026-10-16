@@ -174,6 +174,20 @@
   .list-add { margin-top: 10px; background: none; border: 1px dashed var(--coral); color: var(--coral); padding: 9px 16px; font-size: 14px; }
   .list-add:hover { background: var(--coral-tint); }
   .q.invalid .list-row input { border-color: var(--error); }
+  .mail-sug { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .mail-sug button { font: inherit; font-size: 13px; font-weight: 600; color: var(--slate); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+  .mail-sug button:hover, .mail-sug button:focus { border-color: var(--coral); color: var(--coral); outline: none; }
+  .draft-note { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; font-size: 14px; color: var(--slate); background: var(--coral-tint); border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; }
+  .draft-note button { font: inherit; font-size: 14px; font-weight: 600; color: var(--coral); background: none; border: 0; text-decoration: underline; cursor: pointer; padding: 4px; }
+  .pol-dlg { width: min(720px, 94vw); max-height: 88vh; border: 0; border-radius: 16px; padding: 0; box-shadow: 0 20px 60px -10px rgb(17 17 17 / .35); }
+  .pol-dlg::backdrop { background: rgb(17 17 17 / .45); }
+  .pol-head { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #fff; border-bottom: 1px solid var(--line); padding: 14px 18px; }
+  .pol-head h2 { margin: 0; font-size: 18px; }
+  .pol-head button { width: 44px; height: 44px; border: 0; background: none; border-radius: 10px; color: var(--muted); font-size: 26px; line-height: 1; cursor: pointer; }
+  .pol-body { padding: 4px 22px 24px; font-size: 15px; line-height: 1.65; color: #334155; }
+  .pol-body h1, .pol-body .tag { display: none; }
+  .pol-body h2 { font-size: 16px; margin: 22px 0 8px; color: var(--ink); }
+  .pol-body ul { padding-left: 20px; }
   .lang-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 22px; gap: 6px; align-items: center; }
   .lang-row .list-rm { width: 22px; border: 0; background: none; }
   .lang-row select { padding-left: 8px; padding-right: 24px; background-position: right 7px center; background-size: 13px; }
@@ -269,6 +283,10 @@
       </div>
     </section>
   </form>
+  <dialog class="pol-dlg" id="polDlg" aria-labelledby="polTitle">
+    <div class="pol-head"><h2 id="polTitle">Política de Privacidade</h2><button type="button" id="polClose" aria-label="Fechar">×</button></div>
+    <div class="pol-body" id="polBody"><p>Carregando…</p></div>
+  </dialog>
 
   <!-- Telas finais -->
   <section class="card end hidden" id="endSuccess">
@@ -794,6 +812,7 @@ function confetti() {
 }
 
 function end(id) {
+  limparRascunho();
   form.classList.add("hidden");
   document.getElementById("progressBox").classList.add("hidden");
   document.getElementById(id).classList.remove("hidden");
@@ -856,7 +875,108 @@ document.getElementById("next").addEventListener("click", () => {
 });
 document.getElementById("back").addEventListener("click", () => show(current - 1));
 
+// Rascunho: as respostas ficam salvas neste navegador e voltam se a pessoa sair e voltar ao formulário.
+const RASCUNHO = "dm-parceiros-rascunho";
+const QUESTOES = SECTIONS.flatMap((s) => s.questions);
+let restaurando = false;
+function limparRascunho() { try { localStorage.removeItem(RASCUNHO); } catch {} }
+function salvarRascunho() {
+  if (restaurando || current === 0) return;
+  const r = {};
+  QUESTOES.forEach((q) => {
+    if (q.type === "checkbox") r[q.id] = value(q);
+    else if (q.type === "radio") r[q.id] = value(q);
+    else if (q.type === "list") r[q.id] = [...form.querySelectorAll(`[data-list="${q.id}"] input`)].map((i) => i.value);
+    else if (q.type === "idiomas") r[q.id] = langRows(q).map(({ idioma, nivel }) => ({ idioma, nivel }));
+    else if (q.type === "uf_cidade") r[q.id] = { uf: form.elements[q.id + "_uf"].value, cidade: form.elements[q.id + "_cidade"].value };
+    else if (form.elements[q.id]) r[q.id] = form.elements[q.id].value;
+    if (form.elements[q.id + "__outro"]) r[q.id + "__outro"] = form.elements[q.id + "__outro"].value;
+  });
+  try { localStorage.setItem(RASCUNHO, JSON.stringify({ etapa: current, r, em: Date.now() })); } catch {}
+}
+async function restaurarRascunho() {
+  let d; try { d = JSON.parse(localStorage.getItem(RASCUNHO) || "null"); } catch {}
+  if (!d || !d.r || !d.etapa) return false;
+  restaurando = true;
+  const disparar = (el, ev) => el.dispatchEvent(new Event(ev, { bubbles: true }));
+  for (const q of QUESTOES) {
+    const v = d.r[q.id];
+    if (v == null) continue;
+    if (q.type === "checkbox" || q.type === "radio") {
+      const marcados = Array.isArray(v) ? v : [v];
+      form.querySelectorAll(`input[name="${q.id}"]`).forEach((i) => { if (marcados.includes(i.value)) { i.checked = true; disparar(i, "change"); } });
+    } else if (q.type === "list" || q.type === "idiomas") {
+      const box = form.querySelector(q.type === "list" ? `[data-list="${q.id}"]` : `[data-lang="${q.id}"]`);
+      const itens = (v || []).filter((x) => (q.type === "list" ? String(x).trim() : x.idioma || x.nivel));
+      itens.forEach((x, n) => {
+        if (n > 0) box.querySelector(".list-add").click();
+        const row = box.querySelectorAll(q.type === "list" ? ".list-row" : ".lang-row")[n];
+        if (q.type === "list") row.querySelector("input").value = x;
+        else { row.querySelector("input").value = x.idioma || ""; row.querySelector("select").value = x.nivel || ""; }
+      });
+    } else if (q.type === "uf_cidade") {
+      const uf = form.elements[q.id + "_uf"], cid = form.elements[q.id + "_cidade"];
+      if (v.uf) { uf.value = v.uf; disparar(uf, "change"); await new Promise((ok) => { const t0 = Date.now(); (function espera() { if (!cid.disabled || Date.now() - t0 > 4000) return ok(); setTimeout(espera, 100); })(); }); cid.value = v.cidade || ""; }
+    } else if (form.elements[q.id]) { form.elements[q.id].value = v; disparar(form.elements[q.id], "input"); }
+    if (d.r[q.id + "__outro"] && form.elements[q.id + "__outro"]) form.elements[q.id + "__outro"].value = d.r[q.id + "__outro"];
+  }
+  restaurando = false;
+  show(Math.min(d.etapa, total));
+  const nota = document.createElement("div"); nota.className = "draft-note";
+  nota.innerHTML = '<span>Recuperamos o seu preenchimento. Continue de onde parou.</span><button type="button">Começar do zero</button>';
+  nota.querySelector("button").addEventListener("click", () => { limparRascunho(); location.reload(); });
+  form.prepend(nota);
+  return true;
+}
+form.addEventListener("input", salvarRascunho);
+form.addEventListener("change", salvarRascunho);
+document.getElementById("next").addEventListener("click", () => setTimeout(salvarRascunho, 0));
+document.getElementById("back").addEventListener("click", () => setTimeout(salvarRascunho, 0));
+
+// E-mail: sugere completar com os domínios mais comuns logo abaixo do campo.
+const DOMINIOS = ["gmail.com", "outlook.com", "hotmail.com", "icloud.com", "yahoo.com.br", "live.com", "uol.com.br", "terra.com.br"];
+form.querySelectorAll('input[type="email"]').forEach((inp) => {
+  const box = document.createElement("div"); box.className = "mail-sug hidden"; box.setAttribute("aria-label", "Sugestões de e-mail");
+  inp.after(box);
+  const atualizar = () => {
+    const v = inp.value.trim(), at = v.indexOf("@");
+    const usuario = at < 0 ? v : v.slice(0, at), dom = at < 0 ? "" : v.slice(at + 1).toLowerCase();
+    const opcoes = usuario && !/\s/.test(usuario) ? DOMINIOS.filter((d) => d.startsWith(dom) && d !== dom).slice(0, 4) : [];
+    box.replaceChildren(...opcoes.map((d) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = usuario + "@" + d;
+      b.addEventListener("mousedown", (e) => e.preventDefault());
+      b.addEventListener("click", () => { inp.value = usuario + "@" + d; box.classList.add("hidden"); inp.dispatchEvent(new Event("input", { bubbles: true })); inp.blur(); });
+      return b;
+    }));
+    box.classList.toggle("hidden", !opcoes.length || document.activeElement !== inp);
+  };
+  inp.addEventListener("input", atualizar);
+  inp.addEventListener("focus", atualizar);
+  inp.addEventListener("blur", () => setTimeout(() => box.classList.add("hidden"), 150));
+});
+
+// Política de privacidade aberta numa janela, sem tirar a pessoa do formulário.
+const polDlg = document.getElementById("polDlg");
+document.getElementById("polClose").addEventListener("click", () => polDlg.close());
+polDlg.addEventListener("click", (e) => { if (e.target === polDlg) polDlg.close(); });
+document.addEventListener("click", async (e) => {
+  const a = e.target.closest && e.target.closest('a[href^="/privacidade"]');
+  if (!a || polDlg.contains(a)) return;
+  e.preventDefault();
+  polDlg.showModal();
+  const body = document.getElementById("polBody");
+  if (body.dataset.ok) return;
+  try {
+    const html = await fetch("/privacidade/").then((r) => { if (!r.ok) throw new Error(r.status); return r.text(); });
+    const art = new DOMParser().parseFromString(html, "text/html").querySelector("article");
+    if (!art) throw new Error("sem conteúdo");
+    body.replaceChildren(...[...art.childNodes].map((n) => document.importNode(n, true)));
+    body.dataset.ok = "1";
+  } catch { body.innerHTML = '<p>Não foi possível carregar a política agora. <a href="/privacidade/" target="_blank" rel="noopener">Abrir em outra aba</a>.</p>'; }
+});
+
 show(0);
+restaurarRascunho();
 // Teclado aberto no celular: marca o body enquanto um campo de texto está em foco.
 const isText = (t) => t.matches && t.matches('textarea, input:not([type="checkbox"]):not([type="radio"]), select');
 document.addEventListener("focusin", (e) => { if (isText(e.target)) document.body.classList.add("kb"); });
