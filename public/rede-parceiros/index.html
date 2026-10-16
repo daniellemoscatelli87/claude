@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Rede de Parceiros | Dani Moscatelli</title>
+<title>DM | Partners &amp; Connections</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 <meta name="description" content="Cadastro na Rede de Parceiros da Dani Moscatelli | Experience Design Studio.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,7 +52,7 @@
     padding: 32px 28px;
   }
   @media (max-width: 560px) { .card { padding: 24px 18px; } }
-  h1 { font-size: 26px; margin: 0 0 4px; letter-spacing: .02em; }
+  h1 { font-size: 26px; margin: 0 0 8px; letter-spacing: .02em; }
   h2 { font-size: 20px; margin: 0 0 24px; color: var(--ink); }
   h2 small { display: block; font-size: 12px; font-weight: 600; letter-spacing: .12em; color: var(--coral); text-transform: uppercase; margin-bottom: 4px; }
   h3 { font-size: 16px; margin: 28px 0 8px; }
@@ -67,6 +67,7 @@
   .intro .hl-ic { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: var(--coral); box-shadow: 0 1px 3px rgb(17 17 17 / .08); }
   .intro .hl-ic svg { width: 20px; height: 20px; }
   .intro .hl.ai { background: var(--coral-tint); }
+  .intro .hl-photo { flex-shrink: 0; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
   .intro .mini { font-size: 14px; color: var(--muted); margin: 0 0 8px; }
   .intro .tags { list-style: none; padding: 0; margin: 0 0 14px; display: flex; flex-wrap: wrap; gap: 8px; }
   .intro .tags li { font-size: 14px; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: var(--coral-tint); color: #c43c3c; }
@@ -76,7 +77,10 @@
   .intro .icon-list li { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 500; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
   .intro .icon-list span { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--coral-tint); color: var(--coral); }
   .intro .icon-list svg { width: 18px; height: 18px; }
-  .intro .note { font-size: 14px; color: var(--muted); }
+  .intro .note-box { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--slate); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 0 0 14px; }
+  .intro .note-box svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--slate); margin-top: 1px; }
+  .intro .note-box p { margin: 0 0 8px; }
+  .intro .note-box p:last-child { margin: 0; }
   .contact { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 15px; }
   .contact p { margin: 0 0 4px; }
   .contact .sig-photo, .sign .sig-photo { display: block; width: 96px; height: 96px; border-radius: 50%; margin: 4px 0 12px; }
@@ -208,14 +212,13 @@
   <form id="form" novalidate>
     <!-- Introdução -->
     <section class="card intro step" data-step="0">
-      <h1>REDE DE PARCEIROS</h1>
-      <p class="subtitle">Dani Moscatelli | Experience Design Studio</p>
+      <h1>DM | Partners &amp; Connections</h1>
       <p class="tagline">Conectando competências. Ampliando possibilidades. Transformando negócios.</p>
 
       <p class="lead">O Dani Moscatelli | Experience Design Studio está ampliando sua atuação e construindo um <strong>ecossistema multidisciplinar de profissionais independentes (PJ)</strong> para colaborar em projetos de Design, Experiência Humana, Negócios, Tecnologia e Inovação.</p>
 
       <div class="hl">
-        <span class="hl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M8.2 12.4 7 22l5-3 5 3-1.2-9.6"/></svg></span>
+        <img class="hl-photo" src="/dani-assinatura.webp" alt="Dani Moscatelli" width="56" height="56">
         <p>Com <strong>mais de 20 anos de experiência em Design</strong> e especialização em Service Design, minha atuação conecta estratégia, pesquisa e tecnologia para transformar desafios de negócio em soluções e experiências de valor.</p>
       </div>
 
@@ -225,7 +228,7 @@
       <h3 class="ih"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17.5" cy="9" r="2.5"/><path d="M16 14.2A5 5 0 0 1 21.5 19"/></svg>Quem buscamos</h3>
       <p class="mini">Profissionais de:</p>
       <ul class="tags">
-        <li>Design</li><li>UX/UI</li><li>Pesquisa</li><li>Tecnologia</li><li>Desenvolvimento</li><li>Dados</li><li>IA</li><li>Inovação</li>
+        <li>Design</li><li>UX/UI</li><li>Pesquisa</li><li>Negócios</li><li>Tecnologia</li><li>Desenvolvimento</li><li>Dados</li><li>IA</li><li>Inovação</li>
       </ul>
       <p class="mini">Especialistas em setores como:</p>
       <ul class="tags alt">
@@ -246,10 +249,15 @@
         <span class="hl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></span>
         <p><strong>Quanto mais completo for o seu cadastro, melhor.</strong> A plataforma usa inteligência artificial para analisar os perfis e encontrar os profissionais certos para cada demanda, por isso cada resposta faz diferença.</p>
       </div>
-      <p class="note">O cadastro não representa oferta de trabalho ou garantia de contratação. As parcerias serão estabelecidas conforme as demandas do estúdio e a aderência de cada perfil.</p>
+      <div class="note-box" role="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        <div>
+          <p>O cadastro não representa oferta de trabalho ou garantia de contratação. As parcerias serão estabelecidas conforme as demandas do estúdio e a aderência de cada perfil.</p>
+          <p>Além das oportunidades do estúdio, a rede também é um espaço para a troca de oportunidades entre os próprios profissionais.</p>
+        </div>
+      </div>
 
       <div class="contact">
-        <img class="sig-photo" src="/dani-assinatura.webp" alt="Dani Moscatelli" width="96" height="96">
         <p><strong>Dani Moscatelli</strong><br>Experience Design Studio</p>
         <p>E-mail: <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a></p>
         <p>WhatsApp: (41) 99748-5414</p>
@@ -262,9 +270,9 @@
   <section class="card end hidden" id="endSuccess">
     <div class="end-head">
       <div class="end-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></svg></div>
-      <h2>Boas-vindas ao nosso ecossistema de parceiros!</h2>
+      <h2 id="welcome-title">Boas-vindas!</h2>
     </div>
-    <p>É um prazer receber você na rede de profissionais da Dani Moscatelli | Experience Design Studio!</p>
+    <p>É um prazer receber você no ecossistema profissional da <strong>Dani Moscatelli | Experience Design Studio</strong>!</p>
     <p>Acreditamos que grandes oportunidades surgem da conexão entre diferentes talentos, conhecimentos e perspectivas.</p>
     <p>Agora, você faz parte do nosso ecossistema de parceiros e poderá ser convidado para colaborar em projetos do estúdio, conforme seu perfil e disponibilidade.</p>
     <p>As oportunidades vão além do estúdio! Nossa comunidade também é um espaço para ampliar conexões, compartilhar conhecimentos, divulgar oportunidades e construir parcerias entre profissionais.</p>
@@ -820,6 +828,9 @@ async function submit() {
       body: JSON.stringify(payload()),
     });
     if (!res.ok) throw new Error(await res.text());
+    // Título com o primeiro nome da pessoa.
+    const primeiro = (value({ id: "nome", type: "text" }) || "").trim().split(/\s+/)[0];
+    if (primeiro) document.getElementById("welcome-title").textContent = "Boas-vindas, " + primeiro.charAt(0).toUpperCase() + primeiro.slice(1) + "!";
     end("endSuccess");
     confetti();
   } catch (err) {
