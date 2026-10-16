@@ -516,6 +516,7 @@ const SECTIONS = [
   { title: "Comunidade de networking", n: "Seção final", questions: [
     { id: "interesse_whatsapp", n: 40, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
       infoHtml: "<p>Estamos construindo uma comunidade para conectar profissionais de diferentes especialidades, promover a troca de conhecimentos, compartilhar referências e fortalecer conexões profissionais.</p><p>O espaço será voltado a conversas sobre Design, Experiência Humana, Negócios, Tecnologia e Inovação, além da troca de experiências e oportunidades de colaboração.</p><p>A participação é opcional e independente deste cadastro.</p>",
+      afterIf: (v) => /^Sim/.test(v),
       afterHtml: "<div class=\"info wa-box\"><span class=\"wa-ic\" aria-hidden=\"true\">" + WA_ICON + "</span><div><p><strong>Link de acesso ao grupo:</strong><br><a href=\"" + WHATSAPP_GROUP + "\" target=\"_blank\" rel=\"noopener\">" + WHATSAPP_GROUP + "</a></p><p>Se tiver interesse, basta acessar o link acima. A participação no grupo não é necessária para concluir seu cadastro.</p></div></div>",
       options: ["Sim, tenho interesse em participar.", "Não, obrigado(a). Quero apenas fazer parte da rede de parceiros."] },
   ]},
@@ -565,7 +566,7 @@ function questionHtml(q) {
   const errMsg = q.type === "idiomas" ? "Informe o idioma e o nível de fluência em cada linha." : q.type === "list" ? "Inclua ao menos um item." : q.type === "url" ? (q.urlHost === "linkedin.com" ? "Informe o link do seu perfil no LinkedIn (ex.: https://www.linkedin.com/in/seu-perfil)." : "Informe um link válido (ex.: https://seusite.com.br).") : q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
   return `<div class="q" data-q="${q.id}">
     <label class="q-label" ${["text", "email", "tel", "url", "paragraph"].includes(q.type) ? `for="${q.id}"` : ""}>${q.n}. ${esc(q.label)}${req}</label>
-    ${help}${info}${field}${q.afterHtml || ""}
+    ${help}${info}${field}${q.afterHtml ? (q.afterIf ? `<div class="hidden" data-after="${q.id}">${q.afterHtml}</div>` : q.afterHtml) : ""}
     <div class="err">${errMsg}</div>
   </div>`;
 }
@@ -695,6 +696,13 @@ form.querySelectorAll(".acc").forEach((acc) => {
   update();
 });
 
+// Conteúdo que só aparece depois de certa resposta (ex.: link do grupo do WhatsApp quando a pessoa responde "Sim").
+form.addEventListener("change", (e) => {
+  const box = e.target.name && form.querySelector(`[data-after="${e.target.name}"]`);
+  if (!box) return;
+  const q = SECTIONS.flatMap((x) => x.questions).find((x) => x.id === e.target.name);
+  box.classList.toggle("hidden", !q.afterIf(value(q)));
+});
 form.addEventListener("change", (e) => {
   const name = e.target.name;
   if (!name || !e.target.matches('input[type="radio"], input[type="checkbox"]')) return;
