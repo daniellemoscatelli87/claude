@@ -73,7 +73,8 @@
     <button type="button" class="lc-x" id="fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     <h2 id="dlg-t">Disparar lançamento</h2>
     <p class="muted" id="dlg-s" style="margin:-6px 0 0;font-size:14px"></p>
-    <label>Título (também é o assunto do e-mail)<input type="text" id="titulo" maxlength="200" placeholder="Ex.: O novo site do estúdio está no ar!"></label>
+    <label>Assunto do e-mail<input type="text" id="assunto" maxlength="200" placeholder="Ex.: Lançamento do site Dani Moscatelli - Experience Design Studio"></label>
+    <label>Título da mensagem<input type="text" id="titulo" maxlength="200" placeholder="Ex.: O novo site do estúdio está no ar!"></label>
     <label>Mensagem<textarea id="mensagem" maxlength="10000" placeholder="Escreva a mensagem do lançamento. Deixe uma linha em branco para separar os parágrafos."></textarea>
       <span class="hint">O e-mail já leva a logo, um botão "Conhecer o novo site" e a sua assinatura.</span></label>
     <div class="lc-prev hidden" id="prev"><iframe title="Pré-visualização do e-mail" id="prev-frame"></iframe></div>
@@ -136,11 +137,12 @@ async function chamar(body) {
   return { error: m };
 }
 function initDisparo() {
-  const dlg = document.getElementById("dlg"), t = document.getElementById("titulo"), m = document.getElementById("mensagem");
+  const dlg = document.getElementById("dlg"), a = document.getElementById("assunto"), t = document.getElementById("titulo"), m = document.getElementById("mensagem");
   const err = document.getElementById("dlg-err"), prev = document.getElementById("prev"), frame = document.getElementById("prev-frame");
   const bPrev = document.getElementById("btn-prev"), bSend = document.getElementById("btn-send");
   document.getElementById("ic-abrir").innerHTML = Admin.icon("rocket");
   // Texto padrão do lançamento (pode ser editado na janela antes de enviar).
+  a.value = "Lançamento do site Dani Moscatelli - Experience Design Studio";
   t.value = "Um novo espaço para transformar negócios por meio de experiências.";
   m.value = [
     "Olá,",
@@ -150,12 +152,12 @@ function initDisparo() {
     "Convido você a conhecer esse novo capítulo e descobrir o que podemos construir juntos.",
   ].join("\n\n");
   const erro = (x) => { err.textContent = x; err.classList.toggle("hidden", !x); };
-  const campos = () => { const v = { titulo: t.value.trim(), mensagem: m.value.trim() }; if (!v.titulo || !v.mensagem) { erro("Preencha o título e a mensagem."); (v.titulo ? m : t).focus(); return null; } erro(""); return v; };
-  [t, m].forEach((i) => i.addEventListener("input", () => { prev.classList.add("hidden"); erro(""); }));
+  const campos = () => { const v = { assunto: a.value.trim(), titulo: t.value.trim(), mensagem: m.value.trim() }; if (!v.assunto || !v.titulo || !v.mensagem) { erro("Preencha o assunto, o título e a mensagem."); (!v.assunto ? a : !v.titulo ? t : m).focus(); return null; } erro(""); return v; };
+  [a, t, m].forEach((i) => i.addEventListener("input", () => { prev.classList.add("hidden"); erro(""); }));
   document.getElementById("abrir").addEventListener("click", () => {
     const n = pendentes();
     document.getElementById("dlg-s").textContent = "O e-mail vai para " + (n === 1 ? "1 pessoa que ainda não foi avisada." : n + " pessoas que ainda não foram avisadas.");
-    erro(""); prev.classList.add("hidden"); dlg.showModal(); t.focus();
+    erro(""); prev.classList.add("hidden"); dlg.showModal(); a.focus();
   });
   document.getElementById("fechar").addEventListener("click", () => dlg.close());
   bPrev.addEventListener("click", async () => {
@@ -169,7 +171,7 @@ function initDisparo() {
   bSend.addEventListener("click", async () => {
     const v = campos(); if (!v) return;
     const n = pendentes();
-    if (!(await Admin.confirmDialog({ title: "Enviar o lançamento?", message: "O e-mail \u201c" + v.titulo + "\u201d será enviado para " + (n === 1 ? "1 pessoa." : n + " pessoas.") + " Essa ação não pode ser desfeita.", ok: "Enviar em massa", danger: false }))) return;
+    if (!(await Admin.confirmDialog({ title: "Enviar o lançamento?", message: "O e-mail \u201c" + v.assunto + "\u201d será enviado para " + (n === 1 ? "1 pessoa." : n + " pessoas.") + " Essa ação não pode ser desfeita.", ok: "Enviar em massa", danger: false }))) return;
     bSend.disabled = true; bSend.textContent = "Enviando…";
     const res = await chamar({ acao: "enviar", ...v });
     bSend.disabled = false; bSend.textContent = "Enviar em massa";
