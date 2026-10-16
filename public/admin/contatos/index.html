@@ -107,7 +107,10 @@
   .mt-link-row { display: flex; gap: 8px; align-items: center; }
   .mt-link-row a { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #1a56c4; font-weight: 700; text-decoration: none; }
   .mt-gcal { font-size: 13px; font-weight: 600; color: #1a56c4; text-decoration: none; }
-  .mt-acts { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+  .mt-acts { display: flex; flex-wrap: wrap-reverse; gap: 8px; align-items: center; justify-content: space-between; }
+  .mt-acts .btn-meet { margin-left: auto; }
+  .mt-acts > * { white-space: nowrap; }
+  .mt-acts .btn-meet { padding: 10px 16px; }
   .mt-foot { margin: 0; font-size: 12px; }
   .mt-notice { background: #f0f5ff; border-radius: 14px; padding: 14px; display: grid; gap: 10px; }
   .mt-notice p { margin: 0; font-size: 14px; }
@@ -420,7 +423,6 @@ function renderMeeting(r) {
       closeMeeting(); statusBar(r); historico(r);
     });
   });
-  acts.appendChild(send);
   if (reu || r.reuniao_em) {
     const del = Admin.el("button", "link-danger", agendada ? "Excluir reunião" : "Descartar"); del.type = "button";
     del.addEventListener("click", async () => {
@@ -441,6 +443,8 @@ function renderMeeting(r) {
     });
     acts.appendChild(del);
   }
+  // Ação principal à direita; excluir/descartar à esquerda.
+  acts.appendChild(send);
   body.appendChild(acts);
   const foot = Admin.el("p", "muted mt-foot");
   if (r.email) body.appendChild(foot);
