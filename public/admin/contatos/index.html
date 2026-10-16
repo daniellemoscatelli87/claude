@@ -333,6 +333,7 @@ function renderMeeting(r) {
   const msg = Admin.el("p", "msg err hidden");
   const values = () => {
     if (!date.value || !hour.value) { msg.textContent = "Escolha a data e o horário."; msg.classList.remove("hidden"); return null; }
+    if (date.value < toLocalInput(new Date().toISOString()).slice(0, 10)) { msg.textContent = "Escolha uma data a partir de hoje."; msg.classList.remove("hidden"); return null; }
     return { contato_id: r.id, inicio: new Date(date.value + "T" + hour.value).toISOString(), duracao_min: Number(dur.value), titulo: title.value.trim(), assunto: subj.value.trim(), descricao: desc.value.trim() };
   };
   const run = async (btn, label, payload, after) => {
