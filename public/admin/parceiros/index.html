@@ -486,6 +486,7 @@ function initDesafio() {
       msg.textContent = code === "ocupado" ? "A IA gratuita está ocupada agora. Tente de novo em alguns minutos." : code === "sem_chave" ? "Falta salvar a chave do Gemini (GEMINI_API_KEY) no Supabase." : "Não foi possível analisar agora. Tente de novo.";
       return;
     }
+    Admin.log("Buscou parceiros para um desafio com IA", texto.slice(0, 300));
     DESAFIO = { texto, ranking: new Map(data.ranking.map((x) => [x.id, { aderencia: Math.max(0, Math.min(100, Math.round(+x.aderencia || 0))), motivo: x.motivo || "" }])) };
     dlg.close(); drawDesafioBar(); profiles(ALL);
     document.getElementById("pc-grid").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -705,6 +706,7 @@ async function loadAnalysis(gerar = false) {
     IA = { error: code };
   } else {
     IA = data || {};
+    if (gerar) Admin.log("Gerou a análise da Rede de Parceiros com IA");
     PERFIS_IA.clear();
     Object.entries(IA.perfis || {}).forEach(([id, t]) => PERFIS_IA.set(id, t));
   }
@@ -753,6 +755,7 @@ function lgpdCard(data) {
     btn.disabled = true; btn.textContent = "Excluindo…";
     const { data: del, error } = await Admin.sb.from("cadastros").delete().eq("id", data.id).select("id");
     if (error || !del || !del.length) { btn.disabled = false; btn.textContent = "Excluir cadastro"; msg.textContent = "Não foi possível excluir o cadastro" + (error ? ": " + error.message : "."); return; }
+    await Admin.log("Excluiu o cadastro de parceiro de " + (data.nome || data.email || "parceiro"));
     Admin.toast("Cadastro excluído com sucesso.", "/admin/parceiros/?aba=candidaturas");
   });
   c.append(el("p", "muted lgpd-help", "Use quando a pessoa pedir a exclusão dos dados. Todas as respostas são apagadas."), btn, msg);

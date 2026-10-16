@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Configurações | Área restrita</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/admin.css">
+<style>
+  .cf-card { margin-top: 20px; }
+  .cf-card > h2 { margin-bottom: 4px; }
+  .cf-card > .muted { margin: 0 0 8px; font-size: 14px; }
+  .cf-sub { font-size: 15px; font-weight: 700; margin: 22px 0 0; padding-top: 18px; border-top: 1px solid var(--track); }
+  .cf-card input[type=text] { width: 100%; font: inherit; font-size: 14px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; color: var(--dark); outline: none; }
+  .cf-card input[type=text]:focus { border-color: var(--red); background: #fff; box-shadow: 0 0 0 3px rgb(212 77 77 / .15); }
+  .cf-acts { display: flex; justify-content: flex-end; margin-top: 14px; }
+  .cf-msg { margin-top: 10px; font-size: 13px; color: #1f6b3a; }
+  .cf-msg.err { color: var(--red); }
+  .cf-hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
+  .av-row { display: flex; align-items: center; gap: 16px; margin-top: 14px; }
+  .av-row img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; background: var(--track); flex: none; }
+  .av-row .bt { display: flex; flex-wrap: wrap; gap: 8px; }
+  .link-btn { background: none; border: 0; padding: 8px 4px; font: inherit; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .link-btn:hover { color: var(--red); }
+  .dt-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; }
+  .dt-row + .dt-row { border-top: 1px solid var(--track); }
+  .dt-row b { display: block; font-size: 15px; }
+  .dt-row span { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .btn-danger { flex: none; background: #fff; color: var(--red); border: 1px solid var(--red); border-radius: 999px; padding: 9px 16px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .btn-danger:hover { background: var(--red-tint); }
+  .btn-danger:disabled { opacity: .45; cursor: not-allowed; }
+  .lg-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; padding: 12px 0; }
+  .lg-row + .lg-row { border-top: 1px solid var(--track); }
+  .lg-row .ic { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--slate-tint); color: var(--slate); }
+  .lg-row .ic svg { width: 16px; height: 16px; }
+  .lg-row.del .ic { background: var(--red-tint); color: var(--red); }
+  .lg-row .tx { min-width: 0; display: grid; gap: 2px; }
+  .lg-row b { font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+  .lg-row .dt { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+  .lg-row small { font-size: 12px; color: var(--muted); }
+  .lg-more { display: flex; justify-content: center; margin-top: 8px; }
+  @media (max-width: 520px) {
+    .dt-row { flex-direction: column; align-items: stretch; }
+    .dt-row .btn-danger { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap hidden" id="app">
+  <h1>Configurações</h1>
+  <p class="muted">Seus dados, a gestão dos dados da plataforma e o log de ações.</p>
+
+  <section class="card cf-card" id="perfil">
+    <h2>Dados pessoais</h2>
+    <p class="muted">Nome e foto aparecem no menu da área restrita.</p>
+    <div class="av-row">
+      <img id="av-img" alt="">
+      <div class="bt">
+        <button type="button" class="btn-ghost" id="av-trocar">Trocar foto</button>
+        <button type="button" class="link-btn hidden" id="av-remover">Voltar à foto padrão</button>
+        <input type="file" id="av-file" accept="image/png,image/jpeg,image/webp" class="hidden">
+      </div>
+    </div>
+    <p class="cf-msg hidden" id="av-msg"></p>
+    <form id="f-nome" novalidate>
+      <label class="l" for="nome">Nome</label>
+      <input type="text" id="nome" maxlength="80" autocomplete="name">
+      <p class="cf-msg hidden" id="nome-msg"></p>
+      <div class="cf-acts"><button type="submit" class="btn-ok" id="nome-btn">Salvar nome</button></div>
+    </form>
+
+    <h3 class="cf-sub">E-mail de acesso</h3>
+    <form id="f-email" novalidate>
+      <label class="l" for="email-atual">E-mail atual</label>
+      <input type="email" id="email-atual" disabled>
+      <label class="l" for="email-novo">Novo e-mail</label>
+      <input type="email" id="email-novo" autocomplete="email" placeholder="seu@email.com">
+      <label class="l" for="email-senha">Senha atual</label>
+      <input type="password" id="email-senha" autocomplete="current-password">
+      <p class="cf-hint">A troca só vale depois que você confirmar pelo link enviado por e-mail. Os avisos do site (novas mensagens e cadastros) continuam indo para contato@danimoscatelli.com.br.</p>
+      <p class="cf-msg hidden" id="email-msg"></p>
+      <div class="cf-acts"><button type="submit" class="btn-ok" id="email-btn">Alterar e-mail</button></div>
+    </form>
+
+    <h3 class="cf-sub">Senha</h3>
+    <form id="f-senha" novalidate>
+      <input type="email" id="senha-user" autocomplete="username" class="hidden" tabindex="-1" aria-hidden="true">
+      <label class="l" for="senha-atual">Senha atual</label>
+      <input type="password" id="senha-atual" autocomplete="current-password">
+      <label class="l" for="senha-nova">Nova senha</label>
+      <input type="password" id="senha-nova" autocomplete="new-password">
+      <label class="l" for="senha-conf">Repita a nova senha</label>
+      <input type="password" id="senha-conf" autocomplete="new-password">
+      <p class="cf-hint">Pelo menos 8 caracteres.</p>
+      <p class="cf-msg hidden" id="senha-msg"></p>
+      <div class="cf-acts"><button type="submit" class="btn-ok" id="senha-btn">Alterar senha</button></div>
+    </form>
+  </section>
+
+  <section class="card cf-card" id="dados">
+    <h2>Gestão de dados</h2>
+    <p class="muted">Apaga definitivamente todos os registros de uma área, sem precisar entrar no banco de dados.</p>
+    <div id="dt-list"></div>
+    <p class="cf-msg hidden" id="dt-msg"></p>
+  </section>
+
+  <section class="card cf-card" id="log">
+    <h2>Log da plataforma</h2>
+    <p class="muted">Ações feitas na área restrita, da mais recente para a mais antiga.</p>
+    <div id="lg-list"></div>
+    <div class="lg-more hidden" id="lg-more"><button type="button" class="btn-ghost" id="lg-more-btn">Carregar mais</button></div>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/admin/admin.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const el = Admin.el, sb = Admin.sb;
+const fmt = (iso) => { const d = new Date(iso); return d.toLocaleDateString("pt-BR") + ", " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }); };
+function aviso(id, texto, erro) { const m = $(id); m.textContent = texto; m.classList.toggle("err", !!erro); m.classList.toggle("hidden", !texto); }
+const erroAuth = (e) => /rate limit/i.test(e.message) ? "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente de novo."
+  : /different from the old/i.test(e.message) ? "A nova senha precisa ser diferente da atual."
+  : /already.*registered|already been registered/i.test(e.message) ? "Esse e-mail já está em uso."
+  : "Não foi possível concluir: " + e.message;
+// Confere a senha atual antes de trocar e-mail ou senha.
+async function senhaConfere(senha) {
+  const { error } = await sb.auth.signInWithPassword({ email: Admin.profile().email, password: senha });
+  return !error;
+}
+async function atualizarUsuario(attrs, opts) {
+  const { data, error } = await sb.auth.updateUser(attrs, opts);
+  if (!error && data?.user) Admin.applyProfile(data.user);
+  return error;
+}
+
+/* ---------- Dados pessoais ---------- */
+const PADRAO = "/admin/avatar-dani.webp";
+const BUCKET = "/storage/v1/object/public/perfil/";
+function preencherPerfil() {
+  const p = Admin.profile();
+  $("av-img").src = p.avatar; $("av-img").alt = p.nome;
+  $("av-remover").classList.toggle("hidden", p.avatar === PADRAO);
+  $("nome").value = p.nome;
+  $("email-atual").value = p.email; $("senha-user").value = p.email;
+}
+// Caminho no bucket "perfil" de uma foto enviada (as fotos padrão ficam fora do bucket).
+const caminhoFoto = (url) => (url || "").includes(BUCKET) ? decodeURIComponent(url.split(BUCKET)[1].split("?")[0]) : null;
+// Recorta no centro e reduz para 320x320 em WebP antes de enviar.
+function prepararFoto(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const lado = Math.min(img.naturalWidth, img.naturalHeight), c = document.createElement("canvas");
+      c.width = c.height = 320;
+      c.getContext("2d").drawImage(img, (img.naturalWidth - lado) / 2, (img.naturalHeight - lado) / 2, lado, lado, 0, 0, 320, 320);
+      URL.revokeObjectURL(url);
+      c.toBlob((b) => (b ? resolve(b) : reject()), "image/webp", 0.9);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(); };
+    img.src = url;
+  });
+}
+function initPerfil() {
+  preencherPerfil();
+  $("av-trocar").addEventListener("click", () => $("av-file").click());
+  $("av-file").addEventListener("change", async (e) => {
+    const file = e.target.files[0]; e.target.value = "";
+    if (!file) return;
+    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) return aviso("av-msg", "Use uma imagem PNG, JPG ou WebP.", true);
+    const btn = $("av-trocar"); btn.disabled = true; btn.textContent = "Enviando…"; aviso("av-msg", "");
+    const fim = () => { btn.disabled = false; btn.textContent = "Trocar foto"; };
+    let blob;
+    try { blob = await prepararFoto(file); } catch { fim(); return aviso("av-msg", "Não foi possível ler a imagem. Tente outra.", true); }
+    const antiga = caminhoFoto(Admin.profile().avatar);
+    const path = "avatar-" + Date.now() + ".webp";
+    const { error: upErr } = await sb.storage.from("perfil").upload(path, blob, { contentType: "image/webp", upsert: false });
+    if (upErr) { fim(); return aviso("av-msg", "Não foi possível enviar a foto: " + upErr.message, true); }
+    const url = sb.storage.from("perfil").getPublicUrl(path).data.publicUrl;
+    const err = await atualizarUsuario({ data: { avatar_url: url } });
+    fim();
+    if (err) { await sb.storage.from("perfil").remove([path]); return aviso("av-msg", erroAuth(err), true); }
+    if (antiga) await sb.storage.from("perfil").remove([antiga]);
+    preencherPerfil(); aviso("av-msg", "Foto atualizada.");
+    Admin.log("Alterou a foto do perfil");
+  });
+  $("av-remover").addEventListener("click", async () => {
+    const antiga = caminhoFoto(Admin.profile().avatar);
+    const err = await atualizarUsuario({ data: { avatar_url: null } });
+    if (err) return aviso("av-msg", erroAuth(err), true);
+    if (antiga) await sb.storage.from("perfil").remove([antiga]);
+    preencherPerfil(); aviso("av-msg", "A foto padrão voltou a ser usada.");
+    Admin.log("Voltou à foto padrão do perfil");
+  });
+  $("f-nome").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nome = $("nome").value.trim().replace(/\s+/g, " ");
+    if (nome.length < 2) return aviso("nome-msg", "Informe o nome.", true);
+    const antes = Admin.profile().nome;
+    if (nome === antes) return aviso("nome-msg", "Nenhuma alteração para salvar.");
+    $("nome-btn").disabled = true;
+    const err = await atualizarUsuario({ data: { nome } });
+    $("nome-btn").disabled = false;
+    if (err) return aviso("nome-msg", erroAuth(err), true);
+    preencherPerfil(); aviso("nome-msg", "Nome atualizado.");
+    Admin.log("Alterou o nome do perfil", antes + " para " + nome);
+  });
+  $("f-email").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const novo = $("email-novo").value.trim().toLowerCase(), senha = $("email-senha").value;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(novo)) return aviso("email-msg", "Informe um e-mail válido.", true);
+    if (novo === Admin.profile().email) return aviso("email-msg", "Esse já é o seu e-mail de acesso.", true);
+    if (!senha) return aviso("email-msg", "Informe a sua senha atual.", true);
+    const btn = $("email-btn"); btn.disabled = true; aviso("email-msg", "");
+    if (!(await senhaConfere(senha))) { btn.disabled = false; return aviso("email-msg", "Senha atual incorreta.", true); }
+    const err = await atualizarUsuario({ email: novo }, { emailRedirectTo: location.origin + "/admin/configuracoes/" });
+    btn.disabled = false;
+    if (err) return aviso("email-msg", erroAuth(err), true);
+    $("email-novo").value = ""; $("email-senha").value = "";
+    aviso("email-msg", "Enviamos um link de confirmação para " + novo + ". Se chegar um link também no e-mail atual, confirme os dois. Até lá, continue entrando com o e-mail atual.");
+    Admin.log("Pediu a troca do e-mail de acesso", Admin.profile().email + " para " + novo);
+  });
+  $("f-senha").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const atual = $("senha-atual").value, nova = $("senha-nova").value, conf = $("senha-conf").value;
+    if (!atual) return aviso("senha-msg", "Informe a sua senha atual.", true);
+    if (nova.length < 8) return aviso("senha-msg", "A nova senha precisa ter pelo menos 8 caracteres.", true);
+    if (nova !== conf) return aviso("senha-msg", "As senhas novas não são iguais.", true);
+    const btn = $("senha-btn"); btn.disabled = true; aviso("senha-msg", "");
+    if (!(await senhaConfere(atual))) { btn.disabled = false; return aviso("senha-msg", "Senha atual incorreta.", true); }
+    const err = await atualizarUsuario({ password: nova });
+    btn.disabled = false;
+    if (err) return aviso("senha-msg", erroAuth(err), true);
+    ["senha-atual", "senha-nova", "senha-conf"].forEach((id) => ($(id).value = ""));
+    aviso("senha-msg", "Senha alterada.");
+    Admin.log("Alterou a senha de acesso");
+  });
+}
+
+/* ---------- Gestão de dados ---------- */
+async function dadosFn(body) {
+  const { data, error } = await sb.functions.invoke("admin-dados", { body });
+  if (!error) return data || {};
+  let m = "Não foi possível falar com o servidor. Tente novamente."; try { m = (await error.context.json()).error || m; } catch {}
+  return { error: m };
+}
+const plural = (n, um, varios) => n + " " + (n === 1 ? um : varios);
+const AREAS = [
+  { id: "contatos", nome: "Contatos", desc: (c) => plural(c.contatos, "mensagem", "mensagens") + " e " + plural(c.reunioes, "reunião", "reuniões"),
+    msg: "Todas as mensagens de contato, respostas, e-mails recebidos, anexos e reuniões serão apagados definitivamente. As reuniões são removidas do Google Agenda sem avisar os convidados." },
+  { id: "parceiros", nome: "Parceiros", desc: (c) => plural(c.parceiros, "cadastro", "cadastros") + " na Rede de Parceiros",
+    msg: "Todos os cadastros da Rede de Parceiros e as análises de IA serão apagados definitivamente." },
+  { id: "lancamento", nome: "Lançamento", desc: (c) => plural(c.lancamento, "e-mail cadastrado", "e-mails cadastrados") + " para o aviso de lançamento",
+    msg: "Todos os e-mails cadastrados para o aviso de lançamento (avisados ou não) serão apagados definitivamente." },
+];
+async function carregarDados() {
+  const list = $("dt-list");
+  const c = await dadosFn({ acao: "contagem" });
+  list.replaceChildren();
+  if (c.error) return aviso("dt-msg", c.error, true);
+  for (const a of AREAS) {
+    const row = el("div", "dt-row");
+    const tx = el("div"); tx.append(el("b", null, a.nome), el("span", null, a.desc(c)));
+    const btn = el("button", "btn-danger", "Apagar tudo"); btn.type = "button";
+    const vazio = a.id === "contatos" ? !c.contatos && !c.reunioes : !c[a.id];
+    btn.disabled = vazio;
+    btn.addEventListener("click", async () => {
+      const ok = await Admin.confirmDialog({ title: "Apagar todos os dados de " + a.nome + "?", message: a.msg + " Essa ação é definitiva e não pode ser desfeita. Deseja realmente continuar?", ok: "Apagar tudo", word: "APAGAR" });
+      if (!ok) return;
+      btn.disabled = true; btn.textContent = "Apagando…"; aviso("dt-msg", "");
+      const r = await dadosFn({ acao: "apagar", area: a.id });
+      btn.textContent = "Apagar tudo";
+      if (r.error) { btn.disabled = false; return aviso("dt-msg", r.error, true); }
+      Admin.toast("Dados de " + a.nome + " apagados" + (r.total ? " (" + plural(r.total, "registro", "registros") + ")." : "."));
+      if (r.avisoGoogle) aviso("dt-msg", "Algumas reuniões não puderam ser removidas do Google Agenda. Confira a sua agenda.", true);
+      await Promise.all([carregarDados(), carregarLog(true)]);
+    });
+    row.append(tx, btn);
+    list.appendChild(row);
+  }
+}
+
+/* ---------- Log da plataforma ---------- */
+const PAGINA = 30;
+let LOG = [];
+const ICONE = (acao) => /^(Apagou|Excluiu|Cancelou|Descartou)/.test(acao) ? "close" : /reuni|Meet|Google Agenda/i.test(acao) ? "meeting" : /parceir/i.test(acao) ? "users" : /lançamento/i.test(acao) ? "rocket" : /mensagem|Respondeu/i.test(acao) ? "mail" : /^(Entrou|Saiu)/.test(acao) ? "logout" : "settings";
+async function carregarLog(reiniciar) {
+  if (reiniciar) LOG = [];
+  const { data, error } = await sb.from("admin_log").select("id, created_at, acao, detalhe").order("created_at", { ascending: false }).range(LOG.length, LOG.length + PAGINA - 1);
+  const list = $("lg-list");
+  if (error) { list.replaceChildren(el("p", "msg err", "Não foi possível carregar o log: " + error.message)); return; }
+  LOG = LOG.concat(data);
+  list.replaceChildren();
+  if (!LOG.length) list.appendChild(el("div", "empty", "Nenhuma ação registrada ainda."));
+  for (const r of LOG) {
+    const ic = ICONE(r.acao);
+    const row = el("div", "lg-row" + (ic === "close" ? " del" : ""));
+    const i = el("span", "ic"); i.innerHTML = Admin.icon(ic);
+    const tx = el("div", "tx"); tx.append(el("b", null, r.acao));
+    if (r.detalhe) tx.append(el("span", "dt", r.detalhe));
+    tx.append(el("small", null, fmt(r.created_at)));
+    row.append(i, tx); list.appendChild(row);
+  }
+  $("lg-more").classList.toggle("hidden", data.length < PAGINA);
+}
+
+Admin.init({ page: "configuracoes", onReady: async () => {
+  initPerfil();
+  $("lg-more-btn").addEventListener("click", () => carregarLog(false));
+  await Promise.all([carregarDados(), carregarLog(true)]);
+} });
+</script>
+</body>
+</html>

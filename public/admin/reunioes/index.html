@@ -132,7 +132,7 @@ async function googleCard() {
   btn.onclick = async () => {
     btn.disabled = true;
     const { data: r } = await Admin.sb.functions.invoke("google-agenda", { body: { acao: "conectar" } });
-    if (r?.url) location.href = r.url; else { btn.disabled = false; sub.textContent = "Não foi possível iniciar a conexão. Tente novamente."; }
+    if (r?.url) { await Admin.log("Iniciou a conexão com o Google Agenda"); location.href = r.url; } else { btn.disabled = false; sub.textContent = "Não foi possível iniciar a conexão. Tente novamente."; }
   };
   if (q) history.replaceState(null, "", location.pathname);
 }

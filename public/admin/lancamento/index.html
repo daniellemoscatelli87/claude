@@ -176,6 +176,7 @@ function initDisparo() {
     const res = await chamar({ acao: "enviar", ...v });
     bSend.disabled = false; bSend.textContent = "Enviar em massa";
     if (res.error) return erro(res.error);
+    Admin.log("Disparou o e-mail de lançamento", res.enviados + (res.enviados === 1 ? " enviado" : " enviados") + (res.falhas ? ", " + res.falhas + " não enviados" : "") + '. Assunto: "' + v.assunto + '"');
     dlg.close(); await carregar();
     Admin.toast(res.falhas ? res.enviados + " enviados e " + res.falhas + " não enviados. Tente de novo para quem ficou sem o check." : (res.enviados === 1 ? "Lançamento enviado para 1 pessoa." : "Lançamento enviado para " + res.enviados + " pessoas."));
   });
