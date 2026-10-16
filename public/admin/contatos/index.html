@@ -47,7 +47,7 @@
   .next { border-top: 1px solid var(--track); padding-top: 16px; display: grid; gap: 12px; }
   .next .hint { margin: 0; font-size: 14px; color: var(--muted); }
   .next .acts { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-  .btn-line { background: #fff; border: 1px solid var(--line); color: var(--dark); border-radius: 12px; padding: 10px 16px; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; }
+  .btn-line { background: #fff; border: 1px solid var(--line); color: var(--dark); border-radius: 999px; padding: 10px 16px; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; }
   .btn-line:hover { border-color: var(--red); color: var(--red); }
   .link-muted, .link-danger { background: none; border: 0; padding: 8px 4px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: underline; }
   .link-danger { color: var(--red); }
@@ -63,7 +63,7 @@
   .meet-form .fld { display: block; min-width: 0; }
   .meet-form .fld span { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
   @media (max-width: 480px) { .meet-form .fields { grid-template-columns: 1fr; } }
-  .btn-meet { background: #1a56c4; color: #fff; border-radius: 12px; padding: 10px 18px; font-size: 14px; }
+  .btn-meet { background: #1a56c4; color: #fff; border-radius: 999px; padding: 10px 18px; font-size: 14px; }
   .btn-meet:hover { background: #15479f; }
   a.btn-meet { display: inline-flex; align-items: center; text-decoration: none; }
   .btn-meet:disabled { opacity: .6; cursor: wait; }
@@ -85,6 +85,16 @@
   .mt-body .fld span, .mt-link .lbl { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
   .mt-body input, .mt-body select, .mt-body textarea { min-width: 0; width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--dark); min-height: 44px; }
   .mt-body textarea { resize: vertical; }
+  .mt-fmt { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--track); padding: 4px; border-radius: 999px; }
+  .mt-fmt button { border: 0; background: none; font: inherit; font-size: 14px; font-weight: 600; color: var(--muted); padding: 9px 8px; border-radius: 999px; cursor: pointer; min-height: 40px; }
+  .mt-fmt button[aria-pressed="true"] { background: #fff; color: var(--dark); box-shadow: 0 1px 3px rgb(15 23 42 / .12); }
+  .mt-addr { position: relative; min-width: 0; }
+  .mt-addr .lbl { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .mt-sug { list-style: none; margin: 6px 0 0; padding: 4px; border: 1px solid var(--line); border-radius: 12px; background: #fff; box-shadow: 0 12px 30px -12px rgb(15 23 42 / .3); display: grid; gap: 2px; }
+  .mt-sug button { width: 100%; text-align: left; border: 0; background: none; font: inherit; font-size: 14px; line-height: 1.4; color: var(--dark); padding: 9px 10px; border-radius: 8px; cursor: pointer; }
+  .mt-sug button:hover, .mt-sug button:focus { background: var(--track); outline: none; }
+  .mt-sug small { display: block; color: var(--muted); font-size: 12px; }
+  .mt-addr .hint { margin: 6px 0 0; font-size: 12px; }
   #mt-close { top: 6px; right: 6px; width: 48px; height: 48px; z-index: 2; display: grid; place-items: center; touch-action: manipulation; }
   #mt-close svg { width: 22px; height: 22px; }
   /* iPhone: data e hora têm largura própria e invadem a coluna vizinha sem isto. */
@@ -97,7 +107,10 @@
   .mt-link-row { display: flex; gap: 8px; align-items: center; }
   .mt-link-row a { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #1a56c4; font-weight: 700; text-decoration: none; }
   .mt-gcal { font-size: 13px; font-weight: 600; color: #1a56c4; text-decoration: none; }
-  .mt-acts { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+  .mt-acts { display: flex; flex-wrap: wrap-reverse; gap: 8px; align-items: center; justify-content: space-between; }
+  .mt-acts .btn-meet { margin-left: auto; }
+  .mt-acts > * { white-space: nowrap; }
+  .mt-acts .btn-meet { padding: 10px 16px; }
   .mt-foot { margin: 0; font-size: 12px; }
   .mt-notice { background: #f0f5ff; border-radius: 14px; padding: 14px; display: grid; gap: 10px; }
   .mt-notice p { margin: 0; font-size: 14px; }
@@ -205,7 +218,8 @@ function statusBar(r) {
     const txt = Admin.el("div"); txt.append(Admin.el("div", "k", "Reunião agendada"), Admin.el("div", "v", fmtMeeting(r.reuniao_em)));
     card.append(ic, txt);
     const acts = Admin.el("div", "acts");
-    if (r._reuniao?.meet_link) { const m = Admin.el("a", "btn-meet", "Entrar no Google Meet"); m.href = r._reuniao.meet_link; m.target = "_blank"; m.rel = "noopener noreferrer"; acts.appendChild(m); }
+    if (r._reuniao?.formato === "presencial" && r._reuniao.endereco) { txt.appendChild(Admin.el("div", "muted", "Presencial: " + r._reuniao.endereco)); const m = Admin.el("a", "btn-meet", "Ver no mapa"); m.href = mapsLink(r._reuniao.endereco); m.target = "_blank"; m.rel = "noopener noreferrer"; acts.appendChild(m); }
+    else if (r._reuniao?.meet_link) { const m = Admin.el("a", "btn-meet", "Entrar no Google Meet"); m.href = r._reuniao.meet_link; m.target = "_blank"; m.rel = "noopener noreferrer"; acts.appendChild(m); }
     const ed = Admin.el("button", "btn-line", "Editar reunião"); ed.type = "button"; ed.addEventListener("click", () => openMeeting(r));
     acts.appendChild(ed);
     next.append(card, acts);
@@ -300,6 +314,16 @@ async function openMeeting(r) {
   if (!GOOGLE) GOOGLE = await agenda({ acao: "status" });
   renderMeeting(r);
 }
+// Pesquisa de endereço (OpenStreetMap, pelo serviço Photon), com prioridade para a região de Curitiba.
+const UF = { "Acre": "AC", "Alagoas": "AL", "Amapá": "AP", "Amazonas": "AM", "Bahia": "BA", "Ceará": "CE", "Distrito Federal": "DF", "Espírito Santo": "ES", "Goiás": "GO", "Maranhão": "MA", "Mato Grosso": "MT", "Mato Grosso do Sul": "MS", "Minas Gerais": "MG", "Pará": "PA", "Paraíba": "PB", "Paraná": "PR", "Pernambuco": "PE", "Piauí": "PI", "Rio de Janeiro": "RJ", "Rio Grande do Norte": "RN", "Rio Grande do Sul": "RS", "Rondônia": "RO", "Roraima": "RR", "Santa Catarina": "SC", "São Paulo": "SP", "Sergipe": "SE", "Tocantins": "TO" };
+function enderecoTexto(p) {
+  const rua = [p.street, p.housenumber].filter(Boolean).join(", ");
+  const local = p.name && p.name !== p.street ? p.name : "";
+  const cidade = [p.city || p.county, UF[p.state] || p.state].filter(Boolean).join(" - ");
+  return { titulo: local || rua || cidade, linha: [local && rua, rua || local ? p.district : "", cidade, p.postcode].filter(Boolean).join(", ") };
+}
+const mapsLink = (endereco) => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(endereco);
+
 function renderMeeting(r) {
   const body = document.getElementById("mt-body"); body.replaceChildren();
   const reu = r._reuniao, agendada = reu?.status === "agendada" || (!!r.reuniao_em && !reu);
@@ -326,14 +350,48 @@ function renderMeeting(r) {
   const subj = Admin.el("input"); subj.type = "text"; subj.maxLength = 300; subj.value = reu ? (reu.assunto ?? "") : (r.assunto || "");
   const desc = Admin.el("textarea"); desc.rows = 5; desc.maxLength = 5000; desc.value = reu?.descricao ?? "";
   const grid = Admin.el("div", "fields"); grid.append(field("Data", date), field("Horário", hour));
-  body.append(grid, field("Duração", dur), field("Título", title), field("Assunto", subj), field("Descrição", desc));
+  // Formato: online (Google Meet) ou presencial (endereço no convite, sem Meet).
+  let formato = reu?.formato === "presencial" ? "presencial" : "online";
+  const fmt = Admin.el("div", "mt-fmt"); fmt.setAttribute("role", "group"); fmt.setAttribute("aria-label", "Formato da reunião");
+  const fmtBtn = (v, t) => { const b = Admin.el("button", null, t); b.type = "button"; b.dataset.v = v; b.addEventListener("click", () => { formato = v; syncFmt(); }); return b; };
+  fmt.append(fmtBtn("online", "Online (Google Meet)"), fmtBtn("presencial", "Presencial"));
+  const addrBox = Admin.el("div", "mt-addr");
+  const addr = Admin.el("input"); addr.type = "text"; addr.id = "mt-endereco"; addr.maxLength = 500; addr.autocomplete = "off"; addr.placeholder = "Pesquise o endereço ou o nome do local"; addr.value = reu?.endereco || "";
+  const addrLbl = Admin.el("label", "lbl", "Endereço"); addrLbl.htmlFor = "mt-endereco";
+  const sug = Admin.el("ul", "mt-sug hidden"); sug.setAttribute("role", "listbox");
+  addrBox.append(addrLbl, addr, sug, Admin.el("p", "muted hint", "Confira o número e acrescente o complemento, se precisar."));
+  let busca, ctrl;
+  addr.addEventListener("input", () => {
+    clearTimeout(busca); ctrl?.abort();
+    const q = addr.value.trim();
+    if (q.length < 3) { sug.classList.add("hidden"); return; }
+    busca = setTimeout(async () => {
+      ctrl = new AbortController();
+      try {
+        const res = await fetch("https://photon.komoot.io/api/?limit=5&lat=-25.43&lon=-49.27&q=" + encodeURIComponent(q), { signal: ctrl.signal });
+        const feats = ((await res.json()).features || []).filter((f) => f.properties?.countrycode === "BR");
+        sug.replaceChildren();
+        feats.forEach((f) => {
+          const e = enderecoTexto(f.properties), li = Admin.el("li"), b = Admin.el("button"); b.type = "button"; b.setAttribute("role", "option");
+          b.append(e.titulo); if (e.linha && e.linha !== e.titulo) b.appendChild(Admin.el("small", null, e.linha));
+          b.addEventListener("click", () => { addr.value = [e.titulo, e.linha].filter((x, i, a) => x && a.indexOf(x) === i).join(", "); sug.classList.add("hidden"); addr.focus(); });
+          li.appendChild(b); sug.appendChild(li);
+        });
+        sug.classList.toggle("hidden", !feats.length);
+      } catch {}
+    }, 350);
+  });
+  addr.addEventListener("keydown", (e) => { if (e.key === "Escape") sug.classList.add("hidden"); });
+  body.append(grid, field("Duração", dur), fmt, addrBox, field("Título", title), field("Assunto", subj), field("Descrição", desc));
   // Link do Meet
   const linkBox = Admin.el("div", "mt-link");
   linkBox.appendChild(Admin.el("span", "lbl", "Link da reunião (Google Meet)"));
   const msg = Admin.el("p", "msg err hidden");
   const values = () => {
     if (!date.value || !hour.value) { msg.textContent = "Escolha a data e o horário."; msg.classList.remove("hidden"); return null; }
-    return { contato_id: r.id, inicio: new Date(date.value + "T" + hour.value).toISOString(), duracao_min: Number(dur.value), titulo: title.value.trim(), assunto: subj.value.trim(), descricao: desc.value.trim() };
+    if (date.value < toLocalInput(new Date().toISOString()).slice(0, 10)) { msg.textContent = "Escolha uma data a partir de hoje."; msg.classList.remove("hidden"); return null; }
+    if (formato === "presencial" && !addr.value.trim()) { msg.textContent = "Informe o endereço da reunião presencial."; msg.classList.remove("hidden"); addr.focus(); return null; }
+    return { contato_id: r.id, inicio: new Date(date.value + "T" + hour.value).toISOString(), duracao_min: Number(dur.value), titulo: title.value.trim(), assunto: subj.value.trim(), descricao: desc.value.trim(), formato, endereco: formato === "presencial" ? addr.value.trim() : "" };
   };
   const run = async (btn, label, payload, after) => {
     msg.classList.add("hidden"); btn.disabled = true; const old = btn.textContent; btn.textContent = label;
@@ -357,7 +415,7 @@ function renderMeeting(r) {
   }
   body.append(linkBox, msg);
   const acts = Admin.el("div", "mt-acts");
-  const send = Admin.el("button", "btn-meet", agendada ? "Salvar e avisar o convidado" : "Enviar convite"); send.type = "button";
+  const send = Admin.el("button", "btn-meet", agendada ? "Salvar" : "Enviar convite"); send.type = "button";
   send.addEventListener("click", () => {
     const v = values(); if (!v) return;
     run(send, agendada ? "Salvando…" : "Enviando…", { acao: "salvar", ...v, enviar: true }, (res) => {
@@ -365,7 +423,6 @@ function renderMeeting(r) {
       closeMeeting(); statusBar(r); historico(r);
     });
   });
-  acts.appendChild(send);
   if (reu || r.reuniao_em) {
     const del = Admin.el("button", "link-danger", agendada ? "Excluir reunião" : "Descartar"); del.type = "button";
     del.addEventListener("click", async () => {
@@ -386,8 +443,18 @@ function renderMeeting(r) {
     });
     acts.appendChild(del);
   }
+  // Ação principal à direita; excluir/descartar à esquerda.
+  acts.appendChild(send);
   body.appendChild(acts);
-  if (r.email) body.appendChild(Admin.el("p", "muted mt-foot", agendada ? "Ao salvar, " + r.email + " recebe a atualização pelo Google Agenda." : "Ao enviar, " + r.email + " recebe o convite do Google Agenda com o link do Meet."));
+  const foot = Admin.el("p", "muted mt-foot");
+  if (r.email) body.appendChild(foot);
+  function syncFmt() {
+    const pres = formato === "presencial";
+    fmt.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === formato)));
+    addrBox.classList.toggle("hidden", !pres); linkBox.classList.toggle("hidden", pres); msg.classList.add("hidden");
+    foot.textContent = agendada ? "Ao salvar, " + r.email + " recebe a atualização pelo Google Agenda." : "Ao enviar, " + r.email + " recebe o convite do Google Agenda " + (pres ? "com o endereço." : "com o link do Meet.");
+  }
+  syncFmt();
 }
 
 // Cabeçalho da mensagem em acordeão: fechado mostra nome, e-mail, data/hora e assunto;

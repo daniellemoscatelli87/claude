@@ -11,8 +11,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
-  .tabs { display: flex; width: 100%; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 14px; margin: 20px 0 16px; }
-  .tab { flex: 1; background: none; border: 0; border-radius: 10px; padding: 9px 18px; color: var(--muted); font-size: 14px; }
+  .tabs { display: flex; width: 100%; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 999px; margin: 20px 0 16px; }
+  .tab { flex: 1; background: none; border: 0; border-radius: 999px; padding: 9px 18px; color: var(--muted); font-size: 14px; }
   .tab[aria-selected=true] { background: var(--dark); color: #fff; }
   .tab .n { display: inline-block; margin-left: 6px; padding: 0 7px; border-radius: 999px; background: rgb(148 163 184 / .25); font-size: 12px; }
   .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; align-items: end; }
@@ -220,11 +220,30 @@
   .pcs-dl { margin: 0; display: grid; gap: 8px; }
   .pcs-dl dt { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
   .pcs-dl dd { margin: 2px 0 0; font-size: 14px; color: var(--dark); line-height: 1.4; }
-  .pcs-more { margin-top: auto; align-self: flex-start; font: inherit; font-size: 13px; font-weight: 700; color: var(--red); background: var(--red-tint); border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+  .pcs-more { margin-top: auto; align-self: flex-end; font: inherit; font-size: 13px; font-weight: 700; color: var(--red); background: var(--red-tint); border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer; }
   .pcs-more:hover { background: #fbdcdc; }
   .pcs-fit { display: inline-block; margin-top: 4px; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 2px 8px; background: #fdf3dc; color: #7a5300; }
   .pcs-fit.full { background: #e7f5ec; color: #1f6b3a; }
   .pcs-fit.none { background: var(--track, #f1f5f9); color: var(--muted); }
+  /* Ranking do desafio: linha do tempo com o percentual de aderência no círculo */
+  .pcs-grid.pc-timeline { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .tl-item { --c: #d99a00; position: relative; display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 14px; align-items: start; }
+  .tl-item.full { --c: #1f9d55; }
+  .tl-item.none { --c: #94a3b8; }
+  .tl-item::before { content: ""; position: absolute; left: 27px; top: 0; bottom: -14px; width: 2px; background: var(--line); }
+  .tl-item:first-child::before { top: 44px; }
+  .tl-item:last-child::before { bottom: auto; height: 44px; }
+  .tl-item:only-child::before { display: none; }
+  .tl-mark { position: relative; z-index: 1; margin-top: 16px; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--c) calc(var(--p) * 1%), #e2e8f0 0); }
+  .tl-mark span { width: 44px; height: 44px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 800; color: var(--c); }
+  @media (max-width: 640px) {
+    .tl-item { grid-template-columns: 48px minmax(0, 1fr); gap: 10px; }
+    .tl-item::before { left: 23px; }
+    .tl-item:first-child::before { top: 40px; }
+    .tl-item:last-child::before { height: 40px; }
+    .tl-mark { width: 48px; height: 48px; }
+    .tl-mark span { width: 38px; height: 38px; font-size: 12px; }
+  }
   .pd-drawer { width: min(480px, 94vw); }
   .pd-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 20px 20px 32px; }
   .pc-detail { display: flex; flex-direction: column; gap: 14px; }
@@ -485,7 +504,7 @@ const CURTO = {
 const curto = (id, v) => CURTO[id][v] || clean(v || "");
 const PERFIS_IA = new Map(); // id -> "como pode contribuir" (IA)
 function contribFallback(r) {
-  const p = [r.principal_especializacao, r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase() + " na especialidade"].filter(Boolean).join(", ");
+  const p = r.principal_especializacao || "";
   const areas = (r.areas_experiencia || []).slice(0, 3).map(clean).join(", ");
   return [p, startsSim(r.lideranca) ? "pode liderar" : "", areas && "atua com " + areas].filter(Boolean).join("; ") + ".";
 }
@@ -558,7 +577,6 @@ function summaryCard(r) {
   const senior = [NIVEL[r.tempo_especialidade], r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase() + " de carreira"].filter(Boolean).join(" · ");
   if (senior) who.appendChild(el("div", "pc-sub", senior));
   const m = matchOf(r);
-  if (m) who.appendChild(el("span", "pcs-fit " + nivelAderencia(m.aderencia), "Aderência " + m.aderencia + "%"));
   head.append(el("span", "ini", Admin.initials(r.nome)), who);
   const dl = el("dl", "pcs-dl");
   const row = (k, v) => { if (!v) return; const d = el("div"); d.append(el("dt", null, k), el("dd", null, v)); dl.appendChild(d); };
@@ -601,7 +619,15 @@ function profiles(rows) {
   document.getElementById("pc-count").textContent = plural(list.length, "parceiro", "parceiros") + (DESAFIO ? " · ordenados por aderência ao desafio" : "");
   const grid = document.getElementById("pc-grid"); grid.replaceChildren();
   if (!list.length) return grid.appendChild(el("div", "card empty", "Nenhum parceiro para os filtros atuais."));
-  list.forEach((r) => grid.appendChild(summaryCard(r)));
+  // Com desafio, os cards viram uma linha do tempo em ordem de aderência; o círculo mostra o percentual.
+  grid.classList.toggle("pc-timeline", !!DESAFIO);
+  list.forEach((r) => {
+    if (!DESAFIO) return grid.appendChild(summaryCard(r));
+    const n = matchOf(r).aderencia, item = el("div", "tl-item " + (nivelAderencia(n) || "mid"));
+    const mark = el("div", "tl-mark"); mark.style.setProperty("--p", n); mark.setAttribute("aria-label", "Aderência " + n + "%");
+    mark.appendChild(el("span", null, n + "%"));
+    item.append(mark, summaryCard(r)); grid.appendChild(item);
+  });
 }
 
 function dashboard(rows) {
