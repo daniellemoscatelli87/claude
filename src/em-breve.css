@@ -91,5 +91,7 @@ select.field option { color: var(--color-brand-dark); }
    que deixava a página desencaixada; e nada pode criar rolagem lateral. */
 html { overflow-x: clip; }
 @media (max-width: 767px) {
-  input, select, textarea, .field { font-size: 16px !important; }
+  input, select, textarea, .field, .biz-label { font-size: 16px !important; }
 }
+/* "Meu negócio é..." com o mesmo tamanho de texto dos outros campos. */
+.biz-label { font-size: 13px; }
