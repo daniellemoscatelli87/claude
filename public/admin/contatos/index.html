@@ -223,7 +223,7 @@ function statusBar(r) {
     if (r._reuniao?.formato === "presencial" && r._reuniao.endereco) { txt.appendChild(Admin.el("div", "muted", "Presencial: " + r._reuniao.endereco)); const m = Admin.el("a", "btn-meet", "Ver no mapa"); m.href = mapsLink(r._reuniao.endereco); m.target = "_blank"; m.rel = "noopener noreferrer"; acts.appendChild(m); }
     else if (r._reuniao?.meet_link) { const m = Admin.el("a", "btn-meet", "Entrar no Google Meet"); m.href = r._reuniao.meet_link; m.target = "_blank"; m.rel = "noopener noreferrer"; acts.appendChild(m); }
     const ed = Admin.el("button", "btn-line", "Editar reunião"); ed.type = "button"; ed.addEventListener("click", () => openMeeting(r));
-    acts.appendChild(ed);
+    acts.prepend(ed); // Editar à esquerda, ação principal à direita
     next.append(card, acts);
   } else if (!r.respondido_em) {
     next.append(Admin.el("p", "hint", "Responda pelo histórico abaixo. A mensagem é marcada como respondida automaticamente."));
