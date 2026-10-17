@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loja • Dani Moscatelli | Experience Design Studio</title>
+<title>Store • Dani Moscatelli | Experience Design Studio</title>
 <meta name="description" content="Curadoria de marcas e produtos selecionados por Dani Moscatelli, com condições exclusivas de desconto.">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -179,11 +179,11 @@
 </footer>
 
 <script>
-// Loja em níveis: /store/ lista as marcas; /store/?marca=<slug> mostra os produtos da marca.
-// Marcas e produtos ativos vêm das tabelas `marcas` e `produtos` (cadastrados em /admin/loja/).
+// Store em níveis: /store/ lista as marcas; /store/?marca=<slug> mostra os produtos da marca.
+// Marcas e produtos ativos vêm das tabelas `marcas` e `produtos` (cadastrados em /admin/store/).
 const REST = "https://lipfvnerohkaajegqvwr.supabase.co/rest/v1/";
 const KEY = "sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej";
-const WHATSAPP = "https://wa.me/5541997485414?text=" + encodeURIComponent("Olá, Dani! Tenho interesse em anunciar minha marca na loja do site danimoscatelli.com.br. Podemos conversar?");
+const WHATSAPP = "https://wa.me/5541997485414?text=" + encodeURIComponent("Olá, Dani! Tenho interesse em anunciar minha marca na Store do site danimoscatelli.com.br. Podemos conversar?");
 const NOTA = "Ao clicar em \u201cComprar com desconto\u201d, você será direcionado ao site oficial da marca para concluir a compra. Preços e condições são definidos por cada marca e podem ser alterados sem aviso prévio.";
 const SVG = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 const ICON_EXT = SVG('<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>');
@@ -217,11 +217,11 @@ function cardAnuncie() {
       <a class="buy" href="${WHATSAPP}" target="_blank" rel="noopener">${ICON_WA} Anunciar minha marca</a>
     </article>`);
 }
-async function telaLoja(view) {
-  document.title = "Loja • Dani Moscatelli | Experience Design Studio";
+async function telaStore(view) {
+  document.title = "Store • Dani Moscatelli | Experience Design Studio";
   const marcas = (await api("marcas?select=id,nome,slug,descricao,logo,produtos(count)&ativo=eq.true&order=ordem.asc,nome.asc")) || [];
   view.replaceChildren(
-    node('<section class="hero"><span class="tag">Loja</span><h1>Loja</h1><p class="lead">Uma curadoria de marcas e produtos selecionados por Dani Moscatelli, com condições exclusivas de desconto.</p></section>'),
+    node('<section class="hero"><span class="tag">Store</span><h1>Store</h1><p class="lead">Uma curadoria de marcas e produtos selecionados por Dani Moscatelli, com condições exclusivas de desconto.</p></section>'),
     node('<h2 class="sec">Marcas parceiras</h2>'),
   );
   const grid = node('<div class="grid"></div>');
@@ -258,12 +258,12 @@ function cardProduto(p) {
 }
 async function telaMarca(view, slug) {
   const [m] = (await api("marcas?select=id,nome,slug,descricao,logo&ativo=eq.true&slug=eq." + encodeURIComponent(slug))) || [];
-  const crumb = (nome) => node(`<nav class="crumb" aria-label="Navegação"><a href="/store/">Loja</a><span aria-hidden="true">›</span><span>${esc(nome)}</span></nav>`);
+  const crumb = (nome) => node(`<nav class="crumb" aria-label="Navegação"><a href="/store/">Store</a><span aria-hidden="true">›</span><span>${esc(nome)}</span></nav>`);
   if (!m) {
-    view.replaceChildren(crumb("Marca"), node("<h1>Marca não encontrada</h1>"), node('<p class="lead">Esta marca não está disponível no momento. <a href="/store/" style="color:var(--red);font-weight:600">Conheça as demais marcas da loja.</a></p>'));
+    view.replaceChildren(crumb("Marca"), node("<h1>Marca não encontrada</h1>"), node('<p class="lead">Esta marca não está disponível no momento. <a href="/store/" style="color:var(--red);font-weight:600">Conheça as demais marcas da Store.</a></p>'));
     return;
   }
-  document.title = m.nome + " • Loja • Dani Moscatelli | Experience Design Studio";
+  document.title = m.nome + " • Store • Dani Moscatelli | Experience Design Studio";
   const produtos = (await api("produtos?select=id,nome,preco,desconto,link,fotos&ativo=eq.true&marca_id=eq." + m.id + "&order=ordem.asc,created_at.desc")) || [];
   const head = node(`<section class="hero bhead"><div class="lg"><img src="${esc(m.logo)}" alt="${esc(m.nome)}"></div><div>
       <span class="tag">Marca parceira</span><h1>${esc(m.nome)}</h1>${m.descricao ? `<p class="lead">${esc(m.descricao)}</p>` : ""}</div></section>`);
@@ -279,7 +279,7 @@ async function telaMarca(view, slug) {
 
 const slug = new URLSearchParams(location.search).get("marca");
 const view = document.getElementById("view");
-slug ? telaMarca(view, slug) : telaLoja(view);
+slug ? telaMarca(view, slug) : telaStore(view);
 // Cabeçalho ganha fundo ao rolar a página.
 const topo = document.querySelector("header");
 const marcar = () => topo.classList.toggle("scrolled", scrollY > 8);

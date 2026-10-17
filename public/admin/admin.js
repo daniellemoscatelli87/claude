@@ -48,7 +48,7 @@
     { id: "reunioes", href: "/admin/reunioes/", label: "Reuniões", icon: "meeting" },
     { id: "parceiros", href: "/admin/parceiros/", label: "Parceiros", icon: "users" },
     { id: "lancamento", href: "/admin/lancamento/", label: "Lançamento", icon: "rocket" },
-    { id: "loja", href: "/admin/loja/", label: "Loja", icon: "bag" },
+    { id: "store", href: "/admin/store/", label: "Store", icon: "bag" },
     { id: "configuracoes", href: "/admin/configuracoes/", label: "Configurações", icon: "settings" },
   ];
 

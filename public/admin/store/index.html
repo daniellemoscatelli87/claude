@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>Loja | Área restrita</title>
+<title>Store | Área restrita</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,11 +73,11 @@
 </head>
 <body>
 <main class="wrap hidden" id="app">
-  <h1>Loja</h1>
+  <h1>Store</h1>
   <p class="muted" id="count"></p>
   <p class="msg err hidden" id="load-err"></p>
   <div class="lj-top">
-    <a href="/store/" target="_blank" rel="noopener">Ver a loja →</a>
+    <a href="/store/" target="_blank" rel="noopener">Ver a Store →</a>
     <button type="button" class="btn-add" id="nova-marca"><span class="bi" id="ic-novo"></span>Nova marca</button>
   </div>
   <div id="list"></div>
@@ -94,7 +94,7 @@
     </div>
     <label>Nome da marca<input type="text" id="m-nome" maxlength="80" placeholder="Ex.: Donna Shape"></label>
     <label>Descrição (opcional)<textarea id="m-desc" maxlength="400" placeholder="Uma ou duas frases sobre a marca."></textarea></label>
-    <label class="tg"><input type="checkbox" id="m-ativo" checked>Mostrar na loja</label>
+    <label class="tg"><input type="checkbox" id="m-ativo" checked>Mostrar na Store</label>
     <p class="msg err hidden" id="dm-err"></p>
     <div class="lj-acts">
       <button type="button" class="link-danger hidden" id="m-excluir">Excluir marca</button>
@@ -110,7 +110,7 @@
     <div>
       <div style="font-size:13px;font-weight:600;margin-bottom:6px">Fotos (3)</div>
       <div class="fotos" id="fotos"></div>
-      <span class="hint">Toque em cada quadro para escolher a foto. Elas aparecem quadradas na loja.</span>
+      <span class="hint">Toque em cada quadro para escolher a foto. Elas aparecem quadradas na Store.</span>
     </div>
     <label>Marca<select id="marca"></select></label>
     <label>Nome do produto<input type="text" id="nome" maxlength="160"></label>
@@ -119,7 +119,7 @@
       <label>Desconto (%)<input type="text" id="desconto" inputmode="numeric" maxlength="2" placeholder="Ex.: 15"></label>
     </div>
     <label>Link de compra (afiliado ou cupom)<input type="url" id="link" placeholder="https://"></label>
-    <label class="tg"><input type="checkbox" id="ativo" checked>Mostrar na loja</label>
+    <label class="tg"><input type="checkbox" id="ativo" checked>Mostrar na Store</label>
     <p class="msg err hidden" id="dlg-err"></p>
     <div class="lj-acts">
       <button type="button" class="link-danger hidden" id="excluir">Excluir produto</button>
@@ -132,7 +132,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/admin/admin.js"></script>
 <script>
-// Loja em níveis: marcas (logo, nome, descrição) e, dentro de cada marca, os produtos
+// Store em níveis: marcas (logo, nome, descrição) e, dentro de cada marca, os produtos
 // (três fotos, preço, desconto e link de compra). A vitrine pública fica em /store/.
 const el = Admin.el, sb = Admin.sb, $ = (id) => document.getElementById(id);
 const BUCKET = "/storage/v1/object/public/loja/";
@@ -183,7 +183,7 @@ async function carregar() {
   ]);
   const error = m.error || p.error;
   $("load-err").classList.toggle("hidden", !error);
-  if (error) { $("load-err").textContent = "Não foi possível carregar a loja: " + error.message; return; }
+  if (error) { $("load-err").textContent = "Não foi possível carregar a Store: " + error.message; return; }
   MARCAS = m.data; PRODS = p.data;
   render();
 }
@@ -260,7 +260,7 @@ $("form-marca").addEventListener("submit", async (e) => {
     if (up.error) { fim(); return mostrarErro("dm-err", "Não foi possível enviar a logo: " + up.error.message); }
     logo = up.url; nova = up.path;
   }
-  // Endereço da marca na loja (/store/?marca=...), único entre as marcas.
+  // Endereço da marca na Store (/store/?marca=...), único entre as marcas.
   let slug = MARCA?.slug || slugify(nome);
   if (!MARCA) { const base = slug; let i = 2; while (MARCAS.some((x) => x.slug === slug)) slug = base + "-" + i++; }
   const linha = { nome, descricao: descricao || null, logo, slug, ativo: $("m-ativo").checked, updated_at: new Date().toISOString() };
@@ -268,18 +268,18 @@ $("form-marca").addEventListener("submit", async (e) => {
   fim();
   if (error) { if (nova) await remover([nova]); return mostrarErro("dm-err", "Não foi possível salvar: " + error.message); }
   if (nova && caminho(LOGO.substitui)) await remover([caminho(LOGO.substitui)]);
-  Admin.log((MARCA ? "Editou a marca " : "Cadastrou a marca ") + nome + " na loja", linha.ativo ? "" : "Oculta");
+  Admin.log((MARCA ? "Editou a marca " : "Cadastrou a marca ") + nome + " na Store", linha.ativo ? "" : "Oculta");
   $("dlg-marca").close(); await carregar();
   Admin.toast(MARCA ? "Marca atualizada." : "Marca cadastrada.");
 });
 $("m-excluir").addEventListener("click", async () => {
   const m = MARCA; if (!m) return;
   if (PRODS.some((p) => p.marca_id === m.id)) return mostrarErro("dm-err", "Esta marca tem produtos. Exclua ou mova os produtos antes de excluir a marca.");
-  if (!(await Admin.confirmDialog({ title: "Excluir marca?", message: "A marca “" + m.nome + "” e a logo serão apagadas definitivamente e a marca sai da loja. Essa ação não pode ser desfeita.", ok: "Excluir marca" }))) return;
+  if (!(await Admin.confirmDialog({ title: "Excluir marca?", message: "A marca “" + m.nome + "” e a logo serão apagadas definitivamente e a marca sai da Store. Essa ação não pode ser desfeita.", ok: "Excluir marca" }))) return;
   const { error } = await sb.from("marcas").delete().eq("id", m.id);
   if (error) return mostrarErro("dm-err", "Não foi possível excluir: " + error.message);
   if (caminho(m.logo)) await remover([caminho(m.logo)]);
-  Admin.log("Excluiu a marca " + m.nome + " da loja");
+  Admin.log("Excluiu a marca " + m.nome + " da Store");
   $("dlg-marca").close(); await carregar();
   Admin.toast("Marca excluída.");
 });
@@ -353,22 +353,22 @@ $("form").addEventListener("submit", async (e) => {
   if (error) { await remover(enviadas); return erro("Não foi possível salvar: " + error.message); }
   await remover(antigas);
   const marca = MARCAS.find((m) => m.id === marca_id)?.nome || "";
-  Admin.log((EDIT ? "Editou o produto " : "Cadastrou o produto ") + nome + " na loja", marca + " · " + brl(preco) + (desconto ? " · " + desconto + "% de desconto" : "") + (linha.ativo ? "" : " · oculto"));
+  Admin.log((EDIT ? "Editou o produto " : "Cadastrou o produto ") + nome + " na Store", marca + " · " + brl(preco) + (desconto ? " · " + desconto + "% de desconto" : "") + (linha.ativo ? "" : " · oculto"));
   $("dlg").close(); await carregar();
   Admin.toast(EDIT ? "Produto atualizado." : "Produto cadastrado.");
 });
 $("excluir").addEventListener("click", async () => {
   const p = EDIT; if (!p) return;
-  if (!(await Admin.confirmDialog({ title: "Excluir produto?", message: "“" + p.nome + "” e as 3 fotos serão apagados definitivamente e o produto sai da loja. Essa ação não pode ser desfeita.", ok: "Excluir produto" }))) return;
+  if (!(await Admin.confirmDialog({ title: "Excluir produto?", message: "“" + p.nome + "” e as 3 fotos serão apagados definitivamente e o produto sai da Store. Essa ação não pode ser desfeita.", ok: "Excluir produto" }))) return;
   const { error } = await sb.from("produtos").delete().eq("id", p.id);
   if (error) return mostrarErro("dlg-err", "Não foi possível excluir: " + error.message);
   await remover(p.fotos.map(caminho).filter(Boolean));
-  Admin.log("Excluiu o produto " + p.nome + " da loja", MARCAS.find((m) => m.id === p.marca_id)?.nome || "");
+  Admin.log("Excluiu o produto " + p.nome + " da Store", MARCAS.find((m) => m.id === p.marca_id)?.nome || "");
   $("dlg").close(); await carregar();
   Admin.toast("Produto excluído.");
 });
 
-Admin.init({ page: "loja", onReady: async () => {
+Admin.init({ page: "store", onReady: async () => {
   $("ic-novo").innerHTML = Admin.icon("bag");
   $("ic-novo").style.display = "inline-flex";
   $("nova-marca").addEventListener("click", () => abrirMarca(null));
