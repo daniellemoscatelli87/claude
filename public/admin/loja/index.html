@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Loja | Área restrita</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/admin.css">
+<style>
+  .lj-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 20px 0 12px; }
+  .lj-top a { font-size: 14px; font-weight: 600; color: var(--red); }
+  .btn-add { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 14px; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 10px 18px; cursor: pointer; }
+  .btn-add:hover { background: var(--red-dark); }
+  .btn-add svg { width: 18px; height: 18px; }
+  .pr-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 12px 6px; border-radius: 12px; cursor: pointer; }
+  .pr-row + .pr-row { border-top: 1px solid var(--track); }
+  .pr-row:hover { background: #f8fafc; }
+  .pr-row img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; background: var(--track); }
+  .pr-row .tx { min-width: 0; display: grid; gap: 2px; }
+  .pr-row .m { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; color: var(--red); }
+  .pr-row b { font-size: 15px; overflow-wrap: anywhere; }
+  .pr-row .p { font-size: 13px; color: var(--muted); }
+  .pill { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
+  .pill.on { background: #e7f5ec; color: #1f6b3a; }
+  .pill.off { background: var(--track); color: var(--muted); }
+  .lj-dlg { width: min(640px, 94vw); max-height: 92vh; border: 0; border-radius: 18px; padding: 0; box-shadow: 0 20px 60px -10px rgb(15 23 42 / .35); }
+  .lj-dlg::backdrop { background: rgb(15 23 42 / .45); }
+  .lj-in { position: relative; padding: 22px; display: grid; gap: 14px; }
+  .lj-in h2 { margin: 0; font-size: 20px; padding-right: 40px; }
+  .lj-in label { display: grid; gap: 6px; font-size: 13px; font-weight: 600; }
+  .lj-in input[type=text], .lj-in input[type=url] { width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--dark); outline: none; }
+  .lj-in input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgb(212 77 77 / .15); }
+  .lj-in .hint { font-size: 12px; color: var(--muted); font-weight: 400; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .fotos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .slot { position: relative; aspect-ratio: 1 / 1; border: 2px dashed var(--line); border-radius: 14px; background: #f8fafc; display: grid; place-items: center; cursor: pointer; overflow: hidden; color: var(--muted); font-size: 12px; font-weight: 600; text-align: center; padding: 6px; }
+  .slot:hover { border-color: var(--red); color: var(--red); }
+  .slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .slot .n { position: absolute; top: 6px; left: 6px; background: rgb(15 23 42 / .7); color: #fff; font-size: 11px; border-radius: 999px; padding: 1px 7px; z-index: 1; }
+  .slot.err { border-color: var(--red); }
+  .lj-in .tg { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .lj-in .tg input { width: 18px; height: 18px; accent-color: var(--red); margin: 0; }
+  .lj-acts { display: flex; flex-wrap: wrap-reverse; gap: 8px; justify-content: space-between; align-items: center; }
+  .lj-acts .btn-add { margin-left: auto; }
+  .link-danger { background: none; border: 0; padding: 8px 4px; font: inherit; font-size: 14px; font-weight: 600; color: var(--red); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .lj-x { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; background: none; border-radius: 10px; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
+  .lj-x svg { width: 22px; height: 22px; }
+  @media (max-width: 520px) { .two { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main class="wrap hidden" id="app">
+  <h1>Loja</h1>
+  <p class="muted" id="count"></p>
+  <p class="msg err hidden" id="load-err"></p>
+  <div class="lj-top">
+    <a href="/loja/" target="_blank" rel="noopener">Ver a loja →</a>
+    <button type="button" class="btn-add" id="novo"><span id="ic-novo"></span>Novo produto</button>
+  </div>
+  <section class="card"><div id="list"></div></section>
+</main>
+<dialog class="lj-dlg" id="dlg" aria-labelledby="dlg-t">
+  <form class="lj-in" id="form" novalidate>
+    <button type="button" class="lj-x" id="fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <h2 id="dlg-t">Novo produto</h2>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px">Fotos (3)</div>
+      <div class="fotos" id="fotos"></div>
+      <span class="hint">Toque em cada quadro para escolher a foto. Elas aparecem quadradas na loja.</span>
+    </div>
+    <label>Marca<input type="text" id="marca" maxlength="80" list="marcas" placeholder="Ex.: Donna Shape"></label>
+    <datalist id="marcas"></datalist>
+    <label>Nome do produto<input type="text" id="nome" maxlength="160"></label>
+    <div class="two">
+      <label>Preço (R$)<input type="text" id="preco" inputmode="decimal" placeholder="Ex.: 149,90"></label>
+      <label>Desconto (%)<input type="text" id="desconto" inputmode="numeric" maxlength="2" placeholder="Ex.: 15"></label>
+    </div>
+    <label>Link de compra (afiliado ou cupom)<input type="url" id="link" placeholder="https://"></label>
+    <label class="tg"><input type="checkbox" id="ativo" checked>Mostrar na loja</label>
+    <p class="msg err hidden" id="dlg-err"></p>
+    <div class="lj-acts">
+      <button type="button" class="link-danger hidden" id="excluir">Excluir produto</button>
+      <button type="submit" class="btn-add" id="salvar">Salvar</button>
+    </div>
+  </form>
+</dialog>
+<input type="file" id="file" accept="image/png,image/jpeg,image/webp" class="hidden">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/admin/admin.js"></script>
+<script>
+// Produtos da vitrine pública (/loja/): três fotos, marca, nome, preço, desconto e link de compra.
+const el = Admin.el, sb = Admin.sb, $ = (id) => document.getElementById(id);
+const BUCKET = "/storage/v1/object/public/loja/";
+const brl = (v) => Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+let ALL = [], EDIT = null, SLOTS = [];
+
+function render() {
+  const list = $("list"); list.replaceChildren();
+  const vis = ALL.filter((p) => p.ativo).length;
+  $("count").textContent = ALL.length ? (ALL.length === 1 ? "1 produto" : ALL.length + " produtos") + " · " + (vis === 1 ? "1 visível" : vis + " visíveis") + " na loja" : "";
+  if (!ALL.length) return list.appendChild(el("div", "empty", "Nenhum produto cadastrado ainda. Toque em “Novo produto” para começar."));
+  for (const p of ALL) {
+    const row = el("div", "pr-row"); row.tabIndex = 0; row.setAttribute("role", "button");
+    const img = el("img"); img.src = p.fotos[0]; img.alt = "";
+    const tx = el("div", "tx"); tx.append(el("span", "m", p.marca), el("b", null, p.nome), el("span", "p", brl(p.preco) + (p.desconto ? " · " + p.desconto + "% de desconto" : "")));
+    row.append(img, tx, el("span", "pill " + (p.ativo ? "on" : "off"), p.ativo ? "Visível" : "Oculto"));
+    const abrir = () => abrirForm(p);
+    row.addEventListener("click", abrir);
+    row.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); abrir(); } });
+    list.appendChild(row);
+  }
+}
+async function carregar() {
+  const { data, error } = await sb.from("produtos").select("*").order("ordem").order("created_at", { ascending: false });
+  $("load-err").classList.toggle("hidden", !error);
+  if (error) { $("load-err").textContent = "Não foi possível carregar os produtos: " + error.message; return; }
+  ALL = data;
+  $("marcas").replaceChildren(...[...new Set(["Donna Shape", ...data.map((p) => p.marca)])].map((m) => { const o = el("option"); o.value = m; return o; }));
+  render();
+}
+
+/* ---------- Fotos ---------- */
+// Recorta no centro e reduz para 1200x1200 em WebP antes de enviar.
+function prepararFoto(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const lado = Math.min(img.naturalWidth, img.naturalHeight), alvo = Math.min(1200, lado), c = document.createElement("canvas");
+      c.width = c.height = alvo;
+      c.getContext("2d").drawImage(img, (img.naturalWidth - lado) / 2, (img.naturalHeight - lado) / 2, lado, lado, 0, 0, alvo, alvo);
+      URL.revokeObjectURL(url);
+      c.toBlob((b) => (b ? resolve(b) : reject()), "image/webp", 0.88);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(); };
+    img.src = url;
+  });
+}
+const caminho = (url) => (url || "").includes(BUCKET) ? decodeURIComponent(url.split(BUCKET)[1].split("?")[0]) : null;
+let slotAtual = 0;
+function desenharFotos() {
+  const box = $("fotos"); box.replaceChildren();
+  SLOTS.forEach((s, i) => {
+    const b = el("button", "slot"); b.type = "button";
+    b.setAttribute("aria-label", (s ? "Trocar" : "Escolher") + " a foto " + (i + 1));
+    b.append(el("span", "n", String(i + 1)));
+    if (s) { const img = el("img"); img.src = s.preview || s.url; img.alt = ""; b.appendChild(img); }
+    else b.append("Escolher foto " + (i + 1));
+    b.addEventListener("click", () => { slotAtual = i; $("file").click(); });
+    box.appendChild(b);
+  });
+}
+$("file").addEventListener("change", async (e) => {
+  const f = e.target.files[0]; e.target.value = "";
+  if (!f) return;
+  if (!/^image\/(png|jpeg|webp)$/.test(f.type)) return erro("Use imagens PNG, JPG ou WebP.");
+  try {
+    const blob = await prepararFoto(f);
+    const antigo = SLOTS[slotAtual];
+    if (antigo?.preview) URL.revokeObjectURL(antigo.preview);
+    SLOTS[slotAtual] = { blob, preview: URL.createObjectURL(blob), substitui: antigo?.url || antigo?.substitui || null };
+    erro(""); desenharFotos();
+  } catch { erro("Não foi possível ler a imagem. Tente outra."); }
+});
+
+/* ---------- Formulário ---------- */
+const erro = (t) => { $("dlg-err").textContent = t; $("dlg-err").classList.toggle("hidden", !t); };
+function abrirForm(p) {
+  EDIT = p || null;
+  $("dlg-t").textContent = p ? "Editar produto" : "Novo produto";
+  $("marca").value = p?.marca ?? "Donna Shape";
+  $("nome").value = p?.nome ?? "";
+  $("preco").value = p ? Number(p.preco).toFixed(2).replace(".", ",") : "";
+  $("desconto").value = p?.desconto ? String(p.desconto) : "";
+  $("link").value = p?.link ?? "";
+  $("ativo").checked = p ? p.ativo : true;
+  $("excluir").classList.toggle("hidden", !p);
+  SLOTS = p ? p.fotos.map((url) => ({ url })) : [null, null, null];
+  desenharFotos(); erro("");
+  $("dlg").showModal();
+}
+$("fechar").addEventListener("click", () => $("dlg").close());
+$("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const marca = $("marca").value.trim(), nome = $("nome").value.trim(), link = $("link").value.trim();
+  const preco = Number($("preco").value.trim().replace(/[^\d,.-]/g, "").replace(/\.(?=\d{3}(\D|$))/g, "").replace(",", "."));
+  const desconto = $("desconto").value.trim() ? Number($("desconto").value.trim()) : 0;
+  if (SLOTS.some((s) => !s)) return erro("Escolha as 3 fotos do produto.");
+  if (!marca) return erro("Informe a marca."), $("marca").focus();
+  if (!nome) return erro("Informe o nome do produto."), $("nome").focus();
+  if (!$("preco").value.trim() || !isFinite(preco) || preco < 0) return erro("Informe um preço válido, por exemplo 149,90."), $("preco").focus();
+  if (!Number.isInteger(desconto) || desconto < 0 || desconto > 99) return erro("O desconto deve ser um número de 0 a 99."), $("desconto").focus();
+  if (!/^https?:\/\/\S+\.\S+/.test(link)) return erro("Informe o link de compra, começando com https://."), $("link").focus();
+  const btn = $("salvar"); btn.disabled = true; btn.textContent = "Salvando…"; erro("");
+  const fim = () => { btn.disabled = false; btn.textContent = "Salvar"; };
+  // Envia as fotos novas; as substituídas são apagadas só depois de salvar.
+  const fotos = [], enviadas = [], remover = [];
+  for (const [i, s] of SLOTS.entries()) {
+    if (!s.blob) { fotos.push(s.url); continue; }
+    const path = Date.now() + "-" + i + "-" + Math.random().toString(36).slice(2, 8) + ".webp";
+    const { error } = await sb.storage.from("loja").upload(path, s.blob, { contentType: "image/webp", upsert: false });
+    if (error) { if (enviadas.length) await sb.storage.from("loja").remove(enviadas); fim(); return erro("Não foi possível enviar a foto " + (i + 1) + ": " + error.message); }
+    enviadas.push(path);
+    fotos.push(sb.storage.from("loja").getPublicUrl(path).data.publicUrl);
+    if (caminho(s.substitui)) remover.push(caminho(s.substitui));
+  }
+  const linha = { marca, nome, preco, desconto, link, fotos, ativo: $("ativo").checked, updated_at: new Date().toISOString() };
+  const q = EDIT ? sb.from("produtos").update(linha).eq("id", EDIT.id) : sb.from("produtos").insert(linha);
+  const { error } = await q;
+  fim();
+  if (error) { if (enviadas.length) await sb.storage.from("loja").remove(enviadas); return erro("Não foi possível salvar: " + error.message); }
+  if (remover.length) await sb.storage.from("loja").remove(remover);
+  Admin.log((EDIT ? "Editou o produto " : "Cadastrou o produto ") + nome + " na loja", marca + " · " + brl(preco) + (desconto ? " · " + desconto + "% de desconto" : "") + (linha.ativo ? "" : " · oculto"));
+  $("dlg").close(); await carregar();
+  Admin.toast(EDIT ? "Produto atualizado." : "Produto cadastrado.");
+});
+$("excluir").addEventListener("click", async () => {
+  if (!EDIT) return;
+  const p = EDIT;
+  if (!(await Admin.confirmDialog({ title: "Excluir produto?", message: "“" + p.nome + "” e as 3 fotos serão apagados definitivamente e o produto sai da loja. Essa ação não pode ser desfeita.", ok: "Excluir produto" }))) return;
+  const { error } = await sb.from("produtos").delete().eq("id", p.id);
+  if (error) return erro("Não foi possível excluir: " + error.message);
+  const paths = p.fotos.map(caminho).filter(Boolean);
+  if (paths.length) await sb.storage.from("loja").remove(paths);
+  Admin.log("Excluiu o produto " + p.nome + " da loja", p.marca);
+  $("dlg").close(); await carregar();
+  Admin.toast("Produto excluído.");
+});
+
+Admin.init({ page: "loja", onReady: async () => {
+  $("ic-novo").innerHTML = Admin.icon("bag");
+  $("ic-novo").style.display = "inline-flex";
+  $("novo").addEventListener("click", () => abrirForm(null));
+  await carregar();
+} });
+</script>
+</body>
+</html>

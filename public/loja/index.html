@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loja • Dani Moscatelli | Experience Design Studio</title>
+<meta name="description" content="Produtos que Dani Moscatelli está vendendo e recomendando, com desconto.">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #d44d4d;
+    --red-dark: #c13e3e;
+    --dark: #0f172a;
+    --muted: #64748b;
+    --line: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: #fbfbfd;
+    color: var(--dark);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: clip;
+  }
+  .wrap { width: 100%; max-width: 80rem; margin: 0 auto; padding: 0 24px; }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; padding-bottom: 24px; }
+  header img { height: 48px; width: auto; display: block; }
+  header .back { font-size: 14px; font-weight: 600; color: var(--red); text-decoration: underline; text-underline-offset: 4px; }
+  main { flex: 1; padding-bottom: 64px; }
+  .tag { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .2em; color: var(--red); background: #fef2f2; border-radius: 999px; padding: 4px 12px; }
+  .tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+  h1 { font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 800; letter-spacing: -.025em; line-height: 1.15; margin: 16px 0 8px; }
+  .lead { font-size: 16px; line-height: 1.6; color: var(--muted); margin: 0 0 32px; max-width: 560px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgb(15 23 42 / .04); }
+  .gal { position: relative; aspect-ratio: 1 / 1; background: #f1f5f9; }
+  .slides { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .slides::-webkit-scrollbar { display: none; }
+  .slides img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; display: block; }
+  .off { position: absolute; top: 12px; left: 12px; background: var(--red); color: #fff; font-size: 13px; font-weight: 800; padding: 5px 10px; border-radius: 999px; }
+  .dots { position: absolute; bottom: 12px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; }
+  .dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgb(255 255 255 / .6); box-shadow: 0 0 0 1px rgb(15 23 42 / .15); cursor: pointer; }
+  .dots button[aria-current=true] { background: #fff; width: 20px; border-radius: 999px; }
+  .arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgb(255 255 255 / .9); color: var(--dark); display: grid; place-items: center; cursor: pointer; box-shadow: 0 2px 8px rgb(15 23 42 / .15); opacity: 0; transition: opacity .2s; }
+  .arrow svg { width: 18px; height: 18px; }
+  .arrow.prev { left: 10px; } .arrow.next { right: 10px; }
+  .gal:hover .arrow, .arrow:focus-visible { opacity: 1; }
+  @media (hover: none) { .arrow { display: none; } }
+  .info { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .brand { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .16em; color: var(--red); }
+  .name { font-size: 17px; font-weight: 700; line-height: 1.35; margin: 0; }
+  .price { display: flex; align-items: baseline; gap: 8px; margin: 6px 0 14px; }
+  .price b { font-size: 24px; font-weight: 800; letter-spacing: -.01em; }
+  .price span { font-size: 13px; font-weight: 700; color: #1f9d55; }
+  .buy { margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--red); color: #fff; text-decoration: none; font-weight: 700; font-size: 15px; padding: 13px 20px; border-radius: 999px; transition: background .2s; }
+  .buy:hover { background: var(--red-dark); }
+  .buy svg { width: 16px; height: 16px; }
+
+  .ad { border: 2px dashed #f3c4c4; background: #fffafa; box-shadow: none; align-items: center; justify-content: center; text-align: center; padding: 32px 24px; gap: 10px; min-height: 320px; }
+  .ad .ic { width: 56px; height: 56px; border-radius: 50%; background: #fef2f2; color: var(--red); display: grid; place-items: center; }
+  .ad .ic svg { width: 26px; height: 26px; }
+  .ad h2 { font-size: 20px; font-weight: 800; margin: 6px 0 0; }
+  .ad p { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0 0 8px; max-width: 280px; }
+  .ad .buy { margin-top: 4px; background: #25d366; }
+  .ad .buy:hover { background: #1ebe5a; }
+  .ad .buy svg { width: 18px; height: 18px; }
+  .note { font-size: 12px; color: var(--muted); margin: 28px 0 0; }
+  .state { color: var(--muted); padding: 24px 0; }
+
+  footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 24px; padding-bottom: 24px; border-top: 1px solid rgb(226 232 240 / .5); font-size: 12px; color: var(--muted); }
+  footer p { font-size: 12px; color: var(--muted); margin: 0; }
+  footer .links { display: flex; align-items: center; gap: 16px; color: #94a3b8; }
+  footer .links a { color: #94a3b8; text-decoration: none; }
+  footer .links a:hover { color: var(--red); }
+  @media (max-width: 639px) {
+    .wrap { padding: 0 16px; }
+    header img { height: 40px; }
+    footer .wrap { flex-direction: column; text-align: center; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a href="/"><img src="/logo-dm.png" alt="Dani Moscatelli - Experience Design Studio"></a>
+    <a class="back" href="/">Voltar ao site</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <span class="tag">Loja</span>
+    <h1>Loja</h1>
+    <p class="lead">Produtos que estou vendendo e recomendando, com desconto especial.</p>
+    <div class="grid" id="grid"><p class="state">Carregando produtos…</p></div>
+    <p class="note">Ao tocar em "Comprar com desconto", você vai para o site da marca para concluir a compra.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Dani Moscatelli • Experience Design Studio. Todos os direitos reservados.</p>
+    <div class="links">
+      <span>Curitiba - PR</span>
+      <span aria-hidden="true" style="color:#cbd5e1">•</span>
+      <a href="/privacidade/">Política de privacidade</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Vitrine: produtos ativos da tabela `produtos` (cadastrados em /admin/loja/), na ordem definida no painel.
+const API = "https://lipfvnerohkaajegqvwr.supabase.co/rest/v1/produtos?select=id,marca,nome,preco,desconto,link,fotos&ativo=eq.true&order=ordem.asc,created_at.desc";
+const KEY = "sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej";
+const WHATSAPP = "https://wa.me/5541997485414?text=" + encodeURIComponent("Olá, Dani! Quero anunciar minha marca na loja do seu site.");
+const SVG = (d, extra = "") => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}>${d}</svg>`;
+const ICON_EXT = SVG('<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>');
+const ICON_STORE = SVG('<path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M10 20v-5h4v5"/>');
+const ICON_WA = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.05 21.5h-.01a9.43 9.43 0 0 1-4.8-1.32l-.35-.2-3.57.93.95-3.48-.22-.36a9.42 9.42 0 0 1-1.45-5.02c0-5.2 4.24-9.44 9.46-9.44 2.52 0 4.9.99 6.68 2.77a9.38 9.38 0 0 1 2.77 6.68c0 5.21-4.24 9.44-9.46 9.44zm8.04-17.48A11.3 11.3 0 0 0 12.05.7C5.78.7.68 5.8.68 12.06c0 2 .52 3.96 1.52 5.68L.6 23.3l5.7-1.5a11.33 11.33 0 0 0 5.74 1.47h.01c6.27 0 11.37-5.1 11.37-11.37 0-3.04-1.18-5.89-3.33-8.04z"/></svg>';
+const brl = (v) => Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function card(p) {
+  const el = document.createElement("article");
+  el.className = "card";
+  const fotos = (p.fotos || []).slice(0, 3);
+  el.innerHTML = `<div class="gal">
+      <div class="slides">${fotos.map((f, i) => `<img src="${esc(f)}" alt="${esc(p.nome)}, foto ${i + 1} de ${fotos.length}" loading="lazy" width="600" height="600">`).join("")}</div>
+      ${p.desconto ? `<span class="off">-${p.desconto}%</span>` : ""}
+      <button type="button" class="arrow prev" aria-label="Foto anterior">${SVG('<path d="m15 18-6-6 6-6"/>')}</button>
+      <button type="button" class="arrow next" aria-label="Próxima foto">${SVG('<path d="m9 18 6-6-6-6"/>')}</button>
+      <div class="dots">${fotos.map((_, i) => `<button type="button" aria-label="Ver foto ${i + 1}"${i ? "" : ' aria-current="true"'}></button>`).join("")}</div>
+    </div>
+    <div class="info">
+      <span class="brand">${esc(p.marca)}</span>
+      <h2 class="name">${esc(p.nome)}</h2>
+      <div class="price"><b>${brl(p.preco)}</b>${p.desconto ? `<span>${p.desconto}% de desconto</span>` : ""}</div>
+      <a class="buy" href="${esc(p.link)}" target="_blank" rel="noopener sponsored">Comprar com desconto ${ICON_EXT}</a>
+    </div>`;
+  // Galeria: deslizar no celular, setas no computador e bolinhas para ir a cada foto.
+  const slides = el.querySelector(".slides"), dots = [...el.querySelectorAll(".dots button")];
+  const atual = () => Math.round(slides.scrollLeft / slides.clientWidth);
+  const ir = (i) => slides.scrollTo({ left: Math.max(0, Math.min(fotos.length - 1, i)) * slides.clientWidth, behavior: "smooth" });
+  slides.addEventListener("scroll", () => { const i = atual(); dots.forEach((d, j) => d.setAttribute("aria-current", String(j === i))); }, { passive: true });
+  dots.forEach((d, i) => d.addEventListener("click", () => ir(i)));
+  el.querySelector(".prev").addEventListener("click", () => ir(atual() - 1));
+  el.querySelector(".next").addEventListener("click", () => ir(atual() + 1));
+  return el;
+}
+
+function anuncie() {
+  const el = document.createElement("article");
+  el.className = "card ad";
+  el.innerHTML = `<span class="ic">${ICON_STORE}</span>
+    <h2>Sua marca aqui</h2>
+    <p>Quer apresentar seus produtos nesta vitrine? Fale comigo e anuncie a sua marca.</p>
+    <a class="buy" href="${WHATSAPP}" target="_blank" rel="noopener">${ICON_WA} Quero anunciar</a>`;
+  return el;
+}
+
+(async () => {
+  const grid = document.getElementById("grid");
+  let produtos = [];
+  try {
+    const res = await fetch(API, { headers: { apikey: KEY, Authorization: "Bearer " + KEY } });
+    if (res.ok) produtos = await res.json();
+  } catch {}
+  grid.replaceChildren(...produtos.map(card), anuncie());
+})();
+</script>
+</body>
+</html>
