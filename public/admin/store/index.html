@@ -40,6 +40,19 @@
   .slot { position: relative; aspect-ratio: 1 / 1; border: 2px dashed var(--line); border-radius: 14px; background: #f8fafc; display: grid; place-items: center; cursor: pointer; overflow: hidden; color: var(--muted); font-size: 12px; font-weight: 600; text-align: center; padding: 6px; }
   .slot:hover { border-color: var(--red); color: var(--red); }
   .slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .slot-w { display: grid; gap: 6px; }
+  .ord { display: flex; justify-content: center; gap: 6px; }
+  .ord button { width: 34px; height: 30px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--dark); cursor: pointer; display: grid; place-items: center; font: inherit; font-size: 14px; }
+  .ord button:hover:not(:disabled) { border-color: var(--red); color: var(--red); }
+  .ord button:disabled { opacity: .35; cursor: default; }
+  .slot .capa-tag { position: absolute; bottom: 6px; left: 6px; z-index: 1; background: var(--red); color: #fff; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 1px 8px; }
+  .capa-box { display: grid; gap: 6px; }
+  .capa-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+  .capa-frame { position: relative; width: 200px; aspect-ratio: 1 / 1; border-radius: 16px; overflow: hidden; background: #f1f5f9; cursor: grab; touch-action: none; border: 1px solid var(--line); }
+  .capa-frame:active { cursor: grabbing; }
+  .capa-frame img { width: 100%; height: 100%; object-fit: cover; display: block; user-select: none; pointer-events: none; }
+  .capa-ctl { display: grid; gap: 10px; flex: 1; min-width: 160px; }
+  .capa-ctl input[type=range] { width: 100%; accent-color: var(--red); }
   .slot .n { position: absolute; top: 6px; left: 6px; background: rgb(15 23 42 / .7); color: #fff; font-size: 11px; border-radius: 999px; padding: 1px 7px; z-index: 1; }
   .slot.err { border-color: var(--red); }
   .lj-in .tg { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
@@ -116,7 +129,18 @@
     <div>
       <div style="font-size:13px;font-weight:600;margin-bottom:6px">Fotos (3)</div>
       <div class="fotos" id="fotos"></div>
-      <span class="hint">Toque em cada quadro para escolher a foto. Elas aparecem quadradas na Store.</span>
+      <span class="hint">Toque em cada quadro para escolher a foto e use as setas para mudar a ordem. A primeira foto é a capa do card; na janela do produto as fotos aparecem inteiras.</span>
+    </div>
+    <div class="capa-box hidden" id="capa-box">
+      <div style="font-size:13px;font-weight:600">Recorte da capa no card</div>
+      <span class="hint">Arraste a foto para enquadrar e use o zoom. É assim que a capa aparece na Store.</span>
+      <div class="capa-row">
+        <div class="capa-frame" id="capa-frame"><img id="capa-img" alt="Prévia da capa" draggable="false"></div>
+        <div class="capa-ctl">
+          <label>Zoom<input type="range" id="capa-zoom" min="1" max="3" step="0.05" value="1"></label>
+          <button type="button" class="btn-line" id="capa-reset">Centralizar</button>
+        </div>
+      </div>
     </div>
     <label>Marca<select id="marca"></select></label>
     <label>Nome do produto<input type="text" id="nome" maxlength="160"></label>
@@ -201,7 +225,7 @@ async function carregar() {
 
 /* ---------- Imagens ---------- */
 // Produto: recorta no centro e reduz para 1200x1200. Logo: mantém a proporção (até 800 px), sem cortes.
-function prepararImagem(file, quadrada) {
+function prepararImagem(file, quadrada, maximo = 800) {
   return new Promise((resolve, reject) => {
     const img = new Image(), url = URL.createObjectURL(file);
     img.onload = () => {
@@ -211,7 +235,7 @@ function prepararImagem(file, quadrada) {
         c.width = c.height = alvo;
         c.getContext("2d").drawImage(img, (W - lado) / 2, (H - lado) / 2, lado, lado, 0, 0, alvo, alvo);
       } else {
-        const k = Math.min(1, 800 / Math.max(W, H));
+        const k = Math.min(1, maximo / Math.max(W, H));
         c.width = Math.round(W * k); c.height = Math.round(H * k);
         c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
       }
@@ -311,24 +335,72 @@ let EDIT = null, SLOTS = [], slotAtual = 0;
 function desenharFotos() {
   const box = $("fotos"); box.replaceChildren();
   SLOTS.forEach((s, i) => {
+    const w = el("div", "slot-w");
     const b = el("button", "slot"); b.type = "button";
     b.setAttribute("aria-label", (s ? "Trocar" : "Escolher") + " a foto " + (i + 1));
     b.append(el("span", "n", String(i + 1)));
     if (s) { const img = el("img"); img.src = s.preview || s.url; img.alt = ""; b.appendChild(img); }
     else b.append("Escolher foto " + (i + 1));
+    if (i === 0 && s) b.append(el("span", "capa-tag", "Capa"));
     b.addEventListener("click", () => { slotAtual = i; $("file").click(); });
-    box.appendChild(b);
+    // Setas para mudar a ordem de exibição.
+    const ord = el("div", "ord");
+    const mover = (de, para) => { [SLOTS[de], SLOTS[para]] = [SLOTS[para], SLOTS[de]]; if (de === 0 || para === 0) CAPA = { ...CAPA_PADRAO }; desenharFotos(); };
+    const esq = el("button", null, "‹"); esq.type = "button"; esq.disabled = i === 0 || !s; esq.setAttribute("aria-label", "Mover a foto " + (i + 1) + " para a esquerda"); esq.addEventListener("click", () => mover(i, i - 1));
+    const dir = el("button", null, "›"); dir.type = "button"; dir.disabled = i === SLOTS.length - 1 || !s; dir.setAttribute("aria-label", "Mover a foto " + (i + 1) + " para a direita"); dir.addEventListener("click", () => mover(i, i + 1));
+    ord.append(esq, dir);
+    w.append(b, ord);
+    box.appendChild(w);
   });
+  desenharCapa();
 }
+
+/* ---------- Recorte da capa ---------- */
+// Posição (x, y em %) e zoom aplicados à primeira foto no card da Store (mesmo CSS da vitrine).
+const CAPA_PADRAO = { x: 50, y: 50, zoom: 1 };
+let CAPA = { ...CAPA_PADRAO };
+const limitar = (v, a, b) => Math.min(b, Math.max(a, v));
+function aplicarCapa(img, c) {
+  img.style.objectPosition = c.x + "% " + c.y + "%";
+  img.style.transformOrigin = c.x + "% " + c.y + "%";
+  img.style.transform = "scale(" + c.zoom + ")";
+}
+function desenharCapa() {
+  const s = SLOTS[0];
+  $("capa-box").classList.toggle("hidden", !s);
+  if (!s) return;
+  const img = $("capa-img");
+  if (img.dataset.src !== (s.preview || s.url)) { img.src = s.preview || s.url; img.dataset.src = img.src; }
+  $("capa-zoom").value = String(CAPA.zoom);
+  aplicarCapa(img, CAPA);
+}
+(() => {
+  const frame = $("capa-frame");
+  let ini = null;
+  frame.addEventListener("pointerdown", (e) => { ini = { px: e.clientX, py: e.clientY, x: CAPA.x, y: CAPA.y }; frame.setPointerCapture(e.pointerId); });
+  frame.addEventListener("pointermove", (e) => {
+    if (!ini) return;
+    const k = 100 / frame.clientWidth / CAPA.zoom * 1.5;
+    CAPA.x = limitar(ini.x - (e.clientX - ini.px) * k, 0, 100);
+    CAPA.y = limitar(ini.y - (e.clientY - ini.py) * k, 0, 100);
+    aplicarCapa($("capa-img"), CAPA);
+  });
+  const soltar = () => { ini = null; };
+  frame.addEventListener("pointerup", soltar); frame.addEventListener("pointercancel", soltar);
+  $("capa-zoom").addEventListener("input", (e) => { CAPA.zoom = Number(e.target.value); aplicarCapa($("capa-img"), CAPA); });
+  $("capa-reset").addEventListener("click", () => { CAPA = { ...CAPA_PADRAO }; desenharCapa(); });
+})();
 $("file").addEventListener("change", async (e) => {
   const f = e.target.files[0]; e.target.value = "";
   if (!f) return;
   if (!/^image\/(png|jpeg|webp)$/.test(f.type)) return mostrarErro("dlg-err", "Use imagens PNG, JPG ou WebP.");
   try {
-    const blob = await prepararImagem(f, true);
+    // Foto inteira (até 1600 px no lado maior): o recorte da capa é só uma configuração de exibição.
+    const blob = await prepararImagem(f, false, 1600);
     const antigo = SLOTS[slotAtual];
     if (antigo?.preview) URL.revokeObjectURL(antigo.preview);
     SLOTS[slotAtual] = { blob, preview: URL.createObjectURL(blob), substitui: antigo?.url || antigo?.substitui || null };
+    if (slotAtual === 0) CAPA = { ...CAPA_PADRAO };
     mostrarErro("dlg-err", ""); desenharFotos();
   } catch { mostrarErro("dlg-err", "Não foi possível ler a imagem. Tente outra."); }
 });
@@ -355,6 +427,7 @@ function abrirProduto(p, marcaId) {
   $("ativo").checked = p ? p.ativo : true;
   $("excluir").classList.toggle("hidden", !p);
   SLOTS = p ? p.fotos.map((url) => ({ url })) : [null, null, null];
+  CAPA = { ...CAPA_PADRAO, ...(p?.capa || {}) };
   desenharFotos(); mostrarErro("dlg-err", "");
   mostrarFinal();
   $("dlg").showModal();
@@ -381,7 +454,7 @@ $("form").addEventListener("submit", async (e) => {
     enviadas.push(up.path); fotos.push(up.url);
     if (caminho(s.substitui)) antigas.push(caminho(s.substitui));
   }
-  const linha = { marca_id, nome, codigo: codigo || null, preco, desconto, link, fotos, ativo: $("ativo").checked, updated_at: new Date().toISOString() };
+  const linha = { marca_id, nome, codigo: codigo || null, preco, desconto, link, fotos, capa: { x: Math.round(CAPA.x * 10) / 10, y: Math.round(CAPA.y * 10) / 10, zoom: Math.round(CAPA.zoom * 100) / 100 }, ativo: $("ativo").checked, updated_at: new Date().toISOString() };
   const { error } = EDIT ? await sb.from("produtos").update(linha).eq("id", EDIT.id) : await sb.from("produtos").insert(linha);
   fim();
   if (error) { await remover(enviadas); return erro("Não foi possível salvar: " + error.message); }
