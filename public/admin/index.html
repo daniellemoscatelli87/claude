@@ -117,7 +117,7 @@ const segs = (list) => { const l = (list || []).map(clean); return l.length > 2 
 
 Admin.init({ page: "inicio", onReady: async () => {
   const h = new Date().getHours();
-  document.getElementById("hello").textContent = (h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite") + ", Dani!";
+  document.getElementById("hello").textContent = (h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite") + ", " + Admin.profile().nome.split(/\s+/)[0] + "!";
   const [c, p, l] = await Promise.all([
     Admin.sb.from("contatos").select("id, created_at, nome, empresa, cargo, assunto, visualizado_em, respondido_em, reuniao_em", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),
     Admin.sb.from("cadastros").select("id, created_at, nome, empresa, principal_especializacao, segmentos, visualizado_em", { count: "exact" }).order("created_at", { ascending: false }).limit(LIMIT),

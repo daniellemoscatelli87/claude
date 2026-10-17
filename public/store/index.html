@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Store • Dani Moscatelli | Experience Design Studio</title>
+<meta name="description" content="Curadoria de marcas e produtos selecionados por Dani Moscatelli, com condições exclusivas de desconto.">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #d44d4d;
+    --red-dark: #c13e3e;
+    --dark: #0f172a;
+    --muted: #64748b;
+    --line: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--dark);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: clip;
+    position: relative;
+    /* Mesmo fundo da página inicial: gradiente suave, grade sutil e brilho vermelho. */
+    background-color: #fbfbfd;
+    background-image:
+      radial-gradient(at 0% 0%, rgba(229, 62, 62, .035) 0px, transparent 45%),
+      radial-gradient(at 100% 30%, rgba(229, 62, 62, .055) 0px, transparent 55%),
+      radial-gradient(at 50% 100%, rgba(241, 245, 249, .7) 0px, transparent 60%);
+  }
+  body::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background-size: 48px 48px;
+    background-image: linear-gradient(to right, rgba(148, 163, 184, .05) 1px, transparent 1px), linear-gradient(to bottom, rgba(148, 163, 184, .05) 1px, transparent 1px); }
+  .wrap { width: 100%; max-width: 80rem; margin: 0 auto; padding: 0 24px; }
+
+  /* Cabeçalho (proposta C): foto "Descontinhos pra você" à direita, fundindo no fundo vinho; título à esquerda. */
+  .banner-wrap { padding-top: 20px; }
+  .banner { position: relative; overflow: hidden; isolation: isolate; border-radius: 32px; min-height: 520px; display: flex; align-items: center; color: #fff;
+    background: radial-gradient(70% 100% at 100% 50%, #3a0b0e 0%, transparent 70%), linear-gradient(90deg, #0d0506 0%, #170708 100%);
+    box-shadow: 0 30px 70px -30px rgb(23 7 8 / .7); }
+  .bn-photo { position: absolute; z-index: -1; top: 0; right: 0; height: 100%; aspect-ratio: 1 / 1; width: auto; max-width: 62%; object-fit: cover; object-position: 30% 30%;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 24%); mask-image: linear-gradient(to right, transparent 0%, #000 24%); }
+  .bn-text { position: relative; padding: 56px; max-width: 600px; }
+  .bn-home { color: inherit; text-decoration: none; display: inline-block; }
+  .bn-kicker { display: inline-flex; align-items: center; gap: 12px; margin: 0; font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 700; letter-spacing: -.01em; }
+  .bn-kicker img { width: 34px; height: auto; }
+  .bn-title { margin: 8px 0 0; font-size: clamp(4.5rem, 11vw, 8.5rem); font-weight: 800; line-height: .88; letter-spacing: -.05em; color: var(--red); }
+  .bn-line { width: 64px; height: 4px; border-radius: 4px; background: #fff; margin: 24px 0 18px; }
+  .bn-lead { margin: 0; max-width: 420px; font-size: 17px; line-height: 1.65; color: rgb(255 255 255 / .78); }
+  @media (max-width: 860px) {
+    .banner { flex-direction: column; align-items: stretch; min-height: 0; border-radius: 24px; }
+    .bn-photo { position: relative; z-index: 0; order: -1; width: 100%; max-width: none; height: auto; aspect-ratio: 1 / 1; object-position: 50% 50%;
+      -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%); mask-image: linear-gradient(to bottom, #000 70%, transparent 100%); }
+    .bn-text { padding: 0 24px 32px; margin-top: -40px; z-index: 1; }
+    .bn-title { font-size: 4.75rem; }
+    .bn-lead { font-size: 15px; }
+  }
+
+  /* Topo da página da marca: logo grande centralizada sobre fundo claro com brilho suave. */
+  .mhero { position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; padding: 44px 24px 48px; margin-bottom: 44px; border-radius: 28px;
+    background: radial-gradient(60% 80% at 50% 0%, #fff 0%, rgb(255 255 255 / 0) 70%), radial-gradient(70% 90% at 50% 100%, rgb(212 77 77 / .10) 0%, transparent 70%), #fbf6f6; border: 1px solid #f1e2e2; }
+  .mhero .mlogo { display: block; width: auto; max-width: min(520px, 90%); max-height: 200px; object-fit: contain; filter: drop-shadow(0 14px 24px rgb(15 23 42 / .12)); }
+  .mhero .lead { margin: 0; max-width: 620px; text-align: center; }
+  .mhero.escura .lead { color: rgb(255 255 255 / .8); }
+  .mhero.escura { border-color: transparent; }
+  .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  @media (max-width: 639px) { .mhero { padding: 32px 20px 36px; border-radius: 22px; gap: 14px; } .mhero .mlogo { max-height: 130px; } }
+  /* Topo claro da página da marca. */
+  .bpanel { background: #fff; border: 1px solid var(--line); border-radius: 24px; padding: 28px; margin-bottom: 40px; box-shadow: 0 12px 32px -24px rgb(15 23 42 / .2); }
+  .bpanel .lg { box-shadow: none; border: 1px solid var(--line); }
+  .bpanel h1 { font-size: clamp(2rem, 5vw, 3rem); }
+  main { flex: 1; padding: 40px 0 72px; }
+
+  /* Destaque do topo: painel escuro com brilho vermelho. */
+  .hero { position: relative; overflow: hidden; border-radius: 28px; padding: 56px 48px; margin-bottom: 48px; color: #fff;
+    background: radial-gradient(120% 140% at 100% 0%, rgba(212, 77, 77, .55) 0%, transparent 55%), radial-gradient(90% 120% at 0% 100%, rgba(212, 77, 77, .22) 0%, transparent 60%), linear-gradient(135deg, #0f172a 0%, #1e1b2e 60%, #2a1520 100%);
+    box-shadow: 0 30px 60px -30px rgb(15 23 42 / .55); }
+  .hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background-size: 40px 40px; opacity: .6;
+    background-image: linear-gradient(to right, rgb(255 255 255 / .05) 1px, transparent 1px), linear-gradient(to bottom, rgb(255 255 255 / .05) 1px, transparent 1px);
+    mask-image: linear-gradient(to left, #000 0%, transparent 70%); -webkit-mask-image: linear-gradient(to left, #000 0%, transparent 70%); }
+  .hero > * { position: relative; z-index: 1; }
+  .tag { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .2em; color: var(--red); background: #fef2f2; border-radius: 999px; padding: 5px 12px; }
+  .tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+  .hero .tag { color: #fff; background: rgb(255 255 255 / .12); border: 1px solid rgb(255 255 255 / .18); }
+  .hero .tag::before { background: #ff8a8a; box-shadow: 0 0 0 4px rgb(255 138 138 / .25); }
+  h1 { font-size: clamp(2.25rem, 6vw, 3.75rem); font-weight: 800; letter-spacing: -.035em; line-height: 1.05; margin: 18px 0 14px; }
+  .lead { font-size: 17px; line-height: 1.65; color: var(--muted); margin: 0; max-width: 560px; }
+  .hero .lead { color: rgb(255 255 255 / .78); }
+
+  .sec { display: flex; align-items: center; gap: 16px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: var(--dark); margin: 0 0 20px; }
+  .sec::before { content: ""; width: 28px; height: 3px; border-radius: 3px; background: var(--red); }
+  .sec::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgb(15 23 42 / .04), 0 12px 32px -24px rgb(15 23 42 / .18); transition: box-shadow .25s, transform .25s, border-color .25s; }
+  .card:hover { transform: translateY(-4px); border-color: #f1d0d0; box-shadow: 0 2px 4px rgb(15 23 42 / .04), 0 24px 48px -24px rgb(212 77 77 / .35); }
+  /* Entrada suave dos cartões. */
+  .grid > .card { animation: subir .5s cubic-bezier(.2, .7, .2, 1) both; }
+  .grid > .card:nth-child(2) { animation-delay: .06s; } .grid > .card:nth-child(3) { animation-delay: .12s; } .grid > .card:nth-child(4) { animation-delay: .18s; } .grid > .card:nth-child(n+5) { animation-delay: .24s; }
+  @keyframes subir { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .grid > .card { animation: none; } .card, .card:hover { transition: none; transform: none; } }
+
+  .gal { position: relative; aspect-ratio: 1 / 1; background: #f1f5f9; overflow: hidden; }
+  .slides { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .slides::-webkit-scrollbar { display: none; }
+  .slides img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; display: block; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+  .card:hover .slides img { transform: scale(1.04); }
+  .gal::after { content: ""; position: absolute; inset: auto 0 0; height: 70px; pointer-events: none; background: linear-gradient(to top, rgb(15 23 42 / .28), transparent); }
+  .off { position: absolute; top: 14px; left: 14px; z-index: 2; background: var(--red); color: #fff; font-size: 14px; font-weight: 800; letter-spacing: .02em; padding: 6px 12px; border-radius: 999px; box-shadow: 0 6px 16px -6px rgb(184 50 50 / .7); }
+  .dots { position: absolute; bottom: 14px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; gap: 6px; }
+  .dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: rgb(255 255 255 / .55); cursor: pointer; transition: width .25s, background .25s; }
+  .dots button[aria-current=true] { background: #fff; width: 22px; }
+  .arrow { position: absolute; top: 50%; z-index: 2; transform: translateY(-50%); width: 38px; height: 38px; border: 0; border-radius: 50%; background: rgb(255 255 255 / .92); color: var(--dark); display: grid; place-items: center; cursor: pointer; box-shadow: 0 4px 12px rgb(15 23 42 / .18); opacity: 0; transition: opacity .2s, background .2s; }
+  .arrow:hover { background: #fff; color: var(--red); }
+  .arrow svg { width: 18px; height: 18px; }
+  .arrow.prev { left: 12px; } .arrow.next { right: 12px; }
+  .gal:hover .arrow, .arrow:focus-visible { opacity: 1; }
+  @media (hover: none) { .arrow { display: none; } }
+  .info { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .name { font-size: 18px; font-weight: 700; line-height: 1.35; margin: 0; letter-spacing: -.01em; }
+  .price { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 8px 0 18px; }
+  .price b { font-size: 28px; font-weight: 800; letter-spacing: -.02em; }
+  .price span { font-size: 12px; font-weight: 700; color: #177a43; background: #e7f6ee; border-radius: 999px; padding: 4px 10px; }
+  .buy { margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--red); color: #fff; text-decoration: none; font-weight: 700; font-size: 15px; padding: 14px 20px; border-radius: 999px; box-shadow: 0 10px 20px -10px rgb(212 77 77 / .8); transition: background .2s, box-shadow .2s, transform .2s; }
+  .buy:hover { background: var(--red-dark); box-shadow: 0 14px 24px -10px rgb(212 77 77 / .9); }
+  .buy:active { transform: scale(.98); }
+  .buy svg { width: 16px; height: 16px; }
+
+  /* Marcas */
+  .bcard { text-decoration: none; color: inherit; }
+  .blogo { position: relative; aspect-ratio: 16 / 10; display: grid; place-items: center; padding: 36px; border-bottom: 1px solid var(--line);
+    background: radial-gradient(80% 90% at 50% 0%, #fff 0%, #fbf4f4 100%); }
+  .blogo img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
+  .bcard:hover .blogo img { transform: scale(1.05); }
+  .blogo.cheia { padding: 0; border-bottom-color: transparent; }
+  .bhead .lg.cheia { padding: 0; overflow: hidden; }
+  .bcard .info { gap: 8px; }
+  .bcard .name { font-size: 21px; }
+  .bdesc { font-size: 14px; line-height: 1.65; color: var(--muted); margin: 0; }
+  .bmeta { margin-top: auto; padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); }
+  .bmeta b { display: inline-flex; align-items: center; gap: 6px; color: #fff; background: var(--red); font-size: 13px; padding: 8px 14px; border-radius: 999px; transition: background .2s, gap .2s; }
+  .bcard:hover .bmeta b { background: var(--red-dark); gap: 10px; }
+
+  /* Sua marca aqui */
+  .ad { position: relative; border: 2px dashed #efb9b9; background: radial-gradient(100% 80% at 50% 0%, #fff 0%, #fdf1f1 100%); align-items: center; justify-content: center; text-align: center; padding: 36px 26px; gap: 10px; min-height: 340px; }
+  .ad:hover { border-color: var(--red); }
+  .ad .ic { width: 64px; height: 64px; border-radius: 20px; background: var(--red); color: #fff; display: grid; place-items: center; box-shadow: 0 12px 24px -12px rgb(184 50 50 / .8); transform: rotate(-6deg); }
+  .ad .ic svg { width: 28px; height: 28px; }
+  .ad h2 { font-size: 22px; font-weight: 800; margin: 10px 0 0; letter-spacing: -.01em; }
+  .ad p { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0 0 10px; max-width: 280px; }
+  .ad .buy { margin-top: 4px; }
+
+  .note { font-size: 12px; line-height: 1.6; color: var(--muted); margin: 32px 0 0; padding: 14px 18px; border-radius: 14px; background: rgb(255 255 255 / .7); border: 1px solid var(--line); }
+  .state { color: var(--muted); padding: 24px 0; }
+  .crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); margin: 0 0 18px; }
+  .crumb a { color: var(--red); font-weight: 600; text-decoration: none; }
+  .crumb a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* Topo da página da marca */
+  .bhead { display: flex; align-items: center; gap: 28px; }
+  .bhead .lg { flex: none; width: 240px; height: 148px; border-radius: 26px; background: #fff; display: grid; place-items: center; padding: 20px; box-shadow: 0 20px 40px -20px rgb(0 0 0 / .6); }
+  .bhead .lg img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .bhead h1 { margin: 14px 0 10px; }
+
+  footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 24px; padding-bottom: 24px; border-top: 1px solid rgb(226 232 240 / .5); font-size: 12px; color: var(--muted); }
+  footer p { font-size: 12px; color: var(--muted); margin: 0; }
+  footer .links { display: flex; align-items: center; gap: 16px; color: #94a3b8; }
+  footer .links a { color: #94a3b8; text-decoration: none; }
+  footer .links a:hover { color: var(--red); }
+  @media (max-width: 639px) {
+    .wrap { padding: 0 16px; }
+    header img { height: 40px; }
+    header .back { padding: 7px 12px; font-size: 13px; }
+    .hero { padding: 36px 24px; border-radius: 22px; margin-bottom: 36px; }
+    .bhead { flex-direction: column; align-items: flex-start; gap: 18px; }
+    .bhead .lg { width: 200px; height: 112px; border-radius: 20px; padding: 14px; }
+    footer .wrap { flex-direction: column; text-align: center; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+<header class="banner-wrap">
+  <div class="wrap">
+    <div class="banner">
+      <img class="bn-photo" src="/store/dani-store-3.webp" alt="Dani Moscatelli segurando a placa Descontinhos pra você" width="1000" height="1000" fetchpriority="high">
+      <div class="bn-text">
+        <a class="bn-home" href="/store/" aria-label="Dani Moscatelli Store, início">
+          <p class="bn-kicker"><img src="/store/dm-icone.webp" alt="" width="34" height="39">Dani Moscatelli</p>
+          <p class="bn-title">Store</p>
+        </a>
+        <div class="bn-line" aria-hidden="true"></div>
+        <p class="bn-lead">Uma curadoria de marcas e produtos selecionados por Dani Moscatelli, com condições exclusivas de desconto.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap" id="view"><p class="state">Carregando…</p></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Dani Moscatelli • Experience Design Studio. Todos os direitos reservados.</p>
+    <div class="links">
+      <span>Curitiba - PR</span>
+      <span aria-hidden="true" style="color:#cbd5e1">•</span>
+      <a href="/privacidade/">Política de privacidade</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Store em níveis: /store/ lista as marcas; /store/?marca=<slug> mostra os produtos da marca.
+// Marcas e produtos ativos vêm das tabelas `marcas` e `produtos` (cadastrados em /admin/store/).
+const REST = "https://lipfvnerohkaajegqvwr.supabase.co/rest/v1/";
+const KEY = "sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej";
+const WHATSAPP = "https://wa.me/5541997485414?text=" + encodeURIComponent("Olá, Dani! Tenho interesse em anunciar minha marca na Store do site danimoscatelli.com.br. Podemos conversar?");
+const NOTA = "Ao clicar em \u201cComprar com desconto\u201d, você será direcionado ao site oficial da marca para concluir a compra. Preços e condições são definidos por cada marca e podem ser alterados sem aviso prévio.";
+const SVG = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const ICON_EXT = SVG('<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>');
+const ICON_STORE = SVG('<path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M10 20v-5h4v5"/>');
+const brl = (v) => Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+// Logo com fundo próprio (ex.: preto): a área da logo usa a mesma cor e a logo ocupa o espaço todo.
+const fundo = (m) => m.logo_fundo && /^#[0-9a-f]{6}$/.test(m.logo_fundo) ? ` style="background:${m.logo_fundo}"` : "";
+const plural = (n, um, varios) => n + " " + (n === 1 ? um : varios);
+async function api(q) {
+  try { const r = await fetch(REST + q, { headers: { apikey: KEY, Authorization: "Bearer " + KEY } }); return r.ok ? await r.json() : null; } catch { return null; }
+}
+function node(html) { const t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+
+/* ---------- Nível 1: marcas ---------- */
+function cardMarca(m) {
+  const n = m.produtos?.[0]?.count ?? 0;
+  return node(`<a class="card bcard" href="?marca=${encodeURIComponent(m.slug)}">
+      <div class="blogo${m.logo_fundo ? " cheia" : ""}"${fundo(m)}><img src="${esc(m.logo)}" alt="${esc(m.nome)}" loading="lazy"></div>
+      <div class="info">
+        <h2 class="name">${esc(m.nome)}</h2>
+        ${m.descricao ? `<p class="bdesc">${esc(m.descricao)}</p>` : ""}
+        <div class="bmeta"><span>${n ? plural(n, "produto", "produtos") : "Produtos em atualização"}</span><b>Ver produtos →</b></div>
+      </div>
+    </a>`);
+}
+function cardAnuncie() {
+  return node(`<article class="card ad">
+      <span class="ic">${ICON_STORE}</span>
+      <h2>Sua marca aqui</h2>
+      <p>Apresente seus produtos nesta vitrine, com a curadoria da Dani Moscatelli | Experience Design Studio.</p>
+      <a class="buy" href="${WHATSAPP}" target="_blank" rel="noopener">Entrar em contato</a>
+    </article>`);
+}
+async function telaStore(view) {
+  document.title = "Store • Dani Moscatelli | Experience Design Studio";
+  const marcas = (await api("marcas?select=id,nome,slug,descricao,logo,logo_fundo,produtos(count)&ativo=eq.true&order=ordem.asc,nome.asc")) || [];
+  view.replaceChildren(
+    node('<h2 class="sec">Marcas parceiras</h2>'),
+  );
+  const grid = node('<div class="grid"></div>');
+  grid.append(...marcas.map(cardMarca), cardAnuncie());
+  view.appendChild(grid);
+}
+
+/* ---------- Nível 2: produtos da marca ---------- */
+function cardProduto(p) {
+  const fotos = (p.fotos || []).slice(0, 3);
+  const el = node(`<article class="card">
+    <div class="gal">
+      <div class="slides">${fotos.map((f, i) => `<img src="${esc(f)}" alt="${esc(p.nome)}, foto ${i + 1} de ${fotos.length}" loading="lazy" width="600" height="600">`).join("")}</div>
+      ${p.desconto ? `<span class="off">-${p.desconto}%</span>` : ""}
+      <button type="button" class="arrow prev" aria-label="Foto anterior">${SVG('<path d="m15 18-6-6 6-6"/>')}</button>
+      <button type="button" class="arrow next" aria-label="Próxima foto">${SVG('<path d="m9 18 6-6-6-6"/>')}</button>
+      <div class="dots">${fotos.map((_, i) => `<button type="button" aria-label="Ver foto ${i + 1}"${i ? "" : ' aria-current="true"'}></button>`).join("")}</div>
+    </div>
+    <div class="info">
+      <h3 class="name">${esc(p.nome)}</h3>
+      <div class="price"><b>${brl(p.preco)}</b>${p.desconto ? `<span>${p.desconto}% de desconto</span>` : ""}</div>
+      <a class="buy" href="${esc(p.link)}" target="_blank" rel="noopener sponsored">Comprar com desconto ${ICON_EXT}</a>
+    </div>
+  </article>`);
+  // Galeria: deslizar no celular, setas no computador e bolinhas para ir a cada foto.
+  const slides = el.querySelector(".slides"), dots = [...el.querySelectorAll(".dots button")];
+  const atual = () => Math.round(slides.scrollLeft / slides.clientWidth);
+  const ir = (i) => slides.scrollTo({ left: Math.max(0, Math.min(fotos.length - 1, i)) * slides.clientWidth, behavior: "smooth" });
+  slides.addEventListener("scroll", () => { const i = atual(); dots.forEach((d, j) => d.setAttribute("aria-current", String(j === i))); }, { passive: true });
+  dots.forEach((d, i) => d.addEventListener("click", () => ir(i)));
+  el.querySelector(".prev").addEventListener("click", () => ir(atual() - 1));
+  el.querySelector(".next").addEventListener("click", () => ir(atual() + 1));
+  return el;
+}
+async function telaMarca(view, slug) {
+  const [m] = (await api("marcas?select=id,nome,slug,descricao,logo,logo_fundo&ativo=eq.true&slug=eq." + encodeURIComponent(slug))) || [];
+  const crumb = (nome) => node(`<nav class="crumb" aria-label="Navegação"><a href="/store/">Store</a><span aria-hidden="true">›</span><span>${esc(nome)}</span></nav>`);
+  if (!m) {
+    view.replaceChildren(crumb("Marca"), node("<h1>Marca não encontrada</h1>"), node('<p class="lead">Esta marca não está disponível no momento. <a href="/store/" style="color:var(--red);font-weight:600">Conheça as demais marcas da Store.</a></p>'));
+    return;
+  }
+  document.title = m.nome + " • Store • Dani Moscatelli | Experience Design Studio";
+  const produtos = (await api("produtos?select=id,nome,preco,desconto,link,fotos&ativo=eq.true&marca_id=eq." + m.id + "&order=ordem.asc,created_at.desc")) || [];
+  // Topo da marca: a logo grande e centralizada é o título (o nome fica no h1 para leitores de tela).
+  const head = node(`<section class="mhero${m.logo_fundo ? " escura" : ""}"${fundo(m)}>
+      <span class="tag">Marca parceira</span>
+      <h1 class="sr">${esc(m.nome)}</h1>
+      <img class="mlogo" src="${esc(m.logo)}" alt="${esc(m.nome)}">
+      ${m.descricao ? `<p class="lead">${esc(m.descricao)}</p>` : ""}
+    </section>`);
+  view.replaceChildren(crumb(m.nome), head);
+  if (produtos.length) {
+    const grid = node('<div class="grid"></div>');
+    grid.append(...produtos.map(cardProduto));
+    view.append(node(`<h2 class="sec">${plural(produtos.length, "produto", "produtos")}</h2>`), grid, node(`<p class="note">${NOTA}</p>`));
+  } else {
+    view.append(node('<p class="state">Os produtos desta marca estão em atualização. Volte em breve.</p>'));
+  }
+}
+
+const slug = new URLSearchParams(location.search).get("marca");
+const view = document.getElementById("view");
+slug ? telaMarca(view, slug) : telaStore(view);
+</script>
+</body>
+</html>

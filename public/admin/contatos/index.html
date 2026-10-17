@@ -275,6 +275,7 @@ function deleteCard(r) {
     }
     const { data: del, error } = await Admin.sb.from("contatos").delete().eq("id", r.id).select("id");
     if (error || !del?.length) return fail("Não foi possível excluir a mensagem" + (error ? ": " + error.message : "."));
+    await Admin.log("Excluiu a mensagem de contato de " + (r.nome || r.email || "contato"), r.assunto || "");
     Admin.toast(semEmail ? "Mensagem excluída, mas não foi possível enviar o e-mail com o motivo do cancelamento." : "Mensagem excluída com sucesso.", "/admin/contatos/");
   });
   c.append(btn, msg);
@@ -329,7 +330,7 @@ function renderMeeting(r) {
     box.appendChild(Admin.el("p", null, GOOGLE?.configurado === false ? ERRO_AGENDA.sem_credenciais : "Conecte sua conta Google para gerar o link do Meet e enviar o convite pelo Google Agenda."));
     if (GOOGLE?.configurado !== false) {
       const c = Admin.el("button", "btn-meet", "Conectar Google Agenda"); c.type = "button";
-      c.addEventListener("click", async () => { c.disabled = true; const res = await agenda({ acao: "conectar" }); if (res.url) location.href = res.url; else { c.disabled = false; box.appendChild(Admin.el("p", "msg err", erroAgenda(res.error))); } });
+      c.addEventListener("click", async () => { c.disabled = true; const res = await agenda({ acao: "conectar" }); if (res.url) { await Admin.log("Iniciou a conexão com o Google Agenda"); location.href = res.url; } else { c.disabled = false; box.appendChild(Admin.el("p", "msg err", erroAgenda(res.error))); } });
       box.appendChild(c);
     }
     body.appendChild(box);
@@ -423,7 +424,7 @@ function renderMeeting(r) {
   } else {
     linkBox.appendChild(Admin.el("p", "muted", "O link é criado pelo Google ao gerar a reunião."));
     const gen = Admin.el("button", "btn-line", "Gerar link do Meet"); gen.type = "button";
-    gen.addEventListener("click", () => { const v = values(); if (v) run(gen, "Gerando…", { acao: "salvar", ...v, enviar: false }, (res) => { r._reuniao = res.reuniao; renderMeeting(r); statusBar(r); }); });
+    gen.addEventListener("click", () => { const v = values(); if (v) run(gen, "Gerando…", { acao: "salvar", ...v, enviar: false }, (res) => { Admin.log("Gerou link do Meet para reunião com " + (r.nome || r.email || "contato")); r._reuniao = res.reuniao; renderMeeting(r); statusBar(r); }); });
     linkBox.appendChild(gen);
   }
   body.append(linkBox, msg);
@@ -432,6 +433,7 @@ function renderMeeting(r) {
   send.addEventListener("click", () => {
     const v = values(); if (!v) return;
     run(send, agendada ? "Salvando…" : "Enviando…", { acao: "salvar", ...v, enviar: true }, (res) => {
+      Admin.log((agendada ? "Alterou a reunião com " : "Agendou reunião com ") + (r.nome || r.email || "contato"), new Date(res.reuniao.inicio).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }));
       r._reuniao = res.reuniao; r.reuniao_em = res.reuniao.inicio; r.respondido_em = r.respondido_em || res.reuniao.updated_at;
       closeMeeting(); statusBar(r); historico(r);
     });
@@ -445,6 +447,7 @@ function renderMeeting(r) {
       if (motivo === false) return;
       const quando = reu?.inicio || r.reuniao_em, tituloReu = reu?.titulo || "";
       run(del, "Excluindo…", { acao: "excluir", contato_id: r.id }, async () => {
+        Admin.log((agendada ? "Cancelou a reunião com " : "Descartou o rascunho de reunião com ") + (r.nome || r.email || "contato"), typeof motivo === "string" ? "Motivo: " + motivo : "");
         r._reuniao = null; r.reuniao_em = null; closeMeeting(); statusBar(r);
         let aviso = agendada ? "Reunião excluída com sucesso." : "Rascunho descartado com sucesso.";
         if (agendada && r.email && typeof motivo === "string") {
@@ -626,6 +629,7 @@ async function historico(r) {
       try { detail = (await error?.context?.json())?.error || ""; } catch {}
       return fail("Não foi possível enviar a resposta." + (detail ? " " + detail : " Tente novamente."));
     }
+    Admin.log("Respondeu a mensagem de " + (r.nome || r.email || "contato"), anexos.length ? anexos.length + (anexos.length === 1 ? " imagem anexada" : " imagens anexadas") : "");
     if (!r.respondido_em) { r.respondido_em = data.respondido_em; statusBar(r); }
     await historico(r);
     const m = document.querySelector("#historico .reply .msg"); if (m) m.textContent = "Resposta enviada para " + r.email + ".";

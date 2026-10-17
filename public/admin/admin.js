@@ -2,8 +2,9 @@
 // Cada página carrega o supabase-js (UMD) antes deste arquivo, tem um <main id="app" class="hidden">
 // e chama Admin.init({ page, onReady }).
 (function () {
-  const ADMIN_EMAIL = "contato@danimoscatelli.com.br";
+  // Nome e foto padrão; a administradora pode trocar os dois em Configurações (ficam no user_metadata).
   const ADMIN_NAME = "Dani Moscatelli";
+  const ADMIN_AVATAR = "/admin/avatar-dani.webp";
   // "Permanecer conectado" marcado: a sessão fica no localStorage e é renovada automaticamente
   // até clicar em "Sair". Desmarcado: fica no sessionStorage e termina ao fechar o navegador.
   const REMEMBER_KEY = "dm-admin-remember";
@@ -35,6 +36,8 @@
     users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/>',
     rocket: '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>',
     bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+    bag: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+    settings: '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
     logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
   };
   const icon = (name) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -45,6 +48,8 @@
     { id: "reunioes", href: "/admin/reunioes/", label: "Reuniões", icon: "meeting" },
     { id: "parceiros", href: "/admin/parceiros/", label: "Parceiros", icon: "users" },
     { id: "lancamento", href: "/admin/lancamento/", label: "Lançamento", icon: "rocket" },
+    { id: "store", href: "/admin/store/", label: "Store", icon: "bag" },
+    { id: "configuracoes", href: "/admin/configuracoes/", label: "Configurações", icon: "settings" },
   ];
 
   const $ = (id) => document.getElementById(id);
@@ -152,7 +157,7 @@
     const drawer = el("aside", "drawer"); drawer.id = "drawer";
     drawer.setAttribute("aria-label", "Menu");
     drawer.innerHTML = `<button type="button" class="close" id="drawer-close" aria-label="Fechar menu">${icon("close")}</button>
-      <div class="who"><img class="avatar" src="/admin/avatar-dani.webp" alt="${ADMIN_NAME}" width="44" height="44"><div><div class="n">${ADMIN_NAME}</div><div class="e" id="who-email"></div></div></div>
+      <div class="who"><img class="avatar" id="who-avatar" src="${ADMIN_AVATAR}" alt="${ADMIN_NAME}" width="44" height="44"><div><div class="n" id="who-name">${ADMIN_NAME}</div><div class="e" id="who-email"></div></div></div>
       <nav>${PAGES.map((p) => `<a href="${p.href}"${p.id === page ? ' aria-current="page"' : ""}>${icon(p.icon)}${p.label}<span class="nav-count hidden" data-count="${p.id}"></span></a>`).join("")}</nav>
       <div class="foot"><button type="button" class="logout" id="logout">${icon("logout")}Sair</button></div>`;
 
@@ -257,9 +262,16 @@
     async function render(session) {
       if (!session) return show("login");
       if (recovering) return show("newpass");
+      // O acesso vem do papel "admin" no app_metadata (definido só no servidor), não do e-mail de login.
+      // Uma sessão antiga, de antes do papel existir, é renovada uma vez para trazê-lo.
+      if (session.user.app_metadata?.role !== "admin") {
+        const { data } = await sb.auth.refreshSession();
+        if (data.session) session = data.session;
+      }
       const email = (session.user.email || "").toLowerCase();
-      if (email !== ADMIN_EMAIL) { $("denied-email").textContent = email; return show("denied"); }
-      $("who-email").textContent = email;
+      if (session.user.app_metadata?.role !== "admin") { $("denied-email").textContent = email; return show("denied"); }
+      USER = session.user;
+      applyProfile(session.user);
       show("app");
       loadNotifications();
       await onReady();
@@ -284,6 +296,7 @@
       const { error } = await sb.auth.signInWithPassword({ email, password });
       $("login-btn").disabled = false;
       if (error) setMsg("login-msg", authError(error), true);
+      else log("Entrou na área restrita");
     });
 
     $("forgot-open").addEventListener("click", () => { $("forgot-email").value = $("login-email").value; setMsg("forgot-msg", ""); show("forgot"); });
@@ -317,7 +330,7 @@
       render(data.session);
     });
 
-    const logout = async () => { await sb.auth.signOut(); location.href = "/admin/"; };
+    const logout = async () => { await log("Saiu da área restrita"); await sb.auth.signOut(); location.href = "/admin/"; };
     $("logout").addEventListener("click", logout);
     $("denied-logout").addEventListener("click", logout);
 
@@ -328,6 +341,26 @@
       current = id;
       render(session);
     });
+  }
+
+  // Nome, foto e e-mail no menu (e no cumprimento da Início), a partir dos dados do perfil.
+  let USER = null;
+  const profile = (u = USER) => ({
+    nome: (u?.user_metadata?.nome || "").trim() || ADMIN_NAME,
+    avatar: u?.user_metadata?.avatar_url || ADMIN_AVATAR,
+    email: (u?.email || "").toLowerCase(),
+  });
+  function applyProfile(u) {
+    USER = u;
+    const p = profile(u);
+    $("who-name").textContent = p.nome;
+    $("who-avatar").src = p.avatar; $("who-avatar").alt = p.nome;
+    $("who-email").textContent = p.email;
+  }
+
+  // Log da plataforma: registra uma ação da administradora (visível em Configurações).
+  async function log(acao, detalhe) {
+    try { await sb.from("admin_log").insert({ acao: String(acao).slice(0, 200), detalhe: detalhe ? String(detalhe).slice(0, 1000) : null }); } catch {}
   }
 
   // Notificações: mensagens de contato não abertas (novas ou com resposta nova do contato)
@@ -399,13 +432,21 @@
 
   // Confirmação em janela (modal) antes de ações que não podem ser desfeitas.
   // Com field ({ label, placeholder, required }), mostra um campo de texto e devolve o que foi digitado.
-  function confirmDialog({ title, message, ok = "Excluir", danger = true, field }) {
+  // Com word (ex.: "APAGAR"), o botão de confirmar só é liberado depois de digitar a palavra.
+  function confirmDialog({ title, message, ok = "Excluir", danger = true, field, word }) {
     return new Promise((resolve) => {
       const dlg = document.createElement("dialog"); dlg.className = "confirm-dlg";
       dlg.setAttribute("aria-labelledby", "cd-title");
-      dlg.innerHTML = `<h2 id="cd-title"></h2><p class="muted"></p>${field ? '<label class="cd-field"><span></span><textarea rows="3" maxlength="1000"></textarea><em class="cd-err hidden">Preencha o motivo para continuar.</em></label>' : ""}<div class="cd-acts"><button type="button" class="btn-ghost" data-v="0">Cancelar</button><button type="button" class="${danger ? "btn-danger-solid" : "btn-ok"}" data-v="1"></button></div>`;
+      dlg.innerHTML = `<h2 id="cd-title"></h2><p class="muted"></p>${field ? '<label class="cd-field"><span></span><textarea rows="3" maxlength="1000"></textarea><em class="cd-err hidden">Preencha o motivo para continuar.</em></label>' : ""}${word ? '<label class="cd-field"><span></span><input type="text" autocomplete="off" autocapitalize="characters" spellcheck="false"></label>' : ""}<div class="cd-acts"><button type="button" class="btn-ghost" data-v="0">Cancelar</button><button type="button" class="${danger ? "btn-danger-solid" : "btn-ok"}" data-v="1"></button></div>`;
       dlg.querySelector("h2").textContent = title; dlg.querySelector("p").textContent = message; dlg.querySelector('[data-v="1"]').textContent = ok;
       const ta = dlg.querySelector("textarea");
+      const wi = dlg.querySelector(".cd-field input");
+      if (word) {
+        const okBtn = dlg.querySelector('[data-v="1"]');
+        dlg.querySelector(".cd-field span").textContent = "Digite " + word + " para confirmar";
+        okBtn.disabled = true;
+        wi.addEventListener("input", () => { okBtn.disabled = wi.value.trim().toUpperCase() !== word; });
+      }
       if (field) { dlg.querySelector(".cd-field span").textContent = field.label; ta.placeholder = field.placeholder || ""; ta.addEventListener("input", () => dlg.querySelector(".cd-err").classList.add("hidden")); }
       const done = (v) => { dlg.close(); dlg.remove(); resolve(v); };
       dlg.addEventListener("click", (e) => {
@@ -418,7 +459,7 @@
         if (b) done(b.dataset.v === "1"); else if (e.target === dlg) done(false);
       });
       dlg.addEventListener("cancel", (e) => { e.preventDefault(); done(false); });
-      document.body.appendChild(dlg); dlg.showModal(); (ta || dlg.querySelector('[data-v="0"]')).focus();
+      document.body.appendChild(dlg); dlg.showModal(); (ta || wi || dlg.querySelector('[data-v="0"]')).focus();
     });
   }
 
@@ -431,5 +472,5 @@
   }
   try { const t = sessionStorage.getItem("admin-toast"); if (t) { sessionStorage.removeItem("admin-toast"); if (document.readyState === "loading") addEventListener("DOMContentLoaded", () => toast(t)); else toast(t); } } catch {}
 
-  window.Admin = { sb, el, init, icon, notifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES, confirmDialog, toast };
+  window.Admin = { sb, el, init, log, profile, applyProfile, icon, notifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES, confirmDialog, toast };
 })();
