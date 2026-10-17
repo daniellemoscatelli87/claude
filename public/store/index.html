@@ -62,6 +62,15 @@
     .bn-lead { font-size: 15px; }
   }
 
+  /* Topo da página da marca: logo grande centralizada sobre fundo claro com brilho suave. */
+  .mhero { position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; padding: 44px 24px 48px; margin-bottom: 44px; border-radius: 28px;
+    background: radial-gradient(60% 80% at 50% 0%, #fff 0%, rgb(255 255 255 / 0) 70%), radial-gradient(70% 90% at 50% 100%, rgb(212 77 77 / .10) 0%, transparent 70%), #fbf6f6; border: 1px solid #f1e2e2; }
+  .mhero .mlogo { display: block; width: auto; max-width: min(520px, 90%); max-height: 200px; object-fit: contain; filter: drop-shadow(0 14px 24px rgb(15 23 42 / .12)); }
+  .mhero .lead { margin: 0; max-width: 620px; text-align: center; }
+  .mhero.escura .lead { color: rgb(255 255 255 / .8); }
+  .mhero.escura { border-color: transparent; }
+  .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  @media (max-width: 639px) { .mhero { padding: 32px 20px 36px; border-radius: 22px; gap: 14px; } .mhero .mlogo { max-height: 130px; } }
   /* Topo claro da página da marca. */
   .bpanel { background: #fff; border: 1px solid var(--line); border-radius: 24px; padding: 28px; margin-bottom: 40px; box-shadow: 0 12px 32px -24px rgb(15 23 42 / .2); }
   .bpanel .lg { box-shadow: none; border: 1px solid var(--line); }
@@ -294,8 +303,13 @@ async function telaMarca(view, slug) {
   }
   document.title = m.nome + " • Store • Dani Moscatelli | Experience Design Studio";
   const produtos = (await api("produtos?select=id,nome,preco,desconto,link,fotos&ativo=eq.true&marca_id=eq." + m.id + "&order=ordem.asc,created_at.desc")) || [];
-  const head = node(`<section class="bpanel bhead"><div class="lg${m.logo_fundo ? " cheia" : ""}"${fundo(m)}><img src="${esc(m.logo)}" alt="${esc(m.nome)}"></div><div>
-      <span class="tag">Marca parceira</span><h1>${esc(m.nome)}</h1>${m.descricao ? `<p class="lead">${esc(m.descricao)}</p>` : ""}</div></section>`);
+  // Topo da marca: a logo grande e centralizada é o título (o nome fica no h1 para leitores de tela).
+  const head = node(`<section class="mhero${m.logo_fundo ? " escura" : ""}"${fundo(m)}>
+      <span class="tag">Marca parceira</span>
+      <h1 class="sr">${esc(m.nome)}</h1>
+      <img class="mlogo" src="${esc(m.logo)}" alt="${esc(m.nome)}">
+      ${m.descricao ? `<p class="lead">${esc(m.descricao)}</p>` : ""}
+    </section>`);
   view.replaceChildren(crumb(m.nome), head);
   if (produtos.length) {
     const grid = node('<div class="grid"></div>');
