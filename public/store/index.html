@@ -145,9 +145,7 @@
   .ad .ic svg { width: 28px; height: 28px; }
   .ad h2 { font-size: 22px; font-weight: 800; margin: 10px 0 0; letter-spacing: -.01em; }
   .ad p { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0 0 10px; max-width: 280px; }
-  .ad .buy { margin-top: 4px; background: #25d366; box-shadow: 0 10px 20px -10px rgb(37 211 102 / .8); }
-  .ad .buy:hover { background: #1ebe5a; }
-  .ad .buy svg { width: 18px; height: 18px; }
+  .ad .buy { margin-top: 4px; }
 
   .note { font-size: 12px; line-height: 1.6; color: var(--muted); margin: 32px 0 0; padding: 14px 18px; border-radius: 14px; background: rgb(255 255 255 / .7); border: 1px solid var(--line); }
   .state { color: var(--muted); padding: 24px 0; }
@@ -219,7 +217,6 @@ const NOTA = "Ao clicar em \u201cComprar com desconto\u201d, você será direcio
 const SVG = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 const ICON_EXT = SVG('<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>');
 const ICON_STORE = SVG('<path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M10 20v-5h4v5"/>');
-const ICON_WA = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.05 21.5h-.01a9.43 9.43 0 0 1-4.8-1.32l-.35-.2-3.57.93.95-3.48-.22-.36a9.42 9.42 0 0 1-1.45-5.02c0-5.2 4.24-9.44 9.46-9.44 2.52 0 4.9.99 6.68 2.77a9.38 9.38 0 0 1 2.77 6.68c0 5.21-4.24 9.44-9.46 9.44zm8.04-17.48A11.3 11.3 0 0 0 12.05.7C5.78.7.68 5.8.68 12.06c0 2 .52 3.96 1.52 5.68L.6 23.3l5.7-1.5a11.33 11.33 0 0 0 5.74 1.47h.01c6.27 0 11.37-5.1 11.37-11.37 0-3.04-1.18-5.89-3.33-8.04z"/></svg>';
 const brl = (v) => Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 // Logo com fundo próprio (ex.: preto): a área da logo usa a mesma cor e a logo ocupa o espaço todo.
@@ -247,7 +244,7 @@ function cardAnuncie() {
       <span class="ic">${ICON_STORE}</span>
       <h2>Sua marca aqui</h2>
       <p>Apresente seus produtos nesta vitrine, com a curadoria da Dani Moscatelli | Experience Design Studio.</p>
-      <a class="buy" href="${WHATSAPP}" target="_blank" rel="noopener">${ICON_WA} Anunciar minha marca</a>
+      <a class="buy" href="${WHATSAPP}" target="_blank" rel="noopener">Entrar em contato</a>
     </article>`);
 }
 async function telaStore(view) {
