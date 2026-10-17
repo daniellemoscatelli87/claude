@@ -136,6 +136,8 @@
     background: radial-gradient(80% 90% at 50% 0%, #fff 0%, #fbf4f4 100%); }
   .blogo img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
   .bcard:hover .blogo img { transform: scale(1.05); }
+  .blogo.cheia { padding: 0; border-bottom-color: transparent; }
+  .bhead .lg.cheia { padding: 0; overflow: hidden; }
   .bcard .info { gap: 8px; }
   .bcard .name { font-size: 21px; }
   .bdesc { font-size: 14px; line-height: 1.65; color: var(--muted); margin: 0; }
@@ -230,6 +232,8 @@ const ICON_STORE = SVG('<path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><p
 const ICON_WA = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.05 21.5h-.01a9.43 9.43 0 0 1-4.8-1.32l-.35-.2-3.57.93.95-3.48-.22-.36a9.42 9.42 0 0 1-1.45-5.02c0-5.2 4.24-9.44 9.46-9.44 2.52 0 4.9.99 6.68 2.77a9.38 9.38 0 0 1 2.77 6.68c0 5.21-4.24 9.44-9.46 9.44zm8.04-17.48A11.3 11.3 0 0 0 12.05.7C5.78.7.68 5.8.68 12.06c0 2 .52 3.96 1.52 5.68L.6 23.3l5.7-1.5a11.33 11.33 0 0 0 5.74 1.47h.01c6.27 0 11.37-5.1 11.37-11.37 0-3.04-1.18-5.89-3.33-8.04z"/></svg>';
 const brl = (v) => Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+// Logo com fundo próprio (ex.: preto): a área da logo usa a mesma cor e a logo ocupa o espaço todo.
+const fundo = (m) => m.logo_fundo && /^#[0-9a-f]{6}$/.test(m.logo_fundo) ? ` style="background:${m.logo_fundo}"` : "";
 const plural = (n, um, varios) => n + " " + (n === 1 ? um : varios);
 async function api(q) {
   try { const r = await fetch(REST + q, { headers: { apikey: KEY, Authorization: "Bearer " + KEY } }); return r.ok ? await r.json() : null; } catch { return null; }
@@ -240,7 +244,7 @@ function node(html) { const t = document.createElement("template"); t.innerHTML 
 function cardMarca(m) {
   const n = m.produtos?.[0]?.count ?? 0;
   return node(`<a class="card bcard" href="?marca=${encodeURIComponent(m.slug)}">
-      <div class="blogo"><img src="${esc(m.logo)}" alt="${esc(m.nome)}" loading="lazy"></div>
+      <div class="blogo${m.logo_fundo ? " cheia" : ""}"${fundo(m)}><img src="${esc(m.logo)}" alt="${esc(m.nome)}" loading="lazy"></div>
       <div class="info">
         <h2 class="name">${esc(m.nome)}</h2>
         ${m.descricao ? `<p class="bdesc">${esc(m.descricao)}</p>` : ""}
@@ -258,7 +262,7 @@ function cardAnuncie() {
 }
 async function telaStore(view) {
   document.title = "Store • Dani Moscatelli | Experience Design Studio";
-  const marcas = (await api("marcas?select=id,nome,slug,descricao,logo,produtos(count)&ativo=eq.true&order=ordem.asc,nome.asc")) || [];
+  const marcas = (await api("marcas?select=id,nome,slug,descricao,logo,logo_fundo,produtos(count)&ativo=eq.true&order=ordem.asc,nome.asc")) || [];
   view.replaceChildren(
     node('<h2 class="sec">Marcas parceiras</h2>'),
   );
@@ -295,7 +299,7 @@ function cardProduto(p) {
   return el;
 }
 async function telaMarca(view, slug) {
-  const [m] = (await api("marcas?select=id,nome,slug,descricao,logo&ativo=eq.true&slug=eq." + encodeURIComponent(slug))) || [];
+  const [m] = (await api("marcas?select=id,nome,slug,descricao,logo,logo_fundo&ativo=eq.true&slug=eq." + encodeURIComponent(slug))) || [];
   const crumb = (nome) => node(`<nav class="crumb" aria-label="Navegação"><a href="/store/">Store</a><span aria-hidden="true">›</span><span>${esc(nome)}</span></nav>`);
   if (!m) {
     view.replaceChildren(crumb("Marca"), node("<h1>Marca não encontrada</h1>"), node('<p class="lead">Esta marca não está disponível no momento. <a href="/store/" style="color:var(--red);font-weight:600">Conheça as demais marcas da Store.</a></p>'));
@@ -303,7 +307,7 @@ async function telaMarca(view, slug) {
   }
   document.title = m.nome + " • Store • Dani Moscatelli | Experience Design Studio";
   const produtos = (await api("produtos?select=id,nome,preco,desconto,link,fotos&ativo=eq.true&marca_id=eq." + m.id + "&order=ordem.asc,created_at.desc")) || [];
-  const head = node(`<section class="bpanel bhead"><div class="lg"><img src="${esc(m.logo)}" alt="${esc(m.nome)}"></div><div>
+  const head = node(`<section class="bpanel bhead"><div class="lg${m.logo_fundo ? " cheia" : ""}"${fundo(m)}><img src="${esc(m.logo)}" alt="${esc(m.nome)}"></div><div>
       <span class="tag">Marca parceira</span><h1>${esc(m.nome)}</h1>${m.descricao ? `<p class="lead">${esc(m.descricao)}</p>` : ""}</div></section>`);
   view.replaceChildren(crumb(m.nome), head);
   if (produtos.length) {

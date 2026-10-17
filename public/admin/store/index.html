@@ -90,7 +90,7 @@
     <div>
       <div style="font-size:13px;font-weight:600;margin-bottom:6px">Logo</div>
       <button type="button" class="logo-slot" id="logo-slot">Escolher logo</button>
-      <span class="hint">PNG com fundo transparente fica melhor. A logo aparece inteira, sem cortes.</span>
+      <span class="hint">Use PNG com fundo transparente ou logo com fundo de uma cor só (ex.: preto): a Store usa a mesma cor ao redor. A logo aparece inteira, sem cortes.</span>
     </div>
     <label>Nome da marca<input type="text" id="m-nome" maxlength="80" placeholder="Ex.: Donna Shape"></label>
     <label>Descrição (opcional)<textarea id="m-desc" maxlength="400" placeholder="Uma ou duas frases sobre a marca."></textarea></label>
@@ -161,7 +161,7 @@ function render() {
     const prods = PRODS.filter((p) => p.marca_id === m.id);
     const sec = el("section", "card mk");
     const h = el("div", "mk-h");
-    const lg = el("span", "lg"); const li = el("img"); li.src = m.logo; li.alt = ""; lg.appendChild(li);
+    const lg = el("span", "lg"); if (m.logo_fundo) { lg.style.background = m.logo_fundo; lg.style.padding = "0"; lg.style.overflow = "hidden"; } const li = el("img"); li.src = m.logo; li.alt = ""; lg.appendChild(li);
     const tx = el("div"); const s = el("span", "s");
     s.append(plural(prods.length, "produto", "produtos"), el("span", "pill " + (m.ativo ? "on" : "off"), m.ativo ? "Visível" : "Oculta"));
     tx.append(el("b", null, m.nome), s);
@@ -205,11 +205,21 @@ function prepararImagem(file, quadrada) {
         c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
       }
       URL.revokeObjectURL(url);
-      c.toBlob((b) => (b ? resolve(b) : reject()), "image/webp", 0.88);
+      const cor = quadrada ? null : corDeFundo(c);
+      c.toBlob((b) => (b ? resolve(Object.assign(b, { cor })) : reject()), "image/webp", 0.88);
     };
     img.onerror = () => { URL.revokeObjectURL(url); reject(); };
     img.src = url;
   });
+}
+// Cor de fundo da logo: se os quatro cantos forem opacos e da mesma cor (ex.: logo em fundo preto), devolve
+// a cor em #rrggbb para a Store pintar a área da logo com ela; logo transparente devolve null.
+function corDeFundo(c) {
+  const ctx = c.getContext("2d"), w = c.width - 1, h = c.height - 1;
+  const px = [[0, 0], [w, 0], [0, h], [w, h]].map(([x, y]) => ctx.getImageData(x, y, 1, 1).data);
+  if (px.some((p) => p[3] < 250)) return null;
+  if (px.some((p) => Math.abs(p[0] - px[0][0]) + Math.abs(p[1] - px[0][1]) + Math.abs(p[2] - px[0][2]) > 24)) return null;
+  return "#" + [0, 1, 2].map((i) => px[0][i].toString(16).padStart(2, "0")).join("");
 }
 async function enviar(blob) {
   const path = Date.now() + "-" + Math.random().toString(36).slice(2, 8) + ".webp";
@@ -224,6 +234,7 @@ let MARCA = null, LOGO = null;
 const slugify = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "marca";
 function desenharLogo() {
   const b = $("logo-slot"); b.replaceChildren();
+  b.style.background = LOGO?.cor || ""; b.style.padding = LOGO?.cor ? "0" : "";
   if (LOGO) { const i = el("img"); i.src = LOGO.preview || LOGO.url; i.alt = "Logo"; b.appendChild(i); } else b.append("Escolher logo");
 }
 function abrirMarca(m) {
@@ -231,7 +242,7 @@ function abrirMarca(m) {
   $("dm-t").textContent = m ? "Editar marca" : "Nova marca";
   $("m-nome").value = m?.nome ?? ""; $("m-desc").value = m?.descricao ?? ""; $("m-ativo").checked = m ? m.ativo : true;
   $("m-excluir").classList.toggle("hidden", !m);
-  LOGO = m ? { url: m.logo } : null;
+  LOGO = m ? { url: m.logo, cor: m.logo_fundo } : null;
   desenharLogo(); mostrarErro("dm-err", "");
   $("dlg-marca").showModal();
 }
@@ -243,7 +254,7 @@ $("file-logo").addEventListener("change", async (e) => {
   try {
     const blob = await prepararImagem(f, false);
     if (LOGO?.preview) URL.revokeObjectURL(LOGO.preview);
-    LOGO = { blob, preview: URL.createObjectURL(blob), substitui: LOGO?.url || LOGO?.substitui || null };
+    LOGO = { blob, cor: blob.cor, preview: URL.createObjectURL(blob), substitui: LOGO?.url || LOGO?.substitui || null };
     mostrarErro("dm-err", ""); desenharLogo();
   } catch { mostrarErro("dm-err", "Não foi possível ler a imagem. Tente outra."); }
 });
@@ -263,7 +274,7 @@ $("form-marca").addEventListener("submit", async (e) => {
   // Endereço da marca na Store (/store/?marca=...), único entre as marcas.
   let slug = MARCA?.slug || slugify(nome);
   if (!MARCA) { const base = slug; let i = 2; while (MARCAS.some((x) => x.slug === slug)) slug = base + "-" + i++; }
-  const linha = { nome, descricao: descricao || null, logo, slug, ativo: $("m-ativo").checked, updated_at: new Date().toISOString() };
+  const linha = { nome, descricao: descricao || null, logo, logo_fundo: LOGO.cor || null, slug, ativo: $("m-ativo").checked, updated_at: new Date().toISOString() };
   const { error } = MARCA ? await sb.from("marcas").update(linha).eq("id", MARCA.id) : await sb.from("marcas").insert(linha);
   fim();
   if (error) { if (nova) await remover([nova]); return mostrarErro("dm-err", "Não foi possível salvar: " + error.message); }
