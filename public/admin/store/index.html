@@ -49,6 +49,12 @@
   .link-danger { background: none; border: 0; padding: 8px 4px; font: inherit; font-size: 14px; font-weight: 600; color: var(--red); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
   .lj-x { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; background: none; border-radius: 10px; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
   .lj-x svg { width: 22px; height: 22px; }
+  .final { display: grid; gap: 2px; padding: 12px 14px; border-radius: 12px; background: #e7f6ee; color: #177a43; }
+  .final .f-t { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+  .final b { font-size: 24px; font-weight: 800; }
+  .final .f-eco { font-size: 13px; }
+  .final .f-vazio { font-size: 13px; color: var(--muted); }
+  .final:has(.f-vazio) { background: #f8fafc; }
   @media (max-width: 520px) { .two { grid-template-columns: 1fr; } }
   .mk { margin-top: 16px; padding: 0; overflow: hidden; }
   .mk-h { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 16px 18px; border-bottom: 1px solid var(--track); background: #fcfcfd; }
@@ -114,10 +120,12 @@
     </div>
     <label>Marca<select id="marca"></select></label>
     <label>Nome do produto<input type="text" id="nome" maxlength="160"></label>
+    <label>Código do produto<input type="text" id="codigo" maxlength="60" placeholder="Ex.: DS-1234"></label>
     <div class="two">
-      <label>Preço (R$)<input type="text" id="preco" inputmode="decimal" placeholder="Ex.: 149,90"></label>
+      <label>Preço original (R$)<input type="text" id="preco" inputmode="decimal" placeholder="Ex.: 189,90"></label>
       <label>Desconto (%)<input type="text" id="desconto" inputmode="numeric" maxlength="2" placeholder="Ex.: 15"></label>
     </div>
+    <div class="final" id="final" aria-live="polite"></div>
     <label>Link de compra (afiliado ou cupom)<input type="url" id="link" placeholder="https://"></label>
     <label class="tg"><input type="checkbox" id="ativo" checked>Mostrar na Store</label>
     <p class="msg err hidden" id="dlg-err"></p>
@@ -137,6 +145,9 @@
 const el = Admin.el, sb = Admin.sb, $ = (id) => document.getElementById(id);
 const BUCKET = "/storage/v1/object/public/loja/";
 const brl = (v) => Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+// Valor final = valor original menos o percentual de desconto (é o que aparece em verde na Store).
+const valorFinal = (preco, desconto) => Math.round(Number(preco) * (100 - (desconto || 0))) / 100;
+const lerPreco = (t) => Number(String(t).trim().replace(/[^\d,.-]/g, "").replace(/\.(?=\d{3}(\D|$))/g, "").replace(",", "."));
 const plural = (n, um, varios) => n + " " + (n === 1 ? um : varios);
 const caminho = (url) => (url || "").includes(BUCKET) ? decodeURIComponent(url.split(BUCKET)[1].split("?")[0]) : null;
 let MARCAS = [], PRODS = [];
@@ -146,7 +157,7 @@ document.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("cli
 function linhaProduto(p) {
   const row = el("div", "pr-row"); row.tabIndex = 0; row.setAttribute("role", "button");
   const img = el("img"); img.src = p.fotos[0]; img.alt = "";
-  const tx = el("div", "tx"); tx.append(el("b", null, p.nome), el("span", "p", brl(p.preco) + (p.desconto ? " · " + p.desconto + "% de desconto" : "")));
+  const tx = el("div", "tx"); tx.append(el("b", null, p.nome), el("span", "p", (p.codigo ? "Cód. " + p.codigo + " · " : "") + (p.desconto ? brl(p.preco) + " → " + brl(valorFinal(p.preco, p.desconto)) + " · " + p.desconto + "% de desconto" : brl(p.preco))));
   row.append(img, tx, el("span", "pill " + (p.ativo ? "on" : "off"), p.ativo ? "Visível" : "Oculto"));
   const abrir = () => abrirProduto(p, p.marca_id);
   row.addEventListener("click", abrir);
@@ -321,6 +332,16 @@ $("file").addEventListener("change", async (e) => {
     mostrarErro("dlg-err", ""); desenharFotos();
   } catch { mostrarErro("dlg-err", "Não foi possível ler a imagem. Tente outra."); }
 });
+// Mostra, enquanto digita, o valor final com o desconto aplicado.
+function mostrarFinal() {
+  const box = $("final"), preco = lerPreco($("preco").value), d = Number($("desconto").value.trim() || 0);
+  if (!$("preco").value.trim() || !isFinite(preco) || preco <= 0 || !Number.isInteger(d) || d < 0 || d > 99) { box.replaceChildren(el("span", "f-vazio", "Informe o preço original e o desconto para ver o valor final.")); return; }
+  const t = el("span", "f-t", d ? "Valor final com " + d + "% de desconto" : "Valor final (sem desconto)");
+  const v = el("b", null, brl(valorFinal(preco, d)));
+  box.replaceChildren(t, v);
+  if (d) box.appendChild(el("span", "f-eco", "Economia de " + brl(preco - valorFinal(preco, d))));
+}
+["preco", "desconto"].forEach((id) => $(id).addEventListener("input", mostrarFinal));
 function abrirProduto(p, marcaId) {
   EDIT = p || null;
   $("dlg-t").textContent = p ? "Editar produto" : "Novo produto";
@@ -328,19 +349,21 @@ function abrirProduto(p, marcaId) {
   $("marca").value = marcaId;
   $("nome").value = p?.nome ?? "";
   $("preco").value = p ? Number(p.preco).toFixed(2).replace(".", ",") : "";
+  $("codigo").value = p?.codigo ?? "";
   $("desconto").value = p?.desconto ? String(p.desconto) : "";
   $("link").value = p?.link ?? "";
   $("ativo").checked = p ? p.ativo : true;
   $("excluir").classList.toggle("hidden", !p);
   SLOTS = p ? p.fotos.map((url) => ({ url })) : [null, null, null];
   desenharFotos(); mostrarErro("dlg-err", "");
+  mostrarFinal();
   $("dlg").showModal();
 }
 $("form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const erro = (t) => mostrarErro("dlg-err", t);
-  const marca_id = $("marca").value, nome = $("nome").value.trim(), link = $("link").value.trim();
-  const preco = Number($("preco").value.trim().replace(/[^\d,.-]/g, "").replace(/\.(?=\d{3}(\D|$))/g, "").replace(",", "."));
+  const marca_id = $("marca").value, nome = $("nome").value.trim(), codigo = $("codigo").value.trim(), link = $("link").value.trim();
+  const preco = lerPreco($("preco").value);
   const desconto = $("desconto").value.trim() ? Number($("desconto").value.trim()) : 0;
   if (SLOTS.some((s) => !s)) return erro("Escolha as 3 fotos do produto.");
   if (!nome) return erro("Informe o nome do produto."), $("nome").focus();
@@ -358,13 +381,13 @@ $("form").addEventListener("submit", async (e) => {
     enviadas.push(up.path); fotos.push(up.url);
     if (caminho(s.substitui)) antigas.push(caminho(s.substitui));
   }
-  const linha = { marca_id, nome, preco, desconto, link, fotos, ativo: $("ativo").checked, updated_at: new Date().toISOString() };
+  const linha = { marca_id, nome, codigo: codigo || null, preco, desconto, link, fotos, ativo: $("ativo").checked, updated_at: new Date().toISOString() };
   const { error } = EDIT ? await sb.from("produtos").update(linha).eq("id", EDIT.id) : await sb.from("produtos").insert(linha);
   fim();
   if (error) { await remover(enviadas); return erro("Não foi possível salvar: " + error.message); }
   await remover(antigas);
   const marca = MARCAS.find((m) => m.id === marca_id)?.nome || "";
-  Admin.log((EDIT ? "Editou o produto " : "Cadastrou o produto ") + nome + " na Store", marca + " · " + brl(preco) + (desconto ? " · " + desconto + "% de desconto" : "") + (linha.ativo ? "" : " · oculto"));
+  Admin.log((EDIT ? "Editou o produto " : "Cadastrou o produto ") + nome + " na Store", marca + (codigo ? " · Cód. " + codigo : "") + " · " + (desconto ? brl(preco) + " → " + brl(valorFinal(preco, desconto)) + " · " + desconto + "% de desconto" : brl(preco)) + (linha.ativo ? "" : " · oculto"));
   $("dlg").close(); await carregar();
   Admin.toast(EDIT ? "Produto atualizado." : "Produto cadastrado.");
 });

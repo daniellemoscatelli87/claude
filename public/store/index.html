@@ -71,6 +71,23 @@
   .mhero.escura { border-color: transparent; }
   .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   @media (max-width: 639px) { .mhero { padding: 32px 20px 36px; border-radius: 22px; gap: 14px; } .mhero .mlogo { max-height: 130px; } }
+  /* Cabeçalho compacto (página da marca): logo Dani Moscatelli, divisor vertical e Store, sem a foto. */
+  .bn-div { display: none; }
+  .banner.compacto { min-height: 0; flex-direction: row; align-items: center; border-radius: 24px; }
+  .banner.compacto .bn-photo, .banner.compacto .bn-line, .banner.compacto .bn-lead { display: none; }
+  .banner.compacto .bn-text { padding: 22px 32px; margin: 0; max-width: none; }
+  .banner.compacto .bn-home { display: flex; align-items: center; gap: 20px; }
+  .banner.compacto .bn-kicker { font-size: 20px; }
+  .banner.compacto .bn-div { display: block; width: 1px; height: 40px; background: rgb(255 255 255 / .3); }
+  .banner.compacto .bn-title { margin: 0; font-size: 44px; line-height: 1; letter-spacing: -.04em; }
+  @media (max-width: 639px) {
+    .banner.compacto .bn-text { padding: 16px 20px; }
+    .banner.compacto .bn-home { gap: 14px; }
+    .banner.compacto .bn-kicker { font-size: 16px; gap: 8px; }
+    .banner.compacto .bn-kicker img { width: 26px; }
+    .banner.compacto .bn-div { height: 30px; }
+    .banner.compacto .bn-title { font-size: 32px; }
+  }
   /* Topo claro da página da marca. */
   .bpanel { background: #fff; border: 1px solid var(--line); border-radius: 24px; padding: 28px; margin-bottom: 40px; box-shadow: 0 12px 32px -24px rgb(15 23 42 / .2); }
   .bpanel .lg { box-shadow: none; border: 1px solid var(--line); }
@@ -106,27 +123,57 @@
   @keyframes subir { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) { .grid > .card { animation: none; } .card, .card:hover { transition: none; transform: none; } }
 
+  /* Card do produto: foto principal grande e limpa; ao tocar no card abre a janela com as 3 fotos. */
+  .pcard { cursor: pointer; }
+  .pcard:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+  .pfoto { position: relative; aspect-ratio: 1 / 1; background: #f1f5f9; overflow: hidden; }
+  .pfoto img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+  .pcard:hover .pfoto img { transform: scale(1.04); }
+  .mais { position: absolute; right: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--dark); background: rgb(255 255 255 / .92); border-radius: 999px; padding: 6px 10px; box-shadow: 0 4px 12px rgb(15 23 42 / .15); }
+  .mais svg { width: 14px; height: 14px; }
+  .info { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .name { font-size: 18px; font-weight: 700; line-height: 1.35; margin: 0; letter-spacing: -.01em; }
+  .cod { font-size: 12px; color: var(--muted); letter-spacing: .02em; }
+  /* Preço: original em vermelho riscado, atual em verde e a etiqueta de desconto ao lado. */
+  .price { display: grid; gap: 2px; margin: 10px 0 18px; }
+  .price s { font-size: 14px; font-weight: 600; color: var(--red); }
+  .price .atual { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .price b { font-size: 28px; font-weight: 800; letter-spacing: -.02em; color: #177a43; }
+  .price .sem b { color: var(--dark); }
+  .off { display: inline-block; background: var(--red); color: #fff; font-size: 13px; font-weight: 800; letter-spacing: .02em; padding: 4px 10px; border-radius: 999px; }
+
+  /* Janela do produto: galeria com as 3 fotos (deslizar, setas, bolinhas e miniaturas) e os dados. */
+  .pdlg { width: min(960px, 94vw); max-height: 92vh; border: 0; border-radius: 24px; padding: 0; overflow: auto; box-shadow: 0 30px 80px -20px rgb(15 23 42 / .5); }
+  .pdlg::backdrop { background: rgb(15 23 42 / .6); backdrop-filter: blur(4px); }
+  .pdlg-in { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); }
+  .pdlg .x { position: absolute; top: 12px; right: 12px; z-index: 3; width: 42px; height: 42px; border: 0; border-radius: 50%; background: rgb(255 255 255 / .92); color: var(--dark); display: grid; place-items: center; cursor: pointer; box-shadow: 0 4px 12px rgb(15 23 42 / .18); }
+  .pdlg .x svg { width: 20px; height: 20px; }
   .gal { position: relative; aspect-ratio: 1 / 1; background: #f1f5f9; overflow: hidden; }
   .slides { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
   .slides::-webkit-scrollbar { display: none; }
-  .slides img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; display: block; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
-  .card:hover .slides img { transform: scale(1.04); }
-  .gal::after { content: ""; position: absolute; inset: auto 0 0; height: 70px; pointer-events: none; background: linear-gradient(to top, rgb(15 23 42 / .28), transparent); }
-  .off { position: absolute; top: 14px; left: 14px; z-index: 2; background: var(--red); color: #fff; font-size: 14px; font-weight: 800; letter-spacing: .02em; padding: 6px 12px; border-radius: 999px; box-shadow: 0 6px 16px -6px rgb(184 50 50 / .7); }
+  .slides img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; display: block; }
   .dots { position: absolute; bottom: 14px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; gap: 6px; }
-  .dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: rgb(255 255 255 / .55); cursor: pointer; transition: width .25s, background .25s; }
+  .dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: rgb(255 255 255 / .6); box-shadow: 0 0 0 1px rgb(15 23 42 / .15); cursor: pointer; transition: width .25s, background .25s; }
   .dots button[aria-current=true] { background: #fff; width: 22px; }
-  .arrow { position: absolute; top: 50%; z-index: 2; transform: translateY(-50%); width: 38px; height: 38px; border: 0; border-radius: 50%; background: rgb(255 255 255 / .92); color: var(--dark); display: grid; place-items: center; cursor: pointer; box-shadow: 0 4px 12px rgb(15 23 42 / .18); opacity: 0; transition: opacity .2s, background .2s; }
+  .arrow { position: absolute; top: 50%; z-index: 2; transform: translateY(-50%); width: 40px; height: 40px; border: 0; border-radius: 50%; background: rgb(255 255 255 / .92); color: var(--dark); display: grid; place-items: center; cursor: pointer; box-shadow: 0 4px 12px rgb(15 23 42 / .18); }
   .arrow:hover { background: #fff; color: var(--red); }
   .arrow svg { width: 18px; height: 18px; }
   .arrow.prev { left: 12px; } .arrow.next { right: 12px; }
-  .gal:hover .arrow, .arrow:focus-visible { opacity: 1; }
   @media (hover: none) { .arrow { display: none; } }
-  .info { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-  .name { font-size: 18px; font-weight: 700; line-height: 1.35; margin: 0; letter-spacing: -.01em; }
-  .price { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 8px 0 18px; }
-  .price b { font-size: 28px; font-weight: 800; letter-spacing: -.02em; }
-  .price span { font-size: 12px; font-weight: 700; color: #177a43; background: #e7f6ee; border-radius: 999px; padding: 4px 10px; }
+  .pdlg-info { padding: 32px 28px 28px; display: flex; flex-direction: column; gap: 4px; }
+  .pdlg-info .marca { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .16em; color: var(--red); margin-bottom: 6px; }
+  .pdlg-info .name { font-size: 24px; }
+  .thumbs { display: grid; grid-template-columns: repeat(3, 72px); gap: 10px; margin: 6px 0 22px; }
+  .thumbs button { padding: 0; border: 2px solid transparent; border-radius: 12px; overflow: hidden; cursor: pointer; background: #f1f5f9; aspect-ratio: 1 / 1; }
+  .thumbs button[aria-current=true] { border-color: var(--red); }
+  .thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pdlg-info .buy { margin-top: auto; }
+  @media (max-width: 760px) {
+    .pdlg { width: 100vw; max-width: 100vw; max-height: 100dvh; height: 100dvh; border-radius: 0; margin: 0; }
+    .pdlg-in { grid-template-columns: 1fr; }
+    .pdlg-info { padding: 22px 20px 28px; }
+    .thumbs { display: none; }
+  }
   .buy { margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--red); color: #fff; text-decoration: none; font-weight: 700; font-size: 15px; padding: 14px 20px; border-radius: 999px; box-shadow: 0 10px 20px -10px rgb(212 77 77 / .8); transition: background .2s, box-shadow .2s, transform .2s; }
   .buy:hover { background: var(--red-dark); box-shadow: 0 14px 24px -10px rgb(212 77 77 / .9); }
   .buy:active { transform: scale(.98); }
@@ -192,12 +239,17 @@
       <div class="bn-text">
         <a class="bn-home" href="/store/" aria-label="Dani Moscatelli Store, início">
           <p class="bn-kicker"><img src="/store/dm-icone.webp" alt="" width="34" height="39">Dani Moscatelli</p>
+          <span class="bn-div" aria-hidden="true"></span>
           <p class="bn-title">Store</p>
         </a>
         <div class="bn-line" aria-hidden="true"></div>
         <p class="bn-lead">Uma curadoria de marcas e produtos selecionados por Dani Moscatelli, com condições exclusivas de desconto.</p>
       </div>
     </div>
+    <script>
+      // Na página de uma marca o cabeçalho fica compacto: sem a foto, só Dani Moscatelli | Store.
+      if (new URLSearchParams(location.search).get("marca")) document.querySelector(".banner").classList.add("compacto");
+    </script>
   </div>
 </header>
 
@@ -268,31 +320,72 @@ async function telaStore(view) {
 }
 
 /* ---------- Nível 2: produtos da marca ---------- */
-function cardProduto(p) {
+const ICON_FOTOS = SVG('<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-8 7"/>');
+const ICON_X = SVG('<path d="M18 6 6 18M6 6l12 12"/>');
+// Valor final: valor original menos o percentual de desconto.
+const valorFinal = (p) => Math.round(Number(p.preco) * (100 - (p.desconto || 0))) / 100;
+const precoHtml = (p) => p.desconto
+  ? `<div class="price"><s>${brl(p.preco)}</s><span class="atual"><b>${brl(valorFinal(p))}</b><span class="off">-${p.desconto}%</span></span></div>`
+  : `<div class="price sem"><span class="atual"><b>${brl(p.preco)}</b></span></div>`;
+const botaoComprar = (p) => `<a class="buy" href="${esc(p.link)}" target="_blank" rel="noopener sponsored">Comprar com desconto ${ICON_EXT}</a>`;
+
+function cardProduto(p, marca) {
   const fotos = (p.fotos || []).slice(0, 3);
-  const el = node(`<article class="card">
-    <div class="gal">
-      <div class="slides">${fotos.map((f, i) => `<img src="${esc(f)}" alt="${esc(p.nome)}, foto ${i + 1} de ${fotos.length}" loading="lazy" width="600" height="600">`).join("")}</div>
-      ${p.desconto ? `<span class="off">-${p.desconto}%</span>` : ""}
-      <button type="button" class="arrow prev" aria-label="Foto anterior">${SVG('<path d="m15 18-6-6 6-6"/>')}</button>
-      <button type="button" class="arrow next" aria-label="Próxima foto">${SVG('<path d="m9 18 6-6-6-6"/>')}</button>
-      <div class="dots">${fotos.map((_, i) => `<button type="button" aria-label="Ver foto ${i + 1}"${i ? "" : ' aria-current="true"'}></button>`).join("")}</div>
+  const el = node(`<article class="card pcard" tabindex="0" aria-label="${esc(p.nome)}: ver fotos e detalhes">
+    <div class="pfoto">
+      <img src="${esc(fotos[0])}" alt="${esc(p.nome)}" loading="lazy" width="600" height="600">
+      ${fotos.length > 1 ? `<span class="mais">${ICON_FOTOS}${fotos.length} fotos</span>` : ""}
     </div>
     <div class="info">
       <h3 class="name">${esc(p.nome)}</h3>
-      <div class="price"><b>${brl(p.preco)}</b>${p.desconto ? `<span>${p.desconto}% de desconto</span>` : ""}</div>
-      <a class="buy" href="${esc(p.link)}" target="_blank" rel="noopener sponsored">Comprar com desconto ${ICON_EXT}</a>
+      ${p.codigo ? `<span class="cod">Cód. ${esc(p.codigo)}</span>` : ""}
+      ${precoHtml(p)}
+      ${botaoComprar(p)}
     </div>
   </article>`);
-  // Galeria: deslizar no celular, setas no computador e bolinhas para ir a cada foto.
-  const slides = el.querySelector(".slides"), dots = [...el.querySelectorAll(".dots button")];
+  // Tocar no card (fora do botão de compra) abre a janela com as fotos.
+  const abrir = (e) => { if (e.target.closest(".buy")) return; abrirProduto(p, marca); };
+  el.addEventListener("click", abrir);
+  el.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target === el) { e.preventDefault(); abrirProduto(p, marca); } });
+  return el;
+}
+
+function abrirProduto(p, marca) {
+  const fotos = (p.fotos || []).slice(0, 3);
+  const dlg = node(`<dialog class="pdlg" aria-label="${esc(p.nome)}">
+    <div class="pdlg-in">
+      <button type="button" class="x" aria-label="Fechar">${ICON_X}</button>
+      <div class="gal">
+        <div class="slides">${fotos.map((f, i) => `<img src="${esc(f)}" alt="${esc(p.nome)}, foto ${i + 1} de ${fotos.length}" width="800" height="800">`).join("")}</div>
+        ${fotos.length > 1 ? `<button type="button" class="arrow prev" aria-label="Foto anterior">${SVG('<path d="m15 18-6-6 6-6"/>')}</button>
+        <button type="button" class="arrow next" aria-label="Próxima foto">${SVG('<path d="m9 18 6-6-6-6"/>')}</button>
+        <div class="dots">${fotos.map((_, i) => `<button type="button" aria-label="Ver foto ${i + 1}"${i ? "" : ' aria-current="true"'}></button>`).join("")}</div>` : ""}
+      </div>
+      <div class="pdlg-info">
+        ${marca ? `<span class="marca">${esc(marca)}</span>` : ""}
+        <h2 class="name">${esc(p.nome)}</h2>
+        ${p.codigo ? `<span class="cod">Cód. ${esc(p.codigo)}</span>` : ""}
+        ${precoHtml(p)}
+        ${fotos.length > 1 ? `<div class="thumbs">${fotos.map((f, i) => `<button type="button" aria-label="Ver foto ${i + 1}"${i ? "" : ' aria-current="true"'}><img src="${esc(f)}" alt=""></button>`).join("")}</div>` : ""}
+        ${botaoComprar(p)}
+      </div>
+    </div>
+  </dialog>`);
+  document.body.appendChild(dlg);
+  const slides = dlg.querySelector(".slides");
   const atual = () => Math.round(slides.scrollLeft / slides.clientWidth);
   const ir = (i) => slides.scrollTo({ left: Math.max(0, Math.min(fotos.length - 1, i)) * slides.clientWidth, behavior: "smooth" });
-  slides.addEventListener("scroll", () => { const i = atual(); dots.forEach((d, j) => d.setAttribute("aria-current", String(j === i))); }, { passive: true });
-  dots.forEach((d, i) => d.addEventListener("click", () => ir(i)));
-  el.querySelector(".prev").addEventListener("click", () => ir(atual() - 1));
-  el.querySelector(".next").addEventListener("click", () => ir(atual() + 1));
-  return el;
+  slides.addEventListener("scroll", () => { const i = atual(); dlg.querySelectorAll(".dots button").forEach((d, j) => d.setAttribute("aria-current", String(j === i))); dlg.querySelectorAll(".thumbs button").forEach((d, j) => d.setAttribute("aria-current", String(j === i))); }, { passive: true });
+  dlg.querySelectorAll(".dots button").forEach((d, i) => d.addEventListener("click", () => ir(i)));
+  dlg.querySelectorAll(".thumbs button").forEach((d, i) => d.addEventListener("click", () => ir(i)));
+  dlg.querySelector(".prev")?.addEventListener("click", () => ir(atual() - 1));
+  dlg.querySelector(".next")?.addEventListener("click", () => ir(atual() + 1));
+  const fechar = () => dlg.close();
+  dlg.querySelector(".x").addEventListener("click", fechar);
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) fechar(); });
+  dlg.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") ir(atual() + 1); if (e.key === "ArrowLeft") ir(atual() - 1); });
+  dlg.addEventListener("close", () => dlg.remove());
+  dlg.showModal();
 }
 async function telaMarca(view, slug) {
   const [m] = (await api("marcas?select=id,nome,slug,descricao,logo,logo_fundo&ativo=eq.true&slug=eq." + encodeURIComponent(slug))) || [];
@@ -302,7 +395,7 @@ async function telaMarca(view, slug) {
     return;
   }
   document.title = m.nome + " • Store • Dani Moscatelli | Experience Design Studio";
-  const produtos = (await api("produtos?select=id,nome,preco,desconto,link,fotos&ativo=eq.true&marca_id=eq." + m.id + "&order=ordem.asc,created_at.desc")) || [];
+  const produtos = (await api("produtos?select=id,nome,codigo,preco,desconto,link,fotos&ativo=eq.true&marca_id=eq." + m.id + "&order=ordem.asc,created_at.desc")) || [];
   // Topo da marca: a logo grande e centralizada é o título (o nome fica no h1 para leitores de tela).
   const head = node(`<section class="mhero${m.logo_fundo ? " escura" : ""}"${fundo(m)}>
       <span class="tag">Marca parceira</span>
@@ -313,7 +406,7 @@ async function telaMarca(view, slug) {
   view.replaceChildren(crumb(m.nome), head);
   if (produtos.length) {
     const grid = node('<div class="grid"></div>');
-    grid.append(...produtos.map(cardProduto));
+    grid.append(...produtos.map((p) => cardProduto(p, m.nome)));
     view.append(node(`<h2 class="sec">${plural(produtos.length, "produto", "produtos")}</h2>`), grid, node(`<p class="note">${NOTA}</p>`));
   } else {
     view.append(node('<p class="state">Os produtos desta marca estão em atualização. Volte em breve.</p>'));
