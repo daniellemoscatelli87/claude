@@ -110,7 +110,7 @@
   .slides img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; display: block; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
   .card:hover .slides img { transform: scale(1.04); }
   .gal::after { content: ""; position: absolute; inset: auto 0 0; height: 70px; pointer-events: none; background: linear-gradient(to top, rgb(15 23 42 / .28), transparent); }
-  .off { position: absolute; top: 14px; left: 14px; z-index: 2; background: linear-gradient(135deg, #e25b5b, #b83232); color: #fff; font-size: 14px; font-weight: 800; letter-spacing: .02em; padding: 6px 12px; border-radius: 999px; box-shadow: 0 6px 16px -6px rgb(184 50 50 / .7); }
+  .off { position: absolute; top: 14px; left: 14px; z-index: 2; background: var(--red); color: #fff; font-size: 14px; font-weight: 800; letter-spacing: .02em; padding: 6px 12px; border-radius: 999px; box-shadow: 0 6px 16px -6px rgb(184 50 50 / .7); }
   .dots { position: absolute; bottom: 14px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; gap: 6px; }
   .dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: rgb(255 255 255 / .55); cursor: pointer; transition: width .25s, background .25s; }
   .dots button[aria-current=true] { background: #fff; width: 22px; }
@@ -148,7 +148,7 @@
   /* Sua marca aqui */
   .ad { position: relative; border: 2px dashed #efb9b9; background: radial-gradient(100% 80% at 50% 0%, #fff 0%, #fdf1f1 100%); align-items: center; justify-content: center; text-align: center; padding: 36px 26px; gap: 10px; min-height: 340px; }
   .ad:hover { border-color: var(--red); }
-  .ad .ic { width: 64px; height: 64px; border-radius: 20px; background: linear-gradient(135deg, #e25b5b, #b83232); color: #fff; display: grid; place-items: center; box-shadow: 0 12px 24px -12px rgb(184 50 50 / .8); transform: rotate(-6deg); }
+  .ad .ic { width: 64px; height: 64px; border-radius: 20px; background: var(--red); color: #fff; display: grid; place-items: center; box-shadow: 0 12px 24px -12px rgb(184 50 50 / .8); transform: rotate(-6deg); }
   .ad .ic svg { width: 28px; height: 28px; }
   .ad h2 { font-size: 22px; font-weight: 800; margin: 10px 0 0; letter-spacing: -.01em; }
   .ad p { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0 0 10px; max-width: 280px; }
