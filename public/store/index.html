@@ -71,6 +71,23 @@
   .mhero.escura { border-color: transparent; }
   .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   @media (max-width: 639px) { .mhero { padding: 32px 20px 36px; border-radius: 22px; gap: 14px; } .mhero .mlogo { max-height: 130px; } }
+  /* Cabeçalho compacto (página da marca): logo Dani Moscatelli, divisor vertical e Store, sem a foto. */
+  .bn-div { display: none; }
+  .banner.compacto { min-height: 0; flex-direction: row; align-items: center; border-radius: 24px; }
+  .banner.compacto .bn-photo, .banner.compacto .bn-line, .banner.compacto .bn-lead { display: none; }
+  .banner.compacto .bn-text { padding: 22px 32px; margin: 0; max-width: none; }
+  .banner.compacto .bn-home { display: flex; align-items: center; gap: 20px; }
+  .banner.compacto .bn-kicker { font-size: 20px; }
+  .banner.compacto .bn-div { display: block; width: 1px; height: 40px; background: rgb(255 255 255 / .3); }
+  .banner.compacto .bn-title { margin: 0; font-size: 44px; line-height: 1; letter-spacing: -.04em; }
+  @media (max-width: 639px) {
+    .banner.compacto .bn-text { padding: 16px 20px; }
+    .banner.compacto .bn-home { gap: 14px; }
+    .banner.compacto .bn-kicker { font-size: 16px; gap: 8px; }
+    .banner.compacto .bn-kicker img { width: 26px; }
+    .banner.compacto .bn-div { height: 30px; }
+    .banner.compacto .bn-title { font-size: 32px; }
+  }
   /* Topo claro da página da marca. */
   .bpanel { background: #fff; border: 1px solid var(--line); border-radius: 24px; padding: 28px; margin-bottom: 40px; box-shadow: 0 12px 32px -24px rgb(15 23 42 / .2); }
   .bpanel .lg { box-shadow: none; border: 1px solid var(--line); }
@@ -192,12 +209,17 @@
       <div class="bn-text">
         <a class="bn-home" href="/store/" aria-label="Dani Moscatelli Store, início">
           <p class="bn-kicker"><img src="/store/dm-icone.webp" alt="" width="34" height="39">Dani Moscatelli</p>
+          <span class="bn-div" aria-hidden="true"></span>
           <p class="bn-title">Store</p>
         </a>
         <div class="bn-line" aria-hidden="true"></div>
         <p class="bn-lead">Uma curadoria de marcas e produtos selecionados por Dani Moscatelli, com condições exclusivas de desconto.</p>
       </div>
     </div>
+    <script>
+      // Na página de uma marca o cabeçalho fica compacto: sem a foto, só Dani Moscatelli | Store.
+      if (new URLSearchParams(location.search).get("marca")) document.querySelector(".banner").classList.add("compacto");
+    </script>
   </div>
 </header>
 
