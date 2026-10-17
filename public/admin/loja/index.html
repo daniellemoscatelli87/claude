@@ -77,7 +77,7 @@
   <p class="muted" id="count"></p>
   <p class="msg err hidden" id="load-err"></p>
   <div class="lj-top">
-    <a href="/loja/" target="_blank" rel="noopener">Ver a loja →</a>
+    <a href="/store/" target="_blank" rel="noopener">Ver a loja →</a>
     <button type="button" class="btn-add" id="nova-marca"><span class="bi" id="ic-novo"></span>Nova marca</button>
   </div>
   <div id="list"></div>
@@ -133,7 +133,7 @@
 <script src="/admin/admin.js"></script>
 <script>
 // Loja em níveis: marcas (logo, nome, descrição) e, dentro de cada marca, os produtos
-// (três fotos, preço, desconto e link de compra). A vitrine pública fica em /loja/.
+// (três fotos, preço, desconto e link de compra). A vitrine pública fica em /store/.
 const el = Admin.el, sb = Admin.sb, $ = (id) => document.getElementById(id);
 const BUCKET = "/storage/v1/object/public/loja/";
 const brl = (v) => Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -260,7 +260,7 @@ $("form-marca").addEventListener("submit", async (e) => {
     if (up.error) { fim(); return mostrarErro("dm-err", "Não foi possível enviar a logo: " + up.error.message); }
     logo = up.url; nova = up.path;
   }
-  // Endereço da marca na loja (/loja/?marca=...), único entre as marcas.
+  // Endereço da marca na loja (/store/?marca=...), único entre as marcas.
   let slug = MARCA?.slug || slugify(nome);
   if (!MARCA) { const base = slug; let i = 2; while (MARCAS.some((x) => x.slug === slug)) slug = base + "-" + i++; }
   const linha = { nome, descricao: descricao || null, logo, slug, ativo: $("m-ativo").checked, updated_at: new Date().toISOString() };

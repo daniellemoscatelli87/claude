@@ -109,7 +109,7 @@
 <body>
 <header>
   <div class="wrap">
-    <a href="/"><img src="/logo-dm.png" alt="Dani Moscatelli - Experience Design Studio"></a>
+    <a href="/store/"><img src="/store/logo-store.png" alt="Dani Moscatelli Store" width="186" height="48"></a>
     <a class="back" href="/">Voltar ao site</a>
   </div>
 </header>
@@ -130,7 +130,7 @@
 </footer>
 
 <script>
-// Loja em níveis: /loja/ lista as marcas; /loja/?marca=<slug> mostra os produtos da marca.
+// Loja em níveis: /store/ lista as marcas; /store/?marca=<slug> mostra os produtos da marca.
 // Marcas e produtos ativos vêm das tabelas `marcas` e `produtos` (cadastrados em /admin/loja/).
 const REST = "https://lipfvnerohkaajegqvwr.supabase.co/rest/v1/";
 const KEY = "sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej";
@@ -211,9 +211,9 @@ function cardProduto(p) {
 }
 async function telaMarca(view, slug) {
   const [m] = (await api("marcas?select=id,nome,slug,descricao,logo&ativo=eq.true&slug=eq." + encodeURIComponent(slug))) || [];
-  const crumb = (nome) => node(`<nav class="crumb" aria-label="Navegação"><a href="/loja/">Loja</a><span aria-hidden="true">›</span><span>${esc(nome)}</span></nav>`);
+  const crumb = (nome) => node(`<nav class="crumb" aria-label="Navegação"><a href="/store/">Loja</a><span aria-hidden="true">›</span><span>${esc(nome)}</span></nav>`);
   if (!m) {
-    view.replaceChildren(crumb("Marca"), node("<h1>Marca não encontrada</h1>"), node('<p class="lead">Esta marca não está disponível no momento. <a href="/loja/" style="color:var(--red);font-weight:600">Conheça as demais marcas da loja.</a></p>'));
+    view.replaceChildren(crumb("Marca"), node("<h1>Marca não encontrada</h1>"), node('<p class="lead">Esta marca não está disponível no momento. <a href="/store/" style="color:var(--red);font-weight:600">Conheça as demais marcas da loja.</a></p>'));
     return;
   }
   document.title = m.nome + " • Loja • Dani Moscatelli | Experience Design Studio";
