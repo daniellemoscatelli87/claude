@@ -40,11 +40,9 @@
   .slot { position: relative; aspect-ratio: 1 / 1; border: 2px dashed var(--line); border-radius: 14px; background: #f8fafc; display: grid; place-items: center; cursor: pointer; overflow: hidden; color: var(--muted); font-size: 12px; font-weight: 600; text-align: center; padding: 6px; }
   .slot:hover { border-color: var(--red); color: var(--red); }
   .slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .slot-w { display: grid; gap: 6px; }
-  .ord { display: flex; justify-content: center; gap: 6px; }
-  .ord button { width: 34px; height: 30px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--dark); cursor: pointer; display: grid; place-items: center; font: inherit; font-size: 14px; }
-  .ord button:hover:not(:disabled) { border-color: var(--red); color: var(--red); }
-  .ord button:disabled { opacity: .35; cursor: default; }
+  .slot.cheio { touch-action: none; cursor: grab; }
+  .slot.arrastando { z-index: 5; opacity: .85; box-shadow: 0 16px 32px -12px rgb(15 23 42 / .45); cursor: grabbing; transition: none; }
+  .slot.alvo { border-color: var(--red); border-style: solid; }
   .slot .capa-tag { position: absolute; bottom: 6px; left: 6px; z-index: 1; background: var(--red); color: #fff; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 1px 8px; }
   .capa-box { display: grid; gap: 6px; }
   .capa-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
@@ -129,7 +127,7 @@
     <div>
       <div style="font-size:13px;font-weight:600;margin-bottom:6px">Fotos (3)</div>
       <div class="fotos" id="fotos"></div>
-      <span class="hint">Toque em cada quadro para escolher a foto e use as setas para mudar a ordem. A primeira foto é a capa do card; na janela do produto as fotos aparecem inteiras.</span>
+      <span class="hint">Toque em cada quadro para escolher a foto e arraste as fotos para mudar a ordem. A primeira foto é a capa do card; na janela do produto as fotos aparecem inteiras.</span>
     </div>
     <div class="capa-box hidden" id="capa-box">
       <div style="font-size:13px;font-weight:600">Recorte da capa no card</div>
@@ -335,24 +333,46 @@ let EDIT = null, SLOTS = [], slotAtual = 0;
 function desenharFotos() {
   const box = $("fotos"); box.replaceChildren();
   SLOTS.forEach((s, i) => {
-    const w = el("div", "slot-w");
-    const b = el("button", "slot"); b.type = "button";
-    b.setAttribute("aria-label", (s ? "Trocar" : "Escolher") + " a foto " + (i + 1));
+    const b = el("button", "slot" + (s ? " cheio" : "")); b.type = "button"; b.dataset.i = String(i);
+    b.setAttribute("aria-label", (s ? "Trocar" : "Escolher") + " a foto " + (i + 1) + (s ? ". Arraste para mudar a ordem" : ""));
     b.append(el("span", "n", String(i + 1)));
-    if (s) { const img = el("img"); img.src = s.preview || s.url; img.alt = ""; b.appendChild(img); }
+    if (s) { const img = el("img"); img.src = s.preview || s.url; img.alt = ""; img.draggable = false; b.appendChild(img); }
     else b.append("Escolher foto " + (i + 1));
     if (i === 0 && s) b.append(el("span", "capa-tag", "Capa"));
-    b.addEventListener("click", () => { slotAtual = i; $("file").click(); });
-    // Setas para mudar a ordem de exibição.
-    const ord = el("div", "ord");
-    const mover = (de, para) => { [SLOTS[de], SLOTS[para]] = [SLOTS[para], SLOTS[de]]; if (de === 0 || para === 0) CAPA = { ...CAPA_PADRAO }; desenharFotos(); };
-    const esq = el("button", null, "‹"); esq.type = "button"; esq.disabled = i === 0 || !s; esq.setAttribute("aria-label", "Mover a foto " + (i + 1) + " para a esquerda"); esq.addEventListener("click", () => mover(i, i - 1));
-    const dir = el("button", null, "›"); dir.type = "button"; dir.disabled = i === SLOTS.length - 1 || !s; dir.setAttribute("aria-label", "Mover a foto " + (i + 1) + " para a direita"); dir.addEventListener("click", () => mover(i, i + 1));
-    ord.append(esq, dir);
-    w.append(b, ord);
-    box.appendChild(w);
+    b.addEventListener("click", () => { if (arrastou) { arrastou = false; return; } slotAtual = i; $("file").click(); });
+    if (s) b.addEventListener("pointerdown", (e) => iniciarArraste(e, b, i));
+    box.appendChild(b);
   });
   desenharCapa();
+}
+// Tocar e arrastar uma foto para outra posição muda a ordem (um toque sem arrastar troca a foto).
+let arrastou = false;
+function iniciarArraste(e, b, de) {
+  const x0 = e.clientX, y0 = e.clientY;
+  let ativo = false, para = de;
+  b.setPointerCapture(e.pointerId);
+  const mover = (ev) => {
+    const dx = ev.clientX - x0, dy = ev.clientY - y0;
+    if (!ativo && Math.hypot(dx, dy) < 8) return;
+    ativo = true; b.classList.add("arrastando");
+    b.style.transform = `translate(${dx}px, ${dy}px) scale(1.05)`;
+    b.style.pointerEvents = "none";
+    const alvo = document.elementFromPoint(ev.clientX, ev.clientY)?.closest("#fotos .slot");
+    b.style.pointerEvents = "";
+    $("fotos").querySelectorAll(".slot").forEach((x) => x.classList.toggle("alvo", x === alvo && x !== b && !!SLOTS[Number(x.dataset.i)]));
+    para = alvo && alvo !== b && SLOTS[Number(alvo.dataset.i)] ? Number(alvo.dataset.i) : de;
+  };
+  const soltar = () => {
+    b.removeEventListener("pointermove", mover); b.removeEventListener("pointerup", soltar); b.removeEventListener("pointercancel", soltar);
+    if (!ativo) return;
+    arrastou = true; setTimeout(() => (arrastou = false), 50);
+    if (para !== de) {
+      const [item] = SLOTS.splice(de, 1); SLOTS.splice(para, 0, item);
+      if (de === 0 || para === 0) CAPA = { ...CAPA_PADRAO };
+    }
+    desenharFotos();
+  };
+  b.addEventListener("pointermove", mover); b.addEventListener("pointerup", soltar); b.addEventListener("pointercancel", soltar);
 }
 
 /* ---------- Recorte da capa ---------- */
