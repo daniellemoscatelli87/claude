@@ -6,39 +6,49 @@ Cada item indica o elo da cadeia de valor em que atua: **Identificar** um desafi
 
 Referência dos cortes: seção 18 de [`CHALLENGE_METHODOLOGY.md`](CHALLENGE_METHODOLOGY.md). Escopo aprovado: [`../engineering/FIRST_INCREMENT_PROMPT.md`](../engineering/FIRST_INCREMENT_PROMPT.md).
 
-**Atualizado em:** 19/10/2026.
+**Atualizado em:** 19/10/2026 (Cortes 1 e 2 implementados).
 
 ---
 
 ## Incremento atual (aprovado): Corte 1 + Corte 2
 
-Onde mora e qual banco: decididos (D-005 e D-006 do [Decision Log](../decisions/DECISION_LOG.md)). Aguardando aprovação do plano do Corte 1.
+Onde mora e qual banco: decididos (D-005 e D-006). IA desde o começo (D-007). Detalhes e evidências de teste no [Implementation Log](../engineering/IMPLEMENTATION_LOG.md).
 
-### Corte 1 · Fundação SaaS · Base · Aprovado, não iniciado
+Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`); **regras** = testes automatizados (`npm test`); **telas** = fluxo no navegador com o servidor simulado. Nenhum item foi testado ainda com login real e IA real, porque a aplicação não está publicada.
 
-| ID | Item | Critério de aceite |
+### Corte 1 · Fundação SaaS · Base
+
+| ID | Item | Status | Teste |
+|---|---|---|---|
+| C1-01 | Cadastro e login de pessoas | Implementado (não publicado) | telas |
+| C1-02 | Organizações e membros com papéis iniciais (quem cria vira `org_admin`) | Implementado (não publicado) | banco, telas |
+| C1-03 | RLS em todas as tabelas; nenhuma escrita direta nas tabelas | Implementado e testado | banco |
+| C1-04 | Auditoria mínima (`audit_events`) em criação, confirmação, edição, respostas e uso da IA | Implementado e testado | banco |
+| C1-05 | Testes de isolamento entre duas organizações (e administradora do site sem acesso) | Implementado e testado | banco (8 verificações) |
+| C1-06 | README para rodar o projeto | Implementado | revisão |
+
+### Corte 2 · Entrada do desafio · Identificar
+
+| ID | Item | Status | Teste |
+|---|---|---|---|
+| C2-01 | Tela "O que você quer melhorar?" logo após criar a organização | Implementado (não publicado) | telas |
+| C2-02 | `original_statement` gravado literalmente e nunca sobrescrito | Implementado e testado | banco, regras |
+| C2-03 | Sugestão da IA editável, separada do texto original | Implementado (não publicado); IA real não testada | telas (IA simulada) |
+| C2-04 | Histórico de versões com autor e motivo | Implementado e testado | banco |
+| C2-05 | Próxima pergunta, uma por vez, por regra determinística | Implementado e testado | regras, telas |
+| C2-06 | "Não sei" com quatro caminhos práticos | Implementado e testado | regras, telas |
+| C2-07 | Aviso para não inserir dados identificáveis ou de saúde | Implementado (não publicado) | telas |
+| C2-08 | Retomar após atualizar a página | Implementado (não publicado) | telas; após novo login: não testado |
+| C2-09 | Validação dos campos do Challenge Model com schema | Implementado e testado | regras |
+| C2-10 | Tipos preparados para o Methodology Engine | Implementado | typecheck |
+
+### Para fechar o incremento
+
+| ID | Item | Status |
 |---|---|---|
-| C1-01 | Cadastro e login de pessoas | Uma pessoa cria conta, entra e sai |
-| C1-02 | Organizações e membros (`organizations`, `organization_members`) com papéis iniciais | A pessoa cria ou seleciona uma organização |
-| C1-03 | RLS em todas as tabelas organizacionais | Uma segunda organização não lê nem edita dados da primeira, inclusive via API e banco (AC-07) |
-| C1-04 | Trilha de auditoria mínima (`audit_events`) | Criação e edição de desafio geram evento |
-| C1-05 | Testes automatizados de isolamento entre duas organizações | Testes executados e resultado registrado no Implementation Log |
-| C1-06 | README para rodar o projeto sem experiência em programação | Passo a passo testado |
-
-### Corte 2 · Entrada do desafio · Identificar · Aprovado, não iniciado
-
-| ID | Item | Critério de aceite |
-|---|---|---|
-| C2-01 | Tela inicial "O que você quer melhorar?" (a experiência começa pelo problema, não por um painel vazio) | Primeira tela após criar a organização |
-| C2-02 | `challenges` salva `original_statement` literalmente e nunca o sobrescreve | Teste automatizado |
-| C2-03 | Proposta de estrutura (título, pessoas afetadas, contexto, resultado desejado) editável, separada do texto original | A pessoa confirma ou edita; o original continua intacto |
-| C2-04 | Histórico de versões (`challenge_versions`) | Cada confirmação ou edição gera versão com autor e motivo |
-| C2-05 | Ver o desafio criado e a próxima pergunta contextual (regra determinística nesta fase) | Linguagem simples, sem termos de metodologia |
-| C2-06 | "Não sei" como resposta válida, com alternativas práticas (encontrar, produzir, pedir ajuda, marcar pendente) | AC-02 |
-| C2-07 | Aviso visível para não inserir dados identificáveis ou clínicos | Visível na entrada do desafio |
-| C2-08 | Persistência após atualizar a página e após novo login | AC-12 |
-| C2-09 | Validação de campos do Challenge Model com biblioteca de schemas | Testes automatizados |
-| C2-10 | Interfaces tipadas preparadas para o próximo módulo (Methodology Engine) | Tipos existem; nada do Corte 3 implementado |
+| C2-11 | Publicar a aplicação (segundo site no Netlify, subdomínio) | Aguardando a dona do produto |
+| C2-12 | Liberar cadastro e endereço de retorno do login no Supabase | Aguardando a dona do produto |
+| C2-13 | Teste com login real e IA real, no celular | Depois da publicação |
 
 ---
 

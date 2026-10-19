@@ -64,12 +64,35 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - um erro de política de acesso pode expor dados de clientes junto com dados do site; mitigação: RLS em todas as tabelas do produto e testes automatizados de isolamento;
   - o produto exige cadastro aberto de pessoas no Supabase Auth, que hoje é compartilhado com a área restrita do site; mitigação: antes de liberar o cadastro, revisar todas as políticas do site para confirmar que nenhuma dá acesso a quem apenas tem conta.
 
+## D-007 · 19/10/2026 · IA desde o primeiro incremento
+
+- **Origem:** Dona do produto ("Quero com IA desde o começo").
+- **Decisão:** a organização inicial do desafio é sugerida pela IA (Google Gemini, já usado pelo site, com a chave nos segredos do Supabase). A sugestão é sempre editável e nunca substitui o texto original.
+- **Alternativa considerada:** começar sem IA, com campos guiados (recomendada pelo Claude por deixar a escolha do provedor para depois).
+- **Guardrails aplicados:** a IA não aponta causa, não propõe solução, não presume solução digital, não reproduz dados que identifiquem pessoas e só usa o que o texto diz. Prompt versionado (`interpretacao_desafio_v1`); a resposta é validada por schema antes de aparecer; a auditoria registra modelo e versão do prompt. A IA não escolhe a próxima pergunta nem autoriza avanço de fase (regra determinística).
+- **Ainda pendente (visão, seção 14):** custos, limites e política de retenção do provedor de IA; avaliação de qualidade das sugestões com usuários.
+
+## D-008 · 19/10/2026 · Site estático e escrita somente por funções do banco
+
+- **Origem:** Proposta do Claude, aplicada no Corte 1.
+- **Decisão:** a aplicação Next.js é gerada como site estático (sem servidor próprio). Leituras usam as regras de acesso do banco (RLS); toda escrita passa por funções do banco (`ei_create_organization`, `ei_create_challenge`, `ei_confirm_structure`, `ei_answer_question`) que conferem o papel da pessoa e gravam versão e auditoria na mesma transação. As APIs não escrevem direto nas tabelas.
+- **Fundamento:** nenhum segredo fica no navegador nem num servidor a mais; a segurança fica concentrada e testável no banco; publicação simples no Netlify.
+- **Alternativas consideradas:** rotas de API no servidor Next.js (exigiria guardar segredos e manter um servidor); escrita direta nas tabelas com RLS (versão e auditoria poderiam ser puladas).
+- **Impacto:** os contratos lógicos da metodologia (seção 16, `POST /api/challenges` etc.) são atendidos por essas funções e pela função de IA, não por rotas `/api`.
+
+## D-009 · 19/10/2026 · Tabela investigation_questions antecipada
+
+- **Origem:** Proposta do Claude, aplicada no Corte 2.
+- **Decisão:** além das cinco tabelas pedidas, foi criada `investigation_questions` (prevista na seção 15 da metodologia) para guardar as respostas das perguntas de entendimento, inclusive "não sei" e o caminho escolhido.
+- **Fundamento:** o prompt pede para justificar tabelas extras. Sem ela, as respostas não persistiriam após recarregar a página (C2-06, C2-08, AC-12).
+
+## D-010 · 19/10/2026 · Migrações do produto versionadas no repositório
+
+- **Origem:** Proposta do Claude (antiga pendência P-003), aplicada.
+- **Decisão:** toda mudança de banco do produto nasce como arquivo em `apps/experience-intelligence/supabase/migrations/` e é aplicada a partir dele.
+
 ---
 
 ## Decisões pendentes
 
-### P-003 · Migrações versionadas no repositório
-
-- **Origem:** Proposta do Claude, pendente.
-- **Contexto:** até hoje as migrações do site foram aplicadas direto no Supabase e não estão versionadas no repositório. O kit exige `supabase/migrations/` versionado, com RLS e políticas.
-- **Proposta:** para o produto, toda mudança de banco nasce como arquivo em `supabase/migrations/` (dentro da pasta da aplicação), aplicada a partir do arquivo e registrada no Implementation Log.
+Nenhuma no momento. Pendências de produto (preço, nicho, provedor de IA etc.) estão na seção 14 da visão.

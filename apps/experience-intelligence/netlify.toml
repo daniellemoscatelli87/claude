@@ -1,0 +1,7 @@
+# Segundo site no Netlify, publicado a partir desta pasta (Base directory: apps/experience-intelligence).
+[build]
+  command = "npm ci && npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "22"
