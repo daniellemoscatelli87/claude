@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { supabase } from "@/infrastructure/supabase";
 import { useSession } from "./session";
+import { isMaster } from "@/application/master";
 
 export function Shell({ children }: { children: React.ReactNode }) {
   const { session, organizations, current, selectOrganization } = useSession();
@@ -13,6 +14,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <Link href="/" className="brand">DM | <span>Experience Intelligence</span></Link>
           {session && (
             <div className="top-actions">
+              {isMaster(session) && <Link href="/master/" className="tag" style={{ textDecoration: "none" }}>Área master</Link>}
               {organizations.length > 1 && current && (
                 <label className="sr-only" htmlFor="org-select">Organização</label>
               )}

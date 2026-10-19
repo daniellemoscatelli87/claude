@@ -42,6 +42,14 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 | C2-09 | Validação dos campos do Challenge Model com schema | Implementado e testado | regras |
 | C2-10 | Tipos preparados para o Methodology Engine | Implementado | typecheck |
 
+### Acesso master (D-011) · Base
+
+| ID | Item | Status | Teste |
+|---|---|---|---|
+| M-01 | Funções de leitura da master com registro de cada acesso (auditoria do cliente e registro da plataforma) | Implementado e testado | banco (6 verificações, `master_access.sql`) |
+| M-02 | Área master na aplicação: clientes, desafios e desafio completo, somente leitura | Implementado (não publicado) | telas |
+| M-03 | Aviso no cadastro de que o estúdio pode acessar os projetos e que tudo fica registrado | Implementado (não publicado) | telas |
+
 ### Para fechar o incremento
 
 | ID | Item | Status |
@@ -56,6 +64,8 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 
 | Corte | Item | Elo | Status |
 |---|---|---|---|
+| Comercial | Cobrança antes do uso: cadastro → pagamento → uso (D-013) | Base | Planejado (não autorizado); depende de provedor de pagamento e preços |
+| Comercial | Termos de uso e política de privacidade do produto, incluindo o acesso da master (D-011) | Base | Obrigatório antes do lançamento comercial |
 | 3 | Motor de condução: perguntas, protocolos em JSON, `next_best_action`, "não sei" completo | Investigar | Planejado (não autorizado) |
 | 4 | Registro e síntese: atividades, evidências, cobertura, tela "O que sabemos / O que falta saber" | Investigar · Compreender | Planejado (não autorizado) |
 | 5 | Integração de inteligência: busca em protocolos curados, prompts versionados, saída validada e logs | Compreender | Planejado (não autorizado) |

@@ -91,6 +91,26 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Proposta do Claude (antiga pendência P-003), aplicada.
 - **Decisão:** toda mudança de banco do produto nasce como arquivo em `apps/experience-intelligence/supabase/migrations/` e é aplicada a partir dele.
 
+## D-011 · 19/10/2026 · A usuária master vê todos os projetos dos clientes, com registro
+
+- **Origem:** Dona do produto ("Dani Moscatelli poderá em algum momento visualizar sim os projetos dos clientes, pois ela é a usuária master"; escolheu "Vê tudo, com registro").
+- **Decisão:** a usuária master vê todas as organizações, todos os desafios e as respostas. Todo acesso passa por funções do banco que registram quem viu o quê e quando, na auditoria da organização do cliente (visível para a administração do cliente) e no registro da plataforma (`master_access_log`). A master não tem leitura direta nas tabelas, então não existe acesso sem registro.
+- **Altera:** a regra "o acesso de estúdio não é global" (`CLAUDE.md`, metodologia seção 15 e D-006) e "administrador SaaS sem acesso irrestrito aos dados de clientes" (visão, seção 2.2). Os textos originais do kit não foram editados; esta decisão prevalece sobre eles.
+- **Quem é master:** marca `ei_master` no `app_metadata` da conta (definida só no servidor), separada do papel `admin` do site. Aplicada à conta contato@danimoscatelli.com.br.
+- **Alternativas consideradas:** ver só com autorização do cliente (regra anterior); ver tudo sem registro (descartada: não há como provar ao cliente quem acessou).
+- **Obrigatório antes do lançamento comercial:** termos de uso e política de privacidade do produto informando esse acesso (LGPD). Por enquanto, a tela de cadastro avisa que a equipe do estúdio pode acessar os projetos e que cada acesso fica registrado.
+
+## D-012 · 19/10/2026 · Login do cliente separado do admin
+
+- **Origem:** Dona do produto.
+- **Decisão:** o cliente tem a própria conta e entra pela plataforma; a área restrita do site continua só da administradora. As contas ficam no mesmo Supabase Auth (D-006), mas uma conta de cliente não dá acesso a nada do site (testado: o papel `admin` vem só do `app_metadata`).
+
+## D-013 · 19/10/2026 · Fluxo comercial: cadastro, pagamento e uso; livre durante os testes
+
+- **Origem:** Dona do produto ("A pessoa vai vir de um fluxo de cadastro > pagamento e daí vai poder usar a plataforma"; para agora escolheu "Livre para testes").
+- **Decisão:** no produto comercial, a pessoa só usa a plataforma depois do pagamento. Enquanto a cobrança não existir, qualquer pessoa cadastrada usa sem pagar, e a tela de cadastro informa que a plataforma está em fase de testes.
+- **Pendente (bloqueia o corte de cobrança, não os testes):** provedor de pagamento, preços e planos (visão, seção 14).
+
 ---
 
 ## Decisões pendentes

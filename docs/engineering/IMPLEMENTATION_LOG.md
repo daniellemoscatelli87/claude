@@ -8,7 +8,7 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ## Estado atual (19/10/2026)
 
-**Cortes 1 e 2 implementados, não publicados.** Banco, regras e telas testados (ver entrada abaixo). Ainda não houve teste com login real e IA real, porque a aplicação não está no ar.
+**Cortes 1 e 2 e acesso master implementados, não publicados.** Banco, regras e telas testados (ver entrada abaixo). Ainda não houve teste com login real e IA real, porque a aplicação não está no ar.
 
 ## 2026-10-19 · Organização da documentação
 
@@ -46,6 +46,17 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 **Não testado ainda:** cadastro e login reais (inclusive e-mail de confirmação), resposta real do Gemini e qualidade das sugestões, retomada após novo login, uso em celular real. Dependem da publicação.
 
 **Pendências para publicar:** segundo site no Netlify com pasta base `apps/experience-intelligence` (o `netlify.toml` já define build e pasta `out`), subdomínio, e no Supabase Auth: cadastro liberado e o endereço do app nas URLs de retorno.
+
+## 2026-10-19 · Acesso master com registro (D-011) e avisos de fase de testes
+
+- **Banco:** migração `apps/experience-intelligence/supabase/migrations/20261019150000_acesso_master.sql`, aplicada como `ei_20261019150000_acesso_master`. Tabela `master_access_log` (sem acesso para `anon` e `authenticated`); funções `ei_is_master`, `ei_master_organizations`, `ei_master_challenges`, `ei_master_challenge` e `ei_master_registrar` (esta última só chamada pelas outras).
+- **Conta master:** `ei_master: true` adicionado ao `app_metadata` de contato@danimoscatelli.com.br (o papel `admin` do site continua lá). A marca passa a valer no próximo login ou renovação da sessão.
+- **Aplicação:** `src/application/master.ts`, tela `src/app/master/page.tsx`, link "Área master" no topo (só para a master) e aviso de fase de testes e de acesso do estúdio no cadastro (`AuthForm`).
+- **Testes executados:**
+  - `supabase/tests/master_access.sql` no banco real, transação desfeita: "OK: 6 verificações passaram": cliente não usa as funções da master; o papel admin do site sozinho não dá acesso master; master não lê direto nas tabelas; master vê organizações, lista de desafios e desafio completo; cada acesso fica registrado na plataforma e na auditoria do cliente; o cliente vê na própria auditoria que a master acessou, mas não o registro geral.
+  - Telas da master no navegador (servidor simulado): master navega clientes → desafios → desafio completo, chamando as três funções; conta comum que abre `/master/` volta ao início e não vê o link; nenhum erro de página.
+  - `npm test` (25 de 25), `npm run typecheck` (sem erros) e `npm run build` (5 páginas, incluindo `/master`).
+- **Não testado ainda:** a área master com login real.
 
 ## Estado do repositório encontrado (19/10/2026)
 

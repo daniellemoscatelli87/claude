@@ -44,6 +44,9 @@ export function AuthForm() {
         <input type="password" autoComplete={modo === "criar" ? "new-password" : "current-password"} value={senha} onChange={(e) => setSenha(e.target.value)} required minLength={8} />
         {modo === "criar" && <span className="hint">Pelo menos 8 caracteres.</span>}
       </label>
+      {modo === "criar" && (
+        <p className="hint" style={{ margin: 0 }}>Plataforma em fase de testes. A equipe Dani Moscatelli | Experience Design Studio pode acessar os projetos da sua organização; cada acesso fica registrado no histórico da organização.</p>
+      )}
       {erro && <p className="msg err" role="alert">{erro}</p>}
       {aviso && <p className="msg ok" role="status">{aviso}</p>}
       <button className="btn btn-primary btn-block" disabled={enviando}>{enviando ? "Aguarde…" : modo === "criar" ? "Criar conta" : "Entrar"}</button>

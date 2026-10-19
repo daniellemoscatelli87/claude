@@ -372,3 +372,9 @@ O valor não está simplesmente em produzir mapas, diagnósticos ou relatórios.
 Mesmo sem possuir especialistas internos nessas disciplinas.
 
 **Como usar esta declaração:** toda funcionalidade proposta deve indicar em qual elo dessa cadeia ela atua e como ajuda a organização a avançar para o elo seguinte. Uma funcionalidade que apenas produz um artefato (mapa, relatório, painel) sem levar a uma ação verificável deve ser questionada antes de entrar no backlog.
+
+### Decisões complementares da dona do produto (19/10/2026)
+
+- **[DECIDIDO]** O login do cliente é separado do login da administração do estúdio (D-012).
+- **[DECIDIDO]** Fluxo comercial: **cadastro → pagamento → uso da plataforma**. Durante a fase de testes, o uso é livre e sem cobrança (D-013). Provedor de pagamento e preços seguem **[PENDENTE]**.
+- **[DECIDIDO]** Dani Moscatelli é a **usuária master** e pode visualizar os projetos de todos os clientes. Cada acesso fica registrado e visível ao cliente na auditoria da organização (D-011). Isso substitui, nas seções 2.2 e 9 deste documento, a regra de que o estúdio só acessa dados autorizados caso a caso. Antes do lançamento comercial, os termos de uso e a política de privacidade do produto devem informar esse acesso.
