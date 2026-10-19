@@ -12,7 +12,7 @@ Referência dos cortes: seção 18 de [`CHALLENGE_METHODOLOGY.md`](CHALLENGE_MET
 
 ## Incremento atual (aprovado): Corte 1 + Corte 2
 
-Bloqueado pelas decisões pendentes P-001, P-002 e P-003 do [Decision Log](../decisions/DECISION_LOG.md).
+Onde mora e qual banco: decididos (D-005 e D-006 do [Decision Log](../decisions/DECISION_LOG.md)). Aguardando aprovação do plano do Corte 1.
 
 ### Corte 1 · Fundação SaaS · Base · Aprovado, não iniciado
 

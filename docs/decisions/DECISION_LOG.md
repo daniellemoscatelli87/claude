@@ -46,28 +46,27 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Fundamento:** seção 13 da visão e passo 1 do prompt do primeiro incremento.
 - **Impacto:** nenhum código do site foi alterado. A pasta `docs/` não é publicada no site (o build só publica `public/` e a página inicial).
 
+## D-005 · 19/10/2026 · O produto é uma aplicação própria dentro deste repositório
+
+- **Origem:** Dona do produto (escolheu a alternativa A da antiga pendência P-001).
+- **Decisão:** o DM | Experience Intelligence será uma aplicação própria em Next.js + TypeScript, em pasta separada deste repositório, publicada como um segundo site no Netlify, em subdomínio próprio.
+- **Fundamento:** separar o SaaS do site do estúdio, seguir a arquitetura recomendada no kit e permitir vender o produto de forma independente.
+- **Alternativas consideradas:** rota dentro do site atual (mistura o SaaS com o site e dificulta testes); repositório separado (fora do repositório que a dona do produto acompanha).
+- **Pendente dentro desta decisão:** nome do subdomínio (será perguntado quando a publicação for configurada).
+
+## D-006 · 19/10/2026 · O produto usa o mesmo projeto Supabase do site
+
+- **Origem:** Dona do produto. Fundamento dado por ela: "os clientes são clientes do estúdio".
+- **Decisão:** o produto usa o projeto Supabase do site (`lipfvnerohkaajegqvwr`), com tabelas e regras de acesso próprias do produto.
+- **Alternativas consideradas:** projeto Supabase exclusivo do produto (recomendado pelo Claude por separar fisicamente os dados dos clientes do SaaS dos dados do site); estúdio com acesso a todos os dados dos clientes (não escolhido).
+- **Regra que continua valendo:** o acesso do estúdio não é global. O papel `admin` do site **não** dá acesso aos desafios, evidências e demais dados das organizações clientes; o estúdio só acessa dados de uma organização quando ela autorizar explicitamente (papel `studio_consultant` por convite, previsto na metodologia).
+- **Riscos registrados:**
+  - um erro de política de acesso pode expor dados de clientes junto com dados do site; mitigação: RLS em todas as tabelas do produto e testes automatizados de isolamento;
+  - o produto exige cadastro aberto de pessoas no Supabase Auth, que hoje é compartilhado com a área restrita do site; mitigação: antes de liberar o cadastro, revisar todas as políticas do site para confirmar que nenhuma dá acesso a quem apenas tem conta.
+
 ---
 
-## Decisões pendentes (bloqueiam o Corte 1)
-
-### P-001 · Onde o produto vai morar e com qual tecnologia
-
-- **Origem:** Proposta do Claude, pendente.
-- **Contexto:** o repositório não está vazio. O site atual é Vite + TypeScript com páginas estáticas em `public/` (área restrita em HTML e JavaScript puro) e Supabase. O prompt do incremento recomenda Next.js + TypeScript apenas se o repositório estivesse vazio e pede para adaptar à estrutura real explicando o motivo.
-- **Alternativas:**
-  - **A. Aplicação própria em Next.js + TypeScript dentro deste repositório** (ex.: `apps/experience-intelligence/`), publicada como um segundo site no Netlify, em subdomínio próprio. Separa o produto do site do estúdio, segue a arquitetura recomendada e facilita vender o produto de forma independente.
-  - **B. Dentro do site atual**, em uma rota como `/app/`, no mesmo padrão das páginas da área restrita. Mais rápido de começar, mas mistura o SaaS com o site do estúdio e dificulta testes, tipagem e crescimento.
-  - **C. Repositório separado** só para o produto. Separação máxima, mas sai do repositório que a dona do produto já acompanha.
-- **Recomendação do Claude:** A.
-
-### P-002 · Projeto Supabase do produto
-
-- **Origem:** Proposta do Claude, pendente.
-- **Contexto:** o site do estúdio usa o projeto Supabase `lipfvnerohkaajegqvwr`, que guarda contatos, parceiros, lançamento e Store, com acesso de administradora do estúdio.
-- **Alternativas:**
-  - **A. Projeto Supabase novo e exclusivo do produto.** Dados de clientes do SaaS ficam fisicamente separados dos dados do site e da administração do estúdio, como pede a regra de que "o acesso de estúdio não é global".
-  - **B. Mesmo projeto do site,** com tabelas e RLS próprias. Menos configuração, mas mistura dados de clientes com os do estúdio e aumenta o risco de vazamento por erro de política.
-- **Recomendação do Claude:** A. Criar o projeto é uma ação da dona do produto no painel do Supabase.
+## Decisões pendentes
 
 ### P-003 · Migrações versionadas no repositório
 
