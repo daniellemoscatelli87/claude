@@ -1,0 +1,35 @@
+# Documentação do produto DM | Experience Intelligence
+
+Esta documentação é parte integrante do produto, não material de apoio descartável. Ela permite continuar o desenvolvimento em novas sessões sem reconstruir o contexto, desde que os arquivos permaneçam no repositório.
+
+## Os quatro registros permanentes
+
+| Registro | Pergunta que responde | Arquivo |
+|---|---|---|
+| **Product Vision** | Onde queremos chegar? | [`strategy/PRODUCT_VISION.md`](strategy/PRODUCT_VISION.md) |
+| **Product Backlog** | O que precisamos construir e em qual prioridade? | [`product/PRODUCT_BACKLOG.md`](product/PRODUCT_BACKLOG.md) |
+| **Decision Log** | Quais decisões foram tomadas, por que e quais alternativas foram consideradas? | [`decisions/DECISION_LOG.md`](decisions/DECISION_LOG.md) |
+| **Implementation Log** | O que foi efetivamente desenvolvido, testado e colocado em funcionamento? | [`engineering/IMPLEMENTATION_LOG.md`](engineering/IMPLEMENTATION_LOG.md) |
+
+## Documentos de referência
+
+| Documento | Conteúdo | Origem |
+|---|---|---|
+| [`strategy/PRODUCT_VISION.md`](strategy/PRODUCT_VISION.md) | Visão, Business Model Canvas, jornada, roadmap por horizontes, riscos e declaração da dona do produto | `03-visao-negocio-produto-roadmap-v1.md` |
+| [`strategy/BUSINESS_MODEL_CANVAS.md`](strategy/BUSINESS_MODEL_CANVAS.md) | Aponta para a seção 4 da visão | Criado na organização |
+| [`strategy/ROADMAP.md`](strategy/ROADMAP.md) | Aponta para a seção 7 da visão | Criado na organização |
+| [`product/CHALLENGE_METHODOLOGY.md`](product/CHALLENGE_METHODOLOGY.md) | Challenge Model, Methodology Engine, regras de domínio, testes de aceitação e cortes | `01-architecture-challenge-methodology-v1.md` |
+| [`engineering/FIRST_INCREMENT_PROMPT.md`](engineering/FIRST_INCREMENT_PROMPT.md) | Escopo aprovado do primeiro incremento (Cortes 1 e 2) | `02-prompt-claude-code-primeiro-incremento.md` |
+| [`research/VALIDATION_LOG.md`](research/VALIDATION_LOG.md) | Aprendizados de validação de mercado e com usuários | Criado na organização |
+| [`../CLAUDE.md`](../CLAUDE.md) | Instruções persistentes para o Claude Code | `CLAUDE.md` do kit |
+
+## Regras de atualização
+
+1. Quando uma funcionalidade for criada ou alterada, o Claude atualiza no mesmo commit:
+   - **Implementation Log**: o que foi feito, arquivos, migrações, comandos de teste executados e resultado real (inclusive falhas).
+   - **Product Backlog**: status do item (concluído, em andamento, próximo, fora de escopo).
+   - **Decision Log**: toda decisão de produto ou arquitetura tomada no caminho, com fundamento e alternativas.
+   - **Product Vision**: somente quando a dona do produto alterar visão, princípios, público ou modelo de negócio.
+2. Distinguir sempre: **visão** ≠ **roadmap** ≠ **escopo aprovado** ≠ **implementado** ≠ **testado** ≠ **validado com usuários**.
+3. Nunca marcar algo como pronto por existir tela, tabela, mockup ou prompt.
+4. Toda funcionalidade deve indicar em qual elo da cadeia de valor atua: **Identificar um desafio → Investigar a realidade → Compreender as pessoas → Transformar o serviço → Avaliar os resultados**.
