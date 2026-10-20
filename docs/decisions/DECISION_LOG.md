@@ -232,6 +232,7 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Feito:** `ei_settings.ai_enabled = true` em 20/10/2026, às 19:40 UTC.
 - **Desligar:** `update public.ei_settings set ai_enabled = false where id;` (SQL Editor do Supabase), ou pedir ao Claude.
 - **Regra:** só desafios fictícios, sem nomes, empresas reais, dados pessoais, de saúde ou confidenciais (termos do Gemini para o plano gratuito). Clientes reais continuam dependendo de D-017 e D-018.
+- **Conta de cliente de teste:** a dona do produto indicou `daniellemoscatelli@gmail.com`, que é dela. Adicionada à lista de convidadas em 20/10/2026, às 19:54 UTC. É a única convidada, e as duas contas são da dona do produto.
 
 ---
 
@@ -240,7 +241,6 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **P-004 · 20/10/2026 · Proposta revisada (seção 8 de [`UX_ONBOARDING_PROPOSAL.md`](../product/UX_ONBOARDING_PROPOSAL.md))**. Assinatura, nome, ícones e prioridade foram decididos (D-022). Ainda aguardam:
   - a aprovação da arquitetura;
   - o limite de análises da IA por desafio;
-  - a conta de cliente de teste;
   - o documento `docs/knowledge/RAG_ARCHITECTURE.md`, citado pelo kit e ausente no repositório.
 
 Outras pendências de produto (preço, nicho, provedor de IA etc.) estão na seção 14 da visão.
