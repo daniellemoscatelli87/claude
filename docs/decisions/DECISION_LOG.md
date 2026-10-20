@@ -315,6 +315,7 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Análise:** o CPF não é necessário para impedir duplicidades nesta fase. As contas já são únicas por e-mail confirmado, as empresas devem usar o CNPJ, e a maioridade pode ser declarada.
 - **Suspenso até nova decisão:** CPF e data de nascimento obrigatórios no cadastro (D-025). A migração `20261021100000` e o formulário **não serão aplicados ou publicados** nessa forma.
 - **Proposta:** ver P-007.
+- **Estado e cidade (21/10/2026):** a dona do produto decidiu mantê-los obrigatórios, porque são importantes para a análise posterior do perfil de clientes. Essa finalidade precisa aparecer no aviso de privacidade e na política, com base legal declarada (ver `docs/legal/`).
 
 ---
 

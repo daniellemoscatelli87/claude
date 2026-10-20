@@ -16,7 +16,8 @@
 | Dado | Finalidade | Base legal provável (LGPD, art. 7º) |
 |---|---|---|
 | Nome, e-mail, senha (hash, guardado pelo Supabase Auth) | Criar e proteger a conta; comunicação sobre o serviço | Execução de contrato ou procedimentos preliminares (V) |
-| Telefone, estado e cidade | Contato e suporte; contexto da conta | Execução de contrato (V) |
+| Telefone | Contato e suporte | Execução de contrato (V) |
+| Estado e cidade (obrigatórios, decisão da dona do produto em 21/10/2026) | Contexto da conta e **análise interna do perfil de clientes por localização**, feita pelo estúdio | Execução de contrato (V) para o contexto; legítimo interesse (IX) para a análise, com teste de balanceamento registrado e uso agregado sempre que possível |
 | Declaração de maioridade | Garantir que a pessoa responsável é maior de idade | Execução de contrato (V) |
 | Dados da empresa (nome, segmento, o que oferece, tipo, porte, CNPJ quando informado) | Configurar o espaço de trabalho e adaptar as orientações; evitar duplicidade | Execução de contrato (V); legítimo interesse (IX) para integridade cadastral |
 | Conteúdo dos desafios, respostas e evidências | Prestar o serviço de investigação guiada | Execução de contrato (V) |

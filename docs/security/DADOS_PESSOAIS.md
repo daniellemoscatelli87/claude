@@ -35,7 +35,11 @@
 
 **Pessoa (conta pessoal)**
 - Identificador: `user_id` interno + e-mail confirmado.
-- Perfil: nome completo (obrigatório), telefone (obrigatório, para contato e suporte), estado e cidade (decisão da dona do produto, D-025). **Sem CPF e sem data de nascimento.**
+- Perfil:
+  - nome completo (obrigatório);
+  - telefone (obrigatório, para contato e suporte);
+  - estado e cidade (**obrigatórios**: confirmado pela dona do produto em 21/10/2026, para a análise posterior do perfil de clientes; a finalidade precisa constar no aviso de privacidade);
+  - **sem CPF e sem data de nascimento.**
 - Maioridade: caixa "Declaro ter 18 anos ou mais", registrada com data e versão do texto.
 - Os dados do perfil continuam fora dos metadados da conta (o gatilho grava em `ei_profiles` e limpa os metadados), para não irem para o token de acesso.
 
