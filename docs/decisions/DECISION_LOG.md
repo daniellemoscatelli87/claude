@@ -172,6 +172,20 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **O que não muda agora:** nenhuma API nova é contratada ou integrada; a IA continua desligada (D-017, D-018); os controles de custo (D-015) continuam valendo.
 - **Próximo passo:** quando começarem o Methodology Engine e o RAG, o Claude apresenta uma proposta técnica que aproveite o código existente. Nada é implementado antes da aprovação.
 
+## D-020 · 20/10/2026 · A IA desenha o discovery desde a submissão do desafio
+
+- **Origem:** Dona do produto ("A IA precisa começar a atuar desde o momento que a empresa submeteu o desafio, pois todas as etapas posteriores vão se desenhar de acordo com o desafio… Um discovery mal feito vai gerar recomendações ruins").
+- **Decisão:** ao submeter o desafio, a IA propõe o plano de discovery: o que perguntar, qual método aplicar e o que a pessoa precisa fazer para obter e enviar as informações. As regras e os protocolos versionados (metodologia, seções 7 e 8) validam o plano e servem de contingência.
+- **Fundamento:** a qualidade do discovery determina a qualidade das recomendações. Perguntas fixas não servem a desafios diferentes.
+- **Guarda-corpos mantidos:**
+  - a IA escolhe métodos só do catálogo e justifica;
+  - o plano é validado e salvo, e recarregar não gera nada;
+  - limites de uso;
+  - a pessoa confirma o entendimento;
+  - sem RAG simulado;
+  - só dados fictícios no plano gratuito do Gemini (D-017, D-018).
+- **Implementação:** proposta no corte UX-3 de [`UX_ONBOARDING_PROPOSAL.md`](../product/UX_ONBOARDING_PROPOSAL.md). Aguarda aprovação.
+
 ---
 
 ## Decisões pendentes

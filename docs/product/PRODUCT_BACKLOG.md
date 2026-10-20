@@ -94,8 +94,8 @@ Especificação: `docs/product/ux-onboarding/` (kit v1.0). Proposta e comparaç�
 |---|---|---|---|
 | UX-1 | Entrada pública com proposta de valor, conta (nome, mostrar senha, esqueci a senha, reenviar confirmação), boas-vindas só no primeiro acesso, mensagens globais | Base · Identificar | Proposto (aguardando aprovação) |
 | UX-2 | Cadastro da organização com campos opcionais (segmento, o que oferece, papel, tipo, porte) e edição posterior auditada | Base | Proposto (aguardando aprovação); exige migração |
-| UX-3 | Área de trabalho, entrada do desafio com pistas, revisão com IA desligada, motor de condução por regras com protocolo versionado no lugar das perguntas fixas, progresso | Identificar · Investigar | Proposto (aguardando aprovação) |
-| UX-4 | Plano de investigação gerado pela IA em lote, salvo e versionado, novo plano só com gatilho | Investigar | Futuro; depende de IA autorizada (D-017, D-018, D-019) |
+| UX-3 | Área de trabalho, entrada do desafio com pistas e **discovery desenhado pela IA desde a submissão** (D-020): plano salvo e versionado, métodos do catálogo, validação pelo motor, plano por regras como contingência, uma atividade por vez, progresso | Identificar · Investigar | Proposto (aguardando aprovação); exige migração (`challenge_plans`) |
+| UX-4 | Revisão dos planos da IA pela dona do produto nos 3 casos fictícios, antes de clientes reais | Investigar | Proposto; obrigatório antes de clientes reais |
 | UX-5 | Simulação "Visualizar experiência de cliente" para a master | Base | Futuro |
 | UX-6 | Convite de pessoas para a organização e apoio especializado contextual | Base · Transformar | Futuro |
 

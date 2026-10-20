@@ -49,6 +49,8 @@ O kit trata o nome como opcional; você pediu que o nome apareça ao lado do ava
 
 ## 2. Investigação adaptativa sem perguntas fixas
 
+> **Revisão de 20/10/2026 (D-020):** a dona do produto decidiu que a IA atua desde a submissão do desafio e desenha o discovery inteiro (o que perguntar, qual método aplicar e o que a pessoa precisa fazer para obter e enviar as informações). A seção 2.5 substitui 2.2 e 2.3 como caminho principal; o motor por regras de 2.2 passa a ser **o guarda-corpo e o modo de contingência** (IA desligada, limite atingido ou resposta inválida).
+
 ### 2.1 Problema atual
 A tela do desafio usa 5 perguntas fixas, iguais para qualquer desafio, com exemplos de recepção e pacientes. Isso contraria o kit e a decisão D-003.
 
@@ -69,6 +71,28 @@ Um **motor de condução por regras**, versionado, no domínio da aplicação (`
 - **Persistência:** o plano fica salvo e versionado numa tabela própria (`challenge_plans`). Recarregar lê o salvo.
 - **Novo plano só com gatilho explícito** ("Atualizar plano" ou contexto novo relevante), dentro dos limites que já existem (`ai_usage`, `ei_settings`), com a funcionalidade registrada no uso.
 - **Dependências:** revisão de privacidade do provedor (D-017, D-018), teste real de concorrência (C2-14) e proposta de vários fornecedores (D-019, IA-01).
+
+### 2.5 Discovery desenhado pela IA desde a submissão (caminho principal, D-020)
+1. **Na submissão do desafio**, uma única chamada da IA devolve, juntas, a proposta de entendimento (o que já existe hoje) e o **plano de discovery**:
+   - necessidades de informação priorizadas, com o porquê de cada uma;
+   - para cada necessidade, o método escolhido entre os seis protocolos versionados da seção 7 de `CHALLENGE_METHODOLOGY.md`;
+   - a atividade concreta: o que perguntar, a quem, onde observar, como registrar e como enviar para a plataforma;
+   - os cuidados de privacidade;
+   - o que fazer quando a pessoa não sabe.
+2. **A IA não inventa método:** ela só escolhe entre os protocolos do catálogo e justifica a escolha. O motor por regras valida o plano:
+   - esquema;
+   - protocolos permitidos;
+   - proibição de dados pessoais ou de saúde;
+   - nenhuma conclusão ou solução antecipada;
+   - limite de tamanho.
+
+   Se falhar, o app usa o plano por regras, rotulado como tal.
+3. **A pessoa confirma o entendimento.** Se editar algo relevante, o app propõe gerar o plano de novo, no máximo 1 vez, dentro do limite de 3 pedidos por desafio que já existe. Recarregar a página nunca gera nada.
+4. **O plano é salvo e versionado** na tabela nova `challenge_plans`, ligada ao desafio, com o modelo, a versão do prompt e a auditoria. A pessoa vê **uma atividade por vez**. As respostas atualizam o estado sem chamar a IA. Um plano novo só com gatilho explícito.
+5. **Qualidade:** você, como especialista, revisa os planos gerados para os 3 casos fictícios do kit antes de qualquer cliente. O resultado fica no `VALIDATION_LOG.md`. A versão do prompt só avança depois dessa revisão.
+6. **Sem RAG por enquanto:** a IA não diz que consultou fontes. Os fundamentos vêm só dos protocolos do catálogo, até o RAG existir.
+7. **Custo:** cerca de 1 a 2 chamadas por desafio, no plano gratuito, sem faturamento. Acima da cota gratuita, o Google recusa e o app segue pelo plano por regras.
+8. **Privacidade:** no plano gratuito, o Google pode usar e revisar o conteúdo. Testes só com desafios fictícios; clientes reais só depois de D-017 e D-018.
 
 ### 2.4 Armazenamento agora
 - Respostas, "não sei" e pendências continuam em `investigation_questions`. A chave da pergunta passa a ser a chave da necessidade.
@@ -109,8 +133,13 @@ Um **motor de condução por regras**, versionado, no domínio da aplicação (`
 ## 6. Ordem proposta (cortes curtos e reversíveis)
 1. **UX-1 · Entrada, conta e boas-vindas** (sem migração): telas A, B, C, D e K, nome da pessoa, mostrar senha, esqueci a senha, reenviar confirmação, ícones e cabeçalho.
 2. **UX-2 · Organização** (migração pequena): tela E, editar depois e seletor.
-3. **UX-3 · Desafio e condução por regras** (sem migração além de `protocol_version`): telas F, G, G2, H, I e J, com o motor e o protocolo versionado substituindo as perguntas fixas, e testes com os 3 cenários do kit.
-4. **Futuro, com IA autorizada:** plano por IA em lote, `challenge_plans`, novo plano com gatilho e vários fornecedores.
+3. **UX-3 · Desafio e discovery desenhado pela IA** (migração: `challenge_plans` e `protocol_version`):
+   - telas F, G, G2, H, I e J;
+   - protocolos da seção 7 em formato versionado;
+   - prompt versionado de plano e validação pelo motor;
+   - plano por regras como contingência;
+   - testes com os 3 cenários do kit, com IA simulada e depois real, só com dados fictícios.
+4. **Futuro:** vários fornecedores de IA (D-019) e RAG.
 5. **Futuro:** simulação "ver como cliente" para a master, convite de equipe e apoio especializado.
 
 Cada corte termina com testes, prints em 375 px e registros atualizados, e só vai ao `main` com a sua autorização.
