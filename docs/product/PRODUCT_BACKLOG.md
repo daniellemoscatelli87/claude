@@ -67,7 +67,7 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 
 | ID | Item | Status |
 |---|---|---|
-| C2-11 | Publicar a aplicação (segundo site no Netlify, subdomínio) | Aguardando a dona do produto |
+| C2-11 | Publicar a aplicação (segundo site no Netlify, subdomínio) | Segundo site publicado em 20/10/2026 (`dm-experience-intelligence.netlify.app`, Private no Netlify); `app.danimoscatelli.com.br` com HTTPS ativo |
 | C2-12 | Liberar cadastro e endereço de retorno do login no Supabase | Concluído em 20/10/2026 pela dona do produto: endereço de retorno `https://app.danimoscatelli.com.br/**` adicionado; conferido que o cadastro por e-mail está ligado, "Confirm email" ligado e login anônimo desligado. Site URL não alterado |
 | C2-13 | Teste com login real e IA real, no celular | Depois da publicação e da revisão do tratamento de dados do Gemini |
 | C2-14 | Teste real de concorrência dos limites da IA (várias chamadas ao mesmo tempo, em conexões diferentes) | **Obrigatório antes de ativar a IA para clientes** (D-018) |
@@ -85,6 +85,28 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 | 5 | Integração de inteligência: busca em protocolos curados, prompts versionados, saída validada e logs | Compreender | Planejado (não autorizado) |
 | 6 | Oferta especializada: regras, cartões, consentimento e notificação ao estúdio | Transformar | Planejado (não autorizado) |
 | 7 | Teste de ponta a ponta: clínica, hotel e experiência do colaborador, sem regras fixas por setor | Avaliar | Planejado (não autorizado) |
+
+### Condução adaptativa, cadastro e primeiro acesso: proposto, aguardando aprovação
+
+Especificação: `docs/product/ux-onboarding/` (kit v1.0). Proposta e comparação com o código: [`UX_ONBOARDING_PROPOSAL.md`](UX_ONBOARDING_PROPOSAL.md), seção 8 (D-021, D-022). Ordem: UX-3a → UX-3b → UX-1. Nada implementado.
+
+| ID | Item | Elo | Status |
+|---|---|---|---|
+| UX-3a | Base da condução adaptativa (D-021): contexto mínimo da organização, nome obrigatório, catálogo de protocolos aprovados, Experience Guide com instrumentos, plano inicial pela IA, cartão de atividade, registro estruturado de evidências e regras imediatas de qualidade | Identificar · Investigar | **Aprovado (D-024), em andamento** |
+| UX-10 | Cadastro em etapas (D-025): /cadastro/ com dados pessoais, confirmação de e-mail, empresa ou negócio, chamada para o primeiro desafio; "Meus dados" com edição, troca de e-mail e senha | Base | Implementado e testado; aprovado (D-029). CPF e data de nascimento retirados (D-027) |
+| UX-13 | Cadastro sem CPF: declaração de maioridade, CNPJ opcional na empresa, aviso de privacidade com aceite registrado (D-027) | Base | Implementado e testado; migrações aplicadas (D-029) |
+| UX-14 | Termos de Uso e Política de Privacidade do produto (requisitos em `docs/legal/`) | Base | Requisitos prontos; texto jurídico obrigatório antes do lançamento |
+| UX-11 | Contato do site vinculado ao perfil e desafios organizados em projetos (P-009) | Base · Identificar | Pedido detalhado; aguarda proposta e aprovação |
+| UX-12 | Botão "Cadastrar" no site do estúdio, apontando para /cadastro/ | Base | Depois (pedido da dona do produto) |
+| UX-3b | Adaptação: análise da IA nos marcos, "O que descobrimos até aqui", decisão proposta (aprofundar, outra perspectiva, revisar hipótese, avançar) validada pelo Engine e confirmada pela pessoa | Investigar · Compreender | Proposto (aguardando aprovação) |
+| UX-1 | Entrada pública, cadastro completo do cliente fora do acesso público (pagamento pulado nos testes), boas-vindas, "Esqueci minha senha", rodapé "by Dani Moscatelli Studio" (D-022) | Base | Proposto (aguardando aprovação) |
+| UX-4 | Revisão dos planos e análises da IA pela dona do produto nos 3 casos fictícios, antes de clientes reais | Investigar | Obrigatório antes de clientes reais |
+| UX-5 | Simulação "Visualizar experiência de cliente" para a master | Base | Futuro |
+| UX-6 | Convite de pessoas para a organização; encaminhamento a especialista | Base · Transformar | Futuro |
+| UX-7 | Anexos de evidências (armazenamento privado, revisão de LGPD) | Investigar | Futuro |
+| UX-15 | Curadoria do corpus de protocolos v0.1 (lacunas L1 a L8 de `docs/knowledge/PROTOCOLS_COMPATIBILITY.md`) com fontes do RAG e validação da dona do produto, até `approved` | Investigar · Compreender | Planejado; feito com a dona do produto |
+| UX-8 | Expansão da biblioteca metodológica com curadoria (novos protocolos e disciplinas) e RAG especialista | Compreender | Futuro (metodologia, seção 11) |
+| UX-9 | Tela na Área master para convidar clientes de teste | Base | Proposto |
 
 ### IA independente de fornecedor (D-019): planejado, não autorizado
 

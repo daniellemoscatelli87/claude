@@ -172,8 +172,211 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **O que não muda agora:** nenhuma API nova é contratada ou integrada; a IA continua desligada (D-017, D-018); os controles de custo (D-015) continuam valendo.
 - **Próximo passo:** quando começarem o Methodology Engine e o RAG, o Claude apresenta uma proposta técnica que aproveite o código existente. Nada é implementado antes da aprovação.
 
+## D-020 · 20/10/2026 · A IA desenha o discovery desde a submissão do desafio
+
+- **Origem:** Dona do produto ("A IA precisa começar a atuar desde o momento que a empresa submeteu o desafio, pois todas as etapas posteriores vão se desenhar de acordo com o desafio… Um discovery mal feito vai gerar recomendações ruins").
+- **Decisão:** ao submeter o desafio, a IA propõe o plano de discovery: o que perguntar, qual método aplicar e o que a pessoa precisa fazer para obter e enviar as informações. As regras e os protocolos versionados (metodologia, seções 7 e 8) validam o plano e servem de contingência.
+- **Fundamento:** a qualidade do discovery determina a qualidade das recomendações. Perguntas fixas não servem a desafios diferentes.
+- **Guarda-corpos mantidos:**
+  - a IA escolhe métodos só do catálogo e justifica;
+  - o plano é validado e salvo, e recarregar não gera nada;
+  - limites de uso;
+  - a pessoa confirma o entendimento;
+  - sem RAG simulado;
+  - só dados fictícios no plano gratuito do Gemini (D-017, D-018).
+- **Implementação:** proposta no corte UX-3 de [`UX_ONBOARDING_PROPOSAL.md`](../product/UX_ONBOARDING_PROPOSAL.md). Aguarda aprovação.
+
+## D-021 · 20/10/2026 · Condução adaptativa: a plataforma conduz, acompanha e adapta (refina D-020)
+
+- **Origem:** Dona do produto.
+- **Decisão:** o discovery é um **ciclo adaptativo**, e não um plano fixo:
+
+  > Desafio → Plano inicial → Atividade guiada → Evidências → Análise → Próxima decisão
+
+  O ciclo se repete até haver evidências suficientes para avançar.
+  - **Papéis:** a IA define a estratégia inicial; o Methodology Engine acompanha a execução e decide quando aprofundar, buscar outra perspectiva, revisar hipóteses ou avançar.
+  - **Método nos bastidores:** o método fica oculto; a interface mostra ações, sem termos técnicos.
+  - **Instrumentos:** toda atividade entrega o que é preciso para executá-la (roteiro de conversa, ficha de observação, orientação para registros e indicadores, campos estruturados de evidência, reconstrução de fluxo; anexos quando autorizados).
+  - **Qualidade das evidências:** o sistema distingue fato, relato, observação, hipótese e conclusão, e aponta insuficiência, contradições, perspectivas não investigadas e risco de viés. A suficiência depende do método, do contexto, da diversidade de perspectivas e do risco. Não há diagnóstico ou recomendação categórica sem sustentação.
+  - **Custo:** regras determinísticas sempre que possível; novas análises da IA só em marcos da investigação, com cache, limites e controle de custo.
+  - **Biblioteca metodológica:** os seis protocolos iniciais são só o corpus de partida. A arquitetura deve permitir expandir com métodos validados (Methodology Engine e RAG especialista). A IA aplica apenas protocolos disponíveis e aprovados.
+  - **Abrangência:** o percurso é multissetorial e multidisciplinar e é construído para o desafio e o contexto de cada caso.
+  - **Sistema, não só IA:** Methodology Engine + RAG + IA + Validação de evidências + Experience Guide, com encaminhamento a especialista quando necessário (saúde e experiência de colaboradores exigem cuidado redobrado).
+- **Arquitetura proposta:** seção 8 de [`UX_ONBOARDING_PROPOSAL.md`](../product/UX_ONBOARDING_PROPOSAL.md). Aguarda aprovação.
+
+## D-022 · 20/10/2026 · Decisões de interface e prioridade
+
+- **Origem:** Dona do produto.
+- **Interface:**
+  - marca **DM | Experience Intelligence** no cabeçalho e assinatura **"by Dani Moscatelli Studio"** no rodapé;
+  - nome da pessoa **obrigatório** no cadastro, com edição posterior;
+  - biblioteca de ícones `lucide-react` aprovada;
+  - interface visual, responsiva, acessível e orientada por tarefas, com pouco texto.
+- **Cadastro do cliente:**
+  - fluxo completo (conta → organização → pagamento → desafio), mantido fora do acesso público enquanto o produto é construído;
+  - nos testes, a etapa de pagamento é pulada.
+- **Prioridade:**
+  - primeiro, o contexto organizacional mínimo de que a IA precisa;
+  - depois, o UX-3 (discovery inteligente);
+  - o restante do onboarding pode vir depois.
+- **Altera:** o subtítulo "Dani Moscatelli Studio" do cabeçalho, ainda não publicado, sai do cabeçalho e vai para o rodapé como "by Dani Moscatelli Studio".
+
+## D-023 · 20/10/2026 · IA ligada temporariamente para testes com dados fictícios
+
+- **Origem:** Dona do produto. Condições dela: só a conta dela autorizada; limites ativos; desligamento imediato; nenhum serviço pago.
+- **Verificado antes de ligar:**
+  - lista de convidadas vazia; a única conta master é contato@danimoscatelli.com.br;
+  - visitante sem login não usa a IA, e pessoas logadas não concluem uso direto;
+  - limites de 3 por desafio, 20 por pessoa por dia e 100 por dia na plataforma;
+  - chave do Gemini no Free Tier, sem faturamento (D-018).
+- **Feito:** `ei_settings.ai_enabled = true` em 20/10/2026, às 19:40 UTC.
+- **Desligar:** `update public.ei_settings set ai_enabled = false where id;` (SQL Editor do Supabase), ou pedir ao Claude.
+- **Regra:** só desafios fictícios, sem nomes, empresas reais, dados pessoais, de saúde ou confidenciais (termos do Gemini para o plano gratuito). Clientes reais continuam dependendo de D-017 e D-018.
+- **Conta de cliente de teste:** a dona do produto indicou `daniellemoscatelli@gmail.com`, que é dela. Adicionada à lista de convidadas em 20/10/2026, às 19:54 UTC. É a única convidada, e as duas contas são da dona do produto.
+
+## D-024 · 20/10/2026 · UX-3a aprovado, com condições
+
+- **Origem:** Dona do produto.
+- **Aprovado:** a arquitetura da seção 8 de `UX_ONBOARDING_PROPOSAL.md` e o início do UX-3a, em incrementos pequenos e verificáveis.
+- **Condições:**
+  - **personalização desde o primeiro momento:** para cada desafio, a plataforma determina quais informações são necessárias, quais atividades as produzem e quais critérios indicam investigação suficiente;
+  - **cada atividade apresenta:**
+    - o que fazer e por que (linguagem simples);
+    - onde e com quem obter;
+    - como executar;
+    - quais perguntas fazer ou dados observar;
+    - como registrar e enviar;
+    - o que fazer se não conseguir;
+  - **instrumentos gerados para o desafio e o contexto da organização;** nada de roteiros universais;
+  - **qualidade:**
+    - avaliar a suficiência antes de concluir;
+    - resposta preenchida não é informação confiável por si só;
+    - reconhecer lacunas, contradições e perspectivas não investigadas;
+    - a validação de formato da IA não substitui a avaliação metodológica;
+  - **o plano evolui** nos marcos, sem recomeçar do zero;
+  - **conduzir, não transferir:** a plataforma acompanha a execução (explica, entrega o roteiro, registra, aponta insuficiência e orienta o próximo passo). Não é uma lista de tarefas transferida ao cliente;
+  - **interface:** visual, com cards, indicadores de progresso, ícones e formulários adequados a cada atividade; nem formulário extenso nem chatbot interminável; preservar a copy e as diretrizes do kit de UX.
+- **Limites:**
+  - `ai_per_challenge` passou de 3 para **10**, só durante os testes (aplicado em 20/10/2026); 20 por pessoa por dia e 100 por dia na plataforma, mantidos;
+  - registrar o consumo por atividade;
+  - não gerar de novo conteúdo já salvo;
+  - **o limite não encerra a investigação:** com dados insuficientes, a plataforma informa e permite continuar depois.
+- **Conta de cliente de teste:** `daniellemoscatelli@gmail.com`, da dona do produto, separada da master, sem privilégios administrativos e só com dados fictícios.
+- **RAG:** `RAG_ARCHITECTURE.md` incorporado em `docs/knowledge/`, com as divergências em `docs/knowledge/RAG_DIVERGENCES.md`.
+- **Avaliação do incremento:** testar 3 desafios fictícios bem diferentes (experiência do paciente, usuários de um produto digital, processos e colaboradores). Antes do próximo incremento, a dona do produto avalia principalmente **a qualidade das atividades propostas**, não só se o código funciona.
+- **Publicação:** antes de publicar, apresentar os resultados dos testes e pedir autorização.
+
+## D-025 · 21/10/2026 · Cadastro em etapas: dados pessoais, depois empresa ou negócio
+
+- **Origem:** Dona do produto.
+- **Fluxo:**
+  - botão "Cadastrar" no site (fica para depois);
+  - **Etapa 1 · Seus dados:** nome completo, CPF, data de nascimento, estado, cidade, telefone, e-mail e senha, editáveis depois em "Meus dados";
+  - confirmação do e-mail;
+  - **Etapa 2 · Empresa ou negócio;**
+  - área logada, que no primeiro acesso mostra a chamada para o primeiro desafio (o primeiro discovery).
+- **Nomenclatura:** "organização" passa a ser **"empresa ou negócio"** na interface (escolha da dona do produto). No banco os nomes continuam os mesmos.
+- **Finalidades do CPF e da data de nascimento** (LGPD; escolha da dona do produto):
+  - identificar quem aceita o contrato e os termos de uso;
+  - evitar contas duplicadas;
+  - confirmar a maioridade;
+  - cobrança, no futuro.
+
+  Nota fiscal, não por enquanto. O texto da tela informa essas finalidades.
+- **Proteção:**
+  - os dados pessoais ficam em `ei_profiles`, sem leitura direta por ninguém;
+  - a pessoa vê o próprio CPF mascarado;
+  - a validação é feita no banco (dígitos do CPF, maioridade, telefone, UF);
+  - no cadastro, os dados seguem com a criação da conta e um gatilho os grava e **retira dos metadados**, para o CPF nunca ir para o token de acesso;
+  - o gatilho só age em cadastros do produto, e contas do site não são afetadas;
+  - CPF repetido gera mensagem genérica, sem revelar que já existe.
+- **Master:** não precisa do perfil pessoal para entrar (não é tratada como cliente).
+- **Obrigatório antes do lançamento:** termos de uso e política de privacidade do produto com essas finalidades, retenção e direitos; avaliar a criptografia do CPF no banco.
+- **Complemento (21/10/2026), dona do produto:**
+  - título "Crie sua conta", barra de progresso e nome da etapa abaixo;
+  - campos com os padrões do site (design system, `docs/design-system/COMPONENTES.md`);
+  - senha com confirmação, força e visualização;
+  - rodapé igual ao do site, com copyright, no lugar de "by Dani Moscatelli Studio".
+- **Pendente (P-006):** cruzar o cadastro com o formulário de contato do site.
+
+## D-026 · 21/10/2026 · Dados pessoais com necessidade, segurança e transparência (revê D-025)
+
+- **Origem:** Dona do produto.
+- **Diretrizes:**
+  1. separar o cadastro da pessoa física do cadastro da empresa;
+  2. gerenciar contas pessoais com id interno e e-mail confirmado, e avaliar o CNPJ para empresas brasileiras;
+  3. antes de tornar o CPF obrigatório, verificar se há necessidade real que meios menos invasivos não atendam;
+  4. se o CPF for necessário, criptografia quando recuperável e HMAC com chave secreta para duplicidade;
+  5. nunca enviar CPF à IA nem colocá-lo em logs ou na auditoria sem necessidade;
+  6. uma pessoa pode participar de várias empresas sem contas duplicadas;
+  7. preparar os requisitos dos Termos de Uso e da Política de Privacidade (finalidades e bases legais), com a informação disponível desde os testes;
+  8. registrar na documentação de arquitetura, segurança e produto.
+- **Estado verificado (21/10/2026):** nenhum CPF armazenado; a migração do perfil pessoal (D-025) nunca foi aplicada. Detalhes em `docs/security/DADOS_PESSOAIS.md`.
+- **Análise:** o CPF não é necessário para impedir duplicidades nesta fase. As contas já são únicas por e-mail confirmado, as empresas devem usar o CNPJ, e a maioridade pode ser declarada.
+- **Suspenso até nova decisão:** CPF e data de nascimento obrigatórios no cadastro (D-025). A migração `20261021100000` e o formulário **não serão aplicados ou publicados** nessa forma.
+- **Proposta:** ver P-007.
+- **Estado e cidade (21/10/2026):** a dona do produto decidiu mantê-los obrigatórios, porque são importantes para a análise posterior do perfil de clientes. Essa finalidade precisa aparecer no aviso de privacidade e na política, com base legal declarada (ver `docs/legal/`).
+
+## D-027 · 21/10/2026 · P-007 aprovada: cadastro sem CPF
+
+- **Origem:** Dona do produto ("Sim, aprovo a P-007").
+- **Decisão:**
+  - sem CPF e sem data de nascimento;
+  - caixa "Declaro que tenho 18 anos ou mais";
+  - CNPJ opcional na empresa ou negócio, validado e único;
+  - aviso de privacidade da fase de testes no cadastro ("Como usamos seus dados"), com aceite obrigatório registrado com data e versão (`testes-2026-10-21`);
+  - CPF só no futuro, se houver necessidade, com criptografia e HMAC (`docs/security/DADOS_PESSOAIS.md`).
+- **Estado:** implementado e testado, **não aplicado no banco e não publicado**. Ver o Implementation Log de 21/10/2026.
+
+## D-028 · 21/10/2026 · Corpus inicial de protocolos incorporado como rascunho
+
+- **Origem:** Dona do produto (envio do arquivo `05-corpus-inicial-protocolos-v0.1.json`).
+- **Decisão:**
+  - o arquivo foi incorporado sem alteração em `docs/knowledge/protocols/`;
+  - os 6 protocolos são **rascunhos iniciais, não aprovados para produção** e não são metodologia definitiva;
+  - não serão recriados do zero;
+  - serão aprofundados com as fontes do RAG e a validação da dona do produto como especialista;
+  - a arquitetura continua extensível para novos métodos de Service Design, UX Research, CX, Business Design, operações e outras disciplinas.
+- **Compatibilidade:** `docs/knowledge/PROTOCOLS_COMPATIBILITY.md`.
+  - **Esquema do RAG:** os 6 protocolos têm todos os 19 campos obrigatórios.
+  - **Methodology Engine:** formato de id adotado do corpus; lacunas L1 a L8 registradas para a curadoria (instrumentos, critérios de suficiência, tipo de evidência, fase, vocabulário das etiquetas, entradas, um termo de jargão, cuidados específicos).
+- **Nenhuma alteração** de código ou banco.
+
+## D-029 · 21/10/2026 · Cadastro aprovado e P-008 aprovada
+
+- **Origem:** Dona do produto ("Podemos aprovar o cadastro e usar os 6 protocolos, ainda em rascunho, nos testes da IA").
+- **Decisão:**
+  - cadastro em etapas aprovado para publicação (D-025, D-026, D-027): migrações `20261021090000` e `20261021100000` aplicadas no Supabase em 21/10/2026;
+  - P-008 aprovada: nos testes da IA do UX-3a, os 6 protocolos do corpus v0.1 são usados como estão, como catálogo `draft`, só com dados fictícios, com instrumentos gerados pela IA dentro dos passos e cuidados de cada protocolo, marcados como rascunho para avaliação, e as lacunas L1 a L8 no relatório de qualidade. Produção continua exigindo protocolos `approved`.
+- **P-006:** a dona do produto detalhou o pedido (contato do site vinculado ao perfil e desafios organizados em projetos). Registrado como P-009, aguardando proposta e aprovação.
+
 ---
 
 ## Decisões pendentes
 
-Nenhuma no momento. Pendências de produto (preço, nicho, provedor de IA etc.) estão na seção 14 da visão.
+
+- **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
+  - cruzar pelo e-mail confirmado, no servidor;
+  - a pessoa vê só o que ela enviou e escolhe o que aproveitar (dados pessoais, empresa, mensagem como ponto de partida do desafio);
+  - a master vê o histórico completo na Área master;
+  - atualizar a Política de Privacidade antes do lançamento;
+  - conteúdo real não vai para o Gemini gratuito.
+
+  Substituída por P-009 (detalhamento da dona do produto em 21/10/2026).
+
+- **P-009 · 21/10/2026 · Contato do site vinculado ao perfil e desafios em projetos.** Pedido da dona do produto:
+  - o app procura um contato do site com o mesmo e-mail confirmado da conta; se achar, o histórico fica vinculado internamente ao perfil;
+  - se o contato foi sobre um projeto (campo assunto), perguntar se o projeto é o mesmo e se a pessoa quer continuar de onde parou; a mensagem do contato pode vir para o campo do desafio, editável;
+  - se o contato foi por outro motivo, ele também fica vinculado ao perfil;
+  - se foi sobre outro projeto, o painel da organização mostra um card do projeto anterior (aberto, sem continuidade, que pode ser retomado) e o novo projeto;
+  - desafios passam a ficar dentro de projetos, que a pessoa pode nomear;
+  - fluxo: cadastro pessoal > escolha do pacote e pagamento (por enquanto pulado) > cadastro da empresa ou estabelecimento > projeto (desafio).
+
+  Aguarda proposta do Claude e aprovação.
+
+- **P-005 · Arquivos citados no RAG:**
+  - `05-corpus-inicial-protocolos-v0.1.json` foi recebido em 21/10/2026 (D-028);
+  - continuam ausentes `SOURCE_CATALOG.json`, `RAG_SOURCE_PLAN.md` e `RAG_INTEGRATION_NOTES.md`, que não bloqueiam o UX-3a.
+- ~~**P-008**~~: aprovada em D-029.
+
+Outras pendências de produto (preço, nicho, provedor de IA etc.) estão na seção 14 da visão.

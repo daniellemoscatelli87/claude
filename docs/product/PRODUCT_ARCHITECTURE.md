@@ -32,9 +32,21 @@ A plataforma não pode depender de um único fornecedor de IA. A arquitetura dev
 | `ai_usage` | Registra cada uso por desafio, organização e pessoa, com resultado | Ainda não registra fornecedor, funcionalidade, tokens nem custo estimado |
 | `ei_settings` | Liga e desliga a IA e define limites globais, por desafio e por pessoa por dia | Ainda não tem limites por plano nem por funcionalidade |
 | Auditoria (`audit_events`) | Registra modelo e versão do prompt de cada sugestão | Já guarda qual modelo foi usado |
-| IA | **Desligada** (D-017) | Continua desligada até a revisão de privacidade e o teste de concorrência (D-018) |
+| IA | **Ligada só para testes com dados fictícios** (D-023); limites de 10 por desafio, 20 por pessoa por dia e 100 na plataforma por dia (D-024) | Clientes reais só depois da revisão de privacidade e do teste de concorrência (D-018) |
 | Methodology Engine e RAG | Não existem (só tipos do motor em `src/domain/methodology/contracts.ts`) | Serão construídos já sem depender de fornecedor |
 
 ### 1.4 Próximo passo combinado
 
 Quando começarem o Methodology Engine e o RAG, o Claude apresenta **uma proposta técnica** para a arquitetura com vários fornecedores, aproveitando o código existente. Nada é implementado antes da aprovação dessa proposta.
+
+---
+
+## 2. Identidade, contas e cadastros (D-026)
+
+**Status:** diretrizes da dona do produto registradas; proposta em [`../security/DADOS_PESSOAIS.md`](../security/DADOS_PESSOAIS.md). **Mudanças no banco e no cadastro aguardam aprovação.**
+
+1. **Pessoa e empresa são cadastros diferentes.** A conta pessoal identifica a pessoa (id interno + e-mail confirmado). A empresa ou negócio é um espaço de trabalho com membros.
+2. **Uma pessoa, várias empresas, sem conta duplicada:** o vínculo fica em `organization_members` (um por empresa), e a interface troca de empresa. Já existe no banco; falta o convite para entrar numa empresa existente (UX-6).
+3. **Duplicidades:** de contas, pelo e-mail confirmado (Supabase Auth); de empresas brasileiras, pelo CNPJ (proposto, opcional).
+4. **CPF** só com necessidade real que não possa ser atendida por meio menos invasivo. Se for necessário: criptografia recuperável no servidor + HMAC com chave secreta para duplicidade; nunca na IA, em logs, nos metadados da conta ou na auditoria.
+5. **Transparência desde os testes:** aviso de privacidade no cadastro, com aceite registrado. Requisitos em [`../legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md`](../legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md).

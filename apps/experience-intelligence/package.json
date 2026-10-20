@@ -8,10 +8,13 @@
     "build": "next build",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint src tests",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prebuild": "node scripts/copiar-municipios.mjs",
+    "predev": "node scripts/copiar-municipios.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
+    "lucide-react": "1.52.0",
     "next": "^16.4.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

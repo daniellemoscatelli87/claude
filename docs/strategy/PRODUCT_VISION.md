@@ -378,3 +378,9 @@ Mesmo sem possuir especialistas internos nessas disciplinas.
 - **[DECIDIDO]** O login do cliente é separado do login da administração do estúdio (D-012).
 - **[DECIDIDO]** Fluxo comercial: **cadastro → pagamento → uso da plataforma**. Durante a fase de testes, o uso é livre e sem cobrança (D-013). Provedor de pagamento e preços seguem **[PENDENTE]**.
 - **[DECIDIDO]** Dani Moscatelli é a **usuária master** e pode visualizar os projetos de todos os clientes. Cada acesso fica registrado e visível ao cliente na auditoria da organização (D-011). Isso substitui, nas seções 2.2 e 9 deste documento, a regra de que o estúdio só acessa dados autorizados caso a caso. Antes do lançamento comercial, os termos de uso e a política de privacidade do produto devem informar esse acesso.
+
+### Princípio central da dona do produto (20/10/2026)
+
+- **[DECIDIDO]** "A DM | Experience Intelligence transforma conhecimento especializado em jornadas de ação acessíveis, conduzindo pessoas e organizações da identificação de desafios à melhoria contínua de experiências, serviços, produtos e operações."
+- **[DECIDIDO]** "O método fica nos bastidores. A ação fica na interface." O cliente executa atividades orientadas; a plataforma aplica Service Design e outras disciplinas sem exigir que ele as conheça, entregando os instrumentos necessários (roteiros, fichas, campos de registro) e acompanhando a execução (D-021).
+- **[DECIDIDO]** A responsabilidade metodológica não fica só na IA: o sistema combina Methodology Engine, RAG, IA, validação de evidências e Experience Guide (D-021).

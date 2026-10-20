@@ -20,6 +20,15 @@ Esta documentação é parte integrante do produto, não material de apoio desca
 | [`strategy/ROADMAP.md`](strategy/ROADMAP.md) | Aponta para a seção 7 da visão | Criado na organização |
 | [`product/CHALLENGE_METHODOLOGY.md`](product/CHALLENGE_METHODOLOGY.md) | Challenge Model, Methodology Engine, regras de domínio, testes de aceitação e cortes | `01-architecture-challenge-methodology-v1.md` |
 | [`product/PRODUCT_ARCHITECTURE.md`](product/PRODUCT_ARCHITECTURE.md) | Decisões de arquitetura que valem para além de um incremento (ex.: IA independente de fornecedor), separando decidido de existente | Criado em 20/10/2026 |
+| [`product/ux-onboarding/`](product/ux-onboarding/00-LEIA-PRIMEIRO.md) | Kit de Product Design: primeiro acesso, cadastro B2B, copy e investigação adaptativa | `DM_Experience_Intelligence_UX_Onboarding_Dinamico_v1.zip` (copiado sem alteração) |
+| [`product/UX_ONBOARDING_PROPOSAL.md`](product/UX_ONBOARDING_PROPOSAL.md) | Comparação do kit com o código e proposta de implementação (aguardando aprovação) | Criado em 20/10/2026 |
+| [`knowledge/RAG_ARCHITECTURE.md`](knowledge/RAG_ARCHITECTURE.md) | Knowledge Engine / RAG: camadas de conhecimento, protocolos, proveniência, recuperação e testes | Kit Completo v4 (copiado sem alteração) |
+| [`knowledge/RAG_DIVERGENCES.md`](knowledge/RAG_DIVERGENCES.md) | Diferenças entre o documento do RAG e as decisões recentes; arquivos citados e ausentes | Criado em 20/10/2026 |
+| [`knowledge/protocols/05-corpus-inicial-protocolos-v0.1.json`](knowledge/protocols/05-corpus-inicial-protocolos-v0.1.json) | Corpus inicial com os 6 protocolos (rascunho, não aprovado para produção) | Enviado pela dona do produto (copiado sem alteração) |
+| [`knowledge/PROTOCOLS_COMPATIBILITY.md`](knowledge/PROTOCOLS_COMPATIBILITY.md) | Compatibilidade do corpus com o esquema do RAG e o Methodology Engine; lacunas para curadoria | Criado em 21/10/2026 |
+| [`security/DADOS_PESSOAIS.md`](security/DADOS_PESSOAIS.md) | Dados pessoais: estado atual do CPF, necessidade e proposta de proteção | Criado em 21/10/2026 |
+| [`legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md`](legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md) | Requisitos dos Termos de Uso e da Política de Privacidade | Criado em 21/10/2026 |
+| [`design-system/COMPONENTES.md`](design-system/COMPONENTES.md) | Componentes do produto e origem no site | Criado em 21/10/2026 |
 | [`engineering/FIRST_INCREMENT_PROMPT.md`](engineering/FIRST_INCREMENT_PROMPT.md) | Escopo aprovado do primeiro incremento (Cortes 1 e 2) | `02-prompt-claude-code-primeiro-incremento.md` |
 | [`research/VALIDATION_LOG.md`](research/VALIDATION_LOG.md) | Aprendizados de validação de mercado e com usuários | Criado na organização |
 | [`../CLAUDE.md`](../CLAUDE.md) | Instruções persistentes para o Claude Code | `CLAUDE.md` do kit |

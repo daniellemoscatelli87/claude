@@ -144,7 +144,194 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Ajustes no `netlify.toml`:**
   - `NETLIFY_NEXT_PLUGIN_SKIP = "true"`: impede o adaptador de Next.js do Netlify de criar funções de servidor ou otimização de imagens; só arquivos estáticos são publicados;
   - regra de pular build corrigida para sempre gerar no primeiro deploy. Testada: primeiro deploy gera; mesmo commit gera; mudança só em `docs/` pula; mudança no app gera.
-- **Configuração do site no Netlify (feita pela dona do produto):** projeto `dm-experience-intelligence`, time danimoscatelli, branch `main`, pasta base `apps/experience-intelligence`, build `npm ci && npm run build`, publicação `apps/experience-intelligence/out`, sem variáveis de ambiente. Deploy aguardando o ajuste acima chegar ao `main`.
+- **Configuração do site no Netlify (feita pela dona do produto):** projeto `dm-experience-intelligence`, time danimoscatelli, branch `main`, pasta base `apps/experience-intelligence`, build `npm ci && npm run build`, publicação `apps/experience-intelligence/out`, sem variáveis de ambiente. Ajuste levado ao `main` pelo PR #29.
+- **Primeiro deploy (20/10/2026, 13:04):** publicado em `https://dm-experience-intelligence.netlify.app`, projeto marcado como **Private** no Netlify. Verificado de fora: `/`, `/desafio/novo/` e `/master/` respondem 401 com redirecionamento para o login do Netlify (só quem está no time do Netlify abre). Verificado pela dona do produto no celular, logada no Netlify: a tela inicial "O que você quer melhorar…" carrega, com o aviso de fase de testes e acesso por convite. IA continua desligada. Login real ainda não testado.
+- **Subdomínio (20/10/2026):** `app.danimoscatelli.com.br` adicionado como domínio principal do projeto no Netlify; registro `CNAME app → dm-experience-intelligence.netlify.app` criado pela dona do produto na Hostinger (DNS do domínio continua na Hostinger; "Netlify DNS" não foi usado). Verificado: o CNAME já responde no Google e no Cloudflare; os registros do site (`@` → 75.2.60.5, `www` → danimoscatelli.netlify.app) continuam iguais e o site responde 200; o app responde 401 (privado) por HTTP. Certificado HTTPS emitido pelo Netlify (Let's Encrypt, `CN=app.danimoscatelli.com.br`, válido até 18/01/2027, verificação ok em 20/10/2026 às 17:27 UTC); o site do estúdio continua respondendo 200.
+
+## 2026-10-20 · Cabeçalho logado com marca e barra lateral de perfil
+
+- **Pedido da dona do produto:** depois do login, cabeçalho com o ícone DM à esquerda (o mesmo da Home do site), divisor vertical e o nome "Experience Intelligence", com "Dani Moscatelli Studio" embaixo; à direita, avatar e seta que abre a barra lateral de perfil.
+- **Feito:** `src/components/Shell.tsx` (cabeçalho e barra lateral), `src/components/avatar.ts` (iniciais), `public/logo-dm-icone.png` (cópia de `public/favicon-dm.png` do site), estilos em `globals.css`. A barra lateral reúne as opções que já existiam no topo: e-mail e organização atual, troca de organização (quando há mais de uma), "Área master" (só para a master) e "Sair". Nenhuma opção nova foi criada. Sem login, o cabeçalho continua como antes.
+- **Acessibilidade:** botão com `aria-expanded`, painel como diálogo com título, foco vai para o painel ao abrir e volta ao botão ao fechar; fecha com Esc, com o "×" ou tocando fora.
+- **Testes:** `npm test` 31 de 31 (3 novos, iniciais do avatar); `typecheck` sem erros; `lint` 0 erros; `build` ok. Navegador com servidor simulado, 390 px: master e cliente; ícone carrega; painel abre, recebe o foco, mostra as opções certas para cada uma (cliente sem "Área master" e sem troca de organização), fecha com Esc e tocando fora, foco volta ao botão; sem rolagem lateral; nenhum erro de página.
+
+## 2026-10-20 · Kit de UX recebido e proposta (só documentação)
+
+- **Feito:** kit `DM_Experience_Intelligence_UX_Onboarding_Dinamico_v1.zip` copiado sem alteração para `docs/product/ux-onboarding/` (`cmp` confirmou os 4 arquivos idênticos); proposta em `docs/product/UX_ONBOARDING_PROPOSAL.md`; itens UX-1 a UX-6 no Backlog; pendência P-004 no Decision Log.
+- **Achado:** as perguntas de enquadramento atuais (`src/domain/challenge/framing.ts`) são 5 perguntas fixas, iguais para todos os desafios e com exemplos de saúde, o que contraria o kit e D-003. A proposta substitui por um motor de condução por regras com protocolo versionado.
+- **Código, banco e configurações:** nenhum alterado.
+
+## 2026-10-20 · IA ligada para testes (D-023) e arquitetura revisada (só documentação)
+
+- **IA:** antes de ligar, verificado que a lista de convidadas está vazia, que a única master é contato@danimoscatelli.com.br, que visitantes sem login não executam `ei_ai_begin`, que pessoas logadas não executam `ei_ai_finish` e que os limites estão em 3, 20 e 100. Depois, `ai_enabled = true` (20/10/2026, 19:40 UTC). Hoje a IA só faz a interpretação inicial do desafio; o plano e a análise adaptativa ainda não existem.
+- **Documentos:**
+  - princípio central em `PRODUCT_VISION.md` (seção 16);
+  - decisões D-021, D-022 e D-023;
+  - arquitetura revisada na seção 8 de `UX_ONBOARDING_PROPOSAL.md`;
+  - Backlog com UX-3a, UX-3b, UX-1 e UX-4 a UX-9.
+- **Código e banco:** nenhum outro alterado.
+
+## 2026-10-21 · UX-3a, incremento 1: contexto da organização, nome obrigatório e rodapé (não publicado)
+
+- **Banco:**
+  - migração `supabase/migrations/20261021090000_contexto_organizacao.sql`, **ainda não aplicada**;
+  - colunas opcionais `offering`, `org_type`, `size_band` e `context_updated_at` em `organizations`, e `job_area` em `organization_members`;
+  - funções `ei_setup_organization`, `ei_update_organization_context` (só `org_admin`; a auditoria guarda só os nomes dos campos alterados) e `ei_update_my_job_area`;
+  - reversão em `supabase/rollback/20261021090000_reverter.sql`.
+- **Aplicação:**
+  - `src/domain/organization/context.ts` (opções do kit e validações);
+  - `src/application/profile.ts` (nome no perfil da conta);
+  - `OrganizationForm` reescrito com a copy da tela E;
+  - `NameForm` (pede o nome antes de continuar e permite editar na barra lateral);
+  - nome obrigatório no cadastro;
+  - página `/organizacao/`;
+  - aviso na área de trabalho quando falta contexto;
+  - barra lateral com nome, "Editar nome", "Informações da organização", "Área master" (só master) e "Sair";
+  - rodapé "by Dani Moscatelli Studio";
+  - `lucide-react` 1.52.0 (versão fixa, licença ISC).
+- **Testes executados:**
+  - `organization_context.sql` junto com a migração, no banco real, em transação desfeita: **OK, 6 verificações**:
+    - sem convite não cria organização;
+    - a convidada cria a organização com contexto;
+    - valores fora da lista e textos longos são recusados;
+    - a auditoria guarda só os campos alterados;
+    - outra organização não lê nem altera o contexto, e ninguém escreve direto na tabela;
+    - a pessoa atualiza a própria área.
+  - `npm test`: 36 de 36. `typecheck`, `lint` e `build` sem erros.
+  - Navegador com servidor simulado (320 e 375 px, sem rolagem lateral, nenhum erro de página):
+    - cadastro recusa conta sem nome;
+    - conta sem nome é levada a "como podemos chamar você?";
+    - a organização é criada com os campos certos e segue para o desafio;
+    - o aviso de contexto incompleto aparece;
+    - a barra lateral mostra o nome, sem o e-mail;
+    - a edição chama as duas funções e mostra "Informações salvas.".
+
+## 2026-10-21 · Cadastro em etapas e perfil pessoal (D-025), não publicado
+
+- **Banco:**
+  - migração `supabase/migrations/20261021100000_perfil_pessoal.sql`, **não aplicada**;
+  - tabela `ei_profiles`, sem leitura direta;
+  - funções `ei_cpf_valido`, `ei_validar_perfil`, `ei_my_profile` (CPF mascarado) e `ei_save_my_profile`;
+  - gatilho `ei_capturar_cadastro` em `auth.users`: só age com a chave `ei_signup`; grava o perfil e limpa os metadados;
+  - reversão em `supabase/rollback/20261021100000_reverter.sql`;
+  - mensagens das funções de 20261021090000 trocadas para "empresa ou negócio".
+- **Aplicação:**
+  - `src/domain/profile/personal.ts` (as mesmas regras do banco, máscaras de CPF e telefone);
+  - `src/application/profile.ts` (cadastro, reenviar confirmação, salvar perfil, trocar e-mail e senha);
+  - `PersonalForm` (cadastro, completar e editar), `Etapas` (indicador "Etapa X de 2"), login com a copy da tela C e mostrar senha;
+  - páginas `/cadastro/` e `/perfil/`;
+  - a área logada pede os dados pessoais (etapa 1) e depois a empresa ou negócio (etapa 2);
+  - primeiro acesso com "Seu primeiro desafio começa aqui";
+  - barra lateral com "Meus dados" e "Empresa ou negócio";
+  - a master não precisa do perfil;
+  - `NameForm` removido.
+- **Testes executados:**
+  - `personal_profile.sql` junto com a migração, no banco real, em transação desfeita: **OK, 8 verificações**:
+    - CPF validado pelos dígitos verificadores;
+    - o cadastro grava o perfil e só o nome fica nos metadados (CPF fora do token);
+    - CPF repetido e menor de 18 anos são recusados;
+    - contas do site não são afetadas;
+    - a pessoa vê o próprio CPF mascarado, e ninguém lê a tabela direto;
+    - a edição mantém o CPF quando ele fica em branco;
+    - outra conta não vê nem reaproveita CPF, e conta antiga completa o perfil;
+    - visitante sem login não acessa perfis.
+  - `npm test`: 43 de 43. `typecheck`, `lint` (0 erros) e `build` (8 páginas) ok.
+  - Navegador com servidor simulado (320 e 375 px, sem rolagem lateral, nenhum erro de página):
+    - erros aparecem junto de cada campo e somem ao editar;
+    - máscaras de CPF e telefone funcionam;
+    - o envio leva os dados em `ei_signup`, só com dígitos;
+    - aparecem a tela "Falta só confirmar seu e-mail" e o reenvio;
+    - conta sem perfil passa por etapa 1, etapa 2 e primeiro desafio;
+    - "Meus dados" mostra o CPF mascarado e envia CPF vazio ao manter, e a troca de e-mail funciona;
+    - a master não é levada à etapa 1.
+- **Não testado:** cadastro real com envio de e-mail (depende de aplicar a migração e publicar).
+
+## 2026-10-21 · Cadastro com os padrões do site e início do design system (não publicado)
+
+- **Pedido da dona do produto:**
+  - "Crie sua conta" como título, acima da barra de progresso;
+  - "Seus dados" como nome da etapa, abaixo da barra;
+  - "Etapa 1 de 2" sem repetir o nome da etapa;
+  - telefone, e-mail, estado e cidade com os mesmos padrões dos formulários de parceiros e de contato;
+  - senha com confirmação, medidor de força e visualização;
+  - rodapé igual ao do site, com copyright.
+- **Feito:**
+  - `src/design-system/` (`padroes.ts` e `campos.tsx`) e `docs/design-system/COMPONENTES.md`;
+  - `PersonalForm`, `AuthForm`, `/cadastro/`, `/perfil/` e a etapa 2 passam a usar esses componentes;
+  - `Etapas` substituído por `BarraProgresso`;
+  - rodapé com copyright no lugar de "by Dani Moscatelli Studio" (substitui o rodapé de D-022);
+  - script `scripts/copiar-municipios.mjs` no `prebuild`, que copia as cidades do site (`public/data/` do app fica fora do Git);
+  - senha passa a exigir letras e números, além de 8 caracteres.
+- **Testes:** `npm test` 47 de 47 (4 novos dos padrões); `typecheck`, `lint` (0 erros) e `build` ok. Navegador com servidor simulado (320 e 375 px, sem rolagem lateral, nenhum erro):
+  - ordem título → barra → etapa;
+  - mensagens de erro iguais às do site;
+  - cidade bloqueada até escolher o estado (400 cidades do PR carregadas);
+  - máscara de telefone;
+  - 4 sugestões de e-mail;
+  - força Fraca → Média → Forte;
+  - "As senhas não são iguais.";
+  - a confirmação da senha não é enviada;
+  - rodapé com copyright;
+  - etapa 2 com "Crie sua conta", "Etapa 2 de 2" e "Empresa ou negócio";
+  - "Meus dados" carrega estado, cidade e telefone.
+
+## 2026-10-21 · P-007: cadastro sem CPF, maioridade, aviso de privacidade e CNPJ (D-027), não publicado
+
+- **Banco** (migrações ajustadas, ainda **não aplicadas**):
+  - `20261021100000_perfil_pessoal.sql`:
+    - `ei_profiles` sem CPF e sem data de nascimento;
+    - com `adult_declared_at`, `privacy_notice_version` e `privacy_accepted_at`;
+    - o gatilho exige maioridade declarada e a versão do aviso, e retira dos metadados telefone, estado e cidade;
+    - `ei_save_my_profile` exige os aceites só ao criar o perfil.
+  - `20261021090000_contexto_organizacao.sql`:
+    - `organizations.cnpj` único, com 14 dígitos;
+    - `ei_cnpj_valido` e `ei_cnpj_normalizado`;
+    - CNPJ repetido gera mensagem orientando a pedir convite;
+    - a auditoria registra "cnpj" como campo alterado, sem o valor.
+  - Reversões atualizadas.
+- **Aplicação:**
+  - `src/domain/privacy/aviso.ts` (texto e versão do aviso), `AvisoPrivacidade`, página `/aviso-de-privacidade/`;
+  - `PersonalForm` sem CPF e sem data de nascimento, com as caixas "Declaro que tenho 18 anos ou mais" e "Li e aceito o aviso de privacidade";
+  - o aviso abre numa janela sobre o formulário, e "Meus dados" mostra a versão e a data do aceite;
+  - campo CNPJ opcional na empresa ou negócio;
+  - design system com `CampoCnpj`, `CampoConfirmacao` e `Janela`.
+- **Testes executados:**
+  - no banco real, com as migrações em transação desfeita:
+    - `personal_profile.sql`: **OK, 8 verificações** (perfil, maioridade e aceite gravados com versão; só o nome nos metadados; recusa sem maioridade, sem aceite ou com telefone inválido; contas do site intactas; sem colunas de CPF e de nascimento; leitura só do próprio perfil; edição mantém o aceite; conta antiga só completa com os aceites; visitante sem acesso);
+    - `organization_context.sql`: **OK, 7 verificações** (com CNPJ inválido recusado, normalizado, único, sem CNPJ possível, CNPJ fora da auditoria);
+  - `npm test`: 48 de 48; `typecheck`, `lint` (0 erros) e `build` ok;
+  - navegador com servidor simulado (320 e 375 px, sem rolagem lateral, nenhum erro):
+    - sem campos de CPF e de nascimento;
+    - os aceites são exigidos;
+    - a janela do aviso abre e fecha com Esc;
+    - o envio leva `adult_declared` e a versão do aviso;
+    - o CNPJ tem máscara, recusa dígito errado e é enviado só com dígitos;
+    - "Meus dados" mostra o aceite e não reenvia aceites na edição.
+
+## 2026-10-21 · Cadastro aprovado: migrações aplicadas (D-029)
+
+- Aplicadas no Supabase: `20261021090000_contexto_organizacao.sql` e `20261021100000_perfil_pessoal.sql` (antes: colunas novas ausentes, sem `ei_profiles`, nenhum gatilho em `auth.users`).
+- Testes no banco real, em transação desfeita: `organization_context.sql` 7 de 7 e `personal_profile.sql` 8 de 8. Conferido depois: nenhum usuário de teste nem perfil ficou gravado.
+- Avisos de segurança do Supabase: os mesmos tipos de antes (funções do banco chamáveis por quem está logado, por desenho, com as verificações dentro de cada função; tabelas sem políticas porque o acesso é só por funções). Proteção contra senhas vazadas segue desligada (recurso do plano pago).
+
+## 2026-10-21 · Ícone nos títulos das etapas do cadastro
+
+- Pedido da dona do produto: ícone vermelho sobre base quadrada rosa clara, com cantos arredondados, ao lado do título de cada etapa.
+- Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
+- Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
+
+## 2026-10-21 · Corpus inicial de protocolos incorporado (D-028), só documentação
+
+- **Feito:**
+  - `docs/knowledge/protocols/05-corpus-inicial-protocolos-v0.1.json` copiado sem alteração (`cmp` idêntico);
+  - relatório `docs/knowledge/PROTOCOLS_COMPATIBILITY.md`;
+  - `RAG_DIVERGENCES.md`, Decision Log (D-028, P-005 e P-008), Backlog (UX-15) e índice atualizados.
+- **Verificação executada:** script de conferência (não versionado):
+  - JSON válido; 19 campos obrigatórios do esquema presentes nos 6 protocolos;
+  - `user_facing_title` a mais;
+  - `questions` vazias e `status: draft` nos 6;
+  - um termo de jargão na interface ("walkthrough" em `observation_light`).
+- **Código e banco:** nenhum alterado.
 
 ## Estado do repositório encontrado (19/10/2026)
 
