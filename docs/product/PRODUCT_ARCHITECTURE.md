@@ -32,7 +32,7 @@ A plataforma não pode depender de um único fornecedor de IA. A arquitetura dev
 | `ai_usage` | Registra cada uso por desafio, organização e pessoa, com resultado | Ainda não registra fornecedor, funcionalidade, tokens nem custo estimado |
 | `ei_settings` | Liga e desliga a IA e define limites globais, por desafio e por pessoa por dia | Ainda não tem limites por plano nem por funcionalidade |
 | Auditoria (`audit_events`) | Registra modelo e versão do prompt de cada sugestão | Já guarda qual modelo foi usado |
-| IA | **Desligada** (D-017) | Continua desligada até a revisão de privacidade e o teste de concorrência (D-018) |
+| IA | **Ligada só para testes com dados fictícios** (D-023); limites de 10 por desafio, 20 por pessoa por dia e 100 na plataforma por dia (D-024) | Clientes reais só depois da revisão de privacidade e do teste de concorrência (D-018) |
 | Methodology Engine e RAG | Não existem (só tipos do motor em `src/domain/methodology/contracts.ts`) | Serão construídos já sem depender de fornecedor |
 
 ### 1.4 Próximo passo combinado
