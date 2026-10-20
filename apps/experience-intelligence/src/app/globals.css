@@ -36,7 +36,9 @@ a { color: var(--red); }
 .brand-logado { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; min-width: 0; }
 .brand-logado img { height: 34px; width: auto; display: block; }
 .brand-divisor { width: 1px; align-self: stretch; min-height: 28px; background: var(--line); }
+.brand-texto { display: grid; line-height: 1.15; min-width: 0; }
 .brand-nome { font-weight: 800; color: var(--red); letter-spacing: -.01em; white-space: nowrap; }
+.brand-sub { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
 .perfil-botao { display: inline-flex; align-items: center; gap: 4px; background: none; border: 0; padding: 4px; cursor: pointer; color: var(--muted); border-radius: 999px; min-height: 44px; }
 .perfil-botao:hover { color: var(--dark); }
 .avatar { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--red-tint); color: var(--red-dark); font-weight: 800; font-size: 14px; }
