@@ -111,6 +111,34 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Decisão:** no produto comercial, a pessoa só usa a plataforma depois do pagamento. Enquanto a cobrança não existir, qualquer pessoa cadastrada usa sem pagar, e a tela de cadastro informa que a plataforma está em fase de testes.
 - **Pendente (bloqueia o corte de cobrança, não os testes):** provedor de pagamento, preços e planos (visão, seção 14).
 
+## D-014 · 20/10/2026 · Testes reais controlados: acesso por convite
+
+- **Origem:** Dona do produto ("preparar a aplicação para testes reais controlados após a publicação, restringindo inicialmente o acesso").
+- **Decisão:** durante a fase de testes, só usam a plataforma a master e as pessoas cujo e-mail está na lista `ei_testers` e foi confirmado na conta. Sem isso, a pessoa entra, mas vê "Acesso por convite" e não cria organização, desafio nem usa a IA. Conferido no banco (`ei_has_access`), não só na tela.
+- **Fundamento:** o Supabase Auth é compartilhado com o site (D-006); qualquer pessoa pode criar conta, então o controle precisa estar no banco.
+- **Alternativas consideradas:** deixar o cadastro do Supabase fechado e convidar pelo painel (também gratuito, mas fecha o cadastro do site inteiro e não impede uso por quem já tem conta); senha única de acesso (fácil de vazar).
+- **Como convidar:** um comando no SQL Editor (README da aplicação).
+
+## D-015 · 20/10/2026 · IA com custo controlado
+
+- **Origem:** Dona do produto ("implemente mecanismos para evitar consumo desnecessário das APIs de inteligência artificial").
+- **Decisão:**
+  - a sugestão da IA fica guardada por desafio (`ai_interpretations`); abrir ou recarregar a página devolve a guardada, sem nova chamada;
+  - cada uso é reservado no banco antes da chamada (`ei_ai_begin`) e contado em `ai_usage`, inclusive os que falham;
+  - limites iniciais: 3 por desafio, 20 por pessoa por dia, 100 na plataforma por dia; ajustáveis em `ei_settings` sem publicar código;
+  - chave `ai_enabled` desliga a IA na hora; a pessoa continua preenchendo à mão;
+  - duas chamadas simultâneas para o mesmo desafio são bloqueadas;
+  - no máximo 2 tentativas por pedido (antes eram até 10) e limite de tamanho da resposta;
+  - "Tentar de novo" só aparece quando pode funcionar.
+- **Altera:** D-007 dizia que a auditoria não guarda o texto gerado. A auditoria continua sem o texto; a sugestão passa a ser guardada em tabela própria, sem acesso direto pelas APIs, para não pagar duas vezes pela mesma sugestão.
+- **Números dos limites:** escolhidos pelo Claude como ponto de partida conservador; a dona do produto pode mudar a qualquer momento.
+
+## D-016 · 20/10/2026 · Custo operacional mínimo
+
+- **Origem:** Dona do produto (desativou o ambiente de homologação por custo; "nunca contrate, ative ou provisione serviços pagos sem minha autorização").
+- **Decisão:** sem ambientes adicionais pagos. Testes automatizados, testes no banco dentro de transação desfeita e telas com servidor simulado; testes reais só depois da publicação, com acesso por convite (D-014). Nenhum serviço, plano ou recurso pago é ativado sem autorização.
+- **Riscos de custo conhecidos:** listados no Implementation Log (entrada de 20/10/2026).
+
 ---
 
 ## Decisões pendentes

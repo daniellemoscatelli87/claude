@@ -5,11 +5,14 @@
 
 begin;
 
-insert into auth.users (id, email, aud, role, raw_app_meta_data)
+insert into auth.users (id, email, aud, role, raw_app_meta_data, email_confirmed_at)
 values
-  ('00000000-0000-4000-a000-00000000000a', 'teste-a@ei.invalid', 'authenticated', 'authenticated', '{}'),
-  ('00000000-0000-4000-a000-0000000000ad', 'teste-admin@ei.invalid', 'authenticated', 'authenticated', '{"role":"admin"}'),
-  ('00000000-0000-4000-a000-0000000000ff', 'teste-master@ei.invalid', 'authenticated', 'authenticated', '{"ei_master":true}');
+  ('00000000-0000-4000-a000-00000000000a', 'teste-a@ei.invalid', 'authenticated', 'authenticated', '{}', now()),
+  ('00000000-0000-4000-a000-0000000000ad', 'teste-admin@ei.invalid', 'authenticated', 'authenticated', '{"role":"admin"}', now()),
+  ('00000000-0000-4000-a000-0000000000ff', 'teste-master@ei.invalid', 'authenticated', 'authenticated', '{"ei_master":true}', now());
+
+-- Pessoas de teste convidadas (acesso por convite, D-014).
+insert into public.ei_testers (email) values ('teste-a@ei.invalid');
 
 create temp table ei_resultado (mensagem text) on commit drop;
 

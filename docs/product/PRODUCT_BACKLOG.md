@@ -6,7 +6,7 @@ Cada item indica o elo da cadeia de valor em que atua: **Identificar** um desafi
 
 Referência dos cortes: seção 18 de [`CHALLENGE_METHODOLOGY.md`](CHALLENGE_METHODOLOGY.md). Escopo aprovado: [`../engineering/FIRST_INCREMENT_PROMPT.md`](../engineering/FIRST_INCREMENT_PROMPT.md).
 
-**Atualizado em:** 19/10/2026 (Cortes 1 e 2 implementados).
+**Atualizado em:** 20/10/2026 (testes controlados e limites da IA).
 
 ---
 
@@ -49,6 +49,16 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 | M-01 | Funções de leitura da master com registro de cada acesso (auditoria do cliente e registro da plataforma) | Implementado e testado | banco (6 verificações, `master_access.sql`) |
 | M-02 | Área master na aplicação: clientes, desafios e desafio completo, somente leitura | Implementado (não publicado) | telas |
 | M-03 | Aviso no cadastro de que o estúdio pode acessar os projetos e que tudo fica registrado | Implementado (não publicado) | telas |
+
+### Testes controlados e custo (D-014 a D-016) · Base
+
+| ID | Item | Status | Teste |
+|---|---|---|---|
+| T-01 | Acesso por convite (lista de teste com e-mail confirmado, ou master), conferido no banco | Implementado e testado (não aplicado no banco) | banco (9 verificações, `controlled_access_ai_limits.sql`), telas |
+| T-02 | Sugestão da IA guardada por desafio; recarregar não chama a IA de novo | Implementado e testado (não aplicado no banco) | banco, telas |
+| T-03 | Limites de uso da IA (por desafio, pessoa por dia e plataforma por dia) e chave para desligar | Implementado e testado (não aplicado no banco) | banco, regras, telas |
+| T-04 | Função da IA com no máximo 2 tentativas por pedido | Implementado (não publicado) | revisão; chamada real não testada |
+| T-05 | Build da aplicação no Netlify só quando a pasta dela muda | Implementado (não publicado) | revisão |
 
 ### Para fechar o incremento
 

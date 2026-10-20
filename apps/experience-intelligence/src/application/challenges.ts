@@ -36,15 +36,23 @@ export interface Interpretation {
   proposal: ChallengeStructure;
   meta: { model: string; prompt_version: string };
 }
-export type InterpretationFailure = "ocupado" | "sem_chave" | "falha";
+export type InterpretationFailure = "ocupado" | "sem_chave" | "limite" | "desativado" | "sem_acesso" | "falha";
+const FALHAS: readonly string[] = ["ocupado", "sem_chave", "limite", "desativado", "sem_acesso"];
+/** Traduz o código devolvido pela função da IA; qualquer outro vira "falha". */
+export function interpretationFailure(code: unknown): InterpretationFailure {
+  return typeof code === "string" && FALHAS.includes(code) ? (code as InterpretationFailure) : "falha";
+}
+/** Falhas em que tentar de novo não adianta (e só gastaria uso da IA). */
+export const canRetryInterpretation = (f: InterpretationFailure) => f === "ocupado" || f === "falha";
 
-/** Pede à IA uma proposta de estrutura. Nada é gravado no desafio: é uma sugestão para revisar. */
+/** Pede à IA uma proposta de estrutura. Nada é gravado no desafio: é uma sugestão para revisar.
+ *  Se a sugestão já foi feita para este desafio, o servidor devolve a guardada sem chamar a IA. */
 export async function interpretChallenge(id: string): Promise<{ ok: true; value: Interpretation } | { ok: false; reason: InterpretationFailure }> {
   const { data, error } = await supabase().functions.invoke("ei-interpretar-desafio", { body: { challenge_id: id } });
   if (error) {
     let code: string = "falha";
     try { code = (await (error as { context?: Response }).context?.json())?.error || code; } catch { /* resposta sem corpo */ }
-    return { ok: false, reason: code === "ocupado" || code === "sem_chave" ? code : "falha" };
+    return { ok: false, reason: interpretationFailure(code) };
   }
   const parsed = ChallengeStructureSchema.safeParse(data?.proposal);
   if (!parsed.success) return { ok: false, reason: "falha" };

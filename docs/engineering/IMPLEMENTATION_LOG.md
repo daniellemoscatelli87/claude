@@ -6,9 +6,9 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
-## Estado atual (19/10/2026)
+## Estado atual (20/10/2026)
 
-**Cortes 1 e 2 e acesso master implementados, não publicados.** Banco, regras e telas testados (ver entrada abaixo). Ainda não houve teste com login real e IA real, porque a aplicação não está no ar.
+**Cortes 1 e 2, acesso master, acesso por convite e limites da IA implementados, não publicados.** Banco, regras e telas testados (ver entradas abaixo). A migração de 20/10 foi testada no banco real dentro de transação desfeita e **ainda não foi aplicada**; a função da IA publicada ainda é a versão 1 (sem limites). Ainda não houve teste com login real e IA real, porque a aplicação não está no ar.
 
 ## 2026-10-19 · Organização da documentação
 
@@ -57,6 +57,53 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
   - Telas da master no navegador (servidor simulado): master navega clientes → desafios → desafio completo, chamando as três funções; conta comum que abre `/master/` volta ao início e não vê o link; nenhum erro de página.
   - `npm test` (25 de 25), `npm run typecheck` (sem erros) e `npm run build` (5 páginas, incluindo `/master`).
 - **Não testado ainda:** a área master com login real.
+
+## 2026-10-20 · Revisão técnica e de segurança, acesso por convite e limites da IA (D-014 a D-016)
+
+**Revisão (antes do merge do PR #28).** Achados:
+
+| # | Achado | Gravidade | Situação |
+|---|---|---|---|
+| R1 | A tela pedia nova sugestão à IA toda vez que o desafio pendente era aberto ou recarregado; cada pedido podia fazer até 10 chamadas ao Gemini; sem limite por pessoa ou por dia | Alta (custo) | Corrigido (D-015) |
+| R2 | Qualquer conta do Supabase Auth (compartilhado com o site) podia criar organizações e desafios sem limite | Média | Corrigido (D-014) |
+| R3 | `ei_log_interpretation` permitia a um membro gravar na auditoria um uso de IA que não aconteceu | Baixa | Corrigido: permissão retirada; a auditoria da IA agora só nasce de um uso reservado |
+| R4 | `ei_confirm_structure` não limita o tamanho das listas da estrutura (pode ocupar espaço no banco) | Baixa (mitigado pelo convite) | Pendente: aguarda decisão da dona do produto |
+| R5 | A função da IA aceita chamadas de qualquer origem (CORS `*`); exige login | Baixa | Pendente: restringir ao endereço do app depois da publicação |
+| R6 | Aviso do Supabase: proteção contra senhas vazadas desligada | Informativo | Não ativar: recurso de plano pago |
+| R7 | Aviso do Supabase: funções `SECURITY DEFINER` executáveis por pessoas logadas | Informativo | Intencional (D-008): cada função confere se a pessoa é membro |
+
+Conferido também: nenhuma função do produto é executável por visitante sem login (`anon`); `ei_master_registrar` e `ei_snapshot` não são portas de escrita; não existe ambiente de homologação (branch) no Supabase; plano do Supabase: Free.
+
+**Banco:** migração `apps/experience-intelligence/supabase/migrations/20261020120000_testes_controlados_e_limites_ia.sql` (tabelas `ei_settings`, `ei_testers`, `ai_usage`, `ai_interpretations`; funções `ei_has_access`, `ei_ai_begin`, `ei_ai_finish`; `ei_create_organization` e `ei_create_challenge` passam a exigir convite). **Não aplicada ainda.**
+
+**Função da IA:** `ei-interpretar-desafio` reescrita para reservar o uso, devolver a sugestão guardada e fazer no máximo 2 chamadas. **Não publicada ainda** (depende da migração).
+
+**Aplicação:** tela "Acesso por convite"; mensagens para limite, IA pausada e sem acesso; "Tentar de novo" só para falhas temporárias; aviso de convite no cadastro; `netlify.toml` só gera a aplicação quando a pasta dela muda.
+
+**Testes executados:**
+
+| Comando / teste | Resultado |
+|---|---|
+| Migração + `controlled_access_ai_limits.sql` no banco real, numa única transação desfeita | "OK: 9 verificações passaram"; conferido depois que nenhuma tabela nova ficou no banco |
+| `npm test` | 28 testes, 28 passaram (3 novos sobre as respostas da IA) |
+| `npm run typecheck` | sem erros |
+| `npm run lint` | 0 erros, os mesmos 3 avisos de "fast refresh" |
+| `npm run build` | sucesso, 5 páginas |
+| Telas com servidor simulado (390 px) | sem convite: "Acesso por convite", sem formulário; convidada: formulário da organização; limite: mensagem, sem "Tentar de novo", preenchimento manual disponível; ocupado: "Tentar de novo" visível; sugestão guardada: aparece preenchida; nenhum erro de página |
+
+**Falha durante os testes:** a primeira execução no banco ficou parada até o tempo esgotar, porque um `update` sem `where` pedia confirmação na ferramenta. Corrigido com `where id`; nada foi gravado.
+
+**Pendente:** aplicar a migração, publicar a função da IA versão 2 e rodar de novo `rls_isolation.sql` e `master_access.sql` (ajustados para usar pessoas convidadas). Depende de autorização.
+
+### Custos recorrentes identificados (nada contratado)
+
+| Serviço | Situação hoje | O que pode gerar custo | Cuidado adotado |
+|---|---|---|---|
+| Supabase | Plano Free (verificado em 20/10/2026), sem branches | Branches de homologação (cobrados por hora), aumento de computação, backups com recuperação por horário, domínio próprio, proteção de senhas vazadas e passar dos limites do Free (banco de 500 MB, invocações de funções, e-mails) | Nada disso foi ativado; testes no banco dentro de transação desfeita; IA e cadastro limitados |
+| Google Gemini | Não verificado: depende de a chave estar no nível gratuito ou com faturamento ativo no Google | Com faturamento ativo, cada chamada é cobrada | Limites D-015 e chave para desligar |
+| Netlify | Site do estúdio já publicado; segundo site ainda não criado | Cada build consome minutos ou créditos do plano, inclusive pré-visualizações de PR | Build da aplicação só quando a pasta dela muda |
+| E-mail de confirmação | Envio padrão do Supabase, gratuito, com limite baixo por hora | Para volume maior será preciso um serviço de e-mail próprio, que pode ser pago | Suficiente para poucos convidados |
+| Subdomínio | Não criado | Nenhum: é configuração de DNS no domínio que já existe | Nenhum necessário |
 
 ## Estado do repositório encontrado (19/10/2026)
 

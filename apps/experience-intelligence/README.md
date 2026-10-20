@@ -11,6 +11,8 @@ Plataforma em que uma organização conta o que quer melhorar e é guiada, passo
 5. Perguntas de entendimento, uma por vez, com a opção "Não sei" e quatro caminhos práticos para seguir.
 6. Tudo fica salvo e é retomado depois de atualizar a página ou entrar de novo.
 7. Uma organização não vê nem altera nada de outra.
+8. Fase de testes com acesso por convite: só e-mails da lista de teste (confirmados) ou a master usam a plataforma.
+9. A IA tem custo controlado: a sugestão fica guardada por desafio (recarregar a página não chama a IA de novo), há limites por desafio, por pessoa por dia e da plataforma por dia, e uma chave para desligar a IA.
 
 O que ainda não existe está no [Product Backlog](../../docs/product/PRODUCT_BACKLOG.md).
 
@@ -52,9 +54,26 @@ Não é preciso configurar nada para rodar: o endereço do Supabase e a chave pu
 
 ## Banco de dados
 
-- Migração: `supabase/migrations/20261019120000_fundacao_e_desafio.sql`.
-- Teste de isolamento: `supabase/tests/rls_isolation.sql`. Ele roda no banco dentro de uma transação desfeita no final (nada fica gravado) e termina com "OK" ou com "FALHOU: motivo".
+- Migrações: pasta `supabase/migrations/`, aplicadas em ordem.
+- Testes no banco: `supabase/tests/rls_isolation.sql` (isolamento), `master_access.sql` (acesso master) e `controlled_access_ai_limits.sql` (convite e limites da IA). Rodam dentro de uma transação desfeita no final (nada fica gravado) e terminam com "OK" ou com "FALHOU: motivo".
 - A chave da IA (`GEMINI_API_KEY`) fica nos segredos das funções do Supabase, nunca no código.
+
+### Fase de testes: convidar, remover e limites da IA
+
+Feito no SQL Editor do Supabase (só quem administra o projeto):
+
+```sql
+-- convidar (e-mail em minúsculas; a pessoa precisa confirmar o e-mail da conta)
+insert into public.ei_testers (email, note) values ('pessoa@empresa.com', 'teste piloto');
+-- remover o convite
+delete from public.ei_testers where email = 'pessoa@empresa.com';
+-- desligar ou religar a IA, sem publicar nada
+update public.ei_settings set ai_enabled = false where id;
+-- ajustar limites (padrão: 3 por desafio, 20 por pessoa por dia, 100 na plataforma por dia)
+update public.ei_settings set ai_per_challenge = 3, ai_per_user_day = 20, ai_global_day = 100 where id;
+-- uso da IA nas últimas 24 horas
+select status, count(*) from public.ai_usage where created_at > now() - interval '1 day' group by status;
+```
 
 ## Publicar
 

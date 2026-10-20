@@ -9,6 +9,7 @@ import { AuthForm } from "@/components/AuthForm";
 import { OrganizationForm } from "@/components/OrganizationForm";
 import { useSession } from "@/components/session";
 import { listChallenges } from "@/application/challenges";
+import { hasPlatformAccess } from "@/application/organizations";
 import { mensagemDeErro } from "@/application/errors";
 import type { Challenge } from "@/domain/challenge/schemas";
 
@@ -22,6 +23,7 @@ export default function Inicio() {
   const router = useRouter();
   const [desafios, setDesafios] = useState<Challenge[] | null>(null);
   const [erro, setErro] = useState("");
+  const [acesso, setAcesso] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (!current) return;
@@ -30,6 +32,12 @@ export default function Inicio() {
       .then((lista) => { if (lista.length === 0) router.replace("/desafio/novo/"); else setDesafios(lista); })
       .catch((e) => setErro(mensagemDeErro(e)));
   }, [current, router]);
+
+  // Fase de testes: sem organização, só quem foi convidada pode criar uma.
+  useEffect(() => {
+    if (loading || !session || current) return;
+    hasPlatformAccess().then(setAcesso).catch(() => setAcesso(false));
+  }, [loading, session, current]);
 
   if (loading) return <Shell><Loading /></Shell>;
 
@@ -43,6 +51,15 @@ export default function Inicio() {
     );
   }
 
+  if (!current && acesso === null) return <Shell><Loading /></Shell>;
+  if (!current && !acesso) {
+    return (
+      <Shell>
+        <h1>Acesso por convite</h1>
+        <p className="lead">A plataforma está em fase de testes e, por enquanto, só pessoas convidadas conseguem usar. Se você recebeu um convite, entre com o mesmo e-mail do convite e confirme esse e-mail pelo link que enviamos.</p>
+      </Shell>
+    );
+  }
   if (!current) return <Shell><OrganizationForm first /></Shell>;
 
   return (

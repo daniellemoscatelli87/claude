@@ -8,7 +8,7 @@ import { Shell, Loading } from "@/components/Shell";
 import { useSession } from "@/components/session";
 import { StructureEditor } from "@/components/StructureEditor";
 import { NextQuestion } from "@/components/NextQuestion";
-import { getChallenge, interpretChallenge, listAnswers, type Interpretation, type InterpretationFailure } from "@/application/challenges";
+import { canRetryInterpretation, getChallenge, interpretChallenge, listAnswers, type Interpretation, type InterpretationFailure } from "@/application/challenges";
 import { mensagemDeErro } from "@/application/errors";
 import { FRAMING_QUESTIONS, framingProgress, nextFramingQuestion, openItems, type QuestionAnswer } from "@/domain/challenge/framing";
 import type { Challenge, ChallengeStructure } from "@/domain/challenge/schemas";
@@ -16,6 +16,9 @@ import type { Challenge, ChallengeStructure } from "@/domain/challenge/schemas";
 const FALHA_IA: Record<InterpretationFailure, string> = {
   ocupado: "A organização automática está ocupada agora. Preencha com o que você sabe ou tente de novo em alguns minutos.",
   sem_chave: "A organização automática não está configurada. Preencha com o que você sabe.",
+  limite: "O limite de organizações automáticas foi atingido por enquanto. Preencha com o que você sabe.",
+  desativado: "A organização automática está pausada. Preencha com o que você sabe.",
+  sem_acesso: "A plataforma está em fase de testes, com acesso por convite.",
   falha: "Não foi possível organizar automaticamente. Preencha com o que você sabe.",
 };
 
@@ -104,7 +107,9 @@ function Desafio() {
             {iaEstado !== "pronto" && (
               <div className="card stack">
                 <p className="msg err" role="alert">{FALHA_IA[iaEstado]}</p>
-                <div className="row end"><button type="button" className="btn btn-ghost" onClick={pedirIa}>Tentar de novo</button></div>
+                {canRetryInterpretation(iaEstado) && (
+                  <div className="row end"><button type="button" className="btn btn-ghost" onClick={pedirIa}>Tentar de novo</button></div>
+                )}
               </div>
             )}
             <StructureEditor key={iaEstado} challengeId={c.id} initial={ia?.proposal ?? null} ai={ia} editing={false} onSaved={recarregar} />

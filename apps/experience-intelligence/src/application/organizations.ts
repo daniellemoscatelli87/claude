@@ -28,6 +28,13 @@ export async function listMyOrganizations(): Promise<MyOrganization[]> {
     .filter((o): o is MyOrganization => o !== null);
 }
 
+/** A pessoa pode usar a plataforma na fase de testes (lista de convidadas ou master). */
+export async function hasPlatformAccess(): Promise<boolean> {
+  const { data, error } = await supabase().rpc("ei_has_access");
+  if (error) throw error;
+  return data === true;
+}
+
 export async function createOrganization(input: unknown): Promise<string> {
   const parsed = OrganizationInputSchema.safeParse(input);
   if (!parsed.success) throw new AppError("Informe o nome da organização (de 2 a 120 caracteres).");

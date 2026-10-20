@@ -45,7 +45,7 @@ export function AuthForm() {
         {modo === "criar" && <span className="hint">Pelo menos 8 caracteres.</span>}
       </label>
       {modo === "criar" && (
-        <p className="hint" style={{ margin: 0 }}>Plataforma em fase de testes. A equipe Dani Moscatelli | Experience Design Studio pode acessar os projetos da sua organização; cada acesso fica registrado no histórico da organização.</p>
+        <p className="hint" style={{ margin: 0 }}>Plataforma em fase de testes, com acesso por convite. A equipe Dani Moscatelli | Experience Design Studio pode acessar os projetos da sua organização; cada acesso fica registrado no histórico da organização.</p>
       )}
       {erro && <p className="msg err" role="alert">{erro}</p>}
       {aviso && <p className="msg ok" role="status">{aviso}</p>}
