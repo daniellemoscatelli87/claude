@@ -56,6 +56,7 @@ Não é preciso configurar nada para rodar: o endereço do Supabase e a chave pu
 
 - Migrações: pasta `supabase/migrations/`, aplicadas em ordem.
 - Testes no banco: `supabase/tests/rls_isolation.sql` (isolamento), `master_access.sql` (acesso master) e `controlled_access_ai_limits.sql` (convite e limites da IA). Rodam dentro de uma transação desfeita no final (nada fica gravado) e terminam com "OK" ou com "FALHOU: motivo".
+- Reversão: pasta `supabase/rollback/`, com um arquivo por migração e as versões anteriores da função da IA.
 - A chave da IA (`GEMINI_API_KEY`) fica nos segredos das funções do Supabase, nunca no código.
 
 ### Fase de testes: convidar, remover e limites da IA
@@ -67,7 +68,9 @@ Feito no SQL Editor do Supabase (só quem administra o projeto):
 insert into public.ei_testers (email, note) values ('pessoa@empresa.com', 'teste piloto');
 -- remover o convite
 delete from public.ei_testers where email = 'pessoa@empresa.com';
--- desligar ou religar a IA, sem publicar nada
+-- a IA está desligada desde 20/10/2026 (D-017); religar só depois de revisar o tratamento de dados do Gemini
+update public.ei_settings set ai_enabled = true where id;
+-- desligar de novo
 update public.ei_settings set ai_enabled = false where id;
 -- ajustar limites (padrão: 3 por desafio, 20 por pessoa por dia, 100 na plataforma por dia)
 update public.ei_settings set ai_per_challenge = 3, ai_per_user_day = 20, ai_global_day = 100 where id;

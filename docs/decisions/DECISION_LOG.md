@@ -139,6 +139,15 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Decisão:** sem ambientes adicionais pagos. Testes automatizados, testes no banco dentro de transação desfeita e telas com servidor simulado; testes reais só depois da publicação, com acesso por convite (D-014). Nenhum serviço, plano ou recurso pago é ativado sem autorização.
 - **Riscos de custo conhecidos:** listados no Implementation Log (entrada de 20/10/2026).
 
+## D-017 · 20/10/2026 · IA desligada até revisar o tratamento de dados; conclusão do uso só pelo servidor
+
+- **Origem:** Dona do produto (condições para aplicar a migração e publicar a função da IA).
+- **Decisão:**
+  - a IA fica desligada (`ei_settings.ai_enabled = false`) até a revisão das condições de tratamento de dados da API do Gemini; nenhuma informação real de cliente vai para a IA antes disso;
+  - `ei_ai_finish` só pode ser chamada pelo servidor (função da IA com a chave de serviço); pessoas logadas não gravam sugestão nem auditoria de IA direto pela API;
+  - toda mudança de banco do produto tem procedimento de reversão em `apps/experience-intelligence/supabase/rollback/`, e as versões anteriores da função da IA ficam guardadas na mesma pasta.
+- **Religar a IA:** só com autorização da dona do produto, com um comando no SQL Editor (README da aplicação).
+
 ---
 
 ## Decisões pendentes

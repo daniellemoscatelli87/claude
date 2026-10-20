@@ -2,7 +2,8 @@
 // Recebe { challenge_id } com o token da pessoa. Antes de chamar a IA, reserva o uso no banco (ei_ai_begin):
 // confere membro, acesso de teste, limites e se a IA está ligada; se já existe sugestão guardada para o
 // desafio, devolve essa e não chama a IA de novo. Não grava nada no desafio: a pessoa revisa, edita e
-// confirma na tela. Ao final, ei_ai_finish guarda a sugestão e registra modelo e versão do prompt.
+// confirma na tela. Ao final, ei_ai_finish (só com a chave de serviço, D-017) guarda a sugestão e registra
+// modelo e versão do prompt. Pessoas logadas não conseguem chamar ei_ai_finish direto.
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 import { z } from "npm:zod@4.6.7";
 
@@ -57,6 +58,14 @@ Deno.serve(async (req) => {
     global: { headers: { Authorization: authorization } },
     auth: { persistSession: false },
   });
+  // Cliente do servidor: usado apenas para concluir o uso que ei_ai_begin reservou com o token da pessoa.
+  const servidor = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
+    auth: { persistSession: false },
+  });
+  const concluir = async (usage: string, proposal: unknown, meta: unknown) => {
+    const { error } = await servidor.rpc("ei_ai_finish", { p_usage: usage, p_proposal: proposal, p_meta: meta });
+    if (error) console.error("ei_ai_finish", error.message);
+  };
   const { challenge_id } = await req.json().catch(() => ({}));
   if (typeof challenge_id !== "string") return json({ error: "Desafio inválido." }, 400);
 
@@ -66,7 +75,7 @@ Deno.serve(async (req) => {
   if (r.status !== "go") return json({ error: STATUS[r.status as string] ?? "falha" }, 409);
   const usage = r.usage_id as string;
   const falhou = async (code: string, status = 502) => {
-    await sb.rpc("ei_ai_finish", { p_usage: usage, p_proposal: null, p_meta: {} });
+    await concluir(usage, null, {});
     return json({ error: code }, status);
   };
 
@@ -99,6 +108,6 @@ Deno.serve(async (req) => {
   if (!proposta.success) { console.error("Proposta inválida", JSON.stringify(bruto).slice(0, 400)); return falhou("formato"); }
 
   const meta = { model: usado, prompt_version: PROMPT_VERSION };
-  await sb.rpc("ei_ai_finish", { p_usage: usage, p_proposal: proposta.data, p_meta: meta });
+  await concluir(usage, proposta.data, meta);
   return json({ proposal: proposta.data, meta });
 });

@@ -57,7 +57,10 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 | T-01 | Acesso por convite (lista de teste com e-mail confirmado, ou master), conferido no banco | Implementado e testado | banco (9 verificações, `controlled_access_ai_limits.sql`), telas |
 | T-02 | Sugestão da IA guardada por desafio; recarregar não chama a IA de novo | Implementado e testado | banco, telas |
 | T-03 | Limites de uso da IA (por desafio, pessoa por dia e plataforma por dia) e chave para desligar | Implementado e testado | banco, regras, telas |
-| T-04 | Função da IA com no máximo 2 tentativas por pedido | Publicado (versão 2); chamada real não testada | revisão |
+| T-04 | Função da IA com no máximo 2 tentativas por pedido | Publicado (versão 3); chamada real não testada | revisão |
+| T-06 | IA desligada até revisar o tratamento de dados da API (D-017) | Aplicado | banco |
+| T-07 | Conclusão do uso da IA só pelo servidor | Implementado e testado | banco |
+| T-08 | Procedimento de reversão das migrações e versões anteriores da função da IA | Pronto; reversão parcial testada | banco |
 | T-05 | Build da aplicação no Netlify só quando a pasta dela muda | Implementado (não publicado) | revisão |
 
 ### Para fechar o incremento
@@ -66,7 +69,7 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 |---|---|---|
 | C2-11 | Publicar a aplicação (segundo site no Netlify, subdomínio) | Aguardando a dona do produto |
 | C2-12 | Liberar cadastro e endereço de retorno do login no Supabase | Aguardando a dona do produto |
-| C2-13 | Teste com login real e IA real, no celular | Depois da publicação |
+| C2-13 | Teste com login real e IA real, no celular | Depois da publicação e da revisão do tratamento de dados do Gemini |
 
 ---
 

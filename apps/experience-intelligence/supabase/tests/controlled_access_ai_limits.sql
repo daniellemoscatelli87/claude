@@ -1,4 +1,4 @@
--- Teste do acesso por convite e dos limites da IA (D-014, D-015).
+-- Teste do acesso por convite, dos limites da IA e da conclusão do uso só pelo servidor (D-014, D-015, D-017).
 -- Roda no banco real dentro de uma transação desfeita no final (ROLLBACK): nada fica gravado.
 -- Pessoas simuladas: C (convidada, e-mail confirmado), N (sem convite), U (convidada sem confirmar o e-mail),
 -- M (master, sem convite) e O (convidada, de outra organização).
@@ -14,7 +14,7 @@ values
   ('00000000-0000-4000-b000-0000000000aa', 'teste-m@ei.invalid', 'authenticated', 'authenticated', '{"ei_master":true}', now()),
   ('00000000-0000-4000-b000-0000000000bb', 'teste-o@ei.invalid', 'authenticated', 'authenticated', '{}', now());
 insert into public.ei_testers (email) values ('teste-c@ei.invalid'), ('teste-u@ei.invalid'), ('teste-o@ei.invalid');
--- Limites conhecidos durante o teste (o valor real é restaurado pelo ROLLBACK).
+-- IA ligada e limites conhecidos só durante o teste (o valor real é restaurado pelo ROLLBACK).
 update public.ei_settings set ai_enabled = true, ai_per_challenge = 2, ai_per_user_day = 100, ai_global_day = 1000 where id;
 
 create temp table ei_resultado (mensagem text) on commit drop;
@@ -25,6 +25,14 @@ begin
   execute 'reset role';
   perform set_config('request.jwt.claims', json_build_object('sub', p_user, 'role', 'authenticated', 'app_metadata', p_app)::text, true);
   execute 'set local role authenticated';
+end $$;
+
+-- Papel do servidor (chave de serviço usada pela função da IA).
+create function pg_temp.servidor() returns void language plpgsql as $$
+begin
+  execute 'reset role';
+  perform set_config('request.jwt.claims', '{"role":"service_role"}', true);
+  execute 'set local role service_role';
 end $$;
 
 do $$
@@ -84,6 +92,11 @@ begin
   v_usage := (v_r ->> 'usage_id')::uuid;
   if public.ei_ai_begin(v_ch) ->> 'status' <> 'busy' then raise exception 'FALHOU: segunda chamada simultânea liberada'; end if;
 
+  -- Nem a própria pessoa conclui o uso direto pela API (só o servidor).
+  v_ok := false;
+  begin perform public.ei_ai_finish(v_usage, '{"title":"Inventada"}', '{}'); exception when insufficient_privilege then v_ok := true; end;
+  if not v_ok then raise exception 'FALHOU: pessoa gravou sugestão da IA direto pela API'; end if;
+
   -- Outra pessoa não conclui o uso nem reserva no desafio alheio.
   perform pg_temp.como(v_o);
   v_ok := false;
@@ -92,19 +105,22 @@ begin
   v_ok := false;
   begin perform public.ei_ai_begin(v_ch); exception when insufficient_privilege then v_ok := true; end;
   if not v_ok then raise exception 'FALHOU: outra organização reservou IA no desafio'; end if;
-  v_resultados := array_append(v_resultados, 'Chamada simultânea bloqueada; outra organização não usa nem conclui a IA do desafio');
+  v_resultados := array_append(v_resultados, 'Chamada simultânea bloqueada; só o servidor conclui o uso; outra organização não usa a IA do desafio');
 
-  perform pg_temp.como(v_c);
+  perform pg_temp.servidor();
   perform public.ei_ai_finish(v_usage, '{"title":"Espera na recepção"}', '{"model":"teste","prompt_version":"v-teste","extra":"descartado"}');
+  perform pg_temp.como(v_c);
   v_r := public.ei_ai_begin(v_ch);
   if v_r ->> 'status' <> 'cached' or v_r -> 'proposal' ->> 'title' <> 'Espera na recepção' or v_r -> 'meta' ? 'extra' then
     raise exception 'FALHOU: sugestão não foi guardada ou meta não filtrada: %', v_r;
   end if;
   select count(*) into v_n_int from public.audit_events where entity_id = v_ch and event_type = 'challenge.interpretation_proposed';
   if v_n_int <> 1 then raise exception 'FALHOU: auditoria da IA não registrada'; end if;
+  perform pg_temp.servidor();
   v_ok := false;
   begin perform public.ei_ai_finish(v_usage, '{"title":"De novo"}', '{}'); exception when insufficient_privilege then v_ok := true; end;
   if not v_ok then raise exception 'FALHOU: uso concluído duas vezes'; end if;
+  perform pg_temp.como(v_c);
   v_resultados := array_append(v_resultados, 'Sugestão guardada: recarregar devolve a mesma, sem nova chamada; auditoria registrada uma vez');
 
   -- ---- Limite por desafio (2 no teste) ----
@@ -112,7 +128,9 @@ begin
   for i in 1..2 loop
     v_r := public.ei_ai_begin(v_ch2);
     if v_r ->> 'status' <> 'go' then raise exception 'FALHOU: tentativa % bloqueada antes do limite: %', i, v_r; end if;
+    perform pg_temp.servidor();
     perform public.ei_ai_finish((v_r ->> 'usage_id')::uuid, null, '{}');
+    perform pg_temp.como(v_c);
   end loop;
   if public.ei_ai_begin(v_ch2) ->> 'status' <> 'limit' then raise exception 'FALHOU: limite por desafio não aplicado'; end if;
   v_resultados := array_append(v_resultados, 'Limite por desafio aplicado, contando também as tentativas que falharam');
