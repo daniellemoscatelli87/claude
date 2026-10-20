@@ -33,6 +33,24 @@ a { color: var(--red); }
 .brand { font-weight: 800; color: var(--dark); text-decoration: none; letter-spacing: -.01em; }
 .brand span { color: var(--red); }
 .top-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.brand-logado { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; min-width: 0; }
+.brand-logado img { height: 34px; width: auto; display: block; }
+.brand-divisor { width: 1px; align-self: stretch; min-height: 28px; background: var(--line); }
+.brand-nome { font-weight: 800; color: var(--red); letter-spacing: -.01em; white-space: nowrap; }
+.perfil-botao { display: inline-flex; align-items: center; gap: 4px; background: none; border: 0; padding: 4px; cursor: pointer; color: var(--muted); border-radius: 999px; min-height: 44px; }
+.perfil-botao:hover { color: var(--dark); }
+.avatar { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--red-tint); color: var(--red-dark); font-weight: 800; font-size: 14px; }
+.avatar.grande { width: 48px; height: 48px; font-size: 17px; flex-shrink: 0; }
+.perfil-fundo { position: fixed; inset: 0; background: rgb(15 23 42 / .35); z-index: 40; }
+.perfil-painel { position: fixed; top: 0; right: 0; bottom: 0; width: min(320px, 86vw); background: var(--card); z-index: 41; box-shadow: -8px 0 24px rgb(15 23 42 / .12); padding: 20px 16px; display: grid; align-content: start; gap: 20px; overflow-y: auto; }
+.perfil-painel:focus { outline: none; }
+.perfil-topo { display: flex; align-items: center; gap: 12px; }
+.perfil-topo > div { flex: 1; min-width: 0; }
+.perfil-email { margin: 0; font-weight: 700; color: var(--dark); overflow-wrap: anywhere; }
+.perfil-fechar { background: none; border: 0; font-size: 28px; line-height: 1; color: var(--muted); cursor: pointer; width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0; }
+.perfil-fechar:hover { color: var(--dark); }
+.perfil-opcoes { display: grid; gap: 14px; }
+.perfil-opcoes > a { font-weight: 600; padding: 10px 0; }
 main { padding: 28px 0 64px; }
 
 h1 { font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1.2; letter-spacing: -.02em; color: var(--dark); margin: 0 0 8px; }
