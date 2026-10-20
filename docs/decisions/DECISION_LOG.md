@@ -299,9 +299,35 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - rodapé igual ao do site, com copyright, no lugar de "by Dani Moscatelli Studio".
 - **Pendente (P-006):** cruzar o cadastro com o formulário de contato do site.
 
+## D-026 · 21/10/2026 · Dados pessoais com necessidade, segurança e transparência (revê D-025)
+
+- **Origem:** Dona do produto.
+- **Diretrizes:**
+  1. separar o cadastro da pessoa física do cadastro da empresa;
+  2. gerenciar contas pessoais com id interno e e-mail confirmado, e avaliar o CNPJ para empresas brasileiras;
+  3. antes de tornar o CPF obrigatório, verificar se há necessidade real que meios menos invasivos não atendam;
+  4. se o CPF for necessário, criptografia quando recuperável e HMAC com chave secreta para duplicidade;
+  5. nunca enviar CPF à IA nem colocá-lo em logs ou na auditoria sem necessidade;
+  6. uma pessoa pode participar de várias empresas sem contas duplicadas;
+  7. preparar os requisitos dos Termos de Uso e da Política de Privacidade (finalidades e bases legais), com a informação disponível desde os testes;
+  8. registrar na documentação de arquitetura, segurança e produto.
+- **Estado verificado (21/10/2026):** nenhum CPF armazenado; a migração do perfil pessoal (D-025) nunca foi aplicada. Detalhes em `docs/security/DADOS_PESSOAIS.md`.
+- **Análise:** o CPF não é necessário para impedir duplicidades nesta fase. As contas já são únicas por e-mail confirmado, as empresas devem usar o CNPJ, e a maioridade pode ser declarada.
+- **Suspenso até nova decisão:** CPF e data de nascimento obrigatórios no cadastro (D-025). A migração `20261021100000` e o formulário **não serão aplicados ou publicados** nessa forma.
+- **Proposta:** ver P-007.
+
 ---
 
 ## Decisões pendentes
+
+- **P-007 · 21/10/2026 · Cadastro sem CPF** (proposta em `docs/security/DADOS_PESSOAIS.md`, seção 3):
+  - retirar CPF e data de nascimento;
+  - declaração de maioridade;
+  - CNPJ opcional e único na empresa;
+  - aviso de privacidade da fase de testes com aceite registrado;
+  - CPF só no futuro, com criptografia e HMAC.
+
+  Aguarda aprovação.
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
   - cruzar pelo e-mail confirmado, no servidor;
