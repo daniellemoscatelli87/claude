@@ -19,6 +19,7 @@ Esta documentação é parte integrante do produto, não material de apoio desca
 | [`strategy/BUSINESS_MODEL_CANVAS.md`](strategy/BUSINESS_MODEL_CANVAS.md) | Aponta para a seção 4 da visão | Criado na organização |
 | [`strategy/ROADMAP.md`](strategy/ROADMAP.md) | Aponta para a seção 7 da visão | Criado na organização |
 | [`product/CHALLENGE_METHODOLOGY.md`](product/CHALLENGE_METHODOLOGY.md) | Challenge Model, Methodology Engine, regras de domínio, testes de aceitação e cortes | `01-architecture-challenge-methodology-v1.md` |
+| [`product/PRODUCT_ARCHITECTURE.md`](product/PRODUCT_ARCHITECTURE.md) | Decisões de arquitetura que valem para além de um incremento (ex.: IA independente de fornecedor), separando decidido de existente | Criado em 20/10/2026 |
 | [`engineering/FIRST_INCREMENT_PROMPT.md`](engineering/FIRST_INCREMENT_PROMPT.md) | Escopo aprovado do primeiro incremento (Cortes 1 e 2) | `02-prompt-claude-code-primeiro-incremento.md` |
 | [`research/VALIDATION_LOG.md`](research/VALIDATION_LOG.md) | Aprendizados de validação de mercado e com usuários | Criado na organização |
 | [`../CLAUDE.md`](../CLAUDE.md) | Instruções persistentes para o Claude Code | `CLAUDE.md` do kit |

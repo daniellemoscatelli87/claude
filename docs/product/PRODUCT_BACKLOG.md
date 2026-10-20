@@ -6,7 +6,7 @@ Cada item indica o elo da cadeia de valor em que atua: **Identificar** um desafi
 
 Referência dos cortes: seção 18 de [`CHALLENGE_METHODOLOGY.md`](CHALLENGE_METHODOLOGY.md). Escopo aprovado: [`../engineering/FIRST_INCREMENT_PROMPT.md`](../engineering/FIRST_INCREMENT_PROMPT.md).
 
-**Atualizado em:** 20/10/2026 (testes controlados e limites da IA).
+**Atualizado em:** 20/10/2026 (testes controlados, limites da IA e decisão de IA independente de fornecedor).
 
 ---
 
@@ -68,7 +68,7 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 | ID | Item | Status |
 |---|---|---|
 | C2-11 | Publicar a aplicação (segundo site no Netlify, subdomínio) | Aguardando a dona do produto |
-| C2-12 | Liberar cadastro e endereço de retorno do login no Supabase | Aguardando a dona do produto |
+| C2-12 | Liberar cadastro e endereço de retorno do login no Supabase | Concluído em 20/10/2026 pela dona do produto: endereço de retorno `https://app.danimoscatelli.com.br/**` adicionado; conferido que o cadastro por e-mail está ligado, "Confirm email" ligado e login anônimo desligado. Site URL não alterado |
 | C2-13 | Teste com login real e IA real, no celular | Depois da publicação e da revisão do tratamento de dados do Gemini |
 | C2-14 | Teste real de concorrência dos limites da IA (várias chamadas ao mesmo tempo, em conexões diferentes) | **Obrigatório antes de ativar a IA para clientes** (D-018) |
 
@@ -85,6 +85,20 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 | 5 | Integração de inteligência: busca em protocolos curados, prompts versionados, saída validada e logs | Compreender | Planejado (não autorizado) |
 | 6 | Oferta especializada: regras, cartões, consentimento e notificação ao estúdio | Transformar | Planejado (não autorizado) |
 | 7 | Teste de ponta a ponta: clínica, hotel e experiência do colaborador, sem regras fixas por setor | Avaliar | Planejado (não autorizado) |
+
+### IA independente de fornecedor (D-019): planejado, não autorizado
+
+Diretrizes completas na seção 1 de [`PRODUCT_ARCHITECTURE.md`](PRODUCT_ARCHITECTURE.md). Nenhum item abaixo deve ser antecipado.
+
+| ID | Item | Elo | Status |
+|---|---|---|---|
+| IA-01 | Proposta técnica da arquitetura com vários fornecedores, aproveitando o código existente | Base | Planejado: apresentar quando começarem o Methodology Engine e o RAG |
+| IA-02 | Escolha do modelo conforme a atividade | Base | Planejado (não autorizado) |
+| IA-03 | Methodology Engine e RAG sem depender do fornecedor de IA | Investigar · Compreender | Planejado (não autorizado); faz parte dos Cortes 3 a 5 |
+| IA-04 | Comparação de modelos: qualidade metodológica, precisão, confiabilidade, privacidade, velocidade e custo | Base | Planejado (não autorizado) |
+| IA-05 | Registro de consumo e custo estimado por organização, pessoa e funcionalidade | Base | Planejado (não autorizado); hoje `ai_usage` registra uso por desafio, organização e pessoa, sem custo |
+| IA-06 | Limites de uso de IA por plano de assinatura | Base | Planejado (não autorizado); depende do corte comercial |
+| IA-07 | Serviço de IA com condições adequadas de privacidade e proteção de dados, antes de dados reais de clientes | Base | Obrigatório antes de usar dados reais; depende de decisão e contratação pela dona do produto |
 
 Horizontes seguintes (H1 a H3) estão na seção 7 da visão e não foram detalhados em itens de backlog.
 

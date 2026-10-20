@@ -158,6 +158,20 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - fazer um teste real de concorrência dos limites (C2-14). Os testes até agora rodaram em uma conexão só; a garantia contra chamadas simultâneas vem da trava do banco e ainda não foi medida com conexões paralelas.
 - **Proibido sem nova autorização:** executar `supabase/rollback/20261020120000_reverter.sql`, que apaga as tabelas de convite e uso da IA.
 
+## D-019 · 20/10/2026 · Arquitetura de IA independente de fornecedor
+
+- **Origem:** Dona do produto.
+- **Decisão:** a plataforma não fica dependente só do Gemini. A arquitetura deve permitir usar modelos do Google Gemini, da Anthropic (Claude), da OpenAI e de outros fornecedores. As seis diretrizes estão na seção 1 de [`PRODUCT_ARCHITECTURE.md`](../product/PRODUCT_ARCHITECTURE.md):
+  1. escolher o modelo conforme a atividade;
+  2. Methodology Engine e RAG independentes do fornecedor;
+  3. comparar modelos por qualidade metodológica, precisão, confiabilidade, privacidade, velocidade e custo;
+  4. registrar consumo e custo estimado por organização, pessoa e funcionalidade;
+  5. limites de uso de IA por plano de assinatura;
+  6. contratar ou configurar serviços com condições adequadas de privacidade antes de processar dados reais de clientes.
+- **Fundamento:** evitar dependência de um único fornecedor e poder escolher pela qualidade, pela privacidade e pelo custo de cada atividade.
+- **O que não muda agora:** nenhuma API nova é contratada ou integrada; a IA continua desligada (D-017, D-018); os controles de custo (D-015) continuam valendo.
+- **Próximo passo:** quando começarem o Methodology Engine e o RAG, o Claude apresenta uma proposta técnica que aproveite o código existente. Nada é implementado antes da aprovação.
+
 ---
 
 ## Decisões pendentes

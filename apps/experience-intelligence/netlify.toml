@@ -3,7 +3,11 @@
   command = "npm ci && npm run build"
   publish = "out"
   # Economia de minutos de build: só gera esta aplicação quando algo nesta pasta mudou.
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."
+  # Sem build anterior (primeiro deploy) ou no mesmo commit, sempre gera.
+  ignore = "if [ -z \"$CACHED_COMMIT_REF\" ] || [ \"$CACHED_COMMIT_REF\" = \"$COMMIT_REF\" ]; then exit 1; fi; git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."
 
 [build.environment]
   NODE_VERSION = "22"
+  # Site estático (output: "export"): não usar o adaptador de Next.js do Netlify, que criaria funções
+  # de servidor e otimização de imagens. Só arquivos estáticos são publicados.
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
