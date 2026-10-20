@@ -56,19 +56,19 @@ export function OrganizationForm({ org, onSaved }: { org?: MyOrganization; onSav
 
   return (
     <>
-      <p className="eyebrow"><Building2 size={18} aria-hidden="true" /> {editando ? "Sua organização" : "Preparando seu espaço de trabalho"}</p>
-      <h1>{editando ? "Informações da organização" : "Vamos conhecer sua organização."}</h1>
+      <p className="eyebrow"><Building2 size={18} aria-hidden="true" /> {editando ? "Sua empresa ou negócio" : "Preparando seu espaço de trabalho"}</p>
+      <h1>{editando ? "Empresa ou negócio" : "Agora, conte sobre sua empresa ou negócio."}</h1>
       <p className="lead">Essas informações ajudam a adaptar as orientações ao seu contexto. Você pode completar os detalhes depois.</p>
       <form className="card stack" onSubmit={enviar} noValidate>
-        <label>Como sua organização é chamada?
+        <label>Qual é o nome da empresa ou negócio?
           <input value={nome} onChange={(e) => setNome(e.target.value)} maxLength={120} autoComplete="organization" required
             disabled={!podeEditarOrg} placeholder="Ex.: Clínica Horizonte, Escola Aurora, Loja Central" aria-describedby="org-nome-ajuda" />
-          <span className="hint" id="org-nome-ajuda">Use o nome pelo qual você identifica sua organização.</span>
+          <span className="hint" id="org-nome-ajuda">Use o nome pelo qual as pessoas conhecem a empresa, o estabelecimento ou a instituição.</span>
         </label>
 
         <fieldset className="opcionais">
           <legend>Detalhes opcionais</legend>
-          <label>Em que área ela atua?
+          <label>Em que área atua?
             <select value={segmento} onChange={(e) => setSegmento(e.target.value)} disabled={!podeEditarOrg}>
               <option value="">Selecione um segmento (opcional)</option>
               {SEGMENTOS.map((s) => <option key={s} value={s}>{s}</option>)}
@@ -81,30 +81,30 @@ export function OrganizationForm({ org, onSaved }: { org?: MyOrganization; onSav
               <input value={segmentoOutro} onChange={(e) => setSegmentoOutro(e.target.value)} maxLength={80} disabled={!podeEditarOrg} />
             </label>
           )}
-          <label>O que sua organização oferece?
+          <label>O que a empresa ou negócio oferece?
             <input value={oferta} onChange={(e) => setOferta(e.target.value)} maxLength={200} disabled={!podeEditarOrg}
               placeholder="Ex.: atendimento médico, hospedagem, ensino, plataforma de serviços..." aria-describedby="org-oferta-ajuda" />
             <span className="hint" id="org-oferta-ajuda">Pode ser um serviço, um produto, uma operação ou uma combinação.</span>
           </label>
-          <label>Qual é o seu papel na organização?
+          <label>Qual é o seu papel nela?
             <select value={area} onChange={(e) => setArea(e.target.value)}>
               <option value="">Selecione (opcional)</option>
               {Object.entries(AREAS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </label>
-          <label>Que tipo de organização é?
+          <label>Qual é o tipo?
             <select value={tipo} onChange={(e) => setTipo(e.target.value)} disabled={!podeEditarOrg}>
               <option value="">Selecione (opcional)</option>
               {Object.entries(TIPOS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </label>
-          <label>Qual é aproximadamente o porte da organização?
+          <label>Quantas pessoas trabalham nela, aproximadamente?
             <select value={porte} onChange={(e) => setPorte(e.target.value)} disabled={!podeEditarOrg}>
               <option value="">Selecione (opcional)</option>
               {Object.entries(PORTES).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </label>
-          {!podeEditarOrg && <p className="hint" style={{ margin: 0 }}>Só quem administra a organização altera os dados dela. Você pode atualizar o seu papel.</p>}
+          {!podeEditarOrg && <p className="hint" style={{ margin: 0 }}>Só quem administra a empresa ou negócio altera esses dados. Você pode atualizar o seu papel.</p>}
         </fieldset>
 
         {erro && <p className="msg err" role="alert">{erro}</p>}

@@ -43,7 +43,7 @@ create or replace function public.ei_update_organization_context(
 declare v_user uuid := auth.uid(); v_old public.organizations; v_changed text[] := '{}';
 begin
   if v_user is null or not public.ei_is_member(p_org, array['org_admin']) then
-    raise exception 'Sua conta não tem permissão para alterar esta organização.' using errcode = '42501';
+    raise exception 'Sua conta não tem permissão para alterar esta empresa ou negócio.' using errcode = '42501';
   end if;
   select * into v_old from public.organizations where id = p_org for update;
   if v_old.name is distinct from btrim(p_name) then v_changed := array_append(v_changed, 'name'); end if;
@@ -66,7 +66,7 @@ returns void language plpgsql security definer set search_path = '' as $$
 declare v_user uuid := auth.uid();
 begin
   if v_user is null or not public.ei_is_member(p_org) then
-    raise exception 'Organização não encontrada.' using errcode = '42501';
+    raise exception 'Empresa ou negócio não encontrado.' using errcode = '42501';
   end if;
   update public.organization_members set job_area = p_job_area where organization_id = p_org and user_id = v_user;
   insert into public.audit_events (organization_id, actor_id, entity_type, entity_id, event_type)

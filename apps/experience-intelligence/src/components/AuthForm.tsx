@@ -1,38 +1,30 @@
 "use client";
-// Criar conta e entrar (C1-01).
+// Entrar (tela C do kit de UX). O cadastro fica em /cadastro/ (D-025).
 import { useState } from "react";
+import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/infrastructure/supabase";
 import { mensagemDeErro } from "@/application/errors";
-import { DisplayNameSchema } from "@/domain/organization/context";
 
 export function AuthForm() {
-  const [modo, setModo] = useState<"entrar" | "criar">("criar");
-  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [verSenha, setVerSenha] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState("");
-  const [aviso, setAviso] = useState("");
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault();
-    setErro(""); setAviso("");
-    const nomeOk = DisplayNameSchema.safeParse(nome);
-    if (modo === "criar" && !nomeOk.success) return setErro(nomeOk.error.issues[0].message);
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return setErro("Informe um e-mail válido.");
-    if (senha.length < 8) return setErro("A senha precisa ter pelo menos 8 caracteres.");
+    setErro("");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return setErro("Confira o endereço de e-mail informado.");
+    if (!senha) return setErro("Informe sua senha.");
     setEnviando(true);
     try {
-      if (modo === "criar") {
-        const { data, error } = await supabase().auth.signUp({ email: email.trim(), password: senha, options: { emailRedirectTo: location.origin + "/", data: { full_name: nomeOk.data } } });
-        if (error) throw error;
-        if (!data.session) setAviso("Conta criada. Enviamos um link de confirmação para " + email.trim() + ". Abra o link e depois entre aqui.");
-      } else {
-        const { error } = await supabase().auth.signInWithPassword({ email: email.trim(), password: senha });
-        if (error) throw error;
-      }
+      const { error } = await supabase().auth.signInWithPassword({ email: email.trim().toLowerCase(), password: senha });
+      if (error) throw error;
     } catch (err) {
-      setErro(mensagemDeErro(err));
+      const m = mensagemDeErro(err);
+      setErro(/incorretos/.test(m) ? "Não conseguimos entrar com esses dados. Confira e tente novamente." : /Confirme seu e-mail/.test(m) ? "Confirme seu e-mail antes de continuar." : m);
     } finally {
       setEnviando(false);
     }
@@ -40,31 +32,23 @@ export function AuthForm() {
 
   return (
     <form className="card stack" onSubmit={enviar} noValidate>
-      <h2>{modo === "criar" ? "Crie sua conta" : "Entre na sua conta"}</h2>
-      {modo === "criar" && (
-        <label>Seu nome
-          <input value={nome} onChange={(e) => setNome(e.target.value)} maxLength={80} autoComplete="name" required />
-        </label>
-      )}
+      <h2>Que bom ter você por aqui.</h2>
+      <p className="hint" style={{ margin: 0 }}>Entre para continuar os desafios da sua empresa ou negócio.</p>
       <label>E-mail
         <input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
       </label>
       <label>Senha
-        <input type="password" autoComplete={modo === "criar" ? "new-password" : "current-password"} value={senha} onChange={(e) => setSenha(e.target.value)} required minLength={8} />
-        {modo === "criar" && <span className="hint">Pelo menos 8 caracteres.</span>}
+        <span className="senha">
+          <input type={verSenha ? "text" : "password"} autoComplete="current-password" value={senha} onChange={(e) => setSenha(e.target.value)} required />
+          <button type="button" onClick={() => setVerSenha(!verSenha)} aria-label={verSenha ? "Ocultar senha" : "Mostrar senha"}>
+            {verSenha ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
+          </button>
+        </span>
       </label>
-      {modo === "criar" && (
-        <p className="hint" style={{ margin: 0 }}>Plataforma em fase de testes, com acesso por convite. A equipe Dani Moscatelli | Experience Design Studio pode acessar os projetos da sua organização; cada acesso fica registrado no histórico da organização.</p>
-      )}
       {erro && <p className="msg err" role="alert">{erro}</p>}
-      {aviso && <p className="msg ok" role="status">{aviso}</p>}
-      <button className="btn btn-primary btn-block" disabled={enviando}>{enviando ? "Aguarde…" : modo === "criar" ? "Criar conta" : "Entrar"}</button>
-      <p className="center" style={{ margin: 0 }}>
-        {modo === "criar" ? "Já tem conta? " : "Ainda não tem conta? "}
-        <button type="button" className="btn-link" onClick={() => { setModo(modo === "criar" ? "entrar" : "criar"); setErro(""); setAviso(""); }}>
-          {modo === "criar" ? "Entrar" : "Criar conta"}
-        </button>
-      </p>
+      <button className="btn btn-primary btn-block" disabled={enviando}>{enviando ? "Aguarde…" : "Entrar"}</button>
+      <p className="center" style={{ margin: 0 }}>Ainda não tem conta? <Link href="/cadastro/">Criar conta</Link></p>
+      <p className="hint center" style={{ margin: 0 }}>Acesso por convite nesta fase.</p>
     </form>
   );
 }

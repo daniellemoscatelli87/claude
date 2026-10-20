@@ -115,3 +115,16 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--r
 input:disabled, select:disabled, textarea:disabled { background: #f1f3f6; color: var(--muted); }
 .perfil-nome { margin: 0; font-weight: 800; color: var(--dark); overflow-wrap: anywhere; }
 .perfil-opcoes .opcao { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; padding: 10px 0; background: none; border: 0; color: var(--red); font: inherit; cursor: pointer; text-decoration: none; }
+.etapas { margin: 0 0 16px; }
+.etapas-texto { margin: 0 0 8px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.etapas ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.etapas li { height: 6px; border-radius: 999px; background: var(--line); }
+.etapas li.feita, .etapas li.atual { background: var(--red); }
+.campo-erro { font-size: 13px; font-weight: 600; color: #9b2c2c; }
+input[aria-invalid="true"], select[aria-invalid="true"] { border-color: #c53030; }
+.linha-2 { display: grid; grid-template-columns: 96px 1fr; gap: 12px; }
+.senha { position: relative; display: block; }
+.senha input { padding-right: 52px; }
+.senha button { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; background: none; border: 0; color: var(--muted); cursor: pointer; border-radius: 10px; }
+.primeiro { text-align: left; }
+.primeiro .icone { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 14px; background: var(--red-tint); color: var(--red-dark); margin-bottom: 12px; }

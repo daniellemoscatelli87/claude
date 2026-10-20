@@ -206,6 +206,46 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - a barra lateral mostra o nome, sem o e-mail;
     - a edição chama as duas funções e mostra "Informações salvas.".
 
+## 2026-10-21 · Cadastro em etapas e perfil pessoal (D-025), não publicado
+
+- **Banco:**
+  - migração `supabase/migrations/20261021100000_perfil_pessoal.sql`, **não aplicada**;
+  - tabela `ei_profiles`, sem leitura direta;
+  - funções `ei_cpf_valido`, `ei_validar_perfil`, `ei_my_profile` (CPF mascarado) e `ei_save_my_profile`;
+  - gatilho `ei_capturar_cadastro` em `auth.users`: só age com a chave `ei_signup`; grava o perfil e limpa os metadados;
+  - reversão em `supabase/rollback/20261021100000_reverter.sql`;
+  - mensagens das funções de 20261021090000 trocadas para "empresa ou negócio".
+- **Aplicação:**
+  - `src/domain/profile/personal.ts` (as mesmas regras do banco, máscaras de CPF e telefone);
+  - `src/application/profile.ts` (cadastro, reenviar confirmação, salvar perfil, trocar e-mail e senha);
+  - `PersonalForm` (cadastro, completar e editar), `Etapas` (indicador "Etapa X de 2"), login com a copy da tela C e mostrar senha;
+  - páginas `/cadastro/` e `/perfil/`;
+  - a área logada pede os dados pessoais (etapa 1) e depois a empresa ou negócio (etapa 2);
+  - primeiro acesso com "Seu primeiro desafio começa aqui";
+  - barra lateral com "Meus dados" e "Empresa ou negócio";
+  - a master não precisa do perfil;
+  - `NameForm` removido.
+- **Testes executados:**
+  - `personal_profile.sql` junto com a migração, no banco real, em transação desfeita: **OK, 8 verificações**:
+    - CPF validado pelos dígitos verificadores;
+    - o cadastro grava o perfil e só o nome fica nos metadados (CPF fora do token);
+    - CPF repetido e menor de 18 anos são recusados;
+    - contas do site não são afetadas;
+    - a pessoa vê o próprio CPF mascarado, e ninguém lê a tabela direto;
+    - a edição mantém o CPF quando ele fica em branco;
+    - outra conta não vê nem reaproveita CPF, e conta antiga completa o perfil;
+    - visitante sem login não acessa perfis.
+  - `npm test`: 43 de 43. `typecheck`, `lint` (0 erros) e `build` (8 páginas) ok.
+  - Navegador com servidor simulado (320 e 375 px, sem rolagem lateral, nenhum erro de página):
+    - erros aparecem junto de cada campo e somem ao editar;
+    - máscaras de CPF e telefone funcionam;
+    - o envio leva os dados em `ei_signup`, só com dígitos;
+    - aparecem a tela "Falta só confirmar seu e-mail" e o reenvio;
+    - conta sem perfil passa por etapa 1, etapa 2 e primeiro desafio;
+    - "Meus dados" mostra o CPF mascarado e envia CPF vazio ao manter, e a troca de e-mail funciona;
+    - a master não é levada à etapa 1.
+- **Não testado:** cadastro real com envio de e-mail (depende de aplicar a migração e publicar).
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:

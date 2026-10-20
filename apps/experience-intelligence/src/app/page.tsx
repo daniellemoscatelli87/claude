@@ -1,19 +1,19 @@
 "use client";
-// Início. Sem conta: criar conta ou entrar. Sem organização: criar a organização. Sem desafios: vai direto
-// para "O que você quer melhorar?" (a experiência começa pelo problema, não por um painel vazio).
+// Início. Sem conta: entrar (o cadastro fica em /cadastro/). Sem dados pessoais: etapa 1. Sem empresa ou
+// negócio: etapa 2. Sem desafios: chamada para o primeiro desafio. Com desafios: a área de trabalho.
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Shell, Loading } from "@/components/Shell";
 import { AuthForm } from "@/components/AuthForm";
 import { OrganizationForm } from "@/components/OrganizationForm";
 import { useSession } from "@/components/session";
 import { listChallenges } from "@/application/challenges";
 import { hasPlatformAccess } from "@/application/organizations";
-import { displayName } from "@/application/profile";
-import { NameForm } from "@/components/NameForm";
+import { isMaster } from "@/application/master";
+import { PersonalForm } from "@/components/PersonalForm";
+import { Etapas } from "@/components/Etapas";
 import { contextoIncompleto } from "@/domain/organization/context";
-import { Building2 } from "lucide-react";
+import { Building2, Target } from "lucide-react";
 import { mensagemDeErro } from "@/application/errors";
 import type { Challenge } from "@/domain/challenge/schemas";
 
@@ -23,21 +23,19 @@ const ETAPA: Record<string, string> = {
 };
 
 export default function Inicio() {
-  const { loading, session, current } = useSession();
-  const router = useRouter();
+  const { loading, session, current, profile } = useSession();
   const [desafios, setDesafios] = useState<Challenge[] | null>(null);
   const [erro, setErro] = useState("");
   const [acesso, setAcesso] = useState<boolean | null>(null);
 
-  const semNome = Boolean(session) && !displayName(session);
+  // A master não é tratada como cliente: não precisa do perfil pessoal para entrar.
+  const semPerfil = Boolean(session) && !profile && !isMaster(session);
 
   useEffect(() => {
-    if (!current || semNome) return;
+    if (!current || semPerfil) return;
     setDesafios(null);
-    listChallenges(current.id)
-      .then((lista) => { if (lista.length === 0) router.replace("/desafio/novo/"); else setDesafios(lista); })
-      .catch((e) => setErro(mensagemDeErro(e)));
-  }, [current, router, semNome]);
+    listChallenges(current.id).then(setDesafios).catch((e) => setErro(mensagemDeErro(e)));
+  }, [current, semPerfil]);
 
   // Fase de testes: sem organização, só quem foi convidada pode criar uma.
   useEffect(() => {
@@ -57,7 +55,7 @@ export default function Inicio() {
     );
   }
 
-  if (semNome) return <Shell><NameForm /></Shell>;
+  if (semPerfil) return <Shell><Etapas atual={1} /><PersonalForm modo="completar" email={session?.user.email} /></Shell>;
   if (!current && acesso === null) return <Shell><Loading /></Shell>;
   if (!current && !acesso) {
     return (
@@ -67,7 +65,22 @@ export default function Inicio() {
       </Shell>
     );
   }
-  if (!current) return <Shell><OrganizationForm /></Shell>;
+  if (!current) return <Shell><Etapas atual={2} /><OrganizationForm /></Shell>;
+
+  // Primeiro acesso: chamada para o primeiro desafio (o primeiro discovery).
+  if (desafios && desafios.length === 0) {
+    return (
+      <Shell>
+        <section className="card primeiro">
+          <span className="icone"><Target size={26} aria-hidden="true" /></span>
+          <p className="eyebrow" style={{ display: "flex" }}>Sua empresa está pronta</p>
+          <h1>Seu primeiro desafio começa aqui.</h1>
+          <p className="lead">Conte o que precisa melhorar. Vamos organizar as informações e orientar os próximos passos para entender o que acontece.</p>
+          <Link href="/desafio/novo/" className="btn btn-primary btn-block">Descrever meu primeiro desafio</Link>
+        </section>
+      </Shell>
+    );
+  }
 
   return (
     <Shell>
@@ -79,7 +92,7 @@ export default function Inicio() {
         <div className="card aviso-card">
           <Building2 size={22} aria-hidden="true" />
           <div className="stack" style={{ gap: 8 }}>
-            <p style={{ margin: 0 }}><b>Conte um pouco mais sobre sua organização.</b> Essas informações ajudam a adaptar as orientações ao seu contexto.</p>
+            <p style={{ margin: 0 }}><b>Conte um pouco mais sobre sua empresa ou negócio.</b> Essas informações ajudam a adaptar as orientações ao seu contexto.</p>
             <Link href="/organizacao/">Completar informações</Link>
           </div>
         </div>

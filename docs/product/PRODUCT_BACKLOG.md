@@ -93,6 +93,9 @@ Especificação: `docs/product/ux-onboarding/` (kit v1.0). Proposta e comparaç�
 | ID | Item | Elo | Status |
 |---|---|---|---|
 | UX-3a | Base da condução adaptativa (D-021): contexto mínimo da organização, nome obrigatório, catálogo de protocolos aprovados, Experience Guide com instrumentos, plano inicial pela IA, cartão de atividade, registro estruturado de evidências e regras imediatas de qualidade | Identificar · Investigar | **Aprovado (D-024), em andamento** |
+| UX-10 | Cadastro em etapas (D-025): /cadastro/ com dados pessoais, confirmação de e-mail, empresa ou negócio, chamada para o primeiro desafio; "Meus dados" com edição, troca de e-mail e senha | Base | Implementado e testado (não publicado) |
+| UX-11 | Cruzar o cadastro com o formulário de contato do site (P-006) | Base · Identificar | Proposto; aguarda decisão |
+| UX-12 | Botão "Cadastrar" no site do estúdio, apontando para /cadastro/ | Base | Depois (pedido da dona do produto) |
 | UX-3b | Adaptação: análise da IA nos marcos, "O que descobrimos até aqui", decisão proposta (aprofundar, outra perspectiva, revisar hipótese, avançar) validada pelo Engine e confirmada pela pessoa | Investigar · Compreender | Proposto (aguardando aprovação) |
 | UX-1 | Entrada pública, cadastro completo do cliente fora do acesso público (pagamento pulado nos testes), boas-vindas, "Esqueci minha senha", rodapé "by Dani Moscatelli Studio" (D-022) | Base | Proposto (aguardando aprovação) |
 | UX-4 | Revisão dos planos e análises da IA pela dona do produto nos 3 casos fictícios, antes de clientes reais | Investigar | Obrigatório antes de clientes reais |

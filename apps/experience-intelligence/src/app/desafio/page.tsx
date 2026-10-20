@@ -75,7 +75,7 @@ function Desafio() {
     return (
       <Shell>
         <h1>Desafio não encontrado</h1>
-        <p className="lead">{erro || "Este desafio não existe ou pertence a outra organização."}</p>
+        <p className="lead">{erro || "Este desafio não existe ou pertence a outra empresa ou negócio."}</p>
         <Link href="/" className="btn btn-ghost">Voltar ao início</Link>
       </Shell>
     );

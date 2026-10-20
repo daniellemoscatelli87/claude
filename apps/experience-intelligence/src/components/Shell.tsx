@@ -3,14 +3,13 @@
 // "Experience Intelligence" à esquerda; à direita, avatar e nome com seta que abre a barra lateral de perfil.
 // Rodapé com a assinatura "by Dani Moscatelli Studio" (D-022).
 import { useEffect, useRef, useState } from "react";
-import { Building2, LogOut, Pencil, ShieldUser } from "lucide-react";
+import { Building2, LogOut, ShieldUser, UserRound } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/infrastructure/supabase";
 import { useSession } from "./session";
 import { isMaster } from "@/application/master";
 import { iniciais } from "./avatar";
 import { displayName } from "@/application/profile";
-import { NameForm } from "./NameForm";
 
 export function Shell({ children }: { children: React.ReactNode }) {
   const { session } = useSession();
@@ -39,13 +38,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
 }
 
 function MenuPerfil() {
-  const { session, organizations, current, selectOrganization } = useSession();
+  const { session, organizations, current, profile, selectOrganization } = useSession();
   const [aberto, setAberto] = useState(false);
-  const [editandoNome, setEditandoNome] = useState(false);
   const botao = useRef<HTMLButtonElement>(null);
   const painel = useRef<HTMLDivElement>(null);
   const email = session?.user.email;
-  const nome = displayName(session);
+  const nome = displayName(session, profile);
 
   useEffect(() => {
     if (!aberto) return;
@@ -55,7 +53,7 @@ function MenuPerfil() {
     return () => document.removeEventListener("keydown", tecla);
   }, [aberto]);
 
-  function fechar() { setAberto(false); setEditandoNome(false); botao.current?.focus(); }
+  function fechar() { setAberto(false); botao.current?.focus(); }
 
   return (
     <>
@@ -79,14 +77,10 @@ function MenuPerfil() {
               <button type="button" className="perfil-fechar" onClick={fechar}><span aria-hidden="true">×</span><span className="sr-only">Fechar</span></button>
             </div>
             <nav className="perfil-opcoes" aria-label="Opções de perfil">
-              {editandoNome ? (
-                <NameForm inicial={nome ?? ""} compacto onSaved={() => setEditandoNome(false)} />
-              ) : (
-                <button type="button" className="opcao" onClick={() => setEditandoNome(true)}><Pencil size={18} aria-hidden="true" /> Editar nome</button>
-              )}
-              {current && <Link href="/organizacao/" className="opcao" onClick={() => setAberto(false)}><Building2 size={18} aria-hidden="true" /> Informações da organização</Link>}
+              <Link href="/perfil/" className="opcao" onClick={() => setAberto(false)}><UserRound size={18} aria-hidden="true" /> Meus dados</Link>
+              {current && <Link href="/organizacao/" className="opcao" onClick={() => setAberto(false)}><Building2 size={18} aria-hidden="true" /> Empresa ou negócio</Link>}
               {organizations.length > 1 && current && (
-                <label>Organização
+                <label>Empresa ou negócio
                   <select value={current.id} onChange={(e) => { selectOrganization(e.target.value); location.href = "/"; }}>
                     {organizations.map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}
                   </select>

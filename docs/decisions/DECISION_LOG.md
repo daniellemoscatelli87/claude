@@ -266,9 +266,46 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Avaliação do incremento:** testar 3 desafios fictícios bem diferentes (experiência do paciente, usuários de um produto digital, processos e colaboradores). Antes do próximo incremento, a dona do produto avalia principalmente **a qualidade das atividades propostas**, não só se o código funciona.
 - **Publicação:** antes de publicar, apresentar os resultados dos testes e pedir autorização.
 
+## D-025 · 21/10/2026 · Cadastro em etapas: dados pessoais, depois empresa ou negócio
+
+- **Origem:** Dona do produto.
+- **Fluxo:**
+  - botão "Cadastrar" no site (fica para depois);
+  - **Etapa 1 · Seus dados:** nome completo, CPF, data de nascimento, estado, cidade, telefone, e-mail e senha, editáveis depois em "Meus dados";
+  - confirmação do e-mail;
+  - **Etapa 2 · Empresa ou negócio;**
+  - área logada, que no primeiro acesso mostra a chamada para o primeiro desafio (o primeiro discovery).
+- **Nomenclatura:** "organização" passa a ser **"empresa ou negócio"** na interface (escolha da dona do produto). No banco os nomes continuam os mesmos.
+- **Finalidades do CPF e da data de nascimento** (LGPD; escolha da dona do produto):
+  - identificar quem aceita o contrato e os termos de uso;
+  - evitar contas duplicadas;
+  - confirmar a maioridade;
+  - cobrança, no futuro.
+
+  Nota fiscal, não por enquanto. O texto da tela informa essas finalidades.
+- **Proteção:**
+  - os dados pessoais ficam em `ei_profiles`, sem leitura direta por ninguém;
+  - a pessoa vê o próprio CPF mascarado;
+  - a validação é feita no banco (dígitos do CPF, maioridade, telefone, UF);
+  - no cadastro, os dados seguem com a criação da conta e um gatilho os grava e **retira dos metadados**, para o CPF nunca ir para o token de acesso;
+  - o gatilho só age em cadastros do produto, e contas do site não são afetadas;
+  - CPF repetido gera mensagem genérica, sem revelar que já existe.
+- **Master:** não precisa do perfil pessoal para entrar (não é tratada como cliente).
+- **Obrigatório antes do lançamento:** termos de uso e política de privacidade do produto com essas finalidades, retenção e direitos; avaliar a criptografia do CPF no banco.
+- **Pendente (P-006):** cruzar o cadastro com o formulário de contato do site.
+
 ---
 
 ## Decisões pendentes
+
+- **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
+  - cruzar pelo e-mail confirmado, no servidor;
+  - a pessoa vê só o que ela enviou e escolhe o que aproveitar (dados pessoais, empresa, mensagem como ponto de partida do desafio);
+  - a master vê o histórico completo na Área master;
+  - atualizar a Política de Privacidade antes do lançamento;
+  - conteúdo real não vai para o Gemini gratuito.
+
+  Aguarda a decisão.
 
 - **P-005 · 20/10/2026 · Arquivos citados no RAG e ausentes:** `05-corpus-inicial-protocolos-v0.1.json` (conteúdo dos protocolos), `SOURCE_CATALOG.json`, `RAG_SOURCE_PLAN.md` e `RAG_INTEGRATION_NOTES.md`. Ver `docs/knowledge/RAG_DIVERGENCES.md`.
 
