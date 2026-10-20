@@ -8,7 +8,7 @@ Comparação feita em 20/10/2026 entre [`RAG_ARCHITECTURE.md`](RAG_ARCHITECTURE.
 | 2 | O Methodology Engine seleciona o protocolo; a IA adapta a linguagem | D-020/D-021: a IA propõe o plano e escolhe protocolos | Compatível: o Engine primeiro filtra os protocolos aplicáveis por regras (`listApplicableProtocols`), a IA escolhe só entre eles e justifica, e o Engine valida |
 | 3 | Experience Guide entrega uma próxima ação por vez | D-021: plano inicial com fila curta de atividades, revisto nos marcos | Compatível: a fila é interna e a interface mostra uma atividade por vez |
 | 4 | Tabela `method_protocols`, status `draft/reviewed/approved/retired`, campos do item 4 | Proposta usava `methodology_protocols` com 2 status | Adotar o nome e o schema do documento (mais completos) |
-| 5 | Material `draft` não pode aparecer como protocolo normativo em produção | Os 6 protocolos ainda não foram escritos nem aprovados | Nos testes, protocolos `draft` só com uma chave de teste ligada; produção exige `approved` pela dona do produto |
+| 5 | Material `draft` não pode aparecer como protocolo normativo em produção | Os 6 protocolos existem como rascunho (`draft`, corpus v0.1, D-028) e não estão aprovados | Nos testes, protocolos `draft` só com uma chave de teste ligada; produção exige `approved` pela dona do produto |
 | 6 | Não fixar provedor de embeddings ou LLM | D-019 | Compatível |
 | 7 | RAG real só com corpus persistido, curado e com citação | D-020/D-021: até o RAG existir, a IA não afirma ter consultado fontes | Compatível; `knowledge_citations` fica vazio e a interface não fala em fontes |
 | 8 | Consultoria em motor separado, sem upsell automático | Visão e CLAUDE.md | Compatível; fora do UX-3a |
