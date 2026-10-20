@@ -1,0 +1,9 @@
+# Segundo site no Netlify, publicado a partir desta pasta (Base directory: apps/experience-intelligence).
+[build]
+  command = "npm ci && npm run build"
+  publish = "out"
+  # Economia de minutos de build: só gera esta aplicação quando algo nesta pasta mudou.
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."
+
+[build.environment]
+  NODE_VERSION = "22"
