@@ -246,6 +246,35 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - a master não é levada à etapa 1.
 - **Não testado:** cadastro real com envio de e-mail (depende de aplicar a migração e publicar).
 
+## 2026-10-21 · Cadastro com os padrões do site e início do design system (não publicado)
+
+- **Pedido da dona do produto:**
+  - "Crie sua conta" como título, acima da barra de progresso;
+  - "Seus dados" como nome da etapa, abaixo da barra;
+  - "Etapa 1 de 2" sem repetir o nome da etapa;
+  - telefone, e-mail, estado e cidade com os mesmos padrões dos formulários de parceiros e de contato;
+  - senha com confirmação, medidor de força e visualização;
+  - rodapé igual ao do site, com copyright.
+- **Feito:**
+  - `src/design-system/` (`padroes.ts` e `campos.tsx`) e `docs/design-system/COMPONENTES.md`;
+  - `PersonalForm`, `AuthForm`, `/cadastro/`, `/perfil/` e a etapa 2 passam a usar esses componentes;
+  - `Etapas` substituído por `BarraProgresso`;
+  - rodapé com copyright no lugar de "by Dani Moscatelli Studio" (substitui o rodapé de D-022);
+  - script `scripts/copiar-municipios.mjs` no `prebuild`, que copia as cidades do site (`public/data/` do app fica fora do Git);
+  - senha passa a exigir letras e números, além de 8 caracteres.
+- **Testes:** `npm test` 47 de 47 (4 novos dos padrões); `typecheck`, `lint` (0 erros) e `build` ok. Navegador com servidor simulado (320 e 375 px, sem rolagem lateral, nenhum erro):
+  - ordem título → barra → etapa;
+  - mensagens de erro iguais às do site;
+  - cidade bloqueada até escolher o estado (400 cidades do PR carregadas);
+  - máscara de telefone;
+  - 4 sugestões de e-mail;
+  - força Fraca → Média → Forte;
+  - "As senhas não são iguais.";
+  - a confirmação da senha não é enviada;
+  - rodapé com copyright;
+  - etapa 2 com "Crie sua conta", "Etapa 2 de 2" e "Empresa ou negócio";
+  - "Meus dados" carrega estado, cidade e telefone.
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:

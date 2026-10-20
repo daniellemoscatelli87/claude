@@ -1,7 +1,7 @@
 // Perfil pessoal (D-025). Os dados ficam em ei_profiles, lidos e gravados só por funções do banco.
 // No cadastro, seguem junto com a criação da conta (chave ei_signup) e o banco os retira dos metadados.
 import type { Session } from "@supabase/supabase-js";
-import { PersonalEditSchema, SignupSchema, errosPorCampo } from "@/domain/profile/personal";
+import { PersonalEditSchema, SENHA_INVALIDA, SignupSchema, errosPorCampo, senhaValida } from "@/domain/profile/personal";
 import { supabase } from "@/infrastructure/supabase";
 import { AppError } from "./errors";
 
@@ -27,7 +27,7 @@ export async function myProfile(): Promise<MyProfile | null> {
 export async function signUpWithProfile(input: unknown): Promise<boolean> {
   const parsed = SignupSchema.safeParse(input);
   if (!parsed.success) throw new FieldErrors(errosPorCampo(parsed.error.issues));
-  const { email, password, ...pessoais } = parsed.data;
+  const { email, password, password_confirm: _confirmacao, ...pessoais } = parsed.data;
   const { data, error } = await supabase().auth.signUp({
     email, password,
     options: { emailRedirectTo: location.origin + "/", data: { ei_signup: pessoais } },
@@ -59,8 +59,9 @@ export async function changeEmail(email: string): Promise<void> {
   if (error) throw error;
 }
 
-export async function changePassword(senha: string): Promise<void> {
-  if (senha.length < 8) throw new AppError("A senha não atende aos requisitos de segurança. Use pelo menos 8 caracteres.");
+export async function changePassword(senha: string, confirmacao: string): Promise<void> {
+  if (!senhaValida(senha)) throw new FieldErrors({ password: SENHA_INVALIDA });
+  if (senha !== confirmacao) throw new FieldErrors({ password_confirm: "As senhas não são iguais." });
   const { error } = await supabase().auth.updateUser({ password: senha });
   if (error) throw error;
 }

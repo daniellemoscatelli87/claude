@@ -2,8 +2,9 @@
 // (ei_validar_perfil); aqui servem para mostrar o erro junto do campo antes de enviar.
 // CPF e data de nascimento: contrato e termos de uso, evitar contas duplicadas e confirmar maioridade.
 import { z } from "zod";
+import { EMAIL_RE, ESTADOS, MSG, maskPhone, requisitosSenha } from "@/design-system/padroes";
 
-export const UFS = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"] as const;
+export const UFS = ESTADOS.map(([uf]) => uf);
 
 export const soDigitos = (v: string) => v.replace(/\D/g, "");
 
@@ -30,12 +31,8 @@ export function maiorDeIdade(data: string, hoje = new Date()): boolean {
 }
 
 export const formatarCpf = (v: string) => soDigitos(v).slice(0, 11).replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-export const formatarTelefone = (v: string) => {
-  const t = soDigitos(v).slice(0, 11);
-  if (t.length <= 2) return t;
-  const meio = t.length > 10 ? 7 : 6;
-  return `(${t.slice(0, 2)}) ${t.slice(2, meio)}${t.length > meio ? "-" + t.slice(meio) : ""}`;
-};
+/** Telefone com a mesma máscara do site. */
+export const formatarTelefone = maskPhone;
 
 const nomeCompleto = z.string().trim().min(3, "Informe seu nome completo.").max(120, "Use até 120 caracteres.")
   .refine((v) => /\s/.test(v), "Informe seu nome completo.");
@@ -44,16 +41,20 @@ export const PersonalDataSchema = z.object({
   full_name: nomeCompleto,
   cpf: z.string().transform(soDigitos).refine(cpfValido, "Confira o CPF informado."),
   birth_date: z.string().refine((v) => maiorDeIdade(v), "O cadastro é para pessoas maiores de 18 anos."),
-  state: z.enum(UFS, { message: "Selecione seu estado." }),
-  city: z.string().trim().min(2, "Informe sua cidade.").max(80, "Use até 80 caracteres."),
-  phone: z.string().transform(soDigitos).refine((v) => v.length === 10 || v.length === 11, "Confira o telefone com DDD."),
+  state: z.string().refine((v) => UFS.includes(v), MSG.ufCidade),
+  city: z.string().trim().min(2, MSG.ufCidade).max(80, "Use até 80 caracteres."),
+  phone: z.string().transform(soDigitos).refine((v) => v.length === 10 || v.length === 11, MSG.tel),
 });
 export type PersonalData = z.infer<typeof PersonalDataSchema>;
 
+export const SENHA_INVALIDA = "A senha não atende aos requisitos de segurança. Confira as orientações do campo.";
+export const senhaValida = (s: string) => requisitosSenha(s).every((r) => r.ok);
+
 export const SignupSchema = PersonalDataSchema.extend({
-  email: z.string().trim().toLowerCase().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Confira o endereço de e-mail informado."),
-  password: z.string().min(8, "A senha não atende aos requisitos de segurança. Use pelo menos 8 caracteres."),
-});
+  email: z.string().trim().toLowerCase().regex(EMAIL_RE, MSG.email),
+  password: z.string().refine(senhaValida, SENHA_INVALIDA),
+  password_confirm: z.string(),
+}).refine((d) => d.password === d.password_confirm, { path: ["password_confirm"], message: "As senhas não são iguais." });
 
 /** Na edição, o CPF pode ficar em branco para manter o atual. */
 export const PersonalEditSchema = PersonalDataSchema.extend({

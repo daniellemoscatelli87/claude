@@ -8,6 +8,8 @@ import { PersonalForm } from "@/components/PersonalForm";
 import { useSession } from "@/components/session";
 import { changeEmail, changePassword } from "@/application/profile";
 import { mensagemDeErro } from "@/application/errors";
+import { FieldErrors } from "@/application/profile";
+import { CampoEmail, CampoSenhaNova } from "@/design-system/campos";
 
 export default function Perfil() {
   const { loading, session, profile } = useSession();
@@ -28,10 +30,13 @@ export default function Perfil() {
 function Acesso({ email }: { email: string }) {
   const [novoEmail, setNovoEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [confirmacao, setConfirmacao] = useState("");
   const [msg, setMsg] = useState<{ ok?: string; err?: string }>({});
+  const [campos, setCampos] = useState<Record<string, string>>({});
   const agir = (f: () => Promise<void>, ok: string) => async (e: React.FormEvent) => {
-    e.preventDefault(); setMsg({});
-    try { await f(); setMsg({ ok }); setNovoEmail(""); setSenha(""); } catch (err) { setMsg({ err: mensagemDeErro(err) }); }
+    e.preventDefault(); setMsg({}); setCampos({});
+    try { await f(); setMsg({ ok }); setNovoEmail(""); setSenha(""); setConfirmacao(""); }
+    catch (err) { if (err instanceof FieldErrors) setCampos(err.campos); else setMsg({ err: mensagemDeErro(err) }); }
   };
   return (
     <section className="card stack">
@@ -40,16 +45,12 @@ function Acesso({ email }: { email: string }) {
         <label>E-mail atual
           <input type="email" value={email} disabled readOnly />
         </label>
-        <label>Novo e-mail
-          <input type="email" value={novoEmail} onChange={(e) => setNovoEmail(e.target.value)} autoComplete="email" />
-        </label>
+        <CampoEmail label="Novo e-mail" value={novoEmail} onChange={setNovoEmail} />
         <button className="btn btn-ghost btn-block" disabled={!novoEmail}>Alterar e-mail</button>
       </form>
-      <form className="stack" onSubmit={agir(() => changePassword(senha), "Senha alterada.")} noValidate>
-        <label>Nova senha
-          <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)} autoComplete="new-password" minLength={8} />
-          <span className="hint">Pelo menos 8 caracteres.</span>
-        </label>
+      <form className="stack" onSubmit={agir(() => changePassword(senha, confirmacao), "Senha alterada.")} noValidate>
+        <CampoSenhaNova rotulo="Nova senha" senha={senha} confirmacao={confirmacao} onSenha={setSenha} onConfirmacao={setConfirmacao}
+          erroSenha={campos.password} erroConfirmacao={campos.password_confirm} />
         <button className="btn btn-ghost btn-block" disabled={!senha}>Alterar senha</button>
       </form>
       {msg.ok && <p className="msg ok" role="status">{msg.ok}</p>}

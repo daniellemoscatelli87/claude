@@ -17,7 +17,8 @@ function segmentoInicial(industry: string | null | undefined): { escolha: string
   return { escolha: SEGMENTO_OUTRO, outro: industry };
 }
 
-export function OrganizationForm({ org, onSaved }: { org?: MyOrganization; onSaved?: () => void }) {
+/** etapa: dentro do cadastro em etapas (título da tela e barra de progresso ficam na página). */
+export function OrganizationForm({ org, onSaved, etapa = false }: { org?: MyOrganization; onSaved?: () => void; etapa?: boolean }) {
   const { reload } = useSession();
   const editando = Boolean(org);
   const podeEditarOrg = !org || org.role === "org_admin";
@@ -56,8 +57,14 @@ export function OrganizationForm({ org, onSaved }: { org?: MyOrganization; onSav
 
   return (
     <>
-      <p className="eyebrow"><Building2 size={18} aria-hidden="true" /> {editando ? "Sua empresa ou negócio" : "Preparando seu espaço de trabalho"}</p>
-      <h1>{editando ? "Empresa ou negócio" : "Agora, conte sobre sua empresa ou negócio."}</h1>
+      {etapa ? (
+        <h2 className="etapa-titulo">Empresa ou negócio</h2>
+      ) : (
+        <>
+          <p className="eyebrow"><Building2 size={18} aria-hidden="true" /> {editando ? "Sua empresa ou negócio" : "Preparando seu espaço de trabalho"}</p>
+          <h1>{editando ? "Empresa ou negócio" : "Agora, conte sobre sua empresa ou negócio."}</h1>
+        </>
+      )}
       <p className="lead">Essas informações ajudam a adaptar as orientações ao seu contexto. Você pode completar os detalhes depois.</p>
       <form className="card stack" onSubmit={enviar} noValidate>
         <label>Qual é o nome da empresa ou negócio?

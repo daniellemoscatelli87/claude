@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Shell, Loading } from "@/components/Shell";
-import { Etapas } from "@/components/Etapas";
+import { BarraProgresso } from "@/design-system/campos";
 import { PersonalForm } from "@/components/PersonalForm";
 import { useSession } from "@/components/session";
 
@@ -14,7 +14,8 @@ export default function Cadastro() {
   if (loading || session) return <Shell><Loading /></Shell>;
   return (
     <Shell>
-      <Etapas atual={1} />
+      <h1>Crie sua conta</h1>
+      <BarraProgresso atual={1} total={2} />
       <PersonalForm modo="cadastro" />
     </Shell>
   );

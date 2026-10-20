@@ -1,7 +1,7 @@
 "use client";
 // Moldura das telas: cabeçalho, conteúdo e rodapé. Logado: ícone DM (o mesmo da Home do site), divisor e
 // "Experience Intelligence" à esquerda; à direita, avatar e nome com seta que abre a barra lateral de perfil.
-// Rodapé com a assinatura "by Dani Moscatelli Studio" (D-022).
+// Rodapé igual ao do site do estúdio, com copyright.
 import { useEffect, useRef, useState } from "react";
 import { Building2, LogOut, ShieldUser, UserRound } from "lucide-react";
 import Link from "next/link";
@@ -10,6 +10,7 @@ import { useSession } from "./session";
 import { isMaster } from "@/application/master";
 import { iniciais } from "./avatar";
 import { displayName } from "@/application/profile";
+import { Rodape } from "@/design-system/campos";
 
 export function Shell({ children }: { children: React.ReactNode }) {
   const { session } = useSession();
@@ -32,7 +33,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       <main><div className="wrap">{children}</div></main>
-      <footer className="rodape"><div className="wrap"><p>by Dani Moscatelli Studio</p></div></footer>
+      <Rodape />
     </>
   );
 }

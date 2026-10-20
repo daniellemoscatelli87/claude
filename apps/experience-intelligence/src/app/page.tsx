@@ -11,7 +11,7 @@ import { listChallenges } from "@/application/challenges";
 import { hasPlatformAccess } from "@/application/organizations";
 import { isMaster } from "@/application/master";
 import { PersonalForm } from "@/components/PersonalForm";
-import { Etapas } from "@/components/Etapas";
+import { BarraProgresso } from "@/design-system/campos";
 import { contextoIncompleto } from "@/domain/organization/context";
 import { Building2, Target } from "lucide-react";
 import { mensagemDeErro } from "@/application/errors";
@@ -55,7 +55,15 @@ export default function Inicio() {
     );
   }
 
-  if (semPerfil) return <Shell><Etapas atual={1} /><PersonalForm modo="completar" email={session?.user.email} /></Shell>;
+  if (semPerfil) {
+    return (
+      <Shell>
+        <h1>Complete seu cadastro</h1>
+        <BarraProgresso atual={1} total={2} />
+        <PersonalForm modo="completar" email={session?.user.email} />
+      </Shell>
+    );
+  }
   if (!current && acesso === null) return <Shell><Loading /></Shell>;
   if (!current && !acesso) {
     return (
@@ -65,7 +73,15 @@ export default function Inicio() {
       </Shell>
     );
   }
-  if (!current) return <Shell><Etapas atual={2} /><OrganizationForm /></Shell>;
+  if (!current) {
+    return (
+      <Shell>
+        <h1>{profile ? "Crie sua conta" : "Complete seu cadastro"}</h1>
+        <BarraProgresso atual={2} total={2} />
+        <OrganizationForm etapa />
+      </Shell>
+    );
+  }
 
   // Primeiro acesso: chamada para o primeiro desafio (o primeiro discovery).
   if (desafios && desafios.length === 0) {

@@ -2,21 +2,21 @@
 // Entrar (tela C do kit de UX). O cadastro fica em /cadastro/ (D-025).
 import { useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { CampoEmail, CampoSenha } from "@/design-system/campos";
+import { EMAIL_RE, MSG } from "@/design-system/padroes";
 import { supabase } from "@/infrastructure/supabase";
 import { mensagemDeErro } from "@/application/errors";
 
 export function AuthForm() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [verSenha, setVerSenha] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState("");
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault();
     setErro("");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return setErro("Confira o endereço de e-mail informado.");
+    if (!EMAIL_RE.test(email.trim())) return setErro(MSG.email);
     if (!senha) return setErro("Informe sua senha.");
     setEnviando(true);
     try {
@@ -34,17 +34,8 @@ export function AuthForm() {
     <form className="card stack" onSubmit={enviar} noValidate>
       <h2>Que bom ter você por aqui.</h2>
       <p className="hint" style={{ margin: 0 }}>Entre para continuar os desafios da sua empresa ou negócio.</p>
-      <label>E-mail
-        <input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-      </label>
-      <label>Senha
-        <span className="senha">
-          <input type={verSenha ? "text" : "password"} autoComplete="current-password" value={senha} onChange={(e) => setSenha(e.target.value)} required />
-          <button type="button" onClick={() => setVerSenha(!verSenha)} aria-label={verSenha ? "Ocultar senha" : "Mostrar senha"}>
-            {verSenha ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
-          </button>
-        </span>
-      </label>
+      <CampoEmail label="E-mail" value={email} onChange={setEmail} required />
+      <CampoSenha value={senha} onChange={setSenha} />
       {erro && <p className="msg err" role="alert">{erro}</p>}
       <button className="btn btn-primary btn-block" disabled={enviando}>{enviando ? "Aguarde…" : "Entrar"}</button>
       <p className="center" style={{ margin: 0 }}>Ainda não tem conta? <Link href="/cadastro/">Criar conta</Link></p>

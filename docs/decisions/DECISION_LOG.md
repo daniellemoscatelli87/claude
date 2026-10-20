@@ -292,6 +292,11 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - CPF repetido gera mensagem genérica, sem revelar que já existe.
 - **Master:** não precisa do perfil pessoal para entrar (não é tratada como cliente).
 - **Obrigatório antes do lançamento:** termos de uso e política de privacidade do produto com essas finalidades, retenção e direitos; avaliar a criptografia do CPF no banco.
+- **Complemento (21/10/2026), dona do produto:**
+  - título "Crie sua conta", barra de progresso e nome da etapa abaixo;
+  - campos com os padrões do site (design system, `docs/design-system/COMPONENTES.md`);
+  - senha com confirmação, força e visualização;
+  - rodapé igual ao do site, com copyright, no lugar de "by Dani Moscatelli Studio".
 - **Pendente (P-006):** cruzar o cadastro com o formulário de contato do site.
 
 ---

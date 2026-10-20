@@ -8,7 +8,9 @@
     "build": "next build",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint src tests",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prebuild": "node scripts/copiar-municipios.mjs",
+    "predev": "node scripts/copiar-municipios.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
