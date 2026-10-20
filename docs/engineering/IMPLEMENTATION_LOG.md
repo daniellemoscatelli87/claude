@@ -132,6 +132,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 | Estado final | IA desligada; limites 3, 20 e 100; 0 convidadas, 0 usos, 0 sugestões, 0 usuários e 0 organizações de teste |
 | `npm test`, `typecheck`, `lint`, `build` | 28 de 28; sem erros; 0 erros de lint; build ok |
 
+## 2026-10-20 · Decisão de IA independente de fornecedor (D-019), só documentação
+
+- **Feito:** criado `docs/product/PRODUCT_ARCHITECTURE.md` (seção 1) e registrados D-019 no Decision Log e IA-01 a IA-07 no Backlog; índice em `docs/README.md`.
+- **Código, banco, funções e configurações:** nenhum alterado. IA continua desligada (`ai_enabled = false`).
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:
