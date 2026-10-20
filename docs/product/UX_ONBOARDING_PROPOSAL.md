@@ -150,3 +150,133 @@ Cada corte termina com testes, prints em 375 px e registros atualizados, e só v
 3. **Ícones:** aprovar a biblioteca `lucide-react`?
 4. **Ordem:** aprovar os cortes UX-1, UX-2 e UX-3, nessa ordem?
 5. **Referência ausente:** o kit cita `docs/knowledge/RAG_ARCHITECTURE.md`, que não existe no repositório. Se esse documento existir, envie; se não, sigo sem ele.
+
+---
+
+## 8. Arquitetura revisada: condução adaptativa (D-021, D-022)
+
+> Esta seção substitui as seções 2.5 e 6 como proposta principal. Nada está implementado. Aguarda aprovação.
+
+### 8.1 O ciclo
+
+```text
+Desafio → Plano inicial → Atividade guiada → Evidências → Análise → Próxima decisão
+                              ↑                                          │
+                              └────────── aprofundar / outra perspectiva / revisar hipótese
+                                                                         ↓
+                                                    avançar (evidências suficientes)
+```
+
+### 8.2 Os cinco componentes e quem decide o quê
+
+| Componente | Responsabilidade | Agora | Depois |
+|---|---|---|---|
+| **Methodology Engine** (regras, determinístico) | Estado do desafio; catálogo de protocolos aprovados; quais transições são permitidas; critérios de suficiência; quando chamar a IA; validação de tudo que a IA devolve | Sim | Critérios mais finos com uso real |
+| **Experience Guide** (tradução do método em ação) | Para cada protocolo: modelo do instrumento (roteiro, ficha, levantamento, fluxo), linguagem sem jargão, o que fazer, com quem, onde, como registrar; lista de termos proibidos na interface | Sim, com modelos para os 6 protocolos | Novos instrumentos com novos protocolos |
+| **IA** | Interpretar o desafio; montar o plano inicial; personalizar o instrumento (ex.: perguntas do roteiro para aquele desafio); analisar evidências nos marcos; propor a próxima decisão | Sim, Gemini gratuito, só dados fictícios | Vários fornecedores (D-019) |
+| **Validação de evidências** | Tipo da evidência; de qual perspectiva veio (público ou papel, nunca a identidade); fonte única; perspectiva faltando; campos obrigatórios; contradições apontadas pela IA e confirmadas pela pessoa | Regras + análise da IA nos marcos | Critérios por setor e risco, com RAG |
+| **RAG especialista** | Fundamentos curados, com procedência, para escolher e aplicar métodos | **Não existe.** A IA usa só o texto dos protocolos aprovados e não afirma ter consultado fontes | Corte próprio (metodologia, seção 11) |
+
+**Regra de decisão:** a IA **propõe**; o Engine **valida e decide** o que pode acontecer; a pessoa **confirma** tudo que vira dado aprovado (entendimento, descobertas). Nenhuma transição crítica é decidida só pela IA (CLAUDE.md).
+
+### 8.3 Planejamento inicial (na submissão)
+- **Entrada da IA:**
+  - o texto original do desafio;
+  - o contexto mínimo da organização (segmento, o que oferece, papel de quem responde, porte);
+  - as pistas marcadas pela pessoa;
+  - o catálogo de protocolos **aprovados**.
+- **Saída validada pelo Engine:**
+  - entendimento do desafio, para a pessoa confirmar;
+  - hipóteses iniciais, marcadas como hipóteses;
+  - necessidades de informação, com o porquê de cada uma;
+  - uma fila curta de atividades, cada uma ligada a um protocolo aprovado;
+  - **o instrumento da primeira atividade já personalizado.**
+- **Custo:** 1 chamada. Salva e versionada; recarregar não gera nada.
+
+### 8.4 Execução da atividade (sem chamar a IA)
+- **Cartão da atividade:**
+  - o que vamos descobrir e por quê;
+  - o que você vai fazer, com quem e onde;
+  - **o instrumento:** "Ver roteiro de conversa", "Abrir ficha de observação", "Quais dados procurar", "Desenhar o caminho";
+  - os cuidados de privacidade.
+- **Registro estruturado:** um campo para cada item do instrumento (ex.: uma resposta por pergunta do roteiro, por pessoa conversada).
+  - A pessoa informa o **perfil** da fonte (ex.: "cliente que desistiu", "atendente"), nunca nome ou contato.
+  - O tipo da evidência é registrado: relato, observação, registro ou medição.
+- **"Não sei":** as quatro saídas que já existem (onde encontrar, como descobrir, pedir ajuda, deixar para depois).
+- **Regras imediatas, sem custo:**
+  - "você registrou 1 conversa; o roteiro pede ao menos 3 perspectivas";
+  - "ainda não há relato de quem usa o serviço, só da equipe";
+  - campos obrigatórios em branco.
+
+### 8.5 Análise e próxima decisão (nos marcos)
+- **Marcos que liberam uma chamada:**
+  - a pessoa conclui uma atividade;
+  - a pessoa marca "Descobri algo importante";
+  - a fila de atividades acabou.
+
+  Responder campo a campo nunca chama a IA.
+- **A IA analisa as evidências daquele marco e devolve:**
+  - descobertas, sempre ligadas às evidências que as sustentam;
+  - tipo e força de cada descoberta (relato individual não vira conclusão geral);
+  - contradições, lacunas, perspectivas faltando e riscos de viés;
+  - **uma decisão proposta:** aprofundar, buscar outra perspectiva, revisar hipótese ou avançar;
+  - a próxima atividade, com o instrumento personalizado.
+- **O Engine valida a resposta:**
+  - **avançar** só se as regras de suficiência da etapa forem atendidas, conforme método, diversidade de perspectivas e risco;
+  - nenhuma recomendação ou conclusão categórica;
+  - risco alto (saúde, colaboradores) → sugere apoio especializado, sem bloquear o que é seguro.
+- **Tela "O que descobrimos até aqui":** descobertas com a etiqueta do tipo de evidência e "Ainda precisamos verificar…". A pessoa confirma ou corrige antes de continuar.
+
+### 8.6 Dados (migração do UX-3)
+Novas tabelas, com RLS (só leitura para membros), escrita por funções do banco com auditoria e escrita da IA só pelo servidor:
+- **`organizations` e `organization_members`:** colunas opcionais do contexto mínimo.
+- **`methodology_protocols`:**
+  - id, versão, status (rascunho, aprovado), especificação e fontes;
+  - só a master altera, e só os aprovados vão para a IA;
+  - começa com os 6 protocolos.
+- **`challenge_plans`:** versões do plano, com origem (IA ou regras), modelo, versão do prompt e versão do catálogo.
+- **`challenge_activities`:** atividade, protocolo, necessidades, status e instrumento personalizado.
+- **`evidences`:**
+  - atividade, tipo, perspectiva (perfil, sem identidade), conteúdo com limite e data;
+  - anexos ficam para depois (exigem armazenamento privado e revisão de LGPD).
+- **`evidence_analyses`:** marco, evidências usadas, descobertas, contradições, lacunas, decisão proposta, confirmação da pessoa, modelo e versão do prompt.
+- **`ai_usage`:** passa a registrar também a funcionalidade (plano ou análise).
+- **`investigation_questions`:** fica para os desafios antigos.
+
+### 8.7 Custos e limites
+- **Gratuito:** Gemini no Free Tier e Supabase no plano gratuito. Nenhum serviço novo.
+- **Chamadas por desafio:** 1 no plano inicial + 1 por marco. O limite atual de **3 por desafio** é baixo para o ciclo. **Decisão sua:** proposta de 10 por desafio durante os testes, mantendo 20 por pessoa por dia e 100 por dia na plataforma.
+- **Contingência:** quando a IA recusa, falha ou estoura o limite, o Engine segue com o plano por regras, identificado como tal.
+
+### 8.8 Cadastro completo do cliente (D-022), fora do acesso público
+- **Fluxo:**
+  - entrada;
+  - criar conta, com nome obrigatório, e confirmar o e-mail;
+  - verificação do convite;
+  - boas-vindas curtas;
+  - organização, com o contexto mínimo;
+  - pagamento, **pulado nos testes** (marcado no estado da conta);
+  - desafio.
+- **"Escondido":** o app não tem link no site, o projeto está "Private" no Netlify e o uso exige convite.
+- **Para você viver o fluxo como cliente:** sugiro uma conta de cliente de teste sua, por exemplo `daniellemoscatelli87+cliente@gmail.com` (o Gmail entrega no seu e-mail principal), adicionada à lista de convidadas. A conta master continua separada.
+
+### 8.9 Ordem de implementação proposta
+1. **UX-3a · Base:**
+   - contexto mínimo da organização e nome obrigatório;
+   - catálogo de protocolos e modelos de instrumentos;
+   - plano inicial pela IA;
+   - cartão de atividade com instrumento e registro estruturado de evidências;
+   - regras imediatas de qualidade.
+2. **UX-3b · Adaptação:**
+   - análise nos marcos e tela "O que descobrimos até aqui";
+   - decisão proposta, validada pelo Engine e confirmada pela pessoa.
+3. **UX-1 restante:** entrada pública, boas-vindas, "Esqueci minha senha" e rodapé "by Dani Moscatelli Studio".
+4. **Depois:** RAG especialista, anexos, novos protocolos com curadoria, encaminhamento a especialista, vários fornecedores, pagamento, simulação para a master e equipe.
+
+Cada corte termina com:
+- testes automáticos;
+- os 3 casos fictícios do kit, com a IA simulada e depois real;
+- prints em 375 px;
+- os registros atualizados.
+
+E só vai ao `main` com a sua autorização.

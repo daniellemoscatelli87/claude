@@ -86,18 +86,21 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 | 6 | Oferta especializada: regras, cartões, consentimento e notificação ao estúdio | Transformar | Planejado (não autorizado) |
 | 7 | Teste de ponta a ponta: clínica, hotel e experiência do colaborador, sem regras fixas por setor | Avaliar | Planejado (não autorizado) |
 
-### Primeiro acesso, cadastro B2B e investigação adaptativa: proposto, aguardando aprovação
+### Condução adaptativa, cadastro e primeiro acesso: proposto, aguardando aprovação
 
-Especificação: `docs/product/ux-onboarding/` (kit v1.0). Proposta e comparação com o código: [`UX_ONBOARDING_PROPOSAL.md`](UX_ONBOARDING_PROPOSAL.md). Nada implementado.
+Especificação: `docs/product/ux-onboarding/` (kit v1.0). Proposta e comparação com o código: [`UX_ONBOARDING_PROPOSAL.md`](UX_ONBOARDING_PROPOSAL.md), seção 8 (D-021, D-022). Ordem: UX-3a → UX-3b → UX-1. Nada implementado.
 
 | ID | Item | Elo | Status |
 |---|---|---|---|
-| UX-1 | Entrada pública com proposta de valor, conta (nome, mostrar senha, esqueci a senha, reenviar confirmação), boas-vindas só no primeiro acesso, mensagens globais | Base · Identificar | Proposto (aguardando aprovação) |
-| UX-2 | Cadastro da organização com campos opcionais (segmento, o que oferece, papel, tipo, porte) e edição posterior auditada | Base | Proposto (aguardando aprovação); exige migração |
-| UX-3 | Área de trabalho, entrada do desafio com pistas e **discovery desenhado pela IA desde a submissão** (D-020): plano salvo e versionado, métodos do catálogo, validação pelo motor, plano por regras como contingência, uma atividade por vez, progresso | Identificar · Investigar | Proposto (aguardando aprovação); exige migração (`challenge_plans`) |
-| UX-4 | Revisão dos planos da IA pela dona do produto nos 3 casos fictícios, antes de clientes reais | Investigar | Proposto; obrigatório antes de clientes reais |
+| UX-3a | Base da condução adaptativa (D-021): contexto mínimo da organização, nome obrigatório, catálogo de protocolos aprovados, Experience Guide com instrumentos, plano inicial pela IA, cartão de atividade, registro estruturado de evidências e regras imediatas de qualidade | Identificar · Investigar | Proposto (aguardando aprovação); exige migração |
+| UX-3b | Adaptação: análise da IA nos marcos, "O que descobrimos até aqui", decisão proposta (aprofundar, outra perspectiva, revisar hipótese, avançar) validada pelo Engine e confirmada pela pessoa | Investigar · Compreender | Proposto (aguardando aprovação) |
+| UX-1 | Entrada pública, cadastro completo do cliente fora do acesso público (pagamento pulado nos testes), boas-vindas, "Esqueci minha senha", rodapé "by Dani Moscatelli Studio" (D-022) | Base | Proposto (aguardando aprovação) |
+| UX-4 | Revisão dos planos e análises da IA pela dona do produto nos 3 casos fictícios, antes de clientes reais | Investigar | Obrigatório antes de clientes reais |
 | UX-5 | Simulação "Visualizar experiência de cliente" para a master | Base | Futuro |
-| UX-6 | Convite de pessoas para a organização e apoio especializado contextual | Base · Transformar | Futuro |
+| UX-6 | Convite de pessoas para a organização; encaminhamento a especialista | Base · Transformar | Futuro |
+| UX-7 | Anexos de evidências (armazenamento privado, revisão de LGPD) | Investigar | Futuro |
+| UX-8 | Expansão da biblioteca metodológica com curadoria (novos protocolos e disciplinas) e RAG especialista | Compreender | Futuro (metodologia, seção 11) |
+| UX-9 | Tela na Área master para convidar clientes de teste | Base | Proposto |
 
 ### IA independente de fornecedor (D-019): planejado, não autorizado
 

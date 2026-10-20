@@ -186,15 +186,61 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - só dados fictícios no plano gratuito do Gemini (D-017, D-018).
 - **Implementação:** proposta no corte UX-3 de [`UX_ONBOARDING_PROPOSAL.md`](../product/UX_ONBOARDING_PROPOSAL.md). Aguarda aprovação.
 
+## D-021 · 20/10/2026 · Condução adaptativa: a plataforma conduz, acompanha e adapta (refina D-020)
+
+- **Origem:** Dona do produto.
+- **Decisão:** o discovery é um **ciclo adaptativo**, e não um plano fixo:
+
+  > Desafio → Plano inicial → Atividade guiada → Evidências → Análise → Próxima decisão
+
+  O ciclo se repete até haver evidências suficientes para avançar.
+  - **Papéis:** a IA define a estratégia inicial; o Methodology Engine acompanha a execução e decide quando aprofundar, buscar outra perspectiva, revisar hipóteses ou avançar.
+  - **Método nos bastidores:** o método fica oculto; a interface mostra ações, sem termos técnicos.
+  - **Instrumentos:** toda atividade entrega o que é preciso para executá-la (roteiro de conversa, ficha de observação, orientação para registros e indicadores, campos estruturados de evidência, reconstrução de fluxo; anexos quando autorizados).
+  - **Qualidade das evidências:** o sistema distingue fato, relato, observação, hipótese e conclusão, e aponta insuficiência, contradições, perspectivas não investigadas e risco de viés. A suficiência depende do método, do contexto, da diversidade de perspectivas e do risco. Não há diagnóstico ou recomendação categórica sem sustentação.
+  - **Custo:** regras determinísticas sempre que possível; novas análises da IA só em marcos da investigação, com cache, limites e controle de custo.
+  - **Biblioteca metodológica:** os seis protocolos iniciais são só o corpus de partida. A arquitetura deve permitir expandir com métodos validados (Methodology Engine e RAG especialista). A IA aplica apenas protocolos disponíveis e aprovados.
+  - **Abrangência:** o percurso é multissetorial e multidisciplinar e é construído para o desafio e o contexto de cada caso.
+  - **Sistema, não só IA:** Methodology Engine + RAG + IA + Validação de evidências + Experience Guide, com encaminhamento a especialista quando necessário (saúde e experiência de colaboradores exigem cuidado redobrado).
+- **Arquitetura proposta:** seção 8 de [`UX_ONBOARDING_PROPOSAL.md`](../product/UX_ONBOARDING_PROPOSAL.md). Aguarda aprovação.
+
+## D-022 · 20/10/2026 · Decisões de interface e prioridade
+
+- **Origem:** Dona do produto.
+- **Interface:**
+  - marca **DM | Experience Intelligence** no cabeçalho e assinatura **"by Dani Moscatelli Studio"** no rodapé;
+  - nome da pessoa **obrigatório** no cadastro, com edição posterior;
+  - biblioteca de ícones `lucide-react` aprovada;
+  - interface visual, responsiva, acessível e orientada por tarefas, com pouco texto.
+- **Cadastro do cliente:**
+  - fluxo completo (conta → organização → pagamento → desafio), mantido fora do acesso público enquanto o produto é construído;
+  - nos testes, a etapa de pagamento é pulada.
+- **Prioridade:**
+  - primeiro, o contexto organizacional mínimo de que a IA precisa;
+  - depois, o UX-3 (discovery inteligente);
+  - o restante do onboarding pode vir depois.
+- **Altera:** o subtítulo "Dani Moscatelli Studio" do cabeçalho, ainda não publicado, sai do cabeçalho e vai para o rodapé como "by Dani Moscatelli Studio".
+
+## D-023 · 20/10/2026 · IA ligada temporariamente para testes com dados fictícios
+
+- **Origem:** Dona do produto. Condições dela: só a conta dela autorizada; limites ativos; desligamento imediato; nenhum serviço pago.
+- **Verificado antes de ligar:**
+  - lista de convidadas vazia; a única conta master é contato@danimoscatelli.com.br;
+  - visitante sem login não usa a IA, e pessoas logadas não concluem uso direto;
+  - limites de 3 por desafio, 20 por pessoa por dia e 100 por dia na plataforma;
+  - chave do Gemini no Free Tier, sem faturamento (D-018).
+- **Feito:** `ei_settings.ai_enabled = true` em 20/10/2026, às 19:40 UTC.
+- **Desligar:** `update public.ei_settings set ai_enabled = false where id;` (SQL Editor do Supabase), ou pedir ao Claude.
+- **Regra:** só desafios fictícios, sem nomes, empresas reais, dados pessoais, de saúde ou confidenciais (termos do Gemini para o plano gratuito). Clientes reais continuam dependendo de D-017 e D-018.
+
 ---
 
 ## Decisões pendentes
 
-- **P-004 · 20/10/2026 · Proposta de primeiro acesso, cadastro B2B e investigação adaptativa** ([`UX_ONBOARDING_PROPOSAL.md`](../product/UX_ONBOARDING_PROPOSAL.md)). Aguarda a dona do produto decidir:
-  - a assinatura (rodapé do kit ou "Dani Moscatelli Studio" no cabeçalho);
-  - se o nome da pessoa é obrigatório;
-  - a biblioteca de ícones `lucide-react`;
-  - a ordem dos cortes UX-1 a UX-3;
+- **P-004 · 20/10/2026 · Proposta revisada (seção 8 de [`UX_ONBOARDING_PROPOSAL.md`](../product/UX_ONBOARDING_PROPOSAL.md))**. Assinatura, nome, ícones e prioridade foram decididos (D-022). Ainda aguardam:
+  - a aprovação da arquitetura;
+  - o limite de análises da IA por desafio;
+  - a conta de cliente de teste;
   - o documento `docs/knowledge/RAG_ARCHITECTURE.md`, citado pelo kit e ausente no repositório.
 
 Outras pendências de produto (preço, nicho, provedor de IA etc.) estão na seção 14 da visão.

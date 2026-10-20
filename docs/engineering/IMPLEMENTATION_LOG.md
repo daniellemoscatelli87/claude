@@ -161,6 +161,16 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Achado:** as perguntas de enquadramento atuais (`src/domain/challenge/framing.ts`) são 5 perguntas fixas, iguais para todos os desafios e com exemplos de saúde, o que contraria o kit e D-003. A proposta substitui por um motor de condução por regras com protocolo versionado.
 - **Código, banco e configurações:** nenhum alterado.
 
+## 2026-10-20 · IA ligada para testes (D-023) e arquitetura revisada (só documentação)
+
+- **IA:** antes de ligar, verificado que a lista de convidadas está vazia, que a única master é contato@danimoscatelli.com.br, que visitantes sem login não executam `ei_ai_begin`, que pessoas logadas não executam `ei_ai_finish` e que os limites estão em 3, 20 e 100. Depois, `ai_enabled = true` (20/10/2026, 19:40 UTC). Hoje a IA só faz a interpretação inicial do desafio; o plano e a análise adaptativa ainda não existem.
+- **Documentos:**
+  - princípio central em `PRODUCT_VISION.md` (seção 16);
+  - decisões D-021, D-022 e D-023;
+  - arquitetura revisada na seção 8 de `UX_ONBOARDING_PROPOSAL.md`;
+  - Backlog com UX-3a, UX-3b, UX-1 e UX-4 a UX-9.
+- **Código e banco:** nenhum outro alterado.
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:
