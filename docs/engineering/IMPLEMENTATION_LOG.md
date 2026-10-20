@@ -308,7 +308,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - o CNPJ tem máscara, recusa dígito errado e é enviado só com dígitos;
     - "Meus dados" mostra o aceite e não reenvia aceites na edição.
 
-## 2026-10-21 · Ícone nos títulos das etapas do cadastro (não publicado)
+## 2026-10-21 · Cadastro aprovado: migrações aplicadas (D-029)
+
+- Aplicadas no Supabase: `20261021090000_contexto_organizacao.sql` e `20261021100000_perfil_pessoal.sql` (antes: colunas novas ausentes, sem `ei_profiles`, nenhum gatilho em `auth.users`).
+- Testes no banco real, em transação desfeita: `organization_context.sql` 7 de 7 e `personal_profile.sql` 8 de 8. Conferido depois: nenhum usuário de teste nem perfil ficou gravado.
+- Avisos de segurança do Supabase: os mesmos tipos de antes (funções do banco chamáveis por quem está logado, por desenho, com as verificações dentro de cada função; tabelas sem políticas porque o acesso é só por funções). Proteção contra senhas vazadas segue desligada (recurso do plano pago).
+
+## 2026-10-21 · Ícone nos títulos das etapas do cadastro
 
 - Pedido da dona do produto: ícone vermelho sobre base quadrada rosa clara, com cantos arredondados, ao lado do título de cada etapa.
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.

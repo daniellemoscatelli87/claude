@@ -342,6 +342,14 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - **Methodology Engine:** formato de id adotado do corpus; lacunas L1 a L8 registradas para a curadoria (instrumentos, critérios de suficiência, tipo de evidência, fase, vocabulário das etiquetas, entradas, um termo de jargão, cuidados específicos).
 - **Nenhuma alteração** de código ou banco.
 
+## D-029 · 21/10/2026 · Cadastro aprovado e P-008 aprovada
+
+- **Origem:** Dona do produto ("Podemos aprovar o cadastro e usar os 6 protocolos, ainda em rascunho, nos testes da IA").
+- **Decisão:**
+  - cadastro em etapas aprovado para publicação (D-025, D-026, D-027): migrações `20261021090000` e `20261021100000` aplicadas no Supabase em 21/10/2026;
+  - P-008 aprovada: nos testes da IA do UX-3a, os 6 protocolos do corpus v0.1 são usados como estão, como catálogo `draft`, só com dados fictícios, com instrumentos gerados pela IA dentro dos passos e cuidados de cada protocolo, marcados como rascunho para avaliação, e as lacunas L1 a L8 no relatório de qualidade. Produção continua exigindo protocolos `approved`.
+- **P-006:** a dona do produto detalhou o pedido (contato do site vinculado ao perfil e desafios organizados em projetos). Registrado como P-009, aguardando proposta e aprovação.
+
 ---
 
 ## Decisões pendentes
@@ -354,11 +362,21 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - atualizar a Política de Privacidade antes do lançamento;
   - conteúdo real não vai para o Gemini gratuito.
 
-  Aguarda a decisão.
+  Substituída por P-009 (detalhamento da dona do produto em 21/10/2026).
+
+- **P-009 · 21/10/2026 · Contato do site vinculado ao perfil e desafios em projetos.** Pedido da dona do produto:
+  - o app procura um contato do site com o mesmo e-mail confirmado da conta; se achar, o histórico fica vinculado internamente ao perfil;
+  - se o contato foi sobre um projeto (campo assunto), perguntar se o projeto é o mesmo e se a pessoa quer continuar de onde parou; a mensagem do contato pode vir para o campo do desafio, editável;
+  - se o contato foi por outro motivo, ele também fica vinculado ao perfil;
+  - se foi sobre outro projeto, o painel da organização mostra um card do projeto anterior (aberto, sem continuidade, que pode ser retomado) e o novo projeto;
+  - desafios passam a ficar dentro de projetos, que a pessoa pode nomear;
+  - fluxo: cadastro pessoal > escolha do pacote e pagamento (por enquanto pulado) > cadastro da empresa ou estabelecimento > projeto (desafio).
+
+  Aguarda proposta do Claude e aprovação.
 
 - **P-005 · Arquivos citados no RAG:**
   - `05-corpus-inicial-protocolos-v0.1.json` foi recebido em 21/10/2026 (D-028);
   - continuam ausentes `SOURCE_CATALOG.json`, `RAG_SOURCE_PLAN.md` e `RAG_INTEGRATION_NOTES.md`, que não bloqueiam o UX-3a.
-- **P-008 · 21/10/2026 · Uso do corpus nos testes do UX-3a** (seção 5 de `docs/knowledge/PROTOCOLS_COMPATIBILITY.md`): usar os 6 protocolos como estão, como catálogo `draft`, só com dados fictícios, com instrumentos gerados pela IA dentro dos passos e cuidados de cada protocolo e as lacunas L1 a L8 no relatório de qualidade. Aguarda aprovação.
+- ~~**P-008**~~: aprovada em D-029.
 
 Outras pendências de produto (preço, nicho, provedor de IA etc.) estão na seção 14 da visão.
