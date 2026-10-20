@@ -22,6 +22,8 @@ Esta documentação é parte integrante do produto, não material de apoio desca
 | [`product/PRODUCT_ARCHITECTURE.md`](product/PRODUCT_ARCHITECTURE.md) | Decisões de arquitetura que valem para além de um incremento (ex.: IA independente de fornecedor), separando decidido de existente | Criado em 20/10/2026 |
 | [`product/ux-onboarding/`](product/ux-onboarding/00-LEIA-PRIMEIRO.md) | Kit de Product Design: primeiro acesso, cadastro B2B, copy e investigação adaptativa | `DM_Experience_Intelligence_UX_Onboarding_Dinamico_v1.zip` (copiado sem alteração) |
 | [`product/UX_ONBOARDING_PROPOSAL.md`](product/UX_ONBOARDING_PROPOSAL.md) | Comparação do kit com o código e proposta de implementação (aguardando aprovação) | Criado em 20/10/2026 |
+| [`knowledge/RAG_ARCHITECTURE.md`](knowledge/RAG_ARCHITECTURE.md) | Knowledge Engine / RAG: camadas de conhecimento, protocolos, proveniência, recuperação e testes | Kit Completo v4 (copiado sem alteração) |
+| [`knowledge/RAG_DIVERGENCES.md`](knowledge/RAG_DIVERGENCES.md) | Diferenças entre o documento do RAG e as decisões recentes; arquivos citados e ausentes | Criado em 20/10/2026 |
 | [`engineering/FIRST_INCREMENT_PROMPT.md`](engineering/FIRST_INCREMENT_PROMPT.md) | Escopo aprovado do primeiro incremento (Cortes 1 e 2) | `02-prompt-claude-code-primeiro-incremento.md` |
 | [`research/VALIDATION_LOG.md`](research/VALIDATION_LOG.md) | Aprendizados de validação de mercado e com usuários | Criado na organização |
 | [`../CLAUDE.md`](../CLAUDE.md) | Instruções persistentes para o Claude Code | `CLAUDE.md` do kit |

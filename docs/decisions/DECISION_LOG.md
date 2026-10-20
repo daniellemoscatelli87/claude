@@ -234,13 +234,42 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Regra:** só desafios fictícios, sem nomes, empresas reais, dados pessoais, de saúde ou confidenciais (termos do Gemini para o plano gratuito). Clientes reais continuam dependendo de D-017 e D-018.
 - **Conta de cliente de teste:** a dona do produto indicou `daniellemoscatelli@gmail.com`, que é dela. Adicionada à lista de convidadas em 20/10/2026, às 19:54 UTC. É a única convidada, e as duas contas são da dona do produto.
 
+## D-024 · 20/10/2026 · UX-3a aprovado, com condições
+
+- **Origem:** Dona do produto.
+- **Aprovado:** a arquitetura da seção 8 de `UX_ONBOARDING_PROPOSAL.md` e o início do UX-3a, em incrementos pequenos e verificáveis.
+- **Condições:**
+  - **personalização desde o primeiro momento:** para cada desafio, a plataforma determina quais informações são necessárias, quais atividades as produzem e quais critérios indicam investigação suficiente;
+  - **cada atividade apresenta:**
+    - o que fazer e por que (linguagem simples);
+    - onde e com quem obter;
+    - como executar;
+    - quais perguntas fazer ou dados observar;
+    - como registrar e enviar;
+    - o que fazer se não conseguir;
+  - **instrumentos gerados para o desafio e o contexto da organização;** nada de roteiros universais;
+  - **qualidade:**
+    - avaliar a suficiência antes de concluir;
+    - resposta preenchida não é informação confiável por si só;
+    - reconhecer lacunas, contradições e perspectivas não investigadas;
+    - a validação de formato da IA não substitui a avaliação metodológica;
+  - **o plano evolui** nos marcos, sem recomeçar do zero;
+  - **conduzir, não transferir:** a plataforma acompanha a execução (explica, entrega o roteiro, registra, aponta insuficiência e orienta o próximo passo). Não é uma lista de tarefas transferida ao cliente;
+  - **interface:** visual, com cards, indicadores de progresso, ícones e formulários adequados a cada atividade; nem formulário extenso nem chatbot interminável; preservar a copy e as diretrizes do kit de UX.
+- **Limites:**
+  - `ai_per_challenge` passou de 3 para **10**, só durante os testes (aplicado em 20/10/2026); 20 por pessoa por dia e 100 por dia na plataforma, mantidos;
+  - registrar o consumo por atividade;
+  - não gerar de novo conteúdo já salvo;
+  - **o limite não encerra a investigação:** com dados insuficientes, a plataforma informa e permite continuar depois.
+- **Conta de cliente de teste:** `daniellemoscatelli@gmail.com`, da dona do produto, separada da master, sem privilégios administrativos e só com dados fictícios.
+- **RAG:** `RAG_ARCHITECTURE.md` incorporado em `docs/knowledge/`, com as divergências em `docs/knowledge/RAG_DIVERGENCES.md`.
+- **Avaliação do incremento:** testar 3 desafios fictícios bem diferentes (experiência do paciente, usuários de um produto digital, processos e colaboradores). Antes do próximo incremento, a dona do produto avalia principalmente **a qualidade das atividades propostas**, não só se o código funciona.
+- **Publicação:** antes de publicar, apresentar os resultados dos testes e pedir autorização.
+
 ---
 
 ## Decisões pendentes
 
-- **P-004 · 20/10/2026 · Proposta revisada (seção 8 de [`UX_ONBOARDING_PROPOSAL.md`](../product/UX_ONBOARDING_PROPOSAL.md))**. Assinatura, nome, ícones e prioridade foram decididos (D-022). Ainda aguardam:
-  - a aprovação da arquitetura;
-  - o limite de análises da IA por desafio;
-  - o documento `docs/knowledge/RAG_ARCHITECTURE.md`, citado pelo kit e ausente no repositório.
+- **P-005 · 20/10/2026 · Arquivos citados no RAG e ausentes:** `05-corpus-inicial-protocolos-v0.1.json` (conteúdo dos protocolos), `SOURCE_CATALOG.json`, `RAG_SOURCE_PLAN.md` e `RAG_INTEGRATION_NOTES.md`. Ver `docs/knowledge/RAG_DIVERGENCES.md`.
 
 Outras pendências de produto (preço, nicho, provedor de IA etc.) estão na seção 14 da visão.
