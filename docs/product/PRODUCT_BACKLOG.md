@@ -70,6 +70,7 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 | C2-11 | Publicar a aplicação (segundo site no Netlify, subdomínio) | Aguardando a dona do produto |
 | C2-12 | Liberar cadastro e endereço de retorno do login no Supabase | Aguardando a dona do produto |
 | C2-13 | Teste com login real e IA real, no celular | Depois da publicação e da revisão do tratamento de dados do Gemini |
+| C2-14 | Teste real de concorrência dos limites da IA (várias chamadas ao mesmo tempo, em conexões diferentes) | **Obrigatório antes de ativar a IA para clientes** (D-018) |
 
 ---
 

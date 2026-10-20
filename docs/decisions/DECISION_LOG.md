@@ -148,6 +148,16 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - toda mudança de banco do produto tem procedimento de reversão em `apps/experience-intelligence/supabase/rollback/`, e as versões anteriores da função da IA ficam guardadas na mesma pasta.
 - **Religar a IA:** só com autorização da dona do produto, com um comando no SQL Editor (README da aplicação).
 
+## D-018 · 20/10/2026 · Gemini sem faturamento; condições para religar a IA
+
+- **Origem:** Dona do produto.
+- **Fato verificado por ela:** a chave do Gemini está no Free Tier, no projeto "Rede de parceiros" do Google AI Studio, sem faturamento configurado.
+- **Decisão:** não ativar faturamento neste momento. A IA continua desligada e o acesso continua restrito por convite.
+- **Antes de ativar a IA para clientes, obrigatório:**
+  - revisar as condições de tratamento de dados da API do Gemini no nível usado (D-017);
+  - fazer um teste real de concorrência dos limites (C2-14). Os testes até agora rodaram em uma conexão só; a garantia contra chamadas simultâneas vem da trava do banco e ainda não foi medida com conexões paralelas.
+- **Proibido sem nova autorização:** executar `supabase/rollback/20261020120000_reverter.sql`, que apaga as tabelas de convite e uso da IA.
+
 ---
 
 ## Decisões pendentes

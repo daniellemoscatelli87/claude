@@ -102,7 +102,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 | Serviço | Situação hoje | O que pode gerar custo | Cuidado adotado |
 |---|---|---|---|
 | Supabase | Plano Free (verificado em 20/10/2026), sem branches | Branches de homologação (cobrados por hora), aumento de computação, backups com recuperação por horário, domínio próprio, proteção de senhas vazadas e passar dos limites do Free (banco de 500 MB, invocações de funções, e-mails) | Nada disso foi ativado; testes no banco dentro de transação desfeita; IA e cadastro limitados |
-| Google Gemini | Não verificado: depende de a chave estar no nível gratuito ou com faturamento ativo no Google | Com faturamento ativo, cada chamada é cobrada | Limites D-015 e chave para desligar |
+| Google Gemini | Free Tier, no projeto "Rede de parceiros", sem faturamento configurado (verificado pela dona do produto em 20/10/2026) | Só passaria a cobrar se o faturamento fosse ativado; a dona do produto decidiu não ativar | Limites D-015; IA desligada (D-017) |
 | Netlify | Site do estúdio já publicado; segundo site ainda não criado | Cada build consome minutos ou créditos do plano, inclusive pré-visualizações de PR | Build da aplicação só quando a pasta dela muda |
 | E-mail de confirmação | Envio padrão do Supabase, gratuito, com limite baixo por hora | Para volume maior será preciso um serviço de e-mail próprio, que pode ser pago | Suficiente para poucos convidados |
 | Subdomínio | Não criado | Nenhum: é configuração de DNS no domínio que já existe | Nenhum necessário |
