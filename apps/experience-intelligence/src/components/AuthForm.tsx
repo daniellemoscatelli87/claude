@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { supabase } from "@/infrastructure/supabase";
 import { mensagemDeErro } from "@/application/errors";
+import { DisplayNameSchema } from "@/domain/organization/context";
 
 export function AuthForm() {
   const [modo, setModo] = useState<"entrar" | "criar">("criar");
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [enviando, setEnviando] = useState(false);
@@ -15,12 +17,14 @@ export function AuthForm() {
   async function enviar(e: React.FormEvent) {
     e.preventDefault();
     setErro(""); setAviso("");
+    const nomeOk = DisplayNameSchema.safeParse(nome);
+    if (modo === "criar" && !nomeOk.success) return setErro(nomeOk.error.issues[0].message);
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return setErro("Informe um e-mail válido.");
     if (senha.length < 8) return setErro("A senha precisa ter pelo menos 8 caracteres.");
     setEnviando(true);
     try {
       if (modo === "criar") {
-        const { data, error } = await supabase().auth.signUp({ email: email.trim(), password: senha, options: { emailRedirectTo: location.origin + "/" } });
+        const { data, error } = await supabase().auth.signUp({ email: email.trim(), password: senha, options: { emailRedirectTo: location.origin + "/", data: { full_name: nomeOk.data } } });
         if (error) throw error;
         if (!data.session) setAviso("Conta criada. Enviamos um link de confirmação para " + email.trim() + ". Abra o link e depois entre aqui.");
       } else {
@@ -37,6 +41,11 @@ export function AuthForm() {
   return (
     <form className="card stack" onSubmit={enviar} noValidate>
       <h2>{modo === "criar" ? "Crie sua conta" : "Entre na sua conta"}</h2>
+      {modo === "criar" && (
+        <label>Seu nome
+          <input value={nome} onChange={(e) => setNome(e.target.value)} maxLength={80} autoComplete="name" required />
+        </label>
+      )}
       <label>E-mail
         <input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
       </label>

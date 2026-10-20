@@ -171,6 +171,41 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - Backlog com UX-3a, UX-3b, UX-1 e UX-4 a UX-9.
 - **Código e banco:** nenhum outro alterado.
 
+## 2026-10-21 · UX-3a, incremento 1: contexto da organização, nome obrigatório e rodapé (não publicado)
+
+- **Banco:**
+  - migração `supabase/migrations/20261021090000_contexto_organizacao.sql`, **ainda não aplicada**;
+  - colunas opcionais `offering`, `org_type`, `size_band` e `context_updated_at` em `organizations`, e `job_area` em `organization_members`;
+  - funções `ei_setup_organization`, `ei_update_organization_context` (só `org_admin`; a auditoria guarda só os nomes dos campos alterados) e `ei_update_my_job_area`;
+  - reversão em `supabase/rollback/20261021090000_reverter.sql`.
+- **Aplicação:**
+  - `src/domain/organization/context.ts` (opções do kit e validações);
+  - `src/application/profile.ts` (nome no perfil da conta);
+  - `OrganizationForm` reescrito com a copy da tela E;
+  - `NameForm` (pede o nome antes de continuar e permite editar na barra lateral);
+  - nome obrigatório no cadastro;
+  - página `/organizacao/`;
+  - aviso na área de trabalho quando falta contexto;
+  - barra lateral com nome, "Editar nome", "Informações da organização", "Área master" (só master) e "Sair";
+  - rodapé "by Dani Moscatelli Studio";
+  - `lucide-react` 1.52.0 (versão fixa, licença ISC).
+- **Testes executados:**
+  - `organization_context.sql` junto com a migração, no banco real, em transação desfeita: **OK, 6 verificações**:
+    - sem convite não cria organização;
+    - a convidada cria a organização com contexto;
+    - valores fora da lista e textos longos são recusados;
+    - a auditoria guarda só os campos alterados;
+    - outra organização não lê nem altera o contexto, e ninguém escreve direto na tabela;
+    - a pessoa atualiza a própria área.
+  - `npm test`: 36 de 36. `typecheck`, `lint` e `build` sem erros.
+  - Navegador com servidor simulado (320 e 375 px, sem rolagem lateral, nenhum erro de página):
+    - cadastro recusa conta sem nome;
+    - conta sem nome é levada a "como podemos chamar você?";
+    - a organização é criada com os campos certos e segue para o desafio;
+    - o aviso de contexto incompleto aparece;
+    - a barra lateral mostra o nome, sem o e-mail;
+    - a edição chama as duas funções e mostra "Informações salvas.".
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:

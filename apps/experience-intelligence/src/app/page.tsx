@@ -10,6 +10,10 @@ import { OrganizationForm } from "@/components/OrganizationForm";
 import { useSession } from "@/components/session";
 import { listChallenges } from "@/application/challenges";
 import { hasPlatformAccess } from "@/application/organizations";
+import { displayName } from "@/application/profile";
+import { NameForm } from "@/components/NameForm";
+import { contextoIncompleto } from "@/domain/organization/context";
+import { Building2 } from "lucide-react";
 import { mensagemDeErro } from "@/application/errors";
 import type { Challenge } from "@/domain/challenge/schemas";
 
@@ -25,13 +29,15 @@ export default function Inicio() {
   const [erro, setErro] = useState("");
   const [acesso, setAcesso] = useState<boolean | null>(null);
 
+  const semNome = Boolean(session) && !displayName(session);
+
   useEffect(() => {
-    if (!current) return;
+    if (!current || semNome) return;
     setDesafios(null);
     listChallenges(current.id)
       .then((lista) => { if (lista.length === 0) router.replace("/desafio/novo/"); else setDesafios(lista); })
       .catch((e) => setErro(mensagemDeErro(e)));
-  }, [current, router]);
+  }, [current, router, semNome]);
 
   // Fase de testes: sem organização, só quem foi convidada pode criar uma.
   useEffect(() => {
@@ -51,6 +57,7 @@ export default function Inicio() {
     );
   }
 
+  if (semNome) return <Shell><NameForm /></Shell>;
   if (!current && acesso === null) return <Shell><Loading /></Shell>;
   if (!current && !acesso) {
     return (
@@ -60,7 +67,7 @@ export default function Inicio() {
       </Shell>
     );
   }
-  if (!current) return <Shell><OrganizationForm first /></Shell>;
+  if (!current) return <Shell><OrganizationForm /></Shell>;
 
   return (
     <Shell>
@@ -68,6 +75,15 @@ export default function Inicio() {
         <h1 style={{ margin: 0 }}>Seus desafios</h1>
         <Link href="/desafio/novo/" className="btn btn-primary">Novo desafio</Link>
       </div>
+      {current.role === "org_admin" && contextoIncompleto(current) && (
+        <div className="card aviso-card">
+          <Building2 size={22} aria-hidden="true" />
+          <div className="stack" style={{ gap: 8 }}>
+            <p style={{ margin: 0 }}><b>Conte um pouco mais sobre sua organização.</b> Essas informações ajudam a adaptar as orientações ao seu contexto.</p>
+            <Link href="/organizacao/">Completar informações</Link>
+          </div>
+        </div>
+      )}
       {erro && <p className="msg err" role="alert">{erro}</p>}
       {!desafios && !erro && <Loading />}
       {desafios && (
