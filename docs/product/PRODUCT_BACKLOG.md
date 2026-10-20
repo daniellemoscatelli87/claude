@@ -54,10 +54,10 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 
 | ID | Item | Status | Teste |
 |---|---|---|---|
-| T-01 | Acesso por convite (lista de teste com e-mail confirmado, ou master), conferido no banco | Implementado e testado (não aplicado no banco) | banco (9 verificações, `controlled_access_ai_limits.sql`), telas |
-| T-02 | Sugestão da IA guardada por desafio; recarregar não chama a IA de novo | Implementado e testado (não aplicado no banco) | banco, telas |
-| T-03 | Limites de uso da IA (por desafio, pessoa por dia e plataforma por dia) e chave para desligar | Implementado e testado (não aplicado no banco) | banco, regras, telas |
-| T-04 | Função da IA com no máximo 2 tentativas por pedido | Implementado (não publicado) | revisão; chamada real não testada |
+| T-01 | Acesso por convite (lista de teste com e-mail confirmado, ou master), conferido no banco | Implementado e testado | banco (9 verificações, `controlled_access_ai_limits.sql`), telas |
+| T-02 | Sugestão da IA guardada por desafio; recarregar não chama a IA de novo | Implementado e testado | banco, telas |
+| T-03 | Limites de uso da IA (por desafio, pessoa por dia e plataforma por dia) e chave para desligar | Implementado e testado | banco, regras, telas |
+| T-04 | Função da IA com no máximo 2 tentativas por pedido | Publicado (versão 2); chamada real não testada | revisão |
 | T-05 | Build da aplicação no Netlify só quando a pasta dela muda | Implementado (não publicado) | revisão |
 
 ### Para fechar o incremento

@@ -8,7 +8,7 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ## Estado atual (20/10/2026)
 
-**Cortes 1 e 2, acesso master, acesso por convite e limites da IA implementados, não publicados.** Banco, regras e telas testados (ver entradas abaixo). A migração de 20/10 foi testada no banco real dentro de transação desfeita e **ainda não foi aplicada**; a função da IA publicada ainda é a versão 1 (sem limites). Ainda não houve teste com login real e IA real, porque a aplicação não está no ar.
+**Cortes 1 e 2, acesso master, acesso por convite e limites da IA implementados, não publicados.** Banco, regras e telas testados (ver entradas abaixo). A migração de 20/10 está aplicada e a função da IA publicada é a versão 2, com limites. Ainda não houve teste com login real e IA real, porque a aplicação não está no ar.
 
 ## 2026-10-19 · Organização da documentação
 
@@ -74,9 +74,9 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 Conferido também: nenhuma função do produto é executável por visitante sem login (`anon`); `ei_master_registrar` e `ei_snapshot` não são portas de escrita; não existe ambiente de homologação (branch) no Supabase; plano do Supabase: Free.
 
-**Banco:** migração `apps/experience-intelligence/supabase/migrations/20261020120000_testes_controlados_e_limites_ia.sql` (tabelas `ei_settings`, `ei_testers`, `ai_usage`, `ai_interpretations`; funções `ei_has_access`, `ei_ai_begin`, `ei_ai_finish`; `ei_create_organization` e `ei_create_challenge` passam a exigir convite). **Não aplicada ainda.**
+**Banco:** migração `apps/experience-intelligence/supabase/migrations/20261020120000_testes_controlados_e_limites_ia.sql` (tabelas `ei_settings`, `ei_testers`, `ai_usage`, `ai_interpretations`; funções `ei_has_access`, `ei_ai_begin`, `ei_ai_finish`; `ei_create_organization` e `ei_create_challenge` passam a exigir convite). Aplicada em 20/10/2026 como `ei_20261020120000_testes_controlados_e_limites_ia`, com autorização da dona do produto.
 
-**Função da IA:** `ei-interpretar-desafio` reescrita para reservar o uso, devolver a sugestão guardada e fazer no máximo 2 chamadas. **Não publicada ainda** (depende da migração).
+**Função da IA:** `ei-interpretar-desafio` reescrita para reservar o uso, devolver a sugestão guardada e fazer no máximo 2 chamadas. Publicada no Supabase como versão 2 (exige login; chamada sem login devolve 401, verificado).
 
 **Aplicação:** tela "Acesso por convite"; mensagens para limite, IA pausada e sem acesso; "Tentar de novo" só para falhas temporárias; aviso de convite no cadastro; `netlify.toml` só gera a aplicação quando a pasta dela muda.
 
@@ -93,7 +93,9 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 
 **Falha durante os testes:** a primeira execução no banco ficou parada até o tempo esgotar, porque um `update` sem `where` pedia confirmação na ferramenta. Corrigido com `where id`; nada foi gravado.
 
-**Pendente:** aplicar a migração, publicar a função da IA versão 2 e rodar de novo `rls_isolation.sql` e `master_access.sql` (ajustados para usar pessoas convidadas). Depende de autorização.
+**Depois de aplicar (banco real, transações desfeitas):** `rls_isolation.sql` 8 de 8, `master_access.sql` 6 de 6 e `controlled_access_ai_limits.sql` 9 de 9. Conferido em seguida: limites no padrão (3, 20, 100), IA ligada, lista de convidadas vazia, nenhum uso, usuário ou organização de teste no banco.
+
+**Ainda não testado:** chamada real ao Gemini pela versão 2 (depende de uma conta convidada na aplicação publicada).
 
 ### Custos recorrentes identificados (nada contratado)
 
