@@ -317,18 +317,21 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Proposta:** ver P-007.
 - **Estado e cidade (21/10/2026):** a dona do produto decidiu mantê-los obrigatórios, porque são importantes para a análise posterior do perfil de clientes. Essa finalidade precisa aparecer no aviso de privacidade e na política, com base legal declarada (ver `docs/legal/`).
 
+## D-027 · 21/10/2026 · P-007 aprovada: cadastro sem CPF
+
+- **Origem:** Dona do produto ("Sim, aprovo a P-007").
+- **Decisão:**
+  - sem CPF e sem data de nascimento;
+  - caixa "Declaro que tenho 18 anos ou mais";
+  - CNPJ opcional na empresa ou negócio, validado e único;
+  - aviso de privacidade da fase de testes no cadastro ("Como usamos seus dados"), com aceite obrigatório registrado com data e versão (`testes-2026-10-21`);
+  - CPF só no futuro, se houver necessidade, com criptografia e HMAC (`docs/security/DADOS_PESSOAIS.md`).
+- **Estado:** implementado e testado, **não aplicado no banco e não publicado**. Ver o Implementation Log de 21/10/2026.
+
 ---
 
 ## Decisões pendentes
 
-- **P-007 · 21/10/2026 · Cadastro sem CPF** (proposta em `docs/security/DADOS_PESSOAIS.md`, seção 3):
-  - retirar CPF e data de nascimento;
-  - declaração de maioridade;
-  - CNPJ opcional e único na empresa;
-  - aviso de privacidade da fase de testes com aceite registrado;
-  - CPF só no futuro, com criptografia e HMAC.
-
-  Aguarda aprovação.
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
   - cruzar pelo e-mail confirmado, no servidor;

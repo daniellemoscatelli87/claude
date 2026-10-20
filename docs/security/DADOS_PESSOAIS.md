@@ -1,6 +1,6 @@
 # Dados pessoais: estado atual e proposta (D-026)
 
-**Data:** 21/10/2026 · **Status:** análise e proposta. **Nada alterado no banco ou no cadastro.**
+**Data:** 21/10/2026 · **Status:** a proposta da seção 3 foi aprovada (D-027) e implementada no código; as migrações ainda **não foram aplicadas** e o app **não foi publicado**.
 
 ## 1. Como o CPF está hoje
 

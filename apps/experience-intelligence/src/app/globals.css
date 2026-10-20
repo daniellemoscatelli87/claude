@@ -146,3 +146,15 @@ input[aria-invalid="true"], select[aria-invalid="true"] { border-color: #c53030;
 .rodape-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; color: #94a3b8; }
 .rodape-links a { color: #94a3b8; text-decoration: none; }
 .rodape-links a:hover { color: var(--red); }
+.confirmacao { display: grid; gap: 4px; }
+.confirmacao-linha { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; font-weight: 400; color: var(--text); cursor: pointer; }
+.confirmacao-linha input { width: 22px; height: 22px; margin: 0; flex-shrink: 0; accent-color: var(--red); }
+.confirmacao-linha .btn-link { padding: 0; font-size: 14px; }
+.janela { width: min(720px, 94vw); max-height: 88vh; border: 0; border-radius: 16px; padding: 0; box-shadow: 0 20px 60px -10px rgb(17 17 17 / .35); }
+.janela::backdrop { background: rgb(17 17 17 / .45); }
+.janela-topo { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #fff; border-bottom: 1px solid var(--line); padding: 14px 18px; }
+.janela-topo h2 { margin: 0; font-size: 18px; }
+.janela-topo button { width: 44px; height: 44px; border: 0; background: none; border-radius: 10px; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
+.janela-corpo { padding: 4px 22px 24px; font-size: 15px; line-height: 1.65; color: #334155; }
+.janela-corpo h3 { font-size: 16px; margin: 20px 0 6px; color: var(--dark); }
+.janela-corpo ul { padding-left: 20px; margin: 0; }

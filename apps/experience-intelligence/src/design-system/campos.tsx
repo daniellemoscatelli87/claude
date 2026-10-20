@@ -1,8 +1,8 @@
 "use client";
 // Componentes de campo do design system, com os mesmos comportamentos dos formulários do site.
-import { useEffect, useId, useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
-import { ESTADOS, forcaSenha, maskPhone, requisitosSenha, sugestoesEmail } from "./padroes";
+import { useEffect, useId, useRef, useState } from "react";
+import { Eye, EyeOff, X } from "lucide-react";
+import { ESTADOS, forcaSenha, maskCnpj, maskPhone, requisitosSenha, sugestoesEmail } from "./padroes";
 
 type Base = { label: string; erro?: string; hint?: string; disabled?: boolean };
 
@@ -32,6 +32,46 @@ export function CampoTexto({ label, erro, hint, disabled, value, onChange, ...in
 /** Telefone com a máscara do site: (41) 99999-9999. */
 export function CampoTelefone(p: Base & { value: string; onChange: (v: string) => void; required?: boolean }) {
   return <CampoTexto {...p} type="tel" inputMode="tel" autoComplete="tel" placeholder="(00) 00000-0000" value={p.value} onChange={(v) => p.onChange(maskPhone(v))} />;
+}
+
+/** CNPJ com máscara 00.000.000/0000-00 (novo). */
+export function CampoCnpj(p: Base & { value: string; onChange: (v: string) => void }) {
+  return <CampoTexto {...p} inputMode="numeric" autoComplete="off" placeholder="00.000.000/0000-00" value={p.value} onChange={(v) => p.onChange(maskCnpj(v))} />;
+}
+
+/** Caixa de confirmação com texto (pode conter link). */
+export function CampoConfirmacao({ checked, onChange, children, erro }: { checked: boolean; onChange: (v: boolean) => void; children: React.ReactNode; erro?: string }) {
+  const d = useDescricao(erro);
+  return (
+    <div className="confirmacao">
+      <label className="confirmacao-linha">
+        <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} aria-invalid={d.invalid} aria-describedby={d.describedBy} />
+        <span>{children}</span>
+      </label>
+      {d.textos}
+    </div>
+  );
+}
+
+/** Janela sobre a página, como a política de privacidade da Rede de Parceiros (<dialog> nativo, Esc fecha). */
+export function Janela({ titulo, aberta, onFechar, children }: { titulo: string; aberta: boolean; onFechar: () => void; children: React.ReactNode }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  const idTitulo = useId();
+  useEffect(() => {
+    const d = ref.current;
+    if (!d) return;
+    if (aberta && !d.open) d.showModal();
+    if (!aberta && d.open) d.close();
+  }, [aberta]);
+  return (
+    <dialog ref={ref} className="janela" aria-labelledby={idTitulo} onClose={onFechar} onClick={(e) => { if (e.target === ref.current) onFechar(); }}>
+      <div className="janela-topo">
+        <h2 id={idTitulo}>{titulo}</h2>
+        <button type="button" onClick={onFechar} aria-label="Fechar"><X size={22} aria-hidden="true" /></button>
+      </div>
+      <div className="janela-corpo">{children}</div>
+    </dialog>
+  );
 }
 
 /** E-mail com sugestões de domínio, como no site. */

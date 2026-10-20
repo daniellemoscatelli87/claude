@@ -8,6 +8,8 @@ import { setCurrentOrganizationId, setupOrganization, updateOrganizationContext,
 import { mensagemDeErro } from "@/application/errors";
 import { AREAS, PORTES, SEGMENTOS, SEGMENTO_OUTRO, TIPOS } from "@/domain/organization/context";
 import { useSession } from "./session";
+import { CampoCnpj } from "@/design-system/campos";
+import { maskCnpj } from "@/design-system/padroes";
 
 const NAO_INFORMAR_SEGMENTO = "Prefiro não informar";
 
@@ -30,6 +32,7 @@ export function OrganizationForm({ org, onSaved, etapa = false }: { org?: MyOrga
   const [area, setArea] = useState(org?.job_area ?? "");
   const [tipo, setTipo] = useState(org?.org_type ?? "");
   const [porte, setPorte] = useState(org?.size_band ?? "");
+  const [cnpj, setCnpj] = useState(org?.cnpj ? maskCnpj(org.cnpj) : "");
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState("");
   const [ok, setOk] = useState("");
@@ -38,7 +41,7 @@ export function OrganizationForm({ org, onSaved, etapa = false }: { org?: MyOrga
     e.preventDefault();
     setErro(""); setOk(""); setEnviando(true);
     const industry = segmento === SEGMENTO_OUTRO ? segmentoOutro : segmento === NAO_INFORMAR_SEGMENTO ? "" : segmento;
-    const dados = { name: nome, industry, offering: oferta, org_type: tipo, size_band: porte, job_area: area };
+    const dados = { name: nome, industry, offering: oferta, org_type: tipo, size_band: porte, job_area: area, cnpj };
     try {
       if (org) {
         await updateOrganizationContext(org.id, dados, podeEditarOrg);
@@ -111,6 +114,8 @@ export function OrganizationForm({ org, onSaved, etapa = false }: { org?: MyOrga
               {Object.entries(PORTES).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </label>
+          <CampoCnpj label="CNPJ" value={cnpj} onChange={setCnpj} disabled={!podeEditarOrg}
+            hint="Opcional. Para empresas brasileiras: ajuda a evitar cadastros duplicados da mesma empresa." />
           {!podeEditarOrg && <p className="hint" style={{ margin: 0 }}>Só quem administra a empresa ou negócio altera esses dados. Você pode atualizar o seu papel.</p>}
         </fieldset>
 

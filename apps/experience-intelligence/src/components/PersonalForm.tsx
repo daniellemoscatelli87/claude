@@ -2,15 +2,18 @@
 // Dados pessoais da pessoa responsável (D-025). Três usos:
 //   cadastro: cria a conta (e-mail e senha) com os dados pessoais;
 //   completar: conta antiga sem perfil informa os dados antes de seguir;
-//   editar: "Meus dados" (o CPF aparece mascarado; deixar em branco mantém o atual).
+//   editar: "Meus dados".
+// Sem CPF e sem data de nascimento (P-007): maioridade declarada e aceite do aviso de privacidade, com versão.
 // Campos do design system (src/design-system), com os mesmos padrões dos formulários do site.
 import { useState } from "react";
 import Link from "next/link";
 import { MailCheck } from "lucide-react";
 import { FieldErrors, resendConfirmation, saveMyProfile, signUpWithProfile, type MyProfile } from "@/application/profile";
 import { mensagemDeErro } from "@/application/errors";
-import { formatarCpf, formatarTelefone } from "@/domain/profile/personal";
-import { CampoEmail, CampoEstadoCidade, CampoSenhaNova, CampoTelefone, CampoTexto } from "@/design-system/campos";
+import { formatarTelefone } from "@/domain/profile/personal";
+import { AVISO_TITULO } from "@/domain/privacy/aviso";
+import { CampoConfirmacao, CampoEmail, CampoEstadoCidade, CampoSenhaNova, CampoTelefone, CampoTexto, Janela } from "@/design-system/campos";
+import { AvisoPrivacidade } from "./AvisoPrivacidade";
 import { useSession } from "./session";
 
 type Modo = "cadastro" | "completar" | "editar";
@@ -18,9 +21,11 @@ type Modo = "cadastro" | "completar" | "editar";
 export function PersonalForm({ modo, perfil, email: emailConta }: { modo: Modo; perfil?: MyProfile | null; email?: string }) {
   const { reload } = useSession();
   const [v, setV] = useState({
-    full_name: perfil?.full_name ?? "", cpf: "", birth_date: perfil?.birth_date ?? "", state: perfil?.state ?? "",
+    full_name: perfil?.full_name ?? "", state: perfil?.state ?? "",
     city: perfil?.city ?? "", phone: perfil ? formatarTelefone(perfil.phone) : "", email: "", password: "", password_confirm: "",
   });
+  const [aceites, setAceites] = useState({ adult_declared: false, privacy_accepted: false });
+  const [avisoAberto, setAvisoAberto] = useState(false);
   const [campos, setCampos] = useState<Record<string, string>>({});
   const [erro, setErro] = useState("");
   const [ok, setOk] = useState("");
@@ -36,12 +41,12 @@ export function PersonalForm({ modo, perfil, email: emailConta }: { modo: Modo; 
     setErro(""); setOk(""); setCampos({}); setEnviando(true);
     try {
       if (modo === "cadastro") {
-        const entrou = await signUpWithProfile(v);
+        const entrou = await signUpWithProfile({ ...v, ...aceites });
         if (!entrou) setConfirmar(v.email.trim().toLowerCase());
       } else {
-        await saveMyProfile(v);
+        await saveMyProfile({ ...v, ...aceites }, modo === "completar");
         await reload();
-        if (modo === "editar") { setOk("Seus dados foram salvos."); setV({ ...v, cpf: "" }); }
+        if (modo === "editar") setOk("Seus dados foram salvos.");
       }
     } catch (err) {
       if (err instanceof FieldErrors) setCampos(err.campos);
@@ -65,10 +70,6 @@ export function PersonalForm({ modo, perfil, email: emailConta }: { modo: Modo; 
       )}
       <form className="card stack" onSubmit={enviar} noValidate>
         <CampoTexto label="Nome completo" value={v.full_name} onChange={atualiza("full_name")} maxLength={120} autoComplete="name" required erro={campos.full_name} />
-        <CampoTexto label="CPF" value={v.cpf} onChange={(x) => atualiza("cpf")(formatarCpf(x))} inputMode="numeric" autoComplete="off"
-          placeholder={modo === "editar" && perfil ? perfil.cpf_masked : "000.000.000-00"} required={modo !== "editar"}
-          hint={modo === "editar" ? "Deixe em branco para manter o CPF atual." : undefined} erro={campos.cpf} />
-        <CampoTexto label="Data de nascimento" type="date" value={v.birth_date} onChange={atualiza("birth_date")} autoComplete="bday" required erro={campos.birth_date} />
         <CampoEstadoCidade uf={v.state} cidade={v.city} erro={campos.state || campos.city}
           onChange={(uf, cidade) => { setV((a) => ({ ...a, state: uf, city: cidade })); limpa("state", "city"); }} />
         <CampoTelefone label="Telefone ou WhatsApp" value={v.phone} onChange={atualiza("phone")} required erro={campos.phone} />
@@ -82,7 +83,26 @@ export function PersonalForm({ modo, perfil, email: emailConta }: { modo: Modo; 
           <CampoTexto label="E-mail" type="email" value={emailConta} onChange={() => {}} disabled readOnly
             hint={modo === "completar" ? "O e-mail da sua conta." : undefined} />
         ) : null}
-        <p className="hint" style={{ margin: 0 }}>Usamos o CPF e a data de nascimento para identificar a pessoa responsável pela conta, evitar cadastros duplicados e confirmar a maioridade. Eles não aparecem para outras pessoas.</p>
+        {modo !== "editar" ? (
+          <>
+            <CampoConfirmacao checked={aceites.adult_declared} erro={campos.adult_declared}
+              onChange={(c) => { setAceites((a) => ({ ...a, adult_declared: c })); limpa("adult_declared"); }}>
+              Declaro que tenho 18 anos ou mais.
+            </CampoConfirmacao>
+            <CampoConfirmacao checked={aceites.privacy_accepted} erro={campos.privacy_accepted}
+              onChange={(c) => { setAceites((a) => ({ ...a, privacy_accepted: c })); limpa("privacy_accepted"); }}>
+              Li e aceito o <button type="button" className="btn-link" onClick={() => setAvisoAberto(true)}>aviso de privacidade</button>.
+            </CampoConfirmacao>
+            <p className="hint" style={{ margin: 0 }}>
+              Usamos estado e cidade para entender o perfil dos clientes, de forma agrupada. Não pedimos CPF nem data de nascimento.{" "}
+              <button type="button" className="btn-link" onClick={() => setAvisoAberto(true)}>Como usamos seus dados</button>
+            </p>
+          </>
+        ) : perfil ? (
+          <p className="hint" style={{ margin: 0 }}>
+            Você aceitou o <button type="button" className="btn-link" onClick={() => setAvisoAberto(true)}>aviso de privacidade</button> (versão {perfil.privacy_notice_version}) em {new Date(perfil.privacy_accepted_at).toLocaleDateString("pt-BR")}.
+          </p>
+        ) : null}
         {erro && <p className="msg err" role="alert">{erro}</p>}
         {ok && <p className="msg ok" role="status">{ok}</p>}
         <button className="btn btn-primary btn-block" disabled={enviando}>
@@ -90,6 +110,9 @@ export function PersonalForm({ modo, perfil, email: emailConta }: { modo: Modo; 
         </button>
         {modo === "cadastro" && <p className="center" style={{ margin: 0 }}>Já tem uma conta? <Link href="/">Entrar</Link></p>}
       </form>
+      <Janela titulo={AVISO_TITULO} aberta={avisoAberto} onFechar={() => setAvisoAberto(false)}>
+        <AvisoPrivacidade />
+      </Janela>
     </>
   );
 }

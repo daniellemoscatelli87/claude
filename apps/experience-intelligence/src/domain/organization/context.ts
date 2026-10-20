@@ -2,6 +2,7 @@
 // organização: ajudam a IA a adaptar o plano de investigação. Nenhum dado fiscal. Textos das opções
 // conforme o kit de UX (docs/product/ux-onboarding/02-COPY-COMPLETA-E-COMPONENTES.md, tela E).
 import { z } from "zod";
+import { cnpjValido } from "@/design-system/padroes";
 
 export const SEGMENTOS = [
   "Saúde", "Educação", "Hospitalidade e turismo", "Varejo e comércio", "Serviços financeiros", "Tecnologia",
@@ -34,6 +35,9 @@ export const OrganizationSetupSchema = z.object({
   org_type: opcional(TIPOS),
   size_band: opcional(PORTES),
   job_area: opcional(AREAS),
+  // CNPJ opcional (P-007): validado pelos dígitos; único no banco, para evitar empresas duplicadas.
+  cnpj: z.string().optional().transform((v) => (v ?? "").replace(/\D/g, "") || undefined)
+    .refine((v) => v === undefined || cnpjValido(v), "Confira o CNPJ informado."),
 });
 export type OrganizationSetup = z.infer<typeof OrganizationSetupSchema>;
 

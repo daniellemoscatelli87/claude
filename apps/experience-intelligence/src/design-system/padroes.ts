@@ -45,3 +45,22 @@ export function forcaSenha(s: string): { nivel: 0 | 1 | 2 | 3; rotulo: string } 
   const extras = [s.length >= 12, /[a-z]/.test(s) && /[A-Z]/.test(s), /[^a-zA-Z0-9]/.test(s)].filter(Boolean).length;
   return extras >= 2 ? { nivel: 3, rotulo: "Forte" } : { nivel: 2, rotulo: "Média" };
 }
+
+/** Máscara de CNPJ: 00.000.000/0000-00 (novo; o site não tem campo de CNPJ). */
+export function maskCnpj(value: string): string {
+  const d = value.replace(/\D/g, "").slice(0, 14);
+  return d.replace(/^(\d{2})(\d)/, "$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+    .replace(/\.(\d{3})(\d)/, ".$1/$2").replace(/(\d{4})(\d)/, "$1-$2");
+}
+
+/** CNPJ válido pelos dígitos verificadores (a mesma regra é conferida no banco). */
+export function cnpjValido(valor: string): boolean {
+  const c = valor.replace(/\D/g, "");
+  if (c.length !== 14 || /^(\d)\1{13}$/.test(c)) return false;
+  const dv = (n: number) => {
+    const pesos = n === 12 ? [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2] : [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    const r = pesos.reduce((s, p, i) => s + Number(c[i]) * p, 0) % 11;
+    return r < 2 ? 0 : 11 - r;
+  };
+  return dv(12) === Number(c[12]) && dv(13) === Number(c[13]);
+}

@@ -93,8 +93,8 @@ Especificação: `docs/product/ux-onboarding/` (kit v1.0). Proposta e comparaç�
 | ID | Item | Elo | Status |
 |---|---|---|---|
 | UX-3a | Base da condução adaptativa (D-021): contexto mínimo da organização, nome obrigatório, catálogo de protocolos aprovados, Experience Guide com instrumentos, plano inicial pela IA, cartão de atividade, registro estruturado de evidências e regras imediatas de qualidade | Identificar · Investigar | **Aprovado (D-024), em andamento** |
-| UX-10 | Cadastro em etapas (D-025): /cadastro/ com dados pessoais, confirmação de e-mail, empresa ou negócio, chamada para o primeiro desafio; "Meus dados" com edição, troca de e-mail e senha | Base | Implementado e testado (não publicado). **CPF e data de nascimento suspensos (D-026)**; ajuste aguarda P-007 |
-| UX-13 | Cadastro sem CPF: declaração de maioridade, CNPJ opcional na empresa, aviso de privacidade com aceite registrado (P-007) | Base | Proposto; aguarda aprovação |
+| UX-10 | Cadastro em etapas (D-025): /cadastro/ com dados pessoais, confirmação de e-mail, empresa ou negócio, chamada para o primeiro desafio; "Meus dados" com edição, troca de e-mail e senha | Base | Implementado e testado (não publicado). CPF e data de nascimento retirados (D-027) |
+| UX-13 | Cadastro sem CPF: declaração de maioridade, CNPJ opcional na empresa, aviso de privacidade com aceite registrado (D-027) | Base | Implementado e testado (não aplicado no banco, não publicado) |
 | UX-14 | Termos de Uso e Política de Privacidade do produto (requisitos em `docs/legal/`) | Base | Requisitos prontos; texto jurídico obrigatório antes do lançamento |
 | UX-11 | Cruzar o cadastro com o formulário de contato do site (P-006) | Base · Identificar | Proposto; aguarda decisão |
 | UX-12 | Botão "Cadastrar" no site do estúdio, apontando para /cadastro/ | Base | Depois (pedido da dona do produto) |

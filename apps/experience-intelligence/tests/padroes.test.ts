@@ -28,3 +28,14 @@ describe("padrões de campos do site", () => {
     expect(requisitosSenha("abc1").map((r) => r.ok)).toEqual([false, true]);
   });
 });
+
+import { cnpjValido, maskCnpj } from "@/design-system/padroes";
+describe("CNPJ", () => {
+  it("máscara e validação", () => {
+    expect(maskCnpj("11222333000181")).toBe("11.222.333/0001-81");
+    expect(maskCnpj("1122")).toBe("11.22");
+    expect(cnpjValido("11.222.333/0001-81")).toBe(true);
+    expect(cnpjValido("11222333000182")).toBe(false);
+    expect(cnpjValido("11111111111111")).toBe(false);
+  });
+});

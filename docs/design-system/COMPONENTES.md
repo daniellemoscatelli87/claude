@@ -12,7 +12,10 @@ Início do design system da DM | Experience Intelligence (pedido da dona do prod
 | `CampoTexto` | `campos.tsx` | Rótulo, ajuda e erro ligados ao campo (`aria-describedby`, `aria-invalid`) | Padrão de erro junto ao campo do kit de UX |
 | `BarraProgresso` | `campos.tsx` | "Etapa X de N" e barra de progresso acessível (`role="progressbar"`) | Novo (cadastro em etapas, D-025) |
 | `Rodape` | `campos.tsx` | Igual ao rodapé do site: "© {ano} Dani Moscatelli • Experience Design Studio. Todos os direitos reservados." · "Curitiba - PR" · "Política de privacidade" (do site). Sem o link "Área restrita", que é da administração do site | `index.html` do site |
-| Regras puras | `padroes.ts` | `EMAIL_RE`, `DOMINIOS`, `sugestoesEmail`, `maskPhone`, `ESTADOS`, `MSG`, `requisitosSenha`, `forcaSenha` (com testes em `tests/padroes.test.ts`) | Copiadas do site |
+| `CampoCnpj` | `campos.tsx` | Máscara `00.000.000/0000-00` e validação dos dígitos (a mesma no banco) | Novo |
+| `CampoConfirmacao` | `campos.tsx` | Caixa de marcação com texto (aceites e declarações), erro junto ao campo | Novo |
+| `Janela` | `campos.tsx` | Conteúdo sobre a página, sem tirar a pessoa do formulário (`<dialog>` nativo; Esc, "×" ou toque fora fecham) | Janela da política de privacidade da Rede de Parceiros (`.pol-dlg`) |
+| Regras puras | `padroes.ts` | `EMAIL_RE`, `DOMINIOS`, `sugestoesEmail`, `maskPhone`, `ESTADOS`, `MSG`, `requisitosSenha`, `forcaSenha`, `maskCnpj`, `cnpjValido` (com testes em `tests/padroes.test.ts`) | Copiadas do site |
 
 ## Regras
 

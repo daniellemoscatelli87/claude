@@ -11,10 +11,11 @@ export interface MyOrganization {
   offering: string | null;
   org_type: string | null;
   size_band: string | null;
+  cnpj: string | null;
   role: Role;
   job_area: string | null;
 }
-type OrgRow = Pick<MyOrganization, "id" | "name" | "industry" | "offering" | "org_type" | "size_band">;
+type OrgRow = Pick<MyOrganization, "id" | "name" | "industry" | "offering" | "org_type" | "size_band" | "cnpj">;
 
 /** Organizações das quais a pessoa é membro (o banco devolve somente essas). */
 export async function listMyOrganizations(): Promise<MyOrganization[]> {
@@ -22,7 +23,7 @@ export async function listMyOrganizations(): Promise<MyOrganization[]> {
   if (!auth.user) return [];
   const { data, error } = await supabase()
     .from("organization_members")
-    .select("role, job_area, organizations ( id, name, industry, offering, org_type, size_band )")
+    .select("role, job_area, organizations ( id, name, industry, offering, org_type, size_band, cnpj )")
     .eq("user_id", auth.user.id)
     .order("created_at");
   if (error) throw error;
@@ -48,7 +49,7 @@ export async function setupOrganization(input: unknown): Promise<string> {
   const d = parsed.data;
   const { data, error } = await supabase().rpc("ei_setup_organization", {
     p_name: d.name, p_industry: d.industry ?? null, p_offering: d.offering ?? null,
-    p_org_type: d.org_type ?? null, p_size_band: d.size_band ?? null, p_job_area: d.job_area ?? null,
+    p_org_type: d.org_type ?? null, p_size_band: d.size_band ?? null, p_job_area: d.job_area ?? null, p_cnpj: d.cnpj ?? null,
   });
   if (error) throw error;
   return data as string;
@@ -62,7 +63,7 @@ export async function updateOrganizationContext(orgId: string, input: unknown, c
   if (canEditOrg) {
     const { error } = await supabase().rpc("ei_update_organization_context", {
       p_org: orgId, p_name: d.name, p_industry: d.industry ?? null, p_offering: d.offering ?? null,
-      p_org_type: d.org_type ?? null, p_size_band: d.size_band ?? null,
+      p_org_type: d.org_type ?? null, p_size_band: d.size_band ?? null, p_cnpj: d.cnpj ?? null,
     });
     if (error) throw error;
   }

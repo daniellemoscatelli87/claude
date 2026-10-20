@@ -1,11 +1,12 @@
 // Perfil pessoal (D-025). Os dados ficam em ei_profiles, lidos e gravados só por funções do banco.
 // No cadastro, seguem junto com a criação da conta (chave ei_signup) e o banco os retira dos metadados.
 import type { Session } from "@supabase/supabase-js";
-import { PersonalEditSchema, SENHA_INVALIDA, SignupSchema, errosPorCampo, senhaValida } from "@/domain/profile/personal";
+import { CompleteProfileSchema, PersonalDataSchema, SENHA_INVALIDA, SignupSchema, dadosDoCadastro, errosPorCampo, senhaValida } from "@/domain/profile/personal";
+import { AVISO_VERSAO } from "@/domain/privacy/aviso";
 import { supabase } from "@/infrastructure/supabase";
 import { AppError } from "./errors";
 
-export interface MyProfile { full_name: string; cpf_masked: string; birth_date: string; state: string; city: string; phone: string }
+export interface MyProfile { full_name: string; state: string; city: string; phone: string; privacy_notice_version: string; privacy_accepted_at: string }
 
 export class FieldErrors extends AppError {
   constructor(public campos: Record<string, string>) { super(Object.values(campos)[0] ?? "Confira os dados informados."); }
@@ -27,12 +28,12 @@ export async function myProfile(): Promise<MyProfile | null> {
 export async function signUpWithProfile(input: unknown): Promise<boolean> {
   const parsed = SignupSchema.safeParse(input);
   if (!parsed.success) throw new FieldErrors(errosPorCampo(parsed.error.issues));
-  const { email, password, password_confirm: _confirmacao, ...pessoais } = parsed.data;
+  const { email, password } = parsed.data;
   const { data, error } = await supabase().auth.signUp({
     email, password,
-    options: { emailRedirectTo: location.origin + "/", data: { ei_signup: pessoais } },
+    options: { emailRedirectTo: location.origin + "/", data: { ei_signup: dadosDoCadastro(parsed.data) } },
   });
-  // Erros do banco no cadastro (ex.: CPF já usado) chegam como erro genérico; não revelamos qual dado existe.
+  // Erros do banco no cadastro chegam como erro genérico do serviço de login.
   if (error) throw /database error/i.test(error.message) ? new AppError("Não foi possível concluir o cadastro. Confira seus dados ou tente entrar.") : error;
   return Boolean(data.session);
 }
@@ -42,12 +43,14 @@ export async function resendConfirmation(email: string): Promise<void> {
   if (error) throw error;
 }
 
-export async function saveMyProfile(input: unknown): Promise<void> {
-  const parsed = PersonalEditSchema.safeParse(input);
+/** Salva o perfil. Ao criar (conta antiga sem perfil), exige maioridade declarada e aceite do aviso. */
+export async function saveMyProfile(input: unknown, criando: boolean): Promise<void> {
+  const parsed = (criando ? CompleteProfileSchema : PersonalDataSchema).safeParse(input);
   if (!parsed.success) throw new FieldErrors(errosPorCampo(parsed.error.issues));
   const d = parsed.data;
   const { error } = await supabase().rpc("ei_save_my_profile", {
-    p_name: d.full_name, p_cpf: d.cpf, p_birth: d.birth_date, p_state: d.state, p_city: d.city, p_phone: d.phone,
+    p_name: d.full_name, p_state: d.state, p_city: d.city, p_phone: d.phone,
+    p_adult_declared: criando ? true : null, p_privacy_version: criando ? AVISO_VERSAO : null,
   });
   if (error) throw error;
   // O nome também fica no perfil da conta, para aparecer no cabeçalho.

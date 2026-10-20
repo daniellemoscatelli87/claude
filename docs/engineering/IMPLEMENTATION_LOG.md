@@ -275,6 +275,39 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - etapa 2 com "Crie sua conta", "Etapa 2 de 2" e "Empresa ou negócio";
   - "Meus dados" carrega estado, cidade e telefone.
 
+## 2026-10-21 · P-007: cadastro sem CPF, maioridade, aviso de privacidade e CNPJ (D-027), não publicado
+
+- **Banco** (migrações ajustadas, ainda **não aplicadas**):
+  - `20261021100000_perfil_pessoal.sql`:
+    - `ei_profiles` sem CPF e sem data de nascimento;
+    - com `adult_declared_at`, `privacy_notice_version` e `privacy_accepted_at`;
+    - o gatilho exige maioridade declarada e a versão do aviso, e retira dos metadados telefone, estado e cidade;
+    - `ei_save_my_profile` exige os aceites só ao criar o perfil.
+  - `20261021090000_contexto_organizacao.sql`:
+    - `organizations.cnpj` único, com 14 dígitos;
+    - `ei_cnpj_valido` e `ei_cnpj_normalizado`;
+    - CNPJ repetido gera mensagem orientando a pedir convite;
+    - a auditoria registra "cnpj" como campo alterado, sem o valor.
+  - Reversões atualizadas.
+- **Aplicação:**
+  - `src/domain/privacy/aviso.ts` (texto e versão do aviso), `AvisoPrivacidade`, página `/aviso-de-privacidade/`;
+  - `PersonalForm` sem CPF e sem data de nascimento, com as caixas "Declaro que tenho 18 anos ou mais" e "Li e aceito o aviso de privacidade";
+  - o aviso abre numa janela sobre o formulário, e "Meus dados" mostra a versão e a data do aceite;
+  - campo CNPJ opcional na empresa ou negócio;
+  - design system com `CampoCnpj`, `CampoConfirmacao` e `Janela`.
+- **Testes executados:**
+  - no banco real, com as migrações em transação desfeita:
+    - `personal_profile.sql`: **OK, 8 verificações** (perfil, maioridade e aceite gravados com versão; só o nome nos metadados; recusa sem maioridade, sem aceite ou com telefone inválido; contas do site intactas; sem colunas de CPF e de nascimento; leitura só do próprio perfil; edição mantém o aceite; conta antiga só completa com os aceites; visitante sem acesso);
+    - `organization_context.sql`: **OK, 7 verificações** (com CNPJ inválido recusado, normalizado, único, sem CNPJ possível, CNPJ fora da auditoria);
+  - `npm test`: 48 de 48; `typecheck`, `lint` (0 erros) e `build` ok;
+  - navegador com servidor simulado (320 e 375 px, sem rolagem lateral, nenhum erro):
+    - sem campos de CPF e de nascimento;
+    - os aceites são exigidos;
+    - a janela do aviso abre e fecha com Esc;
+    - o envio leva `adult_declared` e a versão do aviso;
+    - o CNPJ tem máscara, recusa dígito errado e é enviado só com dígitos;
+    - "Meus dados" mostra o aceite e não reenvia aceites na edição.
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:
