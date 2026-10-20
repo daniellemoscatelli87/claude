@@ -308,6 +308,19 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - o CNPJ tem máscara, recusa dígito errado e é enviado só com dígitos;
     - "Meus dados" mostra o aceite e não reenvia aceites na edição.
 
+## 2026-10-21 · Corpus inicial de protocolos incorporado (D-028), só documentação
+
+- **Feito:**
+  - `docs/knowledge/protocols/05-corpus-inicial-protocolos-v0.1.json` copiado sem alteração (`cmp` idêntico);
+  - relatório `docs/knowledge/PROTOCOLS_COMPATIBILITY.md`;
+  - `RAG_DIVERGENCES.md`, Decision Log (D-028, P-005 e P-008), Backlog (UX-15) e índice atualizados.
+- **Verificação executada:** script de conferência (não versionado):
+  - JSON válido; 19 campos obrigatórios do esquema presentes nos 6 protocolos;
+  - `user_facing_title` a mais;
+  - `questions` vazias e `status: draft` nos 6;
+  - um termo de jargão na interface ("walkthrough" em `observation_light`).
+- **Código e banco:** nenhum alterado.
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:

@@ -104,6 +104,7 @@ Especificação: `docs/product/ux-onboarding/` (kit v1.0). Proposta e comparaç�
 | UX-5 | Simulação "Visualizar experiência de cliente" para a master | Base | Futuro |
 | UX-6 | Convite de pessoas para a organização; encaminhamento a especialista | Base · Transformar | Futuro |
 | UX-7 | Anexos de evidências (armazenamento privado, revisão de LGPD) | Investigar | Futuro |
+| UX-15 | Curadoria do corpus de protocolos v0.1 (lacunas L1 a L8 de `docs/knowledge/PROTOCOLS_COMPATIBILITY.md`) com fontes do RAG e validação da dona do produto, até `approved` | Investigar · Compreender | Planejado; feito com a dona do produto |
 | UX-8 | Expansão da biblioteca metodológica com curadoria (novos protocolos e disciplinas) e RAG especialista | Compreender | Futuro (metodologia, seção 11) |
 | UX-9 | Tela na Área master para convidar clientes de teste | Base | Proposto |
 

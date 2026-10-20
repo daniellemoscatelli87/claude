@@ -24,6 +24,8 @@ Esta documentação é parte integrante do produto, não material de apoio desca
 | [`product/UX_ONBOARDING_PROPOSAL.md`](product/UX_ONBOARDING_PROPOSAL.md) | Comparação do kit com o código e proposta de implementação (aguardando aprovação) | Criado em 20/10/2026 |
 | [`knowledge/RAG_ARCHITECTURE.md`](knowledge/RAG_ARCHITECTURE.md) | Knowledge Engine / RAG: camadas de conhecimento, protocolos, proveniência, recuperação e testes | Kit Completo v4 (copiado sem alteração) |
 | [`knowledge/RAG_DIVERGENCES.md`](knowledge/RAG_DIVERGENCES.md) | Diferenças entre o documento do RAG e as decisões recentes; arquivos citados e ausentes | Criado em 20/10/2026 |
+| [`knowledge/protocols/05-corpus-inicial-protocolos-v0.1.json`](knowledge/protocols/05-corpus-inicial-protocolos-v0.1.json) | Corpus inicial com os 6 protocolos (rascunho, não aprovado para produção) | Enviado pela dona do produto (copiado sem alteração) |
+| [`knowledge/PROTOCOLS_COMPATIBILITY.md`](knowledge/PROTOCOLS_COMPATIBILITY.md) | Compatibilidade do corpus com o esquema do RAG e o Methodology Engine; lacunas para curadoria | Criado em 21/10/2026 |
 | [`security/DADOS_PESSOAIS.md`](security/DADOS_PESSOAIS.md) | Dados pessoais: estado atual do CPF, necessidade e proposta de proteção | Criado em 21/10/2026 |
 | [`legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md`](legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md) | Requisitos dos Termos de Uso e da Política de Privacidade | Criado em 21/10/2026 |
 | [`design-system/COMPONENTES.md`](design-system/COMPONENTES.md) | Componentes do produto e origem no site | Criado em 21/10/2026 |

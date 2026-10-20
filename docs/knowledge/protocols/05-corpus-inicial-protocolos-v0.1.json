@@ -1,0 +1,299 @@
+{
+  "metadata": {
+    "product": "DM | Experience Intelligence",
+    "version": "0.1.0",
+    "status": "draft",
+    "owner": "DM Experience Design Studio",
+    "notice": "Conteúdo original inicial para curadoria, não aprovado para produção. Não reproduz conteúdos integrais de fontes externas; source_ids ficam vazios até revisão editorial e atribuição verificável."
+  },
+  "protocols": [
+    {
+      "id": "clarify_challenge",
+      "version": "0.1.0",
+      "status": "draft",
+      "owner": "DM Experience Design Studio",
+      "user_facing_title": "Entender o que você quer melhorar",
+      "purpose": "Clarificar situação, pessoas afetadas, escopo, indícios e resultado desejado.",
+      "intent_tags": [
+        "vague_challenge"
+      ],
+      "applicable_contexts": [
+        "generic_service_experience"
+      ],
+      "do_not_apply_when": [
+        "permission_missing",
+        "unmanaged_safety_or_privacy_risk"
+      ],
+      "prerequisites": [
+        "challenge_scoped",
+        "risk_screened",
+        "permissions_checked"
+      ],
+      "steps_for_user": [
+        "Descreva o que acontece, com suas palavras.",
+        "Diga quem é afetado, onde e quando.",
+        "Conte como percebeu o problema e o que gostaria que fosse diferente.",
+        "Revise o resumo do desafio antes de prosseguir."
+      ],
+      "questions": [],
+      "expected_outputs": [
+        "Desafio editável com fatos, percepções e perguntas pendentes."
+      ],
+      "quality_checks": [
+        "Não transformar uma opinião inicial em causa comprovada.",
+        "Não pressupor solução digital."
+      ],
+      "if_user_cannot_do_it": [
+        "Se não souber explicar o problema, descreva um episódio concreto ou peça a alguém da operação para contar o que observou."
+      ],
+      "risk_and_privacy": [
+        "Minimizar dados pessoais",
+        "Exigir autorização contextual quando cabível"
+      ],
+      "source_ids": [],
+      "reviewed_by": null,
+      "reviewed_at": null,
+      "expires_at": null
+    },
+    {
+      "id": "review_existing_signals",
+      "version": "0.1.0",
+      "status": "draft",
+      "owner": "DM Experience Design Studio",
+      "user_facing_title": "Olhar o que a organização já sabe",
+      "purpose": "Inventariar informações existentes sem extrapolar.",
+      "intent_tags": [
+        "available_existing_records"
+      ],
+      "applicable_contexts": [
+        "generic_service_experience"
+      ],
+      "do_not_apply_when": [
+        "permission_missing",
+        "unmanaged_safety_or_privacy_risk"
+      ],
+      "prerequisites": [
+        "challenge_scoped",
+        "risk_screened",
+        "permissions_checked"
+      ],
+      "steps_for_user": [
+        "Pergunte onde a equipe registra atendimentos, reclamações ou dúvidas.",
+        "Separe registros relevantes sem dados pessoais desnecessários.",
+        "Anote período, fonte e limitações.",
+        "Liste o que ainda precisamos descobrir."
+      ],
+      "questions": [],
+      "expected_outputs": [
+        "Inventário de registros e lacunas."
+      ],
+      "quality_checks": [
+        "Não confundir quantidade de queixas com prevalência sem denominador.",
+        "Não copiar dados clínicos identificáveis."
+      ],
+      "if_user_cannot_do_it": [
+        "Se não houver registros, anote a ausência e use observação permitida ou conversas voluntárias como alternativa."
+      ],
+      "risk_and_privacy": [
+        "Minimizar dados pessoais",
+        "Exigir autorização contextual quando cabível"
+      ],
+      "source_ids": [],
+      "reviewed_by": null,
+      "reviewed_at": null,
+      "expires_at": null
+    },
+    {
+      "id": "guided_conversation",
+      "version": "0.1.0",
+      "status": "draft",
+      "owner": "DM Experience Design Studio",
+      "user_facing_title": "Conversar com quem vive a experiência",
+      "purpose": "Captar relatos contextualizados sem induzir respostas.",
+      "intent_tags": [
+        "missing_person_perspective"
+      ],
+      "applicable_contexts": [
+        "generic_service_experience"
+      ],
+      "do_not_apply_when": [
+        "permission_missing",
+        "unmanaged_safety_or_privacy_risk"
+      ],
+      "prerequisites": [
+        "challenge_scoped",
+        "risk_screened",
+        "permissions_checked"
+      ],
+      "steps_for_user": [
+        "Defina com quem é apropriado conversar e peça autorização quando cabível.",
+        "Comece com: 'Conte como foi sua experiência'.",
+        "Peça exemplos concretos e evite sugerir respostas.",
+        "Registre o relato fielmente e marque interpretações em campo separado."
+      ],
+      "questions": [],
+      "expected_outputs": [
+        "Relatos contextualizados e limites da escuta."
+      ],
+      "quality_checks": [
+        "Respeitar voluntariedade e privacidade.",
+        "Não registrar nomes ou detalhes sensíveis sem necessidade e base apropriada."
+      ],
+      "if_user_cannot_do_it": [
+        "Se não for possível conversar, procure feedback existente com autorização ou marque lacuna pendente."
+      ],
+      "risk_and_privacy": [
+        "Minimizar dados pessoais",
+        "Exigir autorização contextual quando cabível"
+      ],
+      "source_ids": [],
+      "reviewed_by": null,
+      "reviewed_at": null,
+      "expires_at": null
+    },
+    {
+      "id": "observation_light",
+      "version": "0.1.0",
+      "status": "draft",
+      "owner": "DM Experience Design Studio",
+      "user_facing_title": "Observar como acontece na prática",
+      "purpose": "Compreender etapas e fricções observáveis no ambiente real.",
+      "intent_tags": [
+        "missing_real_world_behavior"
+      ],
+      "applicable_contexts": [
+        "generic_service_experience"
+      ],
+      "do_not_apply_when": [
+        "permission_missing",
+        "unmanaged_safety_or_privacy_risk"
+      ],
+      "prerequisites": [
+        "challenge_scoped",
+        "risk_screened",
+        "permissions_checked"
+      ],
+      "steps_for_user": [
+        "Defina local e objetivo; confirme permissões.",
+        "Observe a sequência do serviço sem interferir ou expor pessoas.",
+        "Anote fatos visíveis, horários relativos e pontos de espera sem identificar pessoas.",
+        "Separe fatos observados de hipóteses."
+      ],
+      "questions": [],
+      "expected_outputs": [
+        "Registro de observação, contexto e limitações."
+      ],
+      "quality_checks": [
+        "Não realizar observação oculta ou invasiva.",
+        "Ambientes de saúde e situações sensíveis exigem autorização e cuidados adicionais."
+      ],
+      "if_user_cannot_do_it": [
+        "Se não houver permissão, peça um walkthrough conduzido por profissional autorizado ou use registros existentes."
+      ],
+      "risk_and_privacy": [
+        "Minimizar dados pessoais",
+        "Exigir autorização contextual quando cabível"
+      ],
+      "source_ids": [],
+      "reviewed_by": null,
+      "reviewed_at": null,
+      "expires_at": null
+    },
+    {
+      "id": "service_flow_walkthrough",
+      "version": "0.1.0",
+      "status": "draft",
+      "owner": "DM Experience Design Studio",
+      "user_facing_title": "Entender como o atendimento funciona por trás",
+      "purpose": "Conectar experiência percebida e etapas operacionais.",
+      "intent_tags": [
+        "operational_flow_unknown"
+      ],
+      "applicable_contexts": [
+        "generic_service_experience"
+      ],
+      "do_not_apply_when": [
+        "permission_missing",
+        "unmanaged_safety_or_privacy_risk"
+      ],
+      "prerequisites": [
+        "challenge_scoped",
+        "risk_screened",
+        "permissions_checked"
+      ],
+      "steps_for_user": [
+        "Convide quem executa o serviço a explicar o fluxo real.",
+        "Liste o que acontece antes, durante e depois do contato.",
+        "Marque transferências, esperas, canais, sistemas e responsáveis.",
+        "Compare a explicação da equipe com o que pessoas afetadas relatam."
+      ],
+      "questions": [],
+      "expected_outputs": [
+        "Fluxo inicial de operação e pontos a validar."
+      ],
+      "quality_checks": [
+        "Não atribuir culpa a trabalhadores sem evidência.",
+        "Distinguir procedimento previsto e prática observada."
+      ],
+      "if_user_cannot_do_it": [
+        "Se a equipe estiver indisponível, reúna orientações de atendimento existentes e registre dúvidas a confirmar."
+      ],
+      "risk_and_privacy": [
+        "Minimizar dados pessoais",
+        "Exigir autorização contextual quando cabível"
+      ],
+      "source_ids": [],
+      "reviewed_by": null,
+      "reviewed_at": null,
+      "expires_at": null
+    },
+    {
+      "id": "small_change_test",
+      "version": "0.1.0",
+      "status": "draft",
+      "owner": "DM Experience Design Studio",
+      "user_facing_title": "Testar uma melhoria pequena e segura",
+      "purpose": "Avaliar intervenção controlável e seus efeitos com prudência.",
+      "intent_tags": [
+        "low_risk_intervention_ready"
+      ],
+      "applicable_contexts": [
+        "generic_service_experience"
+      ],
+      "do_not_apply_when": [
+        "permission_missing",
+        "unmanaged_safety_or_privacy_risk"
+      ],
+      "prerequisites": [
+        "challenge_scoped",
+        "risk_screened",
+        "permissions_checked"
+      ],
+      "steps_for_user": [
+        "Escolha uma mudança reversível aprovada pelo responsável.",
+        "Registre como a experiência ocorre antes da mudança.",
+        "Defina onde, quando e para quem será o teste.",
+        "Observe efeitos, incidentes e feedback; decida manter, ajustar ou interromper."
+      ],
+      "questions": [],
+      "expected_outputs": [
+        "Plano e resultado de experimento seguro com limitações."
+      ],
+      "quality_checks": [
+        "Não alterar procedimentos clínicos, de segurança ou direitos de pessoas sem autorização e expertise.",
+        "Comparação antes/depois não prova causalidade isoladamente."
+      ],
+      "if_user_cannot_do_it": [
+        "Se a mudança exigir aprovação ou envolver risco, suspenda o teste e solicite avaliação responsável."
+      ],
+      "risk_and_privacy": [
+        "Minimizar dados pessoais",
+        "Exigir autorização contextual quando cabível"
+      ],
+      "source_ids": [],
+      "reviewed_by": null,
+      "reviewed_at": null,
+      "expires_at": null
+    }
+  ]
+}

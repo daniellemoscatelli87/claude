@@ -328,6 +328,20 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - CPF só no futuro, se houver necessidade, com criptografia e HMAC (`docs/security/DADOS_PESSOAIS.md`).
 - **Estado:** implementado e testado, **não aplicado no banco e não publicado**. Ver o Implementation Log de 21/10/2026.
 
+## D-028 · 21/10/2026 · Corpus inicial de protocolos incorporado como rascunho
+
+- **Origem:** Dona do produto (envio do arquivo `05-corpus-inicial-protocolos-v0.1.json`).
+- **Decisão:**
+  - o arquivo foi incorporado sem alteração em `docs/knowledge/protocols/`;
+  - os 6 protocolos são **rascunhos iniciais, não aprovados para produção** e não são metodologia definitiva;
+  - não serão recriados do zero;
+  - serão aprofundados com as fontes do RAG e a validação da dona do produto como especialista;
+  - a arquitetura continua extensível para novos métodos de Service Design, UX Research, CX, Business Design, operações e outras disciplinas.
+- **Compatibilidade:** `docs/knowledge/PROTOCOLS_COMPATIBILITY.md`.
+  - **Esquema do RAG:** os 6 protocolos têm todos os 19 campos obrigatórios.
+  - **Methodology Engine:** formato de id adotado do corpus; lacunas L1 a L8 registradas para a curadoria (instrumentos, critérios de suficiência, tipo de evidência, fase, vocabulário das etiquetas, entradas, um termo de jargão, cuidados específicos).
+- **Nenhuma alteração** de código ou banco.
+
 ---
 
 ## Decisões pendentes
@@ -342,6 +356,9 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 
   Aguarda a decisão.
 
-- **P-005 · 20/10/2026 · Arquivos citados no RAG e ausentes:** `05-corpus-inicial-protocolos-v0.1.json` (conteúdo dos protocolos), `SOURCE_CATALOG.json`, `RAG_SOURCE_PLAN.md` e `RAG_INTEGRATION_NOTES.md`. Ver `docs/knowledge/RAG_DIVERGENCES.md`.
+- **P-005 · Arquivos citados no RAG:**
+  - `05-corpus-inicial-protocolos-v0.1.json` foi recebido em 21/10/2026 (D-028);
+  - continuam ausentes `SOURCE_CATALOG.json`, `RAG_SOURCE_PLAN.md` e `RAG_INTEGRATION_NOTES.md`, que não bloqueiam o UX-3a.
+- **P-008 · 21/10/2026 · Uso do corpus nos testes do UX-3a** (seção 5 de `docs/knowledge/PROTOCOLS_COMPATIBILITY.md`): usar os 6 protocolos como estão, como catálogo `draft`, só com dados fictícios, com instrumentos gerados pela IA dentro dos passos e cuidados de cada protocolo e as lacunas L1 a L8 no relatório de qualidade. Aguarda aprovação.
 
 Outras pendências de produto (preço, nicho, provedor de IA etc.) estão na seção 14 da visão.

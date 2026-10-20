@@ -16,9 +16,9 @@ Comparação feita em 20/10/2026 entre [`RAG_ARCHITECTURE.md`](RAG_ARCHITECTURE.
 
 ## Arquivos citados pelo documento e ausentes no repositório
 
-- `05-corpus-inicial-protocolos-v0.1.json`: rascunho original dos protocolos (seed);
+- ~~`05-corpus-inicial-protocolos-v0.1.json`~~: **recebido em 21/10/2026** e incorporado em [`protocols/`](protocols/05-corpus-inicial-protocolos-v0.1.json); compatibilidade em [`PROTOCOLS_COMPATIBILITY.md`](PROTOCOLS_COMPATIBILITY.md);
 - `docs/knowledge/SOURCE_CATALOG.json` (origem: `catalogo_fontes_rag_especialista.json`, 89 fontes candidatas);
 - `docs/knowledge/RAG_SOURCE_PLAN.md` (origem: `plano_construcao_rag_especialista.md`);
 - `docs/knowledge/RAG_INTEGRATION_NOTES.md`.
 
-O primeiro é o mais importante para o UX-3a: contém o conteúdo dos protocolos escrito pelo estúdio. Sem ele, o Claude teria de redigir os protocolos, o que exigiria a revisão e a aprovação da dona do produto antes de qualquer uso.
+Os outros três seguem ausentes e não bloqueiam o UX-3a.
