@@ -86,6 +86,19 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 | 6 | Oferta especializada: regras, cartões, consentimento e notificação ao estúdio | Transformar | Planejado (não autorizado) |
 | 7 | Teste de ponta a ponta: clínica, hotel e experiência do colaborador, sem regras fixas por setor | Avaliar | Planejado (não autorizado) |
 
+### Primeiro acesso, cadastro B2B e investigação adaptativa: proposto, aguardando aprovação
+
+Especificação: `docs/product/ux-onboarding/` (kit v1.0). Proposta e comparação com o código: [`UX_ONBOARDING_PROPOSAL.md`](UX_ONBOARDING_PROPOSAL.md). Nada implementado.
+
+| ID | Item | Elo | Status |
+|---|---|---|---|
+| UX-1 | Entrada pública com proposta de valor, conta (nome, mostrar senha, esqueci a senha, reenviar confirmação), boas-vindas só no primeiro acesso, mensagens globais | Base · Identificar | Proposto (aguardando aprovação) |
+| UX-2 | Cadastro da organização com campos opcionais (segmento, o que oferece, papel, tipo, porte) e edição posterior auditada | Base | Proposto (aguardando aprovação); exige migração |
+| UX-3 | Área de trabalho, entrada do desafio com pistas, revisão com IA desligada, motor de condução por regras com protocolo versionado no lugar das perguntas fixas, progresso | Identificar · Investigar | Proposto (aguardando aprovação) |
+| UX-4 | Plano de investigação gerado pela IA em lote, salvo e versionado, novo plano só com gatilho | Investigar | Futuro; depende de IA autorizada (D-017, D-018, D-019) |
+| UX-5 | Simulação "Visualizar experiência de cliente" para a master | Base | Futuro |
+| UX-6 | Convite de pessoas para a organização e apoio especializado contextual | Base · Transformar | Futuro |
+
 ### IA independente de fornecedor (D-019): planejado, não autorizado
 
 Diretrizes completas na seção 1 de [`PRODUCT_ARCHITECTURE.md`](PRODUCT_ARCHITECTURE.md). Nenhum item abaixo deve ser antecipado.

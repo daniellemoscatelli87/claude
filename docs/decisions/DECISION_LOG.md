@@ -176,4 +176,11 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 
 ## Decisões pendentes
 
-Nenhuma no momento. Pendências de produto (preço, nicho, provedor de IA etc.) estão na seção 14 da visão.
+- **P-004 · 20/10/2026 · Proposta de primeiro acesso, cadastro B2B e investigação adaptativa** ([`UX_ONBOARDING_PROPOSAL.md`](../product/UX_ONBOARDING_PROPOSAL.md)). Aguarda a dona do produto decidir:
+  - a assinatura (rodapé do kit ou "Dani Moscatelli Studio" no cabeçalho);
+  - se o nome da pessoa é obrigatório;
+  - a biblioteca de ícones `lucide-react`;
+  - a ordem dos cortes UX-1 a UX-3;
+  - o documento `docs/knowledge/RAG_ARCHITECTURE.md`, citado pelo kit e ausente no repositório.
+
+Outras pendências de produto (preço, nicho, provedor de IA etc.) estão na seção 14 da visão.

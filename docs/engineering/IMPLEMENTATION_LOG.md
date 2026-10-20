@@ -155,6 +155,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Acessibilidade:** botão com `aria-expanded`, painel como diálogo com título, foco vai para o painel ao abrir e volta ao botão ao fechar; fecha com Esc, com o "×" ou tocando fora.
 - **Testes:** `npm test` 31 de 31 (3 novos, iniciais do avatar); `typecheck` sem erros; `lint` 0 erros; `build` ok. Navegador com servidor simulado, 390 px: master e cliente; ícone carrega; painel abre, recebe o foco, mostra as opções certas para cada uma (cliente sem "Área master" e sem troca de organização), fecha com Esc e tocando fora, foco volta ao botão; sem rolagem lateral; nenhum erro de página.
 
+## 2026-10-20 · Kit de UX recebido e proposta (só documentação)
+
+- **Feito:** kit `DM_Experience_Intelligence_UX_Onboarding_Dinamico_v1.zip` copiado sem alteração para `docs/product/ux-onboarding/` (`cmp` confirmou os 4 arquivos idênticos); proposta em `docs/product/UX_ONBOARDING_PROPOSAL.md`; itens UX-1 a UX-6 no Backlog; pendência P-004 no Decision Log.
+- **Achado:** as perguntas de enquadramento atuais (`src/domain/challenge/framing.ts`) são 5 perguntas fixas, iguais para todos os desafios e com exemplos de saúde, o que contraria o kit e D-003. A proposta substitui por um motor de condução por regras com protocolo versionado.
+- **Código, banco e configurações:** nenhum alterado.
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:
