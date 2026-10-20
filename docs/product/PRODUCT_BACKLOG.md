@@ -68,7 +68,7 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 | ID | Item | Status |
 |---|---|---|
 | C2-11 | Publicar a aplicação (segundo site no Netlify, subdomínio) | Aguardando a dona do produto |
-| C2-12 | Liberar cadastro e endereço de retorno do login no Supabase | Endereço de retorno `https://app.danimoscatelli.com.br/**` adicionado pela dona do produto em 20/10/2026; configuração de cadastro e confirmação de e-mail em verificação |
+| C2-12 | Liberar cadastro e endereço de retorno do login no Supabase | Concluído em 20/10/2026 pela dona do produto: endereço de retorno `https://app.danimoscatelli.com.br/**` adicionado; conferido que o cadastro por e-mail está ligado, "Confirm email" ligado e login anônimo desligado. Site URL não alterado |
 | C2-13 | Teste com login real e IA real, no celular | Depois da publicação e da revisão do tratamento de dados do Gemini |
 | C2-14 | Teste real de concorrência dos limites da IA (várias chamadas ao mesmo tempo, em conexões diferentes) | **Obrigatório antes de ativar a IA para clientes** (D-018) |
 
