@@ -11,6 +11,7 @@ Início do design system da DM | Experience Intelligence (pedido da dona do prod
 | `CampoSenha` | `campos.tsx` | Senha de entrada com mostrar e ocultar | Novo |
 | `CampoTexto` | `campos.tsx` | Rótulo, ajuda e erro ligados ao campo (`aria-describedby`, `aria-invalid`) | Padrão de erro junto ao campo do kit de UX |
 | `BarraProgresso` | `campos.tsx` | "Etapa X de N" e barra de progresso acessível (`role="progressbar"`) | Novo (cadastro em etapas, D-025) |
+| `TituloEtapa` | `campos.tsx` | Título de cada etapa do cadastro com ícone vermelho (`--red`) sobre base quadrada rosa clara (`--red-tint`), 44 px, cantos arredondados (12 px). "Seus dados": `UserRound`; "Empresa ou negócio": `Building2` | Novo (mesmo estilo do ícone do card do primeiro desafio) |
 | `Rodape` | `campos.tsx` | Igual ao rodapé do site: "© {ano} Dani Moscatelli • Experience Design Studio. Todos os direitos reservados." · "Curitiba - PR" · "Política de privacidade" (do site). Sem o link "Área restrita", que é da administração do site | `index.html` do site |
 | `CampoCnpj` | `campos.tsx` | Máscara `00.000.000/0000-00` e validação dos dígitos (a mesma no banco) | Novo |
 | `CampoConfirmacao` | `campos.tsx` | Caixa de marcação com texto (aceites e declarações), erro junto ao campo | Novo |

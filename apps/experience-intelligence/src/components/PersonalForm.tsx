@@ -7,12 +7,12 @@
 // Campos do design system (src/design-system), com os mesmos padrões dos formulários do site.
 import { useState } from "react";
 import Link from "next/link";
-import { MailCheck } from "lucide-react";
+import { MailCheck, UserRound } from "lucide-react";
 import { FieldErrors, resendConfirmation, saveMyProfile, signUpWithProfile, type MyProfile } from "@/application/profile";
 import { mensagemDeErro } from "@/application/errors";
 import { formatarTelefone } from "@/domain/profile/personal";
 import { AVISO_TITULO } from "@/domain/privacy/aviso";
-import { CampoConfirmacao, CampoEmail, CampoEstadoCidade, CampoSenhaNova, CampoTelefone, CampoTexto, Janela } from "@/design-system/campos";
+import { CampoConfirmacao, CampoEmail, CampoEstadoCidade, CampoSenhaNova, CampoTelefone, CampoTexto, Janela, TituloEtapa } from "@/design-system/campos";
 import { AvisoPrivacidade } from "./AvisoPrivacidade";
 import { useSession } from "./session";
 
@@ -62,7 +62,7 @@ export function PersonalForm({ modo, perfil, email: emailConta }: { modo: Modo; 
     <>
       {modo !== "editar" && (
         <>
-          <h2 className="etapa-titulo">Seus dados</h2>
+          <TituloEtapa icone={<UserRound size={22} />}>Seus dados</TituloEtapa>
           <p className="lead">{modo === "cadastro"
             ? "Comece pelos seus dados. Depois, você cadastra sua empresa ou negócio. O acesso à plataforma está disponível apenas para pessoas convidadas nesta fase."
             : "Antes de continuar, precisamos de alguns dados da pessoa responsável pela conta."}</p>

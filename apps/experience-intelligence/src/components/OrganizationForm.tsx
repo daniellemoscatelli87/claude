@@ -8,7 +8,7 @@ import { setCurrentOrganizationId, setupOrganization, updateOrganizationContext,
 import { mensagemDeErro } from "@/application/errors";
 import { AREAS, PORTES, SEGMENTOS, SEGMENTO_OUTRO, TIPOS } from "@/domain/organization/context";
 import { useSession } from "./session";
-import { CampoCnpj } from "@/design-system/campos";
+import { CampoCnpj, TituloEtapa } from "@/design-system/campos";
 import { maskCnpj } from "@/design-system/padroes";
 
 const NAO_INFORMAR_SEGMENTO = "Prefiro não informar";
@@ -61,7 +61,7 @@ export function OrganizationForm({ org, onSaved, etapa = false }: { org?: MyOrga
   return (
     <>
       {etapa ? (
-        <h2 className="etapa-titulo">Empresa ou negócio</h2>
+        <TituloEtapa icone={<Building2 size={22} />}>Empresa ou negócio</TituloEtapa>
       ) : (
         <>
           <p className="eyebrow"><Building2 size={18} aria-hidden="true" /> {editando ? "Sua empresa ou negócio" : "Preparando seu espaço de trabalho"}</p>

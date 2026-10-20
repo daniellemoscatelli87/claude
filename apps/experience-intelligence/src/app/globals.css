@@ -124,7 +124,9 @@ input[aria-invalid="true"], select[aria-invalid="true"] { border-color: #c53030;
 .progresso-texto { margin: 0 0 6px; font-size: 13px; font-weight: 700; color: var(--muted); }
 .progresso-barra { height: 8px; border-radius: 999px; background: var(--line); overflow: hidden; }
 .progresso-barra span { display: block; height: 100%; background: var(--red); border-radius: 999px; transition: width .3s; }
-.etapa-titulo { font-size: 1.25rem; margin: 0 0 6px; }
+.etapa-cabecalho { display: flex; align-items: center; gap: 12px; margin: 0 0 8px; }
+.etapa-icone { display: inline-grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--red-tint); color: var(--red); }
+.etapa-titulo { font-size: 1.25rem; margin: 0; }
 .sugestoes { display: flex; flex-wrap: wrap; gap: 6px; }
 .sugestoes button { font: inherit; font-size: 12px; font-weight: 600; color: #475569; background: #f8fafc; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; min-height: 32px; }
 .sugestoes button:hover { border-color: var(--red); color: var(--red); }

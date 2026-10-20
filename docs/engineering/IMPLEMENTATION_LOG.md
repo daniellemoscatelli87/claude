@@ -308,6 +308,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - o CNPJ tem máscara, recusa dígito errado e é enviado só com dígitos;
     - "Meus dados" mostra o aceite e não reenvia aceites na edição.
 
+## 2026-10-21 · Ícone nos títulos das etapas do cadastro (não publicado)
+
+- Pedido da dona do produto: ícone vermelho sobre base quadrada rosa clara, com cantos arredondados, ao lado do título de cada etapa.
+- Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
+- Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
+
 ## 2026-10-21 · Corpus inicial de protocolos incorporado (D-028), só documentação
 
 - **Feito:**

@@ -1,6 +1,6 @@
 "use client";
 // Componentes de campo do design system, com os mesmos comportamentos dos formulários do site.
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { Eye, EyeOff, X } from "lucide-react";
 import { ESTADOS, forcaSenha, maskCnpj, maskPhone, requisitosSenha, sugestoesEmail } from "./padroes";
 
@@ -197,6 +197,16 @@ export function CampoSenha({ value, onChange, erro, label = "Senha" }: { value: 
 }
 
 /** Barra de progresso do cadastro: "Etapa X de N". */
+/** Título de etapa do cadastro com ícone vermelho sobre base quadrada rosa clara de cantos arredondados. */
+export function TituloEtapa({ icone, children }: { icone: ReactNode; children: ReactNode }) {
+  return (
+    <div className="etapa-cabecalho">
+      <span className="etapa-icone" aria-hidden="true">{icone}</span>
+      <h2 className="etapa-titulo">{children}</h2>
+    </div>
+  );
+}
+
 export function BarraProgresso({ atual, total }: { atual: number; total: number }) {
   return (
     <div className="progresso">
