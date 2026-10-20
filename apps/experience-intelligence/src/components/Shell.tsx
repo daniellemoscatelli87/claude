@@ -1,6 +1,6 @@
 "use client";
 // Moldura das telas: cabeçalho e conteúdo. Logado: ícone DM (o mesmo da Home do site), divisor e nome da
-// plataforma, com "Dani Moscatelli studio" embaixo, à esquerda; à direita, avatar com seta que abre a barra lateral de perfil.
+// plataforma, com "Dani Moscatelli Studio" embaixo, à esquerda; à direita, avatar com seta que abre a barra lateral de perfil.
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/infrastructure/supabase";
@@ -21,7 +21,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 <span className="brand-divisor" aria-hidden="true" />
                 <span className="brand-texto">
                   <span className="brand-nome">Experience Intelligence</span>
-                  <span className="brand-sub">Dani Moscatelli studio</span>
+                  <span className="brand-sub">Dani Moscatelli Studio</span>
                 </span>
               </Link>
               <MenuPerfil />
