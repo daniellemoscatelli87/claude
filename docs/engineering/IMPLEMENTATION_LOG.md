@@ -308,6 +308,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - o CNPJ tem máscara, recusa dígito errado e é enviado só com dígitos;
     - "Meus dados" mostra o aceite e não reenvia aceites na edição.
 
+## 2026-10-21 · Tela de entrada com a proposta de valor (Tela A do kit de UX, não publicado)
+
+- Pedido da dona do produto: a tela de entrada não trazia o contexto do produto. Aplicada a Tela A de `docs/product/ux-onboarding/02-COPY-COMPLETA-E-COMPONENTES.md` com os textos do kit: eyebrow, título, descrição, 3 microcartões (`Target`, `Compass`, `TrendingUp`), "Entrar na plataforma" (leva ao formulário na mesma página), "Criar minha conta" (/cadastro/) e selo "Acesso por convite nesta fase". O formulário de entrar continua abaixo. Rodapé mantido como o do site (pedido anterior da dona do produto), no lugar da assinatura do kit.
+- Arquivos: `src/app/page.tsx`, `src/components/AuthForm.tsx`, `src/app/globals.css`.
+- Verificado: `tsc`, `oxlint` (sem erros), `vitest` 48 de 48, build e navegador a 320, 375 e 1024 px, sem erros e sem rolagem lateral.
+
 ## 2026-10-21 · E-mail escondido na barra lateral (não publicado)
 
 - Pedido da dona do produto: na barra lateral de perfil, esconder o e-mail. Mostra o nome da pessoa e, abaixo, a empresa; sem nome cadastrado (ex.: conta master), só a empresa. `src/components/Shell.tsx`.

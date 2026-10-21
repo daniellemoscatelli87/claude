@@ -31,7 +31,7 @@ export function AuthForm() {
   }
 
   return (
-    <form className="card stack" onSubmit={enviar} noValidate>
+    <form id="entrar" className="card stack" onSubmit={enviar} noValidate>
       <h2>Que bom ter você por aqui.</h2>
       <p className="hint" style={{ margin: 0 }}>Entre para continuar os desafios da sua empresa ou negócio.</p>
       <CampoEmail label="E-mail" value={email} onChange={setEmail} required />
@@ -39,7 +39,6 @@ export function AuthForm() {
       {erro && <p className="msg err" role="alert">{erro}</p>}
       <button className="btn btn-primary btn-block" disabled={enviando}>{enviando ? "Aguarde…" : "Entrar"}</button>
       <p className="center" style={{ margin: 0 }}>Ainda não tem conta? <Link href="/cadastro/">Criar conta</Link></p>
-      <p className="hint center" style={{ margin: 0 }}>Acesso por convite nesta fase.</p>
     </form>
   );
 }

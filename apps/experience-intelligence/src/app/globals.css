@@ -127,6 +127,14 @@ input[aria-invalid="true"], select[aria-invalid="true"] { border-color: #c53030;
 .etapa-cabecalho { display: flex; align-items: center; gap: 12px; margin: 0 0 8px; }
 .etapa-icone { display: inline-grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--red-tint); color: var(--red); }
 .etapa-titulo { font-size: 1.25rem; margin: 0; }
+.valor { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 10px; }
+.valor li { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; }
+.valor b { display: block; color: var(--dark); }
+.valor span:not(.etapa-icone) { display: block; color: var(--muted); font-size: 14px; }
+.entrada-acoes { display: grid; gap: 10px; }
+.selo { display: table; margin: 14px auto 20px; padding: 6px 12px; border-radius: 999px; background: var(--red-tint); color: var(--red-dark); font-size: 13px; font-weight: 700; }
+#entrar { scroll-margin-top: 16px; }
+@media (min-width: 720px) { .valor { grid-template-columns: repeat(3, 1fr); } .valor li { align-items: flex-start; flex-direction: column; } .entrada-acoes { grid-template-columns: 1fr 1fr; } }
 .sugestoes { display: flex; flex-wrap: wrap; gap: 6px; }
 .sugestoes button { font: inherit; font-size: 12px; font-weight: 600; color: #475569; background: #f8fafc; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; min-height: 32px; }
 .sugestoes button:hover { border-color: var(--red); color: var(--red); }

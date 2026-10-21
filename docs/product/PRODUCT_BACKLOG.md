@@ -99,7 +99,7 @@ Especificação: `docs/product/ux-onboarding/` (kit v1.0). Proposta e comparaç�
 | UX-11 | Contato do site vinculado ao perfil e desafios organizados em projetos (P-009) | Base · Identificar | Pedido detalhado; aguarda proposta e aprovação |
 | UX-12 | Botão "Cadastrar" no site do estúdio, apontando para /cadastro/ | Base | Depois (pedido da dona do produto) |
 | UX-3b | Adaptação: análise da IA nos marcos, "O que descobrimos até aqui", decisão proposta (aprofundar, outra perspectiva, revisar hipótese, avançar) validada pelo Engine e confirmada pela pessoa | Investigar · Compreender | Proposto (aguardando aprovação) |
-| UX-1 | Entrada pública, cadastro completo do cliente fora do acesso público (pagamento pulado nos testes), boas-vindas, "Esqueci minha senha", rodapé "by Dani Moscatelli Studio" (D-022) | Base | Proposto (aguardando aprovação) |
+| UX-1 | Entrada pública (Tela A implementada em 21/10/2026, não publicada), cadastro completo do cliente fora do acesso público (pagamento pulado nos testes), boas-vindas, "Esqueci minha senha", rodapé "by Dani Moscatelli Studio" (D-022) | Base | Proposto (aguardando aprovação) |
 | UX-4 | Revisão dos planos e análises da IA pela dona do produto nos 3 casos fictícios, antes de clientes reais | Investigar | Obrigatório antes de clientes reais |
 | UX-5 | Simulação "Visualizar experiência de cliente" para a master | Base | Futuro |
 | UX-6 | Convite de pessoas para a organização; encaminhamento a especialista | Base · Transformar | Futuro |
