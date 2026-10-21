@@ -26,6 +26,7 @@ Esta documentação é parte integrante do produto, não material de apoio desca
 - [`product/LANDING_COMERCIAL_PLANO.md`](product/LANDING_COMERCIAL_PLANO.md) e [`product/landing-comercial/`](product/landing-comercial/): especificação da landing comercial v1, complemento dos cinco conteúdos e plano de implementação (implementado, D-031).
 - [`product/LANDING_REVISAO_UIUX.md`](product/LANDING_REVISAO_UIUX.md): revisão de UI/UX da landing com a skill ui-ux-pro-max (pontos para decisão).
 - [`product/LANDING_REDESENHO_PROPOSTA.md`](product/LANDING_REDESENHO_PROPOSTA.md): proposta de redesenho da landing (conceito da linha de visibilidade; aguarda aprovação).
+- [`product/pagina-produto-v2/`](product/pagina-produto-v2/): direção v2 da página do produto (não é uma segunda Home) e proposta de composição (`PROPOSTA_COMPOSICAO.md`, aguarda aprovação).
 | [`knowledge/RAG_ARCHITECTURE.md`](knowledge/RAG_ARCHITECTURE.md) | Knowledge Engine / RAG: camadas de conhecimento, protocolos, proveniência, recuperação e testes | Kit Completo v4 (copiado sem alteração) |
 | [`knowledge/RAG_DIVERGENCES.md`](knowledge/RAG_DIVERGENCES.md) | Diferenças entre o documento do RAG e as decisões recentes; arquivos citados e ausentes | Criado em 20/10/2026 |
 | [`knowledge/protocols/05-corpus-inicial-protocolos-v0.1.json`](knowledge/protocols/05-corpus-inicial-protocolos-v0.1.json) | Corpus inicial com os 6 protocolos (rascunho, não aprovado para produção) | Enviado pela dona do produto (copiado sem alteração) |
