@@ -1,6 +1,6 @@
 # Landing comercial v1: plano de implementação (aguarda aprovação)
 
-**Data:** 21/10/2026 · **Especificação:** [`landing-comercial/01-COPY-FINAL-E-ARQUITETURA-DA-LANDING.md`](landing-comercial/01-COPY-FINAL-E-ARQUITETURA-DA-LANDING.md) e [`02-INSTRUCOES-CLAUDE-CODE.md`](landing-comercial/02-INSTRUCOES-CLAUDE-CODE.md), enviadas pela dona do produto e guardadas sem alteração. · **Status:** nada programado.
+**Data:** 21/10/2026 · **Especificação:** [`landing-comercial/01-COPY-FINAL-E-ARQUITETURA-DA-LANDING.md`](landing-comercial/01-COPY-FINAL-E-ARQUITETURA-DA-LANDING.md) e [`02-INSTRUCOES-CLAUDE-CODE.md`](landing-comercial/02-INSTRUCOES-CLAUDE-CODE.md), enviadas pela dona do produto e guardadas sem alteração. · **Status:** nada programado. Decisões de 21/10/2026 na seção 8.
 
 Substitui a landing de D-030 (não publicada): copy, dados de mercado e componentes passam a ser os da especificação v1.
 
@@ -72,3 +72,19 @@ Marcações propostas (aviso honesto sem encher cada card):
 - **Riscos:** página longa no celular (mitigado com menu de âncoras e "Voltar ao topo"); excesso de promessa (mitigado pelas marcações da seção 3).
 - **Custo:** zero. Nenhum serviço novo.
 - **Testes:** tipos, lint, testes automáticos, build estático e navegador a 320, 375, 430 e 1280 px: teclado nas abas, stepper, FAQ e menu; Esc fecha o menu; sem rolagem lateral; sem "—"; todos os links com destino real; movimento reduzido respeitado; leitura com JavaScript desligado.
+
+## 8. Decisões da dona do produto (21/10/2026)
+
+- **Cores:** usar exatamente as cores que o app já tem.
+- **Botões de interesse (decisão A):** esses fluxos não serão feitos agora. Ficam fora: "Solicitar acesso antecipado" (header, hero, /entrar/), "Tenho interesse" e "Conversar sobre minha necessidade" (planos), "Conversar sobre consultoria" (seção 9 e CTA final) e "Falar com o estúdio" (FAQ). Ficam: no header "Entrar"; no hero "Ver como funciona" (primário) e a nota "Acesso por convite durante a fase de testes."; na seção 9 "Conhecer a plataforma"; no CTA final a microcopy de convite e o botão "Entrar". Os planos ficam sem botão.
+- **Esqueci minha senha:** incluir. Proposta:
+  - `/entrar/` ganha o link "Esqueci minha senha" → `/recuperar-senha/` (e-mail; resposta sempre igual, "Se houver uma conta com este e-mail, enviaremos um link para criar uma nova senha.", para não revelar quem tem conta);
+  - o link do e-mail abre `/redefinir-senha/`, com o campo de nova senha do design system (força, requisitos, confirmação), usando a troca de senha que já existe;
+  - recurso gratuito do Supabase Auth; o endereço de retorno `https://app.danimoscatelli.com.br/**` já está liberado (C2-12);
+  - atenção: o e-mail de redefinição usa o mesmo modelo e o mesmo envio do Supabase que o site usa; conferir o texto do modelo "Reset password" e o limite de envios por hora do projeto antes de liberar.
+- **Medição de acessos:** Google Analytics 4, na landing do app e também na página inicial do site do estúdio. Implicações (LGPD):
+  - o GA4 usa cookies: carregar só depois do consentimento, com aviso de cookies (aceitar ou recusar, com a mesma facilidade) no app e no site;
+  - a Política de Privacidade do site hoje diz "O site não usa cookies de publicidade nem ferramentas de rastreamento de visitantes": precisa ser atualizada antes de ligar a medição; o aviso de privacidade do app também;
+  - no app, medir só as páginas públicas (landing, entrar, cadastro), nunca a área logada, sem identificar a pessoa;
+  - eventos: `hero_cta_click`, `demo_tab_change`, `faq_expand`, `login_click` (os de planos e consultoria saem junto com os botões);
+  - a dona do produto cria a propriedade no GA4 e informa o ID de medição (`G-...`, não é segredo); sem custo.
