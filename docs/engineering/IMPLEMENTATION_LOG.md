@@ -308,6 +308,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - o CNPJ tem máscara, recusa dígito errado e é enviado só com dígitos;
     - "Meus dados" mostra o aceite e não reenvia aceites na edição.
 
+## 2026-10-21 · Landing: 7 melhorias da revisão de UI/UX aplicadas (não publicado)
+
+- Detalhes em `docs/product/LANDING_REVISAO_UIUX.md`. Arquivos: `globals.css`, `Landing.tsx`, `landing/Interativos.tsx`.
+- Verificado: `tsc`, `oxlint` (sem erros), build; contraste medido em todos os textos da landing (só o logotipo abaixo de 4,5:1); áreas de toque ≥ 44 px (exceto link dentro de frase); navegador a 320, 375, 430 e 1280 px sem rolagem lateral e sem erros; todas as interações retestadas.
+- A dona do produto não gostou do design geral (densa, pouco fluida, pouca variação de componentes): redesenho em proposta.
+
 ## 2026-10-21 · Landing comercial v1, recuperação de senha e GA4 com consentimento (D-031, não publicado)
 
 - Arquivos: `src/components/Landing.tsx`, `src/components/landing/{conteudo.ts,Cabecalho.tsx,Interativos.tsx}`, `src/components/AvisoCookies.tsx`, `src/infrastructure/analytics.ts`, `src/app/{entrar,recuperar-senha,redefinir-senha}/page.tsx`, `src/components/AuthForm.tsx` (textos), `src/components/Shell.tsx` (props `largo` e `medir`), `src/application/profile.ts` (`requestPasswordReset`), `src/app/layout.tsx` (Open Graph e marcação de sessão salva), `src/app/page.tsx`, `src/app/cadastro/page.tsx`, `globals.css` (`.lp-*`, `.cookies`). Sem mudança em banco, funções, IA ou regras de acesso.

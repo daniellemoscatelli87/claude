@@ -378,3 +378,24 @@ html.tem-sessao .sem-sessao { display: none; }
 }
 @media (min-width: 980px) { .lp-hero-grade { grid-template-columns: 1.15fr 1fr; gap: 48px; } }
 @media (prefers-reduced-motion: reduce) { .lp-camadas-diagrama span { transition: none; } }
+
+/* Revisão de UI/UX (docs/product/LANDING_REVISAO_UIUX.md) */
+/* 1. Contraste: vermelho pequeno e botão principal em --red-dark (5,67:1); cinza só sobre branco */
+.lp-sobre a, .lp .lp-ver-exemplo { color: var(--red-dark); }
+.lp .btn-primary { background: var(--red-dark); }
+.lp .btn-primary:hover { background: var(--dark); }
+.lp-secao:not(.lp-suave):not(.lp-escuro) .lp-lead, .lp-secao:not(.lp-suave):not(.lp-escuro) > .lp-wrap > .lp-nota,
+.lp-sintomas > .lp-nota, .lp-sintomas .lp-instrucao, .lp-trilha > .lp-nota, .lp-filtros > .lp-nota, .lp-caso p:not(.lp-selo), .lp-estado { color: var(--text); }
+.lp-suave .lp-card, .lp-suave .lp-painel, .lp-suave .lp-faq-item, .lp-suave .lp-split-card:not(.lp-split-escuro) { background: var(--card); }
+.lp-rodape .lp-nota { color: var(--text); }
+/* 2. Pular para o conteúdo */
+.pular { position: absolute; left: 12px; top: -60px; z-index: 60; background: var(--dark); color: #fff !important; padding: 12px 16px; border-radius: 12px; font-weight: 700; text-decoration: none; }
+.pular:focus { top: 12px; }
+#conteudo:focus { outline: none; }
+/* 3. Abas: sintomas quebram em linhas; nas faixas roláveis, sombra na borda enquanto há mais opções */
+.lp-sintomas .lp-abas { flex-wrap: wrap; overflow: visible; }
+.lp-abas.tem-mais { -webkit-mask-image: linear-gradient(90deg, #000 80%, transparent); mask-image: linear-gradient(90deg, #000 80%, transparent); }
+/* 4. Texto de leitura em 16 px */
+.lp-card > span, .lp-trilha-texto span, .lp-confianca-lista span, .lp-split-card ul, .lp-faq-item p { font-size: 16px; }
+/* 5. Áreas de toque de 44 px */
+.lp-sobre summary, .lp-ver-exemplo, .lp-topo .btn-pequeno, .lp-topo .brand, .lp-nav a, .lp-rodape-nav a, .lp-rodape-nav .btn-link, .lp-link-claro { min-height: 44px; display: inline-flex; align-items: center; }

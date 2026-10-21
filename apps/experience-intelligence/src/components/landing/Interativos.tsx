@@ -27,8 +27,19 @@ function teclasAbas(e: React.KeyboardEvent, atual: number, total: number, ir: (i
 function Abas<T extends { chave: string; nome: string }>({ itens, ativo, onAtivo, rotulo, id, icones, classe }: {
   itens: readonly T[]; ativo: number; onAtivo: (i: number) => void; rotulo: string; id: string; icones?: LucideIcon[]; classe?: string;
 }) {
+  const lista = useRef<HTMLDivElement>(null);
+  const [mais, setMais] = useState(false);
+  useEffect(() => {
+    const el = lista.current;
+    if (!el) return;
+    const medir = () => setMais(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+    medir();
+    el.addEventListener("scroll", medir, { passive: true });
+    window.addEventListener("resize", medir);
+    return () => { el.removeEventListener("scroll", medir); window.removeEventListener("resize", medir); };
+  }, []);
   return (
-    <div role="tablist" aria-label={rotulo} className={`lp-abas ${classe ?? ""}`}>
+    <div ref={lista} role="tablist" aria-label={rotulo} className={`lp-abas ${classe ?? ""}${mais ? " tem-mais" : ""}`}>
       {itens.map((it, i) => {
         const I = icones?.[i];
         return (
@@ -97,8 +108,8 @@ export function CamadasValor() {
         {PILARES.map((p, i) => {
           const I = ICONES_PILARES[i];
           return (
-            <li key={p.chave} className={`lp-card lp-pilar${foco === i ? " ativo" : ""}`} tabIndex={0}
-              onMouseEnter={() => setFoco(i)} onMouseLeave={() => setFoco(null)} onFocus={() => setFoco(i)} onBlur={() => setFoco(null)}>
+            <li key={p.chave} className={`lp-card lp-pilar${foco === i ? " ativo" : ""}`}
+              onMouseEnter={() => setFoco(i)} onMouseLeave={() => setFoco(null)}>
               <span className="etapa-icone" aria-hidden="true"><I size={22} /></span>
               <b>{p.titulo}</b>
               <span>{p.texto}</span>
@@ -205,13 +216,13 @@ export function TrilhaEntregaveis() {
           );
         })}
       </ol>
-      <div ref={painel} id="lp-entregavel" className="lp-painel lp-entregavel" aria-live="polite" tabIndex={-1}>
+      <div ref={painel} id="lp-entregavel" className="lp-painel lp-entregavel" aria-live="polite">
         <span className="lp-etiqueta">{e.etiqueta}</span>
         <h4 className="lp-h4">{ativo + 1}. {e.titulo}</h4>
         <p className="lp-texto-forte">{e.descricao}</p>
         <p><span className="lp-rotulo">No exemplo</span>{e.previa}</p>
         <p>{e.detalhe}</p>
-        <button type="button" className="btn btn-ghost" onClick={() => { setAtivo(proximo); painel.current?.focus(); }}>
+        <button type="button" className="btn btn-ghost" onClick={() => setAtivo(proximo)}>
           Explorar outro entregável: {ENTREGAVEIS[proximo].titulo} <ArrowRight size={16} aria-hidden="true" />
         </button>
       </div>

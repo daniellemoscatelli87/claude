@@ -42,10 +42,11 @@ export function Landing() {
     <div className="lp" id="inicio">
       {/* Sem JavaScript, os conteúdos de abas e perguntas ficam todos visíveis. */}
       <noscript><style>{".lp [hidden]{display:block !important}"}</style></noscript>
+      <a href="#conteudo" className="pular">Pular para o conteúdo</a>
       <CabecalhoLanding />
 
       {/* 01 Hero */}
-      <section className="lp-hero">
+      <section className="lp-hero" id="conteudo" tabIndex={-1}>
         <div className="lp-wrap lp-hero-grade">
           <div>
             <p className="eyebrow">Inteligência para transformar experiências</p>

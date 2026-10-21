@@ -1,6 +1,6 @@
 # Revisão de UI/UX da landing comercial (skill ui-ux-pro-max)
 
-**Data:** 21/10/2026 · **Escopo:** `src/components/Landing.tsx`, `src/components/landing/*`, estilos `.lp-*`. Só revisão: nada foi alterado.
+**Data:** 21/10/2026 · **Escopo:** `src/components/Landing.tsx`, `src/components/landing/*`, estilos `.lp-*`. Os 7 pontos foram aplicados no mesmo dia, a pedido da dona do produto (seção final).
 
 **Método:** checklist das 10 categorias da skill (`references/quick-reference.md`), buscas na base local da skill (`--domain ux`, `--domain landing`) e medições automáticas na página gerada (celular 375 px): contraste das cores, tamanho das áreas de toque, tamanhos de fonte, ordem dos títulos, foco pelo teclado sob o cabeçalho fixo e abas cortadas.
 
@@ -30,6 +30,12 @@
 - Padrão "Pricing-Focused Landing" da skill sugere destacar o plano mais indicado e botão em cada card. Não se aplica agora: os planos estão "em definição" e os botões de interesse ficaram fora por decisão da dona do produto.
 - A busca por "landing B2B SaaS consultoria" não teve correspondência na base da skill; nenhuma recomendação de estrutura foi inventada.
 
-## Próximo passo
+## Aplicado em 21/10/2026 ("Aplique todas as melhorias")
 
-Nada foi alterado. A dona do produto escolhe quais pontos aplicar; o item 1 mexe nas cores e precisa de decisão explícita.
+1. Links e texto vermelho pequeno e o botão principal da landing em `--red-dark` (5,67:1); hover do botão em `--dark`. Textos cinza só sobre branco; nas seções de fundo cinza, texto em `--text`. Medição automática de todos os textos: nenhum abaixo do mínimo, exceto o nome "Experience Intelligence" da marca (logotipo, isento pela WCAG), mantido como no site.
+2. Link "Pular para o conteúdo" no primeiro Tab.
+3. Sintomas quebram em linhas; no ciclo e na demonstração, a faixa rolável ganha uma sombra na borda enquanto há opções escondidas.
+4. Textos de leitura dos cards em 16 px.
+5. Áreas de toque de 44 px (sobre a pesquisa, ver exemplo, entrar, marca, links do menu e do rodapé). "Ver fonte" fica dentro da frase (exceção da WCAG para links no texto).
+6. Cards dos pilares sem foco do teclado (o realce é só visual).
+7. Painel do entregável anunciado só por `aria-live`, sem mover o foco.
