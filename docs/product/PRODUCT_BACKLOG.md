@@ -98,6 +98,7 @@ Especificação: `docs/product/ux-onboarding/` (kit v1.0). Proposta e comparaç�
 | UX-14 | Termos de Uso e Política de Privacidade do produto (requisitos em `docs/legal/`) | Base | Requisitos prontos; texto jurídico obrigatório antes do lançamento |
 | UX-11 | Contato do site vinculado ao perfil e desafios organizados em projetos (P-009) | Base · Identificar | Pedido detalhado; aguarda proposta e aprovação |
 | UX-16 | Landing page pública do produto separada do login (`/entrar/`), com 11 seções (`LANDING_PROPOSAL.md`) | Base | Implementado e testado (D-030), não publicado |
+| UX-17 | Landing comercial v1 (`landing-comercial/`), substitui a de UX-16 | Base | Plano apresentado (`LANDING_COMERCIAL_PLANO.md`); aguarda aprovação |
 | UX-12 | Botão "Cadastrar" no site do estúdio, apontando para /cadastro/ | Base | Depois (pedido da dona do produto) |
 | UX-3b | Adaptação: análise da IA nos marcos, "O que descobrimos até aqui", decisão proposta (aprofundar, outra perspectiva, revisar hipótese, avançar) validada pelo Engine e confirmada pela pessoa | Investigar · Compreender | Proposto (aguardando aprovação) |
 | UX-1 | Entrada pública (substituída pela landing, UX-16), cadastro completo do cliente fora do acesso público (pagamento pulado nos testes), boas-vindas, "Esqueci minha senha", rodapé "by Dani Moscatelli Studio" (D-022) | Base | Proposto (aguardando aprovação) |
