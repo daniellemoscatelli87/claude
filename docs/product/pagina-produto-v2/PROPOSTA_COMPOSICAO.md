@@ -102,3 +102,7 @@ No computador: topo em duas colunas (texto à esquerda, janela do app à direita
 ## 8. Decisões da dona do produto
 
 - **21/10/2026 · Decisão 1: opção B.** A página do produto fica no site do estúdio, em `danimoscatelli.com.br/experience-intelligence/`. Segue as convenções do site: página estática em `public/experience-intelligence/` (HTML, CSS e JavaScript próprios, como a Rede de Parceiros e a Store), sem tocar na página "Em breve". Entrar leva ao app (`app.danimoscatelli.com.br/entrar/`). O que fazer com a landing atual do app (`/` sem login) fica para uma decisão posterior.
+- **21/10/2026 · Decisão 2:**
+  - "Solicitar acesso antecipado" e as menções a acesso por convite saem da página (não existem para o público);
+  - "Conversar com especialista" abre o formulário de contato que já existe no site;
+  - planos: a parte comercial ainda não está definida (detalhe do tratamento na página: aguardando a dona do produto).
