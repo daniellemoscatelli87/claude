@@ -72,3 +72,9 @@ Proposta: transformar essa linha no **único elemento marcante** da página.
 - Rota de teste `src/app/prototipo-landing/page.tsx`, componentes em `src/components/prototipo/` (`Prototipo.tsx`, `prototipo.css`). A landing atual não foi alterada.
 - Rótulos do diagrama do topo tirados da seção 03 da especificação ("o que as pessoas vivenciam"; "processos, equipes, decisões, ambientes e tecnologias") e o termo "linha de visibilidade". O texto de apoio do topo fica a um toque ("Como a plataforma faz isso").
 - Verificado no navegador a 375 e 1280 px: sem rolagem lateral e sem erros; simulador desce as 3 camadas e mostra a pergunta orientadora; linha do tempo abre a etapa no lugar (celular) ou ao lado (computador); pasta abre o documento no lugar (celular) ou abaixo da fileira (computador).
+
+## 8. Nova direção a partir das referências do site (21/10/2026)
+
+- A dona do produto não aprovou o protótipo da "linha de visibilidade" (visual sem impacto, texto demais, conceito confuso, sem a cara da marca) e enviou as páginas do novo site do estúdio como referência (`stitch_high_fidelity_product_landing_page.zip`).
+- O protótipo foi refeito no visual dessas páginas: fundo cinza-azulado com grande superfície branca arredondada, selos em pílula, títulos centrados com trecho em vermelho, cards suaves, comparação em duas colunas (sintomas e plataforma × consultoria), órbitas (categoria), linha do tempo alternada (como funciona), abas em pílula (demonstração), grade "bento" (entregáveis), faixa escura (responsabilidade), cartão final centrado. Paleta da própria referência (vermelhos da marca e grafite); botões no vermelho escuro da referência (#C83232) para contraste.
+- No topo, em vez de foto ou painel com métricas (a especificação proíbe métricas inventadas), uma composição do produto com o desafio de exemplo e o ciclo interativo, marcada "Exemplo ilustrativo".
