@@ -115,8 +115,12 @@ export function CampoEstadoCidade({ uf, cidade, onChange, erro, disabled }: { uf
   return (
     <div className="uf-cidade-campo">
       <div className="uf-cidade">
-        <CampoBusca label="Estado" vazio="Selecione" opcoes={ESTADOS.map(([sigla, nome]) => ({ valor: sigla, rotulo: nome }))}
-          valor={uf} onEscolher={(v) => onChange(v, "")} disabled={disabled} invalido={invalido(!uf)} describedBy={d.describedBy} />
+        <label>Estado
+          <select value={uf} onChange={(e) => onChange(e.target.value, "")} disabled={disabled} aria-invalid={invalido(!uf)} aria-describedby={d.describedBy}>
+            <option value="">Selecione</option>
+            {ESTADOS.map(([sigla, nome]) => <option key={sigla} value={sigla}>{nome}</option>)}
+          </select>
+        </label>
         <CampoBusca label="Cidade" vazio={opcaoVazia} opcoes={(cidades ?? (cidade ? [cidade] : [])).map((c) => ({ valor: c, rotulo: c }))}
           valor={cidade} onEscolher={(v) => onChange(uf, v)} disabled={disabled || estado !== "ok"} invalido={invalido(!cidade)} describedBy={d.describedBy} />
       </div>

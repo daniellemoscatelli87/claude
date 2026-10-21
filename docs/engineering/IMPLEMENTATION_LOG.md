@@ -308,10 +308,10 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - o CNPJ tem máscara, recusa dígito errado e é enviado só com dígitos;
     - "Meus dados" mostra o aceite e não reenvia aceites na edição.
 
-## 2026-10-21 · Busca digitando no estado e na cidade (não publicado)
+## 2026-10-21 · Busca digitando na cidade (não publicado)
 
-- Pedido da dona do produto (estado e cidade): novo `CampoBusca` em `src/design-system/campos.tsx`, usado nos dois campos de `CampoEstadoCidade`; `buscaNormalizada` em `padroes.ts`; estilos `.busca*` em `globals.css`.
-- Verificado: `tsc`, `oxlint` (sem erros), `vitest` 49 de 49 (1 teste novo da busca), build. Navegador a 375 px: 27 estados; "parana" encontra Paraná; "curi" mostra Curitiba e Curiúva; texto sem resultado avisa e volta para a cidade anterior ao sair; nome digitado completo é aceito; trocar o estado limpa a cidade; sem erros e sem rolagem lateral. Fluxo completo do cadastro (320 e 375 px) envia `state` PR e `city` Curitiba.
+- Pedido da dona do produto (corrigido por ela: só a cidade; o estado segue como lista): novo `CampoBusca` em `src/design-system/campos.tsx`, usado na cidade de `CampoEstadoCidade`; `buscaNormalizada` em `padroes.ts`; estilos `.busca*` em `globals.css`.
+- Verificado: `tsc`, `oxlint` (sem erros), `vitest` 49 de 49 (1 teste novo da busca), build. Navegador a 375 px: "curi" mostra Curitiba e Curiúva; texto sem resultado avisa e volta para a cidade anterior ao sair; nome digitado completo é aceito; trocar o estado limpa a cidade; sem erros e sem rolagem lateral. Fluxo completo do cadastro (320 e 375 px) envia `state` PR e `city` Curitiba.
 
 ## 2026-10-21 · Tela de entrada com a proposta de valor (Tela A do kit de UX, não publicado)
 
