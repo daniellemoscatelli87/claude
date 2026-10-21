@@ -1,10 +1,10 @@
 "use client";
-// Início. Sem conta: entrar (o cadastro fica em /cadastro/). Sem dados pessoais: etapa 1. Sem empresa ou
+// Início. Sem conta: landing page do produto (entrar em /entrar/, cadastro em /cadastro/). Sem dados pessoais: etapa 1. Sem empresa ou
 // negócio: etapa 2. Sem desafios: chamada para o primeiro desafio. Com desafios: a área de trabalho.
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Shell, Loading } from "@/components/Shell";
-import { AuthForm } from "@/components/AuthForm";
+import { Landing } from "@/components/Landing";
 import { OrganizationForm } from "@/components/OrganizationForm";
 import { useSession } from "@/components/session";
 import { listChallenges } from "@/application/challenges";
@@ -13,7 +13,7 @@ import { isMaster } from "@/application/master";
 import { PersonalForm } from "@/components/PersonalForm";
 import { BarraProgresso } from "@/design-system/campos";
 import { contextoIncompleto } from "@/domain/organization/context";
-import { Building2, Compass, Target, TrendingUp } from "lucide-react";
+import { Building2, Target } from "lucide-react";
 import { mensagemDeErro } from "@/application/errors";
 import type { Challenge } from "@/domain/challenge/schemas";
 
@@ -47,22 +47,8 @@ export default function Inicio() {
 
   if (!session) {
     return (
-      <Shell>
-        {/* Tela A do kit de UX: proposta de valor antes do acesso. */}
-        <p className="eyebrow">Inteligência para transformar experiências</p>
-        <h1>Experiências melhores começam com perguntas melhores.</h1>
-        <p className="lead">Transforme desafios de atendimento, serviços, processos, operações e produtos em caminhos concretos de melhoria. A plataforma orienta cada etapa, com as pessoas no centro das decisões.</p>
-        <ul className="valor">
-          <li><span className="etapa-icone" aria-hidden="true"><Target size={22} /></span><div><b>Comece pelo desafio</b><span>Conte o que precisa mudar, sem precisar saber a solução.</span></div></li>
-          <li><span className="etapa-icone" aria-hidden="true"><Compass size={22} /></span><div><b>Avance com orientação</b><span>Saiba o que investigar e como obter as informações.</span></div></li>
-          <li><span className="etapa-icone" aria-hidden="true"><TrendingUp size={22} /></span><div><b>Evolua continuamente</b><span>Organize melhorias e acompanhe o que muda.</span></div></li>
-        </ul>
-        <div className="entrada-acoes">
-          <a href="#entrar" className="btn btn-primary btn-block">Entrar na plataforma</a>
-          <Link href="/cadastro/" className="btn btn-ghost btn-block">Criar minha conta</Link>
-        </div>
-        <p className="selo">Acesso por convite nesta fase</p>
-        <AuthForm />
+      <Shell largo publico>
+        <Landing />
       </Shell>
     );
   }

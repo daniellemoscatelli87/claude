@@ -308,6 +308,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - o CNPJ tem máscara, recusa dígito errado e é enviado só com dígitos;
     - "Meus dados" mostra o aceite e não reenvia aceites na edição.
 
+## 2026-10-21 · Landing page pública e página Entrar (D-030, não publicado)
+
+- `src/components/Landing.tsx` (11 seções, dados com fonte), `src/app/entrar/page.tsx` (formulário de entrar; com sessão volta ao início), `src/app/page.tsx` (sem login mostra a landing), `src/components/Shell.tsx` (props `largo` e `publico`: "Entrar" e "Criar conta" no cabeçalho), links "Entrar" do cadastro para `/entrar/`, estilos `.lp-*` em `globals.css`. A Tela A anterior foi substituída.
+- Verificado: `tsc`, `oxlint` (sem erros), `vitest` 49 de 49, build (rota `/entrar` gerada). Navegador a 320, 375 e 1280 px: sem formulário na landing, 6 cards de dados, sem "—" e sem placeholders, FAQ abre, tabela no computador e cartões no celular, "Entrar" leva a `/entrar/` com o formulário, "Criar conta" leva ao cadastro, sem erros e sem rolagem lateral.
+
 ## 2026-10-21 · Busca digitando na cidade (não publicado)
 
 - Pedido da dona do produto (corrigido por ela: só a cidade; o estado segue como lista): novo `CampoBusca` em `src/design-system/campos.tsx`, usado na cidade de `CampoEstadoCidade`; `buscaNormalizada` em `padroes.ts`; estilos `.busca*` em `globals.css`.

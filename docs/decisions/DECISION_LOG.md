@@ -350,6 +350,17 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - P-008 aprovada: nos testes da IA do UX-3a, os 6 protocolos do corpus v0.1 são usados como estão, como catálogo `draft`, só com dados fictícios, com instrumentos gerados pela IA dentro dos passos e cuidados de cada protocolo, marcados como rascunho para avaliação, e as lacunas L1 a L8 no relatório de qualidade. Produção continua exigindo protocolos `approved`.
 - **P-006:** a dona do produto detalhou o pedido (contato do site vinculado ao perfil e desafios organizados em projetos). Registrado como P-009, aguardando proposta e aprovação.
 
+## D-030 · 21/10/2026 · Landing page pública do produto separada do login
+
+- **Origem:** Dona do produto (pedido da landing e respostas às 4 perguntas da proposta).
+- **Decisão:**
+  - `/` sem login vira a landing page (11 seções, `docs/product/LANDING_PROPOSAL.md`); entrar passa para `/entrar/`;
+  - "Falar com especialista" fica fora por enquanto;
+  - dados de mercado reais, com fonte conferida em cada card;
+  - planos Essential, Professional e Transformation, "Em definição" (hipótese comercial);
+  - a landing contextualiza o produto completo, mesmo com etapas em desenvolvimento, porque a página não está divulgada.
+- **Trade-off:** a landing descreve a visão, não só o que está pronto; antes da divulgação, revisar o texto contra o que estiver implementado.
+
 ---
 
 ## Decisões pendentes

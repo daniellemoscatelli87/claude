@@ -12,12 +12,13 @@ import { iniciais } from "./avatar";
 import { displayName } from "@/application/profile";
 import { Rodape } from "@/design-system/campos";
 
-export function Shell({ children }: { children: React.ReactNode }) {
+// largo: conteúdo de largura total (landing page); publico: mostra "Entrar" e "Criar conta" no cabeçalho.
+export function Shell({ children, largo, publico }: { children: React.ReactNode; largo?: boolean; publico?: boolean }) {
   const { session } = useSession();
   return (
     <>
       <header className="top">
-        <div className="wrap">
+        <div className={largo ? "wrap wrap-largo" : "wrap"}>
           {session ? (
             <>
               <Link href="/" className="brand-logado" aria-label="Experience Intelligence, início">
@@ -28,11 +29,19 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <MenuPerfil />
             </>
           ) : (
-            <Link href="/" className="brand">DM | <span>Experience Intelligence</span></Link>
+            <>
+              <Link href="/" className="brand">DM | <span>Experience Intelligence</span></Link>
+              {publico && (
+                <nav className="top-actions" aria-label="Acesso">
+                  <Link href="/entrar/" className="btn-link-top">Entrar</Link>
+                  <Link href="/cadastro/" className="btn btn-primary btn-pequeno">Criar conta</Link>
+                </nav>
+              )}
+            </>
           )}
         </div>
       </header>
-      <main><div className="wrap">{children}</div></main>
+      <main className={largo ? "largo" : undefined}>{largo ? children : <div className="wrap">{children}</div>}</main>
       <Rodape />
     </>
   );

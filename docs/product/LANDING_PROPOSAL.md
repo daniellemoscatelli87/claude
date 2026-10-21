@@ -1,6 +1,6 @@
 # Landing page pública do produto: proposta (aguarda aprovação)
 
-**Data:** 21/10/2026 · **Origem:** pedido da dona do produto (landing de produto SaaS B2B separada do login) · **Status:** proposta, nada implementado.
+**Data:** 21/10/2026 · **Origem:** pedido da dona do produto (landing de produto SaaS B2B separada do login) · **Status:** aprovada com ajustes em 21/10/2026 (D-030) e implementada (não publicada). Ajustes no fim do documento.
 
 Base: o texto enviado pela dona do produto, com a copy de cada seção. A copy abaixo é a dela; só aponto, em **Ajustes**, onde ela conflita com regras já registradas (kit de UX, CLAUDE.md, decisões). Nada novo foi inventado: sem números, depoimentos, logotipos de clientes ou preços.
 
@@ -61,3 +61,23 @@ Diretrizes de interface (do pedido): sem parágrafos longos; cards, linha de eta
 4. **A1 e A3:** aprovar as propostas acima ou ajustar.
 
 Depois da aprovação: implementar em um incremento, testar e mostrar as telas antes de publicar. A Tela A já feita (proposta de valor curta) será substituída pela landing.
+
+## 5. Decisões da dona do produto (21/10/2026, D-030) e o que foi implementado
+
+1. "Falar com especialista" não será desenvolvido agora: os botões "Falar com especialista", "Quero conhecer a consultoria" e "Quero conversar" ficaram fora. No hero, o segundo botão é "Ver planos" (leva a `#planos`); o CTA final tem só "Criar minha conta".
+2. Dados de mercado: pesquisados e conferidos nas fontes originais em 21/10/2026, com a fonte em cada card (link):
+
+| Card | Fonte original | Trecho conferido |
+|---|---|---|
+| 63% trocariam por um concorrente depois de uma única experiência ruim | [Zendesk, CX Trends 2025](https://www.zendesk.com/newsroom/articles/2025-cx-trends-report/) (cerca de 5.100 consumidores e 5.400 profissionais, 22 países, junho e julho de 2024) | "63% willing to switch to a competitor due to just one bad experience" |
+| 49% na América Latina deixariam uma marca depois de uma única experiência ruim | [PwC, Experience is everything (Future of Customer Experience Survey 2017/18)](https://www.pwc.com/ng/en/assets/pdf/experience-is-everything.pdf) | "In Latin America, 49% say they'd walk away from a brand after one bad experience" |
+| Até 16% a mais no preço por uma ótima experiência | Mesmo relatório da PwC | "up to a 16% price premium on products and services" |
+| 23% mais lucratividade e 10% mais fidelização nas equipes mais engajadas | [Gallup, meta-análise do Q12, 10ª edição (2020)](https://www.gallup.com/workplace/236927/employee-engagement-meta-analysis.aspx) (456 estudos, 276 organizações, 2,7 milhões de profissionais; quartil superior × inferior) | "10% in customer loyalty/engagement", "23% in profitability" |
+| 41% menos defeitos de qualidade nas equipes mais engajadas | Mesma meta-análise da Gallup | "41% in quality (defects)" |
+| Mais de 10 milhões de reclamações no Consumidor.gov.br em 10 anos | [Senacon / Ministério da Justiça, Boletim Consumidor.gov.br 2024](https://www.gov.br/mj/pt-br/assuntos/seus-direitos/consumidor/defesadoconsumidor/Biblioteca/boletins-1/boletim-consumidor-gov-br-2024.pdf) | "A plataforma já registrou mais de 10 milhões de reclamações" |
+
+   Ficaram de fora números que não foi possível conferir na fonte original (ex.: o "96% de clientes mais desleais após alto esforço", atribuído à Gartner).
+3. Planos: Essential, Professional e Transformation, com "Em definição" (hipótese comercial, por enquanto).
+4. A landing contextualiza o produto completo, mesmo com etapas ainda em desenvolvimento (a página não está divulgada); sem a faixa de "fase de testes". O termo "Service Design" foi mantido como na copy enviada.
+
+Ajuste de escrita: o travessão do texto da seção 2 virou parênteses (regra do site: sem "—").

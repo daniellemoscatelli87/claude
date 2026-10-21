@@ -108,7 +108,7 @@ export function PersonalForm({ modo, perfil, email: emailConta }: { modo: Modo; 
         <button className="btn btn-primary btn-block" disabled={enviando}>
           {enviando ? "Salvando…" : modo === "cadastro" ? "Criar conta" : modo === "completar" ? "Continuar" : "Salvar meus dados"}
         </button>
-        {modo === "cadastro" && <p className="center" style={{ margin: 0 }}>Já tem uma conta? <Link href="/">Entrar</Link></p>}
+        {modo === "cadastro" && <p className="center" style={{ margin: 0 }}>Já tem uma conta? <Link href="/entrar/">Entrar</Link></p>}
       </form>
       <Janela titulo={AVISO_TITULO} aberta={avisoAberto} onFechar={() => setAvisoAberto(false)}>
         <AvisoPrivacidade />
@@ -131,7 +131,7 @@ function ConfirmarEmail({ email }: { email: string }) {
         setMsg(""); setErro("");
         try { await resendConfirmation(email); setMsg("Enviamos o link de novo."); } catch (e) { setErro(/rate|seconds/i.test(String((e as Error).message)) ? "Aguarde alguns minutos antes de solicitar outro e-mail." : mensagemDeErro(e)); }
       }}>Reenviar e-mail de confirmação</button>
-      <Link href="/" className="btn btn-primary btn-block">Ir para a tela de entrada</Link>
+      <Link href="/entrar/" className="btn btn-primary btn-block">Ir para a tela de entrada</Link>
     </div>
   );
 }
