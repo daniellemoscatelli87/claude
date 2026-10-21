@@ -72,8 +72,9 @@ function MenuPerfil() {
               <span className="avatar grande" aria-hidden="true">{iniciais(nome ?? email)}</span>
               <div>
                 <h2 id="perfil-titulo" className="sr-only">Perfil</h2>
-                <p className="perfil-nome">{nome ?? email}</p>
-                {current && <p className="hint" style={{ margin: 0 }}>{current.name}</p>}
+                {/* O e-mail não aparece: mostra o nome da pessoa e a empresa; sem nome, só a empresa. */}
+                {(nome ?? current?.name) && <p className="perfil-nome">{nome ?? current?.name}</p>}
+                {nome && current && <p className="hint" style={{ margin: 0 }}>{current.name}</p>}
               </div>
               <button type="button" className="perfil-fechar" onClick={fechar}><span aria-hidden="true">×</span><span className="sr-only">Fechar</span></button>
             </div>

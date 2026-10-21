@@ -308,6 +308,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - o CNPJ tem máscara, recusa dígito errado e é enviado só com dígitos;
     - "Meus dados" mostra o aceite e não reenvia aceites na edição.
 
+## 2026-10-21 · E-mail escondido na barra lateral (não publicado)
+
+- Pedido da dona do produto: na barra lateral de perfil, esconder o e-mail. Mostra o nome da pessoa e, abaixo, a empresa; sem nome cadastrado (ex.: conta master), só a empresa. `src/components/Shell.tsx`.
+- Verificado: `tsc`, `oxlint` (sem erros), `vitest` 48 de 48, build e navegador a 375 px (master e cliente): nenhum e-mail no painel, sem erros.
+
 ## 2026-10-21 · Cadastro aprovado: migrações aplicadas (D-029)
 
 - Aplicadas no Supabase: `20261021090000_contexto_organizacao.sql` e `20261021100000_perfil_pessoal.sql` (antes: colunas novas ausentes, sem `ei_profiles`, nenhum gatilho em `auth.users`).
