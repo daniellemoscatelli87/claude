@@ -1,6 +1,6 @@
 # Landing comercial v1: plano de implementação (aguarda aprovação)
 
-**Data:** 21/10/2026 · **Especificação:** [`landing-comercial/01-COPY-FINAL-E-ARQUITETURA-DA-LANDING.md`](landing-comercial/01-COPY-FINAL-E-ARQUITETURA-DA-LANDING.md) e [`02-INSTRUCOES-CLAUDE-CODE.md`](landing-comercial/02-INSTRUCOES-CLAUDE-CODE.md), enviadas pela dona do produto e guardadas sem alteração. · **Status:** nada programado. Decisões de 21/10/2026 na seção 8.
+**Data:** 21/10/2026 · **Especificação:** [`landing-comercial/01-COPY-FINAL-E-ARQUITETURA-DA-LANDING.md`](landing-comercial/01-COPY-FINAL-E-ARQUITETURA-DA-LANDING.md) e [`02-INSTRUCOES-CLAUDE-CODE.md`](landing-comercial/02-INSTRUCOES-CLAUDE-CODE.md), enviadas pela dona do produto e guardadas sem alteração. · **Status:** implementado e testado em 21/10/2026, não publicado (seção 9). Decisões na seção 8.
 
 Substitui a landing de D-030 (não publicada): copy, dados de mercado e componentes passam a ser os da especificação v1.
 
@@ -88,3 +88,11 @@ Marcações propostas (aviso honesto sem encher cada card):
   - no app, medir só as páginas públicas (landing, entrar, cadastro), nunca a área logada, sem identificar a pessoa;
   - eventos: `hero_cta_click`, `demo_tab_change`, `faq_expand`, `login_click` (os de planos e consultoria saem junto com os botões);
   - a dona do produto cria a propriedade no GA4 e informa o ID de medição (`G-...`, não é segredo); sem custo.
+
+## 9. Complemento dos cinco conteúdos e implementação (21/10/2026)
+
+- Complemento recebido e guardado sem alteração em [`landing-comercial/complemento/`](landing-comercial/complemento/): sintomas (Espera, Abandono, Retrabalho, Baixa adesão), "o que a plataforma organiza" no stepper, caso fictício Clínica Aurora nos entregáveis, exemplos de uma linha dos diferenciais e as 4 combinações exatas dos filtros com os estados vazios.
+- Implementado: `src/components/Landing.tsx`, `src/components/landing/` (`conteudo.ts`, `Cabecalho.tsx`, `Interativos.tsx`), `/entrar/` com os textos da especificação, `/recuperar-senha/` e `/redefinir-senha/`, `AvisoCookies` + `src/infrastructure/analytics.ts` (GA4 só com consentimento, só em páginas públicas, sem parâmetros nem fragmento no endereço). O GA4 fica inativo até existir `NEXT_PUBLIC_GA_ID` no Netlify.
+- Ajustes: "—" trocado por vírgula em 7 frases; no celular, ao escolher um entregável, a página leva até o painel de detalhe; sem JavaScript a landing aparece inteira (perguntas e abas abertas).
+- Pendências antes de publicar: textos do aviso de cookies e do aviso de privacidade do app sobre o GA4; conferir no Supabase o modelo do e-mail "Reset password" e o limite de envios; a pergunta 10 do FAQ diz "Você pode solicitar interesse em acesso antecipado", mas esse canal não existe nesta fase.
+- Site do estúdio (GA4 na página inicial e atualização da Política de Privacidade): ainda não alterado; próximo passo, com aprovação dos textos.

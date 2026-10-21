@@ -361,6 +361,17 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - a landing contextualiza o produto completo, mesmo com etapas em desenvolvimento, porque a página não está divulgada.
 - **Trade-off:** a landing descreve a visão, não só o que está pronto; antes da divulgação, revisar o texto contra o que estiver implementado.
 
+## D-031 · 21/10/2026 · Landing comercial v1, recuperação de senha e medição com consentimento
+
+- **Origem:** Dona do produto (especificação da landing comercial v1, complemento dos cinco conteúdos e respostas às decisões do plano).
+- **Decisão:**
+  - a landing comercial v1 substitui a de D-030 (copy, dados PwC 2025 e Qualtrics 2025, componentes interativos estáticos, sem IA);
+  - botões de interesse, consultoria e lista de espera ficam fora nesta fase;
+  - "Esqueci minha senha" entra, com o recurso gratuito do Supabase Auth;
+  - medição com Google Analytics 4 no app (páginas públicas) e na página inicial do site, só depois do consentimento (LGPD);
+  - cores: exatamente as do app.
+- **Trade-off:** o GA4 exige aviso de cookies e atualização das políticas de privacidade antes de ligar; até lá fica inativo.
+
 ---
 
 ## Decisões pendentes

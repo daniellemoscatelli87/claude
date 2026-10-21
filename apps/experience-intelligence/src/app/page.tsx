@@ -43,11 +43,13 @@ export default function Inicio() {
     hasPlatformAccess().then(setAcesso).catch(() => setAcesso(false));
   }, [loading, session, current]);
 
-  if (loading) return <Shell><Loading /></Shell>;
+  // Enquanto a sessão carrega (e no HTML gerado no build), mostra a landing: assim ela é legível sem JavaScript.
+  // Quem já tem sessão salva não a vê piscar: o script do layout marca <html class="tem-sessao">.
+  if (loading) return <div className="sem-sessao"><Shell largo><Landing /></Shell></div>;
 
   if (!session) {
     return (
-      <Shell largo publico>
+      <Shell largo medir>
         <Landing />
       </Shell>
     );

@@ -62,6 +62,12 @@ export async function changeEmail(email: string): Promise<void> {
   if (error) throw error;
 }
 
+/** Envia o link de nova senha. A resposta na tela é sempre a mesma, exista ou não conta com o e-mail. */
+export async function requestPasswordReset(email: string): Promise<void> {
+  const { error } = await supabase().auth.resetPasswordForEmail(email.trim().toLowerCase(), { redirectTo: `${location.origin}/redefinir-senha/` });
+  if (error && /rate limit|seconds/i.test(error.message)) throw error;
+}
+
 export async function changePassword(senha: string, confirmacao: string): Promise<void> {
   if (!senhaValida(senha)) throw new FieldErrors({ password: SENHA_INVALIDA });
   if (senha !== confirmacao) throw new FieldErrors({ password_confirm: "As senhas não são iguais." });

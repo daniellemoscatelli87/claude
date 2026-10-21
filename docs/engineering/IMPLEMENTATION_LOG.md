@@ -308,6 +308,19 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - o CNPJ tem máscara, recusa dígito errado e é enviado só com dígitos;
     - "Meus dados" mostra o aceite e não reenvia aceites na edição.
 
+## 2026-10-21 · Landing comercial v1, recuperação de senha e GA4 com consentimento (D-031, não publicado)
+
+- Arquivos: `src/components/Landing.tsx`, `src/components/landing/{conteudo.ts,Cabecalho.tsx,Interativos.tsx}`, `src/components/AvisoCookies.tsx`, `src/infrastructure/analytics.ts`, `src/app/{entrar,recuperar-senha,redefinir-senha}/page.tsx`, `src/components/AuthForm.tsx` (textos), `src/components/Shell.tsx` (props `largo` e `medir`), `src/application/profile.ts` (`requestPasswordReset`), `src/app/layout.tsx` (Open Graph e marcação de sessão salva), `src/app/page.tsx`, `src/app/cadastro/page.tsx`, `globals.css` (`.lp-*`, `.cookies`). Sem mudança em banco, funções, IA ou regras de acesso.
+- Verificado:
+  - `tsc`, `oxlint` (sem erros), `vitest` 49 de 49, build estático com as rotas novas;
+  - navegador a 320, 375, 430 e 1280 px: sem rolagem lateral, um único H1, sem "—", nenhuma chamada externa sem consentimento;
+  - interações: ciclo do hero, sintomas pelo teclado (setas), stepper com Próxima/Anterior e selo "Visão do funcionamento planejado • Em desenvolvimento" nas etapas 2 a 5, trilha de entregáveis com "Explorar outro entregável", filtros (estado inicial, só público, par sem exemplo, par com exemplo e o botão que abre a aba certa da demonstração), "Ver exemplo" nos diferenciais, FAQ com uma resposta aberta por vez, menu do celular (abre, Esc fecha, fecha ao navegar);
+  - sem JavaScript: a landing aparece completa;
+  - recuperação de senha com o Supabase simulado: envia só o e-mail, mensagem sempre igual; `/redefinir-senha/` sem link válido mostra "O link expirou ou já foi usado";
+  - GA4 com ID de teste: nada carrega antes de "Aceitar"; "Recusar" não carrega; depois de aceitar, `page_view` sem o token do link de senha; "Preferências de cookies" reabre o aviso. Build final sem ID: nenhum aviso de cookies;
+  - regressão: cadastro completo (320 e 375 px), barra lateral sem e-mail e busca na cidade continuam funcionando.
+- Não testado: envio real do e-mail de recuperação e GA4 real (dependem do Supabase e do ID de medição da dona do produto).
+
 ## 2026-10-21 · Landing page pública e página Entrar (D-030, não publicado)
 
 - `src/components/Landing.tsx` (11 seções, dados com fonte), `src/app/entrar/page.tsx` (formulário de entrar; com sessão volta ao início), `src/app/page.tsx` (sem login mostra a landing), `src/components/Shell.tsx` (props `largo` e `publico`: "Entrar" e "Criar conta" no cabeçalho), links "Entrar" do cadastro para `/entrar/`, estilos `.lp-*` em `globals.css`. A Tela A anterior foi substituída.

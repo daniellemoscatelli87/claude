@@ -1,0 +1,123 @@
+{
+  "version": "1.0",
+  "purpose": "Conteúdo local estático ilustrativo para landing pública. Sem chamadas de IA.",
+  "filter_options": {
+    "audiences": [
+      "Clientes e consumidores",
+      "Pacientes e acompanhantes",
+      "Colaboradores",
+      "Usuários de sistemas",
+      "Parceiros e fornecedores"
+    ],
+    "domains": [
+      "Atendimento",
+      "Serviços",
+      "Processos e operações",
+      "Produtos digitais",
+      "Ambientes e interações físicas",
+      "Comunicação e relacionamento"
+    ]
+  },
+  "filter_scenarios": [
+    {
+      "audience": "Pacientes e acompanhantes",
+      "domain": "Atendimento",
+      "title": "Reduzir dúvidas e interrupções na chegada à clínica.",
+      "description": "Investigar acolhimento, informações recebidas e a sequência de atendimento, respeitando as particularidades do ambiente de saúde.",
+      "cta_label": "Ver um exemplo de investigação",
+      "cta_target": "#demonstracao",
+      "tab_to_activate": "saude"
+    },
+    {
+      "audience": "Clientes e consumidores",
+      "domain": "Serviços",
+      "title": "Entender por que clientes abandonam uma contratação.",
+      "description": "Investigar etapas, exigências, comunicação e esforço percebido antes de presumir que falta interesse.",
+      "cta_label": "Entender a abordagem",
+      "cta_target": "#como-funciona"
+    },
+    {
+      "audience": "Colaboradores",
+      "domain": "Processos e operações",
+      "title": "Melhorar a passagem de informações entre equipes.",
+      "description": "Compreender responsabilidades, registros e rupturas de comunicação que podem gerar retrabalho.",
+      "cta_label": "Ver um exemplo de investigação",
+      "cta_target": "#demonstracao",
+      "tab_to_activate": "colaboradores"
+    },
+    {
+      "audience": "Usuários de sistemas",
+      "domain": "Produtos digitais",
+      "title": "Compreender barreiras de uso em um portal interno.",
+      "description": "Investigar tarefas, navegação, linguagem, acessibilidade e relação do sistema com o trabalho cotidiano.",
+      "cta_label": "Ver um exemplo de investigação",
+      "cta_target": "#demonstracao",
+      "tab_to_activate": "produto-digital"
+    }
+  ],
+  "filter_states": {
+    "none": "Escolha quem vive a experiência e o que sua organização deseja melhorar para visualizar um exemplo.",
+    "only_audience": "Agora selecione o que precisa melhorar para conhecer um desafio relacionado.",
+    "only_domain": "Selecione também quem vive essa experiência.",
+    "not_found": "Ainda não há um exemplo pronto para essa combinação. A plataforma parte do desafio real da sua organização — não de uma lista fechada de cenários.",
+    "disclaimer": "Exemplos ilustrativos; a investigação real é adaptada ao contexto e às informações disponíveis."
+  },
+  "stepper_platform_organizes": [
+    {
+      "stage": 1,
+      "title": "Conte o que deseja melhorar",
+      "platform": "Preserva seu relato original, propõe um entendimento inicial, identifica pessoas e contextos possivelmente envolvidos e aponta informações que ainda precisamos esclarecer.",
+      "result": "Desafio contextualizado"
+    },
+    {
+      "stage": 2,
+      "title": "Descubra o que precisa saber",
+      "platform": "Propõe um plano de investigação adaptado ao desafio, prepara perguntas e instrumentos, orienta como obter e registrar informações e permite indicar o que ainda não foi possível descobrir.",
+      "result": "Plano e atividades orientadas"
+    },
+    {
+      "stage": 3,
+      "title": "Organize o que foi descoberto",
+      "platform": "Relaciona informações às etapas investigadas, separa relatos de observações e registros, destaca lacunas e contradições e propõe hipóteses que ainda precisam ser verificadas.",
+      "result": "Evidências e hipóteses rastreáveis"
+    },
+    {
+      "stage": 4,
+      "title": "Encontre caminhos de melhoria",
+      "platform": "Conecta oportunidades às evidências, explicita premissas e riscos, sugere caminhos de teste e ajuda a estruturar responsáveis, ações e critérios de sucesso.",
+      "result": "Plano de melhoria priorizado"
+    },
+    {
+      "stage": 5,
+      "title": "Acompanhe o que mudou",
+      "platform": "Relaciona mudanças aos resultados observados, documenta aprendizados, aponta dúvidas remanescentes e orienta quando aprofundar ou iniciar um novo ciclo.",
+      "result": "Evolução acompanhada"
+    }
+  ],
+  "differentiator_examples": [
+    {
+      "key": "desafio",
+      "example": "Uma clínica relata espera na recepção; a investigação começa por essa situação, não por um formulário universal."
+    },
+    {
+      "key": "conducao",
+      "example": "Em vez de pedir “faça shadowing”, a plataforma mostra como observar o acolhimento e registrar o que acontece."
+    },
+    {
+      "key": "fisico-digital",
+      "example": "Um abandono no aplicativo pode levar à revisão de regras, atendimento e comunicação fora da tela."
+    },
+    {
+      "key": "evidencias",
+      "example": "Um relato isolado vira uma hipótese a verificar, nunca uma conclusão sobre todos os clientes."
+    },
+    {
+      "key": "multidisciplinar",
+      "example": "Uma dificuldade no serviço pode exigir pesquisa com pessoas, análise operacional e revisão de processos digitais."
+    },
+    {
+      "key": "continuidade",
+      "example": "Após um teste de melhoria, os resultados registrados orientam o próximo ajuste, em vez de encerrar o aprendizado."
+    }
+  ]
+}

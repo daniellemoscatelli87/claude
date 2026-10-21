@@ -11,38 +11,35 @@ import { isMaster } from "@/application/master";
 import { iniciais } from "./avatar";
 import { displayName } from "@/application/profile";
 import { Rodape } from "@/design-system/campos";
+import { AvisoCookies } from "./AvisoCookies";
 
-// largo: conteúdo de largura total (landing page); publico: mostra "Entrar" e "Criar conta" no cabeçalho.
-export function Shell({ children, largo, publico }: { children: React.ReactNode; largo?: boolean; publico?: boolean }) {
+// largo: conteúdo de largura total, sem o cabeçalho padrão (a landing tem o próprio).
+// medir: página pública com medição de acessos (aviso de cookies; nada carrega sem consentimento).
+export function Shell({ children, largo, medir }: { children: React.ReactNode; largo?: boolean; medir?: boolean }) {
   const { session } = useSession();
   return (
     <>
-      <header className="top">
-        <div className={largo ? "wrap wrap-largo" : "wrap"}>
-          {session ? (
-            <>
-              <Link href="/" className="brand-logado" aria-label="Experience Intelligence, início">
-                <img src="/logo-dm-icone.png" alt="" width={32} height={37} />
-                <span className="brand-divisor" aria-hidden="true" />
-                <span className="brand-nome">Experience Intelligence</span>
-              </Link>
-              <MenuPerfil />
-            </>
-          ) : (
-            <>
+      {!largo && (
+        <header className="top">
+          <div className="wrap">
+            {session ? (
+              <>
+                <Link href="/" className="brand-logado" aria-label="Experience Intelligence, início">
+                  <img src="/logo-dm-icone.png" alt="" width={32} height={37} />
+                  <span className="brand-divisor" aria-hidden="true" />
+                  <span className="brand-nome">Experience Intelligence</span>
+                </Link>
+                <MenuPerfil />
+              </>
+            ) : (
               <Link href="/" className="brand">DM | <span>Experience Intelligence</span></Link>
-              {publico && (
-                <nav className="top-actions" aria-label="Acesso">
-                  <Link href="/entrar/" className="btn-link-top">Entrar</Link>
-                  <Link href="/cadastro/" className="btn btn-primary btn-pequeno">Criar conta</Link>
-                </nav>
-              )}
-            </>
-          )}
-        </div>
-      </header>
+            )}
+          </div>
+        </header>
+      )}
       <main className={largo ? "largo" : undefined}>{largo ? children : <div className="wrap">{children}</div>}</main>
       <Rodape />
+      {medir && !session && <AvisoCookies />}
     </>
   );
 }

@@ -1,219 +1,220 @@
-// Landing page pública do produto (UX-16, docs/product/LANDING_PROPOSAL.md). Sem formulário: entrar fica em
-// /entrar/ e o cadastro em /cadastro/. Copy aprovada pela dona do produto; dados de mercado com fonte.
+"use client";
+// Landing comercial pública (UX-17, docs/product/landing-comercial/ e LANDING_COMERCIAL_PLANO.md).
+// Sem formulário: entrar fica em /entrar/. Botões de interesse e consultoria ficam fora nesta fase (decisão de 21/10/2026).
+import { useState } from "react";
 import Link from "next/link";
+import { Handshake, Laptop, ScanSearch, ShieldCheck, UserRoundCheck } from "lucide-react";
+import { CabecalhoLanding } from "./landing/Cabecalho";
 import {
-  Activity, Briefcase, CircleCheck, ClipboardList, Compass, HeartHandshake, Layers, MessageSquare,
-  Route, Search, Sparkles, Target, TrendingUp, Users, type LucideIcon,
-} from "lucide-react";
+  CamadasValor, CardsDiferenciais, CicloTransformacao, DemoDesafios, ExploradorSintomas, FiltroAplicacoes,
+  JornadaStepper, PerguntasFrequentes, TrilhaEntregaveis,
+} from "./landing/Interativos";
+import { ANCORAS, CICLO, DADOS, PLANOS, type DemoChave } from "./landing/conteudo";
+import { GA_ID, abrirPreferenciasCookies, medir } from "@/infrastructure/analytics";
 
-const FLUXO: [LucideIcon, string][] = [
-  [Target, "Desafio"], [Search, "Investigação"], [ClipboardList, "Evidências"], [Sparkles, "Oportunidades"], [TrendingUp, "Transformação"],
-];
-
-const PROBLEMAS: [LucideIcon, string][] = [
-  [MessageSquare, "Reclamações recorrentes sem causa clara"],
-  [Route, "Processos que geram atrito"],
-  [Layers, "Serviços que não evoluem"],
-  [Activity, "Produtos digitais com baixa adesão"],
-  [Briefcase, "Operações desalinhadas da experiência"],
-  [Compass, "Falta de método para decidir melhorias"],
-];
-
-// Dados conferidos nas fontes originais em 21/10/2026 (ver LANDING_PROPOSAL.md, seção 5).
-const ZENDESK = { nome: "Zendesk, CX Trends 2025", url: "https://www.zendesk.com/newsroom/articles/2025-cx-trends-report/" };
-const PWC = { nome: "PwC, Future of Customer Experience Survey 2017/18", url: "https://www.pwc.com/ng/en/assets/pdf/experience-is-everything.pdf" };
-const GALLUP = { nome: "Gallup, meta-análise 2020 (2,7 milhões de profissionais)", url: "https://www.gallup.com/workplace/236927/employee-engagement-meta-analysis.aspx" };
-const SENACON = { nome: "Senacon, Boletim Consumidor.gov.br 2024", url: "https://www.gov.br/mj/pt-br/assuntos/seus-direitos/consumidor/defesadoconsumidor/Biblioteca/boletins-1/boletim-consumidor-gov-br-2024.pdf" };
-const DADOS: { numero: string; texto: string; fonte: { nome: string; url: string } }[] = [
-  { numero: "63%", texto: "dos consumidores trocariam de empresa por um concorrente depois de uma única experiência ruim.", fonte: ZENDESK },
-  { numero: "49%", texto: "dos consumidores na América Latina deixariam uma marca depois de uma única experiência ruim.", fonte: PWC },
-  { numero: "até 16%", texto: "a mais no preço é o que clientes aceitam pagar por produtos e serviços com uma ótima experiência.", fonte: PWC },
-  { numero: "23%", texto: "mais lucratividade e 10% mais fidelização de clientes nas equipes mais engajadas, comparadas às menos engajadas.", fonte: GALLUP },
-  { numero: "41%", texto: "menos defeitos de qualidade nas equipes mais engajadas, comparadas às menos engajadas.", fonte: GALLUP },
-  { numero: "+10 milhões", texto: "de reclamações registradas no Consumidor.gov.br em 10 anos.", fonte: SENACON },
-];
-
-const VALOR: [LucideIcon, string, string][] = [
-  [Target, "Comece pelo desafio", "Descreva o que precisa melhorar."],
-  [Compass, "Investigue com direção", "A plataforma orienta o que descobrir, com quem falar, o que observar e como registrar."],
-  [Sparkles, "Transforme com mais segurança", "As evidências ajudam a identificar oportunidades e orientar melhorias."],
-  [TrendingUp, "Acompanhe resultados", "Entenda o que mudou e o que ainda precisa evoluir."],
-];
-
-const SEGMENTOS = ["Saúde", "Hospitalidade", "Educação", "Varejo", "Serviços", "Tecnologia", "Operações internas"];
-const PUBLICOS = ["clientes", "consumidores", "pacientes", "colaboradores", "usuários", "parceiros"];
-const TIPOS = ["atendimento", "processos", "serviços", "operação", "jornadas físicas", "jornadas digitais", "produtos digitais", "comunicação", "experiência interna"];
-
-const ETAPAS: [string, string][] = [
-  ["Desafio", "Você conta o que precisa melhorar."],
-  ["Investigação", "A plataforma define o que precisa ser descoberto e orienta as próximas atividades."],
-  ["Evidências", "As informações são organizadas para revelar padrões, lacunas e oportunidades."],
-  ["Transformação", "As descobertas ajudam a orientar melhorias em serviços, processos, atendimento e operação."],
-  ["Resultados", "Sua organização acompanha o impacto das mudanças e identifica novos ciclos de evolução."],
-];
-
-const ENTREGAS = [
-  "Desafio estruturado", "Plano inicial de investigação", "Atividades guiadas", "Evidências organizadas",
-  "Hipóteses e oportunidades", "Direcionamento para melhorias", "Histórico do projeto", "Base para tomada de decisão",
-];
-
-const COMPARACAO: [string, string][] = [
-  ["Conduz a investigação passo a passo", "Atua em desafios mais complexos"],
-  ["Organiza informações e evidências", "Aprofunda diagnóstico e estratégia"],
-  ["Ajuda a orientar melhorias", "Facilita desenho de serviços e transformação"],
-  ["Pode ser usada continuamente pela equipe", "Potencializa projetos críticos"],
-  ["Escalável e recorrente", "Apoio especializado sob demanda"],
-];
-
-const DIFERENCIAIS: [LucideIcon, string, string][] = [
-  [HeartHandshake, "Pessoas no centro", "Experiências humanas como ponto de partida da transformação."],
-  [Layers, "Além do digital", "A solução considera serviços, processos, atendimento, operação e ambientes físicos."],
-  [Compass, "Condução inteligente", "A plataforma orienta o usuário sobre o que fazer, como fazer e o que observar."],
-  [Route, "Investigação adaptativa", "As etapas se desenham conforme o desafio e as evidências."],
-  [Users, "Visão multidisciplinar", "Service Design, experiência, operações, negócios e tecnologia conectados."],
-  [Briefcase, "Consultoria potencializadora", "Quando necessário, o estúdio entra para acelerar projetos mais complexos."],
-];
-
-const PLANOS: [string, string][] = [
-  ["Essential", "Para organizações começando a estruturar investigações e melhorias."],
-  ["Professional", "Para equipes que precisam de maior capacidade, profundidade e acompanhamento."],
-  ["Transformation", "Para organizações que desejam plataforma + apoio consultivo especializado."],
-];
-
-const FAQ: [string, string][] = [
-  ["A plataforma serve apenas para atendimento?", "Não. Ela pode apoiar investigações relacionadas a serviços, processos, operações, produtos digitais e experiências humanas em diferentes contextos."],
-  ["Preciso conhecer Service Design ou pesquisa?", "Não. A plataforma foi pensada para orientar o usuário passo a passo."],
-  ["A plataforma substitui uma consultoria?", "Ela pode operar de forma autônoma, mas a consultoria especializada continua disponível para desafios mais complexos."],
-  ["Ela serve apenas para saúde?", "Não. A arquitetura é multissetorial, embora também possa ser aplicada a contextos como Patient Experience."],
-  ["O que minha empresa recebe no final?", "Estruturação do desafio, atividades guiadas, evidências organizadas, direcionamento para melhorias e apoio à tomada de decisão."],
-  ["Posso usar para produtos digitais?", "Sim. A plataforma também pode apoiar desafios de UX, fluxos digitais e jornadas em sistemas e plataformas."],
-  ["Como funciona a entrada da IA?", "A inteligência atua para interpretar o desafio e orientar o percurso de investigação, dentro dos limites e configurações definidas pela plataforma."],
-  ["Como a consultoria entra?", "Quando necessário, a plataforma pode ser complementada por apoio especializado da Dani Moscatelli Studio."],
-];
-
-function Icone({ icone: I }: { icone: LucideIcon }) {
-  return <span className="etapa-icone" aria-hidden="true"><I size={22} /></span>;
-}
-
-function Secao({ id, tag, titulo, texto, children, suave }: { id?: string; tag?: string; titulo: string; texto?: React.ReactNode; children?: React.ReactNode; suave?: boolean }) {
+function Secao({ id, tag, titulo, lead, escuro, suave, children }: {
+  id?: string; tag: string; titulo: string; lead?: React.ReactNode; escuro?: boolean; suave?: boolean; children?: React.ReactNode;
+}) {
+  const classe = ["lp-secao", escuro && "lp-escuro", suave && "lp-suave"].filter(Boolean).join(" ");
   return (
-    <section id={id} className={suave ? "lp-secao lp-suave" : "lp-secao"} aria-labelledby={id ? `${id}-titulo` : undefined}>
+    <section id={id} className={classe} aria-labelledby={id ? `${id}-titulo` : undefined}>
       <div className="lp-wrap">
-        {tag && <p className="eyebrow">{tag}</p>}
+        <p className="eyebrow">{tag}</p>
         <h2 id={id ? `${id}-titulo` : undefined} className="lp-titulo">{titulo}</h2>
-        {texto && <div className="lp-texto">{texto}</div>}
+        {lead && <div className="lp-lead">{lead}</div>}
         {children}
       </div>
     </section>
   );
 }
 
-export function Landing() {
+function LinhaNos() {
   return (
-    <div className="lp">
+    <ol className="lp-linha-nos" aria-label="Ciclo de transformação">
+      {CICLO.map((c) => <li key={c.chave}>{c.nome}</li>)}
+    </ol>
+  );
+}
+
+export function Landing() {
+  const [abaDemo, setAbaDemo] = useState<DemoChave>("saude");
+  return (
+    <div className="lp" id="inicio">
+      {/* Sem JavaScript, os conteúdos de abas e perguntas ficam todos visíveis. */}
+      <noscript><style>{".lp [hidden]{display:block !important}"}</style></noscript>
+      <CabecalhoLanding />
+
+      {/* 01 Hero */}
       <section className="lp-hero">
-        <div className="lp-wrap">
-          <p className="eyebrow">Inteligência para transformar experiências</p>
-          <h1 className="lp-h1">Transforme desafios em melhorias reais para clientes, pacientes, usuários e colaboradores.</h1>
-          <p className="lp-sub">A DM | Experience Intelligence ajuda sua organização a compreender experiências, investigar causas, identificar oportunidades e orientar melhorias em serviços, processos, operações e produtos digitais.</p>
-          <div className="lp-acoes">
-            <Link href="/cadastro/" className="btn btn-primary">Começar agora</Link>
-            <a href="#planos" className="btn btn-ghost">Ver planos</a>
+        <div className="lp-wrap lp-hero-grade">
+          <div>
+            <p className="eyebrow">Inteligência para transformar experiências</p>
+            <h1 className="lp-h1">Experiências melhores começam quando entendemos o que precisa mudar.</h1>
+            <p className="lp-sub">Transforme desafios em caminhos concretos de melhoria para clientes, pacientes, usuários, colaboradores e todas as pessoas que se relacionam com sua organização.</p>
+            <p className="lp-apoio">A DM | Experience Intelligence combina inteligência artificial, conhecimento especializado e condução prática para ajudar sua equipe a investigar o que acontece, conectar a experiência à operação e orientar transformações em serviços, processos, atendimento e produtos físicos ou digitais.</p>
+            <p className="lp-micro">Você apresenta o desafio. A plataforma orienta os próximos passos, sem exigir conhecimentos de Service Design ou pesquisa.</p>
+            <div className="lp-acoes">
+              <a href="#como-funciona" className="btn btn-primary" onClick={() => medir("hero_cta_click", { botao: "ver_como_funciona" })}>Ver como funciona</a>
+            </div>
+            <p className="lp-nota">Acesso por convite durante a fase de testes.</p>
           </div>
-          <p className="lp-confianca">Sem precisar dominar Service Design, pesquisa ou metodologias de inovação.</p>
-          <ol className="lp-fluxo" aria-label="Como a jornada avança">
-            {FLUXO.map(([I, nome]) => <li key={nome}><I size={18} aria-hidden="true" /> {nome}</li>)}
-          </ol>
+          <CicloTransformacao />
         </div>
       </section>
 
-      <Secao id="problema" titulo="Experiências ruins custam caro. E quase sempre o problema não está só no atendimento." texto={<>
-        <p>Empresas costumam perceber sintomas (reclamações, retrabalho, perda de clientes, baixa adesão, quedas na satisfação, falhas operacionais) sem conseguir identificar com clareza o que está provocando esses problemas.</p>
-        <p>Melhorar experiências exige conectar o que as pessoas vivenciam com aquilo que a organização precisa transformar.</p>
-      </>}>
-        <ul className="lp-grade lp-grade-3">
-          {PROBLEMAS.map(([I, t]) => <li key={t} className="lp-card lp-card-linha"><Icone icone={I} /><b>{t}</b></li>)}
-        </ul>
-        <h3 className="lp-subtitulo">O que os dados mostram</h3>
+      {/* 02 Dados */}
+      <Secao tag="O desafio das organizações" titulo="O problema aparece na experiência. A causa pode estar em qualquer parte do serviço."
+        lead={<p>Uma reclamação pode começar no atendimento, mas nascer de um processo confuso, uma informação desencontrada, uma decisão operacional ou uma tecnologia mal integrada. Tratar apenas o sintoma é correr o risco de investir na solução errada.</p>}>
         <ul className="lp-grade lp-grade-3">
           {DADOS.map((d) => (
-            <li key={d.numero + d.texto} className="lp-card lp-dado">
+            <li key={d.numero} className="lp-card lp-dado">
               <span className="lp-numero">{d.numero}</span>
               <span>{d.texto}</span>
-              <a href={d.fonte.url} target="_blank" rel="noopener noreferrer" className="lp-fonte">Fonte: {d.fonte.nome}</a>
+              <details className="lp-sobre">
+                <summary>Sobre a pesquisa</summary>
+                <p>{d.fonte} <a href={d.url} target="_blank" rel="noopener noreferrer">Ver fonte</a></p>
+              </details>
             </li>
           ))}
         </ul>
+        <p className="lp-interpretacao">Esses números mostram o peso da experiência nas decisões de consumo. Para transformar essa realidade, é preciso descobrir o que produz cada experiência, e agir sobre isso.</p>
+        <ExploradorSintomas />
       </Secao>
 
-      <Secao id="produto" suave titulo="Uma plataforma para investigar, compreender e transformar experiências." texto={<>
-        <p>A DM | Experience Intelligence é uma plataforma que conduz sua organização por uma jornada estruturada de investigação e melhoria contínua.</p>
-        <p>Ela combina inteligência artificial, metodologia, estrutura analítica e orientação prática para ajudar equipes a transformar desafios em decisões, ações e resultados.</p>
-      </>}>
-        <ul className="lp-grade lp-grade-4">
-          {VALOR.map(([I, t, d]) => <li key={t} className="lp-card"><Icone icone={I} /><b>{t}</b><span>{d}</span></li>)}
-        </ul>
+      {/* 03 Categoria */}
+      <Secao suave tag="Mais do que medir. Mais do que digitalizar." titulo="Da percepção do problema à transformação do serviço."
+        lead={<p>A DM | Experience Intelligence é uma plataforma de inteligência e melhoria contínua que orienta organizações na investigação de desafios reais. Ela conecta o que as pessoas vivenciam aos processos, equipes, decisões, ambientes e tecnologias que tornam essa experiência possível.</p>}>
+        <p className="lp-destaque">O objetivo não é produzir mais dashboards. É ajudar sua organização a saber <b>o que investigar, por que investigar, como agir e o que acompanhar depois</b>.</p>
+        <CamadasValor />
       </Secao>
 
-      <Secao id="para-quem" titulo="Feita para organizações que precisam melhorar experiências de ponta a ponta.">
-        <div className="lp-grupos">
-          <div><h3 className="lp-subtitulo">Segmentos</h3><ul className="lp-chips">{SEGMENTOS.map((s) => <li key={s}>{s}</li>)}</ul></div>
-          <div><h3 className="lp-subtitulo">A plataforma pode ser usada para melhorar experiências de</h3><ul className="lp-chips">{PUBLICOS.map((s) => <li key={s}>{s}</li>)}</ul></div>
-          <div><h3 className="lp-subtitulo">Tipos de desafio</h3><ul className="lp-chips">{TIPOS.map((s) => <li key={s}>{s}</li>)}</ul></div>
+      {/* 04 Como funciona */}
+      <Secao id="como-funciona" tag="Sua jornada de transformação" titulo="Você traz o desafio. Nós ajudamos a construir o caminho."
+        lead={<p>O ponto de partida não é um formulário padrão, uma técnica de pesquisa ou um mapa pronto. É a necessidade real da sua organização. A partir dela, a inteligência propõe e adapta uma investigação orientada por evidências.</p>}>
+        <JornadaStepper />
+        <p className="lp-destaque">Cada desafio pede perguntas e atividades diferentes. O percurso não é uma lista fixa: ele se adapta ao contexto e às evidências reunidas.</p>
+      </Secao>
+
+      {/* 05 Demonstração */}
+      <Secao id="demonstracao" escuro tag="Veja a inteligência em contexto" titulo="O mesmo método de condução. Caminhos diferentes para cada desafio."
+        lead={<p>Uma clínica, um produto digital e uma operação interna não precisam das mesmas perguntas. A plataforma parte da situação apresentada para definir o que investigar e como orientar sua equipe.</p>}>
+        <DemoDesafios aba={abaDemo} onAba={setAbaDemo} />
+      </Secao>
+
+      {/* 06 Entregáveis */}
+      <Secao tag="Do desafio à decisão" titulo="Conhecimento organizado para transformar, não apenas apresentar."
+        lead={<p>Ao longo de uma investigação, sua organização constrói uma base de trabalho que conecta o problema inicial às descobertas e às decisões de melhoria. O nível de aprofundamento depende do desafio e da qualidade das informações reunidas.</p>}>
+        <TrilhaEntregaveis />
+      </Secao>
+
+      {/* 07 Aplicações */}
+      <Secao id="aplicacoes" suave tag="Uma abordagem. Diferentes realidades." titulo="Experiências não acontecem apenas em telas, nem em um único setor."
+        lead={<><p>Sempre que pessoas interagem com um produto, serviço, processo ou organização, existe uma experiência a compreender e a possibilidade de transformá-la.</p><p>Escolha uma combinação para visualizar exemplos de desafios que a plataforma pode ajudar a investigar.</p></>}>
+        <FiltroAplicacoes onVerExemplo={setAbaDemo} />
+      </Secao>
+
+      {/* 08 Diferenciais */}
+      <Secao id="diferenciais" tag="O que nos move" titulo="Metodologia especializada nos bastidores. Direção clara para quem está na operação.">
+        <CardsDiferenciais />
+      </Secao>
+
+      {/* 09 Plataforma + consultoria */}
+      <Secao suave tag="Autonomia quando possível. Especialistas quando necessário." titulo="Sua equipe pode avançar sozinha. E contar com especialistas quando o desafio pedir mais."
+        lead={<p>A DM | Experience Intelligence foi concebida para apoiar investigações e melhorias com autonomia. Em situações de maior complexidade, a Dani Moscatelli | Experience Design Studio pode aprofundar pesquisas, facilitar alinhamentos e apoiar o redesenho e a implementação de serviços.</p>}>
+        <div className="lp-split">
+          <div className="lp-split-card">
+            <span className="etapa-icone" aria-hidden="true"><Laptop size={22} /></span>
+            <span className="lp-rotulo">Plataforma</span>
+            <h3 className="lp-h3">Inteligência para o dia a dia da organização.</h3>
+            <ul>
+              <li>Jornada guiada a partir do desafio.</li>
+              <li>Orientações práticas e instrumentos contextualizados.</li>
+              <li>Organização de evidências e oportunidades.</li>
+              <li>Acompanhamento contínuo das melhorias.</li>
+            </ul>
+            <a href="#como-funciona" className="btn btn-ghost">Conhecer a plataforma</a>
+          </div>
+          <div className="lp-split-card lp-split-escuro">
+            <span className="etapa-icone" aria-hidden="true"><Handshake size={22} /></span>
+            <span className="lp-rotulo">Consultoria especializada</span>
+            <h3 className="lp-h3">Profundidade para transformações complexas.</h3>
+            <ul>
+              <li>Pesquisa e diagnóstico conduzidos por especialistas.</li>
+              <li>Análise de contextos, operações e relações entre áreas.</li>
+              <li>Cocriação e redesenho de serviços e experiências.</li>
+              <li>Facilitação e apoio à implementação e avaliação.</li>
+            </ul>
+          </div>
         </div>
+        <p className="lp-faixa">Não é uma escolha definitiva: a consultoria pode potencializar o trabalho realizado na plataforma, sem substituir a autonomia da sua equipe.</p>
       </Secao>
 
-      <Secao id="como-funciona" suave titulo="Como a plataforma funciona na prática">
-        <ol className="lp-etapas">
-          {ETAPAS.map(([t, d], i) => <li key={t}><span className="lp-passo" aria-hidden="true">{i + 1}</span><div><b>{t}</b><span>{d}</span></div></li>)}
-        </ol>
-        <p className="lp-destaque">A plataforma conduz a jornada sem exigir que o cliente saiba aplicar métodos de Service Design.</p>
-      </Secao>
-
-      <Secao id="entregas" titulo="Ao final, sua organização não recebe apenas respostas. Recebe direção."
-        texto={<p>Dependendo da maturidade do processo e da profundidade da investigação, a plataforma ajuda a sair de percepções soltas para uma compreensão mais clara do que precisa ser transformado.</p>}>
-        <ul className="lp-grade lp-grade-4">
-          {ENTREGAS.map((t) => <li key={t} className="lp-card lp-card-linha lp-entrega"><CircleCheck size={20} aria-hidden="true" /><b>{t}</b></li>)}
+      {/* 10 Responsabilidade */}
+      <Secao escuro tag="Inteligência com responsabilidade" titulo="Boas decisões precisam de perguntas melhores, e evidências confiáveis."
+        lead={<p>A inteligência artificial apoia a organização do desafio e a condução das atividades, mas não transforma suposições em fatos. O processo foi concebido para indicar lacunas de informação, respeitar contextos sensíveis e manter pessoas responsáveis pelas decisões.</p>}>
+        <ul className="lp-grade lp-grade-3 lp-confianca-lista">
+          <li><ShieldCheck size={24} aria-hidden="true" /><b>Privacidade primeiro.</b><span>Oriente o registro apenas das informações necessárias; evite dados pessoais e sensíveis não autorizados.</span></li>
+          <li><ScanSearch size={24} aria-hidden="true" /><b>Evidências com contexto.</b><span>Relatos, registros e observações possuem limites diferentes; a análise precisa reconhecer isso.</span></li>
+          <li><UserRoundCheck size={24} aria-hidden="true" /><b>Decisão humana.</b><span>Recomendações orientam a investigação e a transformação; não substituem responsabilidade profissional.</span></li>
         </ul>
+        <p><Link href="/aviso-de-privacidade/" className="lp-link-claro">Aviso de privacidade</Link></p>
       </Secao>
 
-      <Secao id="consultoria" suave titulo="Plataforma quando sua equipe precisa de autonomia. Consultoria quando o desafio exige profundidade adicional."
-        texto={<p>A plataforma foi desenhada para funcionar de forma independente, mas também pode ser potencializada com o apoio especializado da Dani Moscatelli Studio em desafios que exigem aprofundamento estratégico, facilitação e transformação organizacional.</p>}>
-        <table className="lp-tabela">
-          <thead><tr><th scope="col">Plataforma</th><th scope="col">Consultoria especializada</th></tr></thead>
-          <tbody>{COMPARACAO.map(([a, b]) => <tr key={a}><td>{a}</td><td>{b}</td></tr>)}</tbody>
-        </table>
-        <div className="lp-comparacao-celular">
-          <div className="lp-card"><b>Plataforma</b><ul>{COMPARACAO.map(([a]) => <li key={a}>{a}</li>)}</ul></div>
-          <div className="lp-card"><b>Consultoria especializada</b><ul>{COMPARACAO.map(([, b]) => <li key={b}>{b}</li>)}</ul></div>
-        </div>
-      </Secao>
-
-      <Secao id="diferenciais" titulo="O que torna a DM | Experience Intelligence diferente">
+      {/* 11 Planos */}
+      <Secao id="planos" tag="Planos e acesso" titulo="Uma forma de evoluir experiências de acordo com a realidade da sua organização."
+        lead={<p>Estamos estruturando as modalidades comerciais da DM | Experience Intelligence. A proposta é oferecer autonomia para o trabalho contínuo e opções de apoio especializado conforme a complexidade dos desafios.</p>}>
+        <p className="lp-selo">Planos em definição • Acesso antecipado por convite</p>
         <ul className="lp-grade lp-grade-3">
-          {DIFERENCIAIS.map(([I, t, d]) => <li key={t} className="lp-card"><Icone icone={I} /><b>{t}</b><span>{d}</span></li>)}
+          {PLANOS.map((p) => (
+            <li key={p.nome} className="lp-card lp-plano">
+              <span className="lp-etiqueta">Proposta em estudo</span>
+              <h3 className="lp-h3">{p.nome}</h3>
+              <span><b>Para quem:</b> {p.para}</span>
+              <span><b>Proposta:</b> {p.proposta}</span>
+              <span className="lp-preco">{p.preco}</span>
+            </li>
+          ))}
         </ul>
+        <p className="lp-nota">Nomes, recursos e condições dos planos estão sujeitos a validação. A contratação ainda não está disponível nesta fase.</p>
       </Secao>
 
-      <Secao id="planos" suave titulo="Planos para diferentes momentos de maturidade">
-        <ul className="lp-grade lp-grade-3">
-          {PLANOS.map(([t, d]) => <li key={t} className="lp-card lp-plano"><b>{t}</b><span>{d}</span><span className="lp-preco">Em definição</span></li>)}
-        </ul>
+      {/* 12 FAQ */}
+      <Secao id="perguntas" suave tag="FAQ" titulo="O que você precisa saber antes de começar.">
+        <PerguntasFrequentes />
       </Secao>
 
-      <Secao id="perguntas" titulo="Perguntas frequentes">
-        <div className="lp-faq">
-          {FAQ.map(([p, r]) => <details key={p}><summary>{p}</summary><p>{r}</p></details>)}
-        </div>
-      </Secao>
-
+      {/* 13 CTA final */}
       <section className="lp-final">
         <div className="lp-wrap">
-          <h2 className="lp-titulo">Pronto para transformar desafios em experiências melhores?</h2>
-          <p>Comece com o que sua organização deseja melhorar. A plataforma ajudará a organizar o caminho.</p>
-          <Link href="/cadastro/" className="btn btn-primary">Criar minha conta</Link>
+          <p className="eyebrow">O próximo passo é seu</p>
+          <h2 className="lp-titulo">Sua organização já tem um desafio. Vamos começar por ele?</h2>
+          <p>Quando a experiência não funciona como deveria, cada informação pode ajudar a descobrir um caminho melhor. Conheça uma abordagem que conecta pessoas, operação e tecnologia para transformar desafios em oportunidades de evolução.</p>
+          <LinhaNos />
+          <Link href="/entrar/" className="btn btn-primary" onClick={() => medir("login_click", { local: "cta_final" })}>Entrar</Link>
+          <p className="lp-micro">Acesso à plataforma limitado a pessoas convidadas nesta fase. Sem contratação automática.</p>
         </div>
       </section>
+
+      {/* 14 Rodapé (a linha de copyright vem do rodapé padrão do app) */}
+      <div className="lp-rodape">
+        <div className="lp-wrap lp-rodape-grade">
+          <div>
+            <p className="brand">DM | <span>Experience Intelligence</span></p>
+            <p>Um produto da Dani Moscatelli | Experience Design Studio.</p>
+            <p className="lp-nota">Tecnologia e conhecimento para transformar experiências humanas.</p>
+          </div>
+          <nav aria-label="Rodapé" className="lp-rodape-nav">
+            {ANCORAS.map((a) => <a key={a.id} href={`#${a.id}`}>{a.rotulo}</a>)}
+            <Link href="/entrar/" onClick={() => medir("login_click", { local: "rodape" })}>Entrar</Link>
+          </nav>
+          <div className="lp-rodape-nav">
+            <Link href="/aviso-de-privacidade/">Aviso de privacidade</Link>
+            <a href="https://danimoscatelli.com.br/" target="_blank" rel="noopener">Site do estúdio</a>
+            {GA_ID && <button type="button" className="btn-link" onClick={abrirPreferenciasCookies}>Preferências de cookies</button>}
+            <a href="#inicio">Voltar ao topo</a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

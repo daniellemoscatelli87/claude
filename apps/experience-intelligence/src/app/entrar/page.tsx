@@ -1,5 +1,5 @@
 "use client";
-// Entrar (tela C do kit de UX), separada da landing page (UX-16). Com sessão, volta para o início.
+// Entrar, separada da landing comercial (UX-17). Com sessão, volta para o início.
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Shell, Loading } from "@/components/Shell";
@@ -11,5 +11,5 @@ export default function Entrar() {
   const router = useRouter();
   useEffect(() => { if (session) router.replace("/"); }, [session, router]);
   if (loading || session) return <Shell><Loading /></Shell>;
-  return <Shell><AuthForm /></Shell>;
+  return <Shell medir><AuthForm /></Shell>;
 }

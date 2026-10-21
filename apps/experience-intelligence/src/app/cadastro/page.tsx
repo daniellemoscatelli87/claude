@@ -13,7 +13,7 @@ export default function Cadastro() {
   useEffect(() => { if (!loading && session) router.replace("/"); }, [loading, session, router]);
   if (loading || session) return <Shell><Loading /></Shell>;
   return (
-    <Shell>
+    <Shell medir>
       <h1>Crie sua conta</h1>
       <BarraProgresso atual={1} total={2} />
       <PersonalForm modo="cadastro" />
