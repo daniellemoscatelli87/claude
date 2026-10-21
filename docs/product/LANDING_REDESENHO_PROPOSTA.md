@@ -1,6 +1,6 @@
 # Landing comercial: proposta de redesenho (aguarda aprovação)
 
-**Data:** 21/10/2026 · **Origem:** avaliação da dona do produto: "muito densa de informação, não está bonita, fluida, e não fez bom uso da diversidade de componentes para variar as sensações". · **Status:** proposta; nada implementado. A copy aprovada, as cores do app, a fonte Plus Jakarta Sans e as regras (botões sem degradê, mobile primeiro, acessibilidade) continuam valendo.
+**Data:** 21/10/2026 · **Origem:** avaliação da dona do produto: "muito densa de informação, não está bonita, fluida, e não fez bom uso da diversidade de componentes para variar as sensações". · **Status:** proposta aprovada para protótipo; protótipo em `/prototipo-landing/` (não publicado, sem link), com o topo, o simulador de sintomas, a linha do tempo e a pasta de entregáveis. A copy aprovada, as cores do app, a fonte Plus Jakarta Sans e as regras (botões sem degradê, mobile primeiro, acessibilidade) continuam valendo.
 
 ## 1. Diagnóstico da versão atual
 
@@ -66,3 +66,9 @@ Proposta: transformar essa linha no **único elemento marcante** da página.
 1. Protótipo das três peças que a dona do produto destacou (simulador de sintomas, linha do tempo "Como funciona" e trilha de entregáveis), mais o topo, numa rota de teste não publicada, com capturas no celular e no computador.
 2. Com o protótipo aprovado, aplicar o mesmo sistema às demais seções.
 3. Repetir os testes (acessibilidade, teclado, contraste, 320 a 1280 px) antes de pedir autorização para publicar.
+
+## 7. Protótipo (21/10/2026)
+
+- Rota de teste `src/app/prototipo-landing/page.tsx`, componentes em `src/components/prototipo/` (`Prototipo.tsx`, `prototipo.css`). A landing atual não foi alterada.
+- Rótulos do diagrama do topo tirados da seção 03 da especificação ("o que as pessoas vivenciam"; "processos, equipes, decisões, ambientes e tecnologias") e o termo "linha de visibilidade". O texto de apoio do topo fica a um toque ("Como a plataforma faz isso").
+- Verificado no navegador a 375 e 1280 px: sem rolagem lateral e sem erros; simulador desce as 3 camadas e mostra a pergunta orientadora; linha do tempo abre a etapa no lugar (celular) ou ao lado (computador); pasta abre o documento no lugar (celular) ou abaixo da fileira (computador).
