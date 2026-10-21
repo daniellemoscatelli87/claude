@@ -308,6 +308,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - o CNPJ tem máscara, recusa dígito errado e é enviado só com dígitos;
     - "Meus dados" mostra o aceite e não reenvia aceites na edição.
 
+## 2026-10-21 · Busca digitando no estado e na cidade (não publicado)
+
+- Pedido da dona do produto (estado e cidade): novo `CampoBusca` em `src/design-system/campos.tsx`, usado nos dois campos de `CampoEstadoCidade`; `buscaNormalizada` em `padroes.ts`; estilos `.busca*` em `globals.css`.
+- Verificado: `tsc`, `oxlint` (sem erros), `vitest` 49 de 49 (1 teste novo da busca), build. Navegador a 375 px: 27 estados; "parana" encontra Paraná; "curi" mostra Curitiba e Curiúva; texto sem resultado avisa e volta para a cidade anterior ao sair; nome digitado completo é aceito; trocar o estado limpa a cidade; sem erros e sem rolagem lateral. Fluxo completo do cadastro (320 e 375 px) envia `state` PR e `city` Curitiba.
+
 ## 2026-10-21 · Tela de entrada com a proposta de valor (Tela A do kit de UX, não publicado)
 
 - Pedido da dona do produto: a tela de entrada não trazia o contexto do produto. Aplicada a Tela A de `docs/product/ux-onboarding/02-COPY-COMPLETA-E-COMPONENTES.md` com os textos do kit: eyebrow, título, descrição, 3 microcartões (`Target`, `Compass`, `TrendingUp`), "Entrar na plataforma" (leva ao formulário na mesma página), "Criar minha conta" (/cadastro/) e selo "Acesso por convite nesta fase". O formulário de entrar continua abaixo. Rodapé mantido como o do site (pedido anterior da dona do produto), no lugar da assinatura do kit.

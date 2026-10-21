@@ -1,8 +1,8 @@
 "use client";
 // Componentes de campo do design system, com os mesmos comportamentos dos formulários do site.
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { Eye, EyeOff, X } from "lucide-react";
-import { ESTADOS, forcaSenha, maskCnpj, maskPhone, requisitosSenha, sugestoesEmail } from "./padroes";
+import { ChevronDown, Eye, EyeOff, X } from "lucide-react";
+import { ESTADOS, buscaNormalizada, forcaSenha, maskCnpj, maskPhone, requisitosSenha, sugestoesEmail } from "./padroes";
 
 type Base = { label: string; erro?: string; hint?: string; disabled?: boolean };
 
@@ -111,25 +111,77 @@ export function CampoEstadoCidade({ uf, cidade, onChange, erro, disabled }: { uf
     return () => { vivo = false; };
   }, [uf]);
   const opcaoVazia = estado === "vazio" ? "Escolha o estado primeiro" : estado === "carregando" ? "Carregando cidades…" : estado === "falha" ? "Não foi possível carregar as cidades. Tente de novo." : "Selecione a cidade";
+  const invalido = (vazio: boolean) => (d.invalid && vazio ? true : undefined);
   return (
     <div className="uf-cidade-campo">
       <div className="uf-cidade">
-        <label>Estado
-          <select value={uf} onChange={(e) => onChange(e.target.value, "")} disabled={disabled} aria-invalid={d.invalid && !uf ? true : undefined} aria-describedby={d.describedBy}>
-            <option value="">Selecione</option>
-            {ESTADOS.map(([sigla, nome]) => <option key={sigla} value={sigla}>{nome}</option>)}
-          </select>
-        </label>
-        <label>Cidade
-          <select value={cidade} onChange={(e) => onChange(uf, e.target.value)} disabled={disabled || estado !== "ok"} aria-invalid={d.invalid && !cidade ? true : undefined} aria-describedby={d.describedBy}>
-            <option value="">{opcaoVazia}</option>
-            {cidade && !cidades?.includes(cidade) && <option value={cidade}>{cidade}</option>}
-            {cidades?.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
-        </label>
+        <CampoBusca label="Estado" vazio="Selecione" opcoes={ESTADOS.map(([sigla, nome]) => ({ valor: sigla, rotulo: nome }))}
+          valor={uf} onEscolher={(v) => onChange(v, "")} disabled={disabled} invalido={invalido(!uf)} describedBy={d.describedBy} />
+        <CampoBusca label="Cidade" vazio={opcaoVazia} opcoes={(cidades ?? (cidade ? [cidade] : [])).map((c) => ({ valor: c, rotulo: c }))}
+          valor={cidade} onEscolher={(v) => onChange(uf, v)} disabled={disabled || estado !== "ok"} invalido={invalido(!cidade)} describedBy={d.describedBy} />
       </div>
       {d.textos}
     </div>
+  );
+}
+
+type Opcao = { valor: string; rotulo: string };
+
+/** Lista com busca: a pessoa digita para filtrar (sem diferenciar acentos) e escolhe uma opção da lista.
+ *  Só aceita valores da lista; ao sair do campo sem escolher, volta para a opção anterior. */
+export function CampoBusca({ label, vazio, opcoes, valor, onEscolher, disabled, invalido, describedBy }: {
+  label: string; vazio: string; opcoes: Opcao[]; valor: string; onEscolher: (v: string) => void;
+  disabled?: boolean; invalido?: boolean; describedBy?: string;
+}) {
+  const id = useId();
+  const lista = useRef<HTMLUListElement>(null);
+  const atual = opcoes.find((o) => o.valor === valor);
+  const [texto, setTexto] = useState<string | null>(null); // null: mostra a opção escolhida
+  const [aberto, setAberto] = useState(false);
+  const [ativo, setAtivo] = useState(0);
+  const filtro = buscaNormalizada(texto ?? "");
+  const filtradas = filtro ? opcoes.filter((o) => buscaNormalizada(o.rotulo).includes(filtro)) : opcoes;
+
+  useEffect(() => { lista.current?.children[ativo]?.scrollIntoView({ block: "nearest" }); }, [ativo, aberto]);
+
+  function escolher(o: Opcao) { onEscolher(o.valor); setTexto(null); setAberto(false); }
+  function sair() {
+    if (texto !== null) {
+      const exata = opcoes.find((o) => buscaNormalizada(o.rotulo) === filtro);
+      if (exata) onEscolher(exata.valor); else if (!filtro) onEscolher("");
+    }
+    setTexto(null); setAberto(false);
+  }
+  function teclas(e: React.KeyboardEvent) {
+    if (e.key === "ArrowDown") { e.preventDefault(); if (!aberto) setAberto(true); else setAtivo((i) => Math.min(i + 1, filtradas.length - 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setAtivo((i) => Math.max(i - 1, 0)); }
+    else if (e.key === "Enter" && aberto) { e.preventDefault(); if (filtradas[ativo]) escolher(filtradas[ativo]); }
+    else if (e.key === "Escape" && aberto) { e.preventDefault(); setTexto(null); setAberto(false); }
+  }
+
+  return (
+    <label className="busca">{label}
+      <span className="busca-caixa">
+        <input role="combobox" aria-autocomplete="list" aria-expanded={aberto} aria-controls={`${id}-lista`}
+          aria-activedescendant={aberto && filtradas[ativo] ? `${id}-${ativo}` : undefined}
+          value={texto ?? atual?.rotulo ?? ""} placeholder={vazio} disabled={disabled} autoComplete="off"
+          aria-invalid={invalido} aria-describedby={describedBy}
+          onChange={(e) => { setTexto(e.target.value); setAtivo(0); setAberto(true); }}
+          onFocus={(e) => { e.target.select(); setAtivo(Math.max(0, opcoes.findIndex((o) => o.valor === valor))); setAberto(true); }}
+          onClick={() => setAberto(true)} onBlur={sair} onKeyDown={teclas} />
+        <ChevronDown className="busca-seta" size={18} aria-hidden="true" />
+      </span>
+      {aberto && !disabled && (
+        <ul ref={lista} id={`${id}-lista`} role="listbox" aria-label={label} className="busca-lista">
+          {filtradas.length === 0 && <li className="busca-nada" role="presentation">Nenhum resultado. Confira a grafia.</li>}
+          {filtradas.map((o, i) => (
+            <li key={o.valor} id={`${id}-${i}`} role="option" aria-selected={o.valor === valor}
+              className={i === ativo ? "ativo" : undefined}
+              onMouseDown={(e) => e.preventDefault()} onMouseEnter={() => setAtivo(i)} onClick={() => escolher(o)}>{o.rotulo}</li>
+          ))}
+        </ul>
+      )}
+    </label>
   );
 }
 

@@ -64,3 +64,8 @@ export function cnpjValido(valor: string): boolean {
   };
   return dv(12) === Number(c[12]) && dv(13) === Number(c[13]);
 }
+
+/** Texto para busca: sem acentos, minúsculo e sem espaços nas pontas ("São Paulo" e "sao paulo" coincidem). */
+export function buscaNormalizada(t: string): string {
+  return t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}

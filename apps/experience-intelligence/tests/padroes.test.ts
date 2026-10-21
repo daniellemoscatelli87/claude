@@ -39,3 +39,13 @@ describe("CNPJ", () => {
     expect(cnpjValido("11111111111111")).toBe(false);
   });
 });
+
+import { buscaNormalizada } from "@/design-system/padroes";
+
+describe("busca em listas (estado e cidade)", () => {
+  it("ignora acentos, maiúsculas e espaços nas pontas", () => {
+    expect(buscaNormalizada("  São Paulo ")).toBe("sao paulo");
+    expect(buscaNormalizada("Paraná")).toBe(buscaNormalizada("parana"));
+    expect(buscaNormalizada("Altônia").includes(buscaNormalizada("alto"))).toBe(true);
+  });
+});

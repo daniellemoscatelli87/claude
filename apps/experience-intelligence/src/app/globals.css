@@ -141,6 +141,15 @@ input[aria-invalid="true"], select[aria-invalid="true"] { border-color: #c53030;
 .uf-cidade-campo { display: grid; gap: 6px; }
 .uf-cidade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 12px; }
 @media (max-width: 560px) { .uf-cidade { grid-template-columns: 1fr; } }
+.busca { position: relative; }
+.busca-caixa { position: relative; display: block; }
+.busca-caixa input { padding-right: 40px; }
+.busca-seta { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+.busca-lista { position: absolute; z-index: 20; left: 0; right: 0; top: 100%; margin: 4px 0 0; padding: 6px; list-style: none; max-height: 260px; overflow-y: auto; background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 28px rgba(15, 23, 42, .12); font-weight: 400; }
+.busca-lista li { padding: 10px 12px; min-height: 44px; display: flex; align-items: center; border-radius: 8px; cursor: pointer; color: var(--dark); }
+.busca-lista li.ativo { background: var(--red-tint); }
+.busca-lista li[aria-selected="true"] { font-weight: 700; color: var(--red-dark); }
+.busca-lista li.busca-nada { color: var(--muted); cursor: default; }
 .forca { display: grid; gap: 6px; }
 .forca-barra { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
 .forca-barra i { height: 6px; border-radius: 999px; background: var(--line); }
