@@ -1,6 +1,6 @@
 # Página de produto v2: proposta de composição (aguarda aprovação)
 
-**Data:** 21/10/2026 · **Base:** documentos 00 a 05 desta pasta, enviados pela dona do produto. · **Status:** nada programado.
+**Data:** 21/10/2026 · **Base:** documentos 00 a 05 desta pasta, enviados pela dona do produto. · **Status:** nada programado. Decisões registradas na seção 8.
 
 ## 1. O que foi conferido no código atual
 
@@ -98,3 +98,7 @@ No computador: topo em duas colunas (texto à esquerda, janela do app à direita
 - Artefatos com hipótese, evidência e lacuna diferenciadas; tudo marcado como fictício.
 - Botões com destino real; login separado; nenhuma coleta de dados.
 - Teclado, toque e leitor de tela; 320 a 1280 px sem rolagem lateral; movimento reduzido respeitado; contraste AA.
+
+## 8. Decisões da dona do produto
+
+- **21/10/2026 · Decisão 1: opção B.** A página do produto fica no site do estúdio, em `danimoscatelli.com.br/experience-intelligence/`. Segue as convenções do site: página estática em `public/experience-intelligence/` (HTML, CSS e JavaScript próprios, como a Rede de Parceiros e a Store), sem tocar na página "Em breve". Entrar leva ao app (`app.danimoscatelli.com.br/entrar/`). O que fazer com a landing atual do app (`/` sem login) fica para uma decisão posterior.
