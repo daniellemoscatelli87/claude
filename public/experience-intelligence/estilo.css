@@ -309,6 +309,10 @@ a { color: inherit; }
   .avatar-ponto { display: block; position: absolute; top: 0; right: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--primary); border: 2px solid var(--card); }
   .painel-cab { flex-wrap: nowrap; }
   .kpi { gap: 0; }
+  /* Cards de visão geral em carrossel (arrastar para o lado) */
+  .kpis { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 12px; margin: 0 -12px 12px; padding: 2px 12px 6px; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .kpis::-webkit-scrollbar { display: none; }
+  .kpi { flex: 0 0 42%; scroll-snap-align: start; }
   .etapa-ico { cursor: pointer; }
   .grafico .toque { cursor: pointer; }
 }
