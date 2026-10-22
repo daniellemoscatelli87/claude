@@ -166,7 +166,7 @@ a { color: inherit; }
 .grafico .anterior { stroke: var(--graphite-200); stroke-width: 1.5; }
 .grafico .pa { fill: var(--card); stroke: var(--primary); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
 .grafico .pp { fill: var(--graphite-200); }
-.legenda { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 6px; color: var(--graphite-500); font-size: 0.75rem; }
+.legenda { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 16px; margin-top: 6px; color: var(--graphite-500); font-size: 0.75rem; }
 .legenda span { display: inline-flex; align-items: center; gap: 5px; }
 .legenda span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; }
 .leg-atual::before { background: var(--primary); }
