@@ -297,7 +297,7 @@ a { color: inherit; }
 }
 
 /* Celular: painel minimalista (sem gráficos nos cards, sem cartões flutuantes; nomes aparecem ao tocar) */
-.nome-curto, .avatar-ponto, .ver-todas, .painel-fab { display: none; }
+.avatar-ponto, .ver-todas, .painel-fab { display: none; }
 .painel-fab { position: absolute; z-index: 5; right: 14px; bottom: 14px; width: 48px; height: 48px; align-items: center; justify-content: center; border-radius: 50%; background: var(--primary); color: #fff; font-size: 20px; box-shadow: var(--shadow-lg); cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .menu-aberto .painel-fab { background: #c13e3e; }
 .ver-todas { align-items: center; gap: 4px; margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--border); color: var(--primary); font-size: 0.75rem; font-weight: 600; }
@@ -308,8 +308,14 @@ a { color: inherit; }
 .dica { position: absolute; z-index: 3; transform: translate(-50%, calc(-100% - 8px)); padding: 4px 8px; border-radius: 6px; background: var(--graphite-900); color: #fff; font-size: 0.75rem; font-weight: 500; white-space: nowrap; pointer-events: none; }
 .dica[hidden] { display: none; }
 @media (max-width: 639px) {
-  .nome-longo, .sino, .cab-resto, .filtro-sel, .kpi-linha, .kpi-var, .etapa-nome, .legenda, .flutuante { display: none; }
-  .nome-curto { display: inline; }
+  .sino, .cab-resto, .filtro-sel, .kpi-linha, .kpi-var, .etapa-nome, .legenda, .flutuante { display: none; }
+  /* Mockup antes do título */
+  .hero-visual { order: -1; }
+  /* Cards de visão geral mais baixos */
+  .kpi { padding: 10px; }
+  .kpi-rot { min-height: 0; margin-bottom: 6px; }
+  .kpi-val { font-size: 1.125rem; }
+  .kpi-ico { width: 24px; height: 24px; font-size: 13px; margin-bottom: 0; }
   .painel-fab { display: inline-flex; }
   .oportunidades li:nth-child(n+2) { display: none; }
   .ver-todas { display: flex; }
