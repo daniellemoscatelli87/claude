@@ -125,16 +125,22 @@ a { color: inherit; }
 .filtro-sel .ico { font-size: 13px; }
 .filtro-cal { padding: 6px; border-radius: var(--radius); font-size: 14px; }
 
-/* Cartões KPI (padrão "KPI Cards" do design system, com o arranjo da referência) */
-.kpis { container-type: inline-size; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
-.kpi { background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow-xs); padding: 12px 10px 12px 12px; display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "rot rot" "val spark" "var spark"; align-items: end; column-gap: 8px; }
-.kpi-rot { grid-area: rot; color: var(--graphite-600); font-size: 0.75rem; font-weight: 500; line-height: 1.3; min-height: 2.6em; margin-bottom: 4px; }
-.kpi-val { grid-area: val; font-weight: 700; font-size: 1.375rem; letter-spacing: -0.025em; line-height: 1.1; white-space: nowrap; }
-.kpi-var { grid-area: var; display: inline-flex; align-items: center; gap: 3px; font-weight: 600; font-size: 0.75rem; white-space: nowrap; margin-top: 4px; }
-.kpi-var .ico { font-size: 12px; stroke-width: 2.5; }
+/* Cartões KPI (mesma diagramação dos "KPI Cards" do design system) */
+.kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+.kpi { background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 12px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.kpi-topo { display: flow-root; }
+.kpi-rot { display: block; color: var(--muted-foreground); font-size: 0.75rem; font-weight: 500; line-height: 1.3; min-height: 2.6em; margin-bottom: 4px; }
+.kpi-val { display: block; font-weight: 700; font-size: 1.375rem; letter-spacing: -0.025em; line-height: 1; white-space: nowrap; color: var(--foreground); }
+.kpi-ico { float: right; margin: 0 0 4px 6px; width: 28px; height: 28px; border-radius: 8px; background: var(--muted); color: var(--muted-foreground); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.kpi-linha { width: 100%; height: 28px; overflow: visible; margin-top: auto; }
+.kpi-linha path { fill: none; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.kpi-linha-sobe path { stroke: var(--chart-1); }
+.kpi-linha-desce path { stroke: var(--chart-2); }
+.kpi-var { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 4px; font-weight: 600; font-size: 0.75rem; line-height: 1.3; }
+.kpi-var .ico { font-size: 12px; }
+.kpi-comp { color: var(--muted-foreground); font-weight: 400; }
 .sobe { color: var(--success); }
 .desce { color: var(--primary); }
-.kpi .spark { grid-area: spark; width: 100%; max-width: 72px; height: 32px; justify-self: end; align-self: center; }
 
 /* Gráficos (padrão "Charts" do design system: traço fino, área com degradê de 20% a 0%, grade tracejada) */
 .spark { overflow: visible; }
@@ -174,11 +180,6 @@ a { color: inherit; }
 .oportunidades li span { flex: 1; min-width: 0; }
 .oportunidades li > .ico:last-child { color: var(--graphite-300); font-size: 14px; }
 
-/* Cartões KPI estreitos: o minigráfico desce para a linha da variação */
-@container (max-width: 480px) {
-  .kpi { grid-template-columns: minmax(0, 1fr); grid-template-areas: "rot" "val" "spark" "var"; }
-  .kpi .spark { max-width: none; height: 26px; margin: 6px 0 2px; }
-}
 .jornada { container-type: inline-size; }
 @container (max-width: 300px) {
   .etapa-ico { width: 26px; height: 26px; font-size: 13px; }
@@ -238,6 +239,7 @@ a { color: inherit; }
 
 @media (min-width: 640px) {
   .kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .kpi-rot { min-height: 3.9em; }
   .painel { padding: 18px; }
   .painel-linha { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
 }
