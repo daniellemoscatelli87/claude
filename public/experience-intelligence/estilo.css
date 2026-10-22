@@ -210,16 +210,21 @@ a { color: inherit; }
 .citacao-txt { font-size: 0.75rem; font-weight: 500; color: var(--foreground); line-height: 1.45; }
 .linha-cinza { display: block; height: 6px; width: 85%; border-radius: 9999px; background: var(--muted); margin-top: 10px; }
 .linha-cinza.curta { width: 60%; margin-top: 6px; }
-.voz-barra { display: flex; height: 10px; margin: 4px 0 12px; overflow: hidden; }
-.voz-barra span { display: block; height: 100%; }
-.voz ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; }
-.voz li { display: flex; align-items: center; gap: 6px; color: var(--graphite-600); font-size: 0.75rem; white-space: nowrap; }
-.voz b { color: var(--foreground); font-weight: 700; }
-.ponto { width: 10px; height: 10px; border-radius: 50%; flex: none; }
-.p-clientes { background: var(--primary); }
-.p-pacientes { background: var(--warning); }
-.p-usuarios { background: var(--info); }
-.p-colab { background: var(--violet); }
+.voz-corpo { display: flex; align-items: center; gap: 16px; }
+.rosca { width: 88px; height: 88px; flex: none; }
+.rosca circle { fill: none; }
+.rosca .c1 { stroke: var(--chart-1); }
+.rosca .c2 { stroke: var(--chart-2); }
+.rosca .c3 { stroke: var(--chart-3); }
+.rosca .c4 { stroke: var(--chart-4); }
+.voz ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; flex: 1; min-width: 0; }
+.voz li { display: flex; align-items: center; gap: 8px; color: var(--foreground); font-size: 0.75rem; white-space: nowrap; }
+.voz b { margin-left: auto; color: var(--foreground); font-weight: 600; }
+.ponto { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.ponto.c1 { background: var(--chart-1); }
+.ponto.c2 { background: var(--chart-2); }
+.ponto.c3 { background: var(--chart-3); }
+.ponto.c4 { background: var(--chart-4); }
 .impacto-tit .ico { color: var(--success); font-size: 18px; }
 .impacto-val { display: block; font-weight: 700; font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.1; color: var(--foreground); }
 .impacto-rot { display: block; color: var(--graphite-600); font-size: 0.75rem; margin-top: 2px; line-height: 1.35; }
@@ -246,7 +251,7 @@ a { color: inherit; }
   .painel { padding-bottom: 64px; }
   .flutuante { position: absolute; z-index: 2; }
   .citacao { top: 0; left: 42%; width: 40%; }
-  .voz { left: -24px; bottom: 0; width: 300px; }
+  .voz { left: -24px; bottom: 0; width: 270px; }
   .impacto { right: -8px; bottom: 0; width: 230px; }
 }
 
