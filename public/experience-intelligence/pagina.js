@@ -56,7 +56,7 @@
     origem = e.currentTarget;
     form.reset(); limpar();
     form.classList.remove('enviado'); ok.hidden = true;
-    btn.disabled = false; btn.textContent = 'Avise-me';
+    btn.disabled = false; btn.textContent = 'Enviar';
     modal.showModal();
     email.focus();
   }
@@ -81,7 +81,7 @@
       form.classList.add('enviado'); ok.hidden = false;
       ok.querySelector('button').focus();
     }).catch(function () {
-      btn.disabled = false; btn.textContent = 'Avise-me';
+      btn.disabled = false; btn.textContent = 'Enviar';
       erro('Não foi possível enviar. Tente novamente.');
     });
   });
