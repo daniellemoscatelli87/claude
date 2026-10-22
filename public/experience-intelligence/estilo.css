@@ -266,7 +266,7 @@ a { color: inherit; }
 /* Celular e tablet: cartões flutuantes em grade, abaixo da janela */
 @media (max-width: 1279px) {
   .hero-visual { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; max-width: 760px; margin: 0 auto; }
-  .voz { order: -1; }
+  .citacao { order: -1; }
   .flutuante { box-shadow: var(--shadow-sm); }
 }
 @media (max-width: 559px) {
@@ -283,13 +283,13 @@ a { color: inherit; }
 @media (min-width: 1280px) {
   .hero-visual { padding: 120px 0 110px; }
   .flutuante { position: absolute; z-index: 2; }
-  .voz { top: 15px; left: 46%; width: 270px; }
+  .citacao { top: 15px; left: 46%; width: 300px; }
   .impacto { left: -49px; bottom: 35px; width: 230px; }
-  .citacao { right: -28px; bottom: 30px; width: 300px; }
+  .voz { right: -28px; bottom: 5px; width: 270px; }
 }
 
 @media (min-width: 1280px) and (max-width: 1399px) {
-  .voz { left: 36%; }
+  .citacao { left: 34%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
