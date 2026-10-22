@@ -184,6 +184,7 @@ a { color: inherit; }
 .painel-linha { display: grid; gap: 12px; }
 .cartao { background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow-xs); padding: 14px; min-width: 0; }
 .cartao > strong { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 10px; }
+.cartao > .tit-com-ico { display: flex; align-items: center; gap: 8px; }
 .etapas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); text-align: center; color: var(--graphite-600); font-size: 0.75rem; font-weight: 500; }
 .etapas li { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .etapa-ico { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--card); display: inline-flex; align-items: center; justify-content: center; font-size: 15px; color: var(--graphite-600); }
@@ -205,7 +206,6 @@ a { color: inherit; }
 .oportunidades ul { list-style: none; margin: 0; padding: 0; }
 .oportunidades li { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--border); color: var(--graphite-600); font-size: 0.75rem; line-height: 1.35; }
 .oportunidades li:first-child { border-top: 0; }
-.oportunidades li > .ico:first-child { font-size: 18px; color: var(--graphite-600); }
 .oportunidades li span { flex: 1; min-width: 0; }
 .oportunidades li > .ico:last-child { color: var(--graphite-300); font-size: 14px; }
 
@@ -238,7 +238,6 @@ a { color: inherit; }
 .citacao { display: flex; flex-direction: column; gap: 8px; }
 .citacao-autor { display: flex; align-items: center; gap: 10px; }
 .citacao-autor strong { display: block; font-size: 0.875rem; font-weight: 600; line-height: 1.3; }
-.citacao-autor small { display: block; font-size: 0.75rem; color: var(--muted-foreground); line-height: 1.3; }
 .avatar-g { width: 40px; height: 40px; flex: none; }
 .citacao-txt { font-size: 0.75rem; font-weight: 500; color: var(--foreground); line-height: 1.45; }
 .estrelas { display: flex; gap: 2px; color: var(--warning); font-size: 14px; }
@@ -283,13 +282,13 @@ a { color: inherit; }
 @media (min-width: 1280px) {
   .hero-visual { padding: 120px 0 110px; }
   .flutuante { position: absolute; z-index: 2; }
-  .citacao { top: 15px; left: 46%; width: 300px; }
+  .citacao { top: 15px; left: calc(46% - 20px); width: 300px; }
   .impacto { left: -49px; bottom: 35px; width: 230px; }
   .voz { right: -28px; bottom: 5px; width: 270px; }
 }
 
 @media (min-width: 1280px) and (max-width: 1399px) {
-  .citacao { left: 34%; }
+  .citacao { left: calc(34% - 20px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
