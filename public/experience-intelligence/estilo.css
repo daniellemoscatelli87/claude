@@ -209,8 +209,6 @@ a { color: inherit; }
 .citacao { display: flex; align-items: center; gap: 14px; }
 .avatar-g { width: 52px; height: 52px; font-size: 24px; flex: none; }
 .citacao-txt { font-size: 0.75rem; font-weight: 500; color: var(--foreground); line-height: 1.45; }
-.linha-cinza { display: block; height: 6px; width: 85%; border-radius: 9999px; background: var(--muted); margin-top: 10px; }
-.linha-cinza.curta { width: 60%; margin-top: 6px; }
 .voz-corpo { display: flex; align-items: center; gap: 16px; }
 .rosca { width: 88px; height: 88px; flex: none; }
 .rosca circle { fill: none; }
