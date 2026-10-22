@@ -248,8 +248,7 @@ a { color: inherit; }
 
 /* Computador: cartões sobrepostos à janela, como na referência */
 @media (min-width: 1280px) {
-  .hero-visual { padding: 64px 0 96px; }
-  .painel { padding-bottom: 64px; }
+  .hero-visual { padding: 64px 0 110px; }
   .flutuante { position: absolute; z-index: 2; }
   .citacao { top: 0; left: 42%; width: 40%; }
   .impacto { left: -24px; bottom: 0; width: 230px; }
