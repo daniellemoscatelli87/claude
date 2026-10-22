@@ -255,6 +255,7 @@ body.lateral-aberta { overflow: hidden; }
 .citacao { display: flex; flex-direction: column; gap: 8px; }
 .citacao-autor { display: flex; align-items: center; gap: 10px; }
 .citacao-autor strong { display: block; font-size: 0.875rem; font-weight: 600; line-height: 1.3; }
+.citacao-autor .estrelas { margin-top: 2px; }
 .avatar-g { width: 40px; height: 40px; flex: none; }
 .citacao-txt { font-size: 0.75rem; font-weight: 500; color: var(--foreground); line-height: 1.45; }
 .estrelas { display: flex; gap: 2px; color: var(--warning); font-size: 14px; }
