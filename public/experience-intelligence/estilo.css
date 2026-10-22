@@ -65,7 +65,6 @@ a { color: inherit; }
 @media (max-width: 639px) {
   .topo .btn-contato { display: none; }
 }
-}
 .menu-btn { width: 44px; height: 44px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--card); display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; }
 .menu-btn span { width: 18px; height: 2px; background: var(--foreground); border-radius: 2px; }
 
@@ -260,21 +259,17 @@ body.lateral-aberta { overflow: hidden; }
 .citacao-txt { font-size: 0.75rem; font-weight: 500; color: var(--foreground); line-height: 1.45; }
 .estrelas { display: flex; gap: 2px; color: var(--warning); font-size: 14px; }
 .estrelas .ico { fill: currentColor; }
-.voz-corpo { display: flex; align-items: center; gap: 16px; }
-.rosca { width: 88px; height: 88px; flex: none; }
-.rosca circle { fill: none; }
-.rosca .c1 { stroke: var(--chart-1); }
-.rosca .c2 { stroke: var(--chart-2); }
-.rosca .c3 { stroke: var(--chart-3); }
-.rosca .c4 { stroke: var(--chart-4); }
-.voz ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; flex: 1; min-width: 0; }
-.voz li { display: flex; align-items: center; gap: 8px; color: var(--foreground); font-size: 0.75rem; white-space: nowrap; }
-.voz b { margin-left: auto; color: var(--foreground); font-weight: 600; }
-.ponto { width: 8px; height: 8px; border-radius: 50%; flex: none; }
-.ponto.c1 { background: var(--chart-1); }
-.ponto.c2 { background: var(--chart-2); }
-.ponto.c3 { background: var(--chart-3); }
-.ponto.c4 { background: var(--chart-4); }
+/* Percepção da experiência: barras horizontais (padrão Bar Chart do design system: cantos de 4px, cores chart-1 a chart-4) */
+.barras { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.barras li { display: grid; grid-template-columns: 64px minmax(0, 1fr) 30px; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--foreground); }
+.barra-rot { white-space: nowrap; }
+.barra-trilho { height: 8px; border-radius: 4px; background: var(--muted); overflow: hidden; }
+.barra { display: block; height: 100%; border-radius: 4px; }
+.barra.c1 { background: var(--chart-1); }
+.barra.c2 { background: var(--chart-2); }
+.barra.c3 { background: var(--chart-3); }
+.barra.c4 { background: var(--chart-4); }
+.barras b { text-align: right; font-weight: 600; }
 .tit-ico { width: 28px; height: 28px; border-radius: 8px; background: var(--primary-muted); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 15px; flex: none; }
 .impacto-val { display: flex; align-items: center; gap: 4px; font-weight: 700; font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.1; color: var(--foreground); }
 .impacto-val .ico { font-size: 22px; stroke-width: 2.5; color: var(--primary); }
