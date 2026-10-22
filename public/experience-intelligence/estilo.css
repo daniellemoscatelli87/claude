@@ -128,14 +128,16 @@ body.lateral-aberta { overflow: hidden; }
    Mesmos tamanhos, trajetórias, durações, cores e desfoque dos 4 primeiros slots da paleta clara padrão. */
 .hero { position: relative; isolation: isolate; }
 .fundo-hero { position: absolute; z-index: -1; top: -200px; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); overflow: hidden; background: #FFFFFF; pointer-events: none; }
-.blob { position: absolute; border-radius: 50%; filter: blur(90px); animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-direction: alternate; will-change: transform; }
+.blob { position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform, opacity; }
 /* Troca de lados: as manchas cinza começam à esquerda e vão para a direita; as vermelhas fazem o caminho inverso.
    Ida e volta suaves (ease-in-out, alternate), com leve deriva vertical. Cores, tamanhos e desfoque do design system. */
-.b1, .b2, .b3, .b4 { left: 0; animation-duration: 22s; animation-timing-function: ease-in-out; animation-direction: alternate; }
-.b1 { width: 620px; height: 620px; top: -5%;  background: rgba(237,240,245,0.95); animation-name: troca-cinza-1; }
-.b3 { width: 560px; height: 560px; top: 40%;  background: rgba(214,220,230,0.90); animation-name: troca-cinza-2; animation-delay: -4s; }
-.b2 { width: 520px; height: 520px; top: -10%; background: rgba(253,242,242,1.00); animation-name: troca-vermelho-1; }
-.b4 { width: 420px; height: 420px; top: 45%;  background: rgba(232,128,128,0.38); animation-name: troca-vermelho-2; animation-delay: -4s; }
+.b1, .b2, .b3, .b4 { left: 0; }
+/* Além da troca de lados, a intensidade das cores oscila: mais suave, depois mais intensa (9 a 11s por ciclo). */
+@keyframes pulsar-cor { from { opacity: .45; } to { opacity: 1; } }
+.b1 { width: 620px; height: 620px; top: -5%;  background: rgba(237,240,245,0.95); animation: troca-cinza-1 22s ease-in-out infinite alternate, pulsar-cor 9s ease-in-out infinite alternate; }
+.b3 { width: 560px; height: 560px; top: 40%;  background: rgba(214,220,230,0.90); animation: troca-cinza-2 22s ease-in-out -4s infinite alternate, pulsar-cor 11s ease-in-out -3s infinite alternate; }
+.b2 { width: 520px; height: 520px; top: -10%; background: rgba(253,242,242,1.00); animation: troca-vermelho-1 22s ease-in-out infinite alternate, pulsar-cor 10s ease-in-out -5s infinite alternate; }
+.b4 { width: 420px; height: 420px; top: 45%;  background: rgba(232,128,128,0.38); animation: troca-vermelho-2 22s ease-in-out -4s infinite alternate, pulsar-cor 9.5s ease-in-out -2s infinite alternate; }
 @keyframes troca-cinza-1    { from { transform: translate3d(-10vw, 0, 0); }   to { transform: translate3d(calc(100vw - 520px), 8vh, 0); } }
 @keyframes troca-cinza-2    { from { transform: translate3d(-6vw, 6vh, 0); }  to { transform: translate3d(calc(100vw - 480px), -4vh, 0); } }
 @keyframes troca-vermelho-1 { from { transform: translate3d(calc(100vw - 440px), 0, 0); }   to { transform: translate3d(-8vw, 10vh, 0); } }
