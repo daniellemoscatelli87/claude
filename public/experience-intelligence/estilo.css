@@ -310,11 +310,9 @@ a { color: inherit; }
 .dica { position: absolute; z-index: 3; transform: translate(-50%, calc(-100% - 8px)); padding: 4px 8px; border-radius: 6px; background: var(--graphite-900); color: #fff; font-size: 0.75rem; font-weight: 500; white-space: nowrap; pointer-events: none; }
 .dica[hidden] { display: none; }
 @media (max-width: 639px) {
-  .janela { display: none; }
-  .painel-imagem { display: block; }
+  .hero-visual { display: none; }
+  .painel-imagem { display: block; margin: -12px -8px 4px; width: calc(100% + 16px); max-width: none; }
   .sino, .cab-resto, .filtro-sel, .kpi-linha, .kpi-var, .etapa-nome, .legenda, .flutuante { display: none; }
-  /* Mockup antes do título */
-  .hero-visual { order: -1; }
   /* Cards de visão geral mais baixos */
   .kpi { padding: 10px; }
   .kpi-rot { min-height: 0; margin-bottom: 6px; }
