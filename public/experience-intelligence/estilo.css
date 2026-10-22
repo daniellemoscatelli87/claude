@@ -311,6 +311,10 @@ a { color: inherit; }
 .dica[hidden] { display: none; }
 @media (max-width: 639px) {
   .hero-visual { display: none; }
+  /* Conteúdo do hero centralizado */
+  .hero-texto { text-align: center; }
+  .hero-texto .lead { margin-left: auto; margin-right: auto; }
+  .hero-acoes { justify-content: center; }
   .painel-imagem { display: block; margin: -12px -8px 4px; width: calc(100% + 16px); max-width: none; }
   .sino, .cab-resto, .filtro-sel, .kpi-linha, .kpi-var, .etapa-nome, .legenda, .flutuante { display: none; }
   /* Cards de visão geral mais baixos */
