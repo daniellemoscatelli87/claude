@@ -18,7 +18,7 @@
   }
   botao.addEventListener('click', abrir);
   document.querySelectorAll('[data-fechar-menu]').forEach(function (el) { el.addEventListener('click', function () { fechar(true); }); });
-  menu.addEventListener('click', function (e) { if (e.target.closest('a')) fechar(false); });
+  menu.addEventListener('click', function (e) { if (e.target.closest('a, [data-open-contact]')) fechar(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) fechar(true); });
   window.matchMedia('(min-width: 1200px)').addEventListener('change', function (m) { if (m.matches) fechar(false); });
 })();
