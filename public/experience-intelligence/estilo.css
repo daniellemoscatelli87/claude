@@ -140,7 +140,7 @@ a { color: inherit; }
 .kpi-var .ico { font-size: 12px; }
 .kpi-comp { color: var(--muted-foreground); font-weight: 400; }
 .sobe { color: var(--primary); }
-.desce { color: var(--primary); }
+.desce { color: var(--chart-2); }
 
 /* Gráficos (padrão "Charts" do design system: traço fino, área com degradê de 20% a 0%, grade tracejada) */
 .spark { overflow: visible; }
@@ -252,8 +252,8 @@ a { color: inherit; }
   .hero-visual { padding: 64px 0 110px; }
   .flutuante { position: absolute; z-index: 2; }
   .citacao { top: 0; left: 42%; width: 40%; }
-  .impacto { left: -49px; bottom: 30px; width: 230px; }
-  .voz { right: -28px; bottom: 0; width: 270px; }
+  .impacto { left: -49px; bottom: 35px; width: 230px; }
+  .voz { right: -28px; bottom: 5px; width: 270px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
