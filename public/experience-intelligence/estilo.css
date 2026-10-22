@@ -239,7 +239,6 @@ a { color: inherit; }
 
 @media (min-width: 640px) {
   .kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .kpi-rot { min-height: 3.9em; }
   .painel { padding: 18px; }
   .painel-linha { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
 }
