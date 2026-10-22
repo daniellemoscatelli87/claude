@@ -28,8 +28,8 @@ a { color: inherit; }
   transition: background-color .2s, box-shadow .2s;
 }
 .btn .ico { width: 18px; height: 18px; }
-.btn-primario { background: var(--crimson-500); color: var(--primary-foreground); box-shadow: var(--shadow-sm); }
-.btn-primario:hover { background: var(--crimson-600); }
+.btn-primario { background: #d44d4d; color: #fff; box-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1); }
+.btn-primario:hover { background: #c13e3e; }
 
 /* Cabeçalho: mesmos valores do cabeçalho da página inicial publicada (index.html) */
 .topo { position: sticky; top: 0; z-index: 30; width: 100%; transition: background-color .2s, box-shadow .2s, backdrop-filter .2s; }
@@ -97,6 +97,7 @@ a { color: inherit; }
   font-size: clamp(2rem, 3.2vw, 3.25rem); line-height: 1.1; letter-spacing: -0.03em;
   margin: 0 0 24px; color: var(--foreground); text-wrap: balance;
 }
+.hero h1 .destaque { color: var(--primary); }
 .lead { margin: 0 0 16px; font-size: 1.0625rem; line-height: 1.65; color: var(--graphite-500); max-width: 36rem; }
 .lead strong { color: var(--foreground); font-weight: 700; white-space: nowrap; }
 .hero-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; margin-top: 32px; }
