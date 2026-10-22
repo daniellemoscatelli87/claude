@@ -298,6 +298,8 @@ a { color: inherit; }
 
 /* Celular: painel minimalista (sem gráficos nos cards, sem cartões flutuantes; nomes aparecem ao tocar) */
 .avatar-ponto, .ver-todas, .painel-fab { display: none; }
+/* Celular: imagem estática do painel do computador no lugar do painel */
+.painel-imagem { display: none; width: 100%; height: auto; }
 .painel-fab { position: absolute; z-index: 5; right: 14px; bottom: 14px; width: 48px; height: 48px; align-items: center; justify-content: center; border-radius: 50%; background: var(--primary); color: #fff; font-size: 20px; box-shadow: var(--shadow-lg); cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .menu-aberto .painel-fab { background: #c13e3e; }
 .ver-todas { align-items: center; gap: 4px; margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--border); color: var(--primary); font-size: 0.75rem; font-weight: 600; }
@@ -308,6 +310,8 @@ a { color: inherit; }
 .dica { position: absolute; z-index: 3; transform: translate(-50%, calc(-100% - 8px)); padding: 4px 8px; border-radius: 6px; background: var(--graphite-900); color: #fff; font-size: 0.75rem; font-weight: 500; white-space: nowrap; pointer-events: none; }
 .dica[hidden] { display: none; }
 @media (max-width: 639px) {
+  .janela { display: none; }
+  .painel-imagem { display: block; }
   .sino, .cab-resto, .filtro-sel, .kpi-linha, .kpi-var, .etapa-nome, .legenda, .flutuante { display: none; }
   /* Mockup antes do título */
   .hero-visual { order: -1; }
