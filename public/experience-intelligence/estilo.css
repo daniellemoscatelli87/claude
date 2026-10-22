@@ -61,20 +61,35 @@ a { color: inherit; }
 }
 .nav { display: none; }
 .topo-acoes { display: flex; align-items: center; gap: 12px; }
+/* Celular: Contato fica dentro do menu lateral */
+@media (max-width: 639px) {
+  .topo .btn-contato { display: none; }
+}
 .menu-btn { width: 44px; height: 44px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--card); display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; }
 .menu-btn span { width: 18px; height: 2px; background: var(--foreground); border-radius: 2px; }
 
-.nav.aberto {
-  display: flex; flex-direction: column; position: absolute; left: 16px; right: 16px; top: 100%;
-  background: var(--card); border-radius: calc(var(--radius) + 4px); box-shadow: var(--shadow-lg); padding: 8px;
-}
+/* Menu lateral (celular e tablet): abre pela direita, sobre o conteúdo */
+.lateral-fundo { position: fixed; inset: 0; z-index: 40; background: rgb(13 17 25 / .45); }
+.menu-lateral { position: fixed; z-index: 41; top: 0; right: 0; bottom: 0; width: min(320px, 85vw); display: flex; flex-direction: column; gap: 8px; padding: 16px; background: var(--card); box-shadow: var(--shadow-xl); overflow-y: auto; animation: lateral-in .25s ease-out; }
+.lateral-fundo[hidden], .menu-lateral[hidden] { display: none; }
+@keyframes lateral-in { from { transform: translateX(100%); } to { transform: none; } }
+.menu-lateral-topo { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.menu-lateral-logo { height: 36px; width: auto; }
+.menu-fechar { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: var(--radius); background: none; color: var(--foreground); font-size: 20px; cursor: pointer; }
+.menu-fechar:hover { background: var(--muted); }
+.menu-lateral nav { display: flex; flex-direction: column; }
+.menu-lateral nav a { text-decoration: none; font-weight: 500; font-size: 1rem; color: var(--graphite-700); padding: 14px 12px; border-radius: var(--radius); }
+.menu-lateral nav a:hover { background: var(--muted); color: var(--foreground); }
+.menu-lateral nav a[aria-current] { color: var(--foreground); font-weight: 600; background: var(--primary-muted); }
+.menu-lateral-contato { margin-top: 8px; justify-content: center; }
+body.lateral-aberta { overflow: hidden; }
 .nav a { text-decoration: none; font-weight: 500; font-size: 0.9375rem; color: var(--graphite-700); padding: 12px 14px; border-radius: var(--radius); }
 .nav a:hover { color: var(--foreground); background: var(--muted); }
 .nav a[aria-current] { color: var(--foreground); font-weight: 600; }
 
 @media (min-width: 1200px) {
   .menu-btn { display: none; }
-  .nav, .nav.aberto { display: flex; flex-direction: row; position: static; background: none; box-shadow: none; padding: 0; gap: 4px; }
+  .nav { display: flex; flex-direction: row; position: static; background: none; box-shadow: none; padding: 0; gap: 4px; }
   .nav a { padding: 8px 12px; position: relative; }
   .nav a:hover { background: none; }
   .nav a[aria-current]::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 0; height: 2px; border-radius: 2px; background: var(--primary); }
@@ -106,7 +121,7 @@ a { color: inherit; }
 .link-mais:hover { color: var(--crimson-500); }
 
 @media (min-width: 1280px) {
-  .hero { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); align-items: center; gap: 56px; padding: 56px 40px 96px; }
+  .hero { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); align-items: center; gap: 56px; padding: 0 40px 72px; }
 }
 
 /* Fundo do hero: "Gradient Animation" do design system (Backgrounds).
@@ -239,25 +254,22 @@ a { color: inherit; }
 .citacao { display: flex; flex-direction: column; gap: 8px; }
 .citacao-autor { display: flex; align-items: center; gap: 10px; }
 .citacao-autor strong { display: block; font-size: 0.875rem; font-weight: 600; line-height: 1.3; }
+.citacao-autor .estrelas { margin-top: 2px; }
 .avatar-g { width: 40px; height: 40px; flex: none; }
 .citacao-txt { font-size: 0.75rem; font-weight: 500; color: var(--foreground); line-height: 1.45; }
 .estrelas { display: flex; gap: 2px; color: var(--warning); font-size: 14px; }
 .estrelas .ico { fill: currentColor; }
-.voz-corpo { display: flex; align-items: center; gap: 16px; }
-.rosca { width: 88px; height: 88px; flex: none; }
-.rosca circle { fill: none; }
-.rosca .c1 { stroke: var(--chart-1); }
-.rosca .c2 { stroke: var(--chart-2); }
-.rosca .c3 { stroke: var(--chart-3); }
-.rosca .c4 { stroke: var(--chart-4); }
-.voz ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; flex: 1; min-width: 0; }
-.voz li { display: flex; align-items: center; gap: 8px; color: var(--foreground); font-size: 0.75rem; white-space: nowrap; }
-.voz b { margin-left: auto; color: var(--foreground); font-weight: 600; }
-.ponto { width: 8px; height: 8px; border-radius: 50%; flex: none; }
-.ponto.c1 { background: var(--chart-1); }
-.ponto.c2 { background: var(--chart-2); }
-.ponto.c3 { background: var(--chart-3); }
-.ponto.c4 { background: var(--chart-4); }
+/* Percepção da experiência: barras horizontais (padrão Bar Chart do design system: cantos de 4px, cores chart-1 a chart-4) */
+.barras { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.barras li { display: grid; grid-template-columns: 64px minmax(0, 1fr) 30px; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--foreground); }
+.barra-rot { white-space: nowrap; }
+.barra-trilho { height: 8px; border-radius: 4px; background: var(--muted); overflow: hidden; }
+.barra { display: block; height: 100%; border-radius: 4px; }
+.barra.c1 { background: var(--chart-1); }
+.barra.c2 { background: var(--chart-2); }
+.barra.c3 { background: var(--chart-3); }
+.barra.c4 { background: var(--chart-4); }
+.barras b { text-align: right; font-weight: 600; }
 .tit-ico { width: 28px; height: 28px; border-radius: 8px; background: var(--primary-muted); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 15px; flex: none; }
 .impacto-val { display: flex; align-items: center; gap: 4px; font-weight: 700; font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.1; color: var(--foreground); }
 .impacto-val .ico { font-size: 22px; stroke-width: 2.5; color: var(--primary); }
@@ -281,7 +293,7 @@ a { color: inherit; }
 
 /* Computador: cartões sobrepostos à janela, como na referência */
 @media (min-width: 1280px) {
-  .hero-visual { padding: 120px 0 110px; }
+  .hero-visual { padding: 104px 0 110px; }
   .flutuante { position: absolute; z-index: 2; }
   .citacao { top: 20px; left: calc(46% - 50px); width: 300px; }
   .impacto { left: -49px; bottom: 35px; width: 230px; }
@@ -292,14 +304,40 @@ a { color: inherit; }
   .citacao { left: calc(34% - 50px); }
 }
 
+/* Animações do painel (design system, Motion: "Slide Up" 0.7s com --ease-snappy na entrada;
+   gráficos desenham da esquerda para a direita em 1.5s com ease, como o padrão do Recharts;
+   cartões flutuantes oscilam em y 0 → -6px → 0 em loop easeInOut). Desligadas com movimento reduzido. */
+@keyframes ds-slide-up { from { opacity: 0; transform: translateY(44px); } to { opacity: 1; transform: none; } }
+@keyframes ds-flutuar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes ds-revelar { from { clip-path: inset(-12px 100% -12px -12px); } to { clip-path: inset(-12px -12px -12px -12px); } }
+@keyframes ds-crescer { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes ds-surgir { from { opacity: 0; } to { opacity: 1; } }
+.janela { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.kpi-linha, .grafico { animation: ds-revelar 1.5s ease .5s both; }
+.grafico .pa, .grafico .pp { animation: ds-surgir .4s ease-out 1.8s both; }
+.barra { transform-origin: left center; animation: ds-crescer 1.5s ease 1.1s both; }
+@media (min-width: 1280px) {
+  .flutuante { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both, ds-flutuar 5s ease-in-out infinite; }
+  .citacao { animation-delay: .35s, 1.05s; }
+  .impacto { animation-delay: .5s, 1.2s; animation-duration: .7s, 5.5s; }
+  .voz     { animation-delay: .65s, 1.35s; animation-duration: .7s, 6s; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
 
 /* Celular: painel minimalista (sem gráficos nos cards, sem cartões flutuantes; nomes aparecem ao tocar) */
 .avatar-ponto, .ver-todas, .painel-fab { display: none; }
-/* Celular: imagem estática do painel do computador no lugar do painel */
+/* Celular e tablet: imagem estática do painel do computador no lugar do painel */
 .painel-imagem { display: none; width: 100%; height: auto; }
+@media (max-width: 1279px) {
+  .hero-visual { display: none; }
+  .painel-imagem { display: block; max-width: 680px; margin: -4px auto 12px; }
+}
+@media (max-width: 639px) {
+  .painel-imagem { margin: -12px -8px 4px; width: calc(100% + 16px); max-width: none; }
+}
 .painel-fab { position: absolute; z-index: 5; right: 14px; bottom: 14px; width: 48px; height: 48px; align-items: center; justify-content: center; border-radius: 50%; background: var(--primary); color: #fff; font-size: 20px; box-shadow: var(--shadow-lg); cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .menu-aberto .painel-fab { background: #c13e3e; }
 .ver-todas { align-items: center; gap: 4px; margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--border); color: var(--primary); font-size: 0.75rem; font-weight: 600; }
@@ -310,12 +348,10 @@ a { color: inherit; }
 .dica { position: absolute; z-index: 3; transform: translate(-50%, calc(-100% - 8px)); padding: 4px 8px; border-radius: 6px; background: var(--graphite-900); color: #fff; font-size: 0.75rem; font-weight: 500; white-space: nowrap; pointer-events: none; }
 .dica[hidden] { display: none; }
 @media (max-width: 639px) {
-  .hero-visual { display: none; }
   /* Conteúdo do hero centralizado */
   .hero-texto { text-align: center; }
   .hero-texto .lead { margin-left: auto; margin-right: auto; }
   .hero-acoes { justify-content: center; }
-  .painel-imagem { display: block; margin: -12px -8px 4px; width: calc(100% + 16px); max-width: none; }
   .sino, .cab-resto, .filtro-sel, .kpi-linha, .kpi-var, .etapa-nome, .legenda, .flutuante { display: none; }
   /* Cards de visão geral mais baixos */
   .kpi { padding: 10px; }
