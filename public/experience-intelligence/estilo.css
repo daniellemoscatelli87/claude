@@ -206,7 +206,7 @@ a { color: inherit; }
 .flutuante { background: var(--card); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow-lg); padding: 14px 16px; }
 .flutuante > strong { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; font-weight: 600; margin-bottom: 8px; }
 .citacao { display: flex; align-items: center; gap: 14px; }
-.avatar-g { width: 52px; height: 52px; font-size: 24px; flex: none; }
+.avatar-g { width: 52px; height: 52px; font-size: 24px; flex: none; object-fit: cover; }
 .citacao-txt { font-size: 0.75rem; font-weight: 500; color: var(--foreground); line-height: 1.45; }
 .linha-cinza { display: block; height: 6px; width: 85%; border-radius: 9999px; background: var(--muted); margin-top: 10px; }
 .linha-cinza.curta { width: 60%; margin-top: 6px; }
@@ -225,8 +225,9 @@ a { color: inherit; }
 .ponto.c2 { background: var(--chart-2); }
 .ponto.c3 { background: var(--chart-3); }
 .ponto.c4 { background: var(--chart-4); }
-.impacto-tit .ico { color: var(--success); font-size: 18px; }
-.impacto-val { display: block; font-weight: 700; font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.1; color: var(--foreground); }
+.tit-ico { width: 28px; height: 28px; border-radius: 8px; background: var(--primary-muted); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 15px; flex: none; }
+.impacto-val { display: flex; align-items: center; gap: 4px; font-weight: 700; font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.1; color: var(--success); }
+.impacto-val .ico { font-size: 22px; stroke-width: 2.5; }
 .impacto-rot { display: block; color: var(--graphite-600); font-size: 0.75rem; margin-top: 2px; line-height: 1.35; }
 
 /* Celular e tablet: cartões flutuantes em grade, abaixo da janela */
