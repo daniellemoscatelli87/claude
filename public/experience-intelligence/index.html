@@ -50,7 +50,7 @@
       <p class="lead">As experiências de clientes, consumidores, pacientes, usuários e colaboradores impactam a percepção de valor, a eficiência operacional e os resultados do negócio.</p>
       <p class="lead">A <strong>DM | Experience Intelligence</strong> transforma essas experiências em inteligência estratégica para identificar oportunidades, orientar decisões e impulsionar a melhoria contínua.</p>
       <div class="hero-acoes">
-        <a class="btn btn-primario" href="#contato"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>Avise-me</a>
+        <button class="btn btn-primario" type="button" data-avise><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>Avise-me</button>
         <a class="link-mais" href="#como-funciona">Saiba mais<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></a>
       </div>
     </div>
@@ -166,6 +166,31 @@
     </figure>
   </section>
 </main>
+
+<!-- Avise-me: cadastro na lista de lançamento (mesma tabela da página inicial) -->
+<dialog class="modal" id="modal-avise" aria-labelledby="avise-titulo" aria-describedby="avise-desc">
+  <form class="modal-corpo" id="avise-form" novalidate>
+    <button class="modal-fechar" type="button" data-fechar aria-label="Fechar"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+    <div class="modal-cab">
+      <h2 id="avise-titulo">Avise-me do lançamento</h2>
+      <p id="avise-desc">Informe seu e-mail para ser avisado em primeira mão quando a DM | Experience Intelligence for lançada.</p>
+    </div>
+    <div class="campo">
+      <label for="avise-email">E-mail</label>
+      <input id="avise-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="seu@email.com">
+      <p class="campo-msg" id="avise-msg" aria-live="polite">Prometemos valor e zero spam. Apenas o convite para o primeiro acesso.</p>
+    </div>
+    <div class="modal-acoes">
+      <button class="btn btn-secundario" type="button" data-fechar>Cancelar</button>
+      <button class="btn btn-primario" type="submit" id="avise-btn">Avise-me</button>
+    </div>
+    <div class="modal-ok" id="avise-ok" hidden>
+      <span class="ok-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg></span>
+      <p><strong>Obrigado! Até breve!</strong>Você será avisado em primeira mão no lançamento.</p>
+      <button class="btn btn-primario" type="button" data-fechar>Fechar</button>
+    </div>
+  </form>
+</dialog>
 
 <script src="/experience-intelligence/pagina.js" defer></script>
 </body>

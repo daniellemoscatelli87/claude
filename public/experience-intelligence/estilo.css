@@ -288,3 +288,38 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* Modal Avise-me (padrão Dialog do design system) */
+.modal { width: calc(100% - 2rem); max-width: 32rem; padding: 0; border: 1px solid var(--border); border-radius: calc(var(--radius) + 4px); background: var(--card); color: var(--foreground); box-shadow: var(--shadow-lg); }
+.modal::backdrop { background: rgb(0 0 0 / .5); }
+.modal[open] { animation: modal-in .2s ease-out; }
+@keyframes modal-in { from { opacity: 0; transform: scale(.95); } to { opacity: 1; transform: scale(1); } }
+.modal-corpo { position: relative; display: grid; gap: 16px; padding: 24px; }
+.modal-fechar { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: calc(var(--radius) - 4px); background: none; color: var(--foreground); opacity: .7; cursor: pointer; font-size: 16px; }
+.modal-fechar:hover { opacity: 1; background: var(--muted); }
+.modal-cab h2 { margin: 0 0 8px; padding-right: 32px; font-size: 1.125rem; line-height: 1.3; font-weight: 600; }
+.modal-cab p { margin: 0; color: var(--muted-foreground); font-size: 0.875rem; line-height: 1.5; }
+.campo { display: grid; gap: 6px; }
+.campo label { font-size: 0.875rem; font-weight: 500; }
+.campo input { height: 44px; width: 100%; padding: 0 12px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--input-background); color: var(--foreground); font: inherit; font-size: 1rem; outline: none; transition: border-color .15s, box-shadow .15s; }
+.campo input::placeholder { color: var(--muted-foreground); }
+.campo input:focus-visible { border-color: var(--primary); box-shadow: 0 0 0 3px var(--ring); }
+.campo input[aria-invalid="true"] { border-color: var(--destructive); }
+.campo-msg { margin: 0; font-size: 0.75rem; color: var(--muted-foreground); }
+.campo-msg.erro { color: var(--crimson-500); font-weight: 500; }
+.modal-acoes { display: flex; flex-direction: column-reverse; gap: 8px; }
+.modal-acoes .btn { width: 100%; }
+.btn-secundario { background: var(--secondary); color: var(--secondary-foreground); }
+.btn-secundario:hover { background: var(--secondary-hover); }
+.btn:disabled { opacity: .6; cursor: wait; }
+button.btn { border: 0; cursor: pointer; }
+.modal-ok { display: grid; justify-items: center; gap: 12px; text-align: center; }
+.modal-ok[hidden] { display: none; }
+.modal-ok p { margin: 0; color: var(--muted-foreground); font-size: 0.875rem; }
+.modal-ok strong { display: block; color: var(--foreground); font-size: 1.125rem; margin-bottom: 4px; }
+.ok-ico { width: 48px; height: 48px; border-radius: 50%; background: var(--primary-muted); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 24px; }
+.enviado .modal-cab, .enviado .campo, .enviado .modal-acoes { display: none; }
+@media (min-width: 640px) {
+  .modal-acoes { flex-direction: row; justify-content: flex-end; }
+  .modal-acoes .btn { width: auto; }
+}
