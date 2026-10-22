@@ -33,12 +33,30 @@
   </nav>
   <div class="topo-acoes">
     <a class="btn-contato" href="#contato">Contato</a>
-    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Abrir menu">
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-lateral" aria-label="Abrir menu">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
 </div>
+
+<!-- Menu do celular e tablet: barra lateral sobre o conteúdo -->
+<div class="lateral-fundo" data-fechar-menu hidden></div>
+<aside class="menu-lateral" id="menu-lateral" aria-label="Menu" hidden>
+  <div class="menu-lateral-topo">
+    <img src="/favicon-dm.png" alt="" class="menu-lateral-logo">
+    <button class="menu-fechar" type="button" data-fechar-menu aria-label="Fechar menu"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  </div>
+  <nav aria-label="Seções da página">
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#solucao" aria-current="true">Solução</a>
+    <a href="#aplicacoes">Aplicações</a>
+    <a href="#diferenciais">Diferenciais</a>
+    <a href="#planos">Planos</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <a class="btn-contato menu-lateral-contato" href="#contato">Contato</a>
+</aside>
 
 <main id="conteudo">
   <section class="hero" id="solucao" aria-labelledby="hero-titulo">
