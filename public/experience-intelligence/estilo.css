@@ -103,14 +103,14 @@ a { color: inherit; }
 .janela-topo { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--border); }
 .marca-mini img { width: 26px; }
 .marca-mini .marca-txt strong { font-size: 0.875rem; font-weight: 600; }
-.marca-mini .marca-txt small { font-size: 0.6875rem; }
+.marca-mini .marca-txt small { font-size: 0.75rem; }
 .janela-user { display: flex; align-items: center; gap: 16px; color: var(--graphite-600); }
 .sino { position: relative; font-size: 18px; display: inline-flex; }
 .sino-ponto { position: absolute; top: -1px; right: -1px; width: 7px; height: 7px; border-radius: 50%; background: var(--primary); border: 1.5px solid var(--card); }
 .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--muted); color: var(--graphite-500); display: inline-flex; align-items: center; justify-content: center; font-size: 16px; }
 
-.janela-corpo { display: grid; grid-template-columns: minmax(0, 1fr); }
-.lateral { display: none; list-style: none; margin: 0; padding: 14px 10px; border-right: 1px solid var(--border); }
+.janela-corpo { display: grid; grid-template-columns: auto minmax(0, 1fr); }
+.lateral { list-style: none; margin: 0; padding: 14px 10px; border-right: 1px solid var(--border); }
 .lateral li { display: flex; align-items: center; gap: 10px; padding: 9px 12px; margin-bottom: 4px; border-radius: var(--radius); color: var(--graphite-600); font-weight: 500; font-size: 0.75rem; white-space: nowrap; }
 .lateral li .ico { font-size: 16px; }
 .lateral .ativo { background: var(--primary-muted); color: var(--foreground); }
@@ -118,7 +118,7 @@ a { color: inherit; }
 
 .painel { padding: 16px; background: var(--background); min-width: 0; }
 .painel-cab { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 14px; }
-.painel-cab strong { font-size: 0.9375rem; font-weight: 600; }
+.painel-cab strong { font-size: 0.875rem; font-weight: 600; }
 .filtro { display: inline-flex; align-items: center; gap: 6px; color: var(--graphite-700); }
 .filtro-sel, .filtro-cal { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--border); }
 .filtro-sel { padding: 6px 12px; border-radius: 9999px; }
@@ -128,9 +128,9 @@ a { color: inherit; }
 /* Cartões KPI (padrão "KPI Cards" do design system, com o arranjo da referência) */
 .kpis { container-type: inline-size; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
 .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow-xs); padding: 12px 10px 12px 12px; display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "rot rot" "val spark" "var spark"; align-items: end; column-gap: 8px; }
-.kpi-rot { grid-area: rot; color: var(--graphite-600); font-size: 0.6875rem; font-weight: 500; line-height: 1.3; min-height: 2.6em; margin-bottom: 4px; }
+.kpi-rot { grid-area: rot; color: var(--graphite-600); font-size: 0.75rem; font-weight: 500; line-height: 1.3; min-height: 2.6em; margin-bottom: 4px; }
 .kpi-val { grid-area: val; font-weight: 700; font-size: 1.375rem; letter-spacing: -0.025em; line-height: 1.1; white-space: nowrap; }
-.kpi-var { grid-area: var; display: inline-flex; align-items: center; gap: 3px; font-weight: 600; font-size: 0.6875rem; white-space: nowrap; margin-top: 4px; }
+.kpi-var { grid-area: var; display: inline-flex; align-items: center; gap: 3px; font-weight: 600; font-size: 0.75rem; white-space: nowrap; margin-top: 4px; }
 .kpi-var .ico { font-size: 12px; stroke-width: 2.5; }
 .sobe { color: var(--success); }
 .desce { color: var(--primary); }
@@ -148,8 +148,8 @@ a { color: inherit; }
 
 .painel-linha { display: grid; gap: 12px; }
 .cartao { background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow-xs); padding: 14px; min-width: 0; }
-.cartao > strong { display: block; font-size: 0.8125rem; font-weight: 600; margin-bottom: 10px; }
-.etapas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); text-align: center; color: var(--graphite-600); font-size: 0.625rem; font-weight: 500; }
+.cartao > strong { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 10px; }
+.etapas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); text-align: center; color: var(--graphite-600); font-size: 0.75rem; font-weight: 500; }
 .etapas li { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .etapa-ico { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--card); display: inline-flex; align-items: center; justify-content: center; font-size: 15px; color: var(--graphite-600); }
 .grafico { width: 100%; height: auto; aspect-ratio: 400 / 100; overflow: visible; margin-top: 4px; color: var(--primary); }
@@ -161,14 +161,14 @@ a { color: inherit; }
 .grafico .anterior { stroke: var(--graphite-200); stroke-width: 1.5; }
 .grafico .pa { fill: var(--card); stroke: var(--primary); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
 .grafico .pp { fill: var(--graphite-200); }
-.legenda { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 6px; color: var(--graphite-500); font-size: 0.625rem; }
+.legenda { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 6px; color: var(--graphite-500); font-size: 0.75rem; }
 .legenda span { display: inline-flex; align-items: center; gap: 5px; }
 .legenda span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; }
 .leg-atual::before { background: var(--primary); }
 .leg-anterior::before { background: var(--graphite-300); }
 
 .oportunidades ul { list-style: none; margin: 0; padding: 0; }
-.oportunidades li { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--border); color: var(--graphite-600); font-size: 0.6875rem; line-height: 1.35; }
+.oportunidades li { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--border); color: var(--graphite-600); font-size: 0.75rem; line-height: 1.35; }
 .oportunidades li:first-child { border-top: 0; }
 .oportunidades li > .ico:first-child { font-size: 18px; color: var(--graphite-600); }
 .oportunidades li span { flex: 1; min-width: 0; }
@@ -181,8 +181,25 @@ a { color: inherit; }
 }
 .jornada { container-type: inline-size; }
 @container (max-width: 300px) {
-  .etapas { font-size: 0.5625rem; }
   .etapa-ico { width: 26px; height: 26px; font-size: 13px; }
+  .etapas { display: flex; justify-content: space-between; gap: 4px; }
+  .etapas li { flex: none; }
+  .etapas li:last-child { max-width: 4.2em; }
+}
+
+/* Menu lateral recolhido (só ícones) em todos os tamanhos */
+.lateral { padding: 14px 8px; }
+.lateral li { padding: 9px; justify-content: center; }
+.lat-txt { display: none; }
+/* No celular, os ícones do menu ficam em uma linha acima do painel */
+@media (max-width: 639px) {
+  .janela-corpo { grid-template-columns: minmax(0, 1fr); }
+  .lateral { display: flex; justify-content: space-between; padding: 8px 12px; border-right: 0; border-bottom: 1px solid var(--border); }
+  .lateral li { margin: 0; }
+  .painel { padding: 14px 12px; }
+}
+@media (max-width: 399px) {
+  .marca-mini .marca-txt { display: none; }
 }
 
 /* Cartões flutuantes */
@@ -190,7 +207,7 @@ a { color: inherit; }
 .flutuante > strong { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; font-weight: 600; margin-bottom: 8px; }
 .citacao { display: flex; align-items: center; gap: 14px; }
 .avatar-g { width: 52px; height: 52px; font-size: 24px; flex: none; }
-.citacao-txt { font-size: 0.875rem; font-weight: 500; color: var(--foreground); line-height: 1.45; }
+.citacao-txt { font-size: 0.75rem; font-weight: 500; color: var(--foreground); line-height: 1.45; }
 .linha-cinza { display: block; height: 6px; width: 85%; border-radius: 9999px; background: var(--muted); margin-top: 10px; }
 .linha-cinza.curta { width: 60%; margin-top: 6px; }
 .voz ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 14px; }
@@ -204,8 +221,8 @@ a { color: inherit; }
 .impacto-tit .ico { color: var(--success); font-size: 18px; }
 .impacto-linha { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 14px; align-items: center; }
 .impacto-val { display: block; font-weight: 700; font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.1; color: var(--foreground); }
-.impacto-rot { display: block; color: var(--graphite-600); font-size: 0.8125rem; margin-top: 2px; line-height: 1.35; }
-.impacto-nota { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius); background: var(--success-muted); color: var(--graphite-700); font-size: 0.8125rem; line-height: 1.4; }
+.impacto-rot { display: block; color: var(--graphite-600); font-size: 0.75rem; margin-top: 2px; line-height: 1.35; }
+.impacto-nota { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius); background: var(--success-muted); color: var(--graphite-700); font-size: 0.75rem; line-height: 1.4; }
 .impacto-nota .ico { color: var(--success); font-size: 22px; flex: none; }
 
 /* Celular e tablet: cartões flutuantes em grade, abaixo da janela */
@@ -217,13 +234,9 @@ a { color: inherit; }
 }
 @media (max-width: 559px) {
   .hero-visual { grid-template-columns: minmax(0, 1fr); }
-  .kpi { grid-template-areas: "rot rot" "val val" "var spark"; }
-  .kpi .spark { height: 26px; }
 }
 
 @media (min-width: 640px) {
-  .janela-corpo { grid-template-columns: auto minmax(0, 1fr); }
-  .lateral { display: block; }
   .kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .painel { padding: 18px; }
   .painel-linha { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
@@ -240,8 +253,6 @@ a { color: inherit; }
   .impacto { right: -8px; bottom: 0; width: 56%; }
 }
 @media (min-width: 1280px) and (max-width: 1399px) {
-  .lateral { display: none; }
-  .janela-corpo { grid-template-columns: minmax(0, 1fr); }
   .voz { width: 45%; }
   .impacto { width: 54%; }
   .voz ul { gap: 6px 10px; }
