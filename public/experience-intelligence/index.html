@@ -33,12 +33,30 @@
   </nav>
   <div class="topo-acoes">
     <a class="btn-contato" href="#contato">Contato</a>
-    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Abrir menu">
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-lateral" aria-label="Abrir menu">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
 </div>
+
+<!-- Menu do celular e tablet: barra lateral sobre o conteúdo -->
+<div class="lateral-fundo" data-fechar-menu hidden></div>
+<aside class="menu-lateral" id="menu-lateral" aria-label="Menu" hidden>
+  <div class="menu-lateral-topo">
+    <img src="/favicon-dm.png" alt="" class="menu-lateral-logo">
+    <button class="menu-fechar" type="button" data-fechar-menu aria-label="Fechar menu"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  </div>
+  <nav aria-label="Seções da página">
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#solucao" aria-current="true">Solução</a>
+    <a href="#aplicacoes">Aplicações</a>
+    <a href="#diferenciais">Diferenciais</a>
+    <a href="#planos">Planos</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <a class="btn-contato menu-lateral-contato" href="#contato">Contato</a>
+</aside>
 
 <main id="conteudo">
   <section class="hero" id="solucao" aria-labelledby="hero-titulo">
@@ -47,7 +65,7 @@
     <div class="hero-texto">
       <p class="selo"><span class="selo-ponto" aria-hidden="true"></span>DM | Experience Intelligence</p>
       <h1 id="hero-titulo">Transforme a experiência das pessoas em <span class="destaque">ativo estratégico</span> para o seu negócio.</h1>
-      <img class="painel-imagem" src="/experience-intelligence/painel-celular.webp" width="760" height="741" loading="lazy" alt="Exemplo demonstrativo do painel: visão geral da experiência com satisfação, NPS, TMA e retenção, experiências ao longo da jornada, oportunidades, avaliação de cliente, impacto no negócio e percepção da experiência.">
+      <img class="painel-imagem" src="/experience-intelligence/painel-celular.webp" width="760" height="709" loading="lazy" alt="Exemplo demonstrativo do painel: visão geral da experiência com satisfação, NPS, TMA e retenção, experiências ao longo da jornada, oportunidades, avaliação de cliente, impacto no negócio e percepção da experiência.">
       <p class="lead">As experiências de clientes, consumidores, pacientes, usuários e colaboradores impactam a percepção de valor, a eficiência operacional e os resultados do negócio.</p>
       <p class="lead">A <strong>DM | Experience Intelligence</strong> transforma essas experiências em inteligência estratégica para identificar oportunidades, orientar decisões e impulsionar a melhoria contínua.</p>
       <div class="hero-acoes">
@@ -147,9 +165,8 @@
       <div class="flutuante citacao" aria-hidden="true">
         <span class="citacao-autor">
           <img class="avatar avatar-g" src="/experience-intelligence/foto-citacao.webp" alt="" width="40" height="40">
-          <strong>Maria Luiza</strong>
+          <span><strong>Maria Luiza</strong><span class="estrelas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></span></span>
         </span>
-        <span class="estrelas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></span>
         <span class="citacao-txt">“O atendimento foi rápido e resolveu meu problema.”</span>
       </div>
 
@@ -161,15 +178,12 @@
 
       <div class="flutuante voz" aria-hidden="true">
         <strong>Percepção da experiência</strong>
-        <div class="voz-corpo">
-          <svg class="rosca" viewBox="0 0 88 88" aria-hidden="true"><g transform="matrix(1 0 0 -1 0 88)"><circle class="c1" cx="44" cy="44" r="37.28" stroke-width="13.44" stroke-dasharray="106.06 128.16" stroke-dashoffset="0.00"/><circle class="c2" cx="44" cy="44" r="37.28" stroke-width="13.44" stroke-dasharray="53.03 181.19" stroke-dashoffset="-106.06"/><circle class="c3" cx="44" cy="44" r="37.28" stroke-width="13.44" stroke-dasharray="39.77 194.45" stroke-dashoffset="-159.09"/><circle class="c4" cx="44" cy="44" r="37.28" stroke-width="13.44" stroke-dasharray="35.35 198.87" stroke-dashoffset="-198.87"/></g></svg>
-          <ul>
-            <li><span class="ponto c1"></span>Positivas<b>48%</b></li>
-            <li><span class="ponto c2"></span>Neutras<b>24%</b></li>
-            <li><span class="ponto c3"></span>Negativas<b>18%</b></li>
-            <li><span class="ponto c4"></span>Mistas<b>16%</b></li>
-          </ul>
-        </div>
+        <ul class="barras">
+          <li><span class="barra-rot">Positivas</span><span class="barra-trilho"><span class="barra c1" style="width:48%"></span></span><b>48%</b></li>
+          <li><span class="barra-rot">Neutras</span><span class="barra-trilho"><span class="barra c2" style="width:24%"></span></span><b>24%</b></li>
+          <li><span class="barra-rot">Negativas</span><span class="barra-trilho"><span class="barra c3" style="width:18%"></span></span><b>18%</b></li>
+          <li><span class="barra-rot">Mistas</span><span class="barra-trilho"><span class="barra c4" style="width:16%"></span></span><b>16%</b></li>
+        </ul>
       </div>
     </figure>
   </section>

@@ -1,21 +1,26 @@
-// Menu do cabeçalho no celular.
+// Menu do celular e tablet: barra lateral sobre o conteúdo.
 (function () {
   var botao = document.querySelector('.menu-btn');
-  var nav = document.getElementById('nav');
-  if (!botao || !nav) return;
-  function fechar() {
-    nav.classList.remove('aberto');
+  var menu = document.getElementById('menu-lateral');
+  var fundo = document.querySelector('.lateral-fundo');
+  if (!botao || !menu || !fundo) return;
+  function fechar(devolverFoco) {
+    menu.hidden = true; fundo.hidden = true;
+    document.body.classList.remove('lateral-aberta');
     botao.setAttribute('aria-expanded', 'false');
-    botao.setAttribute('aria-label', 'Abrir menu');
+    if (devolverFoco) botao.focus();
   }
-  botao.addEventListener('click', function () {
-    var abrir = !nav.classList.contains('aberto');
-    nav.classList.toggle('aberto', abrir);
-    botao.setAttribute('aria-expanded', String(abrir));
-    botao.setAttribute('aria-label', abrir ? 'Fechar menu' : 'Abrir menu');
-  });
-  nav.addEventListener('click', function (e) { if (e.target.closest('a')) fechar(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nav.classList.contains('aberto')) { fechar(); botao.focus(); } });
+  function abrir() {
+    menu.hidden = false; fundo.hidden = false;
+    document.body.classList.add('lateral-aberta');
+    botao.setAttribute('aria-expanded', 'true');
+    menu.querySelector('.menu-fechar').focus();
+  }
+  botao.addEventListener('click', abrir);
+  document.querySelectorAll('[data-fechar-menu]').forEach(function (el) { el.addEventListener('click', function () { fechar(true); }); });
+  menu.addEventListener('click', function (e) { if (e.target.closest('a')) fechar(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) fechar(true); });
+  window.matchMedia('(min-width: 1200px)').addEventListener('change', function (m) { if (m.matches) fechar(false); });
 })();
 
 // Cabeçalho ganha fundo ao rolar (igual à página inicial).
