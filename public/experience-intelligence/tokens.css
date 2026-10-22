@@ -1,0 +1,121 @@
+/* Tokens do design system oficial (tema claro), copiados sem alteração de
+   docs/design-system/oficial/src/styles/theme.css. Não editar aqui: atualizar a partir do design system. */
+:root {
+  /* ── Typography ── */
+  --font-sans:    'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+  --font-accent:  'Fraunces', Georgia, serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+  --font-size: 16px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ── Graphite Scale (cold gray, subtle blue undertone) ── */
+  --graphite-50:  #EDF0F5;
+  --graphite-100: #D6DCE6;
+  --graphite-200: #B3BDD0;
+  --graphite-300: #8898B0;
+  --graphite-400: #627288;
+  --graphite-500: #495669;
+  --graphite-600: #374155;
+  --graphite-700: #283043;
+  --graphite-800: #1C2333;
+  --graphite-900: #131A27;
+  --graphite-950: #0D1119;
+
+  /* ── Crimson Scale (burnt blood red, cold) ── */
+  --crimson-50:  #FDF2F2;
+  --crimson-100: #F9DADA;
+  --crimson-200: #F3B3B3;
+  --crimson-300: #E88080;
+  --crimson-400: #D44D4D;
+  --crimson-500: #B82828;
+  --crimson-600: #8C1B1B;
+  --crimson-700: #6D1313;
+  --crimson-800: #520E0E;
+  --crimson-900: #3A0909;
+  --crimson-950: #220505;
+
+  /* ── LIGHT MODE SEMANTIC TOKENS ── */
+  /* Semantic tokens reference primitives. Tokens without an exact primitive
+     match (pure white, rgba alphas, fine-tuned grays) keep their raw value. */
+  --background:        var(--graphite-50);
+  --foreground:        var(--graphite-900);
+  --foreground-muted:  var(--graphite-400);
+  --foreground-subtle: var(--graphite-300);
+
+  --primary:                  var(--crimson-400);
+  --primary-hover:             var(--crimson-400);
+  --primary-foreground:        #FFFFFF;
+  --primary-muted:             rgba(212, 77, 77, 0.1);
+  --primary-muted-foreground:  var(--crimson-400);
+
+  --secondary:            #E4E9F0;
+  --secondary-hover:      var(--graphite-100);
+  --secondary-foreground: var(--graphite-900);
+
+  --muted:            #E8EDF3;
+  --muted-foreground: var(--graphite-400);
+  --accent:           #E8EDF3;
+  --accent-foreground: var(--graphite-900);
+
+  --border:       rgba(19, 26, 39, 0.09);
+  --border-strong: rgba(19, 26, 39, 0.16);
+
+  --success:            #4fb57b;
+  --success-foreground: #FFFFFF;
+  --success-muted:      rgba(79, 181, 123, 0.1);
+  --warning:            #e5a94e;
+  --warning-foreground: #FFFFFF;
+  --warning-muted:      rgba(229, 169, 78, 0.1);
+  --error:              var(--crimson-400);
+  --error-foreground:   #FFFFFF;
+  --error-muted:        rgba(212, 77, 77, 0.1);
+  --info:               #448abc;
+  --info-foreground:    #FFFFFF;
+  --info-muted:         rgba(68, 138, 188, 0.1);
+  --violet:             #ba69dc;
+  --violet-foreground:  #FFFFFF;
+  --violet-muted:       rgba(186, 105, 220, 0.1);
+  --orange:             #fa9852;
+  --orange-foreground:  #FFFFFF;
+  --orange-muted:       rgba(250, 152, 82, 0.1);
+
+  --card:             #FFFFFF;
+  --card-foreground:  var(--graphite-900);
+  --popover:          #FFFFFF;
+  --popover-foreground: var(--graphite-900);
+  --input:            transparent;
+  --input-background: #FFFFFF;
+  --switch-background: var(--graphite-200);
+  --ring:             rgba(212, 77, 77, 0.35);
+
+  --radius: 0.75rem;
+
+  --shadow-xs:  0 1px 2px rgba(13, 17, 25, 0.05);
+  --shadow-sm:  0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05);
+  --shadow:     0 2px 6px rgba(13, 17, 25, 0.07), 0 6px 20px rgba(13, 17, 25, 0.05);
+  --shadow-md:  0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06);
+  --shadow-lg:  0 8px 24px rgba(13, 17, 25, 0.09), 0 24px 64px rgba(13, 17, 25, 0.07);
+  --shadow-xl:  0 16px 48px rgba(13, 17, 25, 0.10), 0 40px 96px rgba(13, 17, 25, 0.08);
+
+  --chart-1: var(--crimson-400);
+  --chart-2: var(--graphite-500);
+  --chart-3: var(--graphite-300);
+  --chart-4: var(--graphite-200);
+  --chart-5: var(--graphite-100);
+
+  --destructive:            var(--crimson-400);
+  --destructive-foreground: #FFFFFF;
+
+  --sidebar:                   #FFFFFF;
+  --sidebar-foreground:        var(--graphite-900);
+  --sidebar-primary:           var(--crimson-400);
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent:            #E8EDF3;
+  --sidebar-accent-foreground: var(--graphite-900);
+  --sidebar-border:            rgba(19, 26, 39, 0.09);
+  --sidebar-ring:              rgba(212, 77, 77, 0.35);
+}
