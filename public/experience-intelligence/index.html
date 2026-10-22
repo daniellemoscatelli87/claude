@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/experience-intelligence/tokens.css">
 <link rel="stylesheet" href="/experience-intelligence/estilo.css">
+<link rel="stylesheet" href="/experience-intelligence/contato.css">
 </head>
 <body>
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
@@ -32,7 +33,7 @@
     <a href="#faq">FAQ</a>
   </nav>
   <div class="topo-acoes">
-    <a class="btn-contato" href="#contato">Contato</a>
+    <button class="btn-contato" type="button" data-open-contact>Contato</button>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-lateral" aria-label="Abrir menu">
       <span></span><span></span><span></span>
     </button>
@@ -55,7 +56,7 @@
     <a href="#planos">Planos</a>
     <a href="#faq">FAQ</a>
   </nav>
-  <a class="btn-contato menu-lateral-contato" href="#contato">Contato</a>
+  <button class="btn-contato menu-lateral-contato" type="button" data-open-contact>Contato</button>
 </aside>
 
 <main id="conteudo">
@@ -214,6 +215,123 @@
   </form>
 </dialog>
 
+<!-- Gaveta de contato: a mesma da página inicial (index.html), gravando na tabela contatos -->
+<div id="drawer-backdrop" aria-hidden="true" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ease-in-out opacity-0 pointer-events-none"></div>
+<aside id="contact-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" class="fixed top-0 right-0 bottom-0 z-50 w-full sm:w-[500px] md:w-[540px] max-w-full bg-white shadow-drawer transition-transform duration-300 ease-in-out flex flex-col justify-between overflow-hidden sm:rounded-l-3xl translate-x-full invisible">
+  <div id="drawer-header" class="px-6 sm:px-8 pt-5 pb-3.5 border-b border-slate-100 flex items-start justify-between relative bg-white z-10">
+    <div>
+      <div class="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-brand-red bg-red-50/80 rounded-full px-3 py-0.5 mb-1"><span class="w-1.5 h-1.5 rounded-full bg-brand-red"></span> Contato &amp; Parcerias</div>
+      <h2 id="drawer-title" class="text-2xl sm:text-3xl font-extrabold text-brand-dark tracking-[-0.025em] leading-tight">Inicie uma conversa</h2>
+      <p class="text-xs sm:text-sm text-brand-muted mt-1 leading-snug pr-6">Preencha os dados abaixo que em breve entrarei em contato para agendar uma conversa e apresentar uma proposta para o seu desafio.</p>
+    </div>
+    <button type="button" id="btn-close-drawer" aria-label="Fechar formulário de contato" class="flex-shrink-0 -mr-2 -mt-1 p-2 rounded-full text-slate-400 hover:text-brand-dark hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+  </div>
+
+  <div class="flex-1 overflow-y-auto px-6 sm:px-8 py-4 space-y-3 custom-scroll">
+    <form id="contact-form" novalidate class="gap-2.5 flex flex-col">
+      <input class="field" name="nome" placeholder="Nome completo *" aria-label="Nome completo" required type="text" autocomplete="name">
+      <input class="field" name="email" placeholder="E-mail corporativo *" aria-label="E-mail corporativo" required type="email" autocomplete="email">
+      <input class="field" name="telefone" placeholder="Telefone / WhatsApp *" aria-label="Telefone / WhatsApp" required type="tel" autocomplete="tel">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <input class="field" name="empresa" placeholder="Nome da Empresa *" aria-label="Nome da Empresa" required type="text" autocomplete="organization">
+        <input class="field" name="cargo" placeholder="Cargo / Função *" aria-label="Cargo / Função" required type="text" autocomplete="organization-title">
+      </div>
+
+      <div id="accordion-business" class="rounded-xl border border-slate-200 bg-slate-50/50 transition-all overflow-hidden">
+        <button type="button" id="btn-toggle-business" aria-expanded="false" aria-controls="accordion-business-body" class="w-full p-3 flex items-center justify-between text-left cursor-pointer focus:outline-none transition-colors hover:bg-slate-100/60 select-none">
+          <span class="biz-label text-slate-700 font-medium">Meu negócio é... *</span>
+          <svg id="accordion-business-icon" class="w-4 h-4 text-slate-400 transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+        <div id="accordion-business-body" class="px-3 pb-3 pt-1 space-y-1.5 border-t border-slate-200/60 hidden">
+          <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white/70 border border-slate-200/50 hover:bg-white hover:border-slate-300 transition-all cursor-pointer">
+            <input class="mt-0.5 w-4 h-4 cursor-pointer flex-shrink-0 accent-brand-red" name="tipo_negocio" type="radio" value="Um produto/serviço digital">
+            <div class="flex-1"><span class="block font-medium text-brand-charcoal leading-snug text-[13px]">Um produto/serviço digital</span><span class="block text-slate-500 mt-0.5 leading-snug text-[11.5px]">(SaaS, E-commerce, Marketplace, APP, Sistema, Software, etc.)</span></div>
+          </label>
+          <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white/70 border border-slate-200/50 hover:bg-white hover:border-slate-300 transition-all cursor-pointer">
+            <input class="mt-0.5 w-4 h-4 cursor-pointer flex-shrink-0 accent-brand-red" name="tipo_negocio" type="radio" value="Um Negócio Físico">
+            <div class="flex-1"><span class="block font-medium text-brand-charcoal leading-snug text-[13px]">Um Negócio Físico</span><span class="block text-slate-500 mt-0.5 leading-snug text-[11.5px]">(Clínicas, Salões, Petshops, Hotéis, Restaurantes, Cafés e Bares, etc.)</span></div>
+          </label>
+          <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white/70 border border-slate-200/50 hover:bg-white hover:border-slate-300 transition-all cursor-pointer">
+            <input class="mt-0.5 w-4 h-4 cursor-pointer flex-shrink-0 accent-brand-red" name="tipo_negocio" type="radio" value="Um Negócio Físico e Digital">
+            <div class="flex-1"><span class="block font-medium text-brand-charcoal leading-snug text-[13px]">Um Negócio Físico e Digital</span></div>
+          </label>
+          <div class="flex items-center gap-2 p-2 rounded-lg bg-white/70 border border-slate-200/50 hover:bg-white hover:border-slate-300 transition-all">
+            <label class="flex items-center gap-2.5 cursor-pointer flex-shrink-0">
+              <input id="radio-business-outro" class="w-4 h-4 cursor-pointer flex-shrink-0 accent-brand-red" name="tipo_negocio" type="radio" value="Outro">
+              <span class="font-medium text-brand-charcoal leading-snug text-[13px]">Outro:</span>
+            </label>
+            <input id="input-outro-descricao" name="tipo_negocio_outro" type="text" aria-label="Outro tipo de negócio" placeholder="Qual? Descreva brevemente..." class="flex-1 min-w-0 px-2.5 py-1 bg-white rounded-md border border-slate-200 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-all text-xs">
+          </div>
+        </div>
+      </div>
+
+      <div class="relative">
+        <select class="field" name="assunto" aria-label="Assunto" required>
+          <option disabled selected value="">Assunto *</option>
+          <option>Diagnóstico ou orçamento de projeto</option>
+          <option>Palestra, aula ou conteúdo</option>
+          <option>Parceria ou colaboração</option>
+          <option>Imprensa ou divulgação</option>
+          <!-- Oculta enquanto o Programa Parceiro Piloto não estiver ativo: <option>Inscrição para o Programa Parceiro Piloto</option> -->
+          <option>Outro</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg></div>
+      </div>
+
+      <textarea class="field resize-none h-[90px]" name="mensagem" rows="3" required aria-label="Conte um pouco sobre seu desafio" placeholder="Conte um pouco sobre seu desafio (Quais objetivos, dores ou ideias você gostaria de trabalhar conosco?) *"></textarea>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <div id="days-box" class="flex flex-col justify-center px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50">
+          <div class="mb-1 flex items-center justify-between">
+            <span class="font-semibold text-slate-700 text-xs">Melhor dia da semana *</span>
+            <span class="text-[10px] text-slate-400">múltiplos</span>
+          </div>
+          <div class="flex items-center justify-between gap-1">
+            <label class="flex-1 text-center"><input type="checkbox" name="dias" value="Seg" class="sr-only peer"><span class="block py-1 font-semibold rounded-lg text-brand-muted text-xs peer-checked:bg-brand-red peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand-red/30 transition-colors cursor-pointer select-none">Seg</span></label>
+            <label class="flex-1 text-center"><input type="checkbox" name="dias" value="Ter" class="sr-only peer"><span class="block py-1 font-semibold rounded-lg text-brand-muted text-xs peer-checked:bg-brand-red peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand-red/30 transition-colors cursor-pointer select-none">Ter</span></label>
+            <label class="flex-1 text-center"><input type="checkbox" name="dias" value="Qua" class="sr-only peer"><span class="block py-1 font-semibold rounded-lg text-brand-muted text-xs peer-checked:bg-brand-red peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand-red/30 transition-colors cursor-pointer select-none">Qua</span></label>
+            <label class="flex-1 text-center"><input type="checkbox" name="dias" value="Qui" class="sr-only peer"><span class="block py-1 font-semibold rounded-lg text-brand-muted text-xs peer-checked:bg-brand-red peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand-red/30 transition-colors cursor-pointer select-none">Qui</span></label>
+            <label class="flex-1 text-center"><input type="checkbox" name="dias" value="Sex" class="sr-only peer"><span class="block py-1 font-semibold rounded-lg text-brand-muted text-xs peer-checked:bg-brand-red peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand-red/30 transition-colors cursor-pointer select-none">Sex</span></label>
+          </div>
+        </div>
+        <div class="relative h-full flex items-center">
+          <select class="field h-full" name="periodo" aria-label="Período de preferência" required>
+            <option disabled selected value="">Período (preferência) *</option>
+            <option>Manhã</option>
+            <option>Tarde</option>
+            <option>Flexível</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg></div>
+        </div>
+      </div>
+      <p id="contact-error" class="hidden text-xs text-brand-red"></p>
+    </form>
+
+    <div id="contact-success" class="hidden py-8 px-4 flex-col items-center text-center space-y-4">
+      <div class="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center text-brand-red"><svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg></div>
+      <div>
+        <h3 class="text-xl font-bold text-brand-dark">Mensagem enviada com sucesso!</h3>
+        <p class="text-sm text-brand-muted mt-2 max-w-xs mx-auto">Entraremos em contato em breve para agendarmos a nossa conversa.</p>
+      </div>
+      <button type="button" id="btn-success-close" class="mt-4 px-6 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-brand-charcoal text-xs font-semibold transition-colors cursor-pointer">Fechar</button>
+    </div>
+  </div>
+
+  <div id="drawer-submit-bar" class="px-6 sm:px-8 py-3 bg-white border-t border-slate-100 flex-shrink-0 z-10">
+    <button type="submit" form="contact-form" id="btn-submit-contact" class="w-full py-3 px-6 rounded-full bg-brand-red hover:bg-[#c13e3e] text-white text-sm font-semibold tracking-wide shadow-btn-glow hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-wait">
+      <span id="btn-submit-label">Solicitar reunião</span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+    </button>
+  </div>
+  <div class="px-6 sm:px-8 py-2.5 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-400 flex items-center justify-between gap-3">
+    <span>🔒 Ambiente seguro.</span>
+    <span class="font-medium text-brand-charcoal">Dani Moscatelli Studio</span>
+  </div>
+</aside>
+
 <script src="/experience-intelligence/pagina.js" defer></script>
+<script src="/experience-intelligence/contato.js" defer></script>
 </body>
 </html>

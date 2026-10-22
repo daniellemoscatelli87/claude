@@ -40,6 +40,7 @@ a { color: inherit; }
 .logo-icone { height: 40px; }
 .logo-completo { display: none; }
 .btn-contato {
+  border: 0; font-family: inherit;
   display: inline-flex; align-items: center; justify-content: center; padding: 10px 16px; border-radius: 9999px;
   background: #d44d4d; color: #fff; font-size: 0.875rem; line-height: 1.25rem; font-weight: 600; text-decoration: none;
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1); transition: all .2s; cursor: pointer;
