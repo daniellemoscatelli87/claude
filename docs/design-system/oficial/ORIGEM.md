@@ -11,3 +11,10 @@
 - **Integração indicada pelo próprio design system:** Tailwind CSS v4, `theme.css` em `src/styles/`, mapeamento `@theme inline`, tema escuro pela classe `.dark` no `<html>`, cores sempre por token (sem hexadecimal solto).
 - **Situação:** referência. A forma e o lugar de adoção dependem de decisão da dona do produto.
 - **Atenção de acessibilidade:** o botão primário usa branco sobre `#D44D4D` (4,23:1), abaixo do mínimo de 4,5:1 para texto normal.
+
+## Endereço no site: danimoscatelli.com.br/designsystem (22/10/2026)
+
+- O site (Netlify) mostra o design system publicado no GitHub Pages pelo próprio endereço, por regras de proxy em `public/_redirects`: `/designsystem` e `/designsystem/*` apontam para `https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/`, e `/DaniMoscatelli-DesignSystem/*` faz os arquivos (JS, CSS, imagens) carregarem no domínio do site. Nada é copiado: o que aparece é sempre a versão publicada no GitHub Pages.
+- Atualização: Figma Make envia ao GitHub (commits do figma[bot]) → o fluxo `deploy.yml` do repositório do design system constrói e publica no GitHub Pages (cerca de 2 minutos) → o endereço do site já mostra a versão nova, sem publicar o site de novo.
+- Cuidado: o `vite.config.ts` do repositório do design system define `base: '/DaniMoscatelli-DesignSystem/'`. Se um envio do Figma Make sobrescrever essa linha, o GitHub Pages e o endereço do site deixam de carregar.
+- Testado com um servidor local que simula as mesmas regras: `/designsystem` e `/designsystem/` abrem o design system, 37 de 37 imagens carregadas, nenhuma falha de rede nem erro na página. O build do site copia `_redirects` para `dist/`. A regra não pode adicionar ou remover barra final no Netlify (geraria laço), por isso as duas formas apontam direto para o GitHub Pages.
