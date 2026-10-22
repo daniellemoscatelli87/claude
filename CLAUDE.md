@@ -21,6 +21,7 @@ Se os arquivos estiverem ausentes, informe precisamente quais faltam e peça ape
 
 ## Regras permanentes
 
+- **Design system oficial obrigatório (decisão da dona do produto, 22/10/2026, D-032).** Todo o site do estúdio, o produto e tudo o que for criado segue completamente o design system oficial: https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/ (repositório `daniellemoscatelli87/DaniMoscatelli-DesignSystem`, publicado também em `danimoscatelli.com.br/designsystem`; cópia de referência em `docs/design-system/oficial/`). Usar os tokens (cores, tipografia, espaçamento, raios, sombras, temas claro e escuro), os componentes e as regras de marca desse design system; não criar cores, fontes ou componentes visuais fora dele. Se algo necessário não existir no design system, ou se uma regra dele conflitar com acessibilidade, perguntar à dona do produto antes.
 - **Distinguir visão ≠ roadmap ≠ escopo do incremento ≠ implementado ≠ validado.** Não implementar recursos futuros sem autorização.
 - **Prioridade de referência:** visão/modelo de negócio = `PRODUCT_VISION.md`; regras de domínio = `CHALLENGE_METHODOLOGY.md`; escopo imediato = último prompt aprovado; segurança sempre obrigatória.
 - Cada tarefa deve manter: problema humano, valor para o cliente, dados/evidências necessários, UX guiada e critérios de aceitação.

@@ -372,6 +372,13 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - cores: exatamente as do app.
 - **Trade-off:** o GA4 exige aviso de cookies e atualização das políticas de privacidade antes de ligar; até lá fica inativo.
 
+## D-032 · 22/10/2026 · Design system oficial obrigatório em tudo
+
+- **Origem:** Dona do produto ("eu preciso que todo o site, produto, tudo que for criado siga completamente o design system").
+- **Decisão:** o design system oficial (https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/) é a fonte única de tokens, componentes e marca para o site do estúdio, o app DM | Experience Intelligence e tudo o que for criado. Regra registrada no `CLAUDE.md`.
+- **Consequências:** migrar o app (hoje com CSS próprio) e as páginas do site (Tailwind v4, mas com cores próprias) para os tokens e componentes do design system; a página do produto v2 nasce no design system.
+- **Pendente:** ordem da migração e o contraste do botão primário (branco sobre #D44D4D, 4,23:1, abaixo do mínimo de 4,5:1).
+
 ---
 
 ## Decisões pendentes
