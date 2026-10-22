@@ -17,3 +17,12 @@
   nav.addEventListener('click', function (e) { if (e.target.closest('a')) fechar(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nav.classList.contains('aberto')) { fechar(); botao.focus(); } });
 })();
+
+// Cabeçalho ganha fundo ao rolar (igual à página inicial).
+(function () {
+  var h = document.getElementById('site-header');
+  if (!h) return;
+  function f() { h.classList.toggle('is-scrolled', window.scrollY > 8); }
+  f();
+  window.addEventListener('scroll', f, { passive: true });
+})();
