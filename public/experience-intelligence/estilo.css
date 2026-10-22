@@ -307,17 +307,26 @@ body.lateral-aberta { overflow: hidden; }
 /* Animações do painel (design system, Motion: "Slide Up" 0.7s com --ease-snappy na entrada;
    gráficos desenham da esquerda para a direita em 1.5s com ease, como o padrão do Recharts;
    cartões flutuantes oscilam em y 0 → -6px → 0 em loop easeInOut). Desligadas com movimento reduzido. */
-@keyframes ds-slide-up { from { opacity: 0; transform: translateY(44px); } to { opacity: 1; transform: none; } }
-@keyframes ds-flutuar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes ds-slide-up { from { opacity: 0; transform: translate3d(0, 44px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+@keyframes ds-flutuar { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -6px, 0); } }
+@keyframes ds-estrela { from { opacity: 0; transform: translate3d(0, 8px, 0) scale(.4); } to { opacity: 1; transform: none; } }
 @keyframes ds-revelar { from { clip-path: inset(-12px 100% -12px -12px); } to { clip-path: inset(-12px -12px -12px -12px); } }
 @keyframes ds-crescer { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes ds-surgir { from { opacity: 0; } to { opacity: 1; } }
-.janela { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.janela { will-change: transform, opacity; animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .kpi-linha, .grafico { animation: ds-revelar 1.5s ease .5s both; }
 .grafico .pa, .grafico .pp { animation: ds-surgir .4s ease-out 1.8s both; }
 .barra { transform-origin: left center; animation: ds-crescer 1.5s ease 1.1s both; }
 @media (min-width: 1280px) {
-  .flutuante { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both, ds-flutuar 5s ease-in-out infinite; }
+  /* camada própria na GPU: o movimento fica contínuo, sem trancos no texto e na sombra */
+  .flutuante { will-change: transform, opacity; backface-visibility: hidden; animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both, ds-flutuar 5s ease-in-out infinite; }
+  /* estrelas da avaliação surgem uma depois da outra (Motion: --ease-back, intervalo de 0.12s) */
+  .citacao .estrelas .ico { animation: ds-estrela .4s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+  .citacao .estrelas .ico:nth-child(1) { animation-delay: 1.1s; }
+  .citacao .estrelas .ico:nth-child(2) { animation-delay: 1.22s; }
+  .citacao .estrelas .ico:nth-child(3) { animation-delay: 1.34s; }
+  .citacao .estrelas .ico:nth-child(4) { animation-delay: 1.46s; }
+  .citacao .estrelas .ico:nth-child(5) { animation-delay: 1.58s; }
   .citacao { animation-delay: .35s, 1.05s; }
   .impacto { animation-delay: .5s, 1.2s; animation-duration: .7s, 5.5s; }
   .voz     { animation-delay: .65s, 1.35s; animation-duration: .7s, 6s; }
@@ -333,6 +342,11 @@ body.lateral-aberta { overflow: hidden; }
 .painel-imagem { display: none; width: 100%; height: auto; }
 @media (max-width: 1279px) {
   .hero-visual { display: none; }
+  /* Conteúdo do hero centralizado (celular e tablet) */
+  .hero-texto { text-align: center; max-width: 44rem; margin: 0 auto; }
+  .hero-texto h1 { text-wrap: balance; }
+  .hero-texto .lead { margin-left: auto; margin-right: auto; }
+  .hero-acoes { justify-content: center; }
   .painel-imagem { display: block; max-width: 680px; margin: -4px auto 12px; }
 }
 @media (max-width: 639px) {
@@ -348,10 +362,6 @@ body.lateral-aberta { overflow: hidden; }
 .dica { position: absolute; z-index: 3; transform: translate(-50%, calc(-100% - 8px)); padding: 4px 8px; border-radius: 6px; background: var(--graphite-900); color: #fff; font-size: 0.75rem; font-weight: 500; white-space: nowrap; pointer-events: none; }
 .dica[hidden] { display: none; }
 @media (max-width: 639px) {
-  /* Conteúdo do hero centralizado */
-  .hero-texto { text-align: center; }
-  .hero-texto .lead { margin-left: auto; margin-right: auto; }
-  .hero-acoes { justify-content: center; }
   .sino, .cab-resto, .filtro-sel, .kpi-linha, .kpi-var, .etapa-nome, .legenda, .flutuante { display: none; }
   /* Cards de visão geral mais baixos */
   .kpi { padding: 10px; }
