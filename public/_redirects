@@ -1,1 +1,6 @@
+# Design system oficial (publicado no GitHub Pages a partir do Figma Make), mostrado no domínio do site.
+# Os arquivos do design system usam o endereço /DaniMoscatelli-DesignSystem/; a última regra antes do site faz eles carregarem aqui.
+/designsystem                    https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/        200
+/designsystem/*                  https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/:splat  200
+/DaniMoscatelli-DesignSystem/*   https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/:splat  200
 /*  /index.html  200
