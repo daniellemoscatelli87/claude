@@ -129,14 +129,17 @@ body.lateral-aberta { overflow: hidden; }
 .hero { position: relative; isolation: isolate; }
 .fundo-hero { position: absolute; z-index: -1; top: -200px; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); overflow: hidden; background: #FFFFFF; pointer-events: none; }
 .blob { position: absolute; border-radius: 50%; filter: blur(90px); animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-direction: alternate; will-change: transform; }
-.b1 { width: 620px; height: 620px; top: 0%;   left: 0%;   background: rgba(237,240,245,0.95); animation-name: blob1; animation-duration: 18s; }
-.b2 { width: 520px; height: 520px; top: -10%; left: 55%;  background: rgba(253,242,242,1.00); animation-name: blob2; animation-duration: 23s; }
-.b3 { width: 560px; height: 560px; top: 50%;  left: -12%; background: rgba(214,220,230,0.90); animation-name: blob3; animation-duration: 16s; }
-.b4 { width: 360px; height: 360px; top: 55%;  left: 65%;  background: rgba(232,128,128,0.38); animation-name: blob4; animation-duration: 21s; }
-@keyframes blob1 { 0% { transform: translate(0%, 0%); } 33% { transform: translate(28%, 22%); } 66% { transform: translate(-18%, 42%); } 100% { transform: translate(0%, 0%); } }
-@keyframes blob2 { 0% { transform: translate(55%, -10%); } 33% { transform: translate(30%, 38%); } 66% { transform: translate(68%, 6%); } 100% { transform: translate(55%, -10%); } }
-@keyframes blob3 { 0% { transform: translate(-12%, 50%); } 33% { transform: translate(42%, 8%); } 66% { transform: translate(14%, 68%); } 100% { transform: translate(-12%, 50%); } }
-@keyframes blob4 { 0% { transform: translate(65%, 55%); } 33% { transform: translate(18%, 78%); } 66% { transform: translate(78%, 18%); } 100% { transform: translate(65%, 55%); } }
+/* Troca de lados: as manchas cinza começam à esquerda e vão para a direita; as vermelhas fazem o caminho inverso.
+   Ida e volta suaves (ease-in-out, alternate), com leve deriva vertical. Cores, tamanhos e desfoque do design system. */
+.b1, .b2, .b3, .b4 { left: 0; animation-duration: 22s; animation-timing-function: ease-in-out; animation-direction: alternate; }
+.b1 { width: 620px; height: 620px; top: -5%;  background: rgba(237,240,245,0.95); animation-name: troca-cinza-1; }
+.b3 { width: 560px; height: 560px; top: 40%;  background: rgba(214,220,230,0.90); animation-name: troca-cinza-2; animation-delay: -4s; }
+.b2 { width: 520px; height: 520px; top: -10%; background: rgba(253,242,242,1.00); animation-name: troca-vermelho-1; }
+.b4 { width: 420px; height: 420px; top: 45%;  background: rgba(232,128,128,0.38); animation-name: troca-vermelho-2; animation-delay: -4s; }
+@keyframes troca-cinza-1    { from { transform: translate3d(-10vw, 0, 0); }   to { transform: translate3d(calc(100vw - 520px), 8vh, 0); } }
+@keyframes troca-cinza-2    { from { transform: translate3d(-6vw, 6vh, 0); }  to { transform: translate3d(calc(100vw - 480px), -4vh, 0); } }
+@keyframes troca-vermelho-1 { from { transform: translate3d(calc(100vw - 440px), 0, 0); }   to { transform: translate3d(-8vw, 10vh, 0); } }
+@keyframes troca-vermelho-2 { from { transform: translate3d(calc(100vw - 380px), 4vh, 0); } to { transform: translate3d(-4vw, -6vh, 0); } }
 
 /* Visual: janela do produto */
 .hero-visual { position: relative; margin: 0; }
