@@ -24,3 +24,7 @@ Início do design system da DM | Experience Intelligence (pedido da dona do prod
 1. Antes de criar um campo novo, procurar um padrão existente no site (`src/em-breve.ts`, `public/rede-parceiros/`, `public/admin/`). Se existir, replicar a regra e o texto de erro.
 2. Componente novo, sem equivalente no site, entra aqui com a indicação "Novo".
 3. Botões sem degradê; tipografia Plus Jakarta Sans; toque mínimo de 44 px; erro junto ao campo.
+
+## Referência: design system DS2 (Graphite + Crimson)
+
+Cópia do design system da dona do produto em [`ds2/`](ds2/ORIGEM.md), sem alteração. Ainda não ligado ao app nem ao site.
