@@ -121,10 +121,10 @@
   celular.addEventListener('change', esconder);
 })();
 
-// Celular: menu do painel abre e fecha pelo botão sanduíche do topo da janela.
+// Celular: menu do painel abre e fecha pelo botão flutuante vermelho.
 (function () {
   var janela = document.querySelector('.janela');
-  var botao = janela && janela.querySelector('.painel-menu');
+  var botao = janela && janela.querySelector('.painel-fab');
   if (!botao) return;
   botao.addEventListener('click', function (e) { e.stopPropagation(); janela.classList.toggle('menu-aberto'); });
   document.addEventListener('click', function (e) {
