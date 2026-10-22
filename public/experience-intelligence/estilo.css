@@ -224,8 +224,12 @@ a { color: inherit; }
 /* No celular, os ícones do menu ficam em uma linha acima do painel */
 @media (max-width: 639px) {
   .janela-corpo { grid-template-columns: minmax(0, 1fr); }
-  .lateral { display: flex; justify-content: space-between; padding: 8px 12px; border-right: 0; border-bottom: 1px solid var(--border); }
-  .lateral li { margin: 0; }
+  /* Menu do painel dentro do botão sanduíche do topo; abre por cima do painel */
+  .janela-corpo { position: relative; }
+  .lateral { display: none; position: absolute; z-index: 4; top: 0; left: 0; width: 72%; padding: 8px; background: var(--card); border-right: 0; border-radius: 0 0 var(--radius) 0; box-shadow: var(--shadow-lg); }
+  .janela.menu-aberto .lateral { display: block; }
+  .lateral li { justify-content: flex-start; padding: 10px 12px; margin: 0 0 2px; }
+  .lat-txt { display: inline; }
   .painel { padding: 14px 12px; }
 }
 
@@ -293,7 +297,9 @@ a { color: inherit; }
 }
 
 /* Celular: painel minimalista (sem gráficos nos cards, sem cartões flutuantes; nomes aparecem ao tocar) */
-.nome-curto, .avatar-ponto, .ver-todas { display: none; }
+.nome-curto, .avatar-ponto, .ver-todas, .painel-menu { display: none; }
+.painel-menu { width: 32px; height: 32px; align-items: center; justify-content: center; margin-right: 4px; border-radius: calc(var(--radius) - 4px); color: var(--foreground); font-size: 18px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.menu-aberto .painel-menu { background: var(--muted); }
 .ver-todas { align-items: center; gap: 4px; margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--border); color: var(--primary); font-size: 0.75rem; font-weight: 600; }
 .ver-todas .ico { font-size: 13px; }
 .avatar-wrap { position: relative; display: inline-flex; }
@@ -304,6 +310,9 @@ a { color: inherit; }
 @media (max-width: 639px) {
   .nome-longo, .sino, .cab-resto, .filtro-sel, .kpi-linha, .kpi-var, .etapa-nome, .legenda, .flutuante { display: none; }
   .nome-curto { display: inline; }
+  .painel-menu { display: inline-flex; }
+  .janela-topo { justify-content: flex-start; }
+  .janela-user { margin-left: auto; }
   .oportunidades li:nth-child(n+2) { display: none; }
   .ver-todas { display: flex; }
   .avatar-ponto { display: block; position: absolute; top: 0; right: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--primary); border: 2px solid var(--card); }

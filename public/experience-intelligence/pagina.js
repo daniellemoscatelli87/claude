@@ -120,3 +120,15 @@
   document.addEventListener('click', function (e) { if (!cartao.contains(e.target)) esconder(); });
   celular.addEventListener('change', esconder);
 })();
+
+// Celular: menu do painel abre e fecha pelo botão sanduíche do topo da janela.
+(function () {
+  var janela = document.querySelector('.janela');
+  var botao = janela && janela.querySelector('.painel-menu');
+  if (!botao) return;
+  botao.addEventListener('click', function (e) { e.stopPropagation(); janela.classList.toggle('menu-aberto'); });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.lateral')) janela.classList.remove('menu-aberto');
+  });
+  window.matchMedia('(max-width: 639px)').addEventListener('change', function () { janela.classList.remove('menu-aberto'); });
+})();
