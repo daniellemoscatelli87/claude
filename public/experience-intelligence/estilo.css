@@ -130,7 +130,7 @@ a { color: inherit; }
 .kpi-topo { display: flow-root; }
 .kpi-rot { display: block; color: var(--muted-foreground); font-size: 0.75rem; font-weight: 500; line-height: 1.3; min-height: 2.6em; margin-bottom: 4px; }
 .kpi-val { display: block; font-weight: 700; font-size: 1.375rem; letter-spacing: -0.025em; line-height: 1; white-space: nowrap; color: var(--foreground); }
-.kpi-ico { float: right; margin: 0 0 4px 6px; width: 28px; height: 28px; border-radius: 8px; background: var(--muted); color: var(--muted-foreground); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.kpi-ico { float: right; margin: 0 0 4px 6px; width: 28px; height: 28px; border-radius: 8px; background: var(--primary-muted); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 15px; }
 .kpi-linha { width: 100%; height: 28px; overflow: visible; margin-top: auto; }
 .kpi-linha path { fill: none; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
 .kpi-linha-sobe path { stroke: var(--chart-1); }
@@ -226,8 +226,8 @@ a { color: inherit; }
 .ponto.c3 { background: var(--chart-3); }
 .ponto.c4 { background: var(--chart-4); }
 .tit-ico { width: 28px; height: 28px; border-radius: 8px; background: var(--primary-muted); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 15px; flex: none; }
-.impacto-val { display: flex; align-items: center; gap: 4px; font-weight: 700; font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.1; color: var(--success); }
-.impacto-val .ico { font-size: 22px; stroke-width: 2.5; }
+.impacto-val { display: flex; align-items: center; gap: 4px; font-weight: 700; font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.1; color: var(--foreground); }
+.impacto-val .ico { font-size: 22px; stroke-width: 2.5; color: var(--success); }
 .impacto-rot { display: block; color: var(--graphite-600); font-size: 0.75rem; margin-top: 2px; line-height: 1.35; }
 
 /* Celular e tablet: cartões flutuantes em grade, abaixo da janela */
@@ -252,8 +252,8 @@ a { color: inherit; }
   .painel { padding-bottom: 64px; }
   .flutuante { position: absolute; z-index: 2; }
   .citacao { top: 0; left: 42%; width: 40%; }
-  .voz { left: -24px; bottom: 0; width: 270px; }
-  .impacto { right: -8px; bottom: 0; width: 230px; }
+  .impacto { left: -24px; bottom: 0; width: 230px; }
+  .voz { right: -8px; bottom: 0; width: 270px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
