@@ -293,7 +293,9 @@ a { color: inherit; }
 }
 
 /* Celular: painel minimalista (sem gráficos nos cards, sem cartões flutuantes; nomes aparecem ao tocar) */
-.nome-curto, .avatar-ponto { display: none; }
+.nome-curto, .avatar-ponto, .ver-todas { display: none; }
+.ver-todas { align-items: center; gap: 4px; margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--border); color: var(--primary); font-size: 0.75rem; font-weight: 600; }
+.ver-todas .ico { font-size: 13px; }
 .avatar-wrap { position: relative; display: inline-flex; }
 .grafico .toque { fill: none; stroke: transparent; stroke-width: 18; pointer-events: stroke; }
 .jornada { position: relative; -webkit-tap-highlight-color: transparent; }
@@ -302,6 +304,8 @@ a { color: inherit; }
 @media (max-width: 639px) {
   .nome-longo, .sino, .cab-resto, .filtro-sel, .kpi-linha, .kpi-var, .etapa-nome, .legenda, .flutuante { display: none; }
   .nome-curto { display: inline; }
+  .oportunidades li:nth-child(n+2) { display: none; }
+  .ver-todas { display: flex; }
   .avatar-ponto { display: block; position: absolute; top: 0; right: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--primary); border: 2px solid var(--card); }
   .painel-cab { flex-wrap: nowrap; }
   .kpi { gap: 0; }
