@@ -86,3 +86,37 @@
     });
   });
 })();
+
+// Celular: no gráfico da jornada, os nomes das etapas e das linhas aparecem ao tocar.
+(function () {
+  var cartao = document.querySelector('.jornada');
+  if (!cartao) return;
+  var dica = cartao.querySelector('.dica');
+  var celular = window.matchMedia('(max-width: 639px)');
+  var atual = null;
+  function esconder() { dica.hidden = true; atual = null; }
+  function mostrar(alvo, texto, x, y) {
+    if (atual === alvo) { esconder(); return; }
+    var c = cartao.getBoundingClientRect();
+    dica.textContent = texto;
+    dica.hidden = false;
+    var meia = dica.offsetWidth / 2;
+    dica.style.left = Math.min(Math.max(x - c.left, meia + 4), c.width - meia - 4) + 'px';
+    dica.style.top = (y - c.top) + 'px';
+    atual = alvo;
+  }
+  cartao.addEventListener('click', function (e) {
+    if (!celular.matches) return;
+    var etapa = e.target.closest('.etapas li');
+    if (etapa) {
+      var r = etapa.querySelector('.etapa-ico').getBoundingClientRect();
+      mostrar(etapa, etapa.querySelector('.etapa-nome').textContent, r.left + r.width / 2, r.top);
+      return;
+    }
+    var linha = e.target.closest('.toque');
+    if (linha) { mostrar(linha, linha.getAttribute('data-nome'), e.clientX, e.clientY); return; }
+    esconder();
+  });
+  document.addEventListener('click', function (e) { if (!cartao.contains(e.target)) esconder(); });
+  celular.addEventListener('change', esconder);
+})();
