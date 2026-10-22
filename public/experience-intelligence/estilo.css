@@ -267,7 +267,7 @@ a { color: inherit; }
 @media (min-width: 1280px) {
   .hero-visual { padding: 64px 0 110px; }
   .flutuante { position: absolute; z-index: 2; }
-  .citacao { top: 0; left: 42%; width: 40%; }
+  .citacao { top: 15px; left: 42%; width: 40%; }
   .impacto { left: -49px; bottom: 35px; width: 230px; }
   .voz { right: -28px; bottom: 5px; width: 270px; }
 }
