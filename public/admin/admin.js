@@ -309,7 +309,7 @@
       const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/admin/" });
       $("forgot-btn").disabled = false;
       if (error) return setMsg("forgot-msg", authError(error), true);
-      setMsg("forgot-msg", "Pronto! Abra o link enviado para " + email + " neste mesmo navegador.");
+      setMsg("forgot-msg", "Pronto! Se este e-mail tiver acesso, enviamos um link para redefinir a senha. Abra o link neste mesmo navegador.");
     });
 
     $("newpass-form").addEventListener("submit", async (e) => {
