@@ -41,6 +41,8 @@
   .slot .tirar { position: absolute; top: 4px; right: 4px; z-index: 2; width: 28px; height: 28px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgb(15 23 42 / .7); color: #fff; cursor: pointer; }
   .slot .tirar svg { width: 14px; height: 14px; }
   .slot .tirar:hover { background: var(--red); }
+  .slot .mais-ico { width: 32px; height: 32px; }
+  .slot.capa { border-color: #f3b3b3; }
   .slot { position: relative; aspect-ratio: 1 / 1; border: 2px dashed var(--line); border-radius: 14px; background: #f8fafc; display: grid; place-items: center; cursor: pointer; overflow: hidden; color: var(--muted); font-size: 12px; font-weight: 600; text-align: center; padding: 6px; }
   .slot:hover { border-color: var(--red); color: var(--red); }
   .slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -337,13 +339,16 @@ let EDIT = null, SLOTS = [], slotAtual = 0, RETIRADAS = [];
 const MAX_FOTOS = 10;
 function desenharFotos() {
   const box = $("fotos"); box.replaceChildren();
-  // As fotos escolhidas e, enquanto houver menos de 10, um quadro para adicionar mais uma.
-  const quadros = SLOTS.length < MAX_FOTOS ? [...SLOTS, null] : SLOTS;
+  // As fotos escolhidas; sem nenhuma, o quadro vazio da capa (obrigatória); e, até 10, o quadro "+" para adicionar.
+  const quadros = [...SLOTS];
+  if (!SLOTS.length) quadros.push("capa");
+  if (SLOTS.length < MAX_FOTOS) quadros.push("mais");
   quadros.forEach((s, i) => {
-    const b = el("div", "slot" + (s ? " cheio" : "")); b.dataset.i = String(i);
+    const vazio = typeof s === "string";
+    const b = el("div", "slot" + (vazio ? " " + s : " cheio")); b.dataset.i = String(i);
     b.setAttribute("role", "button"); b.tabIndex = 0;
-    b.setAttribute("aria-label", s ? "Trocar a foto " + (i + 1) + ". Arraste para mudar a ordem" : "Adicionar foto " + (i + 1) + " de até " + MAX_FOTOS);
-    if (s) {
+    b.setAttribute("aria-label", vazio ? (s === "capa" ? "Escolher a capa (obrigatória)" : "Adicionar foto (até " + MAX_FOTOS + ")") : "Trocar a foto " + (i + 1) + ". Arraste para mudar a ordem");
+    if (!vazio) {
       b.append(el("span", "n", String(i + 1)));
       const img = el("img"); img.src = s.preview || s.url; img.alt = ""; img.draggable = false; b.appendChild(img);
       if (i === 0) b.append(el("span", "capa-tag", "Capa"));
@@ -352,11 +357,13 @@ function desenharFotos() {
       x.addEventListener("pointerdown", (e) => e.stopPropagation());
       x.addEventListener("click", (e) => { e.stopPropagation(); retirarFoto(i); });
       b.appendChild(x);
-    } else b.append(i === 0 ? "Escolher a capa" : "+ Adicionar foto");
-    const escolher = () => { if (arrastou) { arrastou = false; return; } slotAtual = i; $("file").click(); };
+    } else if (s === "capa") b.append(el("span", "capa-tag", "Capa"), "Obrigatória");
+    else b.innerHTML = '<svg class="mais-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+    // Quadros vazios sempre adicionam no fim da lista (sem fotos, a primeira vira a capa).
+    const escolher = () => { if (arrastou) { arrastou = false; return; } slotAtual = vazio ? SLOTS.length : i; $("file").click(); };
     b.addEventListener("click", escolher);
     b.addEventListener("keydown", (e) => { if (e.target === b && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); escolher(); } });
-    if (s) b.addEventListener("pointerdown", (e) => iniciarArraste(e, b, i));
+    if (!vazio) b.addEventListener("pointerdown", (e) => iniciarArraste(e, b, i));
     box.appendChild(b);
   });
   desenharCapa();
