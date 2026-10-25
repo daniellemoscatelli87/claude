@@ -42,10 +42,11 @@
   /* Cabeçalho (proposta C): foto "Descontinhos pra você" à direita, fundindo no fundo vinho; título à esquerda. */
   .banner-wrap { padding-top: 20px; }
   .banner { position: relative; overflow: hidden; isolation: isolate; border-radius: 32px; min-height: 520px; display: flex; align-items: center; color: #fff;
-    background: radial-gradient(70% 100% at 100% 50%, #3a0b0e 0%, transparent 70%), linear-gradient(90deg, #0d0506 0%, #170708 100%);
+    /* Fundo quase preto, do mesmo tom das bordas da foto, para a foto se fundir sem formar faixa */
+    background: #070203;
     box-shadow: 0 30px 70px -30px rgb(23 7 8 / .7); }
   .bn-photo { position: absolute; z-index: -1; top: 0; right: 0; height: 100%; aspect-ratio: 1 / 1; width: auto; max-width: 62%; object-fit: cover; object-position: 30% 30%;
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 24%); mask-image: linear-gradient(to right, transparent 0%, #000 24%); }
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgb(0 0 0 / .55) 18%, #000 40%); mask-image: linear-gradient(to right, transparent 0%, rgb(0 0 0 / .55) 18%, #000 40%); }
   .bn-text { position: relative; padding: 56px; max-width: 600px; }
   .bn-home { color: inherit; text-decoration: none; display: inline-block; }
   .bn-kicker { display: inline-flex; align-items: center; gap: 12px; margin: 0; font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 700; letter-spacing: -.01em; }
