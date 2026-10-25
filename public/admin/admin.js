@@ -472,5 +472,32 @@
   }
   try { const t = sessionStorage.getItem("admin-toast"); if (t) { sessionStorage.removeItem("admin-toast"); if (document.readyState === "loading") addEventListener("DOMContentLoaded", () => toast(t)); else toast(t); } } catch {}
 
+  // Campos de senha: botão de olho para mostrar e ocultar (vale para os campos criados depois, como o login).
+  const OLHO = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>';
+  const OLHO_FECHADO = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg>';
+  function olhoSenha(input) {
+    if (input.dataset.olho) return;
+    input.dataset.olho = "1";
+    const caixa = document.createElement("span");
+    caixa.className = "campo-senha";
+    input.parentNode.insertBefore(caixa, input);
+    caixa.appendChild(input);
+    const botao = document.createElement("button");
+    botao.type = "button";
+    botao.className = "olho-senha";
+    const atualizar = () => {
+      const visivel = input.type === "text";
+      botao.innerHTML = visivel ? OLHO_FECHADO : OLHO;
+      botao.setAttribute("aria-label", visivel ? "Ocultar senha" : "Mostrar senha");
+      botao.setAttribute("aria-pressed", String(visivel));
+    };
+    botao.addEventListener("click", () => { input.type = input.type === "password" ? "text" : "password"; atualizar(); input.focus(); });
+    caixa.appendChild(botao);
+    atualizar();
+  }
+  const olhosNaPagina = () => document.querySelectorAll('input[type="password"]').forEach(olhoSenha);
+  if (document.readyState === "loading") addEventListener("DOMContentLoaded", olhosNaPagina); else olhosNaPagina();
+  new MutationObserver(olhosNaPagina).observe(document.documentElement, { childList: true, subtree: true });
+
   window.Admin = { sb, el, init, log, profile, applyProfile, icon, notifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES, confirmDialog, toast };
 })();
