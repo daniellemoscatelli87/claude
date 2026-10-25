@@ -37,6 +37,12 @@
   .lj-in .hint { font-size: 12px; color: var(--muted); font-weight: 400; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .fotos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (min-width: 560px) { .fotos { grid-template-columns: repeat(5, 1fr); } }
+  .slot .tirar { position: absolute; top: 4px; right: 4px; z-index: 2; width: 28px; height: 28px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgb(15 23 42 / .7); color: #fff; cursor: pointer; }
+  .slot .tirar svg { width: 14px; height: 14px; }
+  .slot .tirar:hover { background: var(--red); }
+  .slot .mais-ico { width: 32px; height: 32px; }
+  .slot.capa { border-color: #f3b3b3; }
   .slot { position: relative; aspect-ratio: 1 / 1; border: 2px dashed var(--line); border-radius: 14px; background: #f8fafc; display: grid; place-items: center; cursor: pointer; overflow: hidden; color: var(--muted); font-size: 12px; font-weight: 600; text-align: center; padding: 6px; }
   .slot:hover { border-color: var(--red); color: var(--red); }
   .slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -125,9 +131,9 @@
     <button type="button" class="lj-x" data-close aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     <h2 id="dlg-t">Novo produto</h2>
     <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:6px">Fotos (3)</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px">Fotos (até 10)</div>
       <div class="fotos" id="fotos"></div>
-      <span class="hint">Toque em cada quadro para escolher a foto e arraste as fotos para mudar a ordem. A primeira foto é a capa do card; na janela do produto as fotos aparecem inteiras.</span>
+      <span class="hint">Adicione de 1 a 10 fotos. Toque numa foto para trocá-la, no × para retirá-la e arraste para mudar a ordem. A primeira foto é a capa do card; na janela do produto as fotos aparecem inteiras.</span>
     </div>
     <div class="capa-box hidden" id="capa-box">
       <div style="font-size:13px;font-weight:600">Recorte da capa no card</div>
@@ -163,7 +169,7 @@
 <script src="/admin/admin.js"></script>
 <script>
 // Store em níveis: marcas (logo, nome, descrição) e, dentro de cada marca, os produtos
-// (três fotos, preço, desconto e link de compra). A vitrine pública fica em /store/.
+// (de 1 a 10 fotos, preço, desconto e link de compra). A vitrine pública fica em /store/.
 const el = Admin.el, sb = Admin.sb, $ = (id) => document.getElementById(id);
 const BUCKET = "/storage/v1/object/public/loja/";
 const brl = (v) => Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -329,21 +335,47 @@ $("m-excluir").addEventListener("click", async () => {
 });
 
 /* ---------- Produto ---------- */
-let EDIT = null, SLOTS = [], slotAtual = 0;
+let EDIT = null, SLOTS = [], slotAtual = 0, RETIRADAS = [];
+const MAX_FOTOS = 10;
 function desenharFotos() {
   const box = $("fotos"); box.replaceChildren();
-  SLOTS.forEach((s, i) => {
-    const b = el("button", "slot" + (s ? " cheio" : "")); b.type = "button"; b.dataset.i = String(i);
-    b.setAttribute("aria-label", (s ? "Trocar" : "Escolher") + " a foto " + (i + 1) + (s ? ". Arraste para mudar a ordem" : ""));
-    b.append(el("span", "n", String(i + 1)));
-    if (s) { const img = el("img"); img.src = s.preview || s.url; img.alt = ""; img.draggable = false; b.appendChild(img); }
-    else b.append("Escolher foto " + (i + 1));
-    if (i === 0 && s) b.append(el("span", "capa-tag", "Capa"));
-    b.addEventListener("click", () => { if (arrastou) { arrastou = false; return; } slotAtual = i; $("file").click(); });
-    if (s) b.addEventListener("pointerdown", (e) => iniciarArraste(e, b, i));
+  // As fotos escolhidas; sem nenhuma, o quadro vazio da capa (obrigatória); e, até 10, o quadro "+" para adicionar.
+  const quadros = [...SLOTS];
+  if (!SLOTS.length) quadros.push("capa");
+  if (SLOTS.length < MAX_FOTOS) quadros.push("mais");
+  quadros.forEach((s, i) => {
+    const vazio = typeof s === "string";
+    const b = el("div", "slot" + (vazio ? " " + s : " cheio")); b.dataset.i = String(i);
+    b.setAttribute("role", "button"); b.tabIndex = 0;
+    b.setAttribute("aria-label", vazio ? (s === "capa" ? "Escolher a capa (obrigatória)" : "Adicionar foto (até " + MAX_FOTOS + ")") : "Trocar a foto " + (i + 1) + ". Arraste para mudar a ordem");
+    if (!vazio) {
+      b.append(el("span", "n", String(i + 1)));
+      const img = el("img"); img.src = s.preview || s.url; img.alt = ""; img.draggable = false; b.appendChild(img);
+      if (i === 0) b.append(el("span", "capa-tag", "Capa"));
+      const x = el("button", "tirar"); x.type = "button"; x.setAttribute("aria-label", "Retirar a foto " + (i + 1));
+      x.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+      x.addEventListener("pointerdown", (e) => e.stopPropagation());
+      x.addEventListener("click", (e) => { e.stopPropagation(); retirarFoto(i); });
+      b.appendChild(x);
+    } else if (s === "capa") b.append(el("span", "capa-tag", "Capa"), "Obrigatória");
+    else b.innerHTML = '<svg class="mais-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+    // Quadros vazios sempre adicionam no fim da lista (sem fotos, a primeira vira a capa).
+    const escolher = () => { if (arrastou) { arrastou = false; return; } slotAtual = vazio ? SLOTS.length : i; $("file").click(); };
+    b.addEventListener("click", escolher);
+    b.addEventListener("keydown", (e) => { if (e.target === b && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); escolher(); } });
+    if (!vazio) b.addEventListener("pointerdown", (e) => iniciarArraste(e, b, i));
     box.appendChild(b);
   });
   desenharCapa();
+}
+// Retira a foto da lista; a que já estava salva só é apagada do armazenamento depois de salvar o produto.
+function retirarFoto(i) {
+  const [s] = SLOTS.splice(i, 1);
+  if (s?.preview) URL.revokeObjectURL(s.preview);
+  if (s?.url) RETIRADAS.push(s.url);
+  if (s?.substitui) RETIRADAS.push(s.substitui);
+  if (i === 0) CAPA = { ...CAPA_PADRAO };
+  desenharFotos();
 }
 // Tocar e arrastar uma foto para outra posição muda a ordem (um toque sem arrastar troca a foto).
 let arrastou = false;
@@ -446,7 +478,7 @@ function abrirProduto(p, marcaId) {
   $("link").value = p?.link ?? "";
   $("ativo").checked = p ? p.ativo : true;
   $("excluir").classList.toggle("hidden", !p);
-  SLOTS = p ? p.fotos.map((url) => ({ url })) : [null, null, null];
+  SLOTS = p ? p.fotos.map((url) => ({ url })) : []; RETIRADAS = [];
   CAPA = { ...CAPA_PADRAO, ...(p?.capa || {}) };
   desenharFotos(); mostrarErro("dlg-err", "");
   mostrarFinal();
@@ -458,7 +490,7 @@ $("form").addEventListener("submit", async (e) => {
   const marca_id = $("marca").value, nome = $("nome").value.trim(), codigo = $("codigo").value.trim(), link = $("link").value.trim();
   const preco = lerPreco($("preco").value);
   const desconto = $("desconto").value.trim() ? Number($("desconto").value.trim()) : 0;
-  if (SLOTS.some((s) => !s)) return erro("Escolha as 3 fotos do produto.");
+  if (!SLOTS.length) return erro("Escolha pelo menos uma foto do produto (a capa).");
   if (!nome) return erro("Informe o nome do produto."), $("nome").focus();
   if (!$("preco").value.trim() || !isFinite(preco) || preco < 0) return erro("Informe um preço válido, por exemplo 149,90."), $("preco").focus();
   if (!Number.isInteger(desconto) || desconto < 0 || desconto > 99) return erro("O desconto deve ser um número de 0 a 99."), $("desconto").focus();
@@ -466,7 +498,7 @@ $("form").addEventListener("submit", async (e) => {
   const btn = $("salvar"); btn.disabled = true; btn.textContent = "Salvando…"; erro("");
   const fim = () => { btn.disabled = false; btn.textContent = "Salvar"; };
   // Envia as fotos novas; as substituídas são apagadas só depois de salvar.
-  const fotos = [], enviadas = [], antigas = [];
+  const fotos = [], enviadas = [], antigas = RETIRADAS.map(caminho).filter(Boolean);
   for (const [i, s] of SLOTS.entries()) {
     if (!s.blob) { fotos.push(s.url); continue; }
     const up = await enviar(s.blob);
@@ -486,7 +518,7 @@ $("form").addEventListener("submit", async (e) => {
 });
 $("excluir").addEventListener("click", async () => {
   const p = EDIT; if (!p) return;
-  if (!(await Admin.confirmDialog({ title: "Excluir produto?", message: "“" + p.nome + "” e as 3 fotos serão apagados definitivamente e o produto sai da Store. Essa ação não pode ser desfeita.", ok: "Excluir produto" }))) return;
+  if (!(await Admin.confirmDialog({ title: "Excluir produto?", message: "“" + p.nome + "” e as fotos serão apagados definitivamente e o produto sai da Store. Essa ação não pode ser desfeita.", ok: "Excluir produto" }))) return;
   const { error } = await sb.from("produtos").delete().eq("id", p.id);
   if (error) return mostrarErro("dlg-err", "Não foi possível excluir: " + error.message);
   await remover(p.fotos.map(caminho).filter(Boolean));
