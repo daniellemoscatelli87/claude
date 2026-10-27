@@ -379,6 +379,36 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Consequências:** migrar o app (hoje com CSS próprio) e as páginas do site (Tailwind v4, mas com cores próprias) para os tokens e componentes do design system; a página do produto v2 nasce no design system.
 - **Pendente:** ordem da migração e o contraste do botão primário (branco sobre #D44D4D, 4,23:1, abaixo do mínimo de 4,5:1).
 
+## D-033 · 22/10/2026 · Página do produto: hero publicado no site do estúdio
+
+- **Origem:** Dona do produto (construção seção por seção, a partir da referência visual do hero e do design system oficial; publicação autorizada em cada etapa).
+- **Decisão:**
+  - página estática em `public/experience-intelligence/` (danimoscatelli.com.br/experience-intelligence/), seguindo a decisão 1 da proposta v2; a página "Em breve", o app, a autenticação e o banco não mudam;
+  - cabeçalho igual ao da página inicial publicada (logo, espaçamentos, botão Contato, fundo ao rolar), com os links da página; no celular e no tablet o menu abre como barra lateral e, no celular, o Contato fica dentro dela;
+  - título "Transforme a experiência das pessoas em ativo estratégico para o seu negócio.", tag "DM | Experience Intelligence" e a descrição aprovada pela dona do produto;
+  - painel demonstrativo com dados fictícios (indicadores, jornada, oportunidades, avaliação, impacto e percepção da experiência), tokens, gráficos, ícones e animações do design system; a frase visível "Exemplo demonstrativo" foi retirada a pedido da dona do produto e continua na descrição para leitor de tela;
+  - celular e tablet (até 1279 px) mostram uma imagem estática do painel do computador;
+  - "Avise-me" abre uma janela que grava o e-mail na lista de lançamento existente (`notificacoes_lancamento`);
+  - "Contato" abre a mesma gaveta de contato da página inicial (cópia da marcação e da lógica, grava em `contatos`);
+  - fundo "Gradient Animation" do design system, com as manchas percorrendo os quatro cantos e variando de intensidade;
+  - fotos de pessoas fornecidas pela dona do produto (não foi usada geração de imagem paga).
+- **Trade-offs:**
+  - a gaveta de contato está copiada: mudanças na da página inicial precisam ser repetidas aqui;
+  - a página fica fora do Google (`noindex`) e sem link na página inicial até a dona do produto decidir divulgar;
+  - botões vermelhos em #D44D4D (cor da página inicial e do design system) ainda abaixo do contraste mínimo, pendente de D-032;
+  - os números de "Percepção da experiência" somam 106% (valores definidos pela dona do produto; ajuste pendente).
+
+## D-034 · 25/10/2026 · Store: de 1 a 10 fotos por produto
+
+- **Origem:** Dona do produto ("permitir adicionar até 10 fotos por produto"; mínimo escolhido: 1 foto, a capa).
+- **Decisão:** cada produto tem de 1 a 10 fotos. No cadastro aparecem só o quadro vazio da capa e um quadro "+" para adicionar; cada foto tem "×" para retirar e pode ser arrastada para mudar a ordem; a vitrine mostra todas.
+- **Banco:** a restrição `produtos_fotos_check` passou de "exatamente 3" para "de 1 a 10" (migração `produtos_fotos_1_a_10`, aplicada em 25/10/2026; compatível com os produtos existentes).
+
+## D-035 · 25/10/2026 · Área restrita: senha visível sob demanda e e-mail oculto na redefinição
+
+- **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
+- **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
+
 ---
 
 ## Decisões pendentes

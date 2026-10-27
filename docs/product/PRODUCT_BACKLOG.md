@@ -101,7 +101,9 @@ Especificação: `docs/product/ux-onboarding/` (kit v1.0). Proposta e comparaç�
 | UX-17 | Landing comercial v1 (`landing-comercial/`), substitui a de UX-16 | Base | Implementado e testado (D-031), não publicado |
 | UX-18 | Esqueci minha senha (`/recuperar-senha/`, `/redefinir-senha/`) | Base | Implementado e testado com Supabase simulado; falta conferir o e-mail real |
 | UX-19 | Medição de acessos GA4 com consentimento: app (páginas públicas) e página inicial do site | Base | App pronto e inativo até o ID; site, textos de cookies e políticas aguardam aprovação |
-| UX-20 | Página do produto v2 (`pagina-produto-v2/`): demonstração interativa, substitui a landing v1 e o protótipo | Base | Proposta de composição apresentada; aguarda decisões |
+| UX-20 | Página do produto v2 (`pagina-produto-v2/`) no site do estúdio (`/experience-intelligence/`), construída seção por seção | Base | Hero implementado, testado e publicado (D-033). Próximas: as outras 9 seções da proposta; depois, links do menu, divulgação (tirar `noindex`) e link na página inicial |
+| UX-21 | Store: de 1 a 10 fotos por produto (D-034) | Site | Implementado, testado e publicado |
+| UX-22 | Área restrita: mostrar/ocultar senha e e-mail oculto na redefinição (D-035) | Site | Implementado, testado e publicado |
 | UX-12 | Botão "Cadastrar" no site do estúdio, apontando para /cadastro/ | Base | Depois (pedido da dona do produto) |
 | UX-3b | Adaptação: análise da IA nos marcos, "O que descobrimos até aqui", decisão proposta (aprofundar, outra perspectiva, revisar hipótese, avançar) validada pelo Engine e confirmada pela pessoa | Investigar · Compreender | Proposto (aguardando aprovação) |
 | UX-1 | Entrada pública (substituída pela landing, UX-16), cadastro completo do cliente fora do acesso público (pagamento pulado nos testes), boas-vindas, "Esqueci minha senha", rodapé "by Dani Moscatelli Studio" (D-022) | Base | Proposto (aguardando aprovação) |

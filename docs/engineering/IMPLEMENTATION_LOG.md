@@ -373,6 +373,28 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - um termo de jargão na interface ("walkthrough" em `observation_light`).
 - **Código e banco:** nenhum alterado.
 
+## 2026-10-22 · Página do produto: hero (D-033, publicado)
+
+- Arquivos: `public/experience-intelligence/` (`index.html`, `estilo.css`, `tokens.css` copiado do design system oficial, `pagina.js`, `contato.css`, `contato.js`, `simbolo.svg`, `foto-citacao.webp`, `foto-perfil.webp`, `painel-celular.webp`). Imagem do painel em `docs/product/pagina-produto-v2/imagens/` (PNG e WebP, fundo transparente). Sem mudança no app, na página inicial, na autenticação ou nas funções.
+- `contato.css`: utilitários do Tailwind usados pela gaveta, gerados a partir de `src/em-breve.css`, com o reset e as variáveis restritos a `#contact-drawer` e `#drawer-backdrop`; `contato.js`: lógica de `src/em-breve.ts` sem a parte de "Notificar lançamento".
+- Publicado pelos PRs #32, #33, #34 e #35 (só a pasta da página).
+- Verificado:
+  - build do site; navegador de 320 a 1600 px sem rolagem lateral e sem erros de JavaScript;
+  - janela "Avise-me" com envio simulado: e-mail válido, inválido e falha de rede; foco e fechamento (X, Cancelar, Esc, fora);
+  - gaveta de contato com envio simulado: dados no mesmo formato da página inicial, validação dos obrigatórios, mensagem de sucesso; foco no primeiro campo;
+  - menu lateral (abrir, fechar no X, no fundo, com Esc e ao escolher um item);
+  - animações (entrada, gráficos, cartões flutuando, estrelas, fundo) e movimento reduzido (tudo parado e completo);
+  - no site publicado: página, janela do Avise-me, menu lateral e gaveta de contato, sem envio de dados reais.
+- Não testado: envio real do Avise-me e do contato (para não criar registros falsos) e a fluidez das animações em aparelhos reais.
+
+## 2026-10-25 · Área restrita e Store (D-034, D-035, publicado)
+
+- Arquivos: `public/admin/admin.js` (botão de mostrar/ocultar senha para todo campo de senha, inclusive os criados depois; mensagem de redefinição sem o e-mail), `public/admin/admin.css` (`.campo-senha`, `.olho-senha`), `public/admin/store/index.html` (1 a 10 fotos, quadro da capa e quadro "+", retirar com "×"), `public/store/index.html` (vitrine com até 10 fotos e nova capa), `public/store/dani-store-4.webp`.
+- Banco: migração `produtos_fotos_1_a_10` (restrição `produtos_fotos_check` entre 1 e 10).
+- Publicado pelos PRs #36 e #37.
+- Verificado: build; mensagem de redefinição com envio simulado; botão de senha no login e nos 7 campos das Configurações; cadastro com 10 fotos, retirada e quadros vazios; banner da Store em 1440 e 375 px; no site publicado: senha, mensagem e capa.
+- Não testado: as Configurações com a sessão real (exige a conta da dona do produto) e a vitrine com um produto real de mais de 3 fotos (nenhum produto de teste foi salvo).
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:
