@@ -84,6 +84,7 @@
     }).then(function (res) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
       form.classList.add('enviado'); ok.hidden = false;
+      window.dmEvento && window.dmEvento('cadastro_lancamento', { origem: 'pagina_produto' });
       ok.querySelector('button').focus();
     }).catch(function () {
       btn.disabled = false; btn.textContent = 'Enviar';
