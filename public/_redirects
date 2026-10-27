@@ -3,4 +3,4 @@
 /designsystem                    https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/        200
 /designsystem/*                  https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/:splat  200
 /DaniMoscatelli-DesignSystem/*   https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/:splat  200
-/*  /index.html  200
+# Endereços que não existem mostram a página 404.html (status 404), em vez da página inicial.
