@@ -353,6 +353,7 @@ html { scroll-behavior: smooth; }
 .etiqueta { display: inline-block; margin: 0 0 20px; padding: 8px 18px; border-radius: 9999px; background: var(--primary-muted); color: var(--crimson-500); font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
 .plat-texto h2 { margin: 0 0 24px; font-size: clamp(1.75rem, 2.6vw, 2.625rem); line-height: 1.12; letter-spacing: -0.03em; font-weight: 800; color: var(--foreground); text-wrap: balance; }
 .plat-texto .lead { max-width: 38rem; }
+.plat-texto h2 .destaque { color: var(--primary); }
 .plat-grid { display: grid; gap: 40px; }
 .plat-fluxo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 16px; border-radius: 28px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-md); }
 .plat-col { border-radius: 20px; padding: 24px 20px; background: var(--crimson-50); }
