@@ -24,6 +24,7 @@ const submitLabel = $('btn-submit-label');
 const contactError = $('contact-error');
 let lastFocus = null;
 function openDrawer() {
+    window.dmEvento && window.dmEvento('contato_aberto', { origem: 'pagina_produto' });
     lastFocus = document.activeElement;
     drawer.classList.remove('invisible');
     requestAnimationFrame(() => {
@@ -166,6 +167,7 @@ contactForm.addEventListener('submit', async (e) => {
         contactForm.classList.add('hidden');
         submitBar.classList.add('hidden');
         $('drawer-header').classList.add('hidden');
+        window.dmEvento && window.dmEvento('contato_enviado', { origem: 'pagina_produto' });
         success.classList.remove('hidden');
         success.classList.add('flex');
     }

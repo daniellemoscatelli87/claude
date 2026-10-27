@@ -34,6 +34,11 @@
     });
   }
 
+  // Eventos das ações importantes do site. Só registra se a pessoa aceitou a medição; nunca envia dados pessoais.
+  window.dmEvento = function (nome, params) {
+    if (carregado && window.gtag) window.gtag("event", nome, params || {});
+  };
+
   var aviso = null;
   function estilo() {
     if (document.getElementById("dm-cookies-estilo")) return;

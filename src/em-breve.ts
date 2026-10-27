@@ -37,6 +37,7 @@ notifyForm.addEventListener('submit', async (e) => {
     await insert('notificacoes_lancamento', { email });
     notifyForm.reset();
     setNotifyState('success');
+    (window as any).dmEvento?.('cadastro_lancamento', { origem: 'pagina_inicial' });
     setTimeout(() => setNotifyState('idle'), NOTIFY_SUCCESS_MS);
   } catch (err) {
     console.error(err);
@@ -74,6 +75,7 @@ const contactError = $('contact-error');
 let lastFocus: HTMLElement | null = null;
 
 function openDrawer() {
+  (window as any).dmEvento?.('contato_aberto');
   lastFocus = document.activeElement as HTMLElement | null;
   drawer.classList.remove('invisible');
   requestAnimationFrame(() => {
@@ -208,6 +210,7 @@ contactForm.addEventListener('submit', async (e) => {
     contactForm.classList.add('hidden');
     submitBar.classList.add('hidden');
     $('drawer-header').classList.add('hidden');
+    (window as any).dmEvento?.('contato_enviado');
     success.classList.remove('hidden');
     success.classList.add('flex');
   } catch (err) {
