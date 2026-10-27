@@ -1,0 +1,6 @@
+# Buscadores podem ler o site; a área restrita fica de fora.
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+Sitemap: https://www.danimoscatelli.com.br/sitemap.xml
