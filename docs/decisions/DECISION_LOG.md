@@ -409,6 +409,18 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-036 · 27/10/2026 · Site encontrável nos buscadores e medição de acessos com consentimento
+
+- **Origem:** Dona do produto ("a página em breve pode e deve ser encontrada no Google"; títulos, descrições e textos de cookies e da Política de Privacidade aprovados por ela).
+- **Decisão:**
+  - títulos: "Dani Moscatelli | Experience Design Studio" (página inicial) e "Dani Moscatelli | Partners & Connections" (Rede de Parceiros); descrições com as palavras-chave da bio do LinkedIn (Service Design, Business Design, CX, UX, EX), sem citar "20 anos";
+  - endereço oficial em www, imagem de compartilhamento, dados estruturados (estúdio, Dani Moscatelli, Curitiba/PR, LinkedIn pessoal e da empresa, Instagram), `robots.txt` sem a área restrita, mapa do site e página 404;
+  - Google Search Console verificado pelo DNS (registro TXT na Hostinger; não pode ser apagado) e mapa do site enviado;
+  - Google Analytics 4 (G-FTVGXQRJQ6) só depois de "Aceitar" no aviso de cookies, com "Preferências de cookies" para rever; Política de Privacidade atualizada (medição, finalidade, fornecedor e seção de cookies);
+  - eventos principais: `cadastro_lancamento`, `contato_enviado`, `cadastro_parceiro`; também `contato_aberto`, `clique_quero_ser_parceiro` e `clique_rede_social`; nenhum dado pessoal vai para o Google.
+- **Fora:** a Store (em espera, sem mapa do site nem medição até nova decisão), a área restrita e a página do produto nos buscadores (segue `noindex` até a divulgação; já tem medição com consentimento).
+- **Trade-off:** sem o aviso aceito não há números; os relatórios mostram só quem consentiu.
+
 ---
 
 ## Decisões pendentes

@@ -373,6 +373,18 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - um termo de jargão na interface ("walkthrough" em `observation_light`).
 - **Código e banco:** nenhum alterado.
 
+## 2026-10-27 · Encontrabilidade e medição do site (D-036, publicado)
+
+- Arquivos: `index.html` (título, descrição, canonical, Open Graph, dados estruturados, verificação do Search Console, link "Preferências de cookies", eventos nos links), `public/rede-parceiros/index.html`, `public/privacidade/index.html` (textos de medição e seção 6 "Cookies"), `public/robots.txt`, `public/sitemap.xml`, `public/404.html`, `public/compartilhar.png`, `public/_redirects` (sem a regra `/* /index.html 200`), `public/analytics.js` (aviso de cookies, GA4 com consentimento e `window.dmEvento`), eventos em `src/em-breve.ts`, `public/experience-intelligence/{pagina.js,contato.js}` e `public/rede-parceiros/index.html`.
+- Fora do código: registro TXT do Google na Hostinger, propriedade do Search Console, propriedade do GA4 e eventos principais marcados pela dona do produto.
+- Publicado pelos PRs #38 a #41.
+- Verificado:
+  - no site publicado: `robots.txt`, `sitemap.xml` (XML válido, lido como Googlebot), 404 em endereço inexistente, demais páginas e `/designsystem` sem regressão;
+  - aviso de cookies: nada do Google antes da escolha; recusar, reabrir e aceitar; ao aceitar, `page_view` e evento chegam ao GA4 e os cookies `_ga` são criados; com "Recusar", nenhum evento; área restrita sem aviso;
+  - visita registrada no Tempo real do GA4 (conferido pela dona do produto).
+- Não testado no navegador: `contato_enviado` e `cadastro_parceiro` com envio real (para não criar registros falsos); conferir no GA4 quando houver o primeiro.
+- Pendente: status "Concluído" do mapa do site no Search Console.
+
 ## 2026-10-22 · Página do produto: hero (D-033, publicado)
 
 - Arquivos: `public/experience-intelligence/` (`index.html`, `estilo.css`, `tokens.css` copiado do design system oficial, `pagina.js`, `contato.css`, `contato.js`, `simbolo.svg`, `foto-citacao.webp`, `foto-perfil.webp`, `painel-celular.webp`). Imagem do painel em `docs/product/pagina-produto-v2/imagens/` (PNG e WebP, fundo transparente). Sem mudança no app, na página inicial, na autenticação ou nas funções.
