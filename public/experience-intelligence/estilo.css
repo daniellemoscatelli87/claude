@@ -358,8 +358,7 @@ html { scroll-behavior: smooth; }
 .plat-col { border-radius: 20px; padding: 24px 20px; background: var(--crimson-50); }
 .plat-col h3 { margin: 0 0 16px; font-size: 1.25rem; line-height: 1.25; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
 .plat-desafio, .plat-resultado { text-align: center; }
-.plat-ico-grande { display: flex; justify-content: center; align-self: center; color: var(--primary); font-size: 36px; margin: 0 auto 10px; }
-.plat-ico-grande .ico { stroke-width: 1.75; }
+.plat-ico-grande { width: 52px; height: 52px; border-radius: 50%; background: var(--primary-muted); color: var(--primary); display: flex; align-items: center; justify-content: center; align-self: center; font-size: 28px; margin: 0 auto 10px; flex: none; }
 .plat-pontos { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 12px; text-align: left; }
 .plat-pontos li { display: flex; align-items: center; gap: 12px; font-size: 1rem; color: var(--graphite-700); }
 .plat-pontos li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex: none; }
@@ -396,7 +395,7 @@ html { scroll-behavior: smooth; }
   .plat-desafio .plat-pontos, .plat-resultado .plat-checks { align-self: center; }
   .plat-intel { position: relative; z-index: 1; margin: -44px 0; padding: 20px 22px; justify-content: center; box-shadow: var(--shadow-lg); }
   .plat-intel h3 { font-size: 1.375rem; margin-bottom: 12px; }
-  .plat-ico-titulo { width: 44px; height: 44px; font-size: 24px; }
+  .plat-ico-titulo, .plat-ico-grande { width: 44px; height: 44px; font-size: 24px; }
   .plat-itens { gap: 8px; }
   .plat-itens li { gap: 14px; padding: 10px 12px; }
   .plat-ico { width: 40px; height: 40px; font-size: 20px; border-radius: 12px; }
