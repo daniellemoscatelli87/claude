@@ -372,7 +372,7 @@ html { scroll-behavior: smooth; }
 .plat-itens strong { display: block; font-size: 1.0625rem; font-weight: 700; color: var(--foreground); }
 .plat-itens li > span:last-child { color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.35; }
 .plat-ico { width: 52px; height: 52px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 26px; flex: none; }
-.plat-ico.violeta { background: var(--violet-muted); color: var(--violet); }
+.plat-ico.violeta { background: var(--muted); color: var(--graphite-600); }
 .plat-ico.vermelho { background: var(--primary-muted); color: var(--primary); }
 .plat-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; text-align: left; }
 .plat-checks li { display: flex; align-items: flex-start; gap: 12px; font-size: 1rem; line-height: 1.4; color: var(--graphite-700); }
@@ -397,9 +397,14 @@ html { scroll-behavior: smooth; }
   .plat-itens li > span:last-child { font-size: 0.875rem; }
   .plat-texto h2 { font-size: clamp(1.75rem, 2.4vw, 2.625rem); }
   .plat-col { display: flex; flex-direction: column; }
-  .plat-desafio, .plat-resultado { margin: 24px 0; justify-content: center; }
+  .plat-desafio, .plat-resultado { margin: 0; justify-content: center; }
   .plat-desafio .plat-pontos, .plat-resultado .plat-checks { align-self: center; }
-  .plat-intel { margin: -24px 0; padding: 24px; }
+  .plat-intel { margin: 0; padding: 18px 20px; align-self: center; }
+  .plat-intel h3 { margin-bottom: 12px; }
+  .plat-ico-titulo { width: 44px; height: 44px; font-size: 24px; }
+  .plat-itens { gap: 8px; }
+  .plat-itens li { padding: 9px 12px; }
+  .plat-ico { width: 40px; height: 40px; font-size: 20px; border-radius: 12px; }
   .plat-seta { align-self: center; transform: none; margin: 0 -14px; }
 }
 
