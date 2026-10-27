@@ -138,3 +138,48 @@
   });
   window.matchMedia('(max-width: 639px)').addEventListener('change', function () { janela.classList.remove('menu-aberto'); });
 })();
+
+// Seção "O que é a plataforma": animações ao entrar na tela (Motion do design system).
+// - texto e cards: "Slide Up" (y 44 → 0, 0.7s, --ease-snappy), um depois do outro;
+// - lista de "Nossa inteligência": "Animated List" — cada item entra no topo e empurra os outros para baixo
+//   (y -32 → 0 e escala 0.93 → 1, com mola); inserimos de baixo para cima para a ordem final ser a da página.
+(function () {
+  var secao = document.getElementById('plataforma');
+  if (!secao) return;
+  var reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduzir || !('IntersectionObserver' in window)) return;
+  var lista = secao.querySelector('.plat-itens');
+  var itens = lista ? Array.prototype.slice.call(lista.children) : [];
+  secao.classList.add('anim-pronto');
+  // Reserva a altura da lista para o card não mudar de tamanho enquanto os itens entram.
+  function reservar() { if (lista) { lista.style.minHeight = ''; lista.style.minHeight = lista.offsetHeight + 'px'; } }
+  reservar();
+  itens.forEach(function (li) { li.remove(); });
+
+  function inserir(li) {
+    var antes = Array.prototype.map.call(lista.children, function (el) { return [el, el.getBoundingClientRect().top]; });
+    lista.insertBefore(li, lista.firstChild);
+    antes.forEach(function (par) {
+      var dy = par[1] - par[0].getBoundingClientRect().top;
+      par[0].style.transition = 'none';
+      par[0].style.transform = 'translateY(' + dy + 'px)';
+    });
+    li.style.transition = 'none';
+    li.style.opacity = '0';
+    li.style.transform = 'translateY(-32px) scale(.93)';
+    lista.offsetHeight; // aplica o estado inicial antes de animar
+    var mola = 'transform .5s cubic-bezier(.22,1.25,.36,1), opacity .35s ease-out';
+    antes.forEach(function (par) { par[0].style.transition = mola; par[0].style.transform = ''; });
+    li.style.transition = mola;
+    li.style.opacity = '';
+    li.style.transform = '';
+  }
+
+  var obs = new IntersectionObserver(function (entradas) {
+    if (!entradas.some(function (e) { return e.isIntersecting; })) return;
+    obs.disconnect();
+    secao.classList.add('visivel');
+    itens.slice().reverse().forEach(function (li, i) { setTimeout(function () { inserir(li); }, 650 + i * 420); });
+  }, { threshold: 0, rootMargin: '0px 0px -25% 0px' });
+  obs.observe(secao.querySelector('.plat-fluxo') || secao);
+})();

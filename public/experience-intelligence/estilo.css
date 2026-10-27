@@ -407,6 +407,26 @@ html { scroll-behavior: smooth; }
   .plat-seta { align-self: center; transform: none; margin: 0 -14px; z-index: 2; }
 }
 
+/* Animações da seção "O que é a plataforma" (só com JavaScript; desligadas com movimento reduzido) */
+@keyframes plat-seta { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+@keyframes plat-seta-v { 0%, 100% { transform: rotate(90deg) translateX(0); } 50% { transform: rotate(90deg) translateX(4px); } }
+.anim-pronto .etiqueta, .anim-pronto .plat-texto h2, .anim-pronto .plat-texto .lead,
+.anim-pronto .plat-fluxo, .anim-pronto .plat-desafio, .anim-pronto .plat-intel, .anim-pronto .plat-resultado,
+.anim-pronto .plat-checks li, .anim-pronto .plat-pontos li { opacity: 0; }
+.visivel .etiqueta, .visivel .plat-texto h2, .visivel .plat-texto .lead,
+.visivel .plat-fluxo, .visivel .plat-desafio, .visivel .plat-intel, .visivel .plat-resultado { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.visivel .plat-texto h2 { animation-delay: .08s; }
+.visivel .plat-texto .lead { animation-delay: .16s; }
+.visivel .plat-fluxo { animation-delay: .2s; }
+.visivel .plat-desafio { animation-delay: .3s; }
+.visivel .plat-intel { animation-delay: .4s; }
+.visivel .plat-resultado { animation-delay: .5s; }
+.visivel .plat-pontos li, .visivel .plat-checks li { animation: ds-surgir .4s ease-out both; }
+.visivel .plat-pontos li:nth-child(1) { animation-delay: .6s; } .visivel .plat-pontos li:nth-child(2) { animation-delay: .7s; } .visivel .plat-pontos li:nth-child(3) { animation-delay: .8s; }
+.visivel .plat-checks li:nth-child(1) { animation-delay: 2.5s; } .visivel .plat-checks li:nth-child(2) { animation-delay: 2.62s; }
+.visivel .plat-checks li:nth-child(3) { animation-delay: 2.74s; } .visivel .plat-checks li:nth-child(4) { animation-delay: 2.86s; }
+.visivel .plat-seta .ico { animation: plat-seta 1.6s ease-in-out 2s infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; animation: none !important; }
