@@ -342,7 +342,72 @@ body.lateral-aberta { overflow: hidden; }
   .voz     { animation-delay: .65s, 1.35s; animation-duration: .7s, 6s; }
 }
 
+
+/* Seção 2: o que é a plataforma (tokens do design system) */
+html { scroll-behavior: smooth; }
+.sec { position: relative; isolation: isolate; overflow: hidden; padding: 72px 16px; background: var(--card); }
+.sec-in { max-width: 1440px; margin: 0 auto; }
+.plataforma::before, .plataforma::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; background: radial-gradient(circle, rgba(212,77,77,.09) 0%, rgba(212,77,77,0) 70%); pointer-events: none; }
+.plataforma::before { width: 760px; height: 760px; right: 4%; top: -120px; }
+.plataforma::after { width: 560px; height: 560px; left: 30%; bottom: -260px; }
+.etiqueta { display: inline-block; margin: 0 0 20px; padding: 8px 18px; border-radius: 9999px; background: var(--primary-muted); color: var(--crimson-500); font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.plat-texto h2 { margin: 0 0 24px; font-size: clamp(1.75rem, 2.6vw, 2.625rem); line-height: 1.12; letter-spacing: -0.03em; font-weight: 800; color: var(--foreground); text-wrap: balance; }
+.plat-texto .lead { max-width: 38rem; }
+.plat-texto h2 .destaque { color: var(--primary); }
+.plat-grid { display: grid; gap: 40px; }
+.plat-fluxo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 16px; border-radius: 28px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+.plat-col { border-radius: 20px; padding: 24px 20px; background: var(--crimson-50); }
+.plat-col h3 { margin: 0 0 16px; font-size: 1.25rem; line-height: 1.25; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
+.plat-desafio, .plat-resultado { text-align: center; }
+.plat-ico-grande { width: 52px; height: 52px; border-radius: 50%; background: var(--primary-muted); color: var(--primary); display: flex; align-items: center; justify-content: center; align-self: center; font-size: 28px; margin: 0 auto 10px; flex: none; }
+.plat-pontos { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 12px; text-align: left; }
+.plat-pontos li { display: flex; align-items: center; gap: 12px; font-size: 1rem; color: var(--graphite-700); }
+.plat-pontos li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex: none; }
+.plat-exemplo { margin: 0; padding: 16px; border-radius: 16px; background: var(--card); box-shadow: var(--shadow-sm); font-style: italic; font-size: 0.9375rem; line-height: 1.5; color: var(--graphite-600); text-align: left; }
+.plat-intel { background: linear-gradient(180deg, var(--crimson-50), #FFFFFF); border: 1px solid var(--crimson-100); box-shadow: var(--shadow-sm); }
+.plat-intel h3 { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; font-size: 1.5rem; }
+.plat-ico-titulo { width: 52px; height: 52px; border-radius: 50%; background: var(--primary-muted); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 28px; flex: none; }
+.plat-itens { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.plat-itens li { display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-radius: 16px; background: var(--card); box-shadow: var(--shadow-xs); }
+.plat-itens strong { display: block; font-size: 1.0625rem; font-weight: 700; color: var(--foreground); }
+.plat-itens li > span:last-child { color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.35; }
+.plat-ico { width: 52px; height: 52px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 26px; flex: none; }
+.plat-ico.violeta { background: var(--muted); color: var(--graphite-600); }
+.plat-ico.vermelho { background: var(--primary-muted); color: var(--primary); }
+.plat-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; text-align: left; }
+.plat-checks li { display: flex; align-items: flex-start; gap: 12px; font-size: 1rem; line-height: 1.4; color: var(--graphite-700); }
+.plat-checks .ico { color: var(--primary); font-size: 20px; stroke-width: 2.5; margin-top: 1px; }
+.plat-seta { justify-self: center; width: 48px; height: 48px; border-radius: 50%; background: var(--card); border: 1px solid var(--crimson-100); box-shadow: var(--shadow-sm); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 22px; transform: rotate(90deg); margin: -4px 0; position: relative; z-index: 1; }
+@media (min-width: 768px) {
+  .sec { padding: 96px 40px; }
+}
+@media (max-width: 1279px) {
+  .plat-texto { text-align: center; max-width: 44rem; margin: 0 auto; }
+  .plat-texto .lead { margin-left: auto; margin-right: auto; }
+  .plat-fluxo { max-width: 560px; width: 100%; margin: 0 auto; }
+}
+@media (min-width: 1280px) {
+  .plat-grid { grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr); align-items: center; gap: 40px; }
+  /* Card branco de base; Desafio e Recomendações com a mesma largura e altura;
+     Nossa inteligência mais larga, mais alta e à frente, passando das bordas da base */
+  .plat-fluxo { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.5fr) auto minmax(0, 1fr); align-items: stretch; gap: 0; padding: 20px; margin: 40px 0; }
+  .plat-col { display: flex; flex-direction: column; padding: 22px 18px; }
+  .plat-desafio, .plat-resultado { justify-content: center; }
+  .plat-desafio .plat-pontos, .plat-resultado .plat-checks { align-self: center; }
+  .plat-intel { position: relative; z-index: 1; margin: -44px 0; padding: 20px 22px; justify-content: center; box-shadow: var(--shadow-lg); }
+  .plat-intel h3 { font-size: 1.375rem; margin-bottom: 12px; }
+  .plat-ico-titulo, .plat-ico-grande { width: 44px; height: 44px; font-size: 24px; }
+  .plat-itens { gap: 8px; }
+  .plat-itens li { gap: 14px; padding: 10px 12px; }
+  .plat-ico { width: 40px; height: 40px; font-size: 20px; border-radius: 12px; }
+  .plat-itens strong { font-size: 1rem; }
+  .plat-itens li > span:last-child { font-size: 0.875rem; }
+  .plat-texto h2 { font-size: clamp(1.75rem, 2.4vw, 2.625rem); }
+  .plat-seta { align-self: center; transform: none; margin: 0 -14px; z-index: 2; }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   * { transition: none !important; animation: none !important; }
 }
 
