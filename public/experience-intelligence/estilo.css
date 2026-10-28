@@ -548,8 +548,12 @@ button.btn { border: 0; cursor: pointer; }
 .cf-identificar ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .cf-identificar li { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 16px 8px; border-radius: 16px; border: 1px solid var(--border); background: var(--card); font-size: 0.9375rem; font-weight: 600; line-height: 1.3; color: var(--foreground); }
 .cf-ico-redondo { width: 48px; height: 48px; border-radius: 12px; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; }
-.cf-nota { display: flex; gap: 10px; align-items: flex-start; margin: 24px 0 0; color: var(--graphite-500); font-size: 0.875rem; font-style: italic; line-height: 1.5; }
+.cf-nota { display: flex; gap: 10px; align-items: flex-start; justify-content: center; text-align: center; margin: 24px 0 0; color: var(--graphite-500); font-size: 0.875rem; font-style: italic; line-height: 1.5; }
 .cf-nota .ico { flex: none; font-size: 20px; margin-top: 1px; }
+/* Celular: ícone da nota acima do texto, centralizado */
+@media (max-width: 639px) {
+  .cf-nota { flex-direction: column; align-items: center; gap: 6px; }
+}
 @media (min-width: 640px) {
   .cf-identificar ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
