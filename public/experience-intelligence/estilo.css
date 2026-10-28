@@ -524,30 +524,34 @@ button.btn { border: 0; cursor: pointer; }
 .cf-corpo { max-width: 1000px; margin: 48px auto 0; }
 .cf-subtitulo { margin: 0 0 24px; text-align: center; font-size: 0.9375rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--foreground); }
 .cf-subtitulo span { color: var(--crimson-500); }
-.cf-etapas { --cf-ico: 44px; --cf-trilho: 14px; list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
-/* Cada etapa: o ícone fica sobre a linha do tempo (no lugar do marcador), fora do card; card com número, texto e exemplo */
-.cf-etapa { position: relative; display: grid; grid-template-columns: var(--cf-ico) minmax(0, 1fr); column-gap: var(--cf-trilho); align-items: center; }
-.cf-cartao { grid-column: 2; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 12px 14px; padding: 16px; border-radius: 20px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
-/* Linha do tempo: traço contínuo entre as etapas e um círculo no meio de cada uma */
-.cf-etapa::before { content: ""; position: absolute; left: calc(var(--cf-ico) / 2 - 1px); top: -8px; bottom: -8px; width: 2px; background: var(--primary); }
+/* Linha do tempo: o número fica na linha, fora do card; o ícone colorido fica dentro do card */
+.cf-etapas { --cf-marco: 44px; --cf-trilho: 14px; list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.cf-etapa { position: relative; display: grid; grid-template-columns: var(--cf-marco) minmax(0, 1fr); column-gap: var(--cf-trilho); align-items: center; }
+.cf-etapa::before { content: ""; position: absolute; left: calc(var(--cf-marco) / 2 - 1px); top: -8px; bottom: -8px; width: 2px; background: var(--primary); }
 .cf-etapa:first-child::before { top: 50%; }
 .cf-etapa:last-child::before { bottom: 50%; }
-.cf-ico { position: relative; z-index: 1; grid-column: 1; grid-row: 1; width: var(--cf-ico); height: var(--cf-ico); border-radius: 50%; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: var(--shadow-md); }
-.cf-num { width: 40px; height: 40px; border-radius: 10px; background: var(--muted); color: var(--foreground); font-size: 0.9375rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-.cf-texto h4 { margin: 0 0 4px; font-size: 1.25rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
+.cf-num { position: relative; z-index: 1; grid-column: 1; grid-row: 1; width: var(--cf-marco); height: var(--cf-marco); border-radius: 50%; background: var(--card); border: 2px solid var(--primary); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.9375rem; font-weight: 800; box-shadow: var(--shadow-md); }
+.cf-cartao { grid-column: 2; grid-row: 1; display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; border-radius: 20px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .25s; }
+.cf-cartao:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.cf-ico { flex: none; width: 48px; height: 48px; border-radius: 14px; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+.cf-texto { min-width: 0; }
+.cf-texto h4 { margin: 2px 0 4px; font-size: 1.125rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
 .cf-texto p { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
-/* Celular: título ao lado do ícone e do número; descrição e exemplo ocupam a largura toda */
-.cf-texto { display: contents; }
-.cf-texto h4 { align-self: center; margin: 0; }
-.cf-texto p { grid-column: 1 / -1; }
-.cf-num { align-self: center; margin-top: 0; }
-/* Tablet: espaço igual dos dois lados, para os cards ficarem centralizados */
-@media (min-width: 768px) and (max-width: 1239px) {
-  .cf-etapas { padding-right: 92px; }
-}
-/* Telas largas: os ícones da linha do tempo ficam na margem, para os cards ficarem centralizados com título, descrição e abas */
-@media (min-width: 1240px) {
-  .cf-etapas { margin-left: -92px; }
+/* Tablet e computador: linha no centro, cards alternando à direita e à esquerda */
+@media (min-width: 768px) {
+  .cf-etapas { --cf-marco: 52px; max-width: 920px; margin: 0 auto; gap: 18px; }
+  .cf-etapa { grid-template-columns: minmax(0, 1fr) var(--cf-marco) minmax(0, 1fr); column-gap: 28px; }
+  .cf-etapa::before { left: calc(50% - 1px); top: -10px; bottom: -10px; }
+  /* Cards encaixados: cada etapa começa antes do fim da anterior, alternando os lados */
+  .cf-etapa + .cf-etapa { margin-top: -40px; }
+  .cf-num { grid-column: 2; font-size: 1rem; }
+  .cf-etapa:nth-child(odd) .cf-cartao { grid-column: 3; }
+  .cf-etapa:nth-child(even) .cf-cartao { grid-column: 1; }
+  /* Setinha do card apontando para a linha */
+  .cf-cartao { position: relative; }
+  .cf-cartao::before { content: ""; position: absolute; top: 50%; width: 12px; height: 12px; margin-top: -6px; background: var(--card); border: 1px solid var(--border); transform: rotate(45deg); }
+  .cf-etapa:nth-child(odd) .cf-cartao::before { left: -7px; border-top: 0; border-right: 0; }
+  .cf-etapa:nth-child(even) .cf-cartao::before { right: -7px; border-bottom: 0; border-left: 0; }
 }
 .cf-identificar { margin-top: 48px; text-align: center; }
 .cf-identificar h3 { margin: 0 0 20px; font-size: 1.25rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
@@ -562,15 +566,6 @@ button.btn { border: 0; cursor: pointer; }
 }
 @media (min-width: 640px) {
   .cf-identificar ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-@media (min-width: 768px) {
-  .cf-etapas { --cf-ico: 64px; --cf-trilho: 28px; }
-  .cf-cartao { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 18px; padding: 16px 20px; }
-  .cf-ico { font-size: 30px; }
-  .cf-num { align-self: center; }
-  .cf-texto h4 { margin: 0 0 4px; align-self: auto; }
-  .cf-texto p { grid-column: auto; }
-  .cf-texto { display: flex; flex-direction: column; justify-content: center; }
 }
 @media (min-width: 1024px) {
   .cf-identificar ul { grid-template-columns: repeat(6, minmax(0, 1fr)); }
@@ -589,7 +584,14 @@ button.btn { border: 0; cursor: pointer; }
 .como-funciona .plat-texto.visivel .lead { animation-delay: .16s; }
 .como-funciona .cf-etapa.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .cf-etapa.visivel::before { transform-origin: top; animation: cf-linha .6s ease-out .2s both; }
-.cf-etapa.visivel .cf-ico { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) .2s both; }
+.cf-etapa.visivel .cf-num { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) .2s both; }
+@keyframes cf-da-direita { from { opacity: 0; transform: translate3d(32px, 0, 0); } to { opacity: 1; transform: none; } }
+@keyframes cf-da-esquerda { from { opacity: 0; transform: translate3d(-32px, 0, 0); } to { opacity: 1; transform: none; } }
+@media (min-width: 768px) {
+  .como-funciona .cf-etapa.visivel { animation: ds-surgir .3s ease-out both; }
+  .cf-etapa.visivel:nth-child(odd) .cf-cartao { animation: cf-da-direita .7s cubic-bezier(0.16, 1, 0.3, 1) .15s both; }
+  .cf-etapa.visivel:nth-child(even) .cf-cartao { animation: cf-da-esquerda .7s cubic-bezier(0.16, 1, 0.3, 1) .15s both; }
+}
 .cf-identificar.visivel li { animation: ds-slide-up .6s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .cf-identificar.visivel li:nth-child(1) { animation-delay: .2s; } .cf-identificar.visivel li:nth-child(2) { animation-delay: .28s; }
 .cf-identificar.visivel li:nth-child(3) { animation-delay: .36s; } .cf-identificar.visivel li:nth-child(4) { animation-delay: .44s; }
