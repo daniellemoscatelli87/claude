@@ -598,6 +598,7 @@ button.btn { border: 0; cursor: pointer; }
 .rag-grid { display: grid; gap: 40px; align-items: center; }
 .rag-intro { text-align: center; max-width: 44rem; margin: 0 auto; }
 .rag-intro h2 { margin: 0 0 24px; font-size: clamp(1.75rem, 2.6vw, 2.625rem); line-height: 1.12; letter-spacing: -0.03em; font-weight: 800; color: var(--foreground); text-wrap: balance; }
+.rag-intro h2 .destaque { color: var(--primary); }
 .rag-intro .lead { margin-left: auto; margin-right: auto; }
 .rag-intro .lead strong { white-space: normal; }
 .rag-roda { position: relative; }
