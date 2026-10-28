@@ -393,7 +393,7 @@ html { scroll-behavior: smooth; }
      Nossa inteligência mais larga, mais alta e à frente, passando das bordas da base */
   .plat-fluxo { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.5fr) auto minmax(0, 1fr); align-items: stretch; gap: 0; padding: 20px; margin: 48px auto 40px; width: 100%; max-width: 1120px; }
   .plat-col { display: flex; flex-direction: column; padding: 22px 18px; }
-  .plat-desafio, .plat-resultado { justify-content: center; }
+  .plat-desafio, .plat-resultado { justify-content: flex-start; padding-top: 40px; }
   .plat-desafio .plat-pontos, .plat-resultado .plat-checks { align-self: center; }
   .plat-intel { position: relative; z-index: 1; margin: -44px 0; padding: 20px 22px; justify-content: center; box-shadow: var(--shadow-lg); }
   .plat-intel h3 { font-size: 1.375rem; margin-bottom: 12px; }
@@ -622,7 +622,7 @@ button.btn { border: 0; cursor: pointer; }
   .rag-centro span { max-width: none; }
 }
 /* Computador: o RAG no centro e as 5 áreas em cards do mesmo tamanho em volta, ligados ao centro por linhas */
-.rag-linhas { display: none; }
+.rag-linhas, .rag-pontos { display: none; }
 @media (min-width: 1200px) {
   .rag-intro { max-width: 52rem; }
   .rag-roda { display: grid; grid-template-columns: minmax(0, 1fr) 260px minmax(0, 1fr); grid-template-rows: 1fr 1fr auto; column-gap: 72px; row-gap: 24px; max-width: 1180px; width: 100%; margin: 8px auto 0; }
@@ -630,7 +630,8 @@ button.btn { border: 0; cursor: pointer; }
   .rag-areas { display: contents; }
   .rag-linhas { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   .rag-linhas line { stroke: var(--crimson-200); stroke-width: 2; stroke-dasharray: 6 6; }
-  .rag-linhas circle { fill: var(--primary); }
+  .rag-pontos { display: block; position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .rag-pontos circle { fill: var(--primary); }
   .rag-centro { grid-area: 1 / 2 / 3 / 3; align-self: center; justify-self: center; position: relative; z-index: 1; width: 240px; height: 240px; margin: 0; font-size: 52px; }
   .rag-centro span { font-size: 1.5rem; }
   .rag-area { position: relative; z-index: 1; align-items: flex-start; min-height: 100%; padding: 22px; }
@@ -646,11 +647,20 @@ button.btn { border: 0; cursor: pointer; }
 /* Animações da seção "Nossa inteligência" (só com JavaScript; desligadas com movimento reduzido) */
 @keyframes rag-surgir-centro { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
 .inteligencia.anim-pronto .etiqueta, .inteligencia.anim-pronto .rag-intro h2, .inteligencia.anim-pronto .rag-intro .lead, .inteligencia.anim-pronto .cf-traco,
-.inteligencia.anim-pronto .rag-centro, .inteligencia.anim-pronto .rag-area, .inteligencia.anim-pronto .rag-linhas { opacity: 0; }
+.inteligencia.anim-pronto .rag-centro, .inteligencia.anim-pronto .rag-area { opacity: 0; }
 .inteligencia .rag-intro.visivel .etiqueta, .inteligencia .rag-intro.visivel h2, .inteligencia .rag-intro.visivel .lead { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .inteligencia .rag-intro.visivel h2 { animation-delay: .08s; }
 .inteligencia .rag-intro.visivel .lead { animation-delay: .16s; }
 .inteligencia .rag-intro.visivel .cf-traco { animation: cf-traco .6s cubic-bezier(0.16, 1, 0.3, 1) .3s both; opacity: 1; }
 .inteligencia .rag-centro.visivel { animation: rag-surgir-centro .6s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-.inteligencia .rag-linhas.visivel { opacity: 1; transition: opacity .8s ease-out .5s; }
+/* Ordem no computador: o núcleo surge, as linhas saem do centro, os pontos aparecem e depois os cards */
+.rag-linhas line { transform-box: view-box; }
+.rag-pontos circle { transform-box: fill-box; transform-origin: center; }
+.inteligencia.anim-pronto .rag-linhas line { transform: scale(0); }
+.inteligencia.anim-pronto .rag-pontos circle { opacity: 0; transform: scale(0); }
+.inteligencia .rag-linhas.visivel line { transform: scale(1); transition: transform .6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(.45s + var(--i, 0) * .06s); }
+.inteligencia .rag-pontos.visivel circle { opacity: 1; transform: scale(1); transition: opacity .3s ease-out, transform .4s cubic-bezier(0.34, 1.56, 0.64, 1); transition-delay: calc(.95s + var(--i, 0) * .06s); }
 .inteligencia .rag-area.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(.25s + var(--i, 0) * .1s); }
+@media (min-width: 1200px) {
+  .inteligencia .rag-area.visivel { animation-delay: calc(1.15s + var(--i, 0) * .1s); }
+}

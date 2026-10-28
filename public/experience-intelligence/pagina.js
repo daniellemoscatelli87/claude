@@ -173,28 +173,34 @@
 })();
 
 // Seção "Nossa inteligência" (computador): linhas tracejadas do centro até cada área, recalculadas quando a tela muda.
+// As linhas ficam atrás dos cards e os pontos ficam por cima deles.
 (function () {
   var roda = document.querySelector('.rag-roda');
   var svg = roda && roda.querySelector('.rag-linhas');
+  var pontos = roda && roda.querySelector('.rag-pontos');
   var centro = roda && roda.querySelector('.rag-centro');
-  if (!svg || !centro) return;
+  if (!svg || !pontos || !centro) return;
   var NS = 'http://www.w3.org/2000/svg';
   function desenhar() {
     svg.textContent = '';
+    pontos.textContent = '';
     if (getComputedStyle(svg).display === 'none') return;
     var base = roda.getBoundingClientRect();
     var c = centro.getBoundingClientRect();
     var cx = c.left + c.width / 2 - base.left, cy = c.top + c.height / 2 - base.top;
-    roda.querySelectorAll('.rag-area').forEach(function (area) {
+    roda.querySelectorAll('.rag-area').forEach(function (area, i) {
       var r = area.getBoundingClientRect();
       var x, y;
       if (r.top - base.top > cy + c.height / 2) { x = cx; y = r.top - base.top; }
       else { x = r.left - base.left > cx ? r.left - base.left : r.right - base.left; y = r.top + r.height / 2 - base.top; }
       var l = document.createElementNS(NS, 'line');
       l.setAttribute('x1', cx); l.setAttribute('y1', cy); l.setAttribute('x2', x); l.setAttribute('y2', y);
+      l.style.transformOrigin = cx + 'px ' + cy + 'px';
+      l.style.setProperty('--i', i);
       var p = document.createElementNS(NS, 'circle');
       p.setAttribute('cx', x); p.setAttribute('cy', y); p.setAttribute('r', 5);
-      svg.appendChild(l); svg.appendChild(p);
+      p.style.setProperty('--i', i);
+      svg.appendChild(l); pontos.appendChild(p);
     });
   }
   desenhar();
@@ -214,7 +220,11 @@
     entradas.forEach(function (e) {
       if (!e.isIntersecting) return;
       e.target.classList.add('visivel');
-      if (e.target.classList.contains('rag-centro')) { var l = secao.querySelector('.rag-linhas'); if (l) l.classList.add('visivel'); }
+      if (e.target.classList.contains('rag-centro')) {
+        secao.querySelectorAll('.rag-linhas, .rag-pontos').forEach(function (l) { l.classList.add('visivel'); });
+        // No computador, os cards entram juntos depois das linhas (a ordem é dada pelos atrasos no CSS).
+        if (getComputedStyle(secao.querySelector('.rag-linhas')).display !== 'none') secao.querySelectorAll('.rag-area').forEach(function (a) { a.classList.add('visivel'); obs.unobserve(a); });
+      }
       obs.unobserve(e.target);
     });
   }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
