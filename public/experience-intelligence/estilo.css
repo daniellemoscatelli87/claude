@@ -541,39 +541,13 @@ button.btn { border: 0; cursor: pointer; }
 .cf-texto h4 { align-self: center; margin: 0; }
 .cf-texto p { grid-column: 1 / -1; }
 .cf-num { align-self: center; margin-top: 0; }
-.cf-exemplo { grid-column: 1 / -1; margin: 0; padding: 12px 16px; border-radius: 14px; background: var(--crimson-50); color: var(--graphite-700); font-size: 0.9375rem; line-height: 1.45; }
-.cf-exemplo .cf-rotulo { display: block; margin-bottom: 2px; color: var(--crimson-500); font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
-/* Abas de contexto do exemplo (Físico, Digital, Operações internas): só o texto do contexto escolhido aparece */
-.cf-pergunta { margin: 0 0 16px; text-align: center; font-size: 1.25rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
-.cf-abas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; max-width: 760px; margin: 0 auto 32px; }
-.cf-aba { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 10px 14px; border-radius: 16px; border: 1px solid var(--border); background: var(--card); color: var(--foreground); font: inherit; font-size: 0.9375rem; font-weight: 600; line-height: 1.25; cursor: pointer; box-shadow: var(--shadow-xs); transition: background-color .2s, border-color .2s, color .2s; }
-.cf-aba .ico { flex: none; font-size: 20px; color: var(--primary); }
-.cf-aba:hover:not([aria-selected="true"]) { background: var(--crimson-50); }
-.cf-aba[aria-selected="true"] { background: var(--primary); border-color: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-sm); }
-.cf-aba[aria-selected="true"] .ico { color: inherit; }
-.cf-aba:focus-visible, #cf-painel:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
-#cf-painel { border-radius: 20px; }
-.cf-corpo [data-ctx] { display: none; animation: ds-surgir .35s ease-out; }
-.cf-corpo[data-contexto="fisico"] [data-ctx="fisico"], .cf-corpo[data-contexto="digital"] [data-ctx="digital"], .cf-corpo[data-contexto="operacoes"] [data-ctx="operacoes"] { display: inline; }
-.cf-meta { display: flex; align-items: center; gap: 14px; margin: 16px 0 0 58px; padding: 16px 20px; border-radius: 20px; background: var(--crimson-50); border: 1px solid var(--crimson-100); }
-.cf-meta-ico { flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--card); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: var(--shadow-sm); }
-.cf-meta-texto { color: var(--foreground); font-size: 1rem; font-weight: 600; line-height: 1.4; }
-.cf-meta-texto strong { display: block; margin-bottom: 2px; color: var(--crimson-500); font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
-@media (max-width: 639px) {
-  .cf-aba { flex-direction: column; gap: 4px; padding: 10px 6px; font-size: 0.8125rem; text-align: center; }
-}
-@media (min-width: 768px) {
-  .cf-meta { margin-left: 92px; }
-}
 /* Tablet: espaço igual dos dois lados, para os cards ficarem centralizados */
 @media (min-width: 768px) and (max-width: 1239px) {
   .cf-etapas { padding-right: 92px; }
-  .cf-meta { margin-right: 92px; }
 }
 /* Telas largas: os ícones da linha do tempo ficam na margem, para os cards ficarem centralizados com título, descrição e abas */
 @media (min-width: 1240px) {
   .cf-etapas { margin-left: -92px; }
-  .cf-meta { margin-left: 0; }
 }
 .cf-identificar { margin-top: 48px; text-align: center; }
 .cf-identificar h3 { margin: 0 0 20px; font-size: 1.25rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
@@ -591,13 +565,12 @@ button.btn { border: 0; cursor: pointer; }
 }
 @media (min-width: 768px) {
   .cf-etapas { --cf-ico: 64px; --cf-trilho: 28px; }
-  .cf-cartao { grid-template-columns: auto minmax(0, 1fr) minmax(0, 0.9fr); align-items: center; gap: 18px; padding: 14px 16px; }
+  .cf-cartao { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 18px; padding: 16px 20px; }
   .cf-ico { font-size: 30px; }
   .cf-num { align-self: center; }
   .cf-texto h4 { margin: 0 0 4px; align-self: auto; }
   .cf-texto p { grid-column: auto; }
-  .cf-texto { padding-right: 18px; border-right: 1px solid var(--border); align-self: stretch; display: flex; flex-direction: column; justify-content: center; }
-  .cf-exemplo { grid-column: auto; }
+  .cf-texto { display: flex; flex-direction: column; justify-content: center; }
 }
 @media (min-width: 1024px) {
   .cf-identificar ul { grid-template-columns: repeat(6, minmax(0, 1fr)); }
@@ -608,16 +581,15 @@ button.btn { border: 0; cursor: pointer; }
 @keyframes cf-traco { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes cf-lado { from { opacity: 0; transform: translate3d(24px, 0, 0); } to { opacity: 1; transform: none; } }
 .como-funciona.anim-pronto .cf-traco, .como-funciona.anim-pronto .cf-subtitulo, .como-funciona.anim-pronto .cf-etapa,
-.como-funciona.anim-pronto .cf-identificar, .como-funciona.anim-pronto .cf-identificar li, .como-funciona.anim-pronto .cf-nota, .como-funciona.anim-pronto .cf-abas, .como-funciona.anim-pronto .cf-pergunta, .como-funciona.anim-pronto .cf-meta { opacity: 0; }
+.como-funciona.anim-pronto .cf-identificar, .como-funciona.anim-pronto .cf-identificar li, .como-funciona.anim-pronto .cf-nota { opacity: 0; }
 .como-funciona .visivel .cf-traco { animation: cf-traco .6s cubic-bezier(0.16, 1, 0.3, 1) .3s both; transform-origin: center; opacity: 1; }
 .como-funciona .plat-texto.visivel h2, .como-funciona .plat-texto.visivel .lead,
-.como-funciona .cf-abas.visivel, .como-funciona .cf-pergunta.visivel, .como-funciona .cf-meta.visivel, .como-funciona .cf-subtitulo.visivel, .como-funciona .cf-identificar.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.como-funciona .cf-subtitulo.visivel, .como-funciona .cf-identificar.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .como-funciona .plat-texto.visivel h2 { animation-delay: .08s; }
 .como-funciona .plat-texto.visivel .lead { animation-delay: .16s; }
 .como-funciona .cf-etapa.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .cf-etapa.visivel::before { transform-origin: top; animation: cf-linha .6s ease-out .2s both; }
 .cf-etapa.visivel .cf-ico { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) .2s both; }
-.cf-etapa.visivel .cf-exemplo { animation: cf-lado .6s cubic-bezier(0.16, 1, 0.3, 1) .35s both; }
 .cf-identificar.visivel li { animation: ds-slide-up .6s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .cf-identificar.visivel li:nth-child(1) { animation-delay: .2s; } .cf-identificar.visivel li:nth-child(2) { animation-delay: .28s; }
 .cf-identificar.visivel li:nth-child(3) { animation-delay: .36s; } .cf-identificar.visivel li:nth-child(4) { animation-delay: .44s; }
@@ -696,3 +668,60 @@ button.btn { border: 0; cursor: pointer; }
 @media (min-width: 1200px) {
   .inteligencia .rag-area.visivel { animation-delay: calc(1.15s + var(--i, 0) * .1s); }
 }
+
+/* Seção 5: aplicações (para quem é e exemplos práticos) — tokens do design system */
+.aplicacoes { background: var(--background); }
+.aplicacoes::before { content: ""; position: absolute; z-index: -1; width: 680px; height: 680px; left: -300px; top: -160px; border-radius: 50%; background: radial-gradient(circle, rgba(212,77,77,.09) 0%, rgba(212,77,77,0) 70%); pointer-events: none; }
+.apl-grid { display: grid; gap: 40px; align-items: center; }
+.apl-intro { text-align: center; max-width: 44rem; margin: 0 auto; }
+.apl-intro h2 { margin: 0 0 24px; font-size: clamp(1.75rem, 2.6vw, 2.625rem); line-height: 1.12; letter-spacing: -0.03em; font-weight: 800; color: var(--foreground); text-wrap: balance; }
+.apl-intro .lead { margin-left: auto; margin-right: auto; }
+.apl-cards { display: grid; gap: 12px; justify-items: center; }
+.apl-card { width: 100%; max-width: 520px; display: flex; flex-direction: column; padding: 24px 20px; border-radius: 24px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+.apl-ico { width: 48px; height: 48px; margin-bottom: 14px; border-radius: 14px; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+.apl-card h3 { margin: 0 0 6px; font-size: 1.25rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
+.apl-card > p { margin: 0 0 18px; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
+.apl-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.apl-op { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 48px; padding: 10px 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--card); color: var(--graphite-700); font: inherit; font-size: 0.9375rem; font-weight: 500; text-align: left; cursor: pointer; transition: background-color .2s, border-color .2s, color .2s; }
+.apl-op .ico { flex: none; font-size: 20px; color: var(--graphite-500); }
+.apl-op:hover { background: var(--crimson-50); }
+.apl-op[aria-pressed="true"] { background: var(--crimson-50); border-color: var(--crimson-200); color: var(--primary); font-weight: 600; }
+.apl-op[aria-pressed="true"] .ico { color: var(--primary); }
+.apl-op:focus-visible, .apl-mais:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
+.apl-sep { color: var(--graphite-400); font-size: 26px; display: flex; transform: rotate(90deg); }
+.apl-sep:first-of-type { transform: none; }
+.apl-caso { animation: ds-surgir .35s ease-out; }
+.apl-caso-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.apl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.apl-tags span { padding: 4px 12px; border-radius: 9999px; background: var(--muted); color: var(--graphite-700); font-size: 0.8125rem; font-weight: 600; }
+.apl-caso-ico { flex: none; width: 52px; height: 52px; border-radius: 14px; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: var(--shadow-xs); }
+.apl-caso h4 { margin: 0 0 12px; font-size: 1.125rem; line-height: 1.35; letter-spacing: -0.01em; font-weight: 700; color: var(--foreground); }
+.apl-caso p { margin: 0 0 8px; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
+.apl-caso p strong { color: var(--foreground); font-weight: 600; }
+.apl-caso .apl-meta { margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: var(--crimson-50); color: var(--graphite-700); }
+.apl-caso .apl-meta strong { color: var(--crimson-500); }
+.apl-mais { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-top: auto; padding: 14px 0 0; border: 0; background: none; color: var(--crimson-500); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; }
+.apl-mais .ico { font-size: 18px; transition: transform .2s; }
+.apl-mais:hover .ico { transform: translateX(3px); }
+/* Tablet largo e computador: os três cards lado a lado, com × e → entre eles */
+@media (min-width: 1024px) {
+  .apl-cards { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1.05fr); align-items: stretch; gap: 14px; }
+  .apl-card { max-width: none; }
+  .apl-sep, .apl-sep:first-of-type { transform: none; align-self: center; }
+}
+@media (min-width: 1280px) {
+  .apl-grid { grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr); gap: 40px; }
+  .apl-intro { text-align: left; margin: 0; }
+  .apl-intro .lead { margin-left: 0; }
+  .apl-intro .cf-traco { margin-left: 0; }
+}
+/* Animações da seção (só com JavaScript; desligadas com movimento reduzido) */
+.aplicacoes.anim-pronto .apl-intro > *, .aplicacoes.anim-pronto .apl-card, .aplicacoes.anim-pronto .apl-sep { opacity: 0; }
+.aplicacoes .apl-intro.visivel > * { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.aplicacoes .apl-intro.visivel h2 { animation-delay: .08s; }
+.aplicacoes .apl-intro.visivel .lead { animation-delay: .16s; }
+.aplicacoes .apl-intro.visivel .cf-traco { animation: cf-traco .6s cubic-bezier(0.16, 1, 0.3, 1) .3s both; opacity: 1; }
+.aplicacoes .apl-cards.visivel .apl-card { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.aplicacoes .apl-cards.visivel .apl-card:nth-of-type(2) { animation-delay: .15s; }
+.aplicacoes .apl-cards.visivel .apl-card:nth-of-type(3) { animation-delay: .3s; }
+.aplicacoes .apl-cards.visivel .apl-sep { animation: ds-surgir .4s ease-out .45s both; }
