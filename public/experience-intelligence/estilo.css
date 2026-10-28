@@ -532,7 +532,7 @@ button.btn { border: 0; cursor: pointer; }
 .cf-etapa::before { content: ""; position: absolute; left: calc(var(--cf-ico) / 2 - 1px); top: -8px; bottom: -8px; width: 2px; background: var(--primary); }
 .cf-etapa:first-child::before { top: 50%; }
 .cf-etapa:last-child::before { bottom: 50%; }
-.cf-ico { position: relative; z-index: 1; grid-column: 1; grid-row: 1; width: var(--cf-ico); height: var(--cf-ico); border-radius: 12px; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: var(--shadow-xs); }
+.cf-ico { position: relative; z-index: 1; grid-column: 1; grid-row: 1; width: var(--cf-ico); height: var(--cf-ico); border-radius: 50%; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: var(--shadow-md); }
 .cf-num { width: 40px; height: 40px; border-radius: 10px; background: var(--muted); color: var(--foreground); font-size: 0.9375rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 .cf-texto h4 { margin: 0 0 4px; font-size: 1.25rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
 .cf-texto p { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
@@ -556,7 +556,7 @@ button.btn { border: 0; cursor: pointer; }
 @media (min-width: 768px) {
   .cf-etapas { --cf-ico: 64px; --cf-trilho: 28px; }
   .cf-cartao { grid-template-columns: auto minmax(0, 1fr) minmax(0, 0.9fr); align-items: center; gap: 18px; padding: 14px 16px; }
-  .cf-ico { border-radius: 16px; font-size: 32px; }
+  .cf-ico { font-size: 30px; }
   .cf-num { align-self: center; }
   .cf-texto h4 { margin: 0 0 4px; align-self: auto; }
   .cf-texto p { grid-column: auto; }
