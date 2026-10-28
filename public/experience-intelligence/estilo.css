@@ -608,8 +608,8 @@ button.btn { border: 0; cursor: pointer; }
 .rag-area { display: flex; align-items: center; gap: 16px; padding: 18px; border-radius: 24px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
 .rag-texto { min-width: 0; }
 .rag-topo { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 12px; }
-.rag-num { min-width: 44px; padding: 6px 10px; border-radius: 10px; background: var(--primary); color: var(--primary-foreground); font-size: 1.25rem; line-height: 1.2; font-weight: 800; text-align: center; }
-.rag-pergunta { padding: 4px 12px; border-radius: 9999px; background: var(--crimson-50); color: var(--foreground); font-size: 0.8125rem; font-weight: 600; }
+.rag-num { min-width: 32px; padding: 4px 8px; border-radius: 8px; background: var(--primary); color: var(--primary-foreground); font-size: 0.8125rem; line-height: 1.4; font-weight: 700; text-align: center; }
+.rag-pergunta { padding: 4px 12px; border-radius: 9999px; background: var(--crimson-50); color: var(--foreground); font-size: 0.8125rem; font-weight: 600; line-height: 1.4; }
 .rag-texto h3 { margin: 0 0 4px; font-size: 1.125rem; line-height: 1.25; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
 .rag-texto p:last-child { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.45; }
 @media (min-width: 640px) {
