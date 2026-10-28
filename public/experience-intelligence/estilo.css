@@ -616,34 +616,25 @@ button.btn { border: 0; cursor: pointer; }
   .rag-areas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .rag-e { grid-column: 1 / -1; }
 }
-/* Computador: roda com as mesmas formas e proporções da referência (desenho em SVG; tamanhos em cqw acompanham a largura) */
-.rag-desenho { display: none; }
-@media (min-width: 1024px) {
-  .rag-roda { container-type: inline-size; aspect-ratio: 1240 / 940; width: 100%; max-width: 1240px; margin: 0 auto; }
-  .rag-desenho { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-  .rag-fundo { fill: url(#rag-fundo-g); }
-  .rag-fatia { fill: var(--card); stroke: var(--crimson-100); stroke-width: 1; }
-  .rag-arco { fill: none; stroke: var(--primary); stroke-width: 5; stroke-linecap: round; }
-  .rag-areas { display: block; }
-  .rag-area { position: absolute; transform: translateY(-50%); padding: 0; gap: 1cqw; border: 0; border-radius: 0; background: none; box-shadow: none; }
-  .rag-a { left: 22.58%; top: 22.85%; width: 26%; }
-  .rag-b { left: 62.10%; top: 27.11%; width: 28%; }
-  .rag-c { left: 7.68%; top: 55.83%; width: 24%; }
-  .rag-d { left: 71.58%; top: 55.83%; width: 25%; }
-  .rag-e { left: 33.87%; top: 79.57%; width: 42%; }
-  .rag-ico { display: none; }
-  .rag-texto { padding-left: 0; border-left: 0; }
-  .rag-topo { gap: 0.8cqw; margin-bottom: 0.9cqw; }
-  .rag-num { padding: 0.3cqw 0.7cqw; border-radius: 0.65cqw; font-size: 1.6cqw; }
-  .rag-pergunta { padding: 0.45cqw 1.1cqw; font-size: 1.5cqw; }
-  .rag-texto h3 { margin-bottom: 0.5cqw; font-size: 2.6cqw; line-height: 1.12; }
-  .rag-texto p:last-child { font-size: 1.9cqw; line-height: 1.3; }
-  .rag-centro { position: absolute; z-index: 1; left: 50%; top: 48.4%; width: 22.6%; height: auto; aspect-ratio: 1; margin: 0; transform: translate(-50%, -50%); border-width: 1.1cqw; gap: 0.6cqw; font-size: 6.4cqw; }
-  .rag-centro span { font-size: 3.1cqw; max-width: 7em; }
+/* Computador: o RAG no centro e as 5 áreas em cards do mesmo tamanho em volta, ligados ao centro por linhas */
+.rag-linhas { display: none; }
+@media (min-width: 1200px) {
+  .rag-intro { max-width: 52rem; }
+  .rag-roda { display: grid; grid-template-columns: minmax(0, 1fr) 260px minmax(0, 1fr); grid-template-rows: 1fr 1fr auto; column-gap: 72px; row-gap: 24px; max-width: 1180px; width: 100%; margin: 8px auto 0; }
+  .rag-roda::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 42%; width: 640px; height: 640px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(212,77,77,.08) 0%, rgba(212,77,77,0) 70%); pointer-events: none; }
+  .rag-areas { display: contents; }
+  .rag-linhas { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .rag-linhas line { stroke: var(--crimson-200); stroke-width: 2; stroke-dasharray: 6 6; }
+  .rag-linhas circle { fill: var(--primary); }
+  .rag-centro { grid-area: 1 / 2 / 3 / 3; align-self: center; justify-self: center; position: relative; z-index: 1; width: 240px; height: 240px; margin: 0; font-size: 52px; }
+  .rag-centro span { font-size: 1.5rem; }
+  .rag-area { position: relative; z-index: 1; align-items: flex-start; min-height: 100%; padding: 22px; }
+  .rag-a { grid-area: 1 / 1 / 2 / 2; }
+  .rag-b { grid-area: 1 / 3 / 2 / 4; }
+  .rag-c { grid-area: 2 / 1 / 3 / 2; }
+  .rag-d { grid-area: 2 / 3 / 3 / 4; }
+  .rag-e { grid-area: 3 / 1 / 4 / 4; justify-self: center; width: calc((100% - 260px - 144px) / 2); }
+  .rag-texto h3 { font-size: 1.25rem; }
+  .rag-texto p:last-child { font-size: 1rem; }
 }
-@media (min-width: 1280px) {
-  .rag-grid { grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.6fr); gap: 48px; }
-  .rag-intro { text-align: left; margin: 0; }
-  .rag-intro .lead { margin-left: 0; }
-  .rag-intro .cf-traco { margin-left: 0; }
 }
