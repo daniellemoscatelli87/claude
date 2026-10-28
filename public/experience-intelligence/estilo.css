@@ -565,6 +565,16 @@ button.btn { border: 0; cursor: pointer; }
 @media (min-width: 768px) {
   .cf-meta { margin-left: 92px; }
 }
+/* Tablet: espaço igual dos dois lados, para os cards ficarem centralizados */
+@media (min-width: 768px) and (max-width: 1239px) {
+  .cf-etapas { padding-right: 92px; }
+  .cf-meta { margin-right: 92px; }
+}
+/* Telas largas: os ícones da linha do tempo ficam na margem, para os cards ficarem centralizados com título, descrição e abas */
+@media (min-width: 1240px) {
+  .cf-etapas { margin-left: -92px; }
+  .cf-meta { margin-left: 0; }
+}
 .cf-identificar { margin-top: 48px; text-align: center; }
 .cf-identificar h3 { margin: 0 0 20px; font-size: 1.25rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
 .cf-identificar ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
