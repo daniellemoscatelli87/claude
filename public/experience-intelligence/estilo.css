@@ -519,7 +519,7 @@ button.btn { border: 0; cursor: pointer; }
 .como-funciona::before, .como-funciona::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; background: radial-gradient(circle, rgba(212,77,77,.09) 0%, rgba(212,77,77,0) 70%); pointer-events: none; }
 .como-funciona::before { width: 640px; height: 640px; right: -220px; top: -200px; }
 .como-funciona::after { width: 560px; height: 560px; left: -260px; top: 55%; }
-.como-funciona .plat-texto .lead { margin-left: auto; margin-right: auto; max-width: 44rem; }
+.como-funciona .plat-texto .lead { margin-left: auto; margin-right: auto; max-width: 44rem; text-wrap: balance; }
 .cf-traco { display: block; width: 64px; height: 4px; margin: 8px auto 0; border-radius: 9999px; background: var(--primary); }
 .cf-corpo { max-width: 1000px; margin: 48px auto 0; }
 .cf-subtitulo { margin: 0 0 24px; text-align: center; font-size: 0.9375rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--foreground); }
