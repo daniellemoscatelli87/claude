@@ -171,3 +171,52 @@
   }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
   secao.querySelectorAll('.plat-texto, .cf-subtitulo, .cf-etapa, .cf-identificar, .cf-nota').forEach(function (el) { obs.observe(el); });
 })();
+
+// Seção "Nossa inteligência" (computador): linhas tracejadas do centro até cada área, recalculadas quando a tela muda.
+(function () {
+  var roda = document.querySelector('.rag-roda');
+  var svg = roda && roda.querySelector('.rag-linhas');
+  var centro = roda && roda.querySelector('.rag-centro');
+  if (!svg || !centro) return;
+  var NS = 'http://www.w3.org/2000/svg';
+  function desenhar() {
+    svg.textContent = '';
+    if (getComputedStyle(svg).display === 'none') return;
+    var base = roda.getBoundingClientRect();
+    var c = centro.getBoundingClientRect();
+    var cx = c.left + c.width / 2 - base.left, cy = c.top + c.height / 2 - base.top;
+    roda.querySelectorAll('.rag-area').forEach(function (area) {
+      var r = area.getBoundingClientRect();
+      var x, y;
+      if (r.top - base.top > cy + c.height / 2) { x = cx; y = r.top - base.top; }
+      else { x = r.left - base.left > cx ? r.left - base.left : r.right - base.left; y = r.top + r.height / 2 - base.top; }
+      var l = document.createElementNS(NS, 'line');
+      l.setAttribute('x1', cx); l.setAttribute('y1', cy); l.setAttribute('x2', x); l.setAttribute('y2', y);
+      var p = document.createElementNS(NS, 'circle');
+      p.setAttribute('cx', x); p.setAttribute('cy', y); p.setAttribute('r', 5);
+      svg.appendChild(l); svg.appendChild(p);
+    });
+  }
+  desenhar();
+  window.addEventListener('resize', desenhar);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(desenhar);
+})();
+
+// Seção "Nossa inteligência": animações ao entrar na tela (Motion do design system).
+(function () {
+  var secao = document.getElementById('inteligencia');
+  if (!secao) return;
+  var reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduzir || !('IntersectionObserver' in window)) return;
+  secao.classList.add('anim-pronto');
+  secao.querySelectorAll('.rag-area').forEach(function (el, i) { el.style.setProperty('--i', i); });
+  var obs = new IntersectionObserver(function (entradas) {
+    entradas.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('visivel');
+      if (e.target.classList.contains('rag-centro')) { var l = secao.querySelector('.rag-linhas'); if (l) l.classList.add('visivel'); }
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+  secao.querySelectorAll('.rag-intro, .rag-centro, .rag-area').forEach(function (el) { obs.observe(el); });
+})();
