@@ -407,6 +407,27 @@ html { scroll-behavior: smooth; }
   .plat-seta { align-self: center; transform: none; margin: 0 -14px; z-index: 2; }
 }
 
+/* Animações da seção "O que é a plataforma" (só com JavaScript; desligadas com movimento reduzido) */
+@keyframes plat-seta { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+@keyframes plat-seta-v { 0%, 100% { transform: rotate(90deg) translateX(0); } 50% { transform: rotate(90deg) translateX(4px); } }
+.anim-pronto .etiqueta, .anim-pronto .plat-texto h2, .anim-pronto .plat-texto .lead,
+.anim-pronto .plat-fluxo, .anim-pronto .plat-desafio, .anim-pronto .plat-intel, .anim-pronto .plat-resultado,
+.anim-pronto .plat-checks li, .anim-pronto .plat-pontos li, .anim-pronto .plat-itens li { opacity: 0; }
+.visivel .etiqueta, .visivel .plat-texto h2, .visivel .plat-texto .lead,
+.visivel .plat-fluxo, .visivel .plat-desafio, .visivel .plat-intel, .visivel .plat-resultado { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.visivel .plat-texto h2 { animation-delay: .08s; }
+.visivel .plat-texto .lead { animation-delay: .16s; }
+.visivel .plat-fluxo { animation-delay: .2s; }
+.visivel .plat-desafio { animation-delay: .3s; }
+.visivel .plat-intel { animation-delay: .4s; }
+.visivel .plat-resultado { animation-delay: .5s; }
+.visivel .plat-pontos li, .visivel .plat-itens li, .visivel .plat-checks li { animation: ds-surgir .4s ease-out both; }
+.visivel .plat-pontos li:nth-child(1) { animation-delay: .6s; } .visivel .plat-pontos li:nth-child(2) { animation-delay: .7s; } .visivel .plat-pontos li:nth-child(3) { animation-delay: .8s; }
+.visivel .plat-itens li:nth-child(1) { animation-delay: .7s; } .visivel .plat-itens li:nth-child(2) { animation-delay: .8s; } .visivel .plat-itens li:nth-child(3) { animation-delay: .9s; } .visivel .plat-itens li:nth-child(4) { animation-delay: 1s; }
+.visivel .plat-checks li:nth-child(1) { animation-delay: .8s; } .visivel .plat-checks li:nth-child(2) { animation-delay: .9s; }
+.visivel .plat-checks li:nth-child(3) { animation-delay: 1s; } .visivel .plat-checks li:nth-child(4) { animation-delay: 1.1s; }
+.visivel .plat-seta .ico { animation: plat-seta 1.6s ease-in-out 1.4s infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; animation: none !important; }
@@ -492,3 +513,77 @@ button.btn { border: 0; cursor: pointer; }
   .modal-acoes { flex-direction: row; justify-content: flex-end; }
   .modal-acoes .btn { width: auto; }
 }
+
+/* Seção 3: como funciona (tokens do design system) */
+.como-funciona { background: var(--background); }
+.como-funciona::before, .como-funciona::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; background: radial-gradient(circle, rgba(212,77,77,.09) 0%, rgba(212,77,77,0) 70%); pointer-events: none; }
+.como-funciona::before { width: 640px; height: 640px; right: -220px; top: -200px; }
+.como-funciona::after { width: 560px; height: 560px; left: -260px; top: 55%; }
+.como-funciona .plat-texto .lead { margin-left: auto; margin-right: auto; max-width: 44rem; }
+.cf-traco { display: block; width: 64px; height: 4px; margin: 8px auto 0; border-radius: 9999px; background: var(--primary); }
+.cf-corpo { max-width: 1000px; margin: 48px auto 0; }
+.cf-subtitulo { margin: 0 0 24px; text-align: center; font-size: 0.9375rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--foreground); }
+.cf-subtitulo span { color: var(--crimson-500); }
+.cf-etapas { list-style: none; margin: 0; padding: 0 0 0 36px; display: grid; gap: 14px; }
+.cf-etapa { position: relative; display: grid; grid-template-columns: auto auto minmax(0, 1fr); align-items: start; gap: 12px 14px; padding: 16px; border-radius: 20px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+/* Linha do tempo: traço contínuo entre as etapas e um círculo no meio de cada uma */
+.cf-etapa::before { content: ""; position: absolute; left: -26px; top: -8px; bottom: -8px; width: 2px; background: var(--primary); }
+.cf-etapa:first-child::before { top: 50%; }
+.cf-etapa:last-child::before { bottom: 50%; }
+.cf-etapa::after { content: ""; position: absolute; left: -34px; top: 50%; width: 18px; height: 18px; margin-top: -9px; border-radius: 50%; background: var(--card); border: 2px solid var(--primary); box-sizing: border-box; }
+.cf-ico { width: 52px; height: 52px; border-radius: 14px; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: var(--shadow-xs); }
+.cf-num { min-width: 40px; padding: 6px 10px; border-radius: 9999px; background: var(--muted); color: var(--foreground); font-size: 0.9375rem; font-weight: 700; text-align: center; margin-top: 10px; }
+.cf-texto h4 { margin: 0 0 4px; font-size: 1.25rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
+.cf-texto p { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
+/* Celular: título ao lado do ícone e do número; descrição e exemplo ocupam a largura toda */
+.cf-texto { display: contents; }
+.cf-texto h4 { align-self: center; margin: 0; }
+.cf-texto p { grid-column: 1 / -1; }
+.cf-num { align-self: center; margin-top: 0; }
+.cf-exemplo { grid-column: 1 / -1; margin: 0; padding: 12px 16px; border-radius: 14px; background: var(--crimson-50); color: var(--graphite-700); font-size: 0.9375rem; line-height: 1.45; }
+.cf-exemplo span { display: block; margin-bottom: 2px; color: var(--crimson-500); font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.cf-identificar { margin-top: 48px; text-align: center; }
+.cf-identificar h3 { margin: 0 0 20px; font-size: 1.25rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
+.cf-identificar ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.cf-identificar li { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 16px 8px; border-radius: 16px; border: 1px solid var(--border); background: var(--card); font-size: 0.9375rem; font-weight: 600; line-height: 1.3; color: var(--foreground); }
+.cf-ico-redondo { width: 48px; height: 48px; border-radius: 50%; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+.cf-nota { display: flex; gap: 10px; align-items: flex-start; margin: 24px 0 0; color: var(--graphite-500); font-size: 0.875rem; font-style: italic; line-height: 1.5; }
+.cf-nota .ico { flex: none; font-size: 20px; margin-top: 1px; }
+@media (min-width: 640px) {
+  .cf-identificar ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 768px) {
+  .cf-etapas { padding-left: 44px; }
+  .cf-etapa { grid-template-columns: auto auto minmax(0, 1fr) minmax(0, 0.9fr); align-items: center; gap: 18px; padding: 14px 16px; }
+  .cf-etapa::before { left: -34px; }
+  .cf-etapa::after { left: -42px; }
+  .cf-ico { width: 64px; height: 64px; border-radius: 16px; font-size: 32px; }
+  .cf-num { margin-top: 0; align-self: start; margin-top: 8px; }
+  .cf-texto h4 { margin: 0 0 4px; align-self: auto; }
+  .cf-texto p { grid-column: auto; }
+  .cf-texto { padding-right: 18px; border-right: 1px solid var(--border); align-self: stretch; display: flex; flex-direction: column; justify-content: center; }
+  .cf-exemplo { grid-column: auto; }
+}
+@media (min-width: 1024px) {
+  .cf-identificar ul { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+/* Animações da seção "Como funciona" (só com JavaScript; desligadas com movimento reduzido) */
+@keyframes cf-linha { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes cf-traco { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes cf-lado { from { opacity: 0; transform: translate3d(24px, 0, 0); } to { opacity: 1; transform: none; } }
+.como-funciona.anim-pronto .cf-traco, .como-funciona.anim-pronto .cf-subtitulo, .como-funciona.anim-pronto .cf-etapa,
+.como-funciona.anim-pronto .cf-identificar, .como-funciona.anim-pronto .cf-identificar li, .como-funciona.anim-pronto .cf-nota { opacity: 0; }
+.como-funciona .visivel .cf-traco { animation: cf-traco .6s cubic-bezier(0.16, 1, 0.3, 1) .3s both; transform-origin: center; opacity: 1; }
+.como-funciona .cf-subtitulo.visivel, .como-funciona .cf-identificar.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.como-funciona .cf-etapa.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.cf-etapa.visivel::before { transform-origin: top; animation: cf-linha .6s ease-out .2s both; }
+.cf-etapa.visivel::after { animation: ds-estrela .45s cubic-bezier(0.34, 1.56, 0.64, 1) .35s both; }
+.cf-etapa.visivel .cf-ico { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) .2s both; }
+.cf-etapa.visivel .cf-exemplo { animation: cf-lado .6s cubic-bezier(0.16, 1, 0.3, 1) .35s both; }
+.cf-identificar.visivel li { animation: ds-slide-up .6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.cf-identificar.visivel li:nth-child(1) { animation-delay: .2s; } .cf-identificar.visivel li:nth-child(2) { animation-delay: .28s; }
+.cf-identificar.visivel li:nth-child(3) { animation-delay: .36s; } .cf-identificar.visivel li:nth-child(4) { animation-delay: .44s; }
+.cf-identificar.visivel li:nth-child(5) { animation-delay: .52s; } .cf-identificar.visivel li:nth-child(6) { animation-delay: .6s; }
+.cf-identificar.visivel .cf-ico-redondo { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) both; animation-delay: inherit; }
+.como-funciona .cf-nota.visivel { animation: ds-surgir .6s ease-out .2s both; }
