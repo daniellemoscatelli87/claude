@@ -169,7 +169,7 @@
       obs.unobserve(e.target);
     });
   }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
-  secao.querySelectorAll('.plat-texto, .cf-pergunta, .cf-abas, .cf-etapa, .cf-meta, .cf-identificar, .cf-nota').forEach(function (el) { obs.observe(el); });
+  secao.querySelectorAll('.plat-texto, .cf-passos, .cf-pergunta, .cf-abas, #cf-painel, .cf-identificar, .cf-nota').forEach(function (el) { obs.observe(el); });
 })();
 
 // Seção "Nossa inteligência" (computador): linhas tracejadas do centro até cada área, recalculadas quando a tela muda.
