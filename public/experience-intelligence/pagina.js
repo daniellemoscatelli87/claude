@@ -201,3 +201,22 @@
   window.addEventListener('resize', desenhar);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(desenhar);
 })();
+
+// Seção "Nossa inteligência": animações ao entrar na tela (Motion do design system).
+(function () {
+  var secao = document.getElementById('inteligencia');
+  if (!secao) return;
+  var reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduzir || !('IntersectionObserver' in window)) return;
+  secao.classList.add('anim-pronto');
+  secao.querySelectorAll('.rag-area').forEach(function (el, i) { el.style.setProperty('--i', i); });
+  var obs = new IntersectionObserver(function (entradas) {
+    entradas.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('visivel');
+      if (e.target.classList.contains('rag-centro')) { var l = secao.querySelector('.rag-linhas'); if (l) l.classList.add('visivel'); }
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+  secao.querySelectorAll('.rag-intro, .rag-centro, .rag-area').forEach(function (el) { obs.observe(el); });
+})();
