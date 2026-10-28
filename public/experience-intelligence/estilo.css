@@ -592,3 +592,47 @@ button.btn { border: 0; cursor: pointer; }
 .cf-identificar.visivel li:nth-child(5) { animation-delay: .52s; } .cf-identificar.visivel li:nth-child(6) { animation-delay: .6s; }
 .cf-identificar.visivel .cf-ico-redondo { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) both; animation-delay: inherit; }
 .como-funciona .cf-nota.visivel { animation: ds-surgir .6s ease-out .2s both; }
+
+/* Seção 4: nossa inteligência (RAG especializado) — tokens do design system */
+.inteligencia::before { content: ""; position: absolute; z-index: -1; width: 620px; height: 620px; left: -260px; bottom: -280px; border-radius: 50%; background: radial-gradient(circle, rgba(212,77,77,.09) 0%, rgba(212,77,77,0) 70%); pointer-events: none; }
+.rag-grid { display: grid; gap: 40px; align-items: center; }
+.rag-intro { text-align: center; max-width: 44rem; margin: 0 auto; }
+.rag-intro h2 { margin: 0 0 24px; font-size: clamp(1.75rem, 2.6vw, 2.625rem); line-height: 1.12; letter-spacing: -0.03em; font-weight: 800; color: var(--foreground); text-wrap: balance; }
+.rag-intro .lead { margin-left: auto; margin-right: auto; }
+.rag-intro .lead strong { white-space: normal; }
+.rag-roda { position: relative; }
+.rag-centro { width: 200px; height: 200px; margin: 0 auto 24px; border-radius: 50%; background: radial-gradient(circle at 50% 40%, var(--card) 0%, var(--crimson-50) 100%); border: 8px solid var(--card); box-shadow: 0 0 0 1px var(--crimson-100), var(--shadow-lg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--primary); text-align: center; font-size: 44px; }
+.rag-centro span { max-width: 7.5em; font-size: 1.25rem; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; }
+.rag-areas { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.rag-area { display: flex; align-items: center; gap: 16px; padding: 18px; border-radius: 24px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+.rag-ico { flex: none; width: 60px; height: 60px; border-radius: 50%; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: var(--shadow-xs); }
+.rag-texto { min-width: 0; padding-left: 16px; border-left: 1px solid var(--crimson-100); }
+.rag-topo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 8px; }
+.rag-num { padding: 3px 8px; border-radius: 8px; background: var(--primary); color: var(--primary-foreground); font-size: 0.8125rem; font-weight: 700; }
+.rag-pergunta { padding: 4px 12px; border-radius: 9999px; background: var(--crimson-50); color: var(--foreground); font-size: 0.8125rem; font-weight: 600; }
+.rag-texto h3 { margin: 0 0 4px; font-size: 1.125rem; line-height: 1.25; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
+.rag-texto p:last-child { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.45; }
+@media (min-width: 640px) {
+  .rag-areas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rag-e { grid-column: 1 / -1; }
+}
+/* Computador: as áreas formam uma roda em volta do centro, com arcos vermelhos nas laterais */
+@media (min-width: 1024px) {
+  .rag-roda { padding: 64px 72px; border-radius: 50%; background: linear-gradient(180deg, var(--crimson-50), var(--card)); border: 4px solid transparent; border-left-color: var(--primary); border-right-color: var(--primary); box-shadow: var(--shadow-md); }
+  .rag-areas { grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: auto minmax(236px, auto) auto; gap: 16px; }
+  .rag-a { grid-area: 1 / 1 / 2 / 4; }
+  .rag-b { grid-area: 1 / 4 / 2 / 7; }
+  .rag-c { grid-area: 2 / 1 / 3 / 3; }
+  .rag-d { grid-area: 2 / 5 / 3 / 7; }
+  .rag-e { grid-area: 3 / 2 / 4 / 6; }
+  .rag-centro { position: absolute; z-index: 1; left: 50%; top: 50%; width: 232px; height: 232px; margin: 0; transform: translate(-50%, -50%); font-size: 52px; }
+  .rag-centro span { font-size: 1.5rem; }
+  .rag-c, .rag-d { flex-direction: column; align-items: flex-start; justify-content: center; }
+  .rag-c .rag-texto, .rag-d .rag-texto { padding-left: 0; border-left: 0; }
+}
+@media (min-width: 1280px) {
+  .rag-grid { grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.6fr); gap: 48px; }
+  .rag-intro { text-align: left; margin: 0; }
+  .rag-intro .lead { margin-left: 0; }
+  .rag-intro .cf-traco { margin-left: 0; }
+}
