@@ -619,26 +619,26 @@ button.btn { border: 0; cursor: pointer; }
 /* Computador: roda com as mesmas formas e proporções da referência (desenho em SVG; tamanhos em cqw acompanham a largura) */
 .rag-desenho { display: none; }
 @media (min-width: 1024px) {
-  .rag-roda { container-type: inline-size; aspect-ratio: 1240 / 790; width: 100%; max-width: 1240px; margin: 0 auto; }
+  .rag-roda { container-type: inline-size; aspect-ratio: 1240 / 940; width: 100%; max-width: 1240px; margin: 0 auto; }
   .rag-desenho { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .rag-fundo { fill: url(#rag-fundo-g); }
   .rag-fatia { fill: var(--card); stroke: var(--crimson-100); stroke-width: 1; }
   .rag-arco { fill: none; stroke: var(--primary); stroke-width: 5; stroke-linecap: round; }
   .rag-areas { display: block; }
-  .rag-area { position: absolute; transform: translateY(-50%); padding: 0; gap: 1.13cqw; border: 0; border-radius: 0; background: none; box-shadow: none; }
-  .rag-a { left: 11.69%; top: 18.3%; width: 34.68%; }
-  .rag-b { left: 52.82%; top: 18.3%; width: 37.5%; }
-  .rag-c { left: 3.63%; top: 51.27%; width: 30.2%; }
-  .rag-d { left: 63.31%; top: 51.9%; width: 33.7%; }
-  .rag-e { left: 24.11%; top: 81.65%; width: 64.2%; }
-  .rag-ico { width: 9.35cqw; height: 9.35cqw; font-size: 4.5cqw; background: radial-gradient(circle at 50% 40%, var(--card) 0%, var(--crimson-50) 100%); box-shadow: var(--shadow-sm); }
-  .rag-texto { padding-left: 1.45cqw; }
+  .rag-area { position: absolute; transform: translateY(-50%); padding: 0; gap: 1cqw; border: 0; border-radius: 0; background: none; box-shadow: none; }
+  .rag-a { left: 19.68%; top: 21.28%; width: 31%; }
+  .rag-b { left: 52.10%; top: 23.83%; width: 36.9%; }
+  .rag-c { left: 4.84%; top: 54.68%; width: 32.1%; }
+  .rag-d { left: 65.48%; top: 52.98%; width: 32.9%; }
+  .rag-e { left: 30.81%; top: 79.78%; width: 50%; }
+  .rag-ico { width: 8cqw; height: 8cqw; font-size: 3.8cqw; background: radial-gradient(circle at 50% 40%, var(--card) 0%, var(--crimson-50) 100%); box-shadow: var(--shadow-sm); }
+  .rag-texto { padding-left: 1.2cqw; }
   .rag-topo { gap: 0.8cqw; margin-bottom: 0.9cqw; }
-  .rag-num { padding: 0.3cqw 0.7cqw; border-radius: 0.65cqw; font-size: 1.4cqw; }
-  .rag-pergunta { padding: 0.45cqw 1.1cqw; font-size: 1.27cqw; }
+  .rag-num { padding: 0.3cqw 0.7cqw; border-radius: 0.65cqw; font-size: 1.35cqw; }
+  .rag-pergunta { padding: 0.45cqw 1.1cqw; font-size: 1.25cqw; }
   .rag-texto h3 { margin-bottom: 0.5cqw; font-size: 2.2cqw; line-height: 1.12; }
   .rag-texto p:last-child { font-size: 1.6cqw; line-height: 1.3; }
-  .rag-centro { position: absolute; z-index: 1; left: 47.98%; top: 46.84%; width: 24.19%; height: auto; aspect-ratio: 1; margin: 0; transform: translate(-50%, -50%); border-width: 1.1cqw; gap: 0.6cqw; font-size: 6.4cqw; }
+  .rag-centro { position: absolute; z-index: 1; left: 50%; top: 48.4%; width: 22.6%; height: auto; aspect-ratio: 1; margin: 0; transform: translate(-50%, -50%); border-width: 1.1cqw; gap: 0.6cqw; font-size: 6.4cqw; }
   .rag-centro span { font-size: 3.1cqw; max-width: 7em; }
 }
 @media (min-width: 1280px) {
