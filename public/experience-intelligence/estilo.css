@@ -626,18 +626,18 @@ button.btn { border: 0; cursor: pointer; }
   .rag-arco { fill: none; stroke: var(--primary); stroke-width: 5; stroke-linecap: round; }
   .rag-areas { display: block; }
   .rag-area { position: absolute; transform: translateY(-50%); padding: 0; gap: 1cqw; border: 0; border-radius: 0; background: none; box-shadow: none; }
-  .rag-a { left: 19.68%; top: 21.28%; width: 31%; }
-  .rag-b { left: 52.10%; top: 23.83%; width: 36.9%; }
-  .rag-c { left: 4.84%; top: 54.68%; width: 32.1%; }
-  .rag-d { left: 65.48%; top: 52.98%; width: 32.9%; }
-  .rag-e { left: 30.81%; top: 79.78%; width: 50%; }
-  .rag-ico { width: 8cqw; height: 8cqw; font-size: 3.8cqw; background: radial-gradient(circle at 50% 40%, var(--card) 0%, var(--crimson-50) 100%); box-shadow: var(--shadow-sm); }
-  .rag-texto { padding-left: 1.2cqw; }
+  .rag-a { left: 22.58%; top: 22.85%; width: 26%; }
+  .rag-b { left: 62.10%; top: 27.11%; width: 28%; }
+  .rag-c { left: 7.68%; top: 55.83%; width: 24%; }
+  .rag-d { left: 71.58%; top: 55.83%; width: 25%; }
+  .rag-e { left: 33.87%; top: 79.57%; width: 42%; }
+  .rag-ico { display: none; }
+  .rag-texto { padding-left: 0; border-left: 0; }
   .rag-topo { gap: 0.8cqw; margin-bottom: 0.9cqw; }
-  .rag-num { padding: 0.3cqw 0.7cqw; border-radius: 0.65cqw; font-size: 1.35cqw; }
-  .rag-pergunta { padding: 0.45cqw 1.1cqw; font-size: 1.25cqw; }
-  .rag-texto h3 { margin-bottom: 0.5cqw; font-size: 2.2cqw; line-height: 1.12; }
-  .rag-texto p:last-child { font-size: 1.6cqw; line-height: 1.3; }
+  .rag-num { padding: 0.3cqw 0.7cqw; border-radius: 0.65cqw; font-size: 1.6cqw; }
+  .rag-pergunta { padding: 0.45cqw 1.1cqw; font-size: 1.5cqw; }
+  .rag-texto h3 { margin-bottom: 0.5cqw; font-size: 2.6cqw; line-height: 1.12; }
+  .rag-texto p:last-child { font-size: 1.9cqw; line-height: 1.3; }
   .rag-centro { position: absolute; z-index: 1; left: 50%; top: 48.4%; width: 22.6%; height: auto; aspect-ratio: 1; margin: 0; transform: translate(-50%, -50%); border-width: 1.1cqw; gap: 0.6cqw; font-size: 6.4cqw; }
   .rag-centro span { font-size: 3.1cqw; max-width: 7em; }
 }
