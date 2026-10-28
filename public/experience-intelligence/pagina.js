@@ -169,7 +169,7 @@
       obs.unobserve(e.target);
     });
   }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
-  secao.querySelectorAll('.plat-texto, .cf-subtitulo, .cf-etapa, .cf-identificar, .cf-nota').forEach(function (el) { obs.observe(el); });
+  secao.querySelectorAll('.plat-texto, .cf-pergunta, .cf-abas, .cf-etapa, .cf-meta, .cf-identificar, .cf-nota').forEach(function (el) { obs.observe(el); });
 })();
 
 // Seção "Nossa inteligência" (computador): linhas tracejadas do centro até cada área, recalculadas quando a tela muda.
@@ -229,4 +229,31 @@
     });
   }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
   secao.querySelectorAll('.rag-intro, .rag-centro, .rag-area').forEach(function (el) { obs.observe(el); });
+})();
+
+// Seção "Como funciona": abas de contexto do exemplo (clique e setas do teclado, padrão de abas acessíveis).
+(function () {
+  var corpo = document.querySelector('.cf-corpo[data-contexto]');
+  if (!corpo) return;
+  var abas = Array.prototype.slice.call(corpo.querySelectorAll('[role="tab"]'));
+  var painel = document.getElementById('cf-painel');
+  function escolher(aba, focar) {
+    abas.forEach(function (a) {
+      var ativa = a === aba;
+      a.setAttribute('aria-selected', ativa ? 'true' : 'false');
+      if (ativa) a.removeAttribute('tabindex'); else a.setAttribute('tabindex', '-1');
+    });
+    corpo.setAttribute('data-contexto', aba.getAttribute('data-aba'));
+    painel.setAttribute('aria-labelledby', aba.id);
+    if (focar) aba.focus();
+  }
+  abas.forEach(function (aba, i) {
+    aba.addEventListener('click', function () { escolher(aba); });
+    aba.addEventListener('keydown', function (e) {
+      var n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: abas.length - 1 }[e.key];
+      if (n === undefined) return;
+      e.preventDefault();
+      escolher(abas[(n + abas.length) % abas.length], true);
+    });
+  });
 })();
