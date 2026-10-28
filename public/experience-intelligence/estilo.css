@@ -568,3 +568,23 @@ button.btn { border: 0; cursor: pointer; }
   .cf-identificar { padding: 28px 20px 20px; }
   .cf-identificar ul { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
+
+/* Animações da seção "Como funciona" (só com JavaScript; desligadas com movimento reduzido) */
+@keyframes cf-linha { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes cf-traco { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes cf-lado { from { opacity: 0; transform: translate3d(24px, 0, 0); } to { opacity: 1; transform: none; } }
+.como-funciona.anim-pronto .cf-traco, .como-funciona.anim-pronto .cf-subtitulo, .como-funciona.anim-pronto .cf-etapa,
+.como-funciona.anim-pronto .cf-identificar, .como-funciona.anim-pronto .cf-identificar li, .como-funciona.anim-pronto .cf-nota { opacity: 0; }
+.como-funciona .visivel .cf-traco { animation: cf-traco .6s cubic-bezier(0.16, 1, 0.3, 1) .3s both; transform-origin: center; opacity: 1; }
+.como-funciona .cf-subtitulo.visivel, .como-funciona .cf-identificar.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.como-funciona .cf-etapa.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.cf-etapa.visivel::before { transform-origin: top; animation: cf-linha .6s ease-out .2s both; }
+.cf-etapa.visivel::after { animation: ds-estrela .45s cubic-bezier(0.34, 1.56, 0.64, 1) .35s both; }
+.cf-etapa.visivel .cf-ico { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) .2s both; }
+.cf-etapa.visivel .cf-exemplo { animation: cf-lado .6s cubic-bezier(0.16, 1, 0.3, 1) .35s both; }
+.cf-identificar.visivel li { animation: ds-slide-up .6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.cf-identificar.visivel li:nth-child(1) { animation-delay: .2s; } .cf-identificar.visivel li:nth-child(2) { animation-delay: .28s; }
+.cf-identificar.visivel li:nth-child(3) { animation-delay: .36s; } .cf-identificar.visivel li:nth-child(4) { animation-delay: .44s; }
+.cf-identificar.visivel li:nth-child(5) { animation-delay: .52s; } .cf-identificar.visivel li:nth-child(6) { animation-delay: .6s; }
+.cf-identificar.visivel .cf-ico-redondo { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) both; animation-delay: inherit; }
+.como-funciona .cf-nota.visivel { animation: ds-surgir .6s ease-out .2s both; }
