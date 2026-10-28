@@ -138,3 +138,36 @@
   });
   window.matchMedia('(max-width: 639px)').addEventListener('change', function () { janela.classList.remove('menu-aberto'); });
 })();
+
+// Seção "O que é a plataforma": animações ao entrar na tela (Motion do design system).
+// Texto e cards: "Slide Up" (y 44 → 0, 0.7s, --ease-snappy), um depois do outro; itens das listas aparecem em seguida.
+(function () {
+  var secao = document.getElementById('plataforma');
+  if (!secao) return;
+  var reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduzir || !('IntersectionObserver' in window)) return;
+  secao.classList.add('anim-pronto');
+  var obs = new IntersectionObserver(function (entradas) {
+    if (!entradas.some(function (e) { return e.isIntersecting; })) return;
+    obs.disconnect();
+    secao.classList.add('visivel');
+  }, { threshold: 0, rootMargin: '0px 0px -25% 0px' });
+  obs.observe(secao.querySelector('.plat-fluxo') || secao);
+})();
+
+// Seção "Como funciona": cada parte anima quando chega na tela (Motion do design system).
+(function () {
+  var secao = document.getElementById('como-funciona');
+  if (!secao) return;
+  var reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduzir || !('IntersectionObserver' in window)) return;
+  secao.classList.add('anim-pronto');
+  var obs = new IntersectionObserver(function (entradas) {
+    entradas.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('visivel');
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+  secao.querySelectorAll('.plat-texto, .cf-subtitulo, .cf-etapa, .cf-identificar, .cf-nota').forEach(function (el) { obs.observe(el); });
+})();
