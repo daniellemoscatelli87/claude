@@ -393,7 +393,7 @@ html { scroll-behavior: smooth; }
      Nossa inteligência mais larga, mais alta e à frente, passando das bordas da base */
   .plat-fluxo { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.5fr) auto minmax(0, 1fr); align-items: stretch; gap: 0; padding: 20px; margin: 48px auto 40px; width: 100%; max-width: 1120px; }
   .plat-col { display: flex; flex-direction: column; padding: 22px 18px; }
-  .plat-desafio, .plat-resultado { justify-content: center; }
+  .plat-desafio, .plat-resultado { justify-content: flex-start; padding-top: 40px; }
   .plat-desafio .plat-pontos, .plat-resultado .plat-checks { align-self: center; }
   .plat-intel { position: relative; z-index: 1; margin: -44px 0; padding: 20px 22px; justify-content: center; box-shadow: var(--shadow-lg); }
   .plat-intel h3 { font-size: 1.375rem; margin-bottom: 12px; }
