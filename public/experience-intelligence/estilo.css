@@ -856,7 +856,7 @@ button.btn { border: 0; cursor: pointer; }
 .apl-duas p { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
 .apl-lado { display: grid; gap: 16px; }
 .apl-foto { position: relative; overflow: hidden; border-radius: 24px; aspect-ratio: 16 / 9; background: var(--muted); box-shadow: var(--shadow-sm); }
-.apl-foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.apl-foto img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
 .apl-meta-card { padding: 20px 22px; border-radius: 24px; background: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-md); }
 .apl-meta-card .apl-rot { color: rgba(255, 255, 255, 0.85); }
 .apl-meta-linha { display: flex; align-items: center; gap: 14px; }
@@ -876,11 +876,12 @@ button.btn { border: 0; cursor: pointer; }
   .apl-intro .cf-traco { margin-left: 0; }
   .apl-cards { align-self: center; }
   /* Como na referência: desafio à esquerda (mais baixo), foto no alto à direita e a meta logo abaixo da foto */
-  .apl-caso { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); grid-template-rows: auto auto; gap: 18px; align-items: start; }
+  .apl-caso { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); grid-template-rows: 190px auto; column-gap: 24px; row-gap: 24px; align-items: stretch; }
   .apl-caso .apl-lado { display: contents; }
-  .apl-desafio { grid-area: 1 / 1 / 3 / 2; margin-top: 140px; position: relative; z-index: 1; }
-  .apl-foto { grid-area: 1 / 2; aspect-ratio: 4 / 3; min-height: 0; margin-left: -60px; }
-  .apl-meta-card { grid-area: 2 / 2; }
+  /* Foto larga no alto, atrás; o desafio sobe por cima da foto e a meta ocupa a coluna da direita abaixo dela */
+  .apl-foto { grid-area: 1 / 1 / 2 / 3; aspect-ratio: auto; min-height: 0; height: 290px; margin-left: 40px; }
+  .apl-desafio { grid-area: 2 / 1; margin-top: -120px; position: relative; z-index: 1; }
+  .apl-meta-card { grid-area: 2 / 2; margin-top: 100px; }
   .apl-duas { grid-template-columns: 1fr; }
   .apl-duas > div + div { padding-left: 0; border-left: 0; padding-top: 18px; border-top: 1px solid var(--border); }
 }
