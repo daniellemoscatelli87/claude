@@ -217,6 +217,7 @@
       p.setAttribute('cx', sx); p.setAttribute('cy', sy); p.setAttribute('r', 4.5);
       p.style.setProperty('--i', i);
       svg.appendChild(l); pontos.appendChild(p);
+      l.style.setProperty('--len', Math.ceil(l.getTotalLength()));
     });
   }
   desenhar();
