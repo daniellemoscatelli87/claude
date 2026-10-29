@@ -169,7 +169,7 @@
       obs.unobserve(e.target);
     });
   }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
-  secao.querySelectorAll('.plat-texto, .cf-etapa, .cf-identificar, .cf-nota').forEach(function (el) { obs.observe(el); });
+  secao.querySelectorAll('.plat-texto, .cf-identificar, .cf-nota').forEach(function (el) { obs.observe(el); });
 })();
 
 // Seção "Nossa inteligência" (computador): linhas tracejadas do centro até cada área, recalculadas quando a tela muda.
@@ -281,9 +281,10 @@
   // Ordem da história: o que já passou fica à esquerda e o que vem depois à direita.
   function mostrar(i) {
     var n = cards.length;
-    centro = Math.max(0, Math.min(n - 1, i));
+    centro = ((i % n) + n) % n;
     cards.forEach(function (c, k) {
-      var pos = k === centro ? 'centro' : k === centro - 1 ? 'esq' : k === centro + 1 ? 'dir' : (k < centro ? 'fora-esq' : 'fora-dir');
+      // Três cards sempre visíveis: o anterior à esquerda e o próximo à direita (em ciclo).
+      var pos = k === centro ? 'centro' : k === (centro + n - 1) % n ? 'esq' : 'dir';
       c.setAttribute('data-pos', pos);
     });
     pontos.forEach(function (p, k) {
@@ -292,7 +293,7 @@
     });
     navs.forEach(function (b) {
       var d = Number(b.getAttribute('data-dir'));
-      b.disabled = d < 0 && centro === 0;
+      b.disabled = false;
       if (d > 0) b.setAttribute('aria-label', centro === n - 1 ? 'Voltar ao início' : 'Próxima etapa');
     });
   }
@@ -300,7 +301,8 @@
     b.addEventListener('click', function () {
       var d = Number(b.getAttribute('data-dir'));
       // Depois da última etapa, avançar volta ao começo da história.
-      mostrar(d > 0 && centro === cards.length - 1 ? 0 : centro + d);
+      var n = cards.length;
+      mostrar((centro + d + n) % n);
     });
   });
   pontos.forEach(function (p) { p.addEventListener('click', function () { mostrar(Number(p.getAttribute('data-ir'))); }); });
@@ -335,6 +337,8 @@
     etapas.forEach(function (e, i) {
       e.classList.toggle('feita', i < atual);
       e.classList.toggle('atual', i === atual);
+      // O card de cada etapa entra junto com a bolinha (uma vez só).
+      if (i <= atual) e.classList.add('visivel');
     });
   }
   function pedir() { if (!agendado) { agendado = true; requestAnimationFrame(atualizar); } }

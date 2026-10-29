@@ -866,3 +866,10 @@ button.btn { border: 0; cursor: pointer; }
 .apl-trilha dd { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
 .apl-caso .apl-meta { display: block; margin: 0; padding: 12px 14px; border-radius: 14px; background: var(--primary); color: var(--primary-foreground); font-weight: 600; }
 .apl-caso .apl-meta strong { display: block; margin-bottom: 2px; color: rgba(255, 255, 255, 0.85); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+/* Bolinhas da linha do tempo com o ícone de cada etapa (no lugar do número e do check) */
+.cf-num .ico { font-size: 22px; }
+@media (min-width: 768px) { .cf-num .ico { font-size: 24px; } }
+.cf-cartao .cf-texto h4 { margin-top: 0; }
+/* Meta do exemplo com ícone de foguete à esquerda */
+.apl-caso .apl-meta { display: flex; align-items: center; gap: 12px; }
+.apl-meta-ico { flex: none; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 20px; }
