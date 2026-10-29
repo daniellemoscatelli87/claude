@@ -957,3 +957,4 @@ button.btn { border: 0; cursor: pointer; }
   .apl-cards { align-self: end; }
   .apl-lista { margin-bottom: 0; }
 }
+.apl-meta-card .apl-meta-ico { background: var(--primary); color: var(--primary-foreground); }
