@@ -962,3 +962,8 @@ button.btn { border: 0; cursor: pointer; }
 .venn-c { mix-blend-mode: multiply; }
 .venn-operacao > *, .venn-melhoria > * { position: relative; top: -10px; }
 .venn-pessoas .venn-ico { position: relative; top: -3px; }
+/* Tag "Para quem" centralizada na largura da seção (acima do título e dos cards) */
+@media (min-width: 1200px) {
+  .aplicacoes .apl2 { position: relative; padding-top: 64px; }
+  .aplicacoes .apl-intro .etiqueta { position: absolute; top: 0; left: 0; right: 0; width: fit-content; margin: 0 auto; }
+}
