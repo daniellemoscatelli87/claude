@@ -834,3 +834,8 @@ button.btn { border: 0; cursor: pointer; }
 .apl-cab .apl-ico { width: 48px; height: 48px; border-radius: 14px; font-size: 24px; }
 .apl-cab h3 { white-space: nowrap; font-size: 1.125rem; }
 @media (min-width: 1024px) and (max-width: 1279px) { .apl-cab h3 { font-size: 0.9375rem; } .apl-card { padding-left: 16px; padding-right: 16px; } .apl-card .apl-desc { min-height: 4.5em; } .apl-cab .apl-ico { width: 40px; height: 40px; font-size: 20px; } }
+/* Card do exemplo (passo 3) em destaque: fundo rosado, borda vermelha suave, sombra maior e ícone preenchido */
+.apl-exemplo { background: linear-gradient(180deg, var(--crimson-50), var(--card) 55%); border-color: var(--crimson-100); box-shadow: var(--shadow-lg); }
+.apl-exemplo .apl-cab .apl-ico { background: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-sm); }
+.apl-exemplo .apl-passo { background: var(--primary); color: var(--primary-foreground); }
+.apl-exemplo .apl-tags span { background: var(--card); border: 1px solid var(--crimson-100); }
