@@ -853,7 +853,7 @@ button.btn { border: 0; cursor: pointer; }
 .apl-duas > div { display: flex; gap: 14px; align-items: flex-start; }
 .apl-mini { flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 22px; }
 .apl-duas h4 { margin: 0 0 4px; font-size: 0.9375rem; font-weight: 700; color: var(--foreground); }
-.apl-duas p { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
+.apl-duas p { margin: 0; color: var(--graphite-500); font-size: 1rem; line-height: 1.5; }
 .apl-lado { display: grid; gap: 16px; }
 .apl-foto { position: relative; overflow: hidden; border-radius: 24px; aspect-ratio: 16 / 9; background: var(--muted); box-shadow: var(--shadow-sm); }
 .apl-foto img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
@@ -936,7 +936,7 @@ button.btn { border: 0; cursor: pointer; }
 .apl-meta-card { display: flex; align-items: flex-start; gap: 16px; padding: 22px; background: var(--card); color: var(--foreground); border: 1px solid var(--border); box-shadow: var(--shadow-md); }
 .apl-meta-card .apl-rot { color: var(--crimson-500); margin-bottom: 6px; }
 .apl-meta-card h4 { margin: 0 0 8px; font-size: 1.375rem; line-height: 1.25; letter-spacing: -0.02em; font-weight: 800; color: var(--foreground); }
-.apl-meta-card p:last-child { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
+.apl-meta-card p:last-child { margin: 0; color: var(--graphite-500); font-size: 1rem; line-height: 1.5; }
 .apl-meta-card .apl-meta-ico { width: 52px; height: 52px; border-radius: 14px; background: var(--crimson-50); color: var(--primary); font-size: 26px; }
 @media (min-width: 768px) { .apl-meta-card { flex-direction: row; justify-content: flex-start; } }
 @media (min-width: 1200px) { .apl-meta-card { margin-top: 60px; align-self: end; } }
