@@ -730,3 +730,15 @@ button.btn { border: 0; cursor: pointer; }
 .aplicacoes .apl-cards.visivel .apl-card:nth-of-type(2) { animation-delay: .15s; }
 .aplicacoes .apl-cards.visivel .apl-card:nth-of-type(3) { animation-delay: .3s; }
 .aplicacoes .apl-cards.visivel .apl-sep { animation: ds-surgir .4s ease-out .45s both; }
+
+/* Cards do carrossel de "O que é a plataforma": imagem, título e resumo */
+.plat-col { text-align: left; }
+.plat-col h3, .plat-intel h3 { display: block; margin: 0 0 8px; font-size: 1.25rem; text-align: left; }
+.plat-foto { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; margin: 0 0 16px; border-radius: 14px; background: var(--muted); }
+.plat-resumo { margin: 0; color: var(--graphite-600); font-size: 0.9375rem; line-height: 1.55; }
+@media (min-width: 1024px) {
+  .plat-col, .plat-col[data-pos="centro"] { padding: 14px 14px 20px; }
+  .plat-col[data-pos="centro"] { justify-content: flex-start; }
+  .plat-col[data-pos="centro"] h3 { font-size: 1.375rem; }
+  .plat-col[data-pos="centro"] .plat-resumo { font-size: 1rem; }
+}
