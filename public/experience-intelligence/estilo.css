@@ -852,6 +852,6 @@ button.btn { border: 0; cursor: pointer; }
 @media (min-width: 1024px) and (max-width: 1279px) { .apl-op { padding: 8px; font-size: 0.8125rem; } .apl-op .ico { font-size: 24px; } }
 /* O quadro Público / Contexto não aparece no exemplo (as escolhas já estão destacadas nos cards 1 e 2) */
 .apl-exemplo .apl-caso-topo { display: none; }
-/* Desafio do exemplo destacado como citação: aspas grandes em vermelho e barra à esquerda */
-.apl-caso h4 { position: relative; margin: 4px 0 16px; padding: 10px 0 10px 18px; border-left: 3px solid var(--primary); font-style: italic; font-weight: 600; color: var(--graphite-700); }
-.apl-caso h4::before { content: "\201C"; position: absolute; top: -18px; left: 10px; color: var(--crimson-200); font-family: Georgia, serif; font-size: 3rem; font-style: normal; line-height: 1; pointer-events: none; }
+/* Desafio do exemplo destacado como citação: balão branco com borda rosada e aspas em um círculo vermelho */
+.apl-caso h4 { position: relative; margin: 6px 0 16px; padding: 14px 16px 14px 58px; border: 1px solid var(--crimson-100); border-radius: 16px; background: var(--card); box-shadow: var(--shadow-xs); font-weight: 600; color: var(--foreground); }
+.apl-caso h4::before { content: "\201C"; position: absolute; top: 14px; left: 14px; width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); font-family: Georgia, serif; font-size: 1.75rem; line-height: 44px; text-align: center; }
