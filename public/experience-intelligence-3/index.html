@@ -4,6 +4,12 @@
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="metodo.css">
+<style id="ei3-modelo-sobe">
+/* Entrada da modelo do hero: sobe de trás do cartão branco (curva --ease-snappy do design system) */
+@keyframes ei3ModeloSobe { from { transform: translateY(110%); } to { transform: translateY(0); } }
+.ei3-modelo-sobe { animation: ei3ModeloSobe 1.1s cubic-bezier(0.16, 1, 0.3, 1) .25s both; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .ei3-modelo-sobe { animation: none; } }
+</style>
 </head><body class="antialiased selection:bg-brand-100 selection:text-brand-600 bg-[#F1F4F8]"><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg>
 
 <title>Dani Moscatelli | Experience Design Studio</title>
@@ -194,7 +200,7 @@ h1, h2, h3, h4, h5, h6 {
 </div>
 <!-- Right Visual (Dani Moscatelli com Painel sobrepondo o Card Gigante) -->
 <div class="lg:col-span-5 flex justify-center lg:justify-end items-end relative pointer-events-none lg:-mb-24" style="transform: translateY(-50px);">
-<div class="relative w-full max-w-[360px] sm:max-w-[400px] lg:max-w-[460px]">
+<div class="relative w-full max-w-[360px] sm:max-w-[400px] lg:max-w-[460px] ei3-modelo-sobe">
 <img alt="Dani Moscatelli - Experience Design Studio" class="w-full h-auto object-contain select-none filter drop-shadow-xl block pointer-events-auto" src="img/imagem-28.webp" style="transform: scale(0.9); transform-origin: center bottom;">
 </div>
 </div>
