@@ -743,5 +743,5 @@ button.btn { border: 0; cursor: pointer; }
   .plat-col[data-pos="centro"] .plat-resumo { font-size: 1rem; }
 }
 /* Só o card do centro mostra a foto colorida; os dos lados ficam em preto e branco até irem para o centro */
-.plat-foto { transition: filter .6s ease; }
-.plat-col:not([data-pos="centro"]) .plat-foto { filter: grayscale(1); }
+.plat-foto { transition: filter .6s ease, opacity .6s ease; }
+.plat-col:not([data-pos="centro"]) .plat-foto { filter: grayscale(1); opacity: .45; }
