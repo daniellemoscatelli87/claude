@@ -850,3 +850,5 @@ button.btn { border: 0; cursor: pointer; }
 .apl-op { flex-direction: column; justify-content: center; gap: 10px; aspect-ratio: 1; min-height: 0; padding: 12px; text-align: center; border-radius: 16px; line-height: 1.3; }
 .apl-op .ico { font-size: 28px; }
 @media (min-width: 1024px) and (max-width: 1279px) { .apl-op { padding: 8px; font-size: 0.8125rem; } .apl-op .ico { font-size: 24px; } }
+/* O quadro Público / Contexto não aparece no exemplo (as escolhas já estão destacadas nos cards 1 e 2) */
+.apl-exemplo .apl-caso-topo { display: none; }
