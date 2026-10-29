@@ -951,3 +951,9 @@ button.btn { border: 0; cursor: pointer; }
   .apl-foto { height: 250px; }
   .apl-desafio { align-self: end; }
 }
+/* Base dos cards alinhada com a base do último botão do menu */
+@media (min-width: 1200px) {
+  .apl2 { align-items: end; }
+  .apl-cards { align-self: end; }
+  .apl-lista { margin-bottom: 0; }
+}
