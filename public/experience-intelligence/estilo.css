@@ -837,11 +837,16 @@ button.btn { border: 0; cursor: pointer; }
 /* Card do exemplo (passo 3) em destaque: fundo rosado, borda vermelha suave, sombra maior e ícone preenchido */
 .apl-exemplo { background: linear-gradient(180deg, var(--crimson-50), var(--card) 55%); border-color: var(--crimson-100); box-shadow: var(--shadow-lg); }
 .apl-exemplo .apl-cab .apl-ico { background: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-sm); }
-.apl-exemplo .apl-tags span { background: var(--card); border: 1px solid var(--crimson-100); }
+/* Escolha atual no exemplo: quadro com duas colunas rotuladas (Público e Contexto), no lugar das etiquetas */
+.apl-exemplo .apl-tags { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; width: 100%; border: 1px solid var(--crimson-100); border-radius: 14px; background: var(--card); overflow: hidden; }
+.apl-exemplo .apl-tags span { display: block; padding: 10px 14px; border-radius: 0; background: none; color: var(--foreground); font-size: 0.875rem; font-weight: 600; line-height: 1.35; }
+.apl-exemplo .apl-tags span + span { border-left: 1px solid var(--crimson-100); }
+.apl-exemplo .apl-tags span::before { display: block; margin-bottom: 2px; color: var(--crimson-500); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.apl-exemplo .apl-tags span:first-child::before { content: "Público"; }
+.apl-exemplo .apl-tags span + span::before { content: "Contexto"; }
+.apl-exemplo .apl-caso-topo { display: block; }
 /* Opções de "Para quem" em quadrados (ícone em cima, nome embaixo), duas por linha */
 .apl-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .apl-op { flex-direction: column; justify-content: center; gap: 10px; aspect-ratio: 1; min-height: 0; padding: 12px; text-align: center; border-radius: 16px; line-height: 1.3; }
 .apl-op .ico { font-size: 28px; }
-/* Número ímpar de opções: a última fica centralizada, com o mesmo tamanho das outras */
-.apl-lista li:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 5px); }
 @media (min-width: 1024px) and (max-width: 1279px) { .apl-op { padding: 8px; font-size: 0.8125rem; } .apl-op .ico { font-size: 24px; } }
