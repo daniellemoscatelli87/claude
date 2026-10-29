@@ -588,7 +588,8 @@ button.btn { border: 0; cursor: pointer; }
 @keyframes cf-da-direita { from { opacity: 0; transform: translate3d(32px, 0, 0); } to { opacity: 1; transform: none; } }
 @keyframes cf-da-esquerda { from { opacity: 0; transform: translate3d(-32px, 0, 0); } to { opacity: 1; transform: none; } }
 @media (min-width: 768px) {
-  .como-funciona .cf-etapa.visivel { animation: ds-surgir .3s ease-out both; }
+  /* Sem animação no item inteiro: assim os números ficam sempre por cima das linhas das etapas vizinhas */
+  .como-funciona .cf-etapa.visivel { animation: none; opacity: 1; }
   .cf-etapa.visivel:nth-child(odd) .cf-cartao { animation: cf-da-direita .7s cubic-bezier(0.16, 1, 0.3, 1) .15s both; }
   .cf-etapa.visivel:nth-child(even) .cf-cartao { animation: cf-da-esquerda .7s cubic-bezier(0.16, 1, 0.3, 1) .15s both; }
 }
