@@ -793,3 +793,16 @@ button.btn { border: 0; cursor: pointer; }
 .plat-nav:disabled:hover { background: var(--card); }
 /* Quebra de linha do título só em telas a partir do tablet */
 @media (max-width: 767px) { .quebra-larga { display: none; } }
+/* Altura fixa dos cards de "Para quem": todos os exemplos ocupam o mesmo espaço (o maior deles),
+   e só o escolhido aparece; os outros ficam invisíveis e fora da leitura de tela */
+.apl-casos { display: grid; }
+.apl-caso { grid-area: 1 / 1; }
+.apl-caso[hidden] { display: block; visibility: hidden; }
+/* Cabeçalho dos cards de "Para quem": ícone ao lado do título e da descrição */
+.apl-cab { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
+.apl-cab .apl-ico { width: 64px; height: 64px; margin: 0; border-radius: 16px; font-size: 30px; flex: none; }
+.apl-cab h3 { margin: 2px 0 4px; }
+.apl-cab p { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
+.apl-exemplo .apl-cab { align-items: center; margin-bottom: 14px; }
+/* Computador: cabeçalhos dos três cards com a mesma altura, para as listas começarem alinhadas */
+@media (min-width: 1024px) { .apl-cab { min-height: 128px; } .apl-exemplo .apl-cab { min-height: 0; } }
