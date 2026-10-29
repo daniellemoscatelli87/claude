@@ -794,14 +794,12 @@ button.btn { border: 0; cursor: pointer; }
 .apl-caso { grid-area: 1 / 1; }
 .apl-caso[hidden] { display: block; visibility: hidden; }
 /* Cabeçalho dos cards de "Para quem": ícone ao lado do título e da descrição */
-.apl-cab { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
-.apl-cab .apl-ico { width: 64px; height: 64px; margin: 0; border-radius: 16px; font-size: 30px; flex: none; }
-.apl-cab h3 { margin: 2px 0 4px; }
-.apl-cab p { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
-.apl-exemplo .apl-cab { align-items: center; margin-bottom: 14px; }
+.apl-cab { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+.apl-cab .apl-ico { width: 56px; height: 56px; margin: 0; border-radius: 16px; font-size: 28px; flex: none; }
+.apl-cab h3 { margin: 0; }
+.apl-card .apl-desc { margin: 0 0 18px; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
 /* Computador: cabeçalhos dos três cards com a mesma altura, para as listas começarem alinhadas */
-@media (min-width: 1024px) { .apl-cab { min-height: 128px; } }
-@media (min-width: 1024px) and (max-width: 1279px) { .apl-cab { min-height: 172px; } .apl-exemplo .apl-cab { min-height: 0; } }
+@media (min-width: 1024px) { .apl-cab { min-height: 64px; } .apl-card .apl-desc { min-height: 3em; } }
 /* "Para quem" como um assistente em passos: selo do passo em cada card e conectores entre eles */
 .apl-card { position: relative; }
 .apl-passo { align-self: flex-start; margin: 0 0 14px; padding: 4px 10px; border-radius: 9999px; background: var(--crimson-50); color: var(--crimson-500); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
