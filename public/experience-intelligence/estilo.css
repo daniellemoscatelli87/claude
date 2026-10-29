@@ -829,3 +829,8 @@ button.btn { border: 0; cursor: pointer; }
 @media (min-width: 768px) {
   .cf-passo-a-passo .cf-etapa::after { left: calc(50% - 1px); }
 }
+/* Títulos dos passos de "Para quem" sempre em uma linha */
+.apl-cab { gap: 12px; }
+.apl-cab .apl-ico { width: 48px; height: 48px; border-radius: 14px; font-size: 24px; }
+.apl-cab h3 { white-space: nowrap; font-size: 1.125rem; }
+@media (min-width: 1024px) and (max-width: 1279px) { .apl-cab h3 { font-size: 0.9375rem; } .apl-card { padding-left: 16px; padding-right: 16px; } .apl-card .apl-desc { min-height: 4.5em; } .apl-cab .apl-ico { width: 40px; height: 40px; font-size: 20px; } }
