@@ -267,3 +267,36 @@
   }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
   secao.querySelectorAll('.apl-intro, .apl-cards').forEach(function (el) { obs.observe(el); });
 })();
+
+// Seção "O que é a plataforma": carrossel dos três cards. O card do centro fica maior e à frente;
+// navega pelas setas, pelos pontos, clicando num card dos lados ou deslizando o dedo no celular.
+(function () {
+  var fluxo = document.querySelector('.plat-fluxo');
+  if (!fluxo) return;
+  var cards = Array.prototype.slice.call(fluxo.querySelectorAll('.plat-col'));
+  var pontos = Array.prototype.slice.call(document.querySelectorAll('.plat-ponto'));
+  var centro = 1;
+  function mostrar(i) {
+    var n = cards.length;
+    centro = (i + n) % n;
+    cards.forEach(function (c, k) {
+      var pos = k === centro ? 'centro' : (k === (centro + n - 1) % n ? 'esq' : 'dir');
+      c.setAttribute('data-pos', pos);
+    });
+    pontos.forEach(function (p, k) { if (k === centro) p.setAttribute('aria-current', 'true'); else p.removeAttribute('aria-current'); });
+  }
+  document.querySelectorAll('.plat-nav').forEach(function (b) {
+    b.addEventListener('click', function () { mostrar(centro + Number(b.getAttribute('data-dir'))); });
+  });
+  pontos.forEach(function (p) { p.addEventListener('click', function () { mostrar(Number(p.getAttribute('data-ir'))); }); });
+  cards.forEach(function (c, k) { c.addEventListener('click', function () { if (k !== centro) mostrar(k); }); });
+  var inicioX = null;
+  fluxo.addEventListener('touchstart', function (e) { inicioX = e.touches[0].clientX; }, { passive: true });
+  fluxo.addEventListener('touchend', function (e) {
+    if (inicioX === null) return;
+    var dx = e.changedTouches[0].clientX - inicioX;
+    if (Math.abs(dx) > 40) mostrar(centro + (dx < 0 ? 1 : -1));
+    inicioX = null;
+  });
+  mostrar(centro);
+})();

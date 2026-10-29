@@ -197,8 +197,8 @@
         <h2 id="plataforma-titulo">Do <span class="destaque">desafio</span> à transformação da <span class="destaque">experiência</span>.</h2>
         <p class="lead"><strong>DM | Experience Intelligence</strong> analisa desafios, identifica atritos e lacunas e conduz sua organização na melhoria contínua da experiência, com recomendações fundamentadas e planos de ação personalizados.</p>
       </div>
-      <div class="plat-fluxo">
-        <article class="plat-col plat-desafio">
+      <div class="plat-fluxo" role="group" aria-roledescription="carrossel" aria-label="Como a plataforma funciona">
+        <article class="plat-col plat-desafio" data-pos="esq" aria-roledescription="slide" aria-label="1 de 3: Desafio de negócio">
           <span class="plat-ico-grande"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span>
           <h3>Desafio de negócio</h3>
           <ul class="plat-pontos">
@@ -208,8 +208,7 @@
           </ul>
           <p class="plat-exemplo">“Como podemos melhorar a experiência de atendimento?”</p>
         </article>
-        <span class="plat-seta" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-        <article class="plat-col plat-intel">
+        <article class="plat-col plat-intel" data-pos="centro" aria-roledescription="slide" aria-label="2 de 3: Nossa inteligência">
           <h3><span class="plat-ico-titulo"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 18V5"/><path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4"/><path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5"/><path d="M17.997 5.125a4 4 0 0 1 2.526 5.77"/><path d="M18 18a4 4 0 0 0 2-7.464"/><path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517"/><path d="M6 18a4 4 0 0 1-2-7.464"/><path d="M6.003 5.125a4 4 0 0 0-2.526 5.77"/></svg></span>Nossa inteligência</h3>
           <ul class="plat-itens">
             <li><span class="plat-ico violeta"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span><strong>IA contextual</strong>(linguagem e análise)</span></li>
@@ -218,8 +217,7 @@
             <li><span class="plat-ico vermelho"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span><span><strong>Validação de evidências</strong>(fontes internas e externas)</span></li>
           </ul>
         </article>
-        <span class="plat-seta" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-        <article class="plat-col plat-resultado">
+        <article class="plat-col plat-resultado" data-pos="dir" aria-roledescription="slide" aria-label="3 de 3: Plano de ação">
           <span class="plat-ico-grande"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
           <h3>Plano de ação</h3>
           <ul class="plat-checks">
@@ -229,6 +227,15 @@
             <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>Acompanhamento de resultados</li>
           </ul>
         </article>
+      </div>
+      <div class="plat-controles">
+        <button type="button" class="plat-nav" data-dir="-1" aria-label="Card anterior"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg></button>
+        <div class="plat-pontos-nav">
+          <button type="button" class="plat-ponto" data-ir="0" aria-label="Mostrar Desafio de negócio"></button>
+          <button type="button" class="plat-ponto" data-ir="1" aria-label="Mostrar Nossa inteligência" aria-current="true"></button>
+          <button type="button" class="plat-ponto" data-ir="2" aria-label="Mostrar Plano de ação"></button>
+        </div>
+        <button type="button" class="plat-nav" data-dir="1" aria-label="Próximo card"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg></button>
       </div>
     </div>
   </section>
