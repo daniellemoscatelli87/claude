@@ -232,33 +232,39 @@
 })();
 
 
-// Seção "Aplicações": ao escolher um público ou um contexto, o card de exemplo mostra o caso mais próximo; "Ver mais exemplos" passa para o próximo.
+// Seção "Para quem": cada público tem o seu exemplo; o contexto destacado é o do exemplo.
+// Ao escolher um contexto, aparece um exemplo dele; "Ver mais exemplos" passa para o próximo.
 (function () {
   var cards = document.querySelector('.apl-cards');
   if (!cards) return;
-  var ordem = ['fisico', 'digital', 'operacoes'];
-  var publicoPadrao = { fisico: 'Pacientes', digital: 'Clientes e consumidores', operacoes: 'Colaboradores' };
+  var casos = Array.prototype.slice.call(cards.querySelectorAll('.apl-caso'));
+  var ordem = casos.map(function (c) { return c.getAttribute('data-ex'); });
   var botoes = Array.prototype.slice.call(cards.querySelectorAll('.apl-op'));
-  function mostrar(ex, publico) {
-    cards.setAttribute('data-exemplo', ex);
-    cards.querySelectorAll('.apl-caso').forEach(function (c) { c.hidden = c.getAttribute('data-ex') !== ex; });
+  function caso(id) { return casos.filter(function (c) { return c.getAttribute('data-ex') === id; })[0]; }
+  function mostrar(id) {
+    var atual = caso(id);
+    if (!atual) return;
+    cards.setAttribute('data-exemplo', id);
+    casos.forEach(function (c) { c.hidden = c !== atual; });
     botoes.forEach(function (b) {
-      var nome = b.textContent.trim();
-      var ativo = b.getAttribute('data-grupo') === 'contexto' ? b.getAttribute('data-ex') === ex : nome === (publico || publicoPadrao[ex]);
+      var ativo = b.getAttribute('data-grupo') === 'contexto' ? b.getAttribute('data-ctx') === atual.getAttribute('data-ctx') : b.getAttribute('data-ex') === id;
       b.setAttribute('aria-pressed', ativo ? 'true' : 'false');
     });
   }
   botoes.forEach(function (b) {
     b.addEventListener('click', function () {
-      mostrar(b.getAttribute('data-ex'), b.getAttribute('data-grupo') === 'publico' ? b.textContent.trim() : null);
+      if (b.getAttribute('data-grupo') === 'contexto') {
+        var agora = caso(cards.getAttribute('data-exemplo'));
+        if (agora && agora.getAttribute('data-ctx') === b.getAttribute('data-ctx')) return;
+      }
+      mostrar(b.getAttribute('data-ex'));
     });
   });
   var mais = cards.querySelector('.apl-mais');
   if (mais) mais.addEventListener('click', function () {
-    var atual = ordem.indexOf(cards.getAttribute('data-exemplo'));
-    mostrar(ordem[(atual + 1) % ordem.length]);
+    mostrar(ordem[(ordem.indexOf(cards.getAttribute('data-exemplo')) + 1) % ordem.length]);
   });
-  mostrar(cards.getAttribute('data-exemplo') || 'digital');
+  mostrar(cards.getAttribute('data-exemplo') || ordem[0]);
 })();
 
 // Seção "Aplicações": animações ao entrar na tela.
