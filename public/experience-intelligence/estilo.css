@@ -967,13 +967,3 @@ button.btn { border: 0; cursor: pointer; }
   .aplicacoes .apl2 { position: relative; padding-top: 64px; }
   .aplicacoes .apl-intro .etiqueta { position: absolute; top: 0; left: 0; right: 0; width: fit-content; margin: 0 auto; }
 }
-/* Manifesto da fundadora (fonte Accent do design system: Fraunces, para manifestos e citações) */
-.plat-manifesto { margin: 8px auto 0; max-width: 46rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; }
-.plat-manifesto-ico { display: flex; color: var(--primary); font-size: 32px; }
-.plat-manifesto blockquote { margin: 0; }
-.plat-manifesto blockquote p { margin: 0; font-family: var(--font-accent); font-style: italic; font-weight: 400; font-size: clamp(1.25rem, 2.2vw, 1.625rem); line-height: 1.45; color: var(--foreground); text-wrap: balance; }
-.plat-manifesto figcaption { display: flex; flex-direction: column; gap: 2px; font-size: 0.875rem; color: var(--graphite-500); }
-.plat-manifesto figcaption::before { content: ""; width: 48px; height: 3px; margin: 0 auto 12px; border-radius: 9999px; background: var(--primary); }
-.plat-manifesto figcaption strong { font-size: 1rem; font-weight: 700; color: var(--foreground); }
-.plataforma.anim-pronto .plat-manifesto { opacity: 0; }
-.plataforma.visivel .plat-manifesto { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) 1.3s both; }
