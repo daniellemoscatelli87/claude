@@ -193,14 +193,24 @@
       var r = area.getBoundingClientRect();
       var ico = area.querySelector('.rag-ico').getBoundingClientRect();
       var ey = ico.top + ico.height / 2 - base.top;
-      var esquerda = r.left + r.width / 2 - base.left < cx;
-      var ex = esquerda ? r.right - base.left + 16 : ico.left - base.left - 16;
-      // Ponto no anel do núcleo, na direção da área
-      var ang = Math.atan2(ey - cy, ex - cx);
-      var sx = cx + Math.cos(ang) * raio, sy = cy + Math.sin(ang) * raio;
-      var mx = sx + (ex - sx) * 0.45;
+      var ix = ico.left + ico.width / 2 - base.left;
+      var sx, sy, d;
+      if (ico.top - base.top > cy + c.height / 2) {
+        // Área abaixo do núcleo: galho reto descendo do anel até o ícone
+        sx = cx; sy = cy + raio;
+        var fy = ico.top - base.top - 14;
+        d = 'M' + sx + ',' + sy + ' L' + sx + ',' + fy;
+      } else {
+        // Áreas dos lados: galho sai do anel na diagonal e termina na horizontal, perto do ícone
+        var esquerda = ix < cx;
+        var ex = esquerda ? ico.right - base.left + 14 : ico.left - base.left - 14;
+        var ang = Math.atan2(ey - cy, ex - cx);
+        sx = cx + Math.cos(ang) * raio; sy = cy + Math.sin(ang) * raio;
+        var kx = sx + (ex - sx) * 0.5;
+        d = 'M' + sx + ',' + sy + ' Q' + kx + ',' + ey + ' ' + (sx + (ex - sx) * 0.75) + ',' + ey + ' L' + ex + ',' + ey;
+      }
       var l = document.createElementNS(NS, 'path');
-      l.setAttribute('d', 'M' + sx + ',' + sy + ' Q' + mx + ',' + ey + ' ' + (sx + (ex - sx) * 0.7) + ',' + ey + ' L' + ex + ',' + ey);
+      l.setAttribute('d', d);
       l.style.transformOrigin = cx + 'px ' + cy + 'px';
       l.style.setProperty('--i', i);
       var p = document.createElementNS(NS, 'circle');
