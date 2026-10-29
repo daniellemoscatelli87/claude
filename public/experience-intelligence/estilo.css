@@ -852,6 +852,17 @@ button.btn { border: 0; cursor: pointer; }
 @media (min-width: 1024px) and (max-width: 1279px) { .apl-op { padding: 8px; font-size: 0.8125rem; } .apl-op .ico { font-size: 24px; } }
 /* O quadro Público / Contexto não aparece no exemplo (as escolhas já estão destacadas nos cards 1 e 2) */
 .apl-exemplo .apl-caso-topo { display: none; }
-/* Desafio do exemplo destacado como citação: balão branco com borda rosada e aspas em um círculo vermelho */
-.apl-caso h4 { position: relative; margin: 6px 0 16px; padding: 14px 16px 14px 58px; border: 1px solid var(--crimson-100); border-radius: 16px; background: var(--card); box-shadow: var(--shadow-xs); font-weight: 600; color: var(--foreground); }
-.apl-caso h4::before { content: "\201C"; position: absolute; top: 14px; left: 14px; width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); font-family: Georgia, serif; font-size: 1.75rem; line-height: 44px; text-align: center; }
+/* Exemplo de "Para quem" contado em sequência: o desafio como citação, a trilha (investigação e primeira ação) e aonde se quer chegar */
+.apl-caso .apl-rot { margin: 4px 0 6px; color: var(--crimson-500); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.apl-caso h4 { margin: 0 0 18px; padding: 0; border: 0; background: none; box-shadow: none; font-size: 1.1875rem; line-height: 1.35; letter-spacing: -0.01em; font-weight: 700; color: var(--foreground); }
+.apl-caso h4::before, .apl-caso h4::after { position: static; display: inline; width: auto; height: auto; border-radius: 0; background: none; color: var(--primary); font-family: Georgia, serif; font-size: 1.5em; line-height: 0; vertical-align: -0.28em; }
+.apl-caso h4::before { content: "\201C"; margin-right: 2px; }
+.apl-caso h4::after { content: "\201D"; margin-left: 2px; }
+.apl-trilha { position: relative; margin: 0 0 14px; padding: 0 0 0 20px; display: grid; gap: 12px; }
+.apl-trilha::before { content: ""; position: absolute; left: 4px; top: 6px; bottom: 6px; width: 2px; border-radius: 2px; background: var(--crimson-100); }
+.apl-trilha div { position: relative; }
+.apl-trilha div::before { content: ""; position: absolute; left: -20px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--card); border: 2px solid var(--primary); box-sizing: border-box; }
+.apl-trilha dt { margin: 0 0 2px; color: var(--foreground); font-size: 0.8125rem; font-weight: 700; }
+.apl-trilha dd { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
+.apl-caso .apl-meta { display: block; margin: 0; padding: 12px 14px; border-radius: 14px; background: var(--primary); color: var(--primary-foreground); font-weight: 600; }
+.apl-caso .apl-meta strong { display: block; margin-bottom: 2px; color: rgba(255, 255, 255, 0.85); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
