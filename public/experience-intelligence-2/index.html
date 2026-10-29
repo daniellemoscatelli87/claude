@@ -1,0 +1,1238 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="pt-BR" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta name="robots" content="noindex">
+</head><body class="antialiased selection:bg-brand-100 selection:text-brand-600 bg-[#F1F4F8]"><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg>
+
+<title>Dani Moscatelli | Experience Design Studio</title>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#FFF5F5',
+              100: '#FDE8E8',
+              200: '#FBD5D5',
+              300: '#F8B4B4',
+              400: '#F05252',
+              500: '#D44D4D',
+              600: '#C83232',
+              700: '#9B1C1C',
+              800: '#771D1D',
+              900: '#5A1717',
+            },
+            graphite: {
+              900: '#1E242B',
+              800: '#2D3540',
+              700: '#3D4653',
+              600: '#525C6B',
+              500: '#6B7684',
+              400: '#94A0B0',
+              300: '#CBD4E1',
+              200: '#E8ECF2',
+              100: '#F2F5F8',
+              50: '#F8FAFC',
+            }
+          },
+          boxShadow: {
+            'card-subtle': '0 2px 14px 0 rgba(0, 0, 0, 0.04)',
+            'card-hover': '0 8px 25px -4px rgba(212, 77, 77, 0.09), 0 3px 10px -2px rgba(0, 0, 0, 0.04)',
+            'surface-giant': '0 -8px 30px rgba(15, 23, 42, 0.04), 0 20px 40px -15px rgba(15, 23, 42, 0.05)',
+          }
+        }
+      }
+    }
+  </script>
+<style id="chart-animations">
+@keyframes dash { 0% { stroke-dashoffset: 400; opacity: 0.4; } 50% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 1; } }
+@keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.4); opacity: 1; filter: drop-shadow(0 0 6px rgba(212, 77, 77, 0.7)); } }
+.metric-animated-path { stroke-dasharray: 400; animation: dash 3.5s ease-in-out infinite alternate !important; }
+.metric-pulse-dot { animation: pulseDot 2s ease-in-out infinite !important; transform-origin: center; transform-box: fill-box; }
+@keyframes heroFloat { 0%, 100% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-5px) scale(1.006); } }
+@keyframes heroEntrance { 0% { opacity: 0; transform: translateY(18px); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes softGlow { 0%, 100% { filter: drop-shadow(0 16px 28px rgba(0,0,0,0.07)); } 50% { filter: drop-shadow(0 20px 34px rgba(212, 77, 77, 0.11)); } }
+@keyframes ctaSubtlePulse { 0%, 100% { box-shadow: 0 4px 14px 0 rgba(212, 77, 77, 0.25); } 50% { box-shadow: 0 6px 22px 4px rgba(212, 77, 77, 0.42); } }
+.hero-animate-float { animation: heroFloat 7.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite, softGlow 7.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; will-change: transform, filter; }
+.hero-fade-1 { animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.05s backwards; }
+.hero-fade-2 { animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s backwards; }
+.hero-fade-3 { animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s backwards; }
+.hero-fade-4 { animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s backwards; }
+.hero-fade-5 { animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.45s backwards; }
+.hero-cta-primary { animation: ctaSubtlePulse 3.5s ease-in-out infinite; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, background-color 0.2s ease; }
+.hero-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px 2px rgba(212, 77, 77, 0.45) !important; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-animate-float, .hero-fade-1, .hero-fade-2, .hero-fade-3, .hero-fade-4, .hero-fade-5, .hero-cta-primary { animation: none !important; transition: none !important; transform: none !important; }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Orbiting Circles Animation */
+@keyframes orbitTrackCW { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes orbitTrackCCW { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
+@keyframes counterRotateCW { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(-360deg); } }
+@keyframes counterRotateCCW { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes centerGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(210, 88, 73, 0.4), 0 8px 22px -3px rgba(210, 88, 73, 0.45); }
+  50% { box-shadow: 0 0 0 10px rgba(210, 88, 73, 0), 0 12px 28px -2px rgba(210, 88, 73, 0.65); }
+}
+
+.orbit-track-inner {
+  position: absolute; top: 50%; left: 50%; width: 170px; height: 170px; margin-top: -85px; margin-left: -85px;
+  animation: orbitTrackCW 28s linear infinite; pointer-events: none; border-radius: 9999px;
+}
+.orbit-track-middle {
+  position: absolute; top: 50%; left: 50%; width: 290px; height: 290px; margin-top: -145px; margin-left: -145px;
+  animation: orbitTrackCCW 36s linear infinite; pointer-events: none; border-radius: 9999px;
+}
+.orbit-track-outer {
+  position: absolute; top: 50%; left: 50%; width: 400px; height: 400px; margin-top: -200px; margin-left: -200px;
+  animation: orbitTrackCW 46s linear infinite; pointer-events: none; border-radius: 9999px;
+}
+.orbit-item-cw { position: absolute; pointer-events: auto; animation: counterRotateCW 28s linear infinite; will-change: transform; }
+.orbit-item-middle-ccw { position: absolute; pointer-events: auto; animation: counterRotateCCW 36s linear infinite; will-change: transform; }
+.orbit-item-outer-cw { position: absolute; pointer-events: auto; animation: counterRotateCW 46s linear infinite; will-change: transform; }
+
+.orbit-system-wrapper:hover .orbit-track-inner,
+.orbit-system-wrapper:hover .orbit-track-middle,
+.orbit-system-wrapper:hover .orbit-track-outer,
+.orbit-system-wrapper:hover .orbit-item-cw,
+.orbit-system-wrapper:hover .orbit-item-middle-ccw,
+.orbit-system-wrapper:hover .orbit-item-outer-cw {
+  animation-play-state: paused;
+}
+.center-client-badge { animation: centerGlow 3s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-track-inner, .orbit-track-middle, .orbit-track-outer,
+  .orbit-item-cw, .orbit-item-middle-ccw, .orbit-item-outer-cw, .center-client-badge {
+    animation: none !important;
+  }
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #3D4653;
+  background-color: #F1F4F8;
+  overflow-x: hidden;
+}
+h1, h2, h3, h4, h5, h6 {
+  color: #1E242B;
+  letter-spacing: -0.025em;
+}
+</style>
+
+
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-50 bg-[#F1F4F8]/95 backdrop-blur-md border-b border-graphite-200/60 transition-all">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
+<!-- Logo Container -->
+<a aria-label="Dani Moscatelli Experience Design Studio" class="flex items-center" href="#"><img alt="Dani Moscatelli - Experience Design Studio" class="h-10 sm:h-12 w-auto object-contain" src="img/imagem-26.webp" style="height: 56px; width: auto;"></a>
+<!-- Center Desktop Navigation Links -->
+<nav class="hidden lg:flex items-center gap-7 text-[13.5px] font-medium text-graphite-600">
+<a class="hover:text-brand-500 transition-colors" href="#problema">O Problema</a>
+<a class="hover:text-brand-500 transition-colors" href="#contexto">Contexto</a>
+<a class="hover:text-brand-500 transition-colors" href="#jornada">Jornada</a>
+<a class="hover:text-brand-500 transition-colors" href="#abordagem">Abordagem</a>
+<a class="hover:text-brand-500 transition-colors" href="#metodo">Método</a><a class="hover:text-brand-500 transition-colors" href="#solucoes">Soluções</a>
+<a class="hover:text-brand-500 transition-colors" href="#empresas-atendidas">Empresas Atendidas</a><a class="hover:text-brand-500 transition-colors" href="#depoimentos">Depoimentos</a>
+<a class="hover:text-brand-500 transition-colors" href="#artigos">Artigos</a>
+</nav>
+<!-- Right Action CTA -->
+<div class="flex items-center">
+<a class="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs md:text-sm font-semibold text-white bg-brand-500 hover:bg-brand-600 shadow-sm transition-all duration-200" href="#contato">
+        Contato
+      </a>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<main class="relative">
+<!-- BEGIN: HeroSection -->
+<section class="relative pt-8 md:pt-14 pb-12 lg:pb-0 overflow-visible bg-transparent">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<!-- Left Content -->
+<div class="lg:col-span-7 flex flex-col items-start z-10">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 border border-graphite-200 text-graphite-700 shadow-sm relative mb-8 hero-fade-1"><span class="relative flex h-2 w-2 mr-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D44D4D] opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-[#D44D4D]"></span></span><span class="font-bold text-xs uppercase tracking-[0.2em] leading-none select-none text-graphite-600">Meaningful Experiences Design</span></div>
+<h1 class="text-3xl sm:text-4xl lg:text-[2.65rem] font-bold text-graphite-900 leading-[1.18] tracking-tight mb-8 hero-fade-2">
+            Transformo objetivos de negócio em <span class="text-brand-500">experiências de alto valor</span> para os seus clientes.
+          </h1>
+<p class="text-base sm:text-[17px] text-graphite-600 leading-relaxed max-w-xl mb-10 hero-fade-3">
+            + de 20 anos projetando ecossistemas de experiência que conectam estratégia, pessoas, operação e tecnologia para transformar jornadas fragmentadas em experiências memoráveis e sustentáveis.
+          </p>
+<!-- Social proof mini -->
+<div class="flex items-center gap-3.5 mb-10 hero-fade-4">
+<div class="flex -space-x-2 overflow-hidden flex-shrink-0"><img alt="Liderança empresarial" class="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover shadow-xs" src="img/imagem-09.webp"><img alt="Liderança empresarial" class="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover shadow-xs" src="img/imagem-14.webp"><img alt="Liderança empresarial" class="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover shadow-xs" src="img/imagem-20.webp"></div>
+<p class="text-xs sm:text-sm text-graphite-600 font-medium leading-tight max-w-sm">
+              Junte-se a outras lideranças empresariais que estão transformando a experiência de seus clientes.
+            </p>
+</div>
+<!-- CTAs -->
+<div class="flex flex-wrap items-center gap-4 hero-fade-5">
+<a class="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full text-sm font-semibold text-white bg-brand-500 hover:bg-brand-600 shadow-sm transition-all duration-200 hero-cta-primary" href="#contato">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Agendar diagnóstico
+            </a>
+<a class="inline-flex items-center justify-center gap-1.5 px-5 py-3 text-sm font-semibold text-graphite-600 hover:text-brand-500 transition-colors" href="#problema">
+              Saiba mais
+              <svg class="w-4 h-4 text-graphite-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 14l-7 7m0 0l-7-7m7 7V3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</div>
+<!-- Right Visual (Dani Moscatelli com Painel sobrepondo o Card Gigante) -->
+<div class="lg:col-span-5 flex justify-center lg:justify-end items-end relative pointer-events-none lg:-mb-24" style="transform: translateY(-50px);">
+<div class="relative w-full max-w-[360px] sm:max-w-[400px] lg:max-w-[460px]">
+<img alt="Dani Moscatelli - Experience Design Studio" class="w-full h-auto object-contain select-none filter drop-shadow-xl block pointer-events-auto" src="img/imagem-28.webp" style="transform: scale(0.9); transform-origin: center bottom;">
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: HeroSection -->
+<!-- BEGIN: GiantSurfaceCardWrapper -->
+<div class="relative w-full max-w-[1400px] mx-auto px-2 sm:px-4 lg:px-6 z-20" style="margin-top: 43px;">
+<div class="bg-white rounded-t-[36px] sm:rounded-t-[48px] lg:rounded-t-[56px] shadow-surface-giant border-t border-x border-slate-200/70 overflow-hidden" style="transform: translateY(3px);">
+<!-- BEGIN: StatisticsSection -->
+<section class="pt-16 sm:pt-20 md:pt-24 pb-16 md:pb-20 bg-white" id="problema">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-4">
+<span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">Cenário Atual</span>
+</div>
+<h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 max-w-2xl mx-auto leading-tight mb-4">A experiência deixou de ser um diferencial. Ela se tornou uma <span class="text-brand-500">vantagem competitiva.</span></h2>
+<p class="text-sm sm:text-base text-graphite-600 max-w-2xl mx-auto mb-12 leading-relaxed">Enquanto consumidores valorizam cada vez mais a experiência, muitas organizações ainda projetam produtos, serviços, canais e operações de forma desconectada, comprometendo a percepção de marca e os resultados do negócio.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left mb-14">
+<!-- Card 1 -->
+<div class="bg-white rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group hover:shadow-card-hover transition-all duration-200" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div class="relative z-10">
+<div class="flex items-center gap-2.5 mb-3.5"><span class="text-graphite-500 group-hover:text-brand-500 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></span><span class="text-xs font-bold uppercase tracking-wider text-graphite-700">PAGAMENTO</span></div>
+<div class="w-full h-20 mb-4 relative metric-chart-wrapper"><svg class="w-full h-full overflow-visible" fill="none" preserveAspectRatio="none" viewBox="0 0 240 80"><defs><linearGradient id="grad-pagamento" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#D44D4D" stop-opacity="0.28"></stop><stop offset="70%" stop-color="#D44D4D" stop-opacity="0.05"></stop><stop offset="100%" stop-color="#D44D4D" stop-opacity="0.0"></stop></linearGradient></defs><line stroke="#F2F5F8" stroke-width="1" x1="0" x2="240" y1="76" y2="76"></line><path class="metric-animated-fill" d="M0 66 C 50 64, 85 58, 130 38 C 175 18, 205 12, 236 10 L 236 76 L 0 76 Z" fill="url(#grad-pagamento)"></path><path class="metric-animated-path" d="M0 66 C 50 64, 85 58, 130 38 C 175 18, 205 12, 236 10" stroke="#D44D4D" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path><circle class="metric-outer-ring" cx="236" cy="10" fill="#FFF5F5" r="5" stroke="#D44D4D" stroke-width="2.5"></circle><circle class="metric-pulse-dot" cx="236" cy="10" fill="#D44D4D" r="2.2"></circle></svg></div>
+<div class="text-4xl md:text-5xl font-extrabold text-graphite-900 tracking-tight mb-2.5">85%</div>
+<p class="text-xs md:text-sm text-graphite-600 leading-relaxed">dos consumidores de 18-24 anos estão dispostos a pagar mais por marcas que oferecem uma experiência superior.</p>
+</div>
+<div class="mt-6 pt-3.5 border-t border-graphite-100"><span class="text-[11px] font-medium tracking-wider text-graphite-500 uppercase">QUALTRICS INSTITUTE, 2024</span></div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group hover:shadow-card-hover transition-all duration-200" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div class="relative z-10">
+<div class="flex items-center gap-2.5 mb-3.5"><span class="text-graphite-500 group-hover:text-brand-500 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></span><span class="text-xs font-bold uppercase tracking-wider text-graphite-700">ABANDONO</span></div>
+<div class="w-full h-20 mb-4 relative metric-chart-wrapper"><svg class="w-full h-full overflow-visible" fill="none" preserveAspectRatio="none" viewBox="0 0 240 80"><defs><linearGradient id="grad-abandono" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#D44D4D" stop-opacity="0.26"></stop><stop offset="70%" stop-color="#D44D4D" stop-opacity="0.05"></stop><stop offset="100%" stop-color="#D44D4D" stop-opacity="0.0"></stop></linearGradient></defs><line stroke="#F2F5F8" stroke-width="1" x1="0" x2="240" y1="76" y2="76"></line><path class="metric-animated-fill" d="M0 16 C 50 16, 85 20, 115 26 C 145 32, 170 60, 236 70 L 236 76 L 0 76 Z" fill="url(#grad-abandono)"></path><path class="metric-animated-path" d="M0 16 C 50 16, 85 20, 115 26 C 145 32, 170 60, 236 70" stroke="#D44D4D" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path><circle cx="115" cy="26" fill="#FFF" r="4" stroke="#D44D4D" stroke-width="2"></circle><circle class="metric-outer-ring" cx="236" cy="70" fill="#FFF5F5" r="5" stroke="#D44D4D" stroke-width="2.5"></circle><circle class="metric-pulse-dot" cx="236" cy="70" fill="#D44D4D" r="2.2"></circle></svg></div>
+<div class="text-4xl md:text-5xl font-extrabold text-graphite-900 tracking-tight mb-2.5">78%</div>
+<p class="text-xs md:text-sm text-graphite-600 leading-relaxed">dos clientes consideram trocar de marca após uma única experiência ruim, mostrando o impacto direto de uma jornada mal resolvida.</p>
+</div>
+<div class="mt-6 pt-3.5 border-t border-graphite-100"><span class="text-[11px] font-medium tracking-wider text-graphite-500 uppercase">HYKEN - STATE OF CX, 2024</span></div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group hover:shadow-card-hover transition-all duration-200" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div class="relative z-10">
+<div class="flex items-center justify-between mb-3.5"><div class="flex items-center gap-2.5"><span class="text-graphite-500 group-hover:text-brand-500 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></span><span class="text-xs font-bold uppercase tracking-wider text-graphite-700">MARCA</span></div><span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-brand-50 text-brand-600 border border-brand-200/80">Gap -45%</span></div>
+<div class="w-full h-20 mb-4 relative metric-chart-wrapper"><svg class="w-full h-full overflow-visible" fill="none" preserveAspectRatio="none" viewBox="0 0 240 80"><defs><linearGradient id="grad-marca" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#D44D4D" stop-opacity="0.28"></stop><stop offset="70%" stop-color="#D44D4D" stop-opacity="0.05"></stop><stop offset="100%" stop-color="#D44D4D" stop-opacity="0.0"></stop></linearGradient></defs><line stroke="#F2F5F8" stroke-width="1" x1="0" x2="240" y1="76" y2="76"></line><line stroke="#8898B0" stroke-width="1.5" stroke-opacity="0.9" x1="0" x2="240" y1="16" y2="16"></line><circle cx="236" cy="16" fill="#8898B0" r="2.5"></circle><text fill="#6B7684" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600" text-anchor="end" x="228" y="13">84% esperado</text><path class="metric-animated-fill" d="M0 64 C 55 64, 100 60, 150 52 C 185 47, 210 47, 236 47 L 236 76 L 0 76 Z" fill="url(#grad-marca)"></path><path class="metric-animated-path" d="M0 64 C 55 64, 100 60, 150 52 C 185 47, 210 47, 236 47" stroke="#D44D4D" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path><circle class="metric-outer-ring" cx="236" cy="47" fill="#FFF5F5" r="5" stroke="#D44D4D" stroke-width="2.5"></circle><circle class="metric-pulse-dot" cx="236" cy="47" fill="#D44D4D" r="2.2"></circle></svg></div>
+<div class="flex items-baseline justify-between mb-2.5"><div class="text-4xl md:text-5xl font-extrabold text-graphite-900 tracking-tight">39%</div><span class="text-xs font-semibold text-graphite-500">vs. 84% esperado</span></div>
+<p class="text-xs md:text-sm text-graphite-600 leading-relaxed">dos consumidores dizem que ficaram mais leais às marcas que usam, bem abaixo dos 84% dos executivos que acreditam que essa lealdade cresceu.</p>
+</div>
+<div class="mt-6 pt-3.5 border-t border-graphite-100"><span class="text-[11px] font-medium tracking-wider text-graphite-500 uppercase">PWC, 2023</span></div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group hover:shadow-card-hover transition-all duration-200" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div class="relative z-10">
+<div class="flex items-center gap-2.5 mb-3.5"><span class="text-graphite-500 group-hover:text-brand-500 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></span><span class="text-xs font-bold uppercase tracking-wider text-graphite-700">FIDELIDADE</span></div>
+<div class="w-full h-20 mb-4 relative metric-chart-wrapper"><svg class="w-full h-full overflow-visible" fill="none" preserveAspectRatio="none" viewBox="0 0 240 80"><defs><linearGradient id="grad-fidelidade" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#D44D4D" stop-opacity="0.30"></stop><stop offset="70%" stop-color="#D44D4D" stop-opacity="0.05"></stop><stop offset="100%" stop-color="#D44D4D" stop-opacity="0.0"></stop></linearGradient></defs><line stroke="#F2F5F8" stroke-width="1" x1="0" x2="240" y1="76" y2="76"></line><path class="metric-animated-fill" d="M0 68 C 50 68, 85 64, 125 50 C 168 36, 200 18, 236 8 L 236 76 L 0 76 Z" fill="url(#grad-fidelidade)"></path><path class="metric-animated-path" d="M0 68 C 50 68, 85 64, 125 50 C 168 36, 200 18, 236 8" stroke="#D44D4D" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path><circle cx="125" cy="50" fill="#FFF" r="3.5" stroke="#D44D4D" stroke-width="2"></circle><circle class="metric-outer-ring" cx="236" cy="8" fill="#FFF5F5" r="5" stroke="#D44D4D" stroke-width="2.5"></circle><circle class="metric-pulse-dot" cx="236" cy="8" fill="#D44D4D" r="2.2"></circle></svg></div>
+<div class="text-4xl md:text-5xl font-extrabold text-graphite-900 tracking-tight mb-2.5">86%</div>
+<p class="text-xs md:text-sm text-graphite-600 leading-relaxed">dos clientes que têm uma ótima experiência tendem a voltar a comprar da marca, reforçando o papel da experiência na fidelização.</p>
+</div>
+<div class="mt-6 pt-3.5 border-t border-graphite-100"><span class="text-[11px] font-medium tracking-wider text-graphite-500 uppercase">HYKEN - STATE OF CX, 2024</span></div>
+</div>
+</div>
+<div class="max-w-3xl mx-auto p-5 text-center">
+<p class="text-lg md:text-xl italic text-graphite-700 leading-relaxed font-normal">"Os dados mostram que a experiência já impacta os resultados de negócio, mas enquanto o mercado avança na automação, muitas organizações se afastam do elemento central de qualquer relação: <strong class="text-brand-500 font-bold not-italic">o pilar humano.</strong>"</p>
+</div>
+</div>
+</section>
+<!-- END: StatisticsSection -->
+<!-- BEGIN: ParadigmComparisonSection -->
+<section class="py-16 md:py-20 bg-white border-t border-graphite-100" id="contexto">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-4">
+<span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">O Desafio</span>
+</div>
+<h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 max-w-2xl mx-auto leading-tight mb-4">Quando a tecnologia se torna replicável, <span class="text-brand-500">a humanidade se torna indispensável.</span></h2>
+<p class="text-sm sm:text-base text-graphite-600 max-w-2xl mx-auto mb-12 leading-relaxed">A tecnologia ampliou as possibilidades de interação, mas também tornou as experiências mais genéricas, impessoais e previsíveis. Através do Human Experience Design, busco resgatar o olhar humano como ponto de partida para criar relações mais relevantes entre pessoas, marcas e negócios.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto text-left mb-12">
+<!-- Col 1: Passado -->
+<div class="bg-graphite-50/50 rounded-2xl p-7 sm:p-8 flex flex-col justify-between" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div>
+<div class="text-center pb-5 border-b border-graphite-200/60">
+<span class="text-xs font-bold tracking-widest text-graphite-400 uppercase">O PASSADO</span>
+<h3 class="text-lg sm:text-xl font-bold text-graphite-900 mt-1">Era da Eficiência</h3>
+</div>
+<div class="py-6 space-y-3 max-w-[280px] mx-auto text-center">
+<div class="py-3 px-5 rounded-xl bg-white text-graphite-800 font-semibold text-sm md:text-base border border-graphite-200 shadow-2xs">Tecnologia</div>
+<div class="text-graphite-400 text-sm font-semibold">↓</div>
+<div class="py-3 px-5 rounded-xl bg-white text-graphite-800 font-semibold text-sm md:text-base border border-graphite-200 shadow-2xs">Processos</div>
+<div class="text-graphite-400 text-sm font-semibold">↓</div>
+<div class="py-3 px-5 rounded-xl bg-white text-graphite-800 font-semibold text-sm md:text-base border border-graphite-200 shadow-2xs">Automação</div>
+<div class="text-graphite-400 text-sm font-semibold">↓</div>
+<div class="py-3 px-5 rounded-xl bg-white text-graphite-800 font-semibold text-sm md:text-base border border-graphite-200 shadow-2xs">IA</div>
+<div class="text-graphite-400 text-sm font-semibold">↓</div>
+<div class="py-3 px-5 rounded-xl bg-white text-graphite-800 font-semibold text-sm md:text-base border border-graphite-200 shadow-2xs">Escala</div>
+<div class="text-graphite-400 text-sm font-semibold">↓</div>
+<div class="py-3.5 px-5 rounded-xl bg-graphite-700 text-white font-bold text-sm md:text-base tracking-wide shadow-xs">Comoditização</div>
+</div>
+</div>
+<p class="text-xs md:text-sm text-graphite-600 text-center border-t border-graphite-200/60 pt-4 leading-relaxed">A tecnologia elevou o padrão de execução. Como consequência técnica deixou de ser um diferencial competitivo.</p>
+</div>
+<!-- Col 2: Agora -->
+<div class="bg-brand-50/20 rounded-2xl p-7 sm:p-8 flex flex-col justify-between" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div>
+<div class="text-center pb-5 border-b border-brand-100">
+<span class="text-xs font-bold tracking-widest text-brand-500 uppercase">O AGORA</span>
+<h3 class="text-lg sm:text-xl font-bold text-graphite-900 mt-1">Era da Experiência</h3>
+</div>
+<div class="py-6 space-y-3 max-w-[280px] mx-auto text-center">
+<div class="py-3 px-5 rounded-xl bg-white text-brand-900 font-semibold text-sm md:text-base border border-brand-200/80 shadow-2xs">Humano</div>
+<div class="text-brand-300 text-sm font-semibold">↓</div>
+<div class="py-3 px-5 rounded-xl bg-white text-brand-900 font-semibold text-sm md:text-base border border-brand-200/80 shadow-2xs">Necessidades</div>
+<div class="text-brand-300 text-sm font-semibold">↓</div>
+<div class="py-3 px-5 rounded-xl bg-white text-brand-900 font-semibold text-sm md:text-base border border-brand-200/80 shadow-2xs">Contexto</div>
+<div class="text-brand-300 text-sm font-semibold">↓</div>
+<div class="py-3 px-5 rounded-xl bg-white text-brand-900 font-semibold text-sm md:text-base border border-brand-200/80 shadow-2xs">Significado</div>
+<div class="text-brand-300 text-sm font-semibold">↓</div>
+<div class="py-3 px-5 rounded-xl bg-white text-brand-900 font-semibold text-sm md:text-base border border-brand-200/80 shadow-2xs">Personalização</div>
+<div class="text-brand-300 text-sm font-semibold">↓</div>
+<div class="py-3.5 px-5 rounded-xl bg-brand-500 text-white font-bold text-sm md:text-base tracking-wide shadow-xs">Inovação</div>
+</div>
+</div>
+<p class="text-xs md:text-sm text-graphite-600 text-center border-t border-brand-100 pt-4 leading-relaxed">O próximo salto competitivo estará na capacidade de compreender pessoas e transformar esse entendimento em experiências de valor.</p>
+</div>
+</div>
+<div class="max-w-xl mx-auto pt-2 text-center">
+<p class="text-base sm:text-lg text-graphite-800 font-medium leading-relaxed">É dessa mudança de perspectiva que nasce uma <span class="text-brand-500 font-bold">nova forma de projetar produtos, serviços e relações</span> entre pessoas e negócios.</p>
+</div>
+</div>
+</section>
+<!-- END: ParadigmComparisonSection -->
+<!-- BEGIN: SystemicApproachSection -->
+<section class="py-16 md:py-20 bg-white border-t border-graphite-100" id="abordagem">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-12">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3">
+<span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">A Abordagem</span>
+</div>
+<h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 max-w-2xl mx-auto leading-tight">A experiência começa a ser construída muito antes do primeiro contato com o cliente.</h2>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+<div class="lg:col-span-6 space-y-4 text-left">
+<h3 class="text-2xl sm:text-3xl font-bold text-graphite-900">Visão sistêmica</h3>
+<div class="space-y-4 text-graphite-600 text-sm sm:text-base leading-relaxed">
+<p class="">Nenhuma experiência é construída de forma isolada. Ela resulta da interação entre pessoas, processos, operação, tecnologia, cultura e modelo de negócio.</p>
+<p class="">Na minha abordagem, conecto essas dimensões para garantir que atuem de forma integrada e sustentem, de maneira consistente, a experiência que a organização promete entregar.</p>
+<p class="">Quando esses elementos estão desconectados, surgem atritos e inconsistências. Quando estão alinhados, a experiência deixa de ser acidente e passa a gerar valor de forma consistente e escalável para clientes e organizações.</p>
+</div>
+</div>
+<div class="lg:col-span-6 flex justify-center">
+<div class="orbit-system-wrapper relative w-[380px] sm:w-[430px] h-[380px] sm:h-[430px] flex items-center justify-center select-none overflow-visible mx-auto">
+<svg class="absolute inset-0 w-full h-full pointer-events-none" fill="none" viewBox="0 0 430 430">
+<circle cx="215" cy="215" opacity="0.35" r="85" stroke="#8898B0" stroke-width="1"></circle>
+<circle cx="215" cy="215" opacity="0.3" r="145" stroke="#8898B0" stroke-width="1"></circle>
+<circle cx="215" cy="215" opacity="0.25" r="200" stroke="#8898B0" stroke-width="1"></circle>
+</svg>
+<!-- Central Element (Cliente) -->
+<div class="relative z-30 flex flex-col items-center justify-center cursor-pointer">
+<div class="center-client-badge w-14 h-14 rounded-full bg-[#D44D4D] flex items-center justify-center text-white shadow-md hover:scale-105 transition-transform duration-200">
+<svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"></path></svg>
+</div>
+<span class="text-xs sm:text-sm font-bold text-graphite-900 mt-1.5 tracking-tight">Cliente</span>
+</div>
+<!-- Órbita Interna -->
+<div class="orbit-track-inner">
+<div class="orbit-item-cw left-[50%] top-[0%]" style="transform: translate(-50%, -50%);">
+<div class="flex flex-col items-center group cursor-pointer hover:scale-110 transition-transform duration-200">
+<div class="w-9 h-9 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center mb-1 text-base">❤️</div>
+<div class="bg-white shadow-sm border border-slate-200 px-2.5 py-0.5 rounded-lg text-xs font-semibold text-graphite-800 whitespace-nowrap">Emoções</div>
+</div>
+</div>
+<div class="orbit-item-cw left-[93.3%] top-[75%]" style="transform: translate(-50%, -50%);">
+<div class="flex flex-col items-center group cursor-pointer hover:scale-110 transition-transform duration-200">
+<div class="w-9 h-9 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center mb-1 text-base">✨</div>
+<div class="bg-white shadow-sm border border-slate-200 px-2.5 py-0.5 rounded-lg text-xs font-semibold text-graphite-800 whitespace-nowrap">Marca</div>
+</div>
+</div>
+<div class="orbit-item-cw left-[6.7%] top-[75%]" style="transform: translate(-50%, -50%);">
+<div class="flex flex-col items-center group cursor-pointer hover:scale-110 transition-transform duration-200">
+<div class="w-9 h-9 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center mb-1 text-base">💬</div>
+<div class="bg-white shadow-sm border border-slate-200 px-2.5 py-0.5 rounded-lg text-xs font-semibold text-graphite-800 whitespace-nowrap">Comunicação</div>
+</div>
+</div>
+</div>
+<!-- Órbita Intermediária -->
+<div class="orbit-track-middle">
+<div class="orbit-item-middle-ccw left-[21.3%] top-[90.9%]" style="transform: translate(-50%, -50%);">
+<div class="flex flex-col items-center group cursor-pointer hover:scale-110 transition-transform duration-200">
+<div class="w-9 h-9 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center mb-1 text-base">⚙️</div>
+<div class="bg-white shadow-sm border border-slate-200 px-2.5 py-0.5 rounded-lg text-xs font-semibold text-graphite-800 whitespace-nowrap">Operação</div>
+</div>
+</div>
+<div class="orbit-item-middle-ccw left-[78.7%] top-[9.1%]" style="transform: translate(-50%, -50%);">
+<div class="flex flex-col items-center group cursor-pointer hover:scale-110 transition-transform duration-200">
+<div class="w-9 h-9 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center mb-1 text-base">📊</div>
+<div class="bg-white shadow-sm border border-slate-200 px-2.5 py-0.5 rounded-lg text-xs font-semibold text-graphite-800 whitespace-nowrap">Dados</div>
+</div>
+</div>
+</div>
+<!-- Órbita Externa -->
+<div class="orbit-track-outer">
+<div class="orbit-item-outer-cw left-[11.7%] top-[17.9%]" style="transform: translate(-50%, -50%);">
+<div class="flex flex-col items-center group cursor-pointer hover:scale-110 transition-transform duration-200">
+<div class="w-9 h-9 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center mb-1 text-base">📱</div>
+<div class="bg-white shadow-sm border border-slate-200 px-2.5 py-0.5 rounded-lg text-xs font-semibold text-graphite-800 whitespace-nowrap">Tecnologia</div>
+</div>
+</div>
+<div class="orbit-item-outer-cw left-[88.3%] top-[17.9%]" style="transform: translate(-50%, -50%);">
+<div class="flex flex-col items-center group cursor-pointer hover:scale-110 transition-transform duration-200">
+<div class="w-9 h-9 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center mb-1 text-base">🤝</div>
+<div class="bg-white shadow-sm border border-slate-200 px-2.5 py-0.5 rounded-lg text-xs font-semibold text-graphite-800 whitespace-nowrap">Atendimento</div>
+</div>
+</div>
+<div class="orbit-item-outer-cw left-[50%] top-[100%]" style="transform: translate(-50%, -50%);">
+<div class="flex flex-col items-center group cursor-pointer hover:scale-110 transition-transform duration-200">
+<div class="w-9 h-9 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center mb-1 text-base">🏛️</div>
+<div class="bg-white shadow-sm border border-slate-200 px-2.5 py-0.5 rounded-lg text-xs font-semibold text-graphite-800 whitespace-nowrap">Espaço Físico</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: SystemicApproachSection -->
+<!-- BEGIN: ChallengesTimelineSection -->
+<section class="py-16 md:py-20 bg-white border-t border-graphite-100" id="jornada">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-14">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3">
+<span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">Pontos de Contato</span>
+</div>
+<h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 max-w-2xl mx-auto leading-tight">Onde você está nessa jornada?</h2>
+<p class="text-sm sm:text-base text-graphite-600 max-w-xl mx-auto mt-2 leading-relaxed">A maioria dos negócios passa pelos mesmos estágios até desenhar experiências que realmente funcionam.</p>
+</div>
+<div class="relative max-w-3xl mx-auto">
+<div class="hidden md:block absolute top-4 bottom-6 left-1/2 -translate-x-1/2 w-px bg-[#8898B0]"></div>
+<div class="space-y-8">
+<!-- Step 1 -->
+<div class="relative flex flex-col md:flex-row items-center">
+<div class="w-full md:w-1/2 md:pr-8">
+<div class="bg-white p-6 rounded-xl text-left" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-500">CONSCIÊNCIA</span>
+<h3 class="text-base sm:text-lg font-bold text-graphite-900 mt-1.5 mb-2 leading-snug">Sabe que precisa melhorar a experiência do cliente, mas não sabe por onde começar?</h3>
+<p class="text-sm leading-relaxed text-graphite-600">Realizo um diagnóstico de maturidade atual de experiência e entrego um plano de ação com prioridades e prazos.</p>
+</div>
+</div>
+<div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-white border-2 border-brand-400 items-center justify-center text-brand-500 font-bold text-sm shadow-2xs">01</div>
+<div class="hidden md:block w-1/2"></div>
+</div>
+<!-- Step 2 -->
+<div class="relative flex flex-col md:flex-row items-center">
+<div class="hidden md:block w-1/2"></div>
+<div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-white border-2 border-brand-400 items-center justify-center text-brand-500 font-bold text-sm shadow-2xs">02</div>
+<div class="w-full md:w-1/2 md:pl-8">
+<div class="bg-white p-6 rounded-xl text-left" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-500">DECISÃO NO ESCURO</span>
+<h3 class="text-base sm:text-lg font-bold text-graphite-900 mt-1.5 mb-2 leading-snug">Decide no escuro, sem dado que sustente a escolha?</h3>
+<p class="text-sm leading-relaxed text-graphite-600">Conduzo pesquisas com quem realmente usa ou compra, e entrego um diagnóstico com as decisões priorizadas por impacto.</p>
+</div>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="relative flex flex-col md:flex-row items-center">
+<div class="w-full md:w-1/2 md:pr-8">
+<div class="bg-white p-6 rounded-xl text-left" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-500">SINTOMA OPERACIONAL</span>
+<h3 class="text-base sm:text-lg font-bold text-graphite-900 mt-1.5 mb-2 leading-snug">Seu processo não funciona nem para o seu time, nem para o cliente?</h3>
+<p class="text-sm leading-relaxed text-graphite-600">Mapeio a jornada atual, identifico onde a experiência trava, e entrego um redesenho de processos com plano de implementação.</p>
+</div>
+</div>
+<div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-white border-2 border-brand-400 items-center justify-center text-brand-500 font-bold text-sm shadow-2xs">03</div>
+<div class="hidden md:block w-1/2"></div>
+</div>
+<!-- Step 4 -->
+<div class="relative flex flex-col md:flex-row items-center">
+<div class="hidden md:block w-1/2"></div>
+<div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-white border-2 border-brand-400 items-center justify-center text-brand-500 font-bold text-sm shadow-2xs">04</div>
+<div class="w-full md:w-1/2 md:pl-8">
+<div class="bg-white p-6 rounded-xl text-left" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-500">CAUSA RAIZ</span>
+<h3 class="text-base sm:text-lg font-bold text-graphite-900 mt-1.5 mb-2 leading-snug">Sua equipe rema para um lado, e o cliente para outro?</h3>
+<p class="text-sm leading-relaxed text-graphite-600">Reúno dados de negócio e de comportamento real de quem compra, e devolvo um posicionamento estratégico com prioridades definidas.</p>
+</div>
+</div>
+</div>
+<!-- Step 5 -->
+<div class="relative flex flex-col md:flex-row items-center">
+<div class="w-full md:w-1/2 md:pr-8">
+<div class="bg-white p-6 rounded-xl text-left" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-500">PRONTO PARA INOVAR</span>
+<h3 class="text-base sm:text-lg font-bold text-graphite-900 mt-1.5 mb-2 leading-snug">Quer inovar, mas não sabe por onde começar?</h3>
+<p class="text-sm leading-relaxed text-graphite-600">A partir de uma compreensão profunda do cliente e do contexto do negócio, transformo evidências em insights, oportunidades e direcionamentos estratégicos para inovação.</p>
+</div>
+</div>
+<div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-white border-2 border-brand-400 items-center justify-center text-brand-500 font-bold text-sm shadow-2xs">05</div>
+<div class="hidden md:block w-1/2"></div>
+</div>
+<!-- Step 6 -->
+<div class="relative flex flex-col md:flex-row items-center">
+<div class="hidden md:block w-1/2"></div>
+<div class="hidden md:flex absolute left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-brand-500 border-2 border-white items-center justify-center text-white text-sm font-bold shadow-2xs">💬</div>
+<div class="w-full md:w-1/2 md:pl-8">
+<div class="bg-brand-50/30 p-6 rounded-xl text-left" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-600">DESAFIO SOB MEDIDA</span>
+<h3 class="text-base sm:text-lg font-bold text-graphite-900 mt-1.5 mb-2 leading-snug">Seu cenário não se encaixa em nenhum desses?</h3>
+<p class="text-sm text-graphite-600 leading-relaxed mb-4">Fique tranquilo(a)! Cada empreendimento possui uma dinâmica única. Vamos conversar sobre o momento específico do seu negócio e desenhar uma abordagem personalizada para o seu desafio.</p>
+<a class="inline-flex items-center px-5 py-2.5 rounded-lg bg-brand-500 text-white font-semibold text-xs sm:text-sm hover:bg-brand-600 shadow-2xs transition-colors" href="#contato">Entrar em contato</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: ChallengesTimelineSection -->
+<!-- BEGIN: MethodSection -->
+<section class="py-16 md:py-20 bg-white border-t border-graphite-100" id="metodo">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center"><div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3"><span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">Método</span></div><h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 max-w-2xl mx-auto leading-tight mb-3">Como transformamos desafios em experiências de valor.</h2><p class="text-sm sm:text-base text-graphite-600 max-w-2xl mx-auto mb-10 leading-relaxed">Cada projeto segue um processo estruturado para compreender a realidade do negócio, identificar oportunidades e transformar esse entendimento em soluções que geram valor para clientes, equipes e organização.</p><div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8" id="metodo-tabs-container"><button type="button" id="metodo-pill-0" class="metodo-tab-btn px-5 py-2.5 rounded-full text-xs md:text-sm font-semibold uppercase tracking-wider bg-graphite-100 text-graphite-600 hover:bg-graphite-200 transition-all duration-200 cursor-pointer" onclick="window.goToMetodoStep(0)">1. Entendimento</button><button type="button" id="metodo-pill-1" class="metodo-tab-btn px-5 py-2.5 rounded-full text-xs md:text-sm font-semibold uppercase tracking-wider bg-graphite-100 text-graphite-600 hover:bg-graphite-200 transition-all duration-200 cursor-pointer" onclick="window.goToMetodoStep(1)">2. Diagnóstico</button><button type="button" id="metodo-pill-2" class="metodo-tab-btn px-5 py-2.5 rounded-full text-xs md:text-sm font-semibold uppercase tracking-wider bg-graphite-100 text-graphite-600 hover:bg-graphite-200 transition-all duration-200 cursor-pointer" onclick="window.goToMetodoStep(2)">3. Desenvolvimento</button><button type="button" id="metodo-pill-3" class="metodo-tab-btn px-5 py-2.5 rounded-full text-xs md:text-sm font-semibold uppercase tracking-wider bg-graphite-100 text-graphite-600 hover:bg-graphite-200 transition-all duration-200 cursor-pointer" onclick="window.goToMetodoStep(3)">4. Implementação</button><button type="button" id="metodo-pill-4" class="metodo-tab-btn px-5 py-2.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider bg-brand-500 text-white shadow-2xs transition-all duration-200 cursor-pointer" onclick="window.goToMetodoStep(4)">5. Evolução</button></div><div class="max-w-xl mx-auto bg-white rounded-2xl p-7 sm:p-8 relative" style="border-width: medium; border-style: none; border-color: currentcolor; border-image: none; box-shadow: rgba(0, 0, 0, 0.06) 0px 12px 36px -6px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;"><div id="metodo-step-card-0" class="block"><div id="metodo-step-number" class="w-11 h-11 rounded-full bg-brand-50 text-brand-500 font-bold text-base flex items-center justify-center mx-auto mb-3.5 border border-brand-200 transition-all">5</div><h3 id="metodo-step-title" class="text-lg md:text-xl font-bold text-graphite-900 mb-2 transition-all">Evolução</h3><p id="metodo-step-desc" class="text-sm md:text-base text-graphite-600 leading-relaxed max-w-md mx-auto transition-all">Monitoramos resultados, métricas de satisfação (NPS, CSAT) e iteramos continuamente para garantir sustentabilidade e valor.</p></div><div id="metodo-step-card-1" class="hidden"><div class="w-11 h-11 rounded-full bg-brand-50 text-brand-500 font-bold text-base flex items-center justify-center mx-auto mb-3.5 border border-brand-200 transition-all">2</div><h3 class="text-lg md:text-xl font-bold text-graphite-900 mb-2 transition-all">Diagnóstico</h3><p class="text-sm md:text-base text-graphite-600 leading-relaxed max-w-md mx-auto transition-all">Mapeamos jornadas, pontos de contato e indicadores para identificar gargalos, fricções e oportunidades reais de melhoria.</p></div><div id="metodo-step-card-2" class="hidden"><div class="w-11 h-11 rounded-full bg-brand-50 text-brand-500 font-bold text-base flex items-center justify-center mx-auto mb-3.5 border border-brand-200 transition-all">3</div><h3 class="text-lg md:text-xl font-bold text-graphite-900 mb-2 transition-all">Desenvolvimento</h3><p class="text-sm md:text-base text-graphite-600 leading-relaxed max-w-md mx-auto transition-all">Co-criamos e desenhamos soluções, fluxos e protótipos focados nas reais necessidades dos clientes e viabilidade do negócio.</p></div><div id="metodo-step-card-3" class="hidden"><div class="w-11 h-11 rounded-full bg-brand-50 text-brand-500 font-bold text-base flex items-center justify-center mx-auto mb-3.5 border border-brand-200 transition-all">4</div><h3 class="text-lg md:text-xl font-bold text-graphite-900 mb-2 transition-all">Implementação</h3><p class="text-sm md:text-base text-graphite-600 leading-relaxed max-w-md mx-auto transition-all">Apoiamos a execução dos planos de ação, garantindo alinhamento das equipes e qualidade técnica em cada entrega.</p></div><div id="metodo-step-card-4" class="hidden"><div class="w-11 h-11 rounded-full bg-brand-50 text-brand-500 font-bold text-base flex items-center justify-center mx-auto mb-3.5 border border-brand-200 transition-all">5</div><h3 class="text-lg md:text-xl font-bold text-graphite-900 mb-2 transition-all">Evolução</h3><p class="text-sm md:text-base text-graphite-600 leading-relaxed max-w-md mx-auto transition-all">Monitoramos resultados, métricas de satisfação (NPS, CSAT) e iteramos continuamente para garantir sustentabilidade e valor.</p></div><div class="flex items-center justify-center gap-3 mt-6"><button type="button" id="metodo-prev-btn" aria-label="Passo anterior" class="w-8 h-8 rounded-full border border-graphite-300 text-graphite-600 flex items-center justify-center text-sm font-bold hover:bg-graphite-50 hover:border-brand-300 transition-colors cursor-pointer select-none" onclick="window.goToMetodoStep((window.currentMetodoStep - 1 + 5) % 5)">‹</button><button type="button" id="metodo-next-btn" aria-label="Próximo passo" class="w-8 h-8 rounded-full bg-brand-500 text-white flex items-center justify-center text-sm font-bold hover:bg-brand-600 transition-colors shadow-2xs cursor-pointer select-none" onclick="window.goToMetodoStep((window.currentMetodoStep + 1) % 5)">›</button></div></div></div>
+<script>
+(function() {
+  var steps = [
+    {
+      num: 1,
+      title: 'Entendimento',
+      desc: 'Conhecemos o negócio, seus objetivos, a operação e as pessoas envolvidas para compreender o contexto e identificar os fatores que influenciam a experiência.'
+    },
+    {
+      num: 2,
+      title: 'Diagnóstico',
+      desc: 'Mapeamos jornadas, pontos de contato e indicadores para identificar gargalos, fricções e oportunidades reais de melhoria.'
+    },
+    {
+      num: 3,
+      title: 'Desenvolvimento',
+      desc: 'Co-criamos e desenhamos soluções, fluxos e protótipos focados nas reais necessidades dos clientes e viabilidade do negócio.'
+    },
+    {
+      num: 4,
+      title: 'Implementação',
+      desc: 'Apoiamos a execução dos planos de ação, garantindo alinhamento das equipes e qualidade técnica em cada entrega.'
+    },
+    {
+      num: 5,
+      title: 'Evolução',
+      desc: 'Monitoramos resultados, métricas de satisfação (NPS, CSAT) e iteramos continuamente para garantir sustentabilidade e valor.'
+    }
+  ];
+
+  var currentStep = 0;
+
+  function updateUI(index) {
+    currentStep = (index + steps.length) % steps.length;
+    var data = steps[currentStep];
+
+    var numEl = document.getElementById('metodo-step-number');
+    var titleEl = document.getElementById('metodo-step-title');
+    var descEl = document.getElementById('metodo-step-desc');
+
+    if (numEl) numEl.textContent = data.num;
+    if (titleEl) titleEl.textContent = data.title;
+    if (descEl) descEl.textContent = data.desc;
+
+    for (var i = 0; i < steps.length; i++) {
+      var pill = document.getElementById('metodo-pill-' + i);
+      if (pill) {
+        if (i === currentStep) {
+          pill.className = 'metodo-tab-btn px-5 py-2.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider bg-brand-500 text-white shadow-2xs transition-all duration-200 cursor-pointer';
+        } else {
+          pill.className = 'metodo-tab-btn px-5 py-2.5 rounded-full text-xs md:text-sm font-semibold uppercase tracking-wider bg-graphite-100 text-graphite-600 hover:bg-graphite-200 transition-all duration-200 cursor-pointer';
+        }
+      }
+    }
+  }
+
+  window.setMetodoStep = function(index) {
+    updateUI(index);
+  };
+
+  window.changeMetodoStep = function(delta) {
+    updateUI(currentStep + delta);
+  };
+
+  var nextBtn = document.getElementById('metodo-next-btn');
+  if (nextBtn) {
+    nextBtn.onclick = function() {
+      window.changeMetodoStep(1);
+    };
+  }
+
+  var prevBtn = document.getElementById('metodo-prev-btn');
+  if (prevBtn) {
+    prevBtn.onclick = function() {
+      window.changeMetodoStep(-1);
+    };
+  }
+
+  for (var i = 0; i < steps.length; i++) {
+    (function(idx) {
+      var pill = document.getElementById('metodo-pill-' + idx);
+      if (pill) {
+        pill.onclick = function() {
+          window.setMetodoStep(idx);
+        };
+      }
+    })(i);
+  }
+})();
+</script><script id="metodo-sync-script" class="">
+window.currentMetodoStep = 0;
+window.goToMetodoStep = function(stepIndex) {
+  window.currentMetodoStep = (stepIndex + 5) % 5;
+  for (var i = 0; i < 5; i++) {
+    var pill = document.getElementById('metodo-pill-' + i);
+    var card = document.getElementById('metodo-step-card-' + i);
+    if (pill) {
+      if (i === window.currentMetodoStep) {
+        pill.className = 'metodo-tab-btn px-5 py-2.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider bg-brand-500 text-white shadow-2xs transition-all duration-200 cursor-pointer';
+      } else {
+        pill.className = 'metodo-tab-btn px-5 py-2.5 rounded-full text-xs md:text-sm font-semibold uppercase tracking-wider bg-graphite-100 text-graphite-600 hover:bg-graphite-200 transition-all duration-200 cursor-pointer';
+      }
+    }
+    if (card) {
+      if (i === window.currentMetodoStep) {
+        card.classList.remove('hidden');
+        card.classList.add('block');
+      } else {
+        card.classList.add('hidden');
+        card.classList.remove('block');
+      }
+    }
+  }
+};
+</script></section><section class="py-16 md:py-20 bg-white border-t border-graphite-100" id="solucoes">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3">
+<span class="relative flex h-2 w-2 mr-1.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D44D4D] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-[#D44D4D]"></span>
+</span>
+<span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">• SOLUÇÕES &amp; ENTREGAS</span>
+</div>
+<h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 max-w-3xl mx-auto leading-tight mb-3">
+Soluções desenhadas para transformar a experiência e <span class="text-brand-500">acelerar os resultados</span> do seu negócio.
+</h2>
+<p class="text-sm sm:text-base text-graphite-600 max-w-2xl mx-auto mb-12 leading-relaxed">
+Abordagens modulares e completas, combinando diagnóstico profundo, estratégia de serviços e implementação ágil.
+</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left mb-12">
+<div class="bg-white rounded-2xl p-7 flex flex-col justify-between group hover:shadow-card-hover hover:scale-[1.01] transition-all duration-300" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div>
+<div class="flex items-center justify-between mb-4">
+<div class="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center text-2xl text-brand-500">🧭</div>
+<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-50 text-brand-600 border border-brand-200/80">Diagnóstico &amp; Estratégia</span>
+</div>
+<h3 class="text-lg sm:text-xl font-bold text-graphite-900 mb-2.5 group-hover:text-brand-500 transition-colors">Diagnóstico &amp; Arquitetura de Experiência (Service Blueprint)</h3>
+<p class="text-sm text-graphite-600 leading-relaxed mb-6">Mapeamento completo de jornadas, fricções do usuário e pontos de contato operacionais com plano de priorização e quick wins.</p>
+<div class="space-y-2 border-t border-graphite-100 pt-4">
+<div class="flex items-center gap-2 text-xs font-medium text-graphite-700"><span class="text-brand-500 font-bold">✓</span> Mapeamento ponta a ponta da jornada do cliente</div>
+<div class="flex items-center gap-2 text-xs font-medium text-graphite-700"><span class="text-brand-500 font-bold">✓</span> Service Blueprint integrando frontstage e backstage operacional</div>
+<div class="flex items-center gap-2 text-xs font-medium text-graphite-700"><span class="text-brand-500 font-bold">✓</span> Matriz de esforço vs. impacto e backlog de oportunidades</div>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-graphite-100 flex items-center justify-between">
+<span class="text-xs text-graphite-500 font-medium">Ciclos de 4 a 6 semanas</span>
+<a class="text-xs font-bold text-brand-500 group-hover:gap-2.5 inline-flex items-center gap-1.5 transition-all" href="#contato">Saber mais →</a>
+</div>
+</div>
+<div class="bg-white rounded-2xl p-7 flex flex-col justify-between group hover:shadow-card-hover hover:scale-[1.01] transition-all duration-300" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div>
+<div class="flex items-center justify-between mb-4">
+<div class="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center text-2xl text-brand-500">💻</div>
+<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-50 text-brand-600 border border-brand-200/80">Produto &amp; Conversão</span>
+</div>
+<h3 class="text-lg sm:text-xl font-bold text-graphite-900 mb-2.5 group-hover:text-brand-500 transition-colors">Redesenho de Produtos &amp; Serviços Digitais</h3>
+<p class="text-sm text-graphite-600 leading-relaxed mb-6">Transformação de plataformas, apps e fluxos de autosserviço com foco em conversão, retenção e satisfação do cliente (CSAT/NPS).</p>
+<div class="space-y-2 border-t border-graphite-100 pt-4">
+<div class="flex items-center gap-2 text-xs font-medium text-graphite-700"><span class="text-brand-500 font-bold">✓</span> Redesenho de fluxos críticos de onboarding e checkout</div>
+<div class="flex items-center gap-2 text-xs font-medium text-graphite-700"><span class="text-brand-500 font-bold">✓</span> Wireframes navegáveis e protótipos de alta fidelidade</div>
+<div class="flex items-center gap-2 text-xs font-medium text-graphite-700"><span class="text-brand-500 font-bold">✓</span> Testes de usabilidade e plano de transição para desenvolvimento</div>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-graphite-100 flex items-center justify-between">
+<span class="text-xs text-graphite-500 font-medium">Solução contínua ou por marcos</span>
+<a class="text-xs font-bold text-brand-500 group-hover:gap-2.5 inline-flex items-center gap-1.5 transition-all" href="#contato">Saber mais →</a>
+</div>
+</div>
+<div class="bg-white rounded-2xl p-7 flex flex-col justify-between group hover:shadow-card-hover hover:scale-[1.01] transition-all duration-300" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div>
+<div class="flex items-center justify-between mb-4">
+<div class="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center text-2xl text-brand-500">⚙️</div>
+<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-50 text-brand-600 border border-brand-200/80">Cultura &amp; Governança</span>
+</div>
+<h3 class="text-lg sm:text-xl font-bold text-graphite-900 mb-2.5 group-hover:text-brand-500 transition-colors">Estruturação &amp; Governança de CX/Design</h3>
+<p class="text-sm text-graphite-600 leading-relaxed mb-6">Criação de métricas de experiência, rituais contínuos de pesquisa com usuários e integração entre tecnologia, produto e atendimento.</p>
+<div class="space-y-2 border-t border-graphite-100 pt-4">
+<div class="flex items-center gap-2 text-xs font-medium text-graphite-700"><span class="text-brand-500 font-bold">✓</span> Definição de framework de indicadores (NPS, CES, CSAT, Churn)</div>
+<div class="flex items-center gap-2 text-xs font-medium text-graphite-700"><span class="text-brand-500 font-bold">✓</span> Rituais de escuta contínua e feedback loop com clientes</div>
+<div class="flex items-center gap-2 text-xs font-medium text-graphite-700"><span class="text-brand-500 font-bold">✓</span> Capacitação e mentoria dos times de produto e atendimento</div>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-graphite-100 flex items-center justify-between">
+<span class="text-xs text-graphite-500 font-medium">Mentoria &amp; Estruturação</span>
+<a class="text-xs font-bold text-brand-500 group-hover:gap-2.5 inline-flex items-center gap-1.5 transition-all" href="#contato">Saber mais →</a>
+</div>
+</div>
+<div class="bg-white rounded-2xl p-7 flex flex-col justify-between group hover:shadow-card-hover hover:scale-[1.01] transition-all duration-300" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div>
+<div class="flex items-center justify-between mb-4">
+<div class="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center text-2xl text-brand-500">🚀</div>
+<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-50 text-brand-600 border border-brand-200/80">Inovação Ágil</span>
+</div>
+<h3 class="text-lg sm:text-xl font-bold text-graphite-900 mb-2.5 group-hover:text-brand-500 transition-colors">Sprints de Inovação &amp; Validação Rápida</h3>
+<p class="text-sm text-graphite-600 leading-relaxed mb-6">Imersão focada para conceber, prototipar e testar novas propostas de valor e modelos de atendimento antes do investimento em desenvolvimento.</p>
+<div class="space-y-2 border-t border-graphite-100 pt-4">
+<div class="flex items-center gap-2 text-xs font-medium text-graphite-700"><span class="text-brand-500 font-bold">✓</span> Sessões colaborativas de ideação e alinhamento executivo</div>
+<div class="flex items-center gap-2 text-xs font-medium text-graphite-700"><span class="text-brand-500 font-bold">✓</span> Prototipagem rápida de baixa a alta resolução</div>
+<div class="flex items-center gap-2 text-xs font-medium text-graphite-700"><span class="text-brand-500 font-bold">✓</span> Validação qualitativa com clientes reais em até 10 dias</div>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-graphite-100 flex items-center justify-between">
+<span class="text-xs text-graphite-500 font-medium">Sprints de 2 a 3 semanas</span>
+<a class="text-xs font-bold text-brand-500 group-hover:gap-2.5 inline-flex items-center gap-1.5 transition-all" href="#contato">Saber mais →</a>
+</div>
+</div>
+</div>
+<div class="max-w-4xl mx-auto bg-brand-50/30 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 text-left" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div>
+<h4 class="text-base sm:text-lg font-bold text-graphite-900 mb-1.5 leading-snug">Dúvidas sobre qual formato é o ideal para o seu momento?</h4>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Realizamos uma conversa inicial sem compromisso para entender seus desafios e definir a abordagem sob medida.</p>
+</div>
+<div class="flex-shrink-0 w-full md:w-auto text-center">
+<a class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-xs md:text-sm font-semibold text-white bg-brand-500 hover:bg-brand-600 shadow-sm transition-all duration-200 whitespace-nowrap" href="#contato">
+Agendar alinhamento de escopo
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- END: MethodSection -->
+<!-- BEGIN: IndustriesGridSection -->
+<section class="py-16 md:py-20 bg-white border-t border-graphite-100">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3">
+<span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">Segmentos de Atuação</span>
+</div>
+<h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 max-w-2xl mx-auto leading-tight mb-3">Segmentos e Mercados Atendidos</h2>
+<p class="text-sm sm:text-base text-graphite-600 max-w-2xl mx-auto mb-10 leading-relaxed">A metodologia de Human Experience Design aplicada em diferentes indústrias e ecossistemas complexos.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left mb-4">
+<!-- Segment 1 -->
+<div class="bg-white p-5 rounded-xl flex flex-col justify-start" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl mb-3 flex-shrink-0">🏛️</div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900 mb-1 leading-snug">Serviços Financeiros e Bancos</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Contas, investimentos e fintechs.</p>
+</div>
+<!-- Segment 2 -->
+<div class="bg-white p-5 rounded-xl flex flex-col justify-start" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl mb-3 flex-shrink-0">🛍️</div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900 mb-1 leading-snug">Varejo e E-commerce</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Compras físicas, online, omnichannel e logística.</p>
+</div>
+<!-- Segment 3 -->
+<div class="bg-white p-5 rounded-xl flex flex-col justify-start" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl mb-3 flex-shrink-0">✨</div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900 mb-1 leading-snug">Beleza e Estética</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Jornadas em salões, spas, clínicas de estética e cosméticos.</p>
+</div>
+<!-- Segment 4 -->
+<div class="bg-white p-5 rounded-xl flex flex-col justify-start" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl mb-3 flex-shrink-0">🐾</div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900 mb-1 leading-snug">Pet Services e Mercado Pet</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Experiência em clínicas veterinárias, hotéis para pets, banho e tosa.</p>
+</div>
+<!-- Segment 5 -->
+<div class="bg-white p-5 rounded-xl flex flex-col justify-start" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl mb-3 flex-shrink-0">🩺</div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900 mb-1 leading-snug">Saúde e Bem-estar</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Jornada do paciente em hospitais, clínicas, laboratórios e planos de saúde.</p>
+</div>
+<!-- Segment 6 -->
+<div class="bg-white p-5 rounded-xl flex flex-col justify-start" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl mb-3 flex-shrink-0">💻</div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900 mb-1 leading-snug">Tecnologia e SaaS</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Processos de onboarding, retenção e suporte ao usuário.</p>
+</div>
+<!-- Segment 7 -->
+<div class="bg-white p-5 rounded-xl flex flex-col justify-start" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl mb-3 flex-shrink-0">✈️</div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900 mb-1 leading-snug">Turismo e Hospitalidade</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Experiência em hotéis, pousadas e agências de viagem.</p>
+</div>
+<!-- Segment 8 -->
+<div class="bg-white p-5 rounded-xl flex flex-col justify-start" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl mb-3 flex-shrink-0">🚆</div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900 mb-1 leading-snug">Mobilidade e Transporte</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Fluxos de passageiros em transportes aéreos, ônibus e apps de carona.</p>
+</div>
+<!-- Segment 9 -->
+<div class="bg-white p-5 rounded-xl flex flex-col justify-start" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl mb-3 flex-shrink-0">🎪</div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900 mb-1 leading-snug">Entretenimento e Lazer</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Grandes eventos, festivais, cinemas e parques temáticos.</p>
+</div>
+<!-- Segment 10 -->
+<div class="bg-white p-5 rounded-xl flex flex-col justify-start" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl mb-3 flex-shrink-0">🎓</div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900 mb-1 leading-snug">Educação</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Experiência de alunos e professores no ensino presencial e EAD.</p>
+</div>
+<!-- Segment 11 -->
+<div class="bg-white p-5 rounded-xl flex flex-col justify-start" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl mb-3 flex-shrink-0">🏛️</div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900 mb-1 leading-snug">Governo e Setor Público</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Simplificação de serviços ao cidadão e emissão de documentos.</p>
+</div>
+<!-- Segment 12 -->
+<div class="bg-white p-5 rounded-xl flex flex-col justify-start" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl mb-3 flex-shrink-0">📡</div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900 mb-1 leading-snug">Telecomunicações e Seguros</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed">Contratação, suporte técnico e resolução de sinistros.</p>
+</div>
+</div>
+<div class="max-w-md mx-auto bg-white p-5 rounded-xl text-left flex items-center gap-4" style="border: none; box-shadow: rgba(0, 0, 0, 0.04) 0px 10px 28px -5px, rgba(0, 0, 0, 0.024) 0px 4px 12px -2px;">
+<div class="w-12 h-12 rounded-xl bg-graphite-100 flex items-center justify-center text-2xl flex-shrink-0">🤝</div>
+<div>
+<h3 class="text-sm sm:text-base font-bold text-graphite-900">ONGs e Terceiro Setor</h3>
+<p class="text-xs sm:text-sm text-graphite-600 leading-relaxed mt-0.5">Captação de recursos e engajamento de voluntários.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: IndustriesGridSection -->
+<!-- BEGIN: TestimonialsSection -->
+<!-- BEGIN: ClientsSection -->
+
+<!-- END: ClientsSection --><section class="py-16 md:py-20 bg-white border-t border-graphite-100" id="depoimentos">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3">
+<span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">Prova Social &amp; Reconhecimento</span>
+</div>
+<h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 max-w-2xl mx-auto leading-tight mb-3">Depoimentos reais de quem <span class="text-[#D44D4D]">construiu e transformou comigo</span></h2>
+<p class="text-sm sm:text-base text-graphite-600 max-w-2xl mx-auto mb-6 leading-relaxed">Recomendações e avaliações registradas publicamente no LinkedIn por líderes, pares e clientes ao longo de mais de 15 anos de trajetória em Design e Inovação.</p>
+<div class="flex flex-wrap items-center justify-center gap-3 text-xs md:text-sm text-graphite-600 mb-8">
+<span class="inline-flex items-center gap-1.5 bg-graphite-50 px-3.5 py-1.5 rounded-full border border-graphite-200 font-semibold"><span class="text-brand-500">★</span> 36 recomendações públicas</span>
+<span class="inline-flex items-center gap-1.5 bg-graphite-50 px-3.5 py-1.5 rounded-full border border-graphite-200 font-semibold"><span class="text-emerald-500 font-bold">✓</span> 100% de satisfação relatada</span>
+<span class="inline-flex items-center gap-1.5 bg-graphite-50 px-3.5 py-1.5 rounded-full border border-graphite-200 font-semibold">👥 Líderes, clientes &amp; pares</span>
+</div>
+<div class="relative mb-10">
+<div class="flex flex-row overflow-x-auto gap-6 pb-4 scroll-smooth snap-x snap-mandatory no-scrollbar" id="testimonials-track">
+<!-- Testimonial 1 -->
+<div class="testimonial-card flex-shrink-0 w-[85%] sm:w-[50%] lg:w-[31.5%] snap-start bg-white rounded-2xl p-6 flex flex-col justify-between hover:shadow-card-hover transition-all duration-200 text-left" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div class="space-y-3.5">
+<div>
+<div class="flex items-center gap-3 mb-1.5">
+<img alt="Isabela Valls" class="w-12 h-12 rounded-full object-cover ring-2 ring-brand-100 flex-shrink-0" src="img/imagem-22.webp">
+<div>
+<h3 class="text-sm font-bold text-graphite-900">Isabela Valls</h3>
+<p class="text-xs text-graphite-500 line-clamp-1">UX Researcher | Service Designer | User-centered Design</p>
+</div>
+</div>
+</div>
+<p class="text-sm text-graphite-600 leading-relaxed italic">“A Dani combina capacidade técnica e visão estratégica para lidar com questões complexas, simplificando problemas e transformando-os em oportunidades. Liderou um dos projetos mais desafiadores da minha carreira com clareza e excelência e, posteriormente, estruturou um departamento de Inovação do zero, equilibrando visão estratégica, autonomia e execução. Mais do que gestora, é uma mentora que desenvolve pessoas e eleva o nível dos times.”</p>
+</div>
+<div class="mt-5 pt-3 border-t border-graphite-100 flex items-center justify-between">
+<span class="text-amber-400 text-sm tracking-widest">★★★★★</span>
+<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-graphite-100 text-graphite-700 border border-graphite-200 uppercase tracking-wider">Liderança</span>
+</div>
+</div>
+<!-- Testimonial 2 -->
+<div class="testimonial-card flex-shrink-0 w-[85%] sm:w-[50%] lg:w-[31.5%] snap-start bg-white rounded-2xl p-6 flex flex-col justify-between hover:shadow-card-hover transition-all duration-200 text-left" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div class="space-y-3.5">
+<div>
+<div class="flex items-center gap-3 mb-1.5">
+<img alt="Fernanda Reynaud Duque-Estrada" class="w-12 h-12 rounded-full object-cover ring-2 ring-brand-100 flex-shrink-0" src="img/imagem-10.webp">
+<div>
+<h3 class="text-sm font-bold text-graphite-900">Fernanda Reynaud Duque-Estrada</h3>
+<p class="text-xs text-graphite-500 line-clamp-1">Marketing | Estratégia | Transformação e Aceleração de Negócios</p>
+</div>
+</div>
+</div>
+<p class="text-sm text-graphite-600 leading-relaxed italic">“A Dani possui conhecimento profundo em experiência de usuários, construção de produtos e soluções inovadoras. Como líder técnica, atua de forma proativa, trazendo visões claras e alinhadas aos desafios de negócio. Como gestora, inspira seus liderados e se tornou uma referência em qualidade de entrega.”</p>
+</div>
+<div class="mt-5 pt-3 border-t border-graphite-100 flex items-center justify-between">
+<span class="text-amber-400 text-sm tracking-widest">★★★★★</span>
+<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-graphite-100 text-graphite-700 border border-graphite-200 uppercase tracking-wider">Liderança</span>
+</div>
+</div>
+<!-- Testimonial 3 -->
+<div class="testimonial-card flex-shrink-0 w-[85%] sm:w-[50%] lg:w-[31.5%] snap-start bg-white rounded-2xl p-6 flex flex-col justify-between hover:shadow-card-hover transition-all duration-200 text-left" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div class="space-y-3.5">
+<div>
+<div class="flex items-center gap-3 mb-1.5">
+<img alt="Arthur Pedro" class="w-12 h-12 rounded-full object-cover ring-2 ring-brand-100 flex-shrink-0" src="img/imagem-30.webp">
+<div>
+<h3 class="text-sm font-bold text-graphite-900">Arthur Pedro</h3>
+<p class="text-xs text-graphite-500 line-clamp-1">Product Designer | Pesquisador</p>
+</div>
+</div>
+</div>
+<p class="text-sm text-graphite-600 leading-relaxed italic">“A Dani combina paixão pelo design, habilidade técnica excepcional e empatia na gestão. Com ela, aprendi a trabalhar estrategicamente de ponta a ponta em um produto. Sua régua de qualidade é alta, mas ela também fornece autonomia, ambiente e recursos para que o time consiga superar expectativas.”</p>
+</div>
+<div class="mt-5 pt-3 border-t border-graphite-100 flex items-center justify-between">
+<span class="text-amber-400 text-sm tracking-widest">★★★★★</span>
+<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-graphite-100 text-graphite-700 border border-graphite-200 uppercase tracking-wider">Liderança</span>
+</div>
+</div>
+<!-- Testimonial 4 -->
+<div class="testimonial-card flex-shrink-0 w-[85%] sm:w-[50%] lg:w-[31.5%] snap-start bg-white rounded-2xl p-6 flex flex-col justify-between hover:shadow-card-hover transition-all duration-200 text-left" style="border: none; box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+<div class="space-y-3.5">
+<div>
+<div class="flex items-center gap-3 mb-1.5">
+<img alt="Jorge Rocha de Souza" class="w-12 h-12 rounded-full object-cover ring-2 ring-brand-100 flex-shrink-0" src="img/imagem-12.webp">
+<div>
+<h3 class="text-sm font-bold text-graphite-900">Jorge Rocha de Souza</h3>
+<p class="text-xs text-graphite-500 line-clamp-1">Founder</p>
+</div>
+</div>
+</div>
+<p class="text-sm text-graphite-600 leading-relaxed italic">“A dedicação, competência e profissionalismo da Dani fazem diferença em qualquer time. É comprometida com resultados, tem excelente comunicação, é colaborativa e está sempre disposta a aprender e contribuir. Uma profissional completa, que entrega com qualidade e agrega valor por onde passa.”</p>
+</div>
+<div class="mt-5 pt-3 border-t border-graphite-100 flex items-center justify-between">
+<span class="text-amber-400 text-sm tracking-widest">★★★★★</span>
+<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-graphite-100 text-graphite-700 border border-graphite-200 uppercase tracking-wider">Cliente</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-center gap-3 mt-4">
+<button aria-label="Depoimentos anteriores" class="w-9 h-9 rounded-full border border-graphite-300 text-graphite-600 flex items-center justify-center text-sm font-bold hover:bg-graphite-50 hover:border-brand-300 transition-colors shadow-2xs" id="carousel-prev-btn" onclick="document.getElementById('testimonials-track').scrollBy({left: -360, behavior: 'smooth'})">‹</button>
+<div class="flex items-center gap-1.5 px-2" id="carousel-dots">
+<span class="w-2.5 h-2.5 rounded-full bg-brand-500 transition-all"></span>
+<span class="w-2 h-2 rounded-full bg-graphite-300 hover:bg-graphite-400 transition-all cursor-pointer"></span>
+<span class="w-2 h-2 rounded-full bg-graphite-300 hover:bg-graphite-400 transition-all cursor-pointer"></span>
+<span class="w-2 h-2 rounded-full bg-graphite-300 hover:bg-graphite-400 transition-all cursor-pointer"></span>
+</div>
+<button aria-label="Próximos depoimentos" class="w-9 h-9 rounded-full bg-brand-500 text-white flex items-center justify-center text-sm font-bold hover:bg-brand-600 transition-colors shadow-2xs" id="carousel-next-btn" onclick="document.getElementById('testimonials-track').scrollBy({left: 360, behavior: 'smooth'})">›</button>
+</div>
+</div>
+<div class="max-w-5xl mx-auto bg-white rounded-2xl md:rounded-[24px] p-6 sm:p-8 md:px-10 md:py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-left" style="border: none; box-shadow: rgba(0, 0, 0, 0.06) 0px 12px 36px -6px, rgba(0, 0, 0, 0.03) 0px 4px 16px -2px;">
+  <div class="max-w-2xl">
+    <div class="flex items-center gap-3 mb-2.5">
+      <img src="img/imagem-17.webp" alt="Selo de verificação" class="w-7 h-7 object-contain inline-block flex-shrink-0">
+      <h3 class="text-xl md:text-2xl font-bold text-graphite-900 tracking-tight">
+        Veja todas as 36 recomendações na íntegra
+      </h3>
+    </div>
+    <p class="text-sm md:text-base text-graphite-500 leading-relaxed">
+      Todas as avaliações acima são verificáveis e foram registradas por profissionais e clientes diretamente no perfil da Dani Moscatelli no LinkedIn.
+    </p>
+  </div>
+  <div class="w-full md:w-auto flex justify-start md:justify-end flex-shrink-0">
+    <a href="https://www.linkedin.com/in/danimoscatelli/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-full bg-[#3B71A6] hover:bg-[#31618F] text-white font-semibold text-sm md:text-base shadow-md transition-all duration-200 whitespace-nowrap group hover:scale-[1.02]">
+      <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
+      </svg>
+      <span class="">Acessar Recomendações no LinkedIn</span>
+    </a>
+  </div>
+</div>
+</div>
+</section>
+<!-- END: TestimonialsSection -->
+<!-- BEGIN: InsightsArticlesSection (BENTO GRID) -->
+<section class="py-16 md:py-20 bg-white border-t border-graphite-100" id="artigos"><div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+  <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3">
+    <span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">INSIGHTS &amp; ARTIGOS</span>
+  </div>
+  <h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 max-w-3xl mx-auto leading-tight mb-3">
+    Pensamentos e visões sobre&nbsp;<div><span class="text-brand-500">experiência&nbsp;</span><span style="color: rgb(212, 77, 77); font-size: 2.25rem; letter-spacing: -0.025em;" class="">e estratégia</span></div></h2>
+  <p class="text-sm sm:text-base text-graphite-600 max-w-2xl mx-auto mb-12 leading-relaxed">
+    Reflexões sobre design centrado no humano, arquitetura de ecossistemas e a transformação de produtos em relações duradouras.
+  </p>
+
+  <!-- Bento Grid Container -->
+  <div class="relative max-w-5xl mx-auto text-left"><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><!-- Featured Top Article (Full Width) -->
+<article class="md:col-span-3 relative overflow-hidden rounded-3xl bg-white flex flex-col md:flex-row transition-all duration-300 group hover:shadow-card-hover mb-2" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+  <div class="md:w-1/2 relative overflow-hidden bg-graphite-100 min-h-[240px] md:min-h-[340px]">
+    <img src="img/imagem-15.webp" alt="Design de Serviços na prática" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+    <span class="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-sm text-xs font-bold text-brand-600 shadow-sm uppercase tracking-wider">
+      <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>Mais recente
+    </span>
+  </div>
+  <div class="p-6 sm:p-8 md:w-1/2 flex flex-col justify-between">
+    <div>
+      <div class="flex items-center gap-2 text-xs font-medium text-graphite-400 mb-3">
+        <span class="text-brand-500 font-bold tracking-wide uppercase text-[11px]">BUSINESS DESIGN</span>
+        <span class="">•</span>
+        <span class="">01/09/2026</span>
+      </div>
+      <h3 class="text-xl md:text-2xl font-bold text-graphite-900 group-hover:text-brand-500 transition-colors leading-snug mb-3">
+        <a href="https://pt.linkedin.com/pulse/design-de-servi%C3%A7os-na-pr%C3%A1tica-o-prefeito-que-decidiu-pela-moscatelli-a2tqf?trk=public_post_feed-article-content" target="_blank" rel="noopener noreferrer" class="">O problema não é o discurso comercial. É a arquitetura do serviço.</a>
+      </h3>
+      <p class="text-sm md:text-base text-graphite-600 leading-relaxed line-clamp-3 mb-6">Quando o cliente compra transformação, não existe um produto pronto para provar seu valor antes da contratação. O desafio, então, não é vender melhor, é desenhar uma experiência que torne o valor e a confiança visíveis ao longo da jornada.</p>
+    </div>
+    <div class="pt-4 border-t border-graphite-100/80 flex items-center justify-between">
+      <a href="https://pt.linkedin.com/pulse/design-de-servi%C3%A7os-na-pr%C3%A1tica-o-prefeito-que-decidiu-pela-moscatelli-a2tqf?trk=public_post_feed-article-content" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-bold text-brand-500 group-hover:gap-3 transition-all">
+        Ler artigo
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+      </a>
+      <span class="text-xs text-graphite-400 font-medium">10–12 min de leitura</span>
+    </div>
+  </div>
+</article>
+
+<!-- 2-Column Grid for Secondary Cards with Horizontal Layout -->
+<div class="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+  <!-- Card 1: AI & Product -->
+  <article class="flex flex-col sm:flex-row items-stretch overflow-hidden rounded-2xl bg-white transition-all duration-300 group hover:shadow-card-hover" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+    <div class="sm:w-2/5 w-full h-48 sm:h-auto relative overflow-hidden flex-shrink-0 bg-graphite-100"><img src="img/imagem-36.webp" alt="Mulher programando e analisando código em estação de trabalho" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"></div>
+    <div class="sm:w-3/5 p-5 sm:p-6 flex flex-col justify-between flex-grow">
+      <div>
+        <div class="flex items-center gap-2 text-xs font-medium text-graphite-400 mb-2">
+          <span class="text-brand-500 font-bold tracking-wide uppercase text-[11px]">AI &amp; PRODUCT</span>
+          <span class="">•</span>
+          <span class="">12/05/26</span>
+        </div>
+        <h3 class="text-base font-bold text-graphite-900 group-hover:text-brand-500 transition-colors leading-snug mb-2">
+          <a href="#" class="">Em 20 horas construí um produto digital do zero com IA. Aqui está o que deu errado.</a>
+        </h3>
+        <p class="text-xs sm:text-sm text-graphite-600 line-clamp-3 mb-4 leading-relaxed">A velocidade impressiona mas <br>a complexidade vem depois <br>e a conta também.</p>
+      </div>
+      <div class="pt-3 border-t border-graphite-100/80 flex items-center justify-between mt-auto">
+        <a href="#" class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-500 group-hover:gap-2.5 transition-all">
+          Ler artigo
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        </a>
+        <span class="text-[11px] text-graphite-400 font-medium">6 -7 min de leitura</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- Card 2: Journey & Metrics -->
+  <article class="flex flex-col sm:flex-row items-stretch overflow-hidden rounded-2xl bg-white transition-all duration-300 group hover:shadow-card-hover" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+    <div class="sm:w-2/5 w-full h-48 sm:h-auto relative overflow-hidden flex-shrink-0 bg-graphite-100">
+      <img src="img/imagem-32.webp" alt="Jornada &amp; Métricas" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+    </div>
+    <div class="sm:w-3/5 p-5 sm:p-6 flex flex-col justify-between flex-grow">
+      <div>
+        <div class="flex items-center gap-2 text-xs font-medium text-graphite-400 mb-2">
+          <span class="text-brand-500 font-bold tracking-wide uppercase text-[11px]">Design de serviços</span>
+          <span class="">•</span>
+          <span class="">03/07/26</span>
+        </div>
+        <h3 class="text-base font-bold text-graphite-900 group-hover:text-brand-500 transition-colors leading-snug mb-2">
+          <a href="#" class="">Design de Serviços na prática: o prefeito que decidiu enxergar a cidade pela perspectiva de um morador de rua</a>
+        </h3>
+        <p class="text-xs sm:text-sm text-graphite-600 leading-relaxed mb-4 line-clamp-3">Um experimento controverso revelou por que serviços devem partir da realidade de quem os utiliza.</p>
+      </div>
+      <div class="pt-3 border-t border-graphite-100/80 flex items-center justify-between mt-auto">
+        <a href="#" class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-500 group-hover:gap-2.5 transition-all">
+          Ler artigo
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        </a>
+        <span class="text-[11px] text-graphite-400 font-medium">8 min de leitura</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- Card 3: Service Architecture -->
+  <article class="flex flex-col sm:flex-row items-stretch overflow-hidden rounded-2xl bg-white transition-all duration-300 group hover:shadow-card-hover" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;">
+    <div class="sm:w-2/5 w-full h-48 sm:h-auto relative overflow-hidden flex-shrink-0 bg-graphite-100">
+      <img src="img/imagem-35.webp" alt="Mulher frustrada segurando o celular no sofá ilustrando experiência mal projetada" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+    </div>
+    <div class="sm:w-3/5 p-5 sm:p-6 flex flex-col justify-between flex-grow">
+      <div>
+        <div class="flex items-center gap-2 text-xs font-medium text-graphite-400 mb-2">
+          <span class="text-brand-500 font-bold tracking-wide uppercase text-[11px]">Arquitetura de Serviços</span>
+          <span class="">•</span>
+          <span class="">16/12/25</span>
+        </div>
+        <h3 class="text-base font-bold text-graphite-900 group-hover:text-brand-500 transition-colors leading-snug mb-2">
+          <a href="#" class="">Quando o Usuário Desiste Antes de Começar: O Custo Real de uma Experiência Mal Projetada</a>
+        </h3>
+        <p class="text-xs sm:text-sm text-graphite-600 leading-relaxed line-clamp-2 mb-4">Um fluxo ruim afasta usuários antes mesmo da primeira entrega.&nbsp;&nbsp;</p>
+      </div>
+      <div class="pt-3 border-t border-graphite-100/80 flex items-center justify-between mt-auto">
+        <a href="#" class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-500 group-hover:gap-2.5 transition-all">
+          Ler artigo
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        </a>
+        <span class="text-[11px] text-graphite-400 font-medium">7 min de leitura</span>
+      </div>
+    </div>
+  </article>
+<article class="flex flex-col sm:flex-row items-stretch overflow-hidden rounded-2xl bg-white transition-all duration-300 group hover:shadow-card-hover" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;"><div class="sm:w-2/5 w-full h-48 sm:h-auto relative overflow-hidden flex-shrink-0 bg-graphite-100"><img src="img/imagem-34.webp" alt="Startup Weekend AI Curitiba" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"></div><div class="sm:w-3/5 p-5 sm:p-6 flex flex-col justify-between flex-grow"><div><div class="flex items-center gap-2 text-xs font-medium text-graphite-400 mb-2"><span class="text-brand-500 font-bold tracking-wide uppercase text-[11px]">INOVAÇÃO &amp; STARTUPS</span><span class="">•</span><span class="">18/09/26</span></div><h3 class="text-base font-bold text-graphite-900 group-hover:text-brand-500 transition-colors leading-snug mb-2"><a href="#" class="">Startup Weekend AI Curitiba: Sentindo na Pele os Desafios que Meus Clientes Enfrentam</a></h3><p class="text-xs sm:text-sm text-graphite-600 leading-relaxed line-clamp-2 mb-4">Validar uma ideia é só o começo. Transformá-la em negócio exige outras competências. Foi isso que vivi na prática.</p></div><div class="pt-3 border-t border-graphite-100/80 flex items-center justify-between mt-auto"><a href="#" class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-500 group-hover:gap-2.5 transition-all">Ler artigo<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a><span class="text-[11px] text-graphite-400 font-medium">6–7 min de leitura</span></div></div></article></div></div></div>
+</div></section><section class="py-16 md:py-20 bg-white border-t border-graphite-100" id="empresas-atendidas">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3">
+      <span class="relative flex h-2 w-2 mr-1.5">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D44D4D] opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-[#D44D4D]"></span>
+      </span>
+      <span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">• EMPRESAS ATENDIDAS</span>
+    </div>
+    <h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 max-w-2xl mx-auto leading-tight mb-3">
+      Empresas Atendidas
+    </h2>
+    <p class="text-sm sm:text-base text-graphite-600 max-w-2xl mx-auto mb-12 leading-relaxed">
+      Projetos, diagnósticos e ecossistemas construídos em parceria com grandes marcas e lideranças de mercado para gerar impacto sustentável.
+    </p>
+    <div class="w-full max-w-6xl mx-auto overflow-hidden relative py-8 px-4 bg-transparent group" style="mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%); min-height: 220px;">
+      <style>
+@keyframes clientMarqueeScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.client-marquee-track { display: flex; width: max-content; animation: clientMarqueeScroll 48s linear infinite; }
+.client-marquee-track:hover { animation-play-state: paused; }
+.client-logo-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0 12px;
+  flex-shrink: 0;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.client-logo-item:hover {
+  transform: scale(1.05);
+}
+.client-logo-img {
+  height: 150px;
+  max-height: 150px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  transition: opacity 0.2s ease;
+  filter: brightness(0) saturate(100%) invert(24%) sepia(18%) saturate(967%) hue-rotate(181deg) brightness(96%) contrast(89%);
+}
+      </style>
+      <div class="client-marquee-track flex items-center gap-10">
+        <div class="flex items-center gap-10 flex-shrink-0">
+          <div class="client-logo-item"><img src="img/imagem-16.webp" alt="Wizard by Pearson" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-08.webp" alt="Stefanini Group" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-21.webp" alt="CiRculaRe powered by Circular Brain" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-29.webp" alt="Unicamp" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-04.webp" alt="Safe Go" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-25.webp" alt="Sisand" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-18.webp" alt="Simepar" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-31.webp" alt="Selecty" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-27.webp" alt="MadeiraMadeira" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-33.webp" alt="Ministério da Educação" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-13.webp" alt="Ministério do Desenvolvimento, Indústria e Comércio Exterior" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-03.webp" alt="IBPT" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-01.webp" alt="Gazeta do Povo" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-05.webp" alt="Fujifilm" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-23.webp" alt="Sistema Fiep" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-19.webp" alt="Farmácias APP" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-02.webp" alt="CGU - Controladoria Geral da União" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-07.webp" alt="Prefeitura de Blumenau" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-11.webp" alt="Atacadão" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-24.webp" alt="AkzoNobel" class="client-logo-img"></div>
+          <div class="client-logo-item"><img src="img/imagem-06.webp" alt="4VANTS" class="client-logo-img"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section><!-- Placeholder moved in next step -->
+<!-- END: InsightsArticlesSection -->
+<!-- BEGIN: FinalCTASection -->
+<section class="py-16 md:py-20 bg-white border-t border-graphite-100" id="contato">
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="border: none; border-radius: 28px; padding: 48px 32px; box-shadow: rgba(0, 0, 0, 0.06) 0px 16px 40px -8px, rgba(0, 0, 0, 0.024) 0px 4px 16px -2px; background: rgb(255, 255, 255);">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3">
+<span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">Vamos Conversar?</span>
+</div>
+<h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 mb-3 leading-tight">
+        Pronto para transformar a experiência do seu negócio?
+      </h2>
+<p class="text-sm sm:text-base text-graphite-600 max-w-xl mx-auto mb-8 leading-relaxed">
+        Agende uma sessão de diagnóstico inicial para avaliarmos o momento dos seus produtos e serviços e identificarmos as alavancas de maior impacto.
+      </p>
+<!-- CTA Buttons -->
+<div class="flex flex-wrap items-center justify-center gap-3.5">
+<a class="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl text-sm md:text-base font-semibold text-white bg-brand-500 hover:bg-brand-600 shadow-sm transition-all" href="#">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          Agendar conversa de diagnóstico
+        </a>
+<a class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm md:text-base font-semibold text-graphite-700 bg-white border border-graphite-300 hover:border-graphite-400 hover:bg-graphite-50 transition-all" href="https://www.linkedin.com/in/danimoscatelli/" rel="noopener noreferrer" target="_blank">
+          Conectar no LinkedIn
+        </a>
+</div>
+</div>
+</section>
+<!-- END: FinalCTASection -->
+</div>
+</div>
+<!-- END: GiantSurfaceCardWrapper -->
+</main>
+<!-- BEGIN: Footer -->
+<footer class="bg-white border-t border-graphite-200/80 py-8 relative z-30">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<img alt="Dani Moscatelli" class="h-6 w-auto object-contain opacity-90" src="img/imagem-37.webp">
+<span class="text-xs text-graphite-400">© 2026 Dani Moscatelli · Experience Design Studio</span>
+</div>
+<div class="flex items-center gap-6 text-xs text-graphite-500 font-medium">
+<a class="hover:text-brand-500 transition-colors" href="#">Case Profiles</a>
+<a class="hover:text-brand-500 transition-colors" href="#">Design Strategy</a>
+<a class="hover:text-brand-500 transition-colors" href="#artigos">Insights</a>
+<a class="hover:text-brand-500 transition-colors" href="https://www.linkedin.com/in/danimoscatelli/" rel="noopener noreferrer" target="_blank">LinkedIn</a>
+<a class="hover:text-brand-500 transition-colors" href="#">Email</a>
+</div>
+</div>
+</footer>
+<!-- END: Footer -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>
