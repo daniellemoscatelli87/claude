@@ -275,17 +275,27 @@
   if (!fluxo) return;
   var cards = Array.prototype.slice.call(fluxo.querySelectorAll('.plat-col'));
   var pontos = Array.prototype.slice.call(document.querySelectorAll('.plat-ponto'));
-  var centro = 1;
+  // A história começa no Desafio (etapa 1).
+  var centro = 0;
+  var navs = Array.prototype.slice.call(document.querySelectorAll('.plat-nav'));
+  // Ordem da história: o que já passou fica à esquerda e o que vem depois à direita (sem voltar ao começo).
   function mostrar(i) {
     var n = cards.length;
-    centro = (i + n) % n;
+    centro = Math.max(0, Math.min(n - 1, i));
     cards.forEach(function (c, k) {
-      var pos = k === centro ? 'centro' : (k === (centro + n - 1) % n ? 'esq' : 'dir');
+      var pos = k === centro ? 'centro' : k === centro - 1 ? 'esq' : k === centro + 1 ? 'dir' : (k < centro ? 'fora-esq' : 'fora-dir');
       c.setAttribute('data-pos', pos);
     });
-    pontos.forEach(function (p, k) { if (k === centro) p.setAttribute('aria-current', 'true'); else p.removeAttribute('aria-current'); });
+    pontos.forEach(function (p, k) {
+      if (k === centro) p.setAttribute('aria-current', 'step'); else p.removeAttribute('aria-current');
+      p.classList.toggle('feita', k < centro);
+    });
+    navs.forEach(function (b) {
+      var d = Number(b.getAttribute('data-dir'));
+      b.disabled = (d < 0 && centro === 0) || (d > 0 && centro === n - 1);
+    });
   }
-  document.querySelectorAll('.plat-nav').forEach(function (b) {
+  navs.forEach(function (b) {
     b.addEventListener('click', function () { mostrar(centro + Number(b.getAttribute('data-dir'))); });
   });
   pontos.forEach(function (p) { p.addEventListener('click', function () { mostrar(Number(p.getAttribute('data-ir'))); }); });
