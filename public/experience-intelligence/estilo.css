@@ -700,8 +700,6 @@ button.btn { border: 0; cursor: pointer; }
 .apl-op[aria-pressed="true"] { background: var(--crimson-50); border-color: var(--crimson-200); color: var(--primary); font-weight: 600; }
 .apl-op[aria-pressed="true"] .ico { color: var(--primary); }
 .apl-op:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
-.apl-sep { color: var(--graphite-400); font-size: 26px; display: flex; transform: rotate(90deg); }
-.apl-sep:first-of-type { transform: none; }
 .apl-caso { animation: ds-surgir .35s ease-out; }
 .apl-caso-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .apl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
@@ -715,7 +713,6 @@ button.btn { border: 0; cursor: pointer; }
 @media (min-width: 1024px) {
   .apl-cards { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1.05fr); align-items: stretch; gap: 14px; }
   .apl-card { max-width: none; }
-  .apl-sep, .apl-sep:first-of-type { transform: none; align-self: center; }
 }
 /* Animações da seção (só com JavaScript; desligadas com movimento reduzido) */
 .aplicacoes.anim-pronto .apl-intro > *, .aplicacoes.anim-pronto .apl-card, .aplicacoes.anim-pronto .apl-sep { opacity: 0; }
@@ -805,4 +802,15 @@ button.btn { border: 0; cursor: pointer; }
 .apl-cab p { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
 .apl-exemplo .apl-cab { align-items: center; margin-bottom: 14px; }
 /* Computador: cabeçalhos dos três cards com a mesma altura, para as listas começarem alinhadas */
-@media (min-width: 1024px) { .apl-cab { min-height: 128px; } .apl-exemplo .apl-cab { min-height: 0; } }
+@media (min-width: 1024px) { .apl-cab { min-height: 128px; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .apl-cab { min-height: 172px; } .apl-exemplo .apl-cab { min-height: 0; } }
+/* "Para quem" como um assistente em passos: selo do passo em cada card e conectores entre eles */
+.apl-card { position: relative; }
+.apl-passo { align-self: flex-start; margin: 0 0 14px; padding: 4px 10px; border-radius: 9999px; background: var(--crimson-50); color: var(--crimson-500); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.apl-sep { position: relative; display: flex; align-items: center; justify-content: center; width: 2px; height: 40px; background: repeating-linear-gradient(180deg, var(--crimson-200) 0 6px, transparent 6px 12px); }
+.apl-sep-bola { position: absolute; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); font-size: 22px; box-shadow: 0 0 0 6px var(--crimson-50), var(--shadow-md); transform: rotate(90deg); }
+@media (min-width: 1024px) {
+  .apl-sep { align-self: center; width: 40px; height: 2px; background: repeating-linear-gradient(90deg, var(--crimson-200) 0 6px, transparent 6px 12px); }
+  .apl-sep-bola { transform: none; }
+}
+.aplicacoes .apl-cards.visivel .apl-sep-bola { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) .55s both; }
