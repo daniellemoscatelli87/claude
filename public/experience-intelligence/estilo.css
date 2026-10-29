@@ -677,7 +677,9 @@ button.btn { border: 0; cursor: pointer; }
 .apl-grid { display: grid; gap: 40px; align-items: center; }
 .apl-intro { text-align: center; max-width: 44rem; margin: 0 auto; }
 .apl-intro h2 { margin: 0 0 24px; font-size: clamp(1.75rem, 2.6vw, 2.625rem); line-height: 1.12; letter-spacing: -0.03em; font-weight: 800; color: var(--foreground); text-wrap: balance; }
-.apl-intro .lead { margin-left: auto; margin-right: auto; }
+.apl-intro h2 .destaque { color: var(--primary); }
+.apl-intro .lead { margin-left: auto; margin-right: auto; text-wrap: balance; }
+.apl-cards { max-width: 1200px; width: 100%; margin: 8px auto 0; }
 .apl-cards { display: grid; gap: 12px; justify-items: center; }
 .apl-card { width: 100%; max-width: 520px; display: flex; flex-direction: column; padding: 24px 20px; border-radius: 24px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
 .apl-ico { width: 48px; height: 48px; margin-bottom: 14px; border-radius: 14px; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; }
@@ -710,12 +712,6 @@ button.btn { border: 0; cursor: pointer; }
   .apl-cards { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1.05fr); align-items: stretch; gap: 14px; }
   .apl-card { max-width: none; }
   .apl-sep, .apl-sep:first-of-type { transform: none; align-self: center; }
-}
-@media (min-width: 1280px) {
-  .apl-grid { grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr); gap: 40px; }
-  .apl-intro { text-align: left; margin: 0; }
-  .apl-intro .lead { margin-left: 0; }
-  .apl-intro .cf-traco { margin-left: 0; }
 }
 /* Animações da seção (só com JavaScript; desligadas com movimento reduzido) */
 .aplicacoes.anim-pronto .apl-intro > *, .aplicacoes.anim-pronto .apl-card, .aplicacoes.anim-pronto .apl-sep { opacity: 0; }
