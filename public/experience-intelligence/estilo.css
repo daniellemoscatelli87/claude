@@ -748,7 +748,7 @@ button.btn { border: 0; cursor: pointer; }
 .plat-col:not([data-pos="centro"]) .plat-foto { filter: grayscale(1) sepia(.35) hue-rotate(180deg) saturate(1.5); opacity: .3; }
 /* Texto dos cards que não estão no centro em cinza médio/claro */
 .plat-col h3, .plat-resumo { transition: color .6s ease; }
-.plat-col:not([data-pos="centro"]) h3, .plat-col:not([data-pos="centro"]) .plat-resumo { color: var(--graphite-400); }
+.plat-col:not([data-pos="centro"]) h3, .plat-col:not([data-pos="centro"]) .plat-resumo { color: var(--graphite-300); }
 /* Frase de fechamento de cada card: componente Alert do design system, variação "warning" (amarelo), com ícone de lâmpada e a tipografia padrão do título do Alert (0,9rem, seminegrito, cor warning). */
 .plat-frase { display: flex; align-items: flex-start; gap: 12px; margin: 14px 0 0; padding: 14px 16px; border-radius: 12px; border: 1px solid rgba(229, 169, 78, 0.2); background: var(--warning-muted); color: var(--warning); font-size: 0.9rem; line-height: 1.5; font-weight: 600; transition: color .6s ease, background-color .6s ease, border-color .6s ease; }
 .plat-frase .ico { flex: none; width: 20px; height: 20px; margin-top: 1px; color: var(--warning); transition: color .6s ease; }
