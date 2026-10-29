@@ -898,7 +898,7 @@ button.btn { border: 0; cursor: pointer; }
 .plataforma .plat-grid { gap: 40px; align-items: center; }
 .plat-venn { position: relative; width: min(100%, 520px); aspect-ratio: 1 / 0.95; margin: 0 auto; }
 .venn-c { position: absolute; width: 58%; aspect-ratio: 1; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 9%; text-align: center; }
-.venn-pessoas { left: 21%; top: 0; background: rgba(212, 77, 77, 0.10); justify-content: flex-start; padding-top: 11%; }
+.venn-pessoas { left: 21%; top: 0; background: var(--crimson-100); justify-content: flex-start; padding-top: 11%; }
 .venn-operacao { left: 0; bottom: 0; background: rgba(98, 114, 136, 0.10); padding-right: 22%; padding-top: 14%; }
 .venn-melhoria { right: 0; bottom: 0; background: rgba(212, 77, 77, 0.14); padding-left: 22%; padding-top: 14%; }
 .venn-ico { display: flex; margin-bottom: 8px; color: var(--primary); font-size: clamp(28px, 4.6vw, 40px); }
