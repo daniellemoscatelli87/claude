@@ -355,7 +355,7 @@ html { scroll-behavior: smooth; }
 .plat-texto .lead { max-width: 38rem; }
 .plat-texto h2 .destaque { color: var(--primary); }
 .plat-grid { display: grid; gap: 40px; }
-.plat-fluxo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 16px; border-radius: 28px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+.plat-fluxo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
 .plat-col { border-radius: 20px; padding: 24px 20px; background: var(--crimson-50); }
 .plat-col h3 { margin: 0 0 16px; font-size: 1.25rem; line-height: 1.25; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
 .plat-desafio, .plat-resultado { text-align: center; background: var(--card); }
@@ -364,7 +364,7 @@ html { scroll-behavior: smooth; }
 .plat-pontos li { display: flex; align-items: center; gap: 12px; font-size: 1rem; color: var(--graphite-700); }
 .plat-pontos li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex: none; }
 .plat-exemplo { margin: 0; padding: 16px; border-radius: 16px; background: var(--crimson-50); box-shadow: var(--shadow-sm); font-style: italic; font-size: 0.9375rem; line-height: 1.5; color: var(--graphite-600); text-align: left; }
-.plat-intel { background: linear-gradient(180deg, var(--crimson-50), #FFFFFF); border: 1px solid var(--crimson-100); box-shadow: var(--shadow-sm); }
+.plat-intel { background: var(--card); }
 .plat-intel h3 { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; font-size: 1.5rem; }
 .plat-ico-titulo { width: 52px; height: 52px; border-radius: 50%; background: var(--primary-muted); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 28px; flex: none; }
 .plat-itens { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
@@ -377,25 +377,42 @@ html { scroll-behavior: smooth; }
 .plat-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; text-align: left; }
 .plat-checks li { display: flex; align-items: flex-start; gap: 12px; font-size: 1rem; line-height: 1.4; color: var(--graphite-700); }
 .plat-checks .ico { color: var(--primary); font-size: 20px; stroke-width: 2.5; margin-top: 1px; }
-.plat-seta { justify-self: center; width: 48px; height: 48px; border-radius: 50%; background: var(--card); border: 1px solid var(--crimson-100); box-shadow: var(--shadow-sm); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 22px; transform: rotate(90deg); margin: -4px 0; position: relative; z-index: 1; }
 @media (min-width: 768px) {
   .sec { padding: 96px 40px; }
 }
 /* Título e descrição centralizados acima dos cards, em todos os tamanhos */
 .plat-texto { text-align: center; max-width: 48rem; margin: 0 auto; }
 .plat-texto .lead { margin-left: auto; margin-right: auto; }
-@media (max-width: 1279px) {
-  .plat-fluxo { max-width: 560px; width: 100%; margin: 0 auto; }
-}
-@media (min-width: 1280px) {
+/* Carrossel: os três cards ficam empilhados no mesmo lugar e cada um recebe uma posição (esquerda, centro ou direita).
+   O card do centro é maior, fica à frente e recebe o destaque. Celular e tablet: só o card do centro aparece. */
+.plat-fluxo { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; max-width: 560px; width: 100%; margin: 0 auto; overflow: hidden; }
+.plat-col { grid-area: 1 / 1; display: flex; flex-direction: column; align-self: center; justify-self: center; width: 100%; background: var(--card); border: 1px solid transparent; transition: transform .6s cubic-bezier(0.16, 1, 0.3, 1), width .6s cubic-bezier(0.16, 1, 0.3, 1), opacity .4s, box-shadow .4s, background-color .4s; }
+.plat-col[data-pos="centro"] { position: relative; z-index: 2; background: linear-gradient(180deg, var(--crimson-50), var(--card)); border-color: var(--crimson-100); box-shadow: var(--shadow-sm); }
+.plat-col[data-pos="esq"] { transform: translateX(-110%); opacity: 0; visibility: hidden; }
+.plat-col[data-pos="dir"] { transform: translateX(110%); opacity: 0; visibility: hidden; }
+.plat-col:not([data-pos="centro"]) { cursor: pointer; }
+.plat-controles { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; }
+.plat-nav { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; box-shadow: var(--shadow-sm); transition: background-color .2s; }
+.plat-nav:hover { background: var(--crimson-50); }
+.plat-pontos-nav { display: flex; gap: 4px; }
+.plat-ponto { width: 28px; height: 28px; padding: 0; border: 0; background: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.plat-ponto::before { content: ""; width: 8px; height: 8px; border-radius: 9999px; background: var(--crimson-200); transition: width .3s, background-color .3s; }
+.plat-ponto[aria-current="true"]::before { width: 24px; background: var(--primary); }
+.plat-nav:focus-visible, .plat-ponto:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
+.plat-desafio .plat-pontos, .plat-resultado .plat-checks { align-self: center; }
+@media (min-width: 1024px) {
   .plat-grid { gap: 24px; }
-  /* Card branco de base; Desafio e Recomendações com a mesma largura e altura;
-     Nossa inteligência mais larga, mais alta e à frente, passando das bordas da base */
-  .plat-fluxo { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.5fr) auto minmax(0, 1fr); align-items: stretch; gap: 0; padding: 20px; margin: 48px auto 40px; width: 100%; max-width: 1120px; }
-  .plat-col { display: flex; flex-direction: column; padding: 22px 18px; }
-  .plat-desafio, .plat-resultado { justify-content: flex-start; padding-top: 40px; }
-  .plat-desafio .plat-pontos, .plat-resultado .plat-checks { align-self: center; }
-  .plat-intel { position: relative; z-index: 1; margin: -44px 0; padding: 20px 22px; justify-content: center; box-shadow: var(--shadow-lg); }
+  /* Sem card de base: os cards dos lados ficam atrás; o do centro é mais alto e fica à frente */
+  .plat-fluxo { max-width: 1120px; margin: 72px auto 0; padding: 16px 20px; overflow: visible; }
+  .plat-col { padding: 22px 18px; }
+  /* O do centro estica até a altura da base e passa das bordas dela, em cima e embaixo: fica sempre maior que os dos lados */
+  .plat-col[data-pos="centro"] { width: 32%; align-self: stretch; justify-content: center; padding: 24px 22px; margin: -40px 0; box-shadow: var(--shadow-lg); }
+  /* Os três cards têm a mesma largura; o do centro continua mais alto e à frente */
+  /* Borda e sombra nos cards dos lados para que a largura deles apareça (antes se confundiam com o branco da base) */
+  .plat-col[data-pos="esq"], .plat-col[data-pos="dir"] { width: 32%; opacity: 1; visibility: visible; border-color: var(--border); box-shadow: none; }
+  .plat-col[data-pos="esq"] { transform: translateX(-104%); }
+  .plat-col[data-pos="dir"] { transform: translateX(104%); }
+  .plat-controles { margin-top: 64px; }
   .plat-intel h3 { font-size: 1.375rem; margin-bottom: 12px; }
   .plat-ico-titulo, .plat-ico-grande { width: 44px; height: 44px; font-size: 24px; }
   .plat-itens { gap: 8px; }
@@ -404,29 +421,23 @@ html { scroll-behavior: smooth; }
   .plat-itens strong { font-size: 1rem; }
   .plat-itens li > span:last-child { font-size: 0.875rem; }
   .plat-texto h2 { font-size: clamp(1.75rem, 2.4vw, 2.625rem); }
-  .plat-seta { align-self: center; transform: none; margin: 0 -14px; z-index: 2; }
 }
 
 /* Animações da seção "O que é a plataforma" (só com JavaScript; desligadas com movimento reduzido) */
-@keyframes plat-seta { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
-@keyframes plat-seta-v { 0%, 100% { transform: rotate(90deg) translateX(0); } 50% { transform: rotate(90deg) translateX(4px); } }
 .anim-pronto .etiqueta, .anim-pronto .plat-texto h2, .anim-pronto .plat-texto .lead,
-.anim-pronto .plat-fluxo, .anim-pronto .plat-desafio, .anim-pronto .plat-intel, .anim-pronto .plat-resultado,
+.anim-pronto .plat-fluxo, .anim-pronto .plat-controles,
 .anim-pronto .plat-checks li, .anim-pronto .plat-pontos li, .anim-pronto .plat-itens li { opacity: 0; }
 .visivel .etiqueta, .visivel .plat-texto h2, .visivel .plat-texto .lead,
-.visivel .plat-fluxo, .visivel .plat-desafio, .visivel .plat-intel, .visivel .plat-resultado { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.visivel .plat-fluxo, .visivel .plat-controles { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .visivel .plat-texto h2 { animation-delay: .08s; }
 .visivel .plat-texto .lead { animation-delay: .16s; }
 .visivel .plat-fluxo { animation-delay: .2s; }
-.visivel .plat-desafio { animation-delay: .3s; }
-.visivel .plat-intel { animation-delay: .4s; }
-.visivel .plat-resultado { animation-delay: .5s; }
+.visivel .plat-controles { animation-delay: .4s; }
 .visivel .plat-pontos li, .visivel .plat-itens li, .visivel .plat-checks li { animation: ds-surgir .4s ease-out both; }
 .visivel .plat-pontos li:nth-child(1) { animation-delay: .6s; } .visivel .plat-pontos li:nth-child(2) { animation-delay: .7s; } .visivel .plat-pontos li:nth-child(3) { animation-delay: .8s; }
 .visivel .plat-itens li:nth-child(1) { animation-delay: .7s; } .visivel .plat-itens li:nth-child(2) { animation-delay: .8s; } .visivel .plat-itens li:nth-child(3) { animation-delay: .9s; } .visivel .plat-itens li:nth-child(4) { animation-delay: 1s; }
 .visivel .plat-checks li:nth-child(1) { animation-delay: .8s; } .visivel .plat-checks li:nth-child(2) { animation-delay: .9s; }
 .visivel .plat-checks li:nth-child(3) { animation-delay: 1s; } .visivel .plat-checks li:nth-child(4) { animation-delay: 1.1s; }
-.visivel .plat-seta .ico { animation: plat-seta 1.6s ease-in-out 1.4s infinite; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -588,7 +599,8 @@ button.btn { border: 0; cursor: pointer; }
 @keyframes cf-da-direita { from { opacity: 0; transform: translate3d(32px, 0, 0); } to { opacity: 1; transform: none; } }
 @keyframes cf-da-esquerda { from { opacity: 0; transform: translate3d(-32px, 0, 0); } to { opacity: 1; transform: none; } }
 @media (min-width: 768px) {
-  .como-funciona .cf-etapa.visivel { animation: ds-surgir .3s ease-out both; }
+  /* Sem animação no item inteiro: assim os números ficam sempre por cima das linhas das etapas vizinhas */
+  .como-funciona .cf-etapa.visivel { animation: none; opacity: 1; }
   .cf-etapa.visivel:nth-child(odd) .cf-cartao { animation: cf-da-direita .7s cubic-bezier(0.16, 1, 0.3, 1) .15s both; }
   .cf-etapa.visivel:nth-child(even) .cf-cartao { animation: cf-da-esquerda .7s cubic-bezier(0.16, 1, 0.3, 1) .15s both; }
 }
@@ -691,22 +703,18 @@ button.btn { border: 0; cursor: pointer; }
 .apl-op:hover { background: var(--crimson-50); }
 .apl-op[aria-pressed="true"] { background: var(--crimson-50); border-color: var(--crimson-200); color: var(--primary); font-weight: 600; }
 .apl-op[aria-pressed="true"] .ico { color: var(--primary); }
-.apl-op:focus-visible, .apl-mais:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
+.apl-op:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
 .apl-sep { color: var(--graphite-400); font-size: 26px; display: flex; transform: rotate(90deg); }
 .apl-sep:first-of-type { transform: none; }
 .apl-caso { animation: ds-surgir .35s ease-out; }
 .apl-caso-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .apl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
 .apl-tags span { padding: 4px 12px; border-radius: 9999px; background: var(--muted); color: var(--graphite-700); font-size: 0.8125rem; font-weight: 600; }
-.apl-caso-ico { flex: none; width: 52px; height: 52px; border-radius: 14px; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: var(--shadow-xs); }
 .apl-caso h4 { margin: 0 0 12px; font-size: 1.125rem; line-height: 1.35; letter-spacing: -0.01em; font-weight: 700; color: var(--foreground); }
 .apl-caso p { margin: 0 0 8px; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
 .apl-caso p strong { color: var(--foreground); font-weight: 600; }
 .apl-caso .apl-meta { margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: var(--crimson-50); color: var(--graphite-700); }
 .apl-caso .apl-meta strong { color: var(--crimson-500); }
-.apl-mais { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-top: auto; padding: 14px 0 0; border: 0; background: none; color: var(--crimson-500); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; }
-.apl-mais .ico { font-size: 18px; transition: transform .2s; }
-.apl-mais:hover .ico { transform: translateX(3px); }
 /* Tablet largo e computador: os três cards lado a lado, com × e → entre eles */
 @media (min-width: 1024px) {
   .apl-cards { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1.05fr); align-items: stretch; gap: 14px; }
@@ -723,3 +731,33 @@ button.btn { border: 0; cursor: pointer; }
 .aplicacoes .apl-cards.visivel .apl-card:nth-of-type(2) { animation-delay: .15s; }
 .aplicacoes .apl-cards.visivel .apl-card:nth-of-type(3) { animation-delay: .3s; }
 .aplicacoes .apl-cards.visivel .apl-sep { animation: ds-surgir .4s ease-out .45s both; }
+
+/* Cards do carrossel de "O que é a plataforma": imagem, título e resumo */
+.plat-col { text-align: left; }
+.plat-col h3, .plat-intel h3 { display: block; margin: 0 0 8px; font-size: 1.25rem; text-align: left; }
+.plat-foto { display: block; width: 100%; height: auto; aspect-ratio: 5 / 2; object-fit: cover; margin: 0 0 16px; border-radius: 14px; background: var(--muted); }
+.plat-resumo { margin: 0; color: var(--graphite-600); font-size: 0.9375rem; line-height: 1.55; }
+@media (min-width: 1024px) {
+  .plat-col, .plat-col[data-pos="centro"] { padding: 14px 14px 20px; }
+  .plat-col[data-pos="centro"] { justify-content: flex-start; }
+  .plat-col[data-pos="centro"] h3 { font-size: 1.375rem; }
+  .plat-col[data-pos="centro"] .plat-resumo { font-size: 1rem; }
+}
+/* Só o card do centro mostra a foto colorida; os dos lados ficam em preto e branco até irem para o centro */
+.plat-foto { transition: filter .6s ease, opacity .6s ease; }
+.plat-col:not([data-pos="centro"]) .plat-foto { filter: grayscale(1); opacity: .45; }
+/* Texto dos cards que não estão no centro em cinza médio/claro */
+.plat-col h3, .plat-resumo { transition: color .6s ease; }
+.plat-col:not([data-pos="centro"]) h3, .plat-col:not([data-pos="centro"]) .plat-resumo { color: var(--graphite-400); }
+/* Frase de fechamento de cada card: componente Alert do design system, variação "warning" (amarelo), com ícone de lâmpada e a tipografia padrão do título do Alert (0,9rem, seminegrito, cor warning). */
+.plat-frase { display: flex; align-items: flex-start; gap: 12px; margin: 14px 0 0; padding: 14px 16px; border-radius: 12px; border: 1px solid rgba(229, 169, 78, 0.2); background: var(--warning-muted); color: var(--warning); font-size: 0.9rem; line-height: 1.5; font-weight: 600; transition: color .6s ease, background-color .6s ease, border-color .6s ease; }
+.plat-frase .ico { flex: none; width: 20px; height: 20px; margin-top: 1px; color: var(--warning); transition: color .6s ease; }
+.plat-col:not([data-pos="centro"]) .plat-frase { color: var(--graphite-400); background: var(--muted); border-color: var(--border); }
+.plat-col:not([data-pos="centro"]) .plat-frase .ico { color: var(--graphite-400); }
+/* Card do centro: a imagem cresce para ocupar a altura disponível, sem sobrar espaço embaixo */
+@media (min-width: 1024px) {
+  .plat-col[data-pos="centro"] .plat-foto { flex: 1 1 0; min-height: 150px; aspect-ratio: auto; }
+}
+/* Notificação com lâmpada nos cards que não estão no centro: cinza mais apagado */
+.plat-col:not([data-pos="centro"]) .plat-frase { color: var(--graphite-300); background: var(--graphite-50); border-color: rgba(19, 26, 39, 0.06); }
+.plat-col:not([data-pos="centro"]) .plat-frase .ico { color: var(--graphite-300); }
