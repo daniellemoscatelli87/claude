@@ -212,10 +212,11 @@
       var l = document.createElementNS(NS, 'path');
       l.setAttribute('d', d);
       l.style.transformOrigin = cx + 'px ' + cy + 'px';
-      l.style.setProperty('--i', i);
+      var o = getComputedStyle(area).getPropertyValue('--o');
+      l.style.setProperty('--o', o);
       var p = document.createElementNS(NS, 'circle');
       p.setAttribute('cx', sx); p.setAttribute('cy', sy); p.setAttribute('r', 4.5);
-      p.style.setProperty('--i', i);
+      p.style.setProperty('--o', o);
       svg.appendChild(l); pontos.appendChild(p);
       l.style.setProperty('--len', Math.ceil(l.getTotalLength()));
     });

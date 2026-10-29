@@ -675,12 +675,14 @@ button.btn { border: 0; cursor: pointer; }
 /* 2. Linhas se desenham do núcleo até cada área (traço que avança pelo caminho) */
 .inteligencia.anim-pronto .rag-linhas path { stroke-dasharray: var(--len, 400); stroke-dashoffset: var(--len, 400); }
 .inteligencia.anim-pronto .rag-pontos circle { opacity: 0; transform: scale(0); }
-.inteligencia .rag-linhas.visivel path { stroke-dashoffset: 0; transition: stroke-dashoffset .9s cubic-bezier(0.65, 0, 0.35, 1); transition-delay: calc(.6s + var(--i, 0) * .12s); }
-.inteligencia .rag-pontos.visivel circle { opacity: 1; transform: scale(1); transition: opacity .3s ease-out, transform .3s ease-out; transition-delay: calc(.6s + var(--i, 0) * .12s); }
+.inteligencia .rag-linhas.visivel path { stroke-dashoffset: 0; transition: stroke-dashoffset .6s cubic-bezier(0.65, 0, 0.35, 1); transition-delay: calc(.7s + var(--o, 0) * .75s); }
+.inteligencia .rag-pontos.visivel circle { opacity: 1; transform: scale(1); transition: opacity .3s ease-out, transform .3s ease-out; transition-delay: calc(.7s + var(--o, 0) * .75s); }
 /* 3. Áreas surgem em Scale In quando a linha chega até elas */
 .inteligencia .rag-area.visivel { animation: rag-scale-in .6s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(.25s + var(--i, 0) * .1s); transform-origin: center; }
 @media (min-width: 1200px) {
-  .inteligencia .rag-area.visivel { animation-delay: calc(1.35s + var(--i, 0) * .12s); }
+  /* Um braço por vez, em sentido horário: a linha se desenha e, ao chegar, a área surge; depois vem o próximo */
+  .rag-a { --o: 0; } .rag-b { --o: 1; } .rag-d { --o: 2; } .rag-e { --o: 3; } .rag-c { --o: 4; }
+  .inteligencia .rag-area.visivel { animation-delay: calc(1.25s + var(--o, 0) * .75s); }
 }
 
 /* Seção 5: aplicações (para quem é e exemplos práticos) — tokens do design system */
