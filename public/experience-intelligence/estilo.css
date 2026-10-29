@@ -941,13 +941,6 @@ button.btn { border: 0; cursor: pointer; }
 @media (min-width: 768px) { .apl-meta-card { flex-direction: row; justify-content: flex-start; } }
 @media (min-width: 1200px) { .apl-meta-card { margin-top: 60px; align-self: end; } }
 @media (min-width: 1200px) {
-  .apl-desafio { padding: 22px 24px; }
-  .apl-desafio h3 { margin-bottom: 16px; padding-bottom: 16px; font-size: 1.25rem; }
-  .apl-duas { gap: 14px; }
-  .apl-duas > div + div { padding-top: 14px; }
-  .apl-duas p { font-size: 0.875rem; }
-}
-@media (min-width: 1200px) {
   .apl-foto { height: 250px; }
   .apl-desafio { align-self: end; }
 }
