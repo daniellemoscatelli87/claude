@@ -653,7 +653,7 @@ button.btn { border: 0; cursor: pointer; }
   .rag-d { grid-area: 2 / 3; }
   /* Lado esquerdo espelhado: texto alinhado à direita, ícone junto do galho */
   .rag-a, .rag-c { flex-direction: row-reverse; text-align: right; }
-  .rag-e { grid-area: 3 / 1 / 4 / 4; justify-self: center; flex-direction: column; align-items: center; text-align: center; max-width: 460px; padding-top: 56px; }
+  .rag-e { grid-area: 3 / 1 / 4 / 4; justify-self: center; flex-direction: column; align-items: center; text-align: center; max-width: 460px; padding-top: 0; margin-top: -8px; }
   .rag-ico { width: 72px; height: 72px; font-size: 30px; }
   .rag-texto h3 { font-size: 1.1875rem; }
 }
