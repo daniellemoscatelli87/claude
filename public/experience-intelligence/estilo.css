@@ -660,9 +660,9 @@ button.btn { border: 0; cursor: pointer; }
 
 /* Animações da seção "Nossa inteligência" (só com JavaScript; desligadas com movimento reduzido) */
 @keyframes rag-surgir-centro { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: none; } }
-@keyframes rag-scale-in { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
+@keyframes rag-scale-in { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
 .inteligencia.anim-pronto .etiqueta, .inteligencia.anim-pronto .rag-intro h2, .inteligencia.anim-pronto .rag-intro .lead, .inteligencia.anim-pronto .cf-traco,
-.inteligencia.anim-pronto .rag-centro, .inteligencia.anim-pronto .rag-area { opacity: 0; }
+.inteligencia.anim-pronto .rag-centro, .inteligencia.anim-pronto .rag-ico, .inteligencia.anim-pronto .rag-texto { opacity: 0; }
 .inteligencia .rag-intro.visivel .etiqueta, .inteligencia .rag-intro.visivel h2, .inteligencia .rag-intro.visivel .lead { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .inteligencia .rag-intro.visivel h2 { animation-delay: .08s; }
 .inteligencia .rag-intro.visivel .lead { animation-delay: .16s; }
@@ -675,14 +675,17 @@ button.btn { border: 0; cursor: pointer; }
 /* 2. Linhas se desenham do núcleo até cada área (traço que avança pelo caminho) */
 .inteligencia.anim-pronto .rag-linhas path { stroke-dasharray: var(--len, 400); stroke-dashoffset: var(--len, 400); }
 .inteligencia.anim-pronto .rag-pontos circle { opacity: 0; transform: scale(0); }
-.inteligencia .rag-linhas.visivel path { stroke-dashoffset: 0; transition: stroke-dashoffset .6s cubic-bezier(0.65, 0, 0.35, 1); transition-delay: calc(.7s + var(--o, 0) * .75s); }
-.inteligencia .rag-pontos.visivel circle { opacity: 1; transform: scale(1); transition: opacity .3s ease-out, transform .3s ease-out; transition-delay: calc(.7s + var(--o, 0) * .75s); }
-/* 3. Áreas surgem em Scale In quando a linha chega até elas */
-.inteligencia .rag-area.visivel { animation: rag-scale-in .6s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(.25s + var(--i, 0) * .1s); transform-origin: center; }
+.inteligencia .rag-linhas.visivel path { stroke-dashoffset: 0; transition: stroke-dashoffset .45s cubic-bezier(0.65, 0, 0.35, 1); transition-delay: calc(.6s + var(--o, 0) * .55s); }
+.inteligencia .rag-pontos.visivel circle { opacity: 1; transform: scale(1); transition: opacity .25s ease-out, transform .25s ease-out; transition-delay: calc(.6s + var(--o, 0) * .55s); }
+/* 3. Em cada área, primeiro o ícone (Scale In) e depois o texto */
+@keyframes rag-texto-in { from { opacity: 0; transform: translate3d(0, 6px, 0); } to { opacity: 1; transform: none; } }
+.inteligencia .rag-area.visivel .rag-ico { animation: rag-scale-in .4s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(.25s + var(--i, 0) * .15s); }
+.inteligencia .rag-area.visivel .rag-texto { animation: rag-texto-in .4s ease-out both; animation-delay: calc(.4s + var(--i, 0) * .15s); }
 @media (min-width: 1200px) {
   /* Um braço por vez, na ordem de leitura (esquerda para a direita, de cima para baixo): a linha se desenha e, ao chegar, a área surge */
   .rag-a { --o: 0; } .rag-b { --o: 1; } .rag-c { --o: 2; } .rag-d { --o: 3; } .rag-e { --o: 4; }
-  .inteligencia .rag-area.visivel { animation-delay: calc(1.25s + var(--o, 0) * .75s); }
+  .inteligencia .rag-area.visivel .rag-ico { animation-delay: calc(1s + var(--o, 0) * .55s); }
+  .inteligencia .rag-area.visivel .rag-texto { animation-delay: calc(1.15s + var(--o, 0) * .55s); }
 }
 
 /* Seção 5: aplicações (para quem é e exemplos práticos) — tokens do design system */
