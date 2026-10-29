@@ -904,7 +904,8 @@ button.btn { border: 0; cursor: pointer; }
 .venn-ico { display: flex; margin-bottom: 8px; color: var(--primary); font-size: clamp(28px, 4.6vw, 40px); }
 .venn-c h3 { margin: 0 0 6px; font-size: clamp(0.9375rem, 1.6vw, 1.1875rem); line-height: 1.2; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
 .venn-c p { margin: 0; color: var(--graphite-500); font-size: clamp(0.75rem, 1.15vw, 0.875rem); line-height: 1.4; }
-.venn-nucleo { position: absolute; left: 50%; top: calc(60% - 10px); width: 15%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.7), var(--shadow-md); display: flex; align-items: center; justify-content: center; }
+/* Centro geométrico entre os centros dos três círculos */
+.venn-nucleo { position: absolute; left: 50%; top: 56.5%; width: 15%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.7), var(--shadow-md); display: flex; align-items: center; justify-content: center; }
 .venn-nucleo img { width: 52%; height: auto; filter: brightness(0) invert(1); }
 @media (max-width: 479px) {
   .venn-c p { display: none; }
