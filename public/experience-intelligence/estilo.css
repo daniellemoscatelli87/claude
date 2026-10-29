@@ -391,7 +391,7 @@ html { scroll-behavior: smooth; }
 .plat-col[data-pos="esq"] { transform: translateX(-110%); opacity: 0; visibility: hidden; }
 .plat-col[data-pos="dir"] { transform: translateX(110%); opacity: 0; visibility: hidden; }
 .plat-col:not([data-pos="centro"]) { cursor: pointer; }
-.plat-controles { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; }
+.plat-controles { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 0 0 20px; }
 .plat-nav { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; box-shadow: var(--shadow-sm); transition: background-color .2s; }
 .plat-nav:hover { background: var(--crimson-50); }
 .plat-nav:focus-visible, .plat-ponto:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
@@ -399,7 +399,7 @@ html { scroll-behavior: smooth; }
 @media (min-width: 1024px) {
   .plat-grid { gap: 24px; }
   /* Sem card de base: os cards dos lados ficam atrás; o do centro é mais alto e fica à frente */
-  .plat-fluxo { max-width: 1120px; margin: 72px auto 0; padding: 16px 20px; overflow: visible; }
+  .plat-fluxo { max-width: 1120px; margin: 64px auto 40px; padding: 16px 20px; overflow: visible; }
   .plat-col { padding: 22px 18px; }
   /* O do centro estica até a altura da base e passa das bordas dela, em cima e embaixo: fica sempre maior que os dos lados */
   .plat-col[data-pos="centro"] { width: 32%; align-self: stretch; justify-content: center; padding: 24px 22px; margin: -40px 0; box-shadow: var(--shadow-lg); }
@@ -408,7 +408,7 @@ html { scroll-behavior: smooth; }
   .plat-col[data-pos="esq"], .plat-col[data-pos="dir"] { width: 32%; opacity: 1; visibility: visible; border-color: var(--border); box-shadow: none; }
   .plat-col[data-pos="esq"] { transform: translateX(-104%); }
   .plat-col[data-pos="dir"] { transform: translateX(104%); }
-  .plat-controles { margin-top: 64px; }
+  .plat-controles { margin: 8px 0 0; }
   .plat-intel h3 { font-size: 1.375rem; margin-bottom: 12px; }
   .plat-ico-titulo, .plat-ico-grande { width: 44px; height: 44px; font-size: 24px; }
   .plat-itens { gap: 8px; }
@@ -731,7 +731,9 @@ button.btn { border: 0; cursor: pointer; }
 /* Cards do carrossel de "O que é a plataforma": imagem, título e resumo */
 .plat-col { text-align: left; }
 .plat-col h3, .plat-intel h3 { display: block; margin: 0 0 8px; font-size: 1.25rem; text-align: left; }
-.plat-foto { display: block; width: 100%; height: auto; aspect-ratio: 5 / 2; object-fit: cover; margin: 0 0 16px; border-radius: 14px; background: var(--muted); }
+/* Imagem do card com a tag do capítulo no canto superior direito */
+.plat-midia { position: relative; margin: 0 0 16px; }
+.plat-foto { display: block; width: 100%; height: auto; aspect-ratio: 5 / 2; object-fit: cover; border-radius: 14px; background: var(--muted); }
 .plat-resumo { margin: 0; color: var(--graphite-600); font-size: 0.9375rem; line-height: 1.55; }
 @media (min-width: 1024px) {
   .plat-col, .plat-col[data-pos="centro"] { padding: 14px 14px 20px; }
@@ -752,15 +754,16 @@ button.btn { border: 0; cursor: pointer; }
 .plat-col:not([data-pos="centro"]) .plat-frase .ico { color: var(--graphite-400); }
 /* Card do centro: a imagem cresce para ocupar a altura disponível, sem sobrar espaço embaixo */
 @media (min-width: 1024px) {
-  .plat-col[data-pos="centro"] .plat-foto { flex: 1 1 0; min-height: 150px; aspect-ratio: auto; }
+  .plat-col[data-pos="centro"] .plat-midia { flex: 1 1 0; min-height: 150px; display: flex; }
+  .plat-col[data-pos="centro"] .plat-foto { flex: 1; height: auto; aspect-ratio: auto; }
 }
 /* Notificação com lâmpada nos cards que não estão no centro: cinza mais apagado */
 .plat-col:not([data-pos="centro"]) .plat-frase { color: var(--graphite-300); background: var(--graphite-50); border-color: rgba(19, 26, 39, 0.06); }
 .plat-col:not([data-pos="centro"]) .plat-frase .ico { color: var(--graphite-300); }
 
 /* Carrossel como história: capítulo acima do título e linha de etapas (Desafio → Inteligência → Plano de ação) */
-.plat-capitulo { margin: 0 0 4px; color: var(--crimson-500); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; transition: color .6s ease; }
-.plat-col:not([data-pos="centro"]) .plat-capitulo { color: var(--graphite-300); }
+.plat-capitulo { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border-radius: 9999px; background: var(--primary); color: var(--primary-foreground); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: var(--shadow-sm); transition: background-color .6s ease, color .6s ease; }
+.plat-col:not([data-pos="centro"]) .plat-capitulo { background: var(--card); color: var(--graphite-300); box-shadow: none; }
 .plat-etapas-nav { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; }
 .plat-etapas-nav li { display: flex; align-items: center; }
 .plat-etapas-nav li + li::before { content: ""; width: 28px; height: 2px; margin: 0 6px; border-radius: 2px; background: var(--crimson-100); }
@@ -788,3 +791,5 @@ button.btn { border: 0; cursor: pointer; }
 }
 .plat-nav:disabled { opacity: .35; cursor: default; box-shadow: none; }
 .plat-nav:disabled:hover { background: var(--card); }
+/* Quebra de linha do título só em telas a partir do tablet */
+@media (max-width: 767px) { .quebra-larga { display: none; } }

@@ -278,7 +278,7 @@
   // A história começa no Desafio (etapa 1).
   var centro = 0;
   var navs = Array.prototype.slice.call(document.querySelectorAll('.plat-nav'));
-  // Ordem da história: o que já passou fica à esquerda e o que vem depois à direita (sem voltar ao começo).
+  // Ordem da história: o que já passou fica à esquerda e o que vem depois à direita.
   function mostrar(i) {
     var n = cards.length;
     centro = Math.max(0, Math.min(n - 1, i));
@@ -292,11 +292,16 @@
     });
     navs.forEach(function (b) {
       var d = Number(b.getAttribute('data-dir'));
-      b.disabled = (d < 0 && centro === 0) || (d > 0 && centro === n - 1);
+      b.disabled = d < 0 && centro === 0;
+      if (d > 0) b.setAttribute('aria-label', centro === n - 1 ? 'Voltar ao início' : 'Próxima etapa');
     });
   }
   navs.forEach(function (b) {
-    b.addEventListener('click', function () { mostrar(centro + Number(b.getAttribute('data-dir'))); });
+    b.addEventListener('click', function () {
+      var d = Number(b.getAttribute('data-dir'));
+      // Depois da última etapa, avançar volta ao começo da história.
+      mostrar(d > 0 && centro === cards.length - 1 ? 0 : centro + d);
+    });
   });
   pontos.forEach(function (p) { p.addEventListener('click', function () { mostrar(Number(p.getAttribute('data-ir'))); }); });
   cards.forEach(function (c, k) { c.addEventListener('click', function () { if (k !== centro) mostrar(k); }); });
