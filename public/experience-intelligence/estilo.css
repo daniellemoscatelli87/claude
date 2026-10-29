@@ -408,7 +408,8 @@ html { scroll-behavior: smooth; }
   /* O do centro estica até a altura da base e passa das bordas dela, em cima e embaixo: fica sempre maior que os dos lados */
   .plat-col[data-pos="centro"] { width: 32%; align-self: stretch; justify-content: center; padding: 24px 22px; margin: -40px 0; box-shadow: var(--shadow-lg); }
   /* Os três cards têm a mesma largura; o do centro continua mais alto e à frente */
-  .plat-col[data-pos="esq"], .plat-col[data-pos="dir"] { width: 32%; opacity: 1; visibility: visible; }
+  /* Borda e sombra nos cards dos lados para que a largura deles apareça (antes se confundiam com o branco da base) */
+  .plat-col[data-pos="esq"], .plat-col[data-pos="dir"] { width: 32%; opacity: 1; visibility: visible; border-color: var(--border); box-shadow: var(--shadow-sm); }
   .plat-col[data-pos="esq"] { transform: translateX(-104%); }
   .plat-col[data-pos="dir"] { transform: translateX(104%); }
   .plat-col:not([data-pos="centro"]):hover { box-shadow: var(--shadow-md); }
