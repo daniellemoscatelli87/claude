@@ -680,8 +680,8 @@ button.btn { border: 0; cursor: pointer; }
 /* 3. Áreas surgem em Scale In quando a linha chega até elas */
 .inteligencia .rag-area.visivel { animation: rag-scale-in .6s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(.25s + var(--i, 0) * .1s); transform-origin: center; }
 @media (min-width: 1200px) {
-  /* Um braço por vez, em sentido horário: a linha se desenha e, ao chegar, a área surge; depois vem o próximo */
-  .rag-a { --o: 0; } .rag-b { --o: 1; } .rag-d { --o: 2; } .rag-e { --o: 3; } .rag-c { --o: 4; }
+  /* Um braço por vez, na ordem de leitura (esquerda para a direita, de cima para baixo): a linha se desenha e, ao chegar, a área surge */
+  .rag-a { --o: 0; } .rag-b { --o: 1; } .rag-c { --o: 2; } .rag-d { --o: 3; } .rag-e { --o: 4; }
   .inteligencia .rag-area.visivel { animation-delay: calc(1.25s + var(--o, 0) * .75s); }
 }
 
