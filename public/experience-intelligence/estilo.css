@@ -892,3 +892,36 @@ button.btn { border: 0; cursor: pointer; }
 .aplicacoes .apl-intro.visivel .cf-traco { animation: cf-traco .6s cubic-bezier(0.16, 1, 0.3, 1) .3s both; opacity: 1; }
 .aplicacoes .apl-menu.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) .2s both; }
 .aplicacoes .apl-cards.visivel { animation: rag-scale-in .7s cubic-bezier(0.16, 1, 0.3, 1) .3s both; }
+
+/* Seção 2 em diagrama de três círculos (Pessoas, Operação e Melhoria contínua) com o símbolo no centro */
+.plataforma .plat-grid { gap: 40px; align-items: center; }
+.plat-venn { position: relative; width: min(100%, 520px); aspect-ratio: 1 / 0.95; margin: 0 auto; }
+.venn-c { position: absolute; width: 58%; aspect-ratio: 1; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 9%; text-align: center; }
+.venn-pessoas { left: 21%; top: 0; background: rgba(212, 77, 77, 0.10); justify-content: flex-start; padding-top: 11%; }
+.venn-operacao { left: 0; bottom: 0; background: rgba(98, 114, 136, 0.10); padding-right: 22%; padding-top: 14%; }
+.venn-melhoria { right: 0; bottom: 0; background: rgba(212, 77, 77, 0.14); padding-left: 22%; padding-top: 14%; }
+.venn-ico { display: flex; margin-bottom: 8px; color: var(--primary); font-size: clamp(28px, 4.6vw, 40px); }
+.venn-c h3 { margin: 0 0 6px; font-size: clamp(0.9375rem, 1.6vw, 1.1875rem); line-height: 1.2; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
+.venn-c p { margin: 0; color: var(--graphite-500); font-size: clamp(0.75rem, 1.15vw, 0.875rem); line-height: 1.4; }
+.venn-nucleo { position: absolute; left: 50%; top: 60%; width: 15%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.7), var(--shadow-md); display: flex; align-items: center; justify-content: center; }
+.venn-nucleo img { width: 52%; height: auto; filter: brightness(0) invert(1); }
+@media (max-width: 479px) {
+  .venn-c p { display: none; }
+}
+@media (min-width: 1024px) {
+  .plataforma .plat-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; }
+  .plataforma .plat-texto { text-align: left; margin: 0; }
+  .plataforma .plat-texto .lead { margin-left: 0; }
+  .plat-venn { width: 100%; max-width: 560px; }
+  .venn-ico { font-size: 40px; }
+  .venn-c h3 { font-size: 1.1875rem; }
+  .venn-c p { font-size: 0.875rem; }
+}
+/* Animação: os círculos surgem um a um em Scale In e o símbolo aparece por último */
+.plataforma.anim-pronto .venn-c, .plataforma.anim-pronto .venn-nucleo { opacity: 0; }
+.plataforma.visivel .venn-c { animation: rag-scale-in .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.plataforma.visivel .venn-pessoas { animation-delay: .25s; }
+.plataforma.visivel .venn-operacao { animation-delay: .45s; }
+.plataforma.visivel .venn-melhoria { animation-delay: .65s; }
+@keyframes venn-nucleo-in { from { opacity: 0; transform: translate(-50%, -50%) scale(.6); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+.plataforma.visivel .venn-nucleo { animation: venn-nucleo-in .6s cubic-bezier(0.16, 1, 0.3, 1) .95s both; }

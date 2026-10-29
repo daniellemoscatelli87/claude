@@ -152,7 +152,7 @@
     obs.disconnect();
     secao.classList.add('visivel');
   }, { threshold: 0, rootMargin: '0px 0px -25% 0px' });
-  obs.observe(secao.querySelector('.plat-fluxo') || secao);
+  obs.observe(secao.querySelector('.plat-venn') || secao);
 })();
 
 // Seção "Como funciona": cada parte anima quando chega na tela (Motion do design system).
