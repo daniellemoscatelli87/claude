@@ -232,39 +232,31 @@
 })();
 
 
-// Seção "Para quem": cada público tem o seu exemplo; o contexto destacado é o do exemplo.
-// Ao escolher um contexto, aparece um exemplo dele; "Ver mais exemplos" passa para o próximo.
+// Seção "Para quem": a combinação de público e contexto escolhidos define o exemplo; "Ver mais exemplos" passa para o próximo.
 (function () {
   var cards = document.querySelector('.apl-cards');
   if (!cards) return;
   var casos = Array.prototype.slice.call(cards.querySelectorAll('.apl-caso'));
-  var ordem = casos.map(function (c) { return c.getAttribute('data-ex'); });
   var botoes = Array.prototype.slice.call(cards.querySelectorAll('.apl-op'));
-  function caso(id) { return casos.filter(function (c) { return c.getAttribute('data-ex') === id; })[0]; }
-  function mostrar(id) {
-    var atual = caso(id);
-    if (!atual) return;
-    cards.setAttribute('data-exemplo', id);
-    casos.forEach(function (c) { c.hidden = c !== atual; });
-    botoes.forEach(function (b) {
-      var ativo = b.getAttribute('data-grupo') === 'contexto' ? b.getAttribute('data-ctx') === atual.getAttribute('data-ctx') : b.getAttribute('data-ex') === id;
-      b.setAttribute('aria-pressed', ativo ? 'true' : 'false');
-    });
+  var escolha = { publico: cards.getAttribute('data-publico'), contexto: cards.getAttribute('data-contexto') };
+  function mostrar() {
+    cards.setAttribute('data-publico', escolha.publico);
+    cards.setAttribute('data-contexto', escolha.contexto);
+    casos.forEach(function (c) { c.hidden = !(c.getAttribute('data-publico') === escolha.publico && c.getAttribute('data-contexto') === escolha.contexto); });
+    botoes.forEach(function (b) { b.setAttribute('aria-pressed', escolha[b.getAttribute('data-grupo')] === b.getAttribute('data-valor') ? 'true' : 'false'); });
   }
   botoes.forEach(function (b) {
-    b.addEventListener('click', function () {
-      if (b.getAttribute('data-grupo') === 'contexto') {
-        var agora = caso(cards.getAttribute('data-exemplo'));
-        if (agora && agora.getAttribute('data-ctx') === b.getAttribute('data-ctx')) return;
-      }
-      mostrar(b.getAttribute('data-ex'));
-    });
+    b.addEventListener('click', function () { escolha[b.getAttribute('data-grupo')] = b.getAttribute('data-valor'); mostrar(); });
   });
   var mais = cards.querySelector('.apl-mais');
   if (mais) mais.addEventListener('click', function () {
-    mostrar(ordem[(ordem.indexOf(cards.getAttribute('data-exemplo')) + 1) % ordem.length]);
+    var i = casos.findIndex(function (c) { return !c.hidden; });
+    var proximo = casos[(i + 1) % casos.length];
+    escolha.publico = proximo.getAttribute('data-publico');
+    escolha.contexto = proximo.getAttribute('data-contexto');
+    mostrar();
   });
-  mostrar(cards.getAttribute('data-exemplo') || ordem[0]);
+  mostrar();
 })();
 
 // Seção "Aplicações": animações ao entrar na tela.
