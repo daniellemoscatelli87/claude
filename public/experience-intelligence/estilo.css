@@ -755,3 +755,10 @@ button.btn { border: 0; cursor: pointer; }
 .plat-frase .ico { flex: none; width: 20px; height: 20px; margin-top: 1px; color: var(--warning); transition: color .6s ease; }
 .plat-col:not([data-pos="centro"]) .plat-frase { color: var(--graphite-400); background: var(--muted); border-color: var(--border); }
 .plat-col:not([data-pos="centro"]) .plat-frase .ico { color: var(--graphite-400); }
+/* Card do centro: a imagem cresce para ocupar a altura disponível, sem sobrar espaço embaixo */
+@media (min-width: 1024px) {
+  .plat-col[data-pos="centro"] .plat-foto { flex: 1 1 0; min-height: 150px; aspect-ratio: auto; }
+}
+/* Notificação com lâmpada nos cards que não estão no centro: cinza mais apagado */
+.plat-col:not([data-pos="centro"]) .plat-frase { color: var(--graphite-300); background: var(--graphite-50); border-color: rgba(19, 26, 39, 0.06); }
+.plat-col:not([data-pos="centro"]) .plat-frase .ico { color: var(--graphite-300); }
