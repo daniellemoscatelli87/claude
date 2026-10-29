@@ -951,3 +951,11 @@ button.btn { border: 0; cursor: pointer; }
   .apl-lista { margin-bottom: 0; }
 }
 .apl-meta-card .apl-meta-ico { background: var(--primary); color: var(--primary-foreground); }
+/* Foto mais alta, atrás dos dois cards: o desafio sobe sobre ela e a meta sobrepõe a base da foto */
+@media (min-width: 1200px) {
+  .apl-caso { grid-template-rows: 96px auto; row-gap: 0; }
+  .apl-foto { grid-area: 1 / 1 / 3 / 3; height: auto; align-self: stretch; margin-bottom: 110px; }
+  .apl-desafio { margin-top: 0; }
+  .apl-meta-card { margin-top: 0; position: relative; z-index: 1; }
+  .apl-foto img { position: absolute; inset: 0; }
+}
