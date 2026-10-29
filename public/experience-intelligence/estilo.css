@@ -925,3 +925,7 @@ button.btn { border: 0; cursor: pointer; }
 .plataforma.visivel .venn-melhoria { animation-delay: .65s; }
 @keyframes venn-nucleo-in { from { opacity: 0; transform: translate(-50%, -50%) scale(.6); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
 .plataforma.visivel .venn-nucleo { animation: venn-nucleo-in .6s cubic-bezier(0.16, 1, 0.3, 1) .95s both; }
+/* Tipo de experiência do exemplo, ao lado do rótulo "O desafio" */
+.apl-topo { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 10px; }
+.apl-topo .apl-rot { margin: 0; }
+.apl-tipo { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; background: var(--crimson-50); border: 1px solid var(--crimson-100); color: var(--crimson-500); font-size: 0.8125rem; font-weight: 600; line-height: 1.3; }

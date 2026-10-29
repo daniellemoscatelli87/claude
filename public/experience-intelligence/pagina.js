@@ -250,25 +250,19 @@
 })();
 
 
-// Seção "Para quem": a combinação de público e contexto escolhidos define o exemplo.
+// Seção "Para quem": cada público tem um exemplo; o tipo de experiência aparece dentro do card do desafio.
 (function () {
   var cards = document.querySelector('.apl-cards');
   if (!cards) return;
   var casos = Array.prototype.slice.call(cards.querySelectorAll('.apl-caso'));
-  // As opções ficam no menu à esquerda, fora do bloco do exemplo
   var botoes = Array.prototype.slice.call(document.querySelectorAll('#aplicacoes .apl-op'));
-  var escolha = { publico: cards.getAttribute('data-publico'), contexto: cards.getAttribute('data-contexto') };
-  function mostrar() {
-    cards.setAttribute('data-publico', escolha.publico);
-    cards.setAttribute('data-contexto', escolha.contexto);
-    casos.forEach(function (c) { c.hidden = !(c.getAttribute('data-publico') === escolha.publico && c.getAttribute('data-contexto') === escolha.contexto); });
-    botoes.forEach(function (b) { b.setAttribute('aria-pressed', escolha[b.getAttribute('data-grupo')] === b.getAttribute('data-valor') ? 'true' : 'false'); });
+  function mostrar(id) {
+    cards.setAttribute('data-publico', id);
+    casos.forEach(function (c) { c.hidden = c.getAttribute('data-publico') !== id; });
+    botoes.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-valor') === id ? 'true' : 'false'); });
   }
-  botoes.forEach(function (b) {
-    b.addEventListener('click', function () { escolha[b.getAttribute('data-grupo')] = b.getAttribute('data-valor'); mostrar(); });
-  });
-
-  mostrar();
+  botoes.forEach(function (b) { b.addEventListener('click', function () { mostrar(b.getAttribute('data-valor')); }); });
+  mostrar(cards.getAttribute('data-publico') || 'clientes');
 })();
 
 // Seção "Aplicações": animações ao entrar na tela.
