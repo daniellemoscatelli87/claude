@@ -391,7 +391,7 @@ html { scroll-behavior: smooth; }
 .plat-col[data-pos="esq"] { transform: translateX(-110%); opacity: 0; visibility: hidden; }
 .plat-col[data-pos="dir"] { transform: translateX(110%); opacity: 0; visibility: hidden; }
 .plat-col:not([data-pos="centro"]) { cursor: pointer; }
-.plat-controles { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; }
+.plat-controles { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 0 0 20px; }
 .plat-nav { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; box-shadow: var(--shadow-sm); transition: background-color .2s; }
 .plat-nav:hover { background: var(--crimson-50); }
 .plat-nav:focus-visible, .plat-ponto:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
@@ -399,7 +399,7 @@ html { scroll-behavior: smooth; }
 @media (min-width: 1024px) {
   .plat-grid { gap: 24px; }
   /* Sem card de base: os cards dos lados ficam atrás; o do centro é mais alto e fica à frente */
-  .plat-fluxo { max-width: 1120px; margin: 72px auto 0; padding: 16px 20px; overflow: visible; }
+  .plat-fluxo { max-width: 1120px; margin: 64px auto 40px; padding: 16px 20px; overflow: visible; }
   .plat-col { padding: 22px 18px; }
   /* O do centro estica até a altura da base e passa das bordas dela, em cima e embaixo: fica sempre maior que os dos lados */
   .plat-col[data-pos="centro"] { width: 32%; align-self: stretch; justify-content: center; padding: 24px 22px; margin: -40px 0; box-shadow: var(--shadow-lg); }
@@ -408,7 +408,7 @@ html { scroll-behavior: smooth; }
   .plat-col[data-pos="esq"], .plat-col[data-pos="dir"] { width: 32%; opacity: 1; visibility: visible; border-color: var(--border); box-shadow: none; }
   .plat-col[data-pos="esq"] { transform: translateX(-104%); }
   .plat-col[data-pos="dir"] { transform: translateX(104%); }
-  .plat-controles { margin-top: 64px; }
+  .plat-controles { margin: 8px 0 0; }
   .plat-intel h3 { font-size: 1.375rem; margin-bottom: 12px; }
   .plat-ico-titulo, .plat-ico-grande { width: 44px; height: 44px; font-size: 24px; }
   .plat-itens { gap: 8px; }
@@ -590,8 +590,6 @@ button.btn { border: 0; cursor: pointer; }
 .como-funciona .plat-texto.visivel h2 { animation-delay: .08s; }
 .como-funciona .plat-texto.visivel .lead { animation-delay: .16s; }
 .como-funciona .cf-etapa.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.cf-etapa.visivel::before { transform-origin: top; animation: cf-linha .6s ease-out .2s both; }
-.cf-etapa.visivel .cf-num { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) .2s both; }
 @keyframes cf-da-direita { from { opacity: 0; transform: translate3d(32px, 0, 0); } to { opacity: 1; transform: none; } }
 @keyframes cf-da-esquerda { from { opacity: 0; transform: translate3d(-32px, 0, 0); } to { opacity: 1; transform: none; } }
 @media (min-width: 768px) {
@@ -700,8 +698,6 @@ button.btn { border: 0; cursor: pointer; }
 .apl-op[aria-pressed="true"] { background: var(--crimson-50); border-color: var(--crimson-200); color: var(--primary); font-weight: 600; }
 .apl-op[aria-pressed="true"] .ico { color: var(--primary); }
 .apl-op:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
-.apl-sep { color: var(--graphite-400); font-size: 26px; display: flex; transform: rotate(90deg); }
-.apl-sep:first-of-type { transform: none; }
 .apl-caso { animation: ds-surgir .35s ease-out; }
 .apl-caso-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .apl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
@@ -715,7 +711,6 @@ button.btn { border: 0; cursor: pointer; }
 @media (min-width: 1024px) {
   .apl-cards { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1.05fr); align-items: stretch; gap: 14px; }
   .apl-card { max-width: none; }
-  .apl-sep, .apl-sep:first-of-type { transform: none; align-self: center; }
 }
 /* Animações da seção (só com JavaScript; desligadas com movimento reduzido) */
 .aplicacoes.anim-pronto .apl-intro > *, .aplicacoes.anim-pronto .apl-card, .aplicacoes.anim-pronto .apl-sep { opacity: 0; }
@@ -731,7 +726,9 @@ button.btn { border: 0; cursor: pointer; }
 /* Cards do carrossel de "O que é a plataforma": imagem, título e resumo */
 .plat-col { text-align: left; }
 .plat-col h3, .plat-intel h3 { display: block; margin: 0 0 8px; font-size: 1.25rem; text-align: left; }
-.plat-foto { display: block; width: 100%; height: auto; aspect-ratio: 5 / 2; object-fit: cover; margin: 0 0 16px; border-radius: 14px; background: var(--muted); }
+/* Imagem do card com a tag do capítulo no canto superior direito */
+.plat-midia { position: relative; margin: 0 0 16px; }
+.plat-foto { display: block; width: 100%; height: auto; aspect-ratio: 5 / 2; object-fit: cover; border-radius: 14px; background: var(--muted); }
 .plat-resumo { margin: 0; color: var(--graphite-600); font-size: 0.9375rem; line-height: 1.55; }
 @media (min-width: 1024px) {
   .plat-col, .plat-col[data-pos="centro"] { padding: 14px 14px 20px; }
@@ -752,15 +749,16 @@ button.btn { border: 0; cursor: pointer; }
 .plat-col:not([data-pos="centro"]) .plat-frase .ico { color: var(--graphite-400); }
 /* Card do centro: a imagem cresce para ocupar a altura disponível, sem sobrar espaço embaixo */
 @media (min-width: 1024px) {
-  .plat-col[data-pos="centro"] .plat-foto { flex: 1 1 0; min-height: 150px; aspect-ratio: auto; }
+  .plat-col[data-pos="centro"] .plat-midia { flex: 1 1 0; min-height: 150px; display: flex; }
+  .plat-col[data-pos="centro"] .plat-foto { flex: 1; height: auto; aspect-ratio: auto; }
 }
 /* Notificação com lâmpada nos cards que não estão no centro: cinza mais apagado */
 .plat-col:not([data-pos="centro"]) .plat-frase { color: var(--graphite-300); background: var(--graphite-50); border-color: rgba(19, 26, 39, 0.06); }
 .plat-col:not([data-pos="centro"]) .plat-frase .ico { color: var(--graphite-300); }
 
 /* Carrossel como história: capítulo acima do título e linha de etapas (Desafio → Inteligência → Plano de ação) */
-.plat-capitulo { margin: 0 0 4px; color: var(--crimson-500); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; transition: color .6s ease; }
-.plat-col:not([data-pos="centro"]) .plat-capitulo { color: var(--graphite-300); }
+.plat-capitulo { position: absolute; top: 10px; right: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(255, 255, 255, 0.72); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: var(--graphite-700); font-size: 0.75rem; font-weight: 600; line-height: 1.4; }
+.plat-col:not([data-pos="centro"]) .plat-capitulo { color: var(--graphite-300); background: rgba(255, 255, 255, 0.6); }
 .plat-etapas-nav { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; }
 .plat-etapas-nav li { display: flex; align-items: center; }
 .plat-etapas-nav li + li::before { content: ""; width: 28px; height: 2px; margin: 0 6px; border-radius: 2px; background: var(--crimson-100); }
@@ -788,3 +786,83 @@ button.btn { border: 0; cursor: pointer; }
 }
 .plat-nav:disabled { opacity: .35; cursor: default; box-shadow: none; }
 .plat-nav:disabled:hover { background: var(--card); }
+/* Quebra de linha do título só em telas a partir do tablet */
+@media (max-width: 767px) { .quebra-larga { display: none; } }
+/* Altura fixa dos cards de "Para quem": todos os exemplos ocupam o mesmo espaço (o maior deles),
+   e só o escolhido aparece; os outros ficam invisíveis e fora da leitura de tela */
+.apl-casos { display: grid; }
+.apl-caso { grid-area: 1 / 1; }
+.apl-caso[hidden] { display: block; visibility: hidden; }
+/* Cabeçalho dos cards de "Para quem": ícone ao lado do título e da descrição */
+.apl-cab { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+.apl-cab .apl-ico { width: 56px; height: 56px; margin: 0; border-radius: 16px; font-size: 28px; flex: none; }
+.apl-cab h3 { margin: 0; }
+.apl-card .apl-desc { margin: 0 0 18px; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
+/* Computador: cabeçalhos dos três cards com a mesma altura, para as listas começarem alinhadas */
+@media (min-width: 1024px) { .apl-cab { min-height: 64px; } .apl-card .apl-desc { min-height: 3em; } }
+/* "Para quem" como um assistente em passos: selo do passo em cada card e conectores entre eles */
+.apl-card { position: relative; }
+.apl-passo { display: block; margin-top: 2px; color: var(--graphite-400); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.apl-sep { position: relative; display: flex; align-items: center; justify-content: center; width: 2px; height: 40px; background: repeating-linear-gradient(180deg, var(--crimson-200) 0 6px, transparent 6px 12px); }
+.apl-sep-bola { position: absolute; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); font-size: 22px; box-shadow: 0 0 0 6px var(--crimson-50), var(--shadow-md); transform: rotate(90deg); }
+@media (min-width: 1024px) {
+  .apl-sep { align-self: center; width: 40px; height: 2px; background: repeating-linear-gradient(90deg, var(--crimson-200) 0 6px, transparent 6px 12px); }
+  .apl-sep-bola { transform: none; }
+}
+.aplicacoes .apl-cards.visivel .apl-sep-bola { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) .55s both; }
+
+/* Linha do tempo com a animação "Step Indicator" do design system (aba Motion): conforme a pessoa rola a página,
+   a etapa atual cresce, as já percorridas ficam preenchidas em vermelho com um check e a linha vai sendo preenchida.
+   Só vale quando o JavaScript está ativo (classe .cf-passo-a-passo); sem ele, a linha fica toda vermelha como antes. */
+.cf-num-ok { display: none; }
+.cf-passo-a-passo .cf-etapa::before { background: var(--graphite-200); }
+.cf-passo-a-passo .cf-etapa::after { content: ""; position: absolute; left: calc(var(--cf-marco) / 2 - 1px); top: 50%; bottom: -10px; width: 2px; background: var(--primary); transform: scaleY(0); transform-origin: top; transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1); }
+.cf-passo-a-passo .cf-etapa:last-child::after { display: none; }
+.cf-passo-a-passo .cf-etapa + .cf-etapa::before { top: -10px; }
+.cf-passo-a-passo .cf-etapa.feita::after { transform: scaleY(1); }
+.cf-passo-a-passo .cf-etapa.feita + .cf-etapa::before { background: linear-gradient(var(--primary) 0 50%, var(--graphite-200) 50%); }
+.cf-passo-a-passo .cf-num { background: var(--card); border-color: var(--graphite-200); color: var(--graphite-400); box-shadow: none; transition: background-color .3s, border-color .3s, color .3s, transform .4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .3s; }
+.cf-passo-a-passo .cf-etapa.feita .cf-num, .cf-passo-a-passo .cf-etapa.atual .cf-num { background: var(--primary); border-color: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-md); }
+.cf-passo-a-passo .cf-etapa.atual .cf-num { transform: scale(1.15); }
+.cf-passo-a-passo .cf-etapa.feita .cf-num-n { display: none; }
+.cf-passo-a-passo .cf-etapa.feita .cf-num-ok { display: inline-flex; font-size: 22px; animation: ds-estrela .25s ease-out both; }
+@media (min-width: 768px) {
+  .cf-passo-a-passo .cf-etapa::after { left: calc(50% - 1px); }
+}
+/* Títulos dos passos de "Para quem" sempre em uma linha */
+.apl-cab { gap: 12px; }
+.apl-cab .apl-ico { width: 48px; height: 48px; border-radius: 14px; font-size: 24px; }
+.apl-cab h3 { white-space: nowrap; font-size: 1.125rem; }
+@media (min-width: 1024px) and (max-width: 1279px) { .apl-cab h3 { font-size: 0.9375rem; } .apl-card { padding-left: 16px; padding-right: 16px; } .apl-card .apl-desc { min-height: 4.5em; } .apl-cab .apl-ico { width: 40px; height: 40px; font-size: 20px; } }
+/* Card do exemplo (passo 3) em destaque: fundo rosado, borda vermelha suave, sombra maior e ícone preenchido */
+.apl-exemplo { background: linear-gradient(180deg, var(--crimson-50), var(--card) 55%); border-color: var(--crimson-100); box-shadow: var(--shadow-lg); }
+.apl-exemplo .apl-cab .apl-ico { background: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-sm); }
+/* Escolha atual no exemplo: quadro com duas colunas rotuladas (Público e Contexto), no lugar das etiquetas */
+.apl-exemplo .apl-tags { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; width: 100%; border: 1px solid var(--crimson-100); border-radius: 14px; background: var(--card); overflow: hidden; }
+.apl-exemplo .apl-tags span { display: block; padding: 10px 14px; border-radius: 0; background: none; color: var(--foreground); font-size: 0.875rem; font-weight: 600; line-height: 1.35; }
+.apl-exemplo .apl-tags span + span { border-left: 1px solid var(--crimson-100); }
+.apl-exemplo .apl-tags span::before { display: block; margin-bottom: 2px; color: var(--crimson-500); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.apl-exemplo .apl-tags span:first-child::before { content: "Público"; }
+.apl-exemplo .apl-tags span + span::before { content: "Contexto"; }
+.apl-exemplo .apl-caso-topo { display: block; }
+/* Opções de "Para quem" em quadrados (ícone em cima, nome embaixo), duas por linha */
+.apl-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.apl-op { flex-direction: column; justify-content: center; gap: 10px; aspect-ratio: 1; min-height: 0; padding: 12px; text-align: center; border-radius: 16px; line-height: 1.3; }
+.apl-op .ico { font-size: 28px; }
+@media (min-width: 1024px) and (max-width: 1279px) { .apl-op { padding: 8px; font-size: 0.8125rem; } .apl-op .ico { font-size: 24px; } }
+/* O quadro Público / Contexto não aparece no exemplo (as escolhas já estão destacadas nos cards 1 e 2) */
+.apl-exemplo .apl-caso-topo { display: none; }
+/* Exemplo de "Para quem" contado em sequência: o desafio como citação, a trilha (investigação e primeira ação) e aonde se quer chegar */
+.apl-caso .apl-rot { margin: 4px 0 6px; color: var(--crimson-500); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.apl-caso h4 { margin: 0 0 18px; padding: 0; border: 0; background: none; box-shadow: none; font-size: 1.1875rem; line-height: 1.35; letter-spacing: -0.01em; font-weight: 700; color: var(--foreground); }
+.apl-caso h4::before, .apl-caso h4::after { position: static; display: inline; width: auto; height: auto; border-radius: 0; background: none; color: var(--primary); font-family: Georgia, serif; font-size: 1.5em; line-height: 0; vertical-align: -0.28em; }
+.apl-caso h4::before { content: "\201C"; margin-right: 2px; }
+.apl-caso h4::after { content: "\201D"; margin-left: 2px; }
+.apl-trilha { position: relative; margin: 0 0 14px; padding: 0 0 0 20px; display: grid; gap: 12px; }
+.apl-trilha::before { content: ""; position: absolute; left: 4px; top: 6px; bottom: 6px; width: 2px; border-radius: 2px; background: var(--crimson-100); }
+.apl-trilha div { position: relative; }
+.apl-trilha div::before { content: ""; position: absolute; left: -20px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--card); border: 2px solid var(--primary); box-sizing: border-box; }
+.apl-trilha dt { margin: 0 0 2px; color: var(--foreground); font-size: 0.8125rem; font-weight: 700; }
+.apl-trilha dd { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
+.apl-caso .apl-meta { display: block; margin: 0; padding: 12px 14px; border-radius: 14px; background: var(--primary); color: var(--primary-foreground); font-weight: 600; }
+.apl-caso .apl-meta strong { display: block; margin-bottom: 2px; color: rgba(255, 255, 255, 0.85); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
