@@ -364,3 +364,19 @@
   window.addEventListener('resize', pedir);
   atualizar();
 })();
+
+// Seção "Diferenciais": animações ao entrar na tela.
+(function () {
+  var secao = document.getElementById('diferenciais');
+  if (!secao) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  secao.classList.add('anim-pronto');
+  var obs = new IntersectionObserver(function (entradas) {
+    entradas.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('visivel');
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+  secao.querySelectorAll('.dif-intro, .dif-cards').forEach(function (el) { obs.observe(el); });
+})();
