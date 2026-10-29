@@ -255,7 +255,8 @@
   var cards = document.querySelector('.apl-cards');
   if (!cards) return;
   var casos = Array.prototype.slice.call(cards.querySelectorAll('.apl-caso'));
-  var botoes = Array.prototype.slice.call(cards.querySelectorAll('.apl-op'));
+  // As opções ficam no menu à esquerda, fora do bloco do exemplo
+  var botoes = Array.prototype.slice.call(document.querySelectorAll('#aplicacoes .apl-op'));
   var escolha = { publico: cards.getAttribute('data-publico'), contexto: cards.getAttribute('data-contexto') };
   function mostrar() {
     cards.setAttribute('data-publico', escolha.publico);
@@ -283,7 +284,7 @@
       obs.unobserve(e.target);
     });
   }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
-  secao.querySelectorAll('.apl-intro, .apl-cards').forEach(function (el) { obs.observe(el); });
+  secao.querySelectorAll('.apl-intro, .apl-menu, .apl-cards').forEach(function (el) { obs.observe(el); });
 })();
 
 // Seção "O que é a plataforma": carrossel dos três cards. O card do centro fica maior e à frente;
