@@ -627,7 +627,7 @@ button.btn { border: 0; cursor: pointer; }
 .rag-texto { min-width: 0; padding-top: 2px; }
 .rag-topo { margin: 0 0 2px; color: var(--crimson-500); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .rag-texto h3 { margin: 0 0 4px; font-size: 1.125rem; line-height: 1.25; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
-.rag-texto p:last-child { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
+.rag-texto p:last-child { margin: 0; color: var(--graphite-500); font-size: 1rem; line-height: 1.5; }
 @media (min-width: 768px) and (max-width: 1199px) {
   .rag-areas { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; }
 }
@@ -798,7 +798,7 @@ button.btn { border: 0; cursor: pointer; }
 .dif-card + .dif-card { border-top: 1px solid var(--border); }
 .dif-ico { width: 64px; height: 64px; margin-bottom: 18px; border-radius: 50%; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 28px; }
 .dif-card h3 { margin: 0 0 8px; font-size: 1.125rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); text-wrap: balance; }
-.dif-card p { margin: 0; max-width: 22rem; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.55; }
+.dif-card p { margin: 0; max-width: 22rem; color: var(--graphite-500); font-size: 1rem; line-height: 1.55; }
 @media (min-width: 768px) {
   .dif-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dif-card + .dif-card { border-top: 0; }
