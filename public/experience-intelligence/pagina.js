@@ -169,7 +169,7 @@
       obs.unobserve(e.target);
     });
   }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
-  secao.querySelectorAll('.plat-texto, .cf-pergunta, .cf-abas, .cf-etapa, .cf-meta, .cf-identificar, .cf-nota').forEach(function (el) { obs.observe(el); });
+  secao.querySelectorAll('.plat-texto, .cf-etapa, .cf-identificar, .cf-nota').forEach(function (el) { obs.observe(el); });
 })();
 
 // Seção "Nossa inteligência" (computador): linhas tracejadas do centro até cada área, recalculadas quando a tela muda.
@@ -231,29 +231,46 @@
   secao.querySelectorAll('.rag-intro, .rag-centro, .rag-area').forEach(function (el) { obs.observe(el); });
 })();
 
-// Seção "Como funciona": abas de contexto do exemplo (clique e setas do teclado, padrão de abas acessíveis).
+
+// Seção "Para quem": a combinação de público e contexto escolhidos define o exemplo; "Ver mais exemplos" passa para o próximo.
 (function () {
-  var corpo = document.querySelector('.cf-corpo[data-contexto]');
-  if (!corpo) return;
-  var abas = Array.prototype.slice.call(corpo.querySelectorAll('[role="tab"]'));
-  var painel = document.getElementById('cf-painel');
-  function escolher(aba, focar) {
-    abas.forEach(function (a) {
-      var ativa = a === aba;
-      a.setAttribute('aria-selected', ativa ? 'true' : 'false');
-      if (ativa) a.removeAttribute('tabindex'); else a.setAttribute('tabindex', '-1');
-    });
-    corpo.setAttribute('data-contexto', aba.getAttribute('data-aba'));
-    painel.setAttribute('aria-labelledby', aba.id);
-    if (focar) aba.focus();
+  var cards = document.querySelector('.apl-cards');
+  if (!cards) return;
+  var casos = Array.prototype.slice.call(cards.querySelectorAll('.apl-caso'));
+  var botoes = Array.prototype.slice.call(cards.querySelectorAll('.apl-op'));
+  var escolha = { publico: cards.getAttribute('data-publico'), contexto: cards.getAttribute('data-contexto') };
+  function mostrar() {
+    cards.setAttribute('data-publico', escolha.publico);
+    cards.setAttribute('data-contexto', escolha.contexto);
+    casos.forEach(function (c) { c.hidden = !(c.getAttribute('data-publico') === escolha.publico && c.getAttribute('data-contexto') === escolha.contexto); });
+    botoes.forEach(function (b) { b.setAttribute('aria-pressed', escolha[b.getAttribute('data-grupo')] === b.getAttribute('data-valor') ? 'true' : 'false'); });
   }
-  abas.forEach(function (aba, i) {
-    aba.addEventListener('click', function () { escolher(aba); });
-    aba.addEventListener('keydown', function (e) {
-      var n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: abas.length - 1 }[e.key];
-      if (n === undefined) return;
-      e.preventDefault();
-      escolher(abas[(n + abas.length) % abas.length], true);
-    });
+  botoes.forEach(function (b) {
+    b.addEventListener('click', function () { escolha[b.getAttribute('data-grupo')] = b.getAttribute('data-valor'); mostrar(); });
   });
+  var mais = cards.querySelector('.apl-mais');
+  if (mais) mais.addEventListener('click', function () {
+    var i = casos.findIndex(function (c) { return !c.hidden; });
+    var proximo = casos[(i + 1) % casos.length];
+    escolha.publico = proximo.getAttribute('data-publico');
+    escolha.contexto = proximo.getAttribute('data-contexto');
+    mostrar();
+  });
+  mostrar();
+})();
+
+// Seção "Aplicações": animações ao entrar na tela.
+(function () {
+  var secao = document.getElementById('aplicacoes');
+  if (!secao) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  secao.classList.add('anim-pronto');
+  var obs = new IntersectionObserver(function (entradas) {
+    entradas.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('visivel');
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+  secao.querySelectorAll('.apl-intro, .apl-cards').forEach(function (el) { obs.observe(el); });
 })();
