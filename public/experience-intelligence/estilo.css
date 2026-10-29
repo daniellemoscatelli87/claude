@@ -409,10 +409,9 @@ html { scroll-behavior: smooth; }
   .plat-col[data-pos="centro"] { width: 32%; align-self: stretch; justify-content: center; padding: 24px 22px; margin: -40px 0; box-shadow: var(--shadow-lg); }
   /* Os três cards têm a mesma largura; o do centro continua mais alto e à frente */
   /* Borda e sombra nos cards dos lados para que a largura deles apareça (antes se confundiam com o branco da base) */
-  .plat-col[data-pos="esq"], .plat-col[data-pos="dir"] { width: 32%; opacity: 1; visibility: visible; border-color: var(--border); box-shadow: var(--shadow-sm); }
+  .plat-col[data-pos="esq"], .plat-col[data-pos="dir"] { width: 32%; opacity: 1; visibility: visible; border-color: var(--border); box-shadow: none; }
   .plat-col[data-pos="esq"] { transform: translateX(-104%); }
   .plat-col[data-pos="dir"] { transform: translateX(104%); }
-  .plat-col:not([data-pos="centro"]):hover { box-shadow: var(--shadow-md); }
   .plat-controles { margin-top: 64px; }
   .plat-intel h3 { font-size: 1.375rem; margin-bottom: 12px; }
   .plat-ico-titulo, .plat-ico-grande { width: 44px; height: 44px; font-size: 24px; }
