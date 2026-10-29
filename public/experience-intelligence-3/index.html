@@ -10,6 +10,28 @@
 .ei3-modelo-sobe { animation: ei3ModeloSobe 1.1s cubic-bezier(0.16, 1, 0.3, 1) .25s both; will-change: transform; }
 @media (prefers-reduced-motion: reduce) { .ei3-modelo-sobe { animation: none; } }
 </style>
+<style id="ei3-revelar">
+/* Só com JavaScript e sem "movimento reduzido": sem isso, tudo fica visível */
+.ei3-revelar main > div section > * { opacity: 0; transform: translateY(44px); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
+.ei3-revelar main > div section.ei3-visivel > * { opacity: 1; transform: none; }
+</style>
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  document.documentElement.classList.add('ei3-revelar');
+  document.addEventListener('DOMContentLoaded', function () {
+    var secoes = Array.prototype.slice.call(document.querySelectorAll("main > div section"));
+    var obs = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (e.isIntersecting) e.target.classList.add('ei3-visivel');
+        // Saiu por baixo (a pessoa rolou para cima): some, para surgir de novo ao descer
+        else if (e.boundingClientRect.top > 0) e.target.classList.remove('ei3-visivel');
+      });
+    }, { threshold: 0, rootMargin: '0px 0px -12% 0px' });
+    secoes.forEach(function (s) { obs.observe(s); });
+  });
+})();
+</script>
 </head><body class="antialiased selection:bg-brand-100 selection:text-brand-600 bg-[#F1F4F8]"><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg>
 
 <title>Dani Moscatelli | Experience Design Studio</title>
@@ -524,7 +546,7 @@ h1, h2, h3, h4, h5, h6 {
 <section class="sec como-funciona" id="metodo" aria-labelledby="cf-titulo">
     <div class="sec-in">
       <div class="plat-texto">
-        <p class="etiqueta">Como funciona</p>
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3"> <span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">Como funciona</span> </div>
         <h2 id="como-titulo">Sete etapas guiadas até <span class="destaque">resultados<br class="quebra-larga"> concretos</span>.</h2>
         <p class="lead">Uma jornada orientada e inteligente que transforma o seu desafio de experiência em aprendizado, recomendações e ações concretas, com resultados práticos e mensuráveis.</p>
         <span class="cf-traco" aria-hidden="true"></span>
