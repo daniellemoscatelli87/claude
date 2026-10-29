@@ -152,7 +152,7 @@
     obs.disconnect();
     secao.classList.add('visivel');
   }, { threshold: 0, rootMargin: '0px 0px -25% 0px' });
-  obs.observe(secao.querySelector('.plat-fluxo') || secao);
+  obs.observe(secao.querySelector('.plat-venn') || secao);
 })();
 
 // Seção "Como funciona": cada parte anima quando chega na tela (Motion do design system).
@@ -169,7 +169,7 @@
       obs.unobserve(e.target);
     });
   }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
-  secao.querySelectorAll('.plat-texto, .cf-etapa, .cf-identificar, .cf-nota').forEach(function (el) { obs.observe(el); });
+  secao.querySelectorAll('.plat-texto, .cf-identificar, .cf-nota').forEach(function (el) { obs.observe(el); });
 })();
 
 // Seção "Nossa inteligência" (computador): linhas tracejadas do centro até cada área, recalculadas quando a tela muda.
@@ -188,19 +188,37 @@
     var base = roda.getBoundingClientRect();
     var c = centro.getBoundingClientRect();
     var cx = c.left + c.width / 2 - base.left, cy = c.top + c.height / 2 - base.top;
+    var raio = c.width / 2 + 45;
     roda.querySelectorAll('.rag-area').forEach(function (area, i) {
       var r = area.getBoundingClientRect();
-      var x, y;
-      if (r.top - base.top > cy + c.height / 2) { x = cx; y = r.top - base.top; }
-      else { x = r.left - base.left > cx ? r.left - base.left : r.right - base.left; y = r.top + r.height / 2 - base.top; }
-      var l = document.createElementNS(NS, 'line');
-      l.setAttribute('x1', cx); l.setAttribute('y1', cy); l.setAttribute('x2', x); l.setAttribute('y2', y);
+      var ico = area.querySelector('.rag-ico').getBoundingClientRect();
+      var ey = ico.top + ico.height / 2 - base.top;
+      var ix = ico.left + ico.width / 2 - base.left;
+      var sx, sy, d;
+      if (ico.top - base.top > cy + c.height / 2) {
+        // Área abaixo do núcleo: galho reto descendo do anel até o ícone
+        sx = cx; sy = cy + raio;
+        var fy = ico.top - base.top - 14;
+        d = 'M' + sx + ',' + sy + ' L' + sx + ',' + fy;
+      } else {
+        // Áreas dos lados: galho sai do anel na diagonal e termina na horizontal, perto do ícone
+        var esquerda = ix < cx;
+        var ex = esquerda ? ico.right - base.left + 14 : ico.left - base.left - 14;
+        var ang = Math.atan2(ey - cy, ex - cx);
+        sx = cx + Math.cos(ang) * raio; sy = cy + Math.sin(ang) * raio;
+        var kx = sx + (ex - sx) * 0.5;
+        d = 'M' + sx + ',' + sy + ' Q' + kx + ',' + ey + ' ' + (sx + (ex - sx) * 0.75) + ',' + ey + ' L' + ex + ',' + ey;
+      }
+      var l = document.createElementNS(NS, 'path');
+      l.setAttribute('d', d);
       l.style.transformOrigin = cx + 'px ' + cy + 'px';
-      l.style.setProperty('--i', i);
+      var o = getComputedStyle(area).getPropertyValue('--o');
+      l.style.setProperty('--o', o);
       var p = document.createElementNS(NS, 'circle');
-      p.setAttribute('cx', x); p.setAttribute('cy', y); p.setAttribute('r', 5);
-      p.style.setProperty('--i', i);
+      p.setAttribute('cx', sx); p.setAttribute('cy', sy); p.setAttribute('r', 4.5);
+      p.style.setProperty('--o', o);
       svg.appendChild(l); pontos.appendChild(p);
+      l.style.setProperty('--len', Math.ceil(l.getTotalLength()));
     });
   }
   desenhar();
@@ -232,24 +250,19 @@
 })();
 
 
-// Seção "Para quem": a combinação de público e contexto escolhidos define o exemplo.
+// Seção "Para quem": cada público tem um exemplo; o tipo de experiência aparece dentro do card do desafio.
 (function () {
   var cards = document.querySelector('.apl-cards');
   if (!cards) return;
   var casos = Array.prototype.slice.call(cards.querySelectorAll('.apl-caso'));
-  var botoes = Array.prototype.slice.call(cards.querySelectorAll('.apl-op'));
-  var escolha = { publico: cards.getAttribute('data-publico'), contexto: cards.getAttribute('data-contexto') };
-  function mostrar() {
-    cards.setAttribute('data-publico', escolha.publico);
-    cards.setAttribute('data-contexto', escolha.contexto);
-    casos.forEach(function (c) { c.hidden = !(c.getAttribute('data-publico') === escolha.publico && c.getAttribute('data-contexto') === escolha.contexto); });
-    botoes.forEach(function (b) { b.setAttribute('aria-pressed', escolha[b.getAttribute('data-grupo')] === b.getAttribute('data-valor') ? 'true' : 'false'); });
+  var botoes = Array.prototype.slice.call(document.querySelectorAll('#aplicacoes .apl-op'));
+  function mostrar(id) {
+    cards.setAttribute('data-publico', id);
+    casos.forEach(function (c) { c.hidden = c.getAttribute('data-publico') !== id; });
+    botoes.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-valor') === id ? 'true' : 'false'); });
   }
-  botoes.forEach(function (b) {
-    b.addEventListener('click', function () { escolha[b.getAttribute('data-grupo')] = b.getAttribute('data-valor'); mostrar(); });
-  });
-
-  mostrar();
+  botoes.forEach(function (b) { b.addEventListener('click', function () { mostrar(b.getAttribute('data-valor')); }); });
+  mostrar(cards.getAttribute('data-publico') || 'clientes');
 })();
 
 // Seção "Aplicações": animações ao entrar na tela.
@@ -265,7 +278,7 @@
       obs.unobserve(e.target);
     });
   }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
-  secao.querySelectorAll('.apl-intro, .apl-cards').forEach(function (el) { obs.observe(el); });
+  secao.querySelectorAll('.apl-intro, .apl-menu, .apl-cards').forEach(function (el) { obs.observe(el); });
 })();
 
 // Seção "O que é a plataforma": carrossel dos três cards. O card do centro fica maior e à frente;
@@ -281,9 +294,10 @@
   // Ordem da história: o que já passou fica à esquerda e o que vem depois à direita.
   function mostrar(i) {
     var n = cards.length;
-    centro = Math.max(0, Math.min(n - 1, i));
+    centro = ((i % n) + n) % n;
     cards.forEach(function (c, k) {
-      var pos = k === centro ? 'centro' : k === centro - 1 ? 'esq' : k === centro + 1 ? 'dir' : (k < centro ? 'fora-esq' : 'fora-dir');
+      // Três cards sempre visíveis: o anterior à esquerda e o próximo à direita (em ciclo).
+      var pos = k === centro ? 'centro' : k === (centro + n - 1) % n ? 'esq' : 'dir';
       c.setAttribute('data-pos', pos);
     });
     pontos.forEach(function (p, k) {
@@ -292,7 +306,7 @@
     });
     navs.forEach(function (b) {
       var d = Number(b.getAttribute('data-dir'));
-      b.disabled = d < 0 && centro === 0;
+      b.disabled = false;
       if (d > 0) b.setAttribute('aria-label', centro === n - 1 ? 'Voltar ao início' : 'Próxima etapa');
     });
   }
@@ -300,7 +314,8 @@
     b.addEventListener('click', function () {
       var d = Number(b.getAttribute('data-dir'));
       // Depois da última etapa, avançar volta ao começo da história.
-      mostrar(d > 0 && centro === cards.length - 1 ? 0 : centro + d);
+      var n = cards.length;
+      mostrar((centro + d + n) % n);
     });
   });
   pontos.forEach(function (p) { p.addEventListener('click', function () { mostrar(Number(p.getAttribute('data-ir'))); }); });
@@ -335,10 +350,28 @@
     etapas.forEach(function (e, i) {
       e.classList.toggle('feita', i < atual);
       e.classList.toggle('atual', i === atual);
+      // O card de cada etapa entra junto com a bolinha (uma vez só).
+      if (i <= atual) e.classList.add('visivel');
     });
   }
   function pedir() { if (!agendado) { agendado = true; requestAnimationFrame(atualizar); } }
   window.addEventListener('scroll', pedir, { passive: true });
   window.addEventListener('resize', pedir);
   atualizar();
+})();
+
+// Seção "Diferenciais": animações ao entrar na tela.
+(function () {
+  var secao = document.getElementById('diferenciais');
+  if (!secao) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  secao.classList.add('anim-pronto');
+  var obs = new IntersectionObserver(function (entradas) {
+    entradas.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('visivel');
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+  secao.querySelectorAll('.dif-intro, .dif-cards').forEach(function (el) { obs.observe(el); });
 })();

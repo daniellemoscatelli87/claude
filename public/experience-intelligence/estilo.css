@@ -382,7 +382,7 @@ html { scroll-behavior: smooth; }
 }
 /* Título e descrição centralizados acima dos cards, em todos os tamanhos */
 .plat-texto { text-align: center; max-width: 48rem; margin: 0 auto; }
-.plat-texto .lead { margin-left: auto; margin-right: auto; }
+.plat-texto .lead { margin-left: auto; margin-right: auto; text-wrap: balance; }
 /* Carrossel: os três cards ficam empilhados no mesmo lugar e cada um recebe uma posição (esquerda, centro ou direita).
    O card do centro é maior, fica à frente e recebe o destaque. Celular e tablet: só o card do centro aparece. */
 .plat-fluxo { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; max-width: 560px; width: 100%; margin: 0 auto; overflow: hidden; }
@@ -614,114 +614,82 @@ button.btn { border: 0; cursor: pointer; }
 .rag-intro .lead { margin-left: auto; margin-right: auto; }
 .rag-intro .lead strong { white-space: normal; }
 .rag-roda { position: relative; }
-.rag-centro { width: 200px; height: 200px; margin: 0 auto 24px; border-radius: 50%; background: radial-gradient(circle at 50% 40%, var(--card) 0%, var(--crimson-50) 100%); border: 8px solid var(--card); box-shadow: 0 0 0 1px var(--crimson-100), var(--shadow-lg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--primary); text-align: center; font-size: 44px; }
-.rag-centro span { max-width: 7.5em; font-size: 1.25rem; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; }
-.rag-areas { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-.rag-area { display: flex; align-items: center; gap: 16px; padding: 18px; border-radius: 24px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
-.rag-texto { min-width: 0; }
-.rag-topo { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 12px; }
-.rag-num { min-width: 32px; padding: 4px 8px; border-radius: 8px; background: var(--primary); color: var(--primary-foreground); font-size: 0.8125rem; line-height: 1.4; font-weight: 700; text-align: center; }
-.rag-pergunta { padding: 4px 12px; border-radius: 9999px; background: var(--crimson-50); color: var(--foreground); font-size: 0.8125rem; font-weight: 600; line-height: 1.4; }
+/* Núcleo: círculo rosado com o ícone, dentro de um anel fino */
+.rag-centro { position: relative; width: 168px; height: 168px; margin: 0 auto 32px; border-radius: 50%; background: var(--crimson-50); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--primary); text-align: center; }
+/* Anel fino em volta do núcleo */
+.rag-centro::before { content: ""; position: absolute; inset: -24px; border-radius: 50%; border: 1px solid var(--graphite-200); pointer-events: none; }
+.rag-nucleo { display: flex; font-size: 52px; }
+.rag-centro > span:last-child { font-size: 0.875rem; font-weight: 700; line-height: 1.2; max-width: 8em; color: var(--crimson-500); }
+/* Áreas: ícone em círculo rosado ao lado do texto, sem caixa */
+.rag-areas { list-style: none; margin: 0; padding: 0; display: grid; gap: 28px; }
+.rag-area { display: flex; align-items: flex-start; gap: 18px; }
+.rag-ico { flex: none; width: 64px; height: 64px; border-radius: 50%; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 28px; }
+.rag-texto { min-width: 0; padding-top: 2px; }
+.rag-topo { margin: 0 0 2px; color: var(--crimson-500); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .rag-texto h3 { margin: 0 0 4px; font-size: 1.125rem; line-height: 1.25; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
-.rag-texto p:last-child { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.45; }
-@media (min-width: 640px) {
-  .rag-areas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .rag-e { grid-column: 1 / -1; }
+.rag-texto p:last-child { margin: 0; color: var(--graphite-500); font-size: 1rem; line-height: 1.5; }
+@media (min-width: 768px) and (max-width: 1199px) {
+  .rag-areas { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; }
 }
-/* Celular e tablet: o centro vira um card vermelho, acima das áreas */
-@media (max-width: 1199px) {
-  .rag-centro { width: auto; height: auto; margin: 0 0 12px; padding: 20px; flex-direction: row; gap: 14px; border: 0; border-radius: 24px; background: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-md); font-size: 32px; }
-  .rag-centro span { max-width: none; }
-}
-/* Computador: o RAG no centro e as 5 áreas em cards do mesmo tamanho em volta, ligados ao centro por linhas */
+/* Computador: núcleo no centro, três áreas à esquerda e duas à direita (intercaladas), ligadas ao núcleo por linhas curvas */
 .rag-linhas, .rag-pontos { display: none; }
 @media (min-width: 1200px) {
   .rag-intro { max-width: 52rem; }
-  .rag-roda { display: grid; grid-template-columns: minmax(0, 1fr) 260px minmax(0, 1fr); grid-template-rows: 1fr 1fr auto; column-gap: 72px; row-gap: 24px; max-width: 1180px; width: 100%; margin: 8px auto 0; }
-  .rag-roda::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 42%; width: 640px; height: 640px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(212,77,77,.08) 0%, rgba(212,77,77,0) 70%); pointer-events: none; }
+  /* Simétrico: duas áreas de cada lado, na mesma altura, e a quinta centralizada abaixo do núcleo */
+  .rag-roda { display: grid; grid-template-columns: minmax(0, 1fr) 300px minmax(0, 1fr); grid-template-rows: 1fr 1fr auto; column-gap: 64px; row-gap: 0; max-width: 1240px; width: 100%; margin: 4px auto 0; }
   .rag-areas { display: contents; }
   .rag-linhas { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-  .rag-linhas line { stroke: var(--crimson-200); stroke-width: 2; stroke-dasharray: 6 6; }
+  .rag-linhas path { fill: none; stroke: var(--crimson-300); stroke-width: 1.5; stroke-linecap: round; }
   .rag-pontos { display: block; position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   .rag-pontos circle { fill: var(--primary); }
-  .rag-centro { grid-area: 1 / 2 / 3 / 3; align-self: center; justify-self: center; position: relative; z-index: 1; width: 240px; height: 240px; margin: 0; font-size: 52px; }
-  .rag-centro span { font-size: 1.5rem; }
-  .rag-area { position: relative; z-index: 1; align-items: flex-start; min-height: 100%; padding: 22px; }
-  .rag-a { grid-area: 1 / 1 / 2 / 2; }
-  .rag-b { grid-area: 1 / 3 / 2 / 4; }
-  .rag-c { grid-area: 2 / 1 / 3 / 2; }
-  .rag-d { grid-area: 2 / 3 / 3 / 4; }
-  .rag-e { grid-area: 3 / 1 / 4 / 4; justify-self: center; width: calc((100% - 260px - 144px) / 2); }
-  .rag-texto h3 { font-size: 1.25rem; }
-  .rag-texto p:last-child { font-size: 1rem; }
+  .rag-centro { grid-area: 1 / 2 / 3 / 3; align-self: center; justify-self: center; margin: 0; z-index: 1; width: 190px; height: 190px; }
+  .rag-centro::before { inset: -45px; }
+  .rag-nucleo { font-size: 60px; }
+  /* Linhas de mesma altura e ícone centralizado no texto: os galhos ficam simétricos em cima e embaixo */
+  .rag-area { position: relative; z-index: 1; padding: 24px 0; align-self: center; align-items: center; }
+  .rag-a { grid-area: 1 / 1; }
+  .rag-c { grid-area: 2 / 1; }
+  .rag-b { grid-area: 1 / 3; }
+  .rag-d { grid-area: 2 / 3; }
+  /* Lado esquerdo espelhado: texto alinhado à direita, ícone junto do galho */
+  .rag-a, .rag-c { flex-direction: row-reverse; text-align: right; }
+  .rag-e { grid-area: 3 / 1 / 4 / 4; justify-self: center; flex-direction: column; align-items: center; text-align: center; max-width: 460px; padding-top: 0; margin-top: -8px; }
+  .rag-ico { width: 72px; height: 72px; font-size: 30px; }
+  .rag-texto h3 { font-size: 1.1875rem; }
 }
 
 /* Animações da seção "Nossa inteligência" (só com JavaScript; desligadas com movimento reduzido) */
-@keyframes rag-surgir-centro { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
+@keyframes rag-surgir-centro { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: none; } }
+@keyframes rag-scale-in { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
 .inteligencia.anim-pronto .etiqueta, .inteligencia.anim-pronto .rag-intro h2, .inteligencia.anim-pronto .rag-intro .lead, .inteligencia.anim-pronto .cf-traco,
-.inteligencia.anim-pronto .rag-centro, .inteligencia.anim-pronto .rag-area { opacity: 0; }
+.inteligencia.anim-pronto .rag-centro, .inteligencia.anim-pronto .rag-ico, .inteligencia.anim-pronto .rag-texto { opacity: 0; }
 .inteligencia .rag-intro.visivel .etiqueta, .inteligencia .rag-intro.visivel h2, .inteligencia .rag-intro.visivel .lead { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .inteligencia .rag-intro.visivel h2 { animation-delay: .08s; }
 .inteligencia .rag-intro.visivel .lead { animation-delay: .16s; }
 .inteligencia .rag-intro.visivel .cf-traco { animation: cf-traco .6s cubic-bezier(0.16, 1, 0.3, 1) .3s both; opacity: 1; }
-.inteligencia .rag-centro.visivel { animation: rag-surgir-centro .6s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+/* 1. Núcleo surge em Scale In suave */
+.inteligencia .rag-centro.visivel { animation: rag-surgir-centro .8s cubic-bezier(0.16, 1, 0.3, 1) both; }
 /* Ordem no computador: o núcleo surge, as linhas saem do centro, os pontos aparecem e depois os cards */
-.rag-linhas line { transform-box: view-box; }
+.rag-linhas path { transform-box: view-box; }
 .rag-pontos circle { transform-box: fill-box; transform-origin: center; }
-.inteligencia.anim-pronto .rag-linhas line { transform: scale(0); }
+/* 2. Linhas se desenham do núcleo até cada área (traço que avança pelo caminho) */
+.inteligencia.anim-pronto .rag-linhas path { stroke-dasharray: var(--len, 400); stroke-dashoffset: var(--len, 400); }
 .inteligencia.anim-pronto .rag-pontos circle { opacity: 0; transform: scale(0); }
-.inteligencia .rag-linhas.visivel line { transform: scale(1); transition: transform .6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(.45s + var(--i, 0) * .06s); }
-.inteligencia .rag-pontos.visivel circle { opacity: 1; transform: scale(1); transition: opacity .3s ease-out, transform .4s cubic-bezier(0.34, 1.56, 0.64, 1); transition-delay: calc(.95s + var(--i, 0) * .06s); }
-.inteligencia .rag-area.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(.25s + var(--i, 0) * .1s); }
+.inteligencia .rag-linhas.visivel path { stroke-dashoffset: 0; transition: stroke-dashoffset .45s cubic-bezier(0.65, 0, 0.35, 1); transition-delay: calc(.6s + var(--o, 0) * .55s); }
+.inteligencia .rag-pontos.visivel circle { opacity: 1; transform: scale(1); transition: opacity .25s ease-out, transform .25s ease-out; transition-delay: calc(.6s + var(--o, 0) * .55s); }
+/* 3. Em cada área, primeiro o ícone (Scale In) e depois o texto */
+@keyframes rag-texto-in { from { opacity: 0; transform: translate3d(0, 6px, 0); } to { opacity: 1; transform: none; } }
+.inteligencia .rag-area.visivel .rag-ico { animation: rag-scale-in .4s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(.25s + var(--i, 0) * .15s); }
+.inteligencia .rag-area.visivel .rag-texto { animation: rag-texto-in .4s ease-out both; animation-delay: calc(.4s + var(--i, 0) * .15s); }
 @media (min-width: 1200px) {
-  .inteligencia .rag-area.visivel { animation-delay: calc(1.15s + var(--i, 0) * .1s); }
+  /* Um braço por vez, na ordem de leitura (esquerda para a direita, de cima para baixo): a linha se desenha e, ao chegar, a área surge */
+  .rag-a { --o: 0; } .rag-b { --o: 1; } .rag-c { --o: 2; } .rag-d { --o: 3; } .rag-e { --o: 4; }
+  .inteligencia .rag-area.visivel .rag-ico { animation-delay: calc(1s + var(--o, 0) * .55s); }
+  .inteligencia .rag-area.visivel .rag-texto { animation-delay: calc(1.15s + var(--o, 0) * .55s); }
 }
 
-/* Seção 5: aplicações (para quem é e exemplos práticos) — tokens do design system */
-.aplicacoes { background: var(--background); }
-.aplicacoes::before { content: ""; position: absolute; z-index: -1; width: 680px; height: 680px; left: -300px; top: -160px; border-radius: 50%; background: radial-gradient(circle, rgba(212,77,77,.09) 0%, rgba(212,77,77,0) 70%); pointer-events: none; }
-.apl-grid { display: grid; gap: 40px; align-items: center; }
-.apl-intro { text-align: center; max-width: 44rem; margin: 0 auto; }
-.apl-intro h2 { margin: 0 0 24px; font-size: clamp(1.75rem, 2.6vw, 2.625rem); line-height: 1.12; letter-spacing: -0.03em; font-weight: 800; color: var(--foreground); text-wrap: balance; }
-.apl-intro h2 .destaque { color: var(--primary); }
-.apl-intro .lead { margin-left: auto; margin-right: auto; text-wrap: balance; }
-.apl-cards { max-width: 1200px; width: 100%; margin: 8px auto 0; }
-.apl-cards { display: grid; gap: 12px; justify-items: center; }
-.apl-card { width: 100%; max-width: 520px; display: flex; flex-direction: column; padding: 24px 20px; border-radius: 24px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
-.apl-ico { width: 48px; height: 48px; margin-bottom: 14px; border-radius: 14px; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; }
-.apl-card h3 { margin: 0 0 6px; font-size: 1.25rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
-.apl-card > p { margin: 0 0 18px; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
-.apl-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.apl-op { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 48px; padding: 10px 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--card); color: var(--graphite-700); font: inherit; font-size: 0.9375rem; font-weight: 500; text-align: left; cursor: pointer; transition: background-color .2s, border-color .2s, color .2s; }
-.apl-op .ico { flex: none; font-size: 20px; color: var(--graphite-500); }
-.apl-op:hover { background: var(--crimson-50); }
-.apl-op[aria-pressed="true"] { background: var(--crimson-50); border-color: var(--crimson-200); color: var(--primary); font-weight: 600; }
-.apl-op[aria-pressed="true"] .ico { color: var(--primary); }
-.apl-op:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
-.apl-caso { animation: ds-surgir .35s ease-out; }
-.apl-caso-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-.apl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
-.apl-tags span { padding: 4px 12px; border-radius: 9999px; background: var(--muted); color: var(--graphite-700); font-size: 0.8125rem; font-weight: 600; }
-.apl-caso h4 { margin: 0 0 12px; font-size: 1.125rem; line-height: 1.35; letter-spacing: -0.01em; font-weight: 700; color: var(--foreground); }
-.apl-caso p { margin: 0 0 8px; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
-.apl-caso p strong { color: var(--foreground); font-weight: 600; }
-.apl-caso .apl-meta { margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: var(--crimson-50); color: var(--graphite-700); }
-.apl-caso .apl-meta strong { color: var(--crimson-500); }
 /* Tablet largo e computador: os três cards lado a lado, com × e → entre eles */
-@media (min-width: 1024px) {
-  .apl-cards { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1.05fr); align-items: stretch; gap: 14px; }
-  .apl-card { max-width: none; }
-}
 /* Animações da seção (só com JavaScript; desligadas com movimento reduzido) */
-.aplicacoes.anim-pronto .apl-intro > *, .aplicacoes.anim-pronto .apl-card, .aplicacoes.anim-pronto .apl-sep { opacity: 0; }
-.aplicacoes .apl-intro.visivel > * { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.aplicacoes .apl-intro.visivel h2 { animation-delay: .08s; }
-.aplicacoes .apl-intro.visivel .lead { animation-delay: .16s; }
-.aplicacoes .apl-intro.visivel .cf-traco { animation: cf-traco .6s cubic-bezier(0.16, 1, 0.3, 1) .3s both; opacity: 1; }
-.aplicacoes .apl-cards.visivel .apl-card { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.aplicacoes .apl-cards.visivel .apl-card:nth-of-type(2) { animation-delay: .15s; }
-.aplicacoes .apl-cards.visivel .apl-card:nth-of-type(3) { animation-delay: .3s; }
-.aplicacoes .apl-cards.visivel .apl-sep { animation: ds-surgir .4s ease-out .45s both; }
 
 /* Cards do carrossel de "O que é a plataforma": imagem, título e resumo */
 .plat-col { text-align: left; }
@@ -788,28 +756,7 @@ button.btn { border: 0; cursor: pointer; }
 .plat-nav:disabled:hover { background: var(--card); }
 /* Quebra de linha do título só em telas a partir do tablet */
 @media (max-width: 767px) { .quebra-larga { display: none; } }
-/* Altura fixa dos cards de "Para quem": todos os exemplos ocupam o mesmo espaço (o maior deles),
-   e só o escolhido aparece; os outros ficam invisíveis e fora da leitura de tela */
-.apl-casos { display: grid; }
-.apl-caso { grid-area: 1 / 1; }
-.apl-caso[hidden] { display: block; visibility: hidden; }
-/* Cabeçalho dos cards de "Para quem": ícone ao lado do título e da descrição */
-.apl-cab { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
-.apl-cab .apl-ico { width: 56px; height: 56px; margin: 0; border-radius: 16px; font-size: 28px; flex: none; }
-.apl-cab h3 { margin: 0; }
-.apl-card .apl-desc { margin: 0 0 18px; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
 /* Computador: cabeçalhos dos três cards com a mesma altura, para as listas começarem alinhadas */
-@media (min-width: 1024px) { .apl-cab { min-height: 64px; } .apl-card .apl-desc { min-height: 3em; } }
-/* "Para quem" como um assistente em passos: selo do passo em cada card e conectores entre eles */
-.apl-card { position: relative; }
-.apl-passo { display: block; margin-top: 2px; color: var(--graphite-400); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
-.apl-sep { position: relative; display: flex; align-items: center; justify-content: center; width: 2px; height: 40px; background: repeating-linear-gradient(180deg, var(--crimson-200) 0 6px, transparent 6px 12px); }
-.apl-sep-bola { position: absolute; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); font-size: 22px; box-shadow: 0 0 0 6px var(--crimson-50), var(--shadow-md); transform: rotate(90deg); }
-@media (min-width: 1024px) {
-  .apl-sep { align-self: center; width: 40px; height: 2px; background: repeating-linear-gradient(90deg, var(--crimson-200) 0 6px, transparent 6px 12px); }
-  .apl-sep-bola { transform: none; }
-}
-.aplicacoes .apl-cards.visivel .apl-sep-bola { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) .55s both; }
 
 /* Linha do tempo com a animação "Step Indicator" do design system (aba Motion): conforme a pessoa rola a página,
    a etapa atual cresce, as já percorridas ficam preenchidas em vermelho com um check e a linha vai sendo preenchida.
@@ -829,40 +776,189 @@ button.btn { border: 0; cursor: pointer; }
 @media (min-width: 768px) {
   .cf-passo-a-passo .cf-etapa::after { left: calc(50% - 1px); }
 }
-/* Títulos dos passos de "Para quem" sempre em uma linha */
-.apl-cab { gap: 12px; }
-.apl-cab .apl-ico { width: 48px; height: 48px; border-radius: 14px; font-size: 24px; }
-.apl-cab h3 { white-space: nowrap; font-size: 1.125rem; }
-@media (min-width: 1024px) and (max-width: 1279px) { .apl-cab h3 { font-size: 0.9375rem; } .apl-card { padding-left: 16px; padding-right: 16px; } .apl-card .apl-desc { min-height: 4.5em; } .apl-cab .apl-ico { width: 40px; height: 40px; font-size: 20px; } }
-/* Card do exemplo (passo 3) em destaque: fundo rosado, borda vermelha suave, sombra maior e ícone preenchido */
-.apl-exemplo { background: linear-gradient(180deg, var(--crimson-50), var(--card) 55%); border-color: var(--crimson-100); box-shadow: var(--shadow-lg); }
-.apl-exemplo .apl-cab .apl-ico { background: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-sm); }
-/* Escolha atual no exemplo: quadro com duas colunas rotuladas (Público e Contexto), no lugar das etiquetas */
-.apl-exemplo .apl-tags { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; width: 100%; border: 1px solid var(--crimson-100); border-radius: 14px; background: var(--card); overflow: hidden; }
-.apl-exemplo .apl-tags span { display: block; padding: 10px 14px; border-radius: 0; background: none; color: var(--foreground); font-size: 0.875rem; font-weight: 600; line-height: 1.35; }
-.apl-exemplo .apl-tags span + span { border-left: 1px solid var(--crimson-100); }
-.apl-exemplo .apl-tags span::before { display: block; margin-bottom: 2px; color: var(--crimson-500); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
-.apl-exemplo .apl-tags span:first-child::before { content: "Público"; }
-.apl-exemplo .apl-tags span + span::before { content: "Contexto"; }
-.apl-exemplo .apl-caso-topo { display: block; }
-/* Opções de "Para quem" em quadrados (ícone em cima, nome embaixo), duas por linha */
-.apl-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-.apl-op { flex-direction: column; justify-content: center; gap: 10px; aspect-ratio: 1; min-height: 0; padding: 12px; text-align: center; border-radius: 16px; line-height: 1.3; }
-.apl-op .ico { font-size: 28px; }
-@media (min-width: 1024px) and (max-width: 1279px) { .apl-op { padding: 8px; font-size: 0.8125rem; } .apl-op .ico { font-size: 24px; } }
-/* O quadro Público / Contexto não aparece no exemplo (as escolhas já estão destacadas nos cards 1 e 2) */
-.apl-exemplo .apl-caso-topo { display: none; }
-/* Exemplo de "Para quem" contado em sequência: o desafio como citação, a trilha (investigação e primeira ação) e aonde se quer chegar */
-.apl-caso .apl-rot { margin: 4px 0 6px; color: var(--crimson-500); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.apl-caso h4 { margin: 0 0 18px; padding: 0; border: 0; background: none; box-shadow: none; font-size: 1.1875rem; line-height: 1.35; letter-spacing: -0.01em; font-weight: 700; color: var(--foreground); }
-.apl-caso h4::before, .apl-caso h4::after { position: static; display: inline; width: auto; height: auto; border-radius: 0; background: none; color: var(--primary); font-family: Georgia, serif; font-size: 1.5em; line-height: 0; vertical-align: -0.28em; }
-.apl-caso h4::before { content: "\201C"; margin-right: 2px; }
-.apl-caso h4::after { content: "\201D"; margin-left: 2px; }
-.apl-trilha { position: relative; margin: 0 0 14px; padding: 0 0 0 20px; display: grid; gap: 12px; }
-.apl-trilha::before { content: ""; position: absolute; left: 4px; top: 6px; bottom: 6px; width: 2px; border-radius: 2px; background: var(--crimson-100); }
-.apl-trilha div { position: relative; }
-.apl-trilha div::before { content: ""; position: absolute; left: -20px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--card); border: 2px solid var(--primary); box-sizing: border-box; }
-.apl-trilha dt { margin: 0 0 2px; color: var(--foreground); font-size: 0.8125rem; font-weight: 700; }
-.apl-trilha dd { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
-.apl-caso .apl-meta { display: block; margin: 0; padding: 12px 14px; border-radius: 14px; background: var(--primary); color: var(--primary-foreground); font-weight: 600; }
-.apl-caso .apl-meta strong { display: block; margin-bottom: 2px; color: rgba(255, 255, 255, 0.85); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+/* Bolinhas da linha do tempo com o ícone de cada etapa (no lugar do número e do check) */
+.cf-num .ico { font-size: 22px; }
+@media (min-width: 768px) { .cf-num .ico { font-size: 24px; } }
+.cf-cartao .cf-texto h4 { margin-top: 0; }
+/* Meta do exemplo com ícone de foguete à esquerda */
+/* Tags 5W2H das áreas de "Nossa inteligência" */
+.rag-topo { margin: 0 0 6px; letter-spacing: 0; text-transform: none; }
+.rag-tag { display: inline-block; padding: 3px 10px; border-radius: 9999px; background: var(--crimson-50); color: var(--crimson-500); font-size: 0.75rem; font-weight: 700; line-height: 1.4; }
+
+/* Seção 6: diferenciais — faixa horizontal: título centralizado e os 4 diferenciais lado a lado, sem caixas */
+.diferenciais { background: var(--card); }
+.diferenciais::before { content: ""; position: absolute; z-index: -1; width: 640px; height: 640px; right: -260px; top: -200px; border-radius: 50%; background: radial-gradient(circle, rgba(212,77,77,.08) 0%, rgba(212,77,77,0) 70%); pointer-events: none; }
+.dif-grid { display: grid; gap: 48px; }
+.dif-intro { text-align: center; max-width: 48rem; margin: 0 auto; }
+.dif-intro h2 { margin: 0 0 20px; font-size: clamp(1.75rem, 2.6vw, 2.625rem); line-height: 1.12; letter-spacing: -0.03em; font-weight: 800; color: var(--foreground); text-wrap: balance; }
+.dif-intro h2 .destaque { color: var(--primary); }
+.dif-intro .lead { margin-left: auto; margin-right: auto; text-wrap: balance; }
+.dif-cards { list-style: none; margin: 0 auto; padding: 0; max-width: 1200px; width: 100%; display: grid; }
+.dif-card { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 28px 8px; }
+.dif-card + .dif-card { border-top: 1px solid var(--border); }
+.dif-ico { width: 64px; height: 64px; margin-bottom: 18px; border-radius: 50%; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 28px; }
+.dif-card h3 { margin: 0 0 8px; font-size: 1.125rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); text-wrap: balance; }
+.dif-card p { margin: 0; max-width: 22rem; color: var(--graphite-500); font-size: 1rem; line-height: 1.55; }
+@media (min-width: 768px) {
+  .dif-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dif-card + .dif-card { border-top: 0; }
+  .dif-card { padding: 28px 28px; }
+  .dif-card:nth-child(even) { border-left: 1px solid var(--border); }
+  .dif-card:nth-child(n+3) { border-top: 1px solid var(--border); }
+}
+@media (min-width: 1200px) {
+  .dif-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .dif-card { padding: 8px 28px; }
+  .dif-card:nth-child(n+3) { border-top: 0; }
+  .dif-card + .dif-card { border-left: 1px solid var(--border); }
+}
+/* Animações (só com JavaScript; desligadas com movimento reduzido) */
+.diferenciais.anim-pronto .dif-intro > *, .diferenciais.anim-pronto .dif-card { opacity: 0; }
+.diferenciais .dif-intro.visivel > * { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.diferenciais .dif-intro.visivel h2 { animation-delay: .08s; }
+.diferenciais .dif-intro.visivel .lead { animation-delay: .16s; }
+.diferenciais .dif-cards.visivel .dif-card { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.diferenciais .dif-cards.visivel .dif-ico { animation: rag-scale-in .5s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: inherit; }
+.diferenciais .dif-cards.visivel .dif-card:nth-child(2) { animation-delay: .12s; }
+.diferenciais .dif-cards.visivel .dif-card:nth-child(3) { animation-delay: .24s; }
+.diferenciais .dif-cards.visivel .dif-card:nth-child(4) { animation-delay: .36s; }
+
+/* Seção 5: para quem — menu de escolhas à esquerda; à direita, o desafio e, ao lado, a foto do contexto e a meta */
+.aplicacoes { background: var(--background); }
+.aplicacoes::before { content: ""; position: absolute; z-index: -1; width: 720px; height: 720px; right: -260px; top: -240px; border-radius: 50%; background: radial-gradient(circle, rgba(212,77,77,.09) 0%, rgba(212,77,77,0) 70%); pointer-events: none; }
+.apl2 { display: grid; gap: 32px; }
+.apl-intro { text-align: center; max-width: 40rem; margin: 0 auto; }
+.apl-intro h2 { margin: 0 0 16px; font-size: clamp(1.75rem, 2.6vw, 2.625rem); line-height: 1.12; letter-spacing: -0.03em; font-weight: 800; color: var(--foreground); text-wrap: balance; }
+.apl-intro h2 .destaque { color: var(--primary); }
+.apl-intro .lead { margin-left: auto; margin-right: auto; text-wrap: balance; }
+.apl-menu { margin-top: 28px; }
+.apl-grupo { margin: 0 0 10px; color: var(--graphite-500); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.apl-lista { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 8px; }
+.apl-op { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 52px; padding: 10px 16px; border-radius: 16px; border: 1px solid var(--border); background: var(--card); color: var(--foreground); font: inherit; font-size: 0.9375rem; font-weight: 500; text-align: left; cursor: pointer; box-shadow: var(--shadow-xs); transition: background-color .2s, border-color .2s, color .2s; }
+.apl-op span { flex: 1; }
+.apl-op .ico { flex: none; font-size: 20px; color: var(--graphite-600); }
+.apl-op .ico:last-child { font-size: 18px; color: var(--graphite-400); }
+.apl-op:hover:not([aria-pressed="true"]) { background: var(--crimson-50); }
+.apl-op[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--primary-foreground); font-weight: 600; box-shadow: var(--shadow-sm); }
+.apl-op[aria-pressed="true"] .ico { color: inherit; }
+.apl-op:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
+/* Exemplos: todos ocupam o mesmo lugar (altura fixa, a do maior); só o escolhido aparece */
+.apl-casos { display: grid; }
+.apl-caso { grid-area: 1 / 1; display: grid; gap: 16px; animation: ds-surgir .35s ease-out; }
+.apl-caso[hidden] { display: grid; visibility: hidden; }
+.apl-desafio { padding: 24px; border-radius: 24px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+.apl-rot { margin: 0 0 8px; color: var(--crimson-500); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.apl-desafio h3 { margin: 0 0 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); font-size: 1.375rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
+.apl-duas { display: grid; gap: 18px; }
+.apl-duas > div { display: flex; gap: 14px; align-items: flex-start; }
+.apl-mini { flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.apl-duas h4 { margin: 0 0 4px; font-size: 0.9375rem; font-weight: 700; color: var(--foreground); }
+.apl-duas p { margin: 0; color: var(--graphite-500); font-size: 1rem; line-height: 1.5; }
+.apl-lado { display: grid; gap: 16px; }
+.apl-foto { position: relative; overflow: hidden; border-radius: 24px; aspect-ratio: 16 / 9; background: var(--muted); box-shadow: var(--shadow-sm); }
+.apl-foto img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.apl-meta-card { padding: 20px 22px; border-radius: 24px; background: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-md); }
+.apl-meta-card .apl-rot { color: rgba(255, 255, 255, 0.85); }
+.apl-meta-linha { display: flex; align-items: center; gap: 14px; }
+.apl-meta-linha p { margin: 0; font-size: 1.125rem; line-height: 1.35; font-weight: 700; }
+.apl-meta-ico { flex: none; width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+@media (min-width: 768px) {
+  .apl-duas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .apl-duas > div + div { padding-left: 18px; border-left: 1px solid var(--border); }
+  .apl-lado { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: stretch; }
+  .apl-foto { aspect-ratio: auto; min-height: 180px; }
+  .apl-meta-card { display: flex; flex-direction: column; justify-content: center; }
+}
+@media (min-width: 1200px) {
+  .apl2 { grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr); gap: 40px; align-items: start; }
+  .apl-intro { text-align: left; margin: 0; }
+  .apl-intro .lead { margin-left: 0; }
+  .apl-intro .cf-traco { margin-left: 0; }
+  .apl-cards { align-self: center; }
+  /* Como na referência: desafio à esquerda (mais baixo), foto no alto à direita e a meta logo abaixo da foto */
+  .apl-caso { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); grid-template-rows: 190px auto; column-gap: 24px; row-gap: 24px; align-items: stretch; }
+  .apl-caso .apl-lado { display: contents; }
+  /* Foto larga no alto, atrás; o desafio sobe por cima da foto e a meta ocupa a coluna da direita abaixo dela */
+  .apl-foto { grid-area: 1 / 1 / 2 / 3; aspect-ratio: auto; min-height: 0; height: 290px; margin-left: 40px; }
+  .apl-desafio { grid-area: 2 / 1; margin-top: -120px; position: relative; z-index: 1; }
+  .apl-meta-card { grid-area: 2 / 2; margin-top: 100px; }
+  .apl-duas { grid-template-columns: 1fr; }
+  .apl-duas > div + div { padding-left: 0; border-left: 0; padding-top: 18px; border-top: 1px solid var(--border); }
+}
+/* Animações (só com JavaScript; desligadas com movimento reduzido) */
+.aplicacoes.anim-pronto .apl-intro > *, .aplicacoes.anim-pronto .apl-menu, .aplicacoes.anim-pronto .apl-cards { opacity: 0; }
+.aplicacoes .apl-intro.visivel > * { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.aplicacoes .apl-intro.visivel h2 { animation-delay: .08s; }
+.aplicacoes .apl-intro.visivel .lead { animation-delay: .16s; }
+.aplicacoes .apl-intro.visivel .cf-traco { animation: cf-traco .6s cubic-bezier(0.16, 1, 0.3, 1) .3s both; opacity: 1; }
+.aplicacoes .apl-menu.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) .2s both; }
+.aplicacoes .apl-cards.visivel { animation: rag-scale-in .7s cubic-bezier(0.16, 1, 0.3, 1) .3s both; }
+
+/* Seção 2 em diagrama de três círculos (Pessoas, Operação e Melhoria contínua) com o símbolo no centro */
+.plataforma .plat-grid { gap: 40px; align-items: center; }
+.plat-venn { position: relative; width: min(100%, 520px); aspect-ratio: 1 / 0.95; margin: 0 auto; }
+.venn-c { position: absolute; width: 58%; aspect-ratio: 1; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 9%; text-align: center; }
+.venn-pessoas { left: 21%; top: 0; background: var(--crimson-100); justify-content: flex-start; padding-top: 11%; }
+.venn-operacao { left: 0; bottom: 0; background: var(--graphite-50); padding-right: 22%; padding-top: 14%; }
+.venn-melhoria { right: 0; bottom: 0; background: var(--crimson-50); padding-left: 22%; padding-top: 14%; }
+.venn-ico { display: flex; margin-bottom: 8px; color: var(--primary); font-size: clamp(28px, 4.6vw, 40px); }
+.venn-c h3 { margin: 0 0 6px; font-size: clamp(0.9375rem, 1.6vw, 1.1875rem); line-height: 1.2; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
+.venn-c p { margin: 0; color: var(--graphite-500); font-size: clamp(0.75rem, 1.15vw, 0.875rem); line-height: 1.4; }
+/* Centro geométrico entre os centros dos três círculos */
+.venn-nucleo { position: absolute; left: 50%; top: 56.5%; width: 15%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.7), var(--shadow-md); display: flex; align-items: center; justify-content: center; }
+.venn-nucleo img { width: 52%; height: auto; filter: brightness(0) invert(1); }
+@media (max-width: 479px) {
+  .venn-c p { display: none; }
+}
+@media (min-width: 1024px) {
+  .plataforma .plat-grid { gap: 48px; }
+  .plat-venn { width: 100%; max-width: 560px; }
+  .venn-ico { font-size: 40px; }
+  .venn-c h3 { font-size: 1.1875rem; }
+  .venn-c p { font-size: 0.875rem; }
+}
+/* Animação: os círculos surgem um a um em Scale In e o símbolo aparece por último */
+.plataforma.anim-pronto .venn-c, .plataforma.anim-pronto .venn-nucleo { opacity: 0; }
+.plataforma.visivel .venn-c { animation: rag-scale-in .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.plataforma.visivel .venn-pessoas { animation-delay: .25s; }
+.plataforma.visivel .venn-operacao { animation-delay: .45s; }
+.plataforma.visivel .venn-melhoria { animation-delay: .65s; }
+@keyframes venn-nucleo-in { from { opacity: 0; transform: translate(-50%, -50%) scale(.6); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+.plataforma.visivel .venn-nucleo { animation: venn-nucleo-in .6s cubic-bezier(0.16, 1, 0.3, 1) .95s both; }
+/* Tipo de experiência do exemplo, ao lado do rótulo "O desafio" */
+.apl-topo { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 10px; }
+.apl-topo .apl-rot { margin: 0; }
+.apl-tipo { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; background: var(--crimson-50); border: 1px solid var(--crimson-100); color: var(--crimson-500); font-size: 0.8125rem; font-weight: 600; line-height: 1.3; }
+/* Ajustes conforme a referência: tag do tipo à direita, discreta; meta em card branco com ícone e descrição */
+.apl-topo { justify-content: space-between; }
+.apl-tipo { background: transparent; border-color: var(--border); color: var(--graphite-600); font-weight: 500; }
+.apl-meta-card { display: flex; align-items: flex-start; gap: 16px; padding: 22px; background: var(--card); color: var(--foreground); border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+.apl-meta-card .apl-rot { color: var(--crimson-500); margin-bottom: 6px; }
+.apl-meta-card h4 { margin: 0 0 8px; font-size: 1.375rem; line-height: 1.25; letter-spacing: -0.02em; font-weight: 800; color: var(--foreground); }
+.apl-meta-card p:last-child { margin: 0; color: var(--graphite-500); font-size: 1rem; line-height: 1.5; }
+.apl-meta-card .apl-meta-ico { width: 52px; height: 52px; border-radius: 14px; background: var(--crimson-50); color: var(--primary); font-size: 26px; }
+@media (min-width: 768px) { .apl-meta-card { flex-direction: row; justify-content: flex-start; } }
+@media (min-width: 1200px) { .apl-meta-card { margin-top: 60px; align-self: end; } }
+@media (min-width: 1200px) {
+  .apl-foto { height: 250px; }
+  .apl-desafio { align-self: end; }
+}
+/* Base dos cards alinhada com a base do último botão do menu */
+@media (min-width: 1200px) {
+  .apl2 { align-items: end; }
+  .apl-cards { align-self: end; }
+  .apl-lista { margin-bottom: 0; }
+}
+.apl-meta-card .apl-meta-ico { background: var(--primary); color: var(--primary-foreground); }
+/* Foto mais alta, atrás dos dois cards: o desafio sobe sobre ela e a meta sobrepõe a base da foto */
+@media (min-width: 1200px) {
+  .apl-caso { grid-template-rows: 96px auto; row-gap: 0; }
+  .apl-foto { grid-area: 1 / 1 / 3 / 3; height: auto; align-self: stretch; margin-bottom: 110px; }
+  .apl-desafio { margin-top: 0; }
+  .apl-meta-card { margin-top: 0; position: relative; z-index: 1; }
+  .apl-foto img { position: absolute; inset: 0; }
+}
+/* Cores sólidas do design system; multiply mantém visível a sobreposição dos círculos */
+.venn-c { mix-blend-mode: multiply; }
+.venn-operacao > *, .venn-melhoria > * { position: relative; top: -10px; }
+.venn-pessoas .venn-ico { position: relative; top: -3px; }
