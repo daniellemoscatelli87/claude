@@ -802,7 +802,7 @@ button.btn { border: 0; cursor: pointer; }
 @media (min-width: 1024px) { .apl-cab { min-height: 64px; } .apl-card .apl-desc { min-height: 3em; } }
 /* "Para quem" como um assistente em passos: selo do passo em cada card e conectores entre eles */
 .apl-card { position: relative; }
-.apl-passo { align-self: flex-start; margin: 0 0 14px; padding: 4px 10px; border-radius: 9999px; background: var(--crimson-50); color: var(--crimson-500); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.apl-passo { display: block; margin-top: 2px; color: var(--graphite-400); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
 .apl-sep { position: relative; display: flex; align-items: center; justify-content: center; width: 2px; height: 40px; background: repeating-linear-gradient(180deg, var(--crimson-200) 0 6px, transparent 6px 12px); }
 .apl-sep-bola { position: absolute; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); font-size: 22px; box-shadow: 0 0 0 6px var(--crimson-50), var(--shadow-md); transform: rotate(90deg); }
 @media (min-width: 1024px) {
@@ -837,5 +837,4 @@ button.btn { border: 0; cursor: pointer; }
 /* Card do exemplo (passo 3) em destaque: fundo rosado, borda vermelha suave, sombra maior e ícone preenchido */
 .apl-exemplo { background: linear-gradient(180deg, var(--crimson-50), var(--card) 55%); border-color: var(--crimson-100); box-shadow: var(--shadow-lg); }
 .apl-exemplo .apl-cab .apl-ico { background: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-sm); }
-.apl-exemplo .apl-passo { background: var(--primary); color: var(--primary-foreground); }
 .apl-exemplo .apl-tags span { background: var(--card); border: 1px solid var(--crimson-100); }
