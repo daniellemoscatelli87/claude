@@ -123,3 +123,5 @@
 #metodo .cf-cartao .cf-texto h4 { margin-top: 0; }
 /* Dentro do cartão branco da home: fundo branco, como as outras seções */
 #metodo.como-funciona { background: var(--card); border-top: 1px solid var(--border); }
+/* Sem os brilhos avermelhados nos cantos */
+#metodo.como-funciona::before, #metodo.como-funciona::after { display: none; }
