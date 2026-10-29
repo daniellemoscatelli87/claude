@@ -232,7 +232,7 @@
 })();
 
 
-// Seção "Para quem": a combinação de público e contexto escolhidos define o exemplo; "Ver mais exemplos" passa para o próximo.
+// Seção "Para quem": a combinação de público e contexto escolhidos define o exemplo.
 (function () {
   var cards = document.querySelector('.apl-cards');
   if (!cards) return;
@@ -248,14 +248,7 @@
   botoes.forEach(function (b) {
     b.addEventListener('click', function () { escolha[b.getAttribute('data-grupo')] = b.getAttribute('data-valor'); mostrar(); });
   });
-  var mais = cards.querySelector('.apl-mais');
-  if (mais) mais.addEventListener('click', function () {
-    var i = casos.findIndex(function (c) { return !c.hidden; });
-    var proximo = casos[(i + 1) % casos.length];
-    escolha.publico = proximo.getAttribute('data-publico');
-    escolha.contexto = proximo.getAttribute('data-contexto');
-    mostrar();
-  });
+
   mostrar();
 })();
 

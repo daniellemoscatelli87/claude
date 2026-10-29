@@ -692,22 +692,18 @@ button.btn { border: 0; cursor: pointer; }
 .apl-op:hover { background: var(--crimson-50); }
 .apl-op[aria-pressed="true"] { background: var(--crimson-50); border-color: var(--crimson-200); color: var(--primary); font-weight: 600; }
 .apl-op[aria-pressed="true"] .ico { color: var(--primary); }
-.apl-op:focus-visible, .apl-mais:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
+.apl-op:focus-visible { outline: 3px solid rgba(212,77,77,.35); outline-offset: 2px; }
 .apl-sep { color: var(--graphite-400); font-size: 26px; display: flex; transform: rotate(90deg); }
 .apl-sep:first-of-type { transform: none; }
 .apl-caso { animation: ds-surgir .35s ease-out; }
 .apl-caso-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .apl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
 .apl-tags span { padding: 4px 12px; border-radius: 9999px; background: var(--muted); color: var(--graphite-700); font-size: 0.8125rem; font-weight: 600; }
-.apl-caso-ico { flex: none; width: 52px; height: 52px; border-radius: 14px; background: var(--crimson-50); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: var(--shadow-xs); }
 .apl-caso h4 { margin: 0 0 12px; font-size: 1.125rem; line-height: 1.35; letter-spacing: -0.01em; font-weight: 700; color: var(--foreground); }
 .apl-caso p { margin: 0 0 8px; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
 .apl-caso p strong { color: var(--foreground); font-weight: 600; }
 .apl-caso .apl-meta { margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: var(--crimson-50); color: var(--graphite-700); }
 .apl-caso .apl-meta strong { color: var(--crimson-500); }
-.apl-mais { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-top: auto; padding: 14px 0 0; border: 0; background: none; color: var(--crimson-500); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; }
-.apl-mais .ico { font-size: 18px; transition: transform .2s; }
-.apl-mais:hover .ico { transform: translateX(3px); }
 /* Tablet largo e computador: os três cards lado a lado, com × e → entre eles */
 @media (min-width: 1024px) {
   .apl-cards { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1.05fr); align-items: stretch; gap: 14px; }
