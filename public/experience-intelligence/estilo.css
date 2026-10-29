@@ -355,7 +355,7 @@ html { scroll-behavior: smooth; }
 .plat-texto .lead { max-width: 38rem; }
 .plat-texto h2 .destaque { color: var(--primary); }
 .plat-grid { display: grid; gap: 40px; }
-.plat-fluxo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 16px; border-radius: 28px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+.plat-fluxo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
 .plat-col { border-radius: 20px; padding: 24px 20px; background: var(--crimson-50); }
 .plat-col h3 { margin: 0 0 16px; font-size: 1.25rem; line-height: 1.25; letter-spacing: -0.02em; font-weight: 700; color: var(--foreground); }
 .plat-desafio, .plat-resultado { text-align: center; background: var(--card); }
@@ -402,7 +402,7 @@ html { scroll-behavior: smooth; }
 .plat-desafio .plat-pontos, .plat-resultado .plat-checks { align-self: center; }
 @media (min-width: 1024px) {
   .plat-grid { gap: 24px; }
-  /* Card branco de base; os cards dos lados ficam menores e atrás; o do centro é maior, fica à frente e passa das bordas da base */
+  /* Sem card de base: os cards dos lados ficam atrás; o do centro é mais alto e fica à frente */
   .plat-fluxo { max-width: 1120px; margin: 72px auto 0; padding: 16px 20px; overflow: visible; }
   .plat-col { padding: 22px 18px; }
   /* O do centro estica até a altura da base e passa das bordas dela, em cima e embaixo: fica sempre maior que os dos lados */
