@@ -590,8 +590,6 @@ button.btn { border: 0; cursor: pointer; }
 .como-funciona .plat-texto.visivel h2 { animation-delay: .08s; }
 .como-funciona .plat-texto.visivel .lead { animation-delay: .16s; }
 .como-funciona .cf-etapa.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.cf-etapa.visivel::before { transform-origin: top; animation: cf-linha .6s ease-out .2s both; }
-.cf-etapa.visivel .cf-num { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) .2s both; }
 @keyframes cf-da-direita { from { opacity: 0; transform: translate3d(32px, 0, 0); } to { opacity: 1; transform: none; } }
 @keyframes cf-da-esquerda { from { opacity: 0; transform: translate3d(-32px, 0, 0); } to { opacity: 1; transform: none; } }
 @media (min-width: 768px) {
@@ -814,3 +812,22 @@ button.btn { border: 0; cursor: pointer; }
   .apl-sep-bola { transform: none; }
 }
 .aplicacoes .apl-cards.visivel .apl-sep-bola { animation: ds-estrela .5s cubic-bezier(0.34, 1.56, 0.64, 1) .55s both; }
+
+/* Linha do tempo com a animação "Step Indicator" do design system (aba Motion): conforme a pessoa rola a página,
+   a etapa atual cresce, as já percorridas ficam preenchidas em vermelho com um check e a linha vai sendo preenchida.
+   Só vale quando o JavaScript está ativo (classe .cf-passo-a-passo); sem ele, a linha fica toda vermelha como antes. */
+.cf-num-ok { display: none; }
+.cf-passo-a-passo .cf-etapa::before { background: var(--graphite-200); }
+.cf-passo-a-passo .cf-etapa::after { content: ""; position: absolute; left: calc(var(--cf-marco) / 2 - 1px); top: 50%; bottom: -10px; width: 2px; background: var(--primary); transform: scaleY(0); transform-origin: top; transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1); }
+.cf-passo-a-passo .cf-etapa:last-child::after { display: none; }
+.cf-passo-a-passo .cf-etapa + .cf-etapa::before { top: -10px; }
+.cf-passo-a-passo .cf-etapa.feita::after { transform: scaleY(1); }
+.cf-passo-a-passo .cf-etapa.feita + .cf-etapa::before { background: linear-gradient(var(--primary) 0 50%, var(--graphite-200) 50%); }
+.cf-passo-a-passo .cf-num { background: var(--card); border-color: var(--graphite-200); color: var(--graphite-400); box-shadow: none; transition: background-color .3s, border-color .3s, color .3s, transform .4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .3s; }
+.cf-passo-a-passo .cf-etapa.feita .cf-num, .cf-passo-a-passo .cf-etapa.atual .cf-num { background: var(--primary); border-color: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-md); }
+.cf-passo-a-passo .cf-etapa.atual .cf-num { transform: scale(1.15); }
+.cf-passo-a-passo .cf-etapa.feita .cf-num-n { display: none; }
+.cf-passo-a-passo .cf-etapa.feita .cf-num-ok { display: inline-flex; font-size: 22px; animation: ds-estrela .25s ease-out both; }
+@media (min-width: 768px) {
+  .cf-passo-a-passo .cf-etapa::after { left: calc(50% - 1px); }
+}

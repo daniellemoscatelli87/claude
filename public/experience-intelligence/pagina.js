@@ -315,3 +315,30 @@
   });
   mostrar(centro);
 })();
+
+// Seção "Como funciona": "Step Indicator" do design system na linha do tempo. A etapa que passa do meio da tela
+// vira a atual; as anteriores ficam marcadas como feitas, e a linha entre elas é preenchida.
+(function () {
+  var lista = document.querySelector('.cf-etapas');
+  if (!lista) return;
+  var etapas = Array.prototype.slice.call(lista.querySelectorAll('.cf-etapa'));
+  lista.classList.add('cf-passo-a-passo');
+  var agendado = false;
+  function atualizar() {
+    agendado = false;
+    var limite = window.innerHeight * 0.6;
+    var atual = -1;
+    etapas.forEach(function (e, i) {
+      var r = e.querySelector('.cf-num').getBoundingClientRect();
+      if (r.top + r.height / 2 < limite) atual = i;
+    });
+    etapas.forEach(function (e, i) {
+      e.classList.toggle('feita', i < atual);
+      e.classList.toggle('atual', i === atual);
+    });
+  }
+  function pedir() { if (!agendado) { agendado = true; requestAnimationFrame(atualizar); } }
+  window.addEventListener('scroll', pedir, { passive: true });
+  window.addEventListener('resize', pedir);
+  atualizar();
+})();
