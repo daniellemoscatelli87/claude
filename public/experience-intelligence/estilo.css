@@ -932,7 +932,7 @@ button.btn { border: 0; cursor: pointer; }
 .apl-tipo { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; background: var(--crimson-50); border: 1px solid var(--crimson-100); color: var(--crimson-500); font-size: 0.8125rem; font-weight: 600; line-height: 1.3; }
 /* Ajustes conforme a referência: tag do tipo à direita, discreta; meta em card branco com ícone e descrição */
 .apl-topo { justify-content: space-between; }
-.apl-tipo { background: var(--muted); border-color: transparent; color: var(--graphite-600); font-weight: 500; }
+.apl-tipo { background: transparent; border-color: var(--border); color: var(--graphite-600); font-weight: 500; }
 .apl-meta-card { display: flex; align-items: flex-start; gap: 16px; padding: 22px; background: var(--card); color: var(--foreground); border: 1px solid var(--border); box-shadow: var(--shadow-md); }
 .apl-meta-card .apl-rot { color: var(--crimson-500); margin-bottom: 6px; }
 .apl-meta-card h4 { margin: 0 0 8px; font-size: 1.375rem; line-height: 1.25; letter-spacing: -0.02em; font-weight: 800; color: var(--foreground); }
