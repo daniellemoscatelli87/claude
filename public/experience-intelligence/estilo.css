@@ -959,4 +959,5 @@ button.btn { border: 0; cursor: pointer; }
 }
 /* Cores sólidas do design system; multiply mantém visível a sobreposição dos círculos */
 .venn-c { mix-blend-mode: multiply; }
-.venn-operacao > *, .venn-melhoria > * { position: relative; top: -5px; }
+.venn-operacao > *, .venn-melhoria > * { position: relative; top: -10px; }
+.venn-pessoas .venn-ico { position: relative; top: -3px; }
