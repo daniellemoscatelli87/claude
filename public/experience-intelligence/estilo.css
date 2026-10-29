@@ -930,3 +930,13 @@ button.btn { border: 0; cursor: pointer; }
 .apl-topo { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 10px; }
 .apl-topo .apl-rot { margin: 0; }
 .apl-tipo { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; background: var(--crimson-50); border: 1px solid var(--crimson-100); color: var(--crimson-500); font-size: 0.8125rem; font-weight: 600; line-height: 1.3; }
+/* Ajustes conforme a referência: tag do tipo à direita, discreta; meta em card branco com ícone e descrição */
+.apl-topo { justify-content: space-between; }
+.apl-tipo { background: var(--muted); border-color: transparent; color: var(--graphite-600); font-weight: 500; }
+.apl-meta-card { display: flex; align-items: flex-start; gap: 16px; padding: 22px; background: var(--card); color: var(--foreground); border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+.apl-meta-card .apl-rot { color: var(--crimson-500); margin-bottom: 6px; }
+.apl-meta-card h4 { margin: 0 0 8px; font-size: 1.375rem; line-height: 1.25; letter-spacing: -0.02em; font-weight: 800; color: var(--foreground); }
+.apl-meta-card p:last-child { margin: 0; color: var(--graphite-500); font-size: 0.9375rem; line-height: 1.5; }
+.apl-meta-card .apl-meta-ico { width: 52px; height: 52px; border-radius: 14px; background: var(--crimson-50); color: var(--primary); font-size: 26px; }
+@media (min-width: 768px) { .apl-meta-card { flex-direction: row; justify-content: flex-start; } }
+@media (min-width: 1200px) { .apl-meta-card { margin-top: 100px; align-self: start; } }
