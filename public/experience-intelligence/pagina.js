@@ -188,17 +188,23 @@
     var base = roda.getBoundingClientRect();
     var c = centro.getBoundingClientRect();
     var cx = c.left + c.width / 2 - base.left, cy = c.top + c.height / 2 - base.top;
+    var raio = c.width / 2 + 45;
     roda.querySelectorAll('.rag-area').forEach(function (area, i) {
       var r = area.getBoundingClientRect();
-      var x, y;
-      if (r.top - base.top > cy + c.height / 2) { x = cx; y = r.top - base.top; }
-      else { x = r.left - base.left > cx ? r.left - base.left : r.right - base.left; y = r.top + r.height / 2 - base.top; }
-      var l = document.createElementNS(NS, 'line');
-      l.setAttribute('x1', cx); l.setAttribute('y1', cy); l.setAttribute('x2', x); l.setAttribute('y2', y);
+      var ico = area.querySelector('.rag-ico').getBoundingClientRect();
+      var ey = ico.top + ico.height / 2 - base.top;
+      var esquerda = r.left + r.width / 2 - base.left < cx;
+      var ex = esquerda ? r.right - base.left + 16 : ico.left - base.left - 16;
+      // Ponto no anel do núcleo, na direção da área
+      var ang = Math.atan2(ey - cy, ex - cx);
+      var sx = cx + Math.cos(ang) * raio, sy = cy + Math.sin(ang) * raio;
+      var mx = sx + (ex - sx) * 0.45;
+      var l = document.createElementNS(NS, 'path');
+      l.setAttribute('d', 'M' + sx + ',' + sy + ' Q' + mx + ',' + ey + ' ' + (sx + (ex - sx) * 0.7) + ',' + ey + ' L' + ex + ',' + ey);
       l.style.transformOrigin = cx + 'px ' + cy + 'px';
       l.style.setProperty('--i', i);
       var p = document.createElementNS(NS, 'circle');
-      p.setAttribute('cx', x); p.setAttribute('cy', y); p.setAttribute('r', 5);
+      p.setAttribute('cx', sx); p.setAttribute('cy', sy); p.setAttribute('r', 4.5);
       p.style.setProperty('--i', i);
       svg.appendChild(l); pontos.appendChild(p);
     });
