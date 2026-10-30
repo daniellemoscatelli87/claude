@@ -115,6 +115,36 @@ html body .metric-animated-path { animation: none !important; stroke-dashoffset:
 #abordagem.ei3-visivel .grid > div:first-child p:nth-child(3) { transition-delay: .5s; }
 #abordagem.ei3-visivel .orbit-system-wrapper { transition-delay: .3s; }
 </style>
+<style id="ei3-sequencia">
+.ei3-revelar main > div section#metodo > *, .ei3-revelar main > div section.ei3-seq > * { opacity: 1; transform: none; transition: none; }
+.ei3-revelar .ei3-seq .ei3-a { opacity: 0; transform: translateY(44px); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
+.ei3-revelar .ei3-seq.ei3-visivel .ei3-a { opacity: 1; transform: none; transition-delay: var(--d, 0s); }
+</style>
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var itens = {
+    segmentos: '.grid > *, .grid ~ div',
+    depoimentos: '.flex-wrap > span, .testimonial-card',
+    artigos: 'article',
+    'empresas-atendidas': '',
+    contato: '.flex-wrap > a'
+  };
+  document.addEventListener('DOMContentLoaded', function () {
+    Object.keys(itens).forEach(function (id) {
+      var sec = document.getElementById(id);
+      if (!sec) return;
+      var base = sec.firstElementChild, internos = itens[id] ? Array.prototype.slice.call(sec.querySelectorAll(itens[id])) : [];
+      var topo = Array.prototype.filter.call(base.children, function (el) {
+        return el.tagName !== 'STYLE' && !internos.some(function (i) { return el === i || el.contains(i); });
+      });
+      topo.forEach(function (el, i) { el.classList.add('ei3-a'); el.style.setProperty('--d', (i * 0.08) + 's'); });
+      internos.forEach(function (el, i) { el.classList.add('ei3-a'); el.style.setProperty('--d', Math.min(0.25 + i * 0.07, 1.2) + 's'); });
+      sec.classList.add('ei3-seq');
+    });
+  });
+})();
+</script>
 </head><body class="antialiased selection:bg-brand-100 selection:text-brand-600 bg-[#F1F4F8]"><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg>
 
 <title>Dani Moscatelli | Experience Design Studio</title>
@@ -693,7 +723,7 @@ h1, h2, h3, h4, h5, h6 {
   </section>
 <!-- END: MethodSection -->
 <!-- BEGIN: IndustriesGridSection -->
-<section class="py-16 md:py-20 bg-white border-t border-graphite-100">
+<section class="py-16 md:py-20 bg-white border-t border-graphite-100" id="segmentos">
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3">
 <span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">Segmentos de Atuação</span>
