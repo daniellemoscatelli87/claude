@@ -34,7 +34,11 @@
 </script>
 <style id="ei3-grafico-uma-vez">
 html body .metric-animated-path { animation: none !important; stroke-dashoffset: 0; }
-.ei3-revelar #problema .ei3-graf-on .metric-animated-path { animation: ei3Desenhar 1.6s cubic-bezier(0.16, 1, 0.3, 1) .5s both !important; }
+.ei3-revelar #problema .ei3-graf-on .metric-animated-path { animation: ei3Desenhar 1.8s cubic-bezier(0.16, 1, 0.3, 1) var(--ei3-atraso-card, .45s) both !important; }
+/* Linha e roleta do mesmo card começam e terminam juntas */
+#problema .grid > :nth-child(1) { --ei3-atraso-card: .45s; } #problema .grid > :nth-child(2) { --ei3-atraso-card: .57s; }
+#problema .grid > :nth-child(3) { --ei3-atraso-card: .69s; } #problema .grid > :nth-child(4) { --ei3-atraso-card: .81s; }
+#problema .grid .text-4xl { color: var(--primary); }
 @keyframes ei3Desenhar { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }
 </style>
 <style id="ei3-desafio-anim">
@@ -87,7 +91,7 @@ html body .metric-animated-path { animation: none !important; stroke-dashoffset:
         var fita = '';
         for (var k = 0; k < 20; k++) fita += '<span>' + (k % 10) + '</span>';
         fita += '<span>' + d + '</span>';
-        html += '<span class="ei3-col" aria-hidden="true"><span class="ei3-fita" style="--alvo:20;--atraso:' + (0.45 + card * 0.12 + i * 0.12) + 's">' + fita + '</span></span>';
+        html += '<span class="ei3-col" aria-hidden="true"><span class="ei3-fita" style="--alvo:20;--atraso:' + (0.45 + card * 0.12) + 's">' + fita + '</span></span>';
       });
       el.innerHTML = html + '<span aria-hidden="true">%</span></span>';
     });
