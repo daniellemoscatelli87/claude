@@ -123,5 +123,11 @@
 #metodo .cf-cartao .cf-texto h4 { margin-top: 0; }
 /* Dentro do cartão branco da home: fundo branco, como as outras seções */
 #metodo.como-funciona { background: var(--card); border-top: 1px solid var(--border); }
+/* Mais espaço entre as etapas da linha do tempo (pedido da dona do produto) */
+#metodo .cf-etapas { gap: 22px; }
+#metodo .cf-etapa::before { top: -11px; bottom: -11px; }
+#metodo .cf-passo-a-passo .cf-etapa + .cf-etapa::before { top: -11px; }
+#metodo .cf-passo-a-passo .cf-etapa::after { bottom: -11px; }
+@media (min-width: 768px) { #metodo .cf-etapas { gap: 18px; } #metodo .cf-etapa::before { top: -10px; bottom: -10px; } #metodo .cf-passo-a-passo .cf-etapa + .cf-etapa::before { top: -10px; } #metodo .cf-passo-a-passo .cf-etapa::after { bottom: -10px; } #metodo .cf-etapa + .cf-etapa { margin-top: -6px; } }
 /* Sem os brilhos avermelhados nos cantos */
 #metodo.como-funciona::before, #metodo.como-funciona::after { display: none; }
