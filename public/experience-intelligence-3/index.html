@@ -139,6 +139,7 @@ html body .metric-animated-path { animation: none !important; stroke-dashoffset:
       var sec = document.getElementById(id);
       if (!sec) return;
       var base = sec.firstElementChild, internos = itens[id] ? Array.prototype.slice.call(sec.querySelectorAll(itens[id])) : [];
+      if (id === 'depoimentos') { var ctl = document.getElementById('carousel-prev-btn'); if (ctl) internos.push(ctl.parentElement); }
       var topo = Array.prototype.filter.call(base.children, function (el) {
         return el.tagName !== 'STYLE' && !internos.some(function (i) { return el === i || el.contains(i); });
       });
@@ -146,6 +147,28 @@ html body .metric-animated-path { animation: none !important; stroke-dashoffset:
       internos.forEach(function (el, i) { el.classList.add('ei3-a'); el.style.setProperty('--d', Math.min(0.25 + i * 0.07, 1.2) + 's'); });
       sec.classList.add('ei3-seq');
     });
+  });
+})();
+</script>
+<style id="ei3-revisao-anim">
+#problema.ei3-visivel .max-w-6xl > :nth-child(5) { transition-delay: 1.4s; }
+.ei3-revelar footer > div > * { opacity: 0; transform: translateY(24px); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
+.ei3-revelar footer.ei3-visivel > div > * { opacity: 1; transform: none; }
+.ei3-revelar footer.ei3-visivel > div > :nth-child(2) { transition-delay: .12s; }
+.ei3-hero-fora .hero-fade-1, .ei3-hero-fora .hero-fade-2, .ei3-hero-fora .hero-fade-3, .ei3-hero-fora .hero-fade-4, .ei3-hero-fora .hero-fade-5, .ei3-hero-fora .ei3-modelo-sobe { animation: none !important; opacity: 0; }
+</style>
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  document.addEventListener('DOMContentLoaded', function () {
+    var rodape = document.querySelector('footer'), hero = document.querySelector('main > section');
+    if (rodape) new IntersectionObserver(function (es) { es.forEach(function (e) {
+      if (e.isIntersecting) rodape.classList.add('ei3-visivel'); else if (e.boundingClientRect.top > 0) rodape.classList.remove('ei3-visivel');
+    }); }, { threshold: 0 }).observe(rodape);
+    // Hero: ao sair por cima, prepara; ao voltar, a entrada (texto e modelo) toca de novo
+    if (hero) new IntersectionObserver(function (es) { es.forEach(function (e) {
+      if (!e.isIntersecting) hero.classList.add('ei3-hero-fora'); else hero.classList.remove('ei3-hero-fora');
+    }); }, { threshold: 0 }).observe(hero);
   });
 })();
 </script>
