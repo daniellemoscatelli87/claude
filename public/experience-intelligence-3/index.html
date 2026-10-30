@@ -34,7 +34,7 @@
 </script>
 <style id="ei3-grafico-uma-vez">
 html body .metric-animated-path { animation: none !important; stroke-dashoffset: 0; }
-.ei3-revelar main section.ei3-visivel .metric-animated-path { animation: ei3Desenhar 1.6s cubic-bezier(0.16, 1, 0.3, 1) .3s both !important; }
+.ei3-revelar #problema .ei3-graf-on .metric-animated-path { animation: ei3Desenhar 1.6s cubic-bezier(0.16, 1, 0.3, 1) .5s both !important; }
 @keyframes ei3Desenhar { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }
 </style>
 <style id="ei3-desafio-anim">
@@ -57,6 +57,50 @@ html body .metric-animated-path { animation: none !important; stroke-dashoffset:
 #contexto.ei3-visivel ul li:nth-child(3) { transition-delay: 1.6s; }
 #contexto.ei3-visivel .max-w-6xl > :nth-child(6) { transition-delay: 1.75s; }
 </style>
+<style id="ei3-cenario-anim">
+.ei3-revelar main > div section#problema > * { opacity: 1; transform: none; transition: none; }
+.ei3-revelar #problema .max-w-6xl > *, .ei3-revelar #problema .grid > * {
+  opacity: 0; transform: translateY(44px); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
+.ei3-revelar #problema.ei3-visivel .max-w-6xl > :not(.grid), .ei3-revelar #problema .grid.ei3-graf-on, .ei3-revelar #problema .ei3-graf-on > * { opacity: 1; transform: none; }
+#problema.ei3-visivel .max-w-6xl > :nth-child(2) { transition-delay: .08s; }
+#problema.ei3-visivel .max-w-6xl > :nth-child(3) { transition-delay: .16s; }
+#problema .ei3-graf-on > :nth-child(2) { transition-delay: .12s; } #problema .ei3-graf-on > :nth-child(3) { transition-delay: .24s; }
+#problema .ei3-graf-on > :nth-child(4) { transition-delay: .36s; }
+.ei3-roleta { display: inline-flex; line-height: 1; }
+.ei3-col { display: inline-block; height: 1em; overflow: hidden; margin-right: -0.025em; }
+.ei3-fita { display: block; transform: translateY(0); }
+.ei3-fita > span { display: block; height: 1em; line-height: 1; }
+.ei3-graf-on .ei3-fita { transform: translateY(calc(var(--alvo) * -1em)); transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: var(--atraso); }
+</style>
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  document.addEventListener('DOMContentLoaded', function () {
+    var grade = document.querySelector('#problema .grid');
+    if (!grade) return;
+    // Números em roleta: cada dígito gira duas voltas e para no valor
+    Array.prototype.forEach.call(grade.querySelectorAll('.text-4xl'), function (el, card) {
+      var txt = el.textContent.trim(), m = txt.match(/^(\d+)(%)$/);
+      if (!m) return;
+      var html = '<span class="ei3-roleta" aria-label="' + txt + '">';
+      m[1].split('').forEach(function (d, i) {
+        var fita = '';
+        for (var k = 0; k < 20; k++) fita += '<span>' + (k % 10) + '</span>';
+        fita += '<span>' + d + '</span>';
+        html += '<span class="ei3-col" aria-hidden="true"><span class="ei3-fita" style="--alvo:20;--atraso:' + (0.45 + card * 0.12 + i * 0.12) + 's">' + fita + '</span></span>';
+      });
+      el.innerHTML = html + '<span aria-hidden="true">%</span></span>';
+    });
+    var obs = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) grade.classList.add('ei3-graf-on');
+        else if (e.boundingClientRect.top > 0) grade.classList.remove('ei3-graf-on');
+      });
+    }, { threshold: 0.25 });
+    obs.observe(grade);
+  });
+})();
+</script>
 </head><body class="antialiased selection:bg-brand-100 selection:text-brand-600 bg-[#F1F4F8]"><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg>
 
 <title>Dani Moscatelli | Experience Design Studio</title>
@@ -256,7 +300,7 @@ h1, h2, h3, h4, h5, h6 {
 </section>
 <!-- END: HeroSection -->
 <!-- BEGIN: GiantSurfaceCardWrapper -->
-<div class="relative w-full max-w-[1400px] mx-auto px-2 sm:px-4 lg:px-6 z-20 mb-10 lg:mb-16" style="margin-top: 43px;">
+<div class="relative w-full max-w-[1400px] mx-auto px-2 sm:px-4 lg:px-6 z-20 mb-6 lg:mb-8" style="margin-top: 43px;">
 <div class="bg-white rounded-[36px] sm:rounded-[48px] lg:rounded-[56px] shadow-surface-giant border border-slate-200/70 overflow-hidden" style="transform: translateY(3px);">
 <!-- BEGIN: StatisticsSection -->
 <section class="pt-16 sm:pt-20 md:pt-24 pb-16 md:pb-20 bg-white" id="problema">
@@ -991,9 +1035,15 @@ h1, h2, h3, h4, h5, h6 {
   </div>
 </section><!-- Placeholder moved in next step -->
 <!-- END: InsightsArticlesSection -->
+
+</div>
+</div>
+<!-- END: GiantSurfaceCardWrapper -->
+<div class="relative w-full max-w-[1400px] mx-auto px-2 sm:px-4 lg:px-6 z-20 mb-10 lg:mb-16">
+<div class="bg-white rounded-[36px] sm:rounded-[48px] lg:rounded-[56px] shadow-surface-giant border border-slate-200/70 overflow-hidden">
 <!-- BEGIN: FinalCTASection -->
-<section class="py-16 md:py-20 bg-white border-t border-graphite-100" id="contato">
-<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="border: none; border-radius: 28px; padding: 48px 32px; box-shadow: rgba(0, 0, 0, 0.06) 0px 16px 40px -8px, rgba(0, 0, 0, 0.024) 0px 4px 16px -2px; background: rgb(255, 255, 255);">
+<section class="py-14 md:py-16" id="contato">
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3">
 <span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">Vamos Conversar?</span>
 </div>
@@ -1018,7 +1068,6 @@ h1, h2, h3, h4, h5, h6 {
 <!-- END: FinalCTASection -->
 </div>
 </div>
-<!-- END: GiantSurfaceCardWrapper -->
 </main>
 <!-- BEGIN: Footer -->
 <footer class="bg-white border-t border-graphite-200/80 py-8 relative z-30">
