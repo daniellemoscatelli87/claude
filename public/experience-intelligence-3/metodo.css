@@ -123,6 +123,9 @@
 #metodo .cf-cartao .cf-texto h4 { margin-top: 0; }
 /* Dentro do cartão branco da home: fundo branco, como as outras seções */
 #metodo.como-funciona { background: var(--card); border-top: 1px solid var(--border); }
+/* Tag "Como funciona" entra junto com o título da seção */
+#metodo.anim-pronto .plat-texto > .inline-flex { opacity: 0; }
+#metodo .plat-texto.visivel > .inline-flex { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; opacity: 1; }
 /* Mais espaço entre as etapas da linha do tempo (pedido da dona do produto) */
 #metodo .cf-etapas { gap: 22px; }
 #metodo .cf-etapa::before { top: -11px; bottom: -11px; }
