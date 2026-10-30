@@ -116,20 +116,20 @@ html.ei3-revelar #problema .ei3-graf-on ~ .ei3-citacao-on strong { opacity: 1; t
 })();
 </script>
 <style id="ei3-eras">
-.ei3-eras { display: grid; gap: 20px; }
-.ei3-faixa { display: grid; grid-template-columns: 220px minmax(0, 1fr); align-items: center; gap: 28px; padding: 28px 32px; border-radius: 20px; border: 1px solid var(--graphite-100); }
-.ei3-faixa.passado { background: rgba(237, 240, 245, 0.5); }
-.ei3-faixa.agora { background: var(--crimson-50); border-color: var(--crimson-100); }
+.ei3-comp { --col-info: 200px; border: 1px solid var(--graphite-100); border-radius: 24px; background: #fff; padding: 12px; }
+.ei3-faixa, .ei3-ponte { display: grid; grid-template-columns: var(--col-info) minmax(0, 1fr); align-items: center; column-gap: 24px; }
+.ei3-faixa { padding: 26px 24px; border-radius: 16px; }
+.ei3-faixa.passado { background: rgba(237, 240, 245, 0.55); }
+.ei3-faixa.agora { background: var(--crimson-50); }
 .ei3-era-info .rot { display: block; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 .ei3-faixa.passado .rot { color: var(--graphite-300); } .ei3-faixa.agora .rot { color: var(--primary); }
-.ei3-era-info h3 { margin: 4px 0 8px; font-size: 1.25rem; font-weight: 700; letter-spacing: -.02em; color: var(--graphite-900); }
-.ei3-era-info p { margin: 0; font-size: 0.8125rem; line-height: 1.5; color: var(--graphite-500); }
+.ei3-era-info h3 { margin: 4px 0 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -.02em; color: var(--graphite-900); }
 .ei3-tl { position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
 .ei3-tl::before { content: ""; position: absolute; top: 9px; left: calc(100% / 12); right: calc(100% / 12); height: 2px; border-radius: 2px; transform-origin: left; }
 .ei3-faixa.passado .ei3-tl::before { background: var(--graphite-200); } .ei3-faixa.agora .ei3-tl::before { background: var(--crimson-300); }
 .ei3-tl li { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; }
 .ei3-tl .pt { width: 12px; height: 12px; margin-top: 4px; border-radius: 50%; box-shadow: 0 0 0 3px #fff; }
-.ei3-faixa.passado .pt { background: var(--graphite-300); } .ei3-faixa.agora .pt { background: var(--crimson-300); }
+.ei3-faixa.passado .pt { background: var(--graphite-300); } .ei3-faixa.agora .pt { background: var(--crimson-300); box-shadow: 0 0 0 3px var(--crimson-50); }
 .ei3-tl .nome { margin-top: 12px; font-size: 0.9375rem; font-weight: 500; line-height: 1.25; }
 .ei3-faixa.passado .nome { color: var(--graphite-600); } .ei3-faixa.agora .nome { color: var(--crimson-600); }
 .ei3-tl li.fim .pt { width: 20px; height: 20px; margin-top: 0; }
@@ -137,15 +137,25 @@ html.ei3-revelar #problema .ei3-graf-on ~ .ei3-citacao-on strong { opacity: 1; t
 .ei3-faixa.agora li.fim .pt { background: var(--primary); box-shadow: 0 0 0 6px var(--crimson-100); }
 .ei3-tl li.fim .nome { margin-top: 10px; font-size: 1.125rem; font-weight: 700; }
 .ei3-faixa.passado li.fim .nome { color: var(--graphite-900); } .ei3-faixa.agora li.fim .nome { color: var(--primary); }
-/* Animação: as duas linhas avançam juntas da esquerda para a direita e cada etapa aparece quando a linha chega nela */
+/* Setas entre as linhas: cada etapa do passado aponta para a sua correspondente no agora */
+.ei3-ponte { padding: 0 24px; height: 34px; }
+.ei3-ponte > span:first-child { grid-column: 1; }
+.ei3-ponte { grid-template-columns: calc(var(--col-info) + 24px) repeat(6, minmax(0, 1fr)); column-gap: 0; }
+.ei3-ponte .seta { position: relative; justify-self: center; width: 2px; height: 100%; background: repeating-linear-gradient(var(--graphite-200) 0 4px, transparent 4px 8px); }
+.ei3-ponte .seta::after { content: ""; position: absolute; left: 50%; bottom: -1px; width: 7px; height: 7px; border-right: 2px solid var(--crimson-300); border-bottom: 2px solid var(--crimson-300); transform: translateX(-50%) rotate(45deg); }
+.ei3-rodape { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding: 20px 24px 12px; margin-top: 8px; border-top: 1px solid var(--graphite-100); }
+.ei3-rodape p { margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--graphite-500); }
+.ei3-rodape p.agora { color: var(--graphite-700); }
+/* Animação: as duas linhas avançam juntas; cada etapa aparece quando a linha chega e a seta liga o antes ao depois */
 .ei3-revelar .ei3-eras .ei3-tl::before { transform: scaleX(0); transition: transform 2s linear .2s; }
 .ei3-revelar .ei3-eras.ei3-in .ei3-tl::before { transform: scaleX(1); }
-.ei3-revelar .ei3-eras .ei3-tl li { opacity: 0; transform: translateY(8px); transition: opacity .45s ease-out, transform .45s cubic-bezier(0.16, 1, 0.3, 1); }
+.ei3-revelar .ei3-eras .ei3-tl li, .ei3-revelar .ei3-eras .ei3-ponte .seta { opacity: 0; transform: translateY(8px); transition: opacity .45s ease-out, transform .45s cubic-bezier(0.16, 1, 0.3, 1); }
 .ei3-revelar .ei3-eras.ei3-in .ei3-tl li { opacity: 1; transform: none; transition-delay: calc(.2s + var(--i) * .4s); }
-.ei3-revelar .ei3-eras .ei3-era-info { opacity: 0; transition: opacity .6s ease-out; }
+.ei3-revelar .ei3-eras.ei3-in .ei3-ponte .seta { opacity: 1; transform: none; transition-delay: calc(.45s + var(--i) * .4s); }
+.ei3-revelar .ei3-eras .ei3-era-info, .ei3-revelar .ei3-eras .ei3-rodape { opacity: 0; transition: opacity .6s ease-out; }
 .ei3-revelar .ei3-eras.ei3-in .ei3-era-info { opacity: 1; }
-.ei3-revelar .ei3-eras.ei3-in .agora .ei3-era-info { transition-delay: .1s; }
-@media (max-width: 1023px) { .ei3-faixa { grid-template-columns: 1fr; gap: 20px; } }
+.ei3-revelar .ei3-eras.ei3-in .ei3-rodape { opacity: 1; transition-delay: 2.3s; }
+@media (max-width: 1023px) { .ei3-comp { --col-info: 0px; } .ei3-faixa { grid-template-columns: 1fr; row-gap: 18px; } .ei3-ponte { column-gap: 0; } .ei3-ponte > span:first-child { display: none; } .ei3-ponte { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 </style>
 <style id="ei3-por-elemento">
 .ei3-revelar main > div section > * { opacity: 1; transform: none; transition: none; }
@@ -466,7 +476,7 @@ h1, h2, h3, h4, h5, h6 {
 </div>
 <h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 max-w-2xl mx-auto leading-tight mb-4">Quando a tecnologia se torna replicável, <span class="text-brand-500">a humanidade se torna indispensável.</span></h2>
 <p class="text-sm sm:text-base text-graphite-600 max-w-2xl mx-auto mb-12 leading-relaxed">A tecnologia ampliou as possibilidades de interação, mas também tornou as experiências mais genéricas, impessoais e previsíveis. Através do Human Experience Design, busco resgatar o olhar humano como ponto de partida para criar relações mais relevantes entre pessoas, marcas e negócios.</p>
-<div class="ei3-eras hidden md:block max-w-5xl mx-auto mb-12 text-left"><div class="ei3-faixa passado"><div class="ei3-era-info"><span class="rot">O passado</span><h3>Era da Eficiência</h3><p>A tecnologia elevou o padrão de execução. Como consequência técnica deixou de ser um diferencial competitivo.</p></div><ol class="ei3-tl" role="list" aria-label="Era da Eficiência"><li style="--i:0"><span class="pt" aria-hidden="true"></span><span class="nome">Tecnologia</span></li><li style="--i:1"><span class="pt" aria-hidden="true"></span><span class="nome">Processos</span></li><li style="--i:2"><span class="pt" aria-hidden="true"></span><span class="nome">Automação</span></li><li style="--i:3"><span class="pt" aria-hidden="true"></span><span class="nome">IA</span></li><li style="--i:4"><span class="pt" aria-hidden="true"></span><span class="nome">Escala</span></li><li style="--i:5" class="fim"><span class="pt" aria-hidden="true"></span><span class="nome">Comoditização</span></li></ol></div><div class="ei3-faixa agora"><div class="ei3-era-info"><span class="rot">O agora</span><h3>Era da Experiência</h3><p>O próximo salto competitivo estará na capacidade de compreender pessoas e transformar esse entendimento em experiências de valor.</p></div><ol class="ei3-tl" role="list" aria-label="Era da Experiência"><li style="--i:0"><span class="pt" aria-hidden="true"></span><span class="nome">Humano</span></li><li style="--i:1"><span class="pt" aria-hidden="true"></span><span class="nome">Necessidades</span></li><li style="--i:2"><span class="pt" aria-hidden="true"></span><span class="nome">Contexto</span></li><li style="--i:3"><span class="pt" aria-hidden="true"></span><span class="nome">Significado</span></li><li style="--i:4"><span class="pt" aria-hidden="true"></span><span class="nome">Personalização</span></li><li style="--i:5" class="fim"><span class="pt" aria-hidden="true"></span><span class="nome">Inovação</span></li></ol></div></div>
+<div class="ei3-eras hidden md:block max-w-5xl mx-auto mb-12 text-left"><div class="ei3-comp"><div class="ei3-faixa passado"><div class="ei3-era-info"><span class="rot">O passado</span><h3>Era da Eficiência</h3></div><ol class="ei3-tl" role="list" aria-label="Era da Eficiência"><li style="--i:0"><span class="pt" aria-hidden="true"></span><span class="nome">Tecnologia</span></li><li style="--i:1"><span class="pt" aria-hidden="true"></span><span class="nome">Processos</span></li><li style="--i:2"><span class="pt" aria-hidden="true"></span><span class="nome">Automação</span></li><li style="--i:3"><span class="pt" aria-hidden="true"></span><span class="nome">IA</span></li><li style="--i:4"><span class="pt" aria-hidden="true"></span><span class="nome">Escala</span></li><li style="--i:5" class="fim"><span class="pt" aria-hidden="true"></span><span class="nome">Comoditização</span></li></ol></div><div class="ei3-ponte" aria-hidden="true"><span></span><span class="seta" style="--i:0"></span><span class="seta" style="--i:1"></span><span class="seta" style="--i:2"></span><span class="seta" style="--i:3"></span><span class="seta" style="--i:4"></span><span class="seta" style="--i:5"></span></div><div class="ei3-faixa agora"><div class="ei3-era-info"><span class="rot">O agora</span><h3>Era da Experiência</h3></div><ol class="ei3-tl" role="list" aria-label="Era da Experiência"><li style="--i:0"><span class="pt" aria-hidden="true"></span><span class="nome">Humano</span></li><li style="--i:1"><span class="pt" aria-hidden="true"></span><span class="nome">Necessidades</span></li><li style="--i:2"><span class="pt" aria-hidden="true"></span><span class="nome">Contexto</span></li><li style="--i:3"><span class="pt" aria-hidden="true"></span><span class="nome">Significado</span></li><li style="--i:4"><span class="pt" aria-hidden="true"></span><span class="nome">Personalização</span></li><li style="--i:5" class="fim"><span class="pt" aria-hidden="true"></span><span class="nome">Inovação</span></li></ol></div><div class="ei3-rodape"><p class="passado">A tecnologia elevou o padrão de execução. Como consequência técnica deixou de ser um diferencial competitivo.</p><p class="agora">O próximo salto competitivo estará na capacidade de compreender pessoas e transformar esse entendimento em experiências de valor.</p></div></div></div>
 <div class="grid grid-cols-1 md:hidden gap-8 max-w-4xl mx-auto text-left mb-12">
 <!-- Col 1: Passado -->
 <div class="bg-graphite-50/50 rounded-2xl p-7 sm:p-8 flex flex-col justify-between" style="border: 1px solid var(--graphite-100); box-shadow: none;">
