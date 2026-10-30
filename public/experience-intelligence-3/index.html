@@ -101,6 +101,20 @@ html body .metric-animated-path { animation: none !important; stroke-dashoffset:
   });
 })();
 </script>
+<style id="ei3-abordagem-anim">
+.ei3-revelar main > div section#abordagem > * { opacity: 1; transform: none; transition: none; }
+.ei3-revelar #abordagem .text-center > *, .ei3-revelar #abordagem .grid > div:first-child > *, .ei3-revelar #abordagem .grid > div:first-child p {
+  opacity: 0; transform: translateY(44px); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
+.ei3-revelar #abordagem .orbit-system-wrapper { opacity: 0; transform: scale(.85); transition: opacity .9s cubic-bezier(0.16, 1, 0.3, 1), transform .9s cubic-bezier(0.16, 1, 0.3, 1); }
+.ei3-revelar #abordagem.ei3-visivel .text-center > *, .ei3-revelar #abordagem.ei3-visivel .grid > div:first-child > *,
+.ei3-revelar #abordagem.ei3-visivel .grid > div:first-child p, .ei3-revelar #abordagem.ei3-visivel .orbit-system-wrapper { opacity: 1; transform: none; }
+#abordagem.ei3-visivel .text-center > :nth-child(2) { transition-delay: .08s; }
+#abordagem.ei3-visivel .grid > div:first-child > h3 { transition-delay: .2s; }
+#abordagem.ei3-visivel .grid > div:first-child p:nth-child(1) { transition-delay: .3s; }
+#abordagem.ei3-visivel .grid > div:first-child p:nth-child(2) { transition-delay: .4s; }
+#abordagem.ei3-visivel .grid > div:first-child p:nth-child(3) { transition-delay: .5s; }
+#abordagem.ei3-visivel .orbit-system-wrapper { transition-delay: .3s; }
+</style>
 </head><body class="antialiased selection:bg-brand-100 selection:text-brand-600 bg-[#F1F4F8]"><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg>
 
 <title>Dani Moscatelli | Experience Design Studio</title>
@@ -964,13 +978,7 @@ h1, h2, h3, h4, h5, h6 {
 <article class="flex flex-col sm:flex-row items-stretch overflow-hidden rounded-2xl bg-white transition-all duration-300 group hover:shadow-card-hover" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 30px -5px, rgba(0, 0, 0, 0.03) 0px 4px 14px -2px;"><div class="sm:w-2/5 w-full h-48 sm:h-auto relative overflow-hidden flex-shrink-0 bg-graphite-100"><img src="img/imagem-34.webp" alt="Startup Weekend AI Curitiba" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"></div><div class="sm:w-3/5 p-5 sm:p-6 flex flex-col justify-between flex-grow"><div><div class="flex items-center gap-2 text-xs font-medium text-graphite-400 mb-2"><span class="text-brand-500 font-bold tracking-wide uppercase text-[11px]">INOVAÇÃO &amp; STARTUPS</span><span class="">•</span><span class="">18/09/26</span></div><h3 class="text-base font-bold text-graphite-900 group-hover:text-brand-500 transition-colors leading-snug mb-2"><a href="#" class="">Startup Weekend AI Curitiba: Sentindo na Pele os Desafios que Meus Clientes Enfrentam</a></h3><p class="text-xs sm:text-sm text-graphite-600 leading-relaxed line-clamp-2 mb-4">Validar uma ideia é só o começo. Transformá-la em negócio exige outras competências. Foi isso que vivi na prática.</p></div><div class="pt-3 border-t border-graphite-100/80 flex items-center justify-between mt-auto"><a href="#" class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-500 group-hover:gap-2.5 transition-all">Ler artigo<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a><span class="text-[11px] text-graphite-400 font-medium">6–7 min de leitura</span></div></div></article></div></div></div>
 </div></section><section class="py-16 md:py-20 bg-white border-t border-graphite-100" id="empresas-atendidas">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3">
-      <span class="relative flex h-2 w-2 mr-1.5">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D44D4D] opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-2 w-2 bg-[#D44D4D]"></span>
-      </span>
-      <span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">• EMPRESAS ATENDIDAS</span>
-    </div>
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs mb-3"> <span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-600 select-none">Parcerias</span> </div>
     <h2 class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-graphite-900 max-w-2xl mx-auto leading-tight mb-3">
       Empresas Atendidas
     </h2>
