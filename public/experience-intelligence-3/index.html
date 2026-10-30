@@ -37,6 +37,26 @@ html body .metric-animated-path { animation: none !important; stroke-dashoffset:
 .ei3-revelar main section.ei3-visivel .metric-animated-path { animation: ei3Desenhar 1.6s cubic-bezier(0.16, 1, 0.3, 1) .3s both !important; }
 @keyframes ei3Desenhar { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }
 </style>
+<style id="ei3-desafio-anim">
+.ei3-revelar main > div section#contexto > * { opacity: 1; transform: none; transition: none; }
+.ei3-revelar #contexto .max-w-6xl > *, .ei3-revelar #contexto .grid > *, .ei3-revelar #contexto ol li, .ei3-revelar #contexto ul li {
+  opacity: 0; transform: translateY(44px); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
+.ei3-revelar #contexto ol li { transform: translateY(14px); }
+.ei3-revelar #contexto.ei3-visivel .max-w-6xl > *, .ei3-revelar #contexto.ei3-visivel .grid > *,
+.ei3-revelar #contexto.ei3-visivel ol li, .ei3-revelar #contexto.ei3-visivel ul li { opacity: 1; transform: none; }
+/* Ordem: tag, título, texto, cards (passado e agora), itens da linha do tempo, valores, frase final */
+#contexto.ei3-visivel .max-w-6xl > :nth-child(2) { transition-delay: .08s; }
+#contexto.ei3-visivel .max-w-6xl > :nth-child(3) { transition-delay: .16s; }
+#contexto.ei3-visivel .grid > :nth-child(1) { transition-delay: .3s; }
+#contexto.ei3-visivel .grid > :nth-child(2) { transition-delay: .45s; }
+#contexto.ei3-visivel ol li:nth-child(2) { transition-delay: .6s; }  #contexto.ei3-visivel ol li:nth-child(3) { transition-delay: .7s; }
+#contexto.ei3-visivel ol li:nth-child(4) { transition-delay: .8s; }  #contexto.ei3-visivel ol li:nth-child(5) { transition-delay: .9s; }
+#contexto.ei3-visivel ol li:nth-child(6) { transition-delay: 1s; }   #contexto.ei3-visivel ol li:nth-child(7) { transition-delay: 1.15s; }
+#contexto.ei3-visivel .max-w-6xl > :nth-child(5) { transition-delay: 1.3s; }
+#contexto.ei3-visivel ul li:nth-child(1) { transition-delay: 1.4s; } #contexto.ei3-visivel ul li:nth-child(2) { transition-delay: 1.5s; }
+#contexto.ei3-visivel ul li:nth-child(3) { transition-delay: 1.6s; }
+#contexto.ei3-visivel .max-w-6xl > :nth-child(6) { transition-delay: 1.75s; }
+</style>
 </head><body class="antialiased selection:bg-brand-100 selection:text-brand-600 bg-[#F1F4F8]"><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg>
 
 <title>Dani Moscatelli | Experience Design Studio</title>
