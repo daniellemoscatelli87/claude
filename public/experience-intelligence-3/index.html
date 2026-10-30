@@ -41,31 +41,11 @@ html body .metric-animated-path { animation: none !important; stroke-dashoffset:
 #problema .grid .text-4xl { color: var(--primary); }
 @keyframes ei3Desenhar { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }
 </style>
-<style id="ei3-desafio-anim">
-.ei3-revelar main > div section#contexto > * { opacity: 1; transform: none; transition: none; }
-.ei3-revelar #contexto .max-w-6xl > *, .ei3-revelar #contexto .grid > *, .ei3-revelar #contexto ol li, .ei3-revelar #contexto ul li {
-  opacity: 0; transform: translateY(44px); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
-.ei3-revelar #contexto ol li { transform: translateY(14px); }
-.ei3-revelar #contexto.ei3-visivel .max-w-6xl > *, .ei3-revelar #contexto.ei3-visivel .grid > *,
-.ei3-revelar #contexto.ei3-visivel ol li, .ei3-revelar #contexto.ei3-visivel ul li { opacity: 1; transform: none; }
-/* Ordem: tag, título, texto, cards (passado e agora), itens da linha do tempo, valores, frase final */
-#contexto.ei3-visivel .max-w-6xl > :nth-child(2) { transition-delay: .08s; }
-#contexto.ei3-visivel .max-w-6xl > :nth-child(3) { transition-delay: .16s; }
-#contexto.ei3-visivel .grid > :nth-child(1) { transition-delay: .3s; }
-#contexto.ei3-visivel .grid > :nth-child(2) { transition-delay: .45s; }
-#contexto.ei3-visivel ol li:nth-child(2) { transition-delay: .6s; }  #contexto.ei3-visivel ol li:nth-child(3) { transition-delay: .7s; }
-#contexto.ei3-visivel ol li:nth-child(4) { transition-delay: .8s; }  #contexto.ei3-visivel ol li:nth-child(5) { transition-delay: .9s; }
-#contexto.ei3-visivel ol li:nth-child(6) { transition-delay: 1s; }   #contexto.ei3-visivel ol li:nth-child(7) { transition-delay: 1.15s; }
-#contexto.ei3-visivel .max-w-6xl > :nth-child(5) { transition-delay: 1.3s; }
-#contexto.ei3-visivel ul li:nth-child(1) { transition-delay: 1.4s; } #contexto.ei3-visivel ul li:nth-child(2) { transition-delay: 1.5s; }
-#contexto.ei3-visivel ul li:nth-child(3) { transition-delay: 1.6s; }
-#contexto.ei3-visivel .max-w-6xl > :nth-child(6) { transition-delay: 1.75s; }
-</style>
 <style id="ei3-cenario-anim">
 .ei3-revelar main > div section#problema > * { opacity: 1; transform: none; transition: none; }
-.ei3-revelar #problema .max-w-6xl > *, .ei3-revelar #problema .grid > * {
+.ei3-revelar #problema .grid > * {
   opacity: 0; transform: translateY(44px); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
-.ei3-revelar #problema.ei3-visivel .max-w-6xl > :not(.grid), .ei3-revelar #problema .grid.ei3-graf-on, .ei3-revelar #problema .ei3-graf-on > * { opacity: 1; transform: none; }
+.ei3-revelar #problema .grid.ei3-graf-on, .ei3-revelar #problema .ei3-graf-on > * { opacity: 1; transform: none; }
 #problema.ei3-visivel .max-w-6xl > :nth-child(2) { transition-delay: .08s; }
 #problema.ei3-visivel .max-w-6xl > :nth-child(3) { transition-delay: .16s; }
 #problema .ei3-graf-on > :nth-child(2) { transition-delay: .12s; } #problema .ei3-graf-on > :nth-child(3) { transition-delay: .24s; }
@@ -105,53 +85,12 @@ html body .metric-animated-path { animation: none !important; stroke-dashoffset:
   });
 })();
 </script>
-<style id="ei3-abordagem-anim">
-.ei3-revelar main > div section#abordagem > * { opacity: 1; transform: none; transition: none; }
-.ei3-revelar #abordagem .text-center > *, .ei3-revelar #abordagem .grid > div:first-child > *, .ei3-revelar #abordagem .grid > div:first-child p {
-  opacity: 0; transform: translateY(44px); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
-.ei3-revelar #abordagem .orbit-system-wrapper { opacity: 0; transform: scale(.85); transition: opacity .9s cubic-bezier(0.16, 1, 0.3, 1), transform .9s cubic-bezier(0.16, 1, 0.3, 1); }
-.ei3-revelar #abordagem.ei3-visivel .text-center > *, .ei3-revelar #abordagem.ei3-visivel .grid > div:first-child > *,
-.ei3-revelar #abordagem.ei3-visivel .grid > div:first-child p, .ei3-revelar #abordagem.ei3-visivel .orbit-system-wrapper { opacity: 1; transform: none; }
-#abordagem.ei3-visivel .text-center > :nth-child(2) { transition-delay: .08s; }
-#abordagem.ei3-visivel .grid > div:first-child > h3 { transition-delay: .2s; }
-#abordagem.ei3-visivel .grid > div:first-child p:nth-child(1) { transition-delay: .3s; }
-#abordagem.ei3-visivel .grid > div:first-child p:nth-child(2) { transition-delay: .4s; }
-#abordagem.ei3-visivel .grid > div:first-child p:nth-child(3) { transition-delay: .5s; }
-#abordagem.ei3-visivel .orbit-system-wrapper { transition-delay: .3s; }
-</style>
-<style id="ei3-sequencia">
-.ei3-revelar main > div section#metodo > *, .ei3-revelar main > div section.ei3-seq > * { opacity: 1; transform: none; transition: none; }
-.ei3-revelar .ei3-seq .ei3-a { opacity: 0; transform: translateY(44px); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
-.ei3-revelar .ei3-seq.ei3-visivel .ei3-a { opacity: 1; transform: none; transition-delay: var(--d, 0s); }
-</style>
-<script>
-(function () {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
-  var itens = {
-    segmentos: '.grid > *, .grid ~ div',
-    depoimentos: '.flex-wrap > span, .testimonial-card',
-    artigos: 'article',
-    'empresas-atendidas': '',
-    contato: '.flex-wrap > a'
-  };
-  document.addEventListener('DOMContentLoaded', function () {
-    Object.keys(itens).forEach(function (id) {
-      var sec = document.getElementById(id);
-      if (!sec) return;
-      var base = sec.firstElementChild, internos = itens[id] ? Array.prototype.slice.call(sec.querySelectorAll(itens[id])) : [];
-      if (id === 'depoimentos') { var ctl = document.getElementById('carousel-prev-btn'); if (ctl) internos.push(ctl.parentElement); }
-      var topo = Array.prototype.filter.call(base.children, function (el) {
-        return el.tagName !== 'STYLE' && !internos.some(function (i) { return el === i || el.contains(i); });
-      });
-      topo.forEach(function (el, i) { el.classList.add('ei3-a'); el.style.setProperty('--d', (i * 0.08) + 's'); });
-      internos.forEach(function (el, i) { el.classList.add('ei3-a'); el.style.setProperty('--d', Math.min(0.25 + i * 0.07, 1.2) + 's'); });
-      sec.classList.add('ei3-seq');
-    });
-  });
-})();
-</script>
 <style id="ei3-revisao-anim">
-#problema.ei3-visivel .max-w-6xl > :nth-child(5) { transition-delay: 1.4s; }
+/* Frase final do Cenário: tem gatilho próprio (fica longe do topo da seção) e só entra depois dos cards; o destaque vem por último */
+html.ei3-revelar #problema.ei3-visivel .max-w-6xl > .ei3-citacao { opacity: 0; transform: translateY(44px); }
+html.ei3-revelar #problema.ei3-visivel .max-w-6xl > .ei3-graf-on ~ .ei3-citacao.ei3-citacao-on { opacity: 1; transform: none; transition-delay: .25s; }
+html.ei3-revelar #problema .ei3-citacao strong { display: inline-block; opacity: 0; transform: translateY(8px); transition: opacity .6s cubic-bezier(0.16, 1, 0.3, 1), transform .6s cubic-bezier(0.16, 1, 0.3, 1); }
+html.ei3-revelar #problema .ei3-graf-on ~ .ei3-citacao-on strong { opacity: 1; transform: none; transition-delay: .9s; }
 .ei3-revelar footer > div > * { opacity: 0; transform: translateY(24px); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
 .ei3-revelar footer.ei3-visivel > div > * { opacity: 1; transform: none; }
 .ei3-revelar footer.ei3-visivel > div > :nth-child(2) { transition-delay: .12s; }
@@ -165,10 +104,68 @@ html body .metric-animated-path { animation: none !important; stroke-dashoffset:
     if (rodape) new IntersectionObserver(function (es) { es.forEach(function (e) {
       if (e.isIntersecting) rodape.classList.add('ei3-visivel'); else if (e.boundingClientRect.top > 0) rodape.classList.remove('ei3-visivel');
     }); }, { threshold: 0 }).observe(rodape);
+    var cit = document.querySelector('#problema .max-w-6xl > .max-w-3xl');
+    if (cit) { cit.classList.add('ei3-citacao'); new IntersectionObserver(function (es) { es.forEach(function (e) {
+      if (e.isIntersecting) cit.classList.add('ei3-citacao-on'); else if (e.boundingClientRect.top > 0) cit.classList.remove('ei3-citacao-on');
+    }); }, { threshold: 0.4 }).observe(cit); }
     // Hero: ao sair por cima, prepara; ao voltar, a entrada (texto e modelo) toca de novo
     if (hero) new IntersectionObserver(function (es) { es.forEach(function (e) {
       if (!e.isIntersecting) hero.classList.add('ei3-hero-fora'); else hero.classList.remove('ei3-hero-fora');
     }); }, { threshold: 0 }).observe(hero);
+  });
+})();
+</script>
+<style id="ei3-por-elemento">
+.ei3-revelar main > div section > * { opacity: 1; transform: none; transition: none; }
+.ei3-revelar .ei3-a { opacity: 0; transform: translateY(var(--y, 44px)); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
+.ei3-revelar .ei3-a.ei3-escala { transform: scale(.85); transition-duration: .9s; }
+.ei3-revelar .ei3-a.ei3-in { opacity: 1; transform: none; transition-delay: var(--d, 0s); }
+</style>
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var mapa = {
+    problema: ':scope > div > :not(.grid):not(.max-w-3xl)',
+    contexto: ':scope > div > :not(.grid):not(.max-w-4xl), .grid > *, ol li, .max-w-4xl > div, ul li',
+    abordagem: '.text-center > *, .grid > div:first-child > h3, .grid > div:first-child p, .orbit-system-wrapper',
+    segmentos: ':scope > div > :not(.grid), .grid > *',
+    depoimentos: ':scope > div > :not(.flex-wrap):not(.mb-10), .flex-wrap > span, #testimonials-track',
+    artigos: ':scope > div > :not(.relative), article',
+    'empresas-atendidas': ':scope > div > :not(style)',
+    contato: ':scope > div > :not(.flex-wrap), .flex-wrap > a'
+  };
+  document.addEventListener('DOMContentLoaded', function () {
+    var todos = [];
+    Object.keys(mapa).forEach(function (id) {
+      var sec = document.getElementById(id);
+      if (!sec) return;
+      Array.prototype.forEach.call(sec.querySelectorAll(mapa[id]), function (el) { if (todos.indexOf(el) < 0) todos.push(el); });
+      if (id === 'depoimentos') { var c = document.getElementById('carousel-prev-btn'); if (c) todos.push(c.parentElement); }
+    });
+    todos.forEach(function (el) {
+      el.classList.add('ei3-a');
+      if (el.classList.contains('orbit-system-wrapper')) el.classList.add('ei3-escala');
+      if (el.tagName === 'LI' && el.closest('ol')) el.style.setProperty('--y', '14px');
+    });
+    // Os que entram juntos na tela aparecem em sequência, na ordem de leitura
+    var obs = new IntersectionObserver(function (es) {
+      var entrando = es.filter(function (e) { return e.isIntersecting; }).map(function (e) { return e.target; });
+      entrando.sort(function (a, b) { return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
+      entrando.forEach(function (el, k) { el.style.setProperty('--d', Math.min(k * 0.08, 0.8) + 's'); el.classList.add('ei3-in'); });
+      es.forEach(function (e) {
+        if (e.isIntersecting) return;
+        // Abaixo da tela: some para surgir de novo. Acima (rolagem rápida ou link do menu): fica visível.
+        if (e.boundingClientRect.top > 0) e.target.classList.remove('ei3-in');
+        else { e.target.style.setProperty('--d', '0s'); e.target.classList.add('ei3-in'); }
+      });
+    }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
+    todos.forEach(function (el) { obs.observe(el); });
+    // Pulos grandes (link do menu, tecla End): o que ficou acima da tela aparece sem esperar
+    var agendado = false;
+    function acima() { agendado = false; todos.forEach(function (el) {
+      if (!el.classList.contains('ei3-in') && el.getBoundingClientRect().bottom < 0) { el.style.setProperty('--d', '0s'); el.classList.add('ei3-in'); }
+    }); }
+    window.addEventListener('scroll', function () { if (!agendado) { agendado = true; requestAnimationFrame(acima); } }, { passive: true });
   });
 })();
 </script>
