@@ -360,6 +360,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-10-31 · Versionamento da publicação do design system (em funcionamento, repositório Deploy)
+
+- **Onde:** repositório `daniellemoscatelli87/DaniMoscatelli-DesignSystem-Deploy` (commits `b4cc0cb`, `afde9bf`), não neste repositório. Arquivos: `.github/workflows/publish.yml`, `scripts/inventario.mjs`, `scripts/versionar.mjs`, `versoes/versoes.json`, `README.md`.
+- **Comportamento:** a cada 15 minutos, se o `main` do design system mudou, cria `vN`, etiqueta a fonte, inventaria, compara com a versão no ar e publica só se nada sumiu; caso contrário retém e falha com a lista. Ações manuais: `aceitar_remocoes` e `voltar`. Checagem do `base` do `vite.config.ts` antes de publicar. Decisão da dona do produto (31/10/2026): no ar só a versão atual; as anteriores só no Git.
+- **Testes executados localmente:** inventário nos commits `099abec` e `633044c` da fonte; comparação detecta a remoção real (seção Posts) e ignora troca de rótulos por tradução (comparação por id); cenários de planejamento: manifesto vazio → `v1`; mesma fonte → nada; versão retida com e sem aceite; voltar para versão existente e inexistente.
+- **Execuções reais:** 41244614314 falhou na tag (identidade do Git ausente), corrigido em `afde9bf`; 41244691669 sucesso em todas as etapas: `v1` = `633044c` publicada, tag `v1` criada na fonte, manifesto gravado (`93b61d7`). O `gh-pages` não recebeu commit novo porque o build era idêntico ao que já estava no ar; site e GitHub Pages seguem idênticos (bundle `index-D7YADOkR.js`).
+- **Pendência:** o primeiro caso real de retenção ainda não aconteceu; acompanhar o próximo envio do Figma Make.
+
 ## 2026-10-31 · Cópia de referência do design system oficial sincronizada, só documentação
 
 - **Feito:**
