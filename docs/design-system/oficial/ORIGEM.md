@@ -1,13 +1,14 @@
 # Design system oficial Dani Moscatelli: cópia de referência
 
-- **Origem oficial (indicada pela dona do produto em 22/10/2026):** https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/ · repositório `daniellemoscatelli87/DaniMoscatelli-DesignSystem`, commit `21f89da` (22/10/2026).
+- **Origem oficial (indicada pela dona do produto em 22/10/2026):** https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/ · repositório `daniellemoscatelli87/DaniMoscatelli-DesignSystem`, branch `main`, commit `633044c` (22/10/2026, último commit do Figma Make; sincronizado em 31/10/2026 e idêntico à fonte por `diff -rq`). Primeira cópia: commit `21f89da`, 22/10/2026.
 - **Substitui** a cópia do DS2 (`danimoscatellivendas-alt/ds2`), que era uma versão anterior.
 - **Copiado sem alteração** (sem `.git` e sem o fluxo de publicação do GitHub). Inclui componentes do shadcn/ui (licença MIT, ver `ATTRIBUTIONS.md`).
 - **Conteúdo:**
   - tokens em `src/styles/theme.css`: escalas graphite e crimson, tokens semânticos claro e escuro (classe `.dark`), sombras, raio 0,75 rem;
   - tipografia: Plus Jakarta Sans (principal), Space Grotesk (destaque) e Fraunces (acento), regras em `src/imports/pasted_text/design-system-typography.md`;
   - marca: logotipos e símbolo em PNG e SVG (`src/imports/`, `src/imports/svg/`);
-  - componentes em `src/app/components/ui/` (shadcn/ui + Radix) e demonstrações em `src/app/components/showcase/` (inclui guia de integração em `IntegrationShowcase.tsx`).
+  - componentes em `src/app/components/ui/` (shadcn/ui + Radix) e demonstrações em `src/app/components/showcase/` (inclui guia de integração em `IntegrationShowcase.tsx`);
+  - desde `633044c`: seções Início, Primeiros passos, Princípios, Usabilidade, Acessibilidade e Desenvolver (`HomeShowcase`, `GetStartedShowcase`, `PrinciplesShowcase`, `UsabilityShowcase`, `AccessibilityShowcase`, `DevelopShowcase`), textos em inglês e português (`src/app/i18n.tsx`) e histórico de mudanças do próprio design system em `src/app/components/showcase/shared/changelog.ts`. A seção Posts e Carrosséis (`PostsShowcase.tsx`) foi removida pelo Figma Make e consta como "Removed" nesse histórico.
 - **Integração indicada pelo próprio design system:** Tailwind CSS v4, `theme.css` em `src/styles/`, mapeamento `@theme inline`, tema escuro pela classe `.dark` no `<html>`, cores sempre por token (sem hexadecimal solto).
 - **Situação:** referência. A forma e o lugar de adoção dependem de decisão da dona do produto.
 - **Atenção de acessibilidade:** o botão primário usa branco sobre `#D44D4D` (4,23:1), abaixo do mínimo de 4,5:1 para texto normal.
@@ -15,6 +16,7 @@
 ## Endereço no site: danimoscatelli.com.br/designsystem (22/10/2026)
 
 - O site (Netlify) mostra o design system publicado no GitHub Pages pelo próprio endereço, por regras de proxy em `public/_redirects`: `/designsystem` e `/designsystem/*` apontam para `https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/`, e `/DaniMoscatelli-DesignSystem/*` faz os arquivos (JS, CSS, imagens) carregarem no domínio do site. Nada é copiado: o que aparece é sempre a versão publicada no GitHub Pages.
-- Atualização: Figma Make envia ao GitHub (commits do figma[bot]) → o fluxo `deploy.yml` do repositório do design system constrói e publica no GitHub Pages (cerca de 2 minutos) → o endereço do site já mostra a versão nova, sem publicar o site de novo.
-- Cuidado: o `vite.config.ts` do repositório do design system define `base: '/DaniMoscatelli-DesignSystem/'`. Se um envio do Figma Make sobrescrever essa linha, o GitHub Pages e o endereço do site deixam de carregar.
+- Atualização (fluxo real, verificado em 31/10/2026): Figma Make envia ao GitHub (commits do `figma[bot]` no `main` do repositório do design system) → o repositório **`daniellemoscatelli87/DaniMoscatelli-DesignSystem-Deploy`** (fluxo `publish.yml`, agendado **a cada 15 minutos** e também manual) baixa o `main`, faz o build com pnpm e publica a pasta `dist` no branch `gh-pages` do repositório do design system (usa o segredo `DEPLOY_TOKEN`) → o GitHub Pages serve o `gh-pages` → o endereço do site já mostra a versão nova, sem publicar o site de novo. Uma alteração feita no Figma Make leva até cerca de 15 minutos para aparecer.
+- Por que existe o repositório Deploy: o `deploy.yml` criado dentro do repositório do design system foi **apagado pelo Figma Make duas vezes** (commits `d5508e5` e `417ed42`, 22/10/2026). Cada envio do Figma Make grava o projeto inteiro e remove o que não faz parte dele (foi o que aconteceu com o `deploy.yml`), por isso a automação ficou num repositório separado, que ele não toca. Hoje não existe nenhum workflow no repositório do design system.
+- Cuidado: o `vite.config.ts` do repositório do design system define `base: '/DaniMoscatelli-DesignSystem/'`. Se um envio do Figma Make sobrescrever essa linha, o GitHub Pages e o endereço do site deixam de carregar. Nos envios até `633044c` a linha foi mantida.
 - Testado com um servidor local que simula as mesmas regras: `/designsystem` e `/designsystem/` abrem o design system, 37 de 37 imagens carregadas, nenhuma falha de rede nem erro na página. O build do site copia `_redirects` para `dist/`. A regra não pode adicionar ou remover barra final no Netlify (geraria laço), por isso as duas formas apontam direto para o GitHub Pages.

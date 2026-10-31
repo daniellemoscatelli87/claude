@@ -360,6 +360,17 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-10-31 · Cópia de referência do design system oficial sincronizada, só documentação
+
+- **Feito:**
+  - `docs/design-system/oficial/` atualizada do commit `21f89da` para o `633044c` (último commit do Figma Make no `main` de `daniellemoscatelli87/DaniMoscatelli-DesignSystem`): 20 arquivos alterados, 10 novos (seções Início, Primeiros passos, Princípios, Usabilidade, Acessibilidade e Desenvolver, `i18n.tsx`, `changelog.ts`, `Guidance.tsx`, `image-7.png`) e 1 removido (`PostsShowcase.tsx`, removido pelo próprio Figma Make);
+  - `ORIGEM.md` com o fluxo real de publicação: Figma Make → `main` do design system → repositório `DaniMoscatelli-DesignSystem-Deploy` (`publish.yml`, a cada 15 minutos) → branch `gh-pages` → GitHub Pages → proxy do site em `/designsystem`. O `deploy.yml` dentro do repositório do design system foi apagado pelo Figma Make em `d5508e5` e `417ed42`.
+- **Verificação executada:**
+  - `diff -rq` entre a cópia e o clone do `main` em `633044c`: nenhuma diferença (fora `ORIGEM.md`, que é nosso);
+  - `src/styles/theme.css` não mudou entre `21f89da` e `633044c` (`git diff --stat` vazio), então o `tokens.css` da página do produto não ficou defasado por esta sincronização;
+  - no ar: `danimoscatelli.com.br/designsystem/` responde 200 com HTML idêntico ao do GitHub Pages (mesmo bundle `index-D7YADOkR.js`), e esse bundle contém textos que só existem a partir de `417ed42`; último commit do `gh-pages` em 31/10/2026 18:58 UTC, feito pelo fluxo do repositório Deploy.
+- **Código e banco:** nenhum alterado. O design system continua como referência, não ligado ao app nem ao site (D-032 pendente de adoção).
+
 ## 2026-10-21 · Corpus inicial de protocolos incorporado (D-028), só documentação
 
 - **Feito:**
