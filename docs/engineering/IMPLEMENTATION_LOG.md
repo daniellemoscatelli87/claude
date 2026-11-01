@@ -360,6 +360,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-01 · Design system v2 publicada por envio manual (integração Figma Make → GitHub fora do ar)
+
+- **Situação:** o arquivo do Figma Make perdeu o vínculo com o repositório (pedido à IA do Make de "desconectar do GitHub", seguido de desinstalação/reinstalação do app do Figma no GitHub). O Figma Make só envia para repositório que ele mesmo cria; as tentativas de "Create repository" criaram dois repositórios vazios e privados (`DaniMoscatelli-DesignSystem-Final`, `Dani-Moscatelli-Design-System`) com o erro "You do not appear to have sufficient permissions for the operation". Chamado aberto no suporte do Figma pela dona do produto.
+- **Contorno executado:** código exportado do Figma Make (zip) → normalizado para o mesmo conjunto de arquivos que o Make enviava (`src/`, `guidelines/`, `index.html` sem marcadores internos, `vite.config.ts` com `base`; excluídos `.figma/`, `.figaro/`, `.tmp/`, `vite.figma.config.ts`, `CLAUDE.md`, `AGENTS.md`, `.gitattributes` com LFS, `pnpm-lock.yaml`, `tsconfig.json` e um `deploy.yml` do Make) → commit `50f63f1` no `main` de `DaniMoscatelli-DesignSystem` → fluxo do repositório Deploy (execução 41267197935, sucesso): `v2` criada, tag `v2` na fonte, 0 removidos e 25 adicionados em relação à `v1` (seção Cards com 10 itens, componente `shine-border`, token `--animate-shine`), publicada no `gh-pages` (commit `950531f`).
+- **Verificação:** build local com pnpm antes do envio (bundle com `base` correto); site `danimoscatelli.com.br/designsystem/` responde 200 com o bundle novo `index-B5eTsOs2.js`, contendo "Card Anatomy", "Nested Cards" e "Shine Border".
+- **Achado:** a seção Cards que a dona do produto dava como perdida existia no Figma Make e nunca tinha chegado ao GitHub.
+- **Pendências:** resposta do suporte do Figma; apagar os dois repositórios vazios (decisão da dona do produto); a cópia de referência em `docs/design-system/oficial/` continua em `633044c` (v1).
+
 ## 2026-10-31 · Versionamento da publicação do design system (em funcionamento, repositório Deploy)
 
 - **Onde:** repositório `daniellemoscatelli87/DaniMoscatelli-DesignSystem-Deploy` (commits `b4cc0cb`, `afde9bf`), não neste repositório. Arquivos: `.github/workflows/publish.yml`, `scripts/inventario.mjs`, `scripts/versionar.mjs`, `versoes/versoes.json`, `README.md`.
