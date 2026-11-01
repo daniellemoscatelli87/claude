@@ -360,11 +360,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
-## 2026-11-01 · Cenas do vidro com textura e cores do DS, só do tema ativo; nome no card da textura (publicação em andamento)
+## 2026-11-01 · Cenas do vidro com textura e cores do DS, só do tema ativo; nome no card da textura (publicado: DM v17 e FindLook v21)
 
 - **Origem:** dona do produto ("Use texturas e cores do próprio DS para construir os exemplos; se o light mode está ativado não mostrar nada que seja do dark mode. E o background de ícones está sem nome").
 - **Feito** (commits `80aed74` DM e `4aba5a2` FindLook): o `GlassScene` (fundo de demonstração dos cards de vidro) trocou as linhas diagonais improvisadas pela textura doodle do próprio DS, mantém só manchas de cor dos tokens (primária, warning, chart-2) e passou a seguir o tema: no modo claro nenhuma cena escura aparece; o bloco "Vidro escuro (tom escuro)" mostra o vidro grafite sobre a cena clara da marca e, no modo escuro, sobre a escura. Para isso o vidro escuro ficou mais opaco no tema claro (valores originais no escuro), o tingimento `tint` virou uma camada em vez de substituir o fundo do vidro (bug: no tom escuro o fundo grafite sumia) e os textos secundários dos exemplos ficam brancos no tom escuro em qualquer tema. Em Backgrounds, o card "Textura doodle" ganhou cabeçalho com nome e etiqueta SVG, como os demais fundos.
-- **Verificação:** builds sem erros; capturas no claro e no escuro da seção de vidro (seletor em tom escuro, bloco de vidro escuro) e do card da textura, sem erros de JavaScript. Workflows disparados; conferir status e versões.
+- **Verificação:** builds sem erros; capturas no claro e no escuro da seção de vidro (seletor em tom escuro, bloco de vidro escuro) e do card da textura, sem erros de JavaScript. Workflows concluídos; DM v17 e FindLook v21 conferidos no ar.
 
 ## 2026-11-01 · Cards glassmorphism com acabamentos (graus de transparência) nos dois design systems (publicado: DM v16 e FindLook v20)
 
