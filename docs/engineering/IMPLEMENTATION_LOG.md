@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-01 · Componente Avatar Circles nos dois design systems (publicado: DM v10 e FindLook v14)
+
+- **Origem:** dona do produto ("Inclua o componente https://magicui.design/docs/components/avatar-circles em ambos os ds").
+- **Feito** (commits `085392c` DM e `9954794` FindLook): `ui/avatar-circles.tsx`, portado do código do Magic UI (lido do registro oficial) com adaptações aos tokens: bordas em `border-background` no lugar de branco/cinza fixos (funciona no claro e no escuro), círculo "+N" em `foreground`/`background`, "+N" só vira link quando `moreHref` é informado (o original tinha `href=""`), prop `size` sm/md/lg, `name` por avatar para o texto alternativo e tooltip, foco visível. Props originais `avatarUrls`, `numPeople` e `className` mantidas.
+- **Documentação:** subseção "Avatar Circles" dentro de Componentes › Badges › Avatar (`#avatar-circles`) com os três tamanhos, um exemplo de prova social ao lado de texto, código e regras de uso; item no menu; changelog. Avatares de demonstração são SVGs locais em `public/avatares/` (nenhuma imagem de host externo e nenhuma pessoa real).
+- **Verificação:** builds sem erros; capturas no claro e no escuro nos dois, sem imagens quebradas e sem erros de JavaScript; "+1200" não cabia no círculo no exemplo do FindLook, trocado por "+120". Workflows concluídos; DM v10 e FindLook v14 conferidos no ar.
+
 ## 2026-11-01 · Rodapé dos dois design systems com link para o site (publicado: DM v9 e FindLook v13)
 
 - **Origem:** dona do produto: no rodapé "© 2026 Dani Moscatelli • Experience Design Studio. All rights reserved.", o trecho "Dani Moscatelli • Experience Design Studio" deve levar a www.danimoscatelli.com.br.
