@@ -29,6 +29,11 @@
 <script type="module" src="/src/em-breve.ts"></script>
 <script src="/analytics.js" defer></script>
 <style>
+  /* Ao rolar, o logo completo dá lugar só ao ícone (também no tablet e no computador) */
+  #site-header.is-scrolled .logo-completo { display: none; }
+  #site-header.is-scrolled .logo-icone { display: block; animation: logo-icone-in .3s ease-out; }
+  @keyframes logo-icone-in { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { #site-header.is-scrolled .logo-icone { animation: none; } }
   #site-header.is-scrolled { background: rgb(255 255 255 / .85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 rgb(15 23 42 / .06), 0 8px 24px -16px rgb(15 23 42 / .25); }
 </style>
 </head>
@@ -40,8 +45,8 @@
 <div id="site-header" class="sticky top-0 z-30 w-full transition-[background-color,box-shadow,backdrop-filter] duration-200">
 <header class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 md:py-8 flex items-center justify-between gap-3 sm:gap-4">
   <a href="/" class="flex items-center shrink-0">
-    <img alt="Dani Moscatelli - Experience Design Studio" class="h-10 w-auto object-contain sm:hidden" src="/favicon-dm.png">
-    <img alt="Dani Moscatelli - Experience Design Studio" class="hidden sm:block sm:h-12 md:h-16 w-auto object-contain" src="/logo-dm.png">
+    <img alt="Dani Moscatelli - Experience Design Studio" class="logo-icone h-10 sm:h-12 md:h-14 w-auto object-contain sm:hidden" src="/favicon-dm.png">
+    <img alt="Dani Moscatelli - Experience Design Studio" class="logo-completo hidden sm:block sm:h-12 md:h-16 w-auto object-contain" src="/logo-dm.png">
   </a>
   <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
   <a href="/rede-parceiros/" onclick="window.dmEvento &amp;&amp; window.dmEvento('clique_quero_ser_parceiro')" class="text-[13px] sm:text-sm font-semibold text-brand-red underline underline-offset-4 whitespace-nowrap">Quero ser parceiro</a>
