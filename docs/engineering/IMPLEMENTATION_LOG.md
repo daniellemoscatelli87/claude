@@ -360,6 +360,16 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-01 · Textura doodle na seção Backgrounds dos dois design systems (publicado: DM v14 e FindLook v18)
+
+- **Origem:** dona do produto, com imagem de referência (papel de parede escuro com ícones de traço): textura em claro e escuro para a seção de backgrounds; no DS do estúdio os elementos remetem a pesquisa, inovação, UX, UI, usuário, jornada, post-it e design thinking; no FindLook, a peças de roupa e acessórios (calça, saia, cropped, vestido, salto, anel, colar, óculos…). Correção dela durante o trabalho: "não é para os ícones ficarem transparentes" → traços em cor sólida.
+- **Feito** (commits `de1e78f` DM e `df5d242` FindLook):
+  - `scripts/gerar-texturas.mjs`: gera um ladrilho SVG de 800 px sem emenda (grade de 10×10 com linhas alternadas deslocadas, tamanho 40–64 px, rotação e deslocamento aleatórios com semente fixa; o que cruza a borda reaparece do outro lado) a partir de ícones do Lucide, lidos do pacote instalado, e de desenhos próprios no mesmo estilo (DM: duplo diamante, jornada, wireframe, persona, post-it, teste A/B, fluxo, protótipo, mapa de empatia…; FindLook: cabide, calça, saia, cropped, vestido, salto, anel, colar, brinco, bolsa, chapéu, bota, tênis, batom, perfume, laço, biquíni, pulseira, óculos de sol…). DM: 66 desenhos distintos; FindLook: 48.
+  - `public/texturas/`: `-claro.svg` (grafite-200), `-escuro.svg` (grafite-800), `-primaria.svg` (crimson-200 / pink-200), `-traco.svg` (currentColor) e PNG claro e escuro de 1600 px com fundo transparente. Traços opacos, sem transparência.
+  - `ui/doodle-texture.tsx`: `DoodleTexture` aplica o arquivo de traço como máscara CSS, então a cor é qualquer token sólido (padrão grafite-200 no claro e grafite-800 no escuro); escalas p/m/g (480/640/800 px); `aria-hidden`, sem eventos de ponteiro.
+  - Backgrounds › "Textura doodle": prévia que segue o tema com controles de escala e de traço (neutra, forte, primária), seis botões de download, código React e CSS, regras de uso. Item no menu e changelog.
+- **Verificação:** builds sem erros; prévias do ladrilho repetido 2×2 nos dois temas; capturas da seção no claro e no escuro sem erros de JavaScript; arquivos SVG e PNG respondendo 200 no GitHub Pages. Workflows concluídos; DM v14 e FindLook v18 conferidos no ar. Ajustes a partir das prévias: ícones maiores e linhas deslocadas (a primeira versão ficou miúda e em grade), desenhos do cropped e da jaqueta refeitos, e traços passados de translúcidos para cores sólidas após a correção da dona do produto.
+
 ## 2026-11-01 · Subcategoria "Cards glassmorphism" nos dois design systems (publicado: DM v13 e FindLook v17)
 
 - **Origem:** dona do produto ("crie uma subcategoria de cards glass morphism").
