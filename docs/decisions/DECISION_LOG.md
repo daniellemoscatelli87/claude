@@ -409,6 +409,15 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-038 · 01/11/2026 · FindLook: tokens unificados com as cores do arquivo vetorial oficial do logo
+
+- **Origem:** Dona do produto, após comparação visual lado a lado ("pode mudar e publicar"). Os vetores oficiais do logo usam pink `#E62040` e preto `#060608`; o brand book v1.0 sugeria `#F4144B` e `#111014` e pedia validação no arquivo-mestre.
+- **Decisão:** os tokens do FindLook Design System passam a `--pink-500: #E62040` e `--graphite-950: #060608`, com as escalas de 50 a 950 recalculadas pelo mesmo método; logo, botões, chips e links ficam no mesmo pink.
+- **Consequência de acessibilidade:** branco sobre pink sobe de 4,16:1 para 4,52:1 e passa o AA para texto normal; `pink-600` sobre branco 6,4:1; `pink-300` sobre grafite 8,9:1. A exceção registrada em D-037 deixa de existir no FindLook (no DM, D-032, continua).
+- **Fora:** o rodapé do FindLook DS traz "© 2026 Dani Moscatelli • Experience Design Studio. All rights reserved." (pedido da dona do produto, 01/11/2026).
+
+---
+
 ## D-037 · 01/11/2026 · FindLook Design System: cópia do design system oficial com marca, cores e tipografia da FindLook
 
 - **Origem:** Dona do produto ("Podemos duplicar esse design system e adaptar somente esses princípios?"; brand book e logos da FindLook enviados; decisões: seções novas sim, só português, escalas derivadas das cores oficiais, logos em SVG gerados com download em SVG e PNG, publicação só no GitHub Pages por enquanto, antigas versões só no Git).
