@@ -409,6 +409,20 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-037 · 01/11/2026 · FindLook Design System: cópia do design system oficial com marca, cores e tipografia da FindLook
+
+- **Origem:** Dona do produto ("Podemos duplicar esse design system e adaptar somente esses princípios?"; brand book e logos da FindLook enviados; decisões: seções novas sim, só português, escalas derivadas das cores oficiais, logos em SVG gerados com download em SVG e PNG, publicação só no GitHub Pages por enquanto, antigas versões só no Git).
+- **Decisão:**
+  - novo repositório `daniellemoscatelli87/FindLook-DesignSystem` (criado pela dona do produto), com cópia da v2 do Dani Moscatelli Design System (`50f63f1`) e tudo o que é marca trocado: tokens (Pink `#F4144B`, Preto Grafite `#111014`, Branco, Rosa Claro `#FFF2F5`; escalas pink e grafite de 50 a 950 derivadas), só Plus Jakarta Sans (títulos ExtraBold/Bold, textos Regular/Medium), logos vetorizados a partir do brand book;
+  - só português: idioma fixo em pt-BR, sem alternador; conteúdo novo escrito só em português;
+  - seções novas a partir do brand book: Princípios (os 6 da FindLook), Tom de voz e mensagens, Estados de informação (confirmado pela loja, a confirmar, esgotado, sugerido por IA, desatualizado; nunca só cor);
+  - contraste (opção "a", recomendada e não contestada): texto branco sobre pink (4,2:1) só em botões e títulos; texto corrido em pink usa `pink-600` no claro (5,8:1) e `pink-300` no escuro (8,3:1), token `--primary-text`;
+  - publicação com o mesmo versionamento do DM: fluxo `publish-findlook.yml` no repositório Deploy, registro em `versoes-findlook/`, `gh-pages` do próprio repositório, endereço `daniellemoscatelli87.github.io/FindLook-DesignSystem/`; o domínio da FindLook fica para depois.
+- **Fora:** caminho no site do estúdio; Figma Make como fonte (o repositório é mantido direto no GitHub); validação da paleta no arquivo-mestre da marca (o brand book a chama de "sugerida").
+- **Trade-off:** as páginas herdadas continuam com o mecanismo bilíngue por baixo (textos em inglês ficam sem uso); os logos são vetorização própria, não o arquivo vetorial oficial pedido pelo brand book.
+
+---
+
 ## D-036 · 27/10/2026 · Site encontrável nos buscadores e medição de acessos com consentimento
 
 - **Origem:** Dona do produto ("a página em breve pode e deve ser encontrada no Google"; títulos, descrições e textos de cookies e da Política de Privacidade aprovados por ela).
