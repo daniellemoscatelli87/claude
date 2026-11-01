@@ -360,6 +360,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-01 · Shine Border com combinações de cores nos dois design systems (publicado: DM v11 e FindLook v15)
+
+- **Origem:** dona do produto ("para o componente shine border eu quero poder combinar cores de bordas, como o amarelo/dourado com a cor primária do ds").
+- **Feito** (commits `7e3eebf` DM e `db087c3` FindLook): `ui/shine-border.tsx` ganhou a prop `preset` e o mapa exportado `shinePresets` com cinco combinações só de tokens: `primaria` (primária + chart-2), `dourada` (warning + primária), `primaria-dourada`, `ouro` (warning + warning-foreground) e `contraste` (primária + foreground). O dourado é o token `--warning` (âmbar `#e5a94e` no claro, `#f5b320` no escuro); nenhuma cor nova foi criada. `shineColor` continua aceitando uma cor ou lista e tem prioridade sobre `preset`; o padrão sem props segue a primária.
+- **Documentação:** Motion › Shine Border, bloco "Combinações de cores" com as cinco combinações animadas (dourada e ouro com borda de 2 px), bolinhas das cores, tokens usados e código; changelog.
+- **Verificação:** builds sem erros; capturas no claro (DM) e no escuro (FindLook) sem erros de JavaScript. Workflows concluídos; DM v11 e FindLook v15 conferidos no ar.
+- **Hipótese registrada:** o design system não tem um token "dourado" próprio; usou-se `--warning`. Se a dona do produto quiser um dourado específico da marca, é uma decisão de token a registrar.
+
 ## 2026-11-01 · Componente Avatar Circles nos dois design systems (publicado: DM v10 e FindLook v14)
 
 - **Origem:** dona do produto ("Inclua o componente https://magicui.design/docs/components/avatar-circles em ambos os ds").
