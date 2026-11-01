@@ -360,12 +360,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
-## 2026-11-01 · Cards glassmorphism com acabamentos (graus de transparência) nos dois design systems (publicação em andamento)
+## 2026-11-01 · Cards glassmorphism com acabamentos (graus de transparência) nos dois design systems (publicado: DM v16 e FindLook v20)
 
 - **Origem:** dona do produto ("o card glassmorphism precisa ter graus de transparência para o usuário escolher qual ele quer: bem transparente translúcido, transparente fosco, transparente com foco de luz etc").
 - **Feito** (commits `2c5600c` DM e `751a165` FindLook): `GlassCard` ganhou a prop `finish` com cinco acabamentos: `padrao` (o anterior), `translucido` (desfoque de 2 px, branco 10/18/28%, o fundo aparece inteiro), `fosco` (desfoque de 64 px, branco 60/72/84%, sem fio de luz: o mais legível), `luz` (desfoque de 24 px, branco 35/48/62% mais foco de luz radial no canto superior esquerdo e brilho interno) e `cristal` (desfoque de 12 px, branco 22/32/44%, borda branca a 90% e reflexo diagonal). Cada acabamento combina com `tone` (vidro claro ou escuro) e `intensity` (leve/média/forte), que dentro do acabamento controla a opacidade. No tom escuro e no tema escuro, foco de luz e reflexo são mais suaves. Nenhuma cor nova.
 - **Documentação:** bloco "Acabamentos — graus de transparência" no início da seção Cards glassmorphism, com seletor interativo feito com o controle segmentado (acabamento, tom, opacidade) aplicando a escolha na hora em dois cards (um interativo e um com `tint` e a descrição do acabamento), amostra dos quatro acabamentos lado a lado, tokens dos acabamentos na tabela e código atualizado. Changelog nos dois.
-- **Verificação:** builds sem erros; capturas de cada acabamento no claro e do cristal no tom escuro, sem erros de JavaScript; um ajuste: o reflexo do cristal e o foco de luz no tom escuro estavam fortes demais e foram suavizados. Workflows `publish.yml` e `publish-findlook.yml` disparados; conferir status final e versões.
+- **Verificação:** builds sem erros; capturas de cada acabamento no claro e do cristal no tom escuro, sem erros de JavaScript; um ajuste: o reflexo do cristal e o foco de luz no tom escuro estavam fortes demais e foram suavizados. Workflows concluídos; DM v16 e FindLook v20 conferidos no ar.
 
 ## 2026-11-01 · Textura doodle na seção Backgrounds dos dois design systems (publicado: DM v14 e FindLook v18; ajuste da demonstração em DM v15 e FindLook v19)
 
