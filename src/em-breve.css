@@ -18,6 +18,19 @@
   --shadow-floating-input: 0 20px 40px -12px rgba(15, 23, 42, 0.08), 0 6px 18px -4px rgba(15, 23, 42, 0.04);
   --shadow-btn-glow: 0 10px 25px -3px rgba(212, 77, 77, 0.35);
   --shadow-drawer: -10px 0 50px -10px rgba(15, 23, 42, 0.15);
+
+  /* Tokens do design system oficial usados no painel lateral de contato (componente SidePanel) */
+  --color-ds-fg: #131A27;
+  --color-ds-muted: #E8EDF3;
+  --color-ds-muted-fg: #627288;
+  --color-ds-accent: #E8EDF3;
+  --color-ds-border: rgba(19, 26, 39, 0.09);
+  --color-ds-primary: #D44D4D;
+  --color-ds-primary-muted: rgba(212, 77, 77, 0.1);
+  --color-ds-ring: rgba(212, 77, 77, 0.35);
+  --color-ds-error: #D44D4D;
+  --shadow-ds-md: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06);
+  --shadow-ds-xl: 0 16px 48px rgba(13, 17, 25, 0.10), 0 40px 96px rgba(13, 17, 25, 0.08);
 }
 
 .bg-ambient-gradient {
@@ -40,29 +53,29 @@
 .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 9999px; }
 .custom-scroll::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
 
-/* Campos do formulário de contato (mockup Stitch) */
+/* Campos do formulário de contato: padrão do painel lateral do design system (SidePanel) */
 .field {
   width: 100%;
   padding: 0.625rem 1rem;
-  border-radius: 0.75rem;
-  border: 1px solid var(--color-slate-200);
-  background: rgb(248 250 252 / 0.5);
-  font-size: 13px;
-  color: var(--color-brand-dark);
+  border-radius: 12px;
+  border: 1px solid var(--color-ds-border);
+  background: rgb(232 237 243 / 0.4);
+  font-size: 0.8125rem;
+  color: var(--color-ds-fg);
   line-height: 1.625;
   outline: none;
-  transition: all 0.15s;
+  transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s;
 }
-.field::placeholder { color: var(--color-slate-400); }
+.field::placeholder { color: var(--color-ds-muted-fg); }
 .field:focus {
   background: #fff;
-  border-color: var(--color-brand-red);
-  box-shadow: 0 0 0 2px rgb(212 77 77 / 0.2);
+  border-color: var(--color-ds-primary);
+  box-shadow: 0 0 0 2px var(--color-ds-ring);
 }
-.field.invalid, .box-invalid { border-color: var(--color-brand-red) !important; }
-select.field { appearance: none; cursor: pointer; }
-select.field:invalid { color: var(--color-slate-400); }
-select.field option { color: var(--color-brand-dark); }
+.field.invalid, .box-invalid { border-color: var(--color-ds-error) !important; }
+select.field { appearance: none; cursor: pointer; padding-right: 2.5rem; }
+select.field:invalid { color: var(--color-ds-muted-fg); }
+select.field option { color: var(--color-ds-fg); }
 
 /* Botão "Notificar lançamento": idle → sending → success */
 .notify-btn {
