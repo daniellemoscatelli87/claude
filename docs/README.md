@@ -34,6 +34,7 @@ Esta documentação é parte integrante do produto, não material de apoio desca
 | [`security/DADOS_PESSOAIS.md`](security/DADOS_PESSOAIS.md) | Dados pessoais: estado atual do CPF, necessidade e proposta de proteção | Criado em 21/10/2026 |
 | [`legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md`](legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md) | Requisitos dos Termos de Uso e da Política de Privacidade | Criado em 21/10/2026 |
 | [`design-system/COMPONENTES.md`](design-system/COMPONENTES.md) | Componentes do produto e origem no site | Criado em 21/10/2026 |
+| FindLook Design System (repositório `daniellemoscatelli87/FindLook-DesignSystem`) | Design system da FindLook, derivado do design system oficial (D-037); publicado em https://daniellemoscatelli87.github.io/FindLook-DesignSystem/ | Criado em 01/11/2026 |
 | [`engineering/FIRST_INCREMENT_PROMPT.md`](engineering/FIRST_INCREMENT_PROMPT.md) | Escopo aprovado do primeiro incremento (Cortes 1 e 2) | `02-prompt-claude-code-primeiro-incremento.md` |
 | [`research/VALIDATION_LOG.md`](research/VALIDATION_LOG.md) | Aprendizados de validação de mercado e com usuários | Criado na organização |
 | [`../CLAUDE.md`](../CLAUDE.md) | Instruções persistentes para o Claude Code | `CLAUDE.md` do kit |
