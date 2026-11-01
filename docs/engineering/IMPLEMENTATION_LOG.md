@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-01 · Componente "Selo (tag do hero)" nos dois design systems (publicação em andamento)
+
+- **Origem:** dona do produto: a tag padrão do design system (pílula com fundo e borda em pink) é menos bonita que a tag do hero da página Experience Intelligence do site, que ela quer no design system.
+- **Padrão replicado do site** (`public/experience-intelligence/estilo.css`, classe `.selo`): pílula com fundo de card, borda `--border`, 6 × 14 px, texto 0,75 rem semibold em caixa alta com tracking 0,14em em `graphite-700`, ponto de 8 px na cor primária, gap 8 px.
+- **Feito:** `ui/selo.tsx` nos dois repositórios (tons neutro e primário, tamanhos md e sm, ponto ou ícone, grafite-300 no escuro; no DM o tom primário usa `text-primary`, no FindLook `text-primary-text`). Documentação em Rótulos › "Selo (tag do hero)" com exemplos, versão sobre superfície escura, regras de uso (um por página ou seção, texto curto, ponto ou ícone, não interativo), código e tokens; subitem no menu; changelog. Commits `c0b2d79` (DM) e `fbeff59` (FindLook). Builds sem erros; captura do bloco conferida no FindLook (claro e escuro).
+- **Observação:** a tag "Moda local em Curitiba" do print não existe nos design systems; vem do produto FindLook em construção, que agora pode trocar pelo `Selo`.
+
 ## 2026-11-01 · DM Design System: seção "Painel lateral (gaveta)" (publicada na v3)
 
 - **Origem:** dona do produto ("o sidebar não está em nenhum dos design systems"): o formulário de contato do site abre em gaveta lateral e o padrão não estava documentado.
