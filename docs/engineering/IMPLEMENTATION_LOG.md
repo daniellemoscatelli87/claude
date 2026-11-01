@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-01 · Componente Controle segmentado nos dois design systems (publicado: DM v12 e FindLook v16)
+
+- **Origem:** dona do produto, com esboço (três células acopladas "Nova | Usada | Tanto faz", a ativa com fundo rosa claro): "componente estilo interruptor onde o usuário pode tocar como se fosse um botão e as opções são acopladas, mas siga o estilo do design system".
+- **Feito** (commits `11c91c4` DM e `aaf8da5` FindLook): `ui/segmented-control.tsx` sobre o Radix ToggleGroup (dependência já existente): opções acopladas com uma sempre selecionada (toque repetido não desmarca), variantes `suave` (ativa com `--primary-muted` e texto na primária, como o esboço) e `solida` (ativa na primária), tamanhos sm/md/lg com os raios e alturas dos botões do sistema (8/12 px; 32/40/44 px), ícones, `fullWidth`, opção desabilitada, foco visível, setas selecionam a próxima opção habilitada com volta ao início e Tab cai na opção ativa. Colunas crescem para o conteúdo em telas estreitas (sem cortar rótulos).
+- **Documentação:** Componentes › Botões › Controles de formulário › "Controle segmentado" (`#segmented`): exemplo controlado com o estado exibido, variante sólida, ícones, largura total, três tamanhos, opção desabilitada, código e regras (quando usar Select, Checkbox ou Switch no lugar). Item no menu e changelog. Exemplos do FindLook: condição da peça, tipo de loja, quero comprar/vender; do DM: condição do item, cobrança mensal/anual, pessoa física/jurídica.
+- **Verificação:** builds sem erros; teste no navegador: clique seleciona, segundo clique mantém, seta direita avança e o estado exibido acompanha; capturas no claro, no escuro e em 390 px sem erros de JavaScript. Dois ajustes feitos a partir dos testes: setas passaram a selecionar (o Radix só movia o foco) e colunas iguais cortavam rótulos no celular. Workflows concluídos; DM v12 e FindLook v16 conferidos no ar.
+
 ## 2026-11-01 · Shine Border com combinações de cores nos dois design systems (publicado: DM v11 e FindLook v15)
 
 - **Origem:** dona do produto ("para o componente shine border eu quero poder combinar cores de bordas, como o amarelo/dourado com a cor primária do ds").
