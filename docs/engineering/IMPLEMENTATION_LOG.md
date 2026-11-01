@@ -360,6 +360,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-01 · Rodapé dos dois design systems com link para o site (publicado: DM v9 e FindLook v13)
+
+- **Origem:** dona do produto: no rodapé "© 2026 Dani Moscatelli • Experience Design Studio. All rights reserved.", o trecho "Dani Moscatelli • Experience Design Studio" deve levar a www.danimoscatelli.com.br.
+- **Feito** (commits `c4a155a` DM e `86550ae` FindLook): em `App.tsx`, o trecho inteiro virou um link para `https://www.danimoscatelli.com.br` (nova aba, `rel="noopener noreferrer"`), com o sublinhado discreto na cor primária que o DM já usava. No DM, o link antigo apontava para o domínio errado (`daniellemoscatelli.com.br`) e só envolvia o nome; corrigido. No FindLook não havia link.
+- **Verificação:** builds sem erros; no FindLook, captura do rodapé e leitura do `href` no navegador; nos dois endereços publicados, o pacote novo contém o link.
+
 ## 2026-11-01 · Títulos com destaque na cor primária e card de convite ao parceiro (publicado: DM v8 e FindLook v12, conferido no ar)
 
 - **Origem:** dona do produto ("Padronizar títulos com o do Hero onde palavras de destaque ficam destacadas na cor principal da paleta, pink ou vermelho dependendo do DS. Outra inclusão é o card do parceiro convidando para o cadastro: um card bonito vertical e horizontal com tamanho p, m e g").
