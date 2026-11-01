@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-01 · Componentes de upload nos dois design systems (publicação em andamento)
+
+- **Origem:** dona do produto ("Desenvolva os componentes de upload bem bonitos e estéticos").
+- **Feito** (commits `591b0b4` DM e `b4235cc` FindLook): `ui/upload.tsx` com `UploadDropzone` (arrastar e soltar, acessível por teclado, botão "Tirar foto" com `capture` no celular, tamanhos md/lg/compacta, validação de tipo, tamanho e quantidade com mensagens em português e nome do arquivo), `UploadItem`/`UploadList` (ícone por tipo ou miniatura, barra de progresso `role="progressbar"`, estados pendente/enviando/concluído/erro, tentar de novo, remover, lista `aria-live`), `ImageUpload` (círculo, quadrado e larga 3:1, trocar no hover/foco, remover), `ImageGrid` (galeria com selo "Capa", progresso por miniatura, limite e contador), `formatBytes` e `validateFiles`. Os componentes não enviam nada: entregam os arquivos ao produto. Cor de texto primária por `var(--primary-text, var(--primary))` para funcionar nos dois sistemas.
+- **Página Componentes › Upload** (`UploadShowcase.tsx`, um arquivo com a constante `FINDLOOK` que troca só os exemplos): área de soltar com lista (envio simulado; o segundo arquivo de um lote falha de propósito para mostrar o "tentar de novo"), compacta, foto com câmera (FindLook: "Busca por foto"), imagem única (foto de perfil ou logo da loja, capa da vitrine), galeria (fotos da peça), importar planilha, estados e mensagens, checklist de acessibilidade, uso e tokens. Item "Upload" no grupo Componentes com 9 subitens; changelog.
+- **Verificação:** builds sem erros; no FindLook, capturas com arquivos reais injetados pelo navegador (PDF, PNG, CSV) mostrando concluído, falha com "tentar de novo", galeria com capa e contador 2/8; versão celular no escuro; 0 erros de console.
+
 ## 2026-11-01 · Componente "Selo (tag do hero)" nos dois design systems (publicação em andamento)
 
 - **Origem:** dona do produto: a tag padrão do design system (pílula com fundo e borda em pink) é menos bonita que a tag do hero da página Experience Intelligence do site, que ela quer no design system.
