@@ -360,7 +360,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
-## 2026-11-01 · Títulos com destaque na cor primária e card de convite ao parceiro (publicação em andamento)
+## 2026-11-01 · Títulos com destaque na cor primária e card de convite ao parceiro (publicado: DM v8 e FindLook v12, conferido no ar)
 
 - **Origem:** dona do produto ("Padronizar títulos com o do Hero onde palavras de destaque ficam destacadas na cor principal da paleta, pink ou vermelho dependendo do DS. Outra inclusão é o card do parceiro convidando para o cadastro: um card bonito vertical e horizontal com tamanho p, m e g").
 - **Feito** (commits `958ce5a` DM e `b5d9c3d` FindLook):
@@ -370,7 +370,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - `ui/partner-card.tsx`: `PartnerCard` com `orientation` vertical/horizontal, `size` p/m/g, `surface` card/tint/dark, selo (eyebrow), título com destaque, descrição, ação principal (pílula na cor primária com seta), link secundário e área visual (ícone ou imagem); brilho suave na cor primária no canto, como o fundo do hero.
   - Componentes › Cards › "Card de convite ao parceiro": seis formatos (vertical P, M e G; horizontal P, M em rosa de apoio e G em grafite), orientações de tamanho, superfície e conteúdo e exemplo de código. DM: "Faça parte da **Rede de Parceiros**", texto da página Rede de Parceiros do site, ação "Quero ser parceiro". FindLook: "Seja encontrado por quem já **procura o que você vende**.", ação "Cadastrar minha loja". Item no menu e entradas no changelog dos dois.
 - **Verificação:** builds dos dois sem erros; capturas de tela no navegador (1366 px claro e escuro, 390 px) das seis variações do card, do bloco de tipografia e dos títulos de página com destaque, sem erros de JavaScript. Dois ajustes feitos a partir das capturas: aspas que apareciam nos exemplos de título e o card vertical G, que ficava apertado em três colunas (agora P e M lado a lado e G abaixo, com largura máxima de 600 px).
-- **Publicação:** workflows `publish.yml` e `publish-findlook.yml` disparados após os pushes; conferir o status final e as novas versões no registro.
+- **Publicação:** workflows `publish.yml` e `publish-findlook.yml` concluídos com sucesso; DM v8 e FindLook v12 no GitHub Pages, seção `card-partner` conferida nos dois endereços publicados.
 
 ## 2026-11-01 · Componentes de upload nos dois design systems (publicado: DM e FindLook no ar, conferido)
 
