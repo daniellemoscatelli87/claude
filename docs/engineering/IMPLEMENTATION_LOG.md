@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-01 · Subcategoria "Cards glassmorphism" nos dois design systems (publicado: DM v13 e FindLook v17)
+
+- **Origem:** dona do produto ("crie uma subcategoria de cards glass morphism").
+- **Feito** (commits `969d3d5` DM e `8e4b450` FindLook): `ui/glass-card.tsx` com `GlassCard` (vidro claro e escuro, intensidades leve/média/forte = desfoque 12/24/40 px com opacidades 40/55/70% no claro e 35/50/65% no grafite, `tint` na primária, `interactive` com elevação e foco, fio de luz de 1 px no topo, raio 20 px e espaçamento 24 px iguais ao Card) e `GlassScene` (fundo de demonstração com manchas de cor dos tokens primária, warning e chart-2). Com `prefers-reduced-transparency` o card vira sólido (card ou grafite). Nenhuma cor nova: só branco, grafite-950 e tokens existentes em opacidade.
+- **Documentação:** Componentes › Cards › "Cards glassmorphism" (`#card-glass`, logo após Shine Border): vidro claro em três intensidades sobre o gradiente da marca (número em destaque, card de perfil com Avatar Circles, chamada com botão), vidro escuro sobre ambiente, tabela de regras (fundo obrigatório, quantidade, contraste mínimo, conteúdo curto, desempenho do backdrop-filter, transparência reduzida), faça/não faça, código e tokens. Item no menu e changelog. Exemplos do FindLook: peças salvas, brechó a 1,2 km, buscar por foto; do DM: desafios em andamento, organização de saúde, "O que você deseja melhorar?".
+- **Verificação:** builds sem erros; capturas no claro, no escuro e em 390 px nos dois, sem erros de JavaScript. Um ajuste: a tabela de tokens usava campos errados (`title`/`value`) e foi corrigida para o formato do `TokenTable` (`group`, `description`, `light`, `dark`). Workflows concluídos; DM v13 e FindLook v17 conferidos no ar.
+
 ## 2026-11-01 · Componente Controle segmentado nos dois design systems (publicado: DM v12 e FindLook v16)
 
 - **Origem:** dona do produto, com esboço (três células acopladas "Nova | Usada | Tanto faz", a ativa com fundo rosa claro): "componente estilo interruptor onde o usuário pode tocar como se fosse um botão e as opções são acopladas, mas siga o estilo do design system".
