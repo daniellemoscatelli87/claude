@@ -360,12 +360,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
-## 2026-11-01 · DM Design System: seção "Painel lateral (gaveta)" (código enviado, publicação aguardando token)
+## 2026-11-01 · DM Design System: seção "Painel lateral (gaveta)" (publicada na v3)
 
 - **Origem:** dona do produto ("o sidebar não está em nenhum dos design systems"): o formulário de contato do site abre em gaveta lateral e o padrão não estava documentado.
 - **Feito (commit `620a0d9` em `DaniMoscatelli-DesignSystem`):** componente `ui/side-panel.tsx` (Radix Dialog; larguras 100% / 500 px / 540 px, overlay `bg-foreground/40` com desfoque, cantos esquerdos 24 px, zonas cabeçalho + corpo rolável + barra de ação + rodapé; Esc, clique fora, foco preso e devolvido, rolagem travada) e página `SidePanelShowcase.tsx` (anatomia, comportamento com demonstração, variante formulário de contato idêntica ao site com validação, máscara de telefone, mensagens e estado de sucesso, checklist de acessibilidade, uso e tokens). Item "Side Panel / Painel lateral" no grupo Componentes; changelog.
 - **Verificação:** `pnpm build` sem erros; capturas via navegador real: página, gaveta aberta, validação com campos destacados e acordeão aberto, versão celular (390 px); 0 erros de console.
-- **Bloqueio:** a publicação da v3 do DM (desatrelamento) falhou com 403 ao gravar a tag: o token `DEPLOY_TOKEN` perdeu o acesso ao repositório `DaniMoscatelli-DesignSystem` (provavelmente ao incluir o FindLook). Pedido à dona do produto para manter os dois repositórios no token. A v3 (`1d4f3dc`) e esta seção (`620a0d9`) serão publicadas na próxima execução bem-sucedida.
+- **Publicação:** a primeira tentativa (execução 41286234747) falhou com 403 ao gravar a tag, porque o token `DEPLOY_TOKEN` tinha perdido o acesso ao repositório `DaniMoscatelli-DesignSystem` ao incluir o FindLook; a dona do produto recolocou os dois repositórios no token. Execução 41286813279: sucesso, **v3 = `620a0d9`** (desatrelamento + painel lateral) publicada, 0 removidos e 15 adicionados em relação à v2, tag `v3`; `danimoscatelli.com.br/designsystem` já serve o bundle novo com a seção.
 - **Pendente de decisão:** levar o painel lateral ao FindLook com qual exemplo de formulário.
 
 ## 2026-11-01 · Design system Dani Moscatelli desatrelado do Figma Make (D-039)
