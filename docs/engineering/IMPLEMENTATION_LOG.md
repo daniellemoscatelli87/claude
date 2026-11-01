@@ -360,6 +360,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-01 · Design system Dani Moscatelli desatrelado do Figma Make (D-039)
+
+- **Feito:** no repositório `DaniMoscatelli-DesignSystem`, commit `1d4f3dc`: README em português sem o link do Figma, `vite.config.ts` sem o comentário do Make, `.gitignore`, entrada no changelog interno ("Mantido no GitHub, não mais no Figma Make"). Fluxo `publish.yml` disparado para publicar a v3. Cópia de referência `docs/design-system/oficial/` sincronizada com `1d4f3dc` (`diff -rq` sem diferenças).
+- **Verificação:** nenhum `figma:asset` em uso no código; build do v2 já validado; publicação da v3 registrada no Deploy quando concluída.
+
 ## 2026-11-01 · FindLook Design System v1.0 publicado (D-037)
 
 - **Onde:** árvore pronta e commit local `c11a490` (115 arquivos) para o repositório `daniellemoscatelli87/FindLook-DesignSystem`, que ainda não existe (a dona do produto cria; esta sessão não cria repositórios). Fluxo de publicação pronto no repositório Deploy (commit local `60ce897`, `publish-findlook.yml`, scripts com `REGISTRO_DIR`), a enviar depois que o repositório existir.

@@ -409,6 +409,16 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-039 · 01/11/2026 · Design systems desatrelados do Figma Make: o GitHub é a única fonte da verdade
+
+- **Origem:** Dona do produto ("estou pensando em desatrelar o design system do figma agora que posso criar tudo por aqui"; "Podemos ter os 2 design systems sendo atualizados só por aqui"), confirmando que não houve alteração no Figma Make depois do código exportado em 01/11/2026.
+- **Decisão:** os repositórios `DaniMoscatelli-DesignSystem` e `FindLook-DesignSystem` passam a ser mantidos exclusivamente por esta colaboração, com publicação e versionamento automáticos pelo repositório Deploy. O arquivo do Figma Make do design system Dani Moscatelli fica como histórico e não deve ser reconectado a repositório nenhum (o Make só envia para repositórios que ele cria, então não há risco de sobrescrita acidental).
+- **Fundamento:** a integração Figma Make → GitHub perdeu seções sem aviso, deixou de enviar (chamado aberto no Figma) e depende de créditos de IA esgotados até 30/11/2026; o fluxo por aqui tem histórico, comparação entre versões e conferência em navegador real.
+- **Trade-off:** perde-se a edição visual por prompt com prévia do Make; toda mudança passa a ser pedida por texto e conferida por capturas de tela.
+- **Consequências:** README, `vite.config.ts` e changelog do DM sem referências ao Make (commit `1d4f3dc`, v3); cópia de referência em `docs/design-system/oficial/` sincronizada; novas seções (a começar pelo painel lateral de contato do site) entram primeiro no DM e depois no FindLook.
+
+---
+
 ## D-038 · 01/11/2026 · FindLook: tokens unificados com as cores do arquivo vetorial oficial do logo
 
 - **Origem:** Dona do produto, após comparação visual lado a lado ("pode mudar e publicar"). Os vetores oficiais do logo usam pink `#E62040` e preto `#060608`; o brand book v1.0 sugeria `#F4144B` e `#111014` e pedia validação no arquivo-mestre.
