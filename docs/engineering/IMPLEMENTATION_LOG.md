@@ -360,11 +360,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
-## 2026-11-02 · Fundos neutros de demonstração dos cards de vidro (publicação em andamento)
+## 2026-11-02 · Fundos neutros de demonstração dos cards de vidro (publicado: DM v21 e FindLook v25)
 
 - **Origem:** dona do produto: o fundo com degradê, textura rosa e cinza juntos não deixava avaliar transparência e opacidade dos cards de vidro; o foco da seção é mostrar configurações e aplicações.
 - **Feito** (commits `ff90d58` DM e `2618c87` FindLook): o `GlassScene` perdeu gradientes e manchas. Agora usa o fundo da página e três fundos neutros escolhíveis (`backdrop`): **blocos de cor** (padrão: quatro faixas sólidas da paleta — primária, grafite-900, âmbar, grafite-300; no escuro grafite-100 e grafite-600 — com duas linhas de texto nítido atrás, uma branca e uma grafite-950), **texto** (linhas de título nítidas na cor do texto) e **textura** (textura doodle em grafite-400). Com isso dá para ver quanta cor atravessa o vidro (opacidade) e quão nítido fica o que está atrás (desfoque). Seletor "Fundo" no painel da seção; a regra "Fundo" da tabela foi reescrita. Vale para o seletor, as intensidades, o bloco escuro e as amostras.
-- **Verificação:** builds sem erros; capturas no claro com os três fundos (blocos + translúcido, texto + fosco, textura + cristal), sem erros de JavaScript. Workflows disparados; conferir status e versões.
+- **Verificação:** builds sem erros; capturas no claro com os três fundos (blocos + translúcido, texto + fosco, textura + cristal), sem erros de JavaScript. Workflows concluídos; DM v21 e FindLook v25 conferidos no ar.
 - **Pendente de decisão da dona do produto:** escala de cinza — ela apontou distância grande entre grafite-900 e grafite-950 e pediu um cinza mais escuro antes do preto, ou revisão da paleta. No DM os passos são regulares (900 `#131A27`, 950 `#0D1119`); no FindLook há o salto (900 `#1D1D20`, 950 `#060608`, que é o grafite oficial do vetor). Opções apresentadas a ela; nada alterado até a decisão.
 
 ## 2026-11-02 · Card de vidro com controle livre de opacidade e desfoque nos dois design systems (publicado: DM v19 e FindLook v23)
