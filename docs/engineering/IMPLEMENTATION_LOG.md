@@ -360,6 +360,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-02 · FindLook: escala de grafite rebalanceada (D-040; publicação em andamento)
+
+- **Origem:** dona do produto, com quatro amostras do balanço desejado (`#000000`, `#19191c`, `#2c2c33`, `#3e3e46`).
+- **Feito** (commit `2f87928` FindLook): `theme.css` com grafite-800 `#2C2C33`, grafite-900 `#19191C` e grafite-950 `#000000`; valores fixos equivalentes (hex e `rgba`) substituídos em 19 arquivos de documentação e exemplos, mantendo o histórico do changelog e os SVGs do logo (`#060608`); nota na seção Marca ("Preto Grafite" agora `#000000`, com a observação sobre o vetor); entrada no changelog. DM sem alteração (decisão registrada em D-040).
+- **Verificação:** build sem erros; tokens computados no navegador no tema escuro (`--graphite-950: #000`, `--background: #000`, `--card: #19191ccc`); capturas da paleta nos dois temas mostrando a escala nova. Workflow `publish-findlook.yml` disparado; conferir versão.
+
 ## 2026-11-02 · Fundos neutros de demonstração dos cards de vidro (publicado: DM v21 e FindLook v25)
 
 - **Origem:** dona do produto: o fundo com degradê, textura rosa e cinza juntos não deixava avaliar transparência e opacidade dos cards de vidro; o foco da seção é mostrar configurações e aplicações.

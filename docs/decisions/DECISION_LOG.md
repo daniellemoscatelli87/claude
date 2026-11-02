@@ -409,6 +409,16 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-040 · 02/11/2026 · FindLook: escala de grafite rebalanceada no fim escuro (800 #2C2C33, 900 #19191C, 950 #000000)
+
+- **Origem:** Dona do produto. Apontou distância grande entre o grafite-900 e o grafite-950 e pediu um cinza mais escuro antes do preto ou a revisão da paleta; depois enviou quatro amostras com o balanço desejado (`#000000`, `#19191c`, `#2c2c33`, `#3e3e46`): "queria que a paleta tivesse esse balanço".
+- **Decisão:** no FindLook Design System, grafite-700 segue `#3E3E46`, grafite-800 passa de `#2B2B31` para `#2C2C33`, grafite-900 de `#1D1D20` para `#19191C` e grafite-950 de `#060608` para `#000000`. Os tokens semânticos do tema escuro (fundo, card, bordas, muted) acompanham por herança. O vetor oficial do logo mantém `#060608` (diferença imperceptível) e não foi alterado. O Dani Moscatelli DS não muda: sua escala (azulada) já tem passos regulares.
+- **Fundamento:** claridade (L*) dos quatro tons passa a ter passos regulares (0 → 9,4 → 17,6 → 26,2), em vez do salto anterior entre 900 (10,9) e 950 (1,7). Mantém a estrutura 50–950 sem criar passo intermediário.
+- **Trade-offs:** o fundo escuro do FindLook vira preto puro, com mais contraste e menos "tom" que o `#060608`; valores fixos equivalentes na documentação foram atualizados em bloco (19 arquivos), preservando o histórico do changelog. Alternativa descartada: acrescentar um passo `grafite-925` sem mexer no resto.
+- **Consequências:** commit `2f87928` no FindLook; nota na seção Marca e entrada no changelog; publicado como FindLook v26 (ver Implementation Log).
+
+---
+
 ## D-039 · 01/11/2026 · Design systems desatrelados do Figma Make: o GitHub é a única fonte da verdade
 
 - **Origem:** Dona do produto ("estou pensando em desatrelar o design system do figma agora que posso criar tudo por aqui"; "Podemos ter os 2 design systems sendo atualizados só por aqui"), confirmando que não houve alteração no Figma Make depois do código exportado em 01/11/2026.
