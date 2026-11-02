@@ -360,7 +360,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
-## 2026-11-02 · Cards de vidro: área de teste com ícones pequenos e alerta de contraste (publicação em andamento)
+## 2026-11-02 · Cards de vidro: área de teste com ícones pequenos e alerta de contraste (publicado: DM v23 e FindLook v28)
 
 - **Origem:** dona do produto ("remova esses fundos multicolor, deixe um fundo com ícones pequenos; a ideia da área de teste é testar transparência/opacidade e legibilidade de título e subtítulo dentro de cards; notifique com um alerta no card quando os níveis de acessibilidade ficarem comprometidos de acordo com a configuração e o fundo").
 - **Feito** (commits `1c619bd` DM e `dd9369d` FindLook):
@@ -368,7 +368,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - `ui/contrast.ts`: utilitários WCAG (leitura de cores, resolução de `var(--token)` pelo navegador, composição alfa, luminância, razão de contraste, mínimos AA e formatação em português).
   - `glass-card.tsx`: tabela numérica de opacidades por acabamento/tom/intensidade/tema (`glassOpacityTable`, espelho das classes) e helper `glassTextContrast`, que compõe fundo → vidro (branco ou grafite-950 na opacidade) → tingimento e devolve as razões e o veredito do título (3:1) e do subtítulo (4,5:1); arredonda a uma casa para bater com o número exibido.
   - Documentação: `GlassTestCard` na seção Cards glassmorphism: título, subtítulo e ação reais sobre o vidro; avaliação sempre visível ("Contraste OK" com as razões) que vira alerta (`role="alert"`, borda âmbar, ícone de atenção, razões abaixo do mínimo em vermelho) quando a configuração compromete. A medição é no **pior caso**: o texto cruzando um traço da textura através do vidro, não a média da cena (sobre página branca a média não variava com a opacidade). Vale para os dois cards do seletor e para as quatro amostras de acabamento.
-- **Verificação:** builds sem erros; no navegador (FindLook): claro/translúcido subtítulo 3,0:1 (alerta), fosco 4,5:1 (OK), opacidade livre 10 % 2,8:1 (alerta), tom escuro 10 % título 2,6:1 (alerta); escuro/translúcido 5,3:1 (OK), fosco 4,0:1 (alerta); sem erros de JavaScript. Duas correções durante o teste: limite da opacidade no helper (`min(1, pct)` em vez de `min(100, pct)`, que zerava o efeito) e veredito calculado sobre o valor arredondado. Workflows disparados; conferir status e versões.
+- **Verificação:** builds sem erros; no navegador (FindLook): claro/translúcido subtítulo 3,0:1 (alerta), fosco 4,5:1 (OK), opacidade livre 10 % 2,8:1 (alerta), tom escuro 10 % título 2,6:1 (alerta); escuro/translúcido 5,3:1 (OK), fosco 4,0:1 (alerta); sem erros de JavaScript. Duas correções durante o teste: limite da opacidade no helper (`min(1, pct)` em vez de `min(100, pct)`, que zerava o efeito) e veredito calculado sobre o valor arredondado. Workflows concluídos; DM v23 e FindLook v28 conferidos no ar.
 
 ## 2026-11-02 · FindLook: escala de grafite rebalanceada (D-040; publicado: FindLook v26)
 
