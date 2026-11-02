@@ -360,12 +360,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
-## 2026-11-02 · Card de vidro com controle livre de opacidade e desfoque nos dois design systems (publicação em andamento)
+## 2026-11-02 · Card de vidro com controle livre de opacidade e desfoque nos dois design systems (publicado: DM v19 e FindLook v23)
 
 - **Origem:** dona do produto ("Permita que a pessoa controle o nível de transparência e opacidade do card de acordo com o desejo dela").
 - **Feito** (commits `a854664` DM e `15d9d98` FindLook): `GlassCard` ganhou as props numéricas `opacity` (0 a 100 %, opacidade do fundo do vidro: 0 totalmente transparente, 100 sólido) e `blur` (0 a 80 px de desfoque), que sobrepõem o acabamento escolhido. Implementadas com `color-mix` sobre branco (vidro claro) ou grafite-950 (vidro escuro) e `backdrop-filter` em linha, com limites aplicados. Sem elas, o card segue o acabamento como antes.
 - **Documentação:** no seletor da seção Cards glassmorphism, dois sliders (componente Slider do sistema) de opacidade do fundo e de desfoque, com valor ao vivo ("do acabamento" enquanto não mexidos), aplicados aos dois cards de demonstração; a linha de código do card interativo passa a mostrar `opacity={…} blur={…}`; botão "Voltar ao acabamento" limpa os dois; linha de tokens e exemplo de código; changelog nos dois.
-- **Verificação:** builds sem erros; teste no navegador: sliders pelo teclado levaram a opacidade a 10 % e o desfoque a 0 px, o estilo em linha do card acompanhou (`color-mix … 10%`, `blur(0px)`), o código exibido refletiu os valores e o botão de voltar removeu o estilo livre; sem erros de JavaScript. Workflows disparados; conferir status e versões.
+- **Verificação:** builds sem erros; teste no navegador: sliders pelo teclado levaram a opacidade a 10 % e o desfoque a 0 px, o estilo em linha do card acompanhou (`color-mix … 10%`, `blur(0px)`), o código exibido refletiu os valores e o botão de voltar removeu o estilo livre; sem erros de JavaScript. Workflows concluídos; DM v19 e FindLook v23 conferidos no ar.
 
 ## 2026-11-01 · Cenas do vidro com textura e cores do DS, só do tema ativo; nome no card da textura (publicado: DM v17 e FindLook v21)
 
