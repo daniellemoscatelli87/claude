@@ -360,6 +360,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-02 · FindLook: textura doodle só com peças de moda (publicação em andamento)
+
+- **Origem:** dona do produto, em duas mensagens: a textura do FindLook tem que ter especificamente vestido, calça, boné, óculos de sol, sandália, tênis e camiseta; depois "inclua saia, e não coloque outros elementos juntos, tem que ficar visível que é algo sobre moda".
+- **Feito** (commits `2286ce1` e `42ae92e` FindLook; `dccfcd7` e `e8f643f` DM só sincronizam o gerador): a textura do FindLook passou a ter exatamente oito peças (vestido, calça, saia, boné, óculos de sol, sandália, tênis e camiseta), sem nenhum outro ícone e sem os preenchimentos decorativos (pontos, estrelas). Boné e sandália foram desenhados; a saia foi redesenhada com cós e pregas para ler melhor em tamanho pequeno. Arquivos SVG (claro, escuro, primária, traço) e PNG regerados; descrição na seção Backgrounds, comentário do componente e changelog atualizados. A textura do estúdio não muda. O primeiro commit (sete itens com peso dobrado, mantendo os demais) foi substituído pelo segundo após a segunda mensagem.
+- **Verificação:** prova dos desenhos isolados em 64 px (os sete pedidos legíveis), prévia do ladrilho 2×2 nos dois temas lendo como moda à primeira vista, build sem erros. Workflow `publish-findlook.yml` disparado; conferir versão.
+
 ## 2026-11-02 · Cards de vidro: área de teste com ícones pequenos e alerta de contraste (publicado: DM v23 e FindLook v28)
 
 - **Origem:** dona do produto ("remova esses fundos multicolor, deixe um fundo com ícones pequenos; a ideia da área de teste é testar transparência/opacidade e legibilidade de título e subtítulo dentro de cards; notifique com um alerta no card quando os níveis de acessibilidade ficarem comprometidos de acordo com a configuração e o fundo").
