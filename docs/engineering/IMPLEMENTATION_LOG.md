@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-03 · FindLook: card de peça sem bairro, estoque acima do divisor, botões com ícone (publicação em andamento)
+
+- **Origem:** dona do produto, com recorte do card compacto: remover o bairro; quantidade e atualização acima do divisor; preço antigo em vermelho acima do atual com o percentual ao lado; "Ver peça" com chevron; "Avise-me" como botão de contorno pink; o card compacto do anexo pode ser removido.
+- **Verificação prévia (D-041):** `main` remota igual à local.
+- **Feito** (commit FindLook, ver abaixo): prop `bairro` removida do `ProductCard` e dos exemplos; bloco de estoque (quantidade + "Atualizado há …") movido para antes do divisor, ficando só a ação abaixo dele; `precoAntigo` riscado na cor primária em linha própria acima do preço atual, pílula "-N%" ao lado do atual; `ChevronRight` no "Ver peça"; esgotada usa `variant="outline"` com borda e texto na primária e `Bell`; exemplo "Camiseta oversized" (compacto vertical) retirado e grade de variações com três colunas; regras "Preço", "Ação" e "Estoque" reescritas; linha "Bairro" removida da tabela; changelog.
+- **Verificação:** build sem erros; capturas das variações verticais e horizontais no claro; sem erros de JavaScript. Workflow disparado; conferir versão.
+
 ## 2026-11-03 · Linha do tempo (Timeline) do site nos dois design systems, com a animação (publicado: DM v25 e FindLook v43)
 
 - **Origem:** dona do produto: a timeline de `danimoscatelli.com.br/experience-intelligence/` (seção "Como funciona") deve ser incorporada aos dois design systems, incluindo a animação.
