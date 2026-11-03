@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-03 · FindLook: seção Ilustrações reconstruída em torno da mascote Nyx (publicação em andamento)
+
+- **Origem:** dona do produto ("a seção de ilustrações da marca precisa ser melhor construída explicando que é parte da identidade da marca, mascote gata preta Nyx; os títulos das imagens precisam melhorar; deixar mais simples: nome, imagem, visão web, visão mobile, onde/quando usar e como não usar").
+- **Verificação prévia (D-041):** `main` remota igual à local; a mascote não estava documentada em lugar nenhum (nome Nyx informado agora pela dona do produto).
+- **Feito** (commit `d7e10b0` FindLook): `IllustrationsShowcase.tsx` reescrito. Abertura "Ilustrações e a mascote Nyx": as ilustrações como parte da identidade da marca ao lado do símbolo, cores e tipografia; retrato da Nyx e seis cards (quem ela é, marca registrada: óculos escuros pink e lenço pink, seu mundo: pin com cabide e peças de moda, estilo, onde aparece, onde não aparece). Títulos das peças revisados para o momento que representam: "Página não encontrada (404)", "Favoritos ainda vazios", "Nenhuma loja seguida", "Nenhum contato com lojas" (também no menu). Cada peça com a estrutura pedida: nome, imagem (WebP/PNG, dimensões, texto alternativo com a Nyx nomeada), visão web e visão mobile (esqueleto de estado vazio com título, texto de apoio e ação, textos marcadores), onde/quando usar e como não usar (regras específicas da peça, ex.: 404 não serve para erro 500; favoritos vazio não serve para "nenhum resultado"; lojas seguidas não vai na lista de busca porque os botões "+ Seguir" parecem clicáveis). Catálogo com links. Changelog.
+- **Verificação:** build sem erros; capturas no claro e no escuro da abertura, do catálogo e de uma peça completa; sem erros de JavaScript. Workflow `publish-findlook.yml` disparado; conferir versão.
+
 ## 2026-11-03 · FindLook: ilustração "Contatos com lojas vazios" (publicado: FindLook v33)
 
 - **Origem:** dona do produto, com a imagem (WebP 1536×1024, fundo transparente): "para a tela vazia do consumidor 'Seus contatos com lojas', representando que nenhum contato ainda foi feito".
