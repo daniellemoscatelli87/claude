@@ -360,12 +360,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
-## 2026-11-03 · FindLook: mascote e cenas de volta em PNG/WebP (publicação em andamento)
+## 2026-11-03 · FindLook: mascote e cenas de volta em PNG/WebP (publicado: FindLook v38)
 
 - **Origem:** dona do produto ("os SVGs não estão dando certo, então volte com os PNGs"), reenviando a folha mestre e a cena "sem lojas locais" em raster (mais três imagens já existentes: contatos, lojas seguidas e uma cena nova de loja vazia, não solicitada).
 - **Verificação prévia (D-041):** `main` remota igual à local.
 - **Feito** (commit `4a46dc0` FindLook): `nyx-mestre.svg`, os cinco painéis `.svg` e `findlook-sem-lojas-locais.svg` removidos; folha mestre regravada a partir do raster enviado (WebP e PNG) com os painéis recortados em WebP; "Nenhuma loja por perto" em WebP (origem) e PNG. Botão de download SVG retirado; tabela de ativos e regra de nomes voltam a "cenas e personagem em WebP e PNG". Changelog. O suporte a `arquivoSvg` no tipo ficou no código, sem uso.
-- **Verificação:** build sem erros; todas as imagens da página carregando. Workflow disparado com `aceitar_remocoes` (os SVGs saem do inventário de propósito); conferir versão.
+- **Verificação:** build sem erros; todas as imagens da página carregando. Workflow concluído com `aceitar_remocoes` (os SVGs saem do inventário de propósito); FindLook v38 no ar, painéis WebP servidos e SVG mestre respondendo 404.
 
 ## 2026-11-03 · FindLook: ilustração "Nenhuma loja por perto" em SVG (publicado: FindLook v37)
 
