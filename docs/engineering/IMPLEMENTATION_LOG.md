@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-03 · FindLook: ilustração "Nenhuma loja por perto" em SVG (publicação em andamento)
+
+- **Origem:** dona do produto, com o SVG "Sem lojas locais": incluir; se o caso já existisse no DS, trocar o PNG pelo SVG.
+- **Verificação prévia (D-041):** `main` remota igual à local; o caso não existia (as quatro cenas anteriores são 404, favoritos, lojas seguidas e contatos), então entrou como peça nova.
+- **Feito** (commit `11aabaa` FindLook): `public/ilustracoes/findlook-sem-lojas-locais.svg` (retângulo branco de fundo removido; `role="img"` e `aria-label`) e `.png` de fallback renderizado do vetor com fundo transparente (1448×1086). A seção passou a aceitar cenas em SVG ou WebP (campo `arquivoSvg`), com botão "SVG (vetor)" no download. Entrada em Estados vazios: nome "Nenhuma loja por perto", expressão Surpresa, onde (busca e mapa quando não há lojas cadastradas na região), quando (localização conhecida e sem lojas na cidade ou raio; convite para ampliar o raio, outra cidade ou indicar loja), como não usar (busca sem resultado com lojas na região; permissão de localização negada). Tabela de ativos, regra de nomes (SVG preferido para cenas) e changelog.
+- **Verificação:** build sem erros; nenhuma imagem quebrada; captura da peça com visões web e mobile. Workflow `publish-findlook.yml` disparado; conferir versão.
+
 ## 2026-11-03 · FindLook: arquivo mestre da Nyx em SVG e cabeçalho padrão da página (publicado: FindLook v36)
 
 - **Origem:** dona do produto: faltou o cabeçalho padrão das outras páginas na página do mascote; enviou o SVG do gatinho canônico ("arquivo mestre") para substituir o PNG.
