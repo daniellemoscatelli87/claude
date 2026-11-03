@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-03 · FindLook: arquivo mestre da Nyx em SVG e cabeçalho padrão da página (publicação em andamento)
+
+- **Origem:** dona do produto: faltou o cabeçalho padrão das outras páginas na página do mascote; enviou o SVG do gatinho canônico ("arquivo mestre") para substituir o PNG.
+- **Verificação prévia (D-041):** `main` remota igual à local.
+- **Feito** (commit `35de613` FindLook): `public/mascote/nyx-mestre.svg` (folha canônica vetorizada, 688 caminhos; retângulo branco de fundo removido para ficar transparente; `role="img"` e `aria-label`); os cinco painéis (personagem, turnaround, expressões, elementos, paleta) passaram a ser SVGs derivados do mesmo vetor com `viewBox` recortado, no lugar dos WebP rasterizados; PNG e WebP da folha mantidos como exportação raster. Página abre com o `PageHeader` compartilhado (eyebrow "Marca", título "Mascote & **Ilustrações**" com destaque em pink, descrição), como Princípios, Tom de voz e as demais. Botão "SVG (arquivo mestre)" no download; tabela de ativos e regra de nomes atualizadas (personagem em SVG; cenas em WebP/PNG). Changelog.
+- **Verificação:** build sem erros; nenhuma imagem quebrada; capturas do topo da página no claro e no escuro com vetores nítidos. Workflow `publish-findlook.yml` disparado; conferir versão.
+
 ## 2026-11-03 · FindLook: Mascote & Ilustrações na hierarquia completa, com a folha canônica da Nyx (publicado: FindLook v35)
 
 - **Origem:** dona do produto: hierarquia sugerida (Brand Identity › Mascot & Illustrations › Character/Master, Expressions & Poses, Illustration Style, Empty States, Error States, Usage Guidelines, Assets & Naming), textos de "Sobre o mascote", princípios de utilização, diretrizes de aplicação e governança, e a folha canônica da Nyx (personagem oficial, turnaround, cinco expressões, elementos e proporções, paleta base).
