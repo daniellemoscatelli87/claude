@@ -360,12 +360,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
-## 2026-11-03 · FindLook: ajustes no card de peça (escassez na primária, Novo sobre a imagem, esgotada em P&B) (publicação em andamento)
+## 2026-11-03 · FindLook: ajustes no card de peça (escassez na primária, Novo sobre a imagem, esgotada em P&B) (publicado: FindLook v41)
 
 - **Origem:** dona do produto, com dois recortes: o amarelo não é cor da grade principal do DS (tag e contagem em rosa com fonte branca; "1 disponível" também em vermelho); tag "Novo" sobre a imagem no canto inferior esquerdo; peça esgotada com "Avise-me" e card em preto e branco com só o botão colorido; sem o título "Referência (a partir do protótipo)" no DS.
 - **Verificação prévia (D-041):** `main` remota igual à local.
 - **Feito** (commit `c028e04` FindLook): tag de escassez em `bg-primary` com `text-primary-foreground`; contagem escassa em `--primary-text`; Selo "Novo" posicionado sobre a imagem (inferior esquerdo, com fundo de card e sombra), bairro sozinho na linha acima do título; esgotada aplica `grayscale` à imagem e ao bloco de textos, deixando o botão colorido com rótulo padrão "Avise-me" (o `cta.label` continua sobrepondo); subtítulo da referência removido; regras de "Novo", bairro, estoque e escassez reescritas; changelog.
-- **Verificação:** build sem erros; capturas no claro e no escuro com os seis exemplos; sem erros de JavaScript. Workflow disparado; conferir versão.
+- **Verificação:** build sem erros; capturas no claro e no escuro com os seis exemplos; sem erros de JavaScript. Workflow concluído; FindLook v41 no ar, conferido no pacote publicado.
 
 ## 2026-11-03 · FindLook: card de peça com estoque, escassez e última atualização (publicado: FindLook v40)
 
