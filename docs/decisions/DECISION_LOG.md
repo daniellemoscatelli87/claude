@@ -409,6 +409,15 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-041 · 03/11/2026 · Design systems editados por mais de uma conversa: verificar antes de fazer
+
+- **Origem:** Dona do produto, após o conflito entre esta conversa e a conversa do produto FindLook no repositório `FindLook-DesignSystem` (PR #1 com `IconeModa` mesclado enquanto a seção Ilustrações era preparada): "não vou pedir alterações no DS só por essa conversa, mas tudo que eu pedir verifique se já não foi feito antes".
+- **Decisão:** mais de uma conversa pode gravar nos repositórios `DaniMoscatelli-DesignSystem` e `FindLook-DesignSystem`. Antes de qualquer mudança no DS, a conversa que vai mudar deve: (1) buscar a `main` mais recente dos dois repositórios; (2) ler os commits e o changelog recentes e procurar se o pedido já existe, inteiro ou em parte; (3) se existir, informar onde está em vez de refazer; se existir em parte, completar por cima; (4) só então alterar, rebaseando sobre a `main` remota antes de enviar.
+- **Fundamento:** evita trabalho duplicado, componentes concorrentes para a mesma necessidade e conflitos de envio; mantém o GitHub como única fonte da verdade (D-039).
+- **Trade-off:** cada pedido começa com uma verificação a mais; conflitos em arquivos compartilhados (como o changelog) ainda podem exigir resolução manual, mantendo as entradas de todas as conversas.
+
+---
+
 ## D-040 · 02/11/2026 · FindLook: escala de grafite rebalanceada no fim escuro (800 #2C2C33, 900 #19191C, 950 #000000)
 
 - **Origem:** Dona do produto. Apontou distância grande entre o grafite-900 e o grafite-950 e pediu um cinza mais escuro antes do preto ou a revisão da paleta; depois enviou quatro amostras com o balanço desejado (`#000000`, `#19191c`, `#2c2c33`, `#3e3e46`): "queria que a paleta tivesse esse balanço".
