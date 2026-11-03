@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-03 · FindLook: ilustração "Contatos com lojas vazios" (publicação em andamento)
+
+- **Origem:** dona do produto, com a imagem (WebP 1536×1024, fundo transparente): "para a tela vazia do consumidor 'Seus contatos com lojas', representando que nenhum contato ainda foi feito".
+- **Verificação prévia (D-041):** `main` remota igual à local e nenhuma ilustração de contatos existente.
+- **Feito** (commit `d35f44e` FindLook): `public/ilustracoes/findlook-contatos-vazio.webp` e `.png`; quarta entrada na seção Ilustrações (uso, arquivo, dimensões, fundo, texto alternativo, elementos: gato com celular na pata, balão de pensamento com vestido no cabide, sacola), subitem no menu, catálogo e changelog.
+- **Verificação:** build sem erros; imagem carregada no navegador (1536×1024) e captura da seção; sem erros de JavaScript. Workflow `publish-findlook.yml` disparado; conferir versão.
+
 ## 2026-11-03 · FindLook: ilustração "Lojas seguidas vazias" (publicado: FindLook v32)
 
 - **Origem:** dona do produto, com a imagem (WebP 1536×1024, fundo transparente): "para a página vazia de lojas seguidas na área logada do consumidor".
