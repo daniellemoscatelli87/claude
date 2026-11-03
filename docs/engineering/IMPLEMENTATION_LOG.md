@@ -360,12 +360,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
-## 2026-11-03 · FindLook: card de peça (ProductCard) a partir do protótipo (publicação em andamento)
+## 2026-11-03 · FindLook: card de peça (ProductCard) a partir do protótipo (publicado: FindLook v39)
 
 - **Origem:** dona do produto, com protótipo de dois cards de produto (imagem, coração de favorito, "Novo", bairro, nome, loja · estilo, preço, botão "Ver peça", "A confirmar"/"Confirmado há 1 dia"): "seguindo as guidelines do design system, reproduza o card de produto; o estilo tem que seguir o DS".
 - **Verificação prévia (D-041):** `main` remota igual à local; nenhum card de produto existia (nem na seção Cards nem nos componentes da outra conversa).
 - **Feito** (commit `e3053c4` FindLook): `ui/product-card.tsx` com a anatomia do Card do sistema (`--card`, `--border`, `--radius`, `--shadow-sm`), imagem 1:1 sobre `--surface-tint` (sem foto, o `IconeModa` da categoria, componente criado pela outra conversa), favorito como botão de alternância (aria-pressed, rótulo com o nome da peça, coração preenchido na primária), `Selo` sm tom primário para "Novo", bairro com pin na cor primária de texto, nome, loja · estilo, preço formatado em reais pelo componente, `Button` padrão em pílula "Ver peça" (link com href ou botão), confirmação com ícone + texto (check em `--success` ou relógio), prop `compacto` para listas estreitas. Diferenças deliberadas em relação ao protótipo, por seguirem o DS: botão na primária (pink) em vez de preto, "Novo" como Selo, raio do Card (`--radius`) em vez do raio maior do protótipo, confirmação sempre com ícone. Seção "Card de peça" em Componentes › Cards (referência, quatro variações, regras por elemento, faça/não faça, código), item no menu, changelog.
-- **Verificação:** build sem erros; favorito alterna `aria-pressed` de false para true com rótulo "Remover … dos favoritos"; capturas no claro, no escuro e em 390 px; sem erros de JavaScript. Workflow disparado; conferir versão.
+- **Verificação:** build sem erros; favorito alterna `aria-pressed` de false para true com rótulo "Remover … dos favoritos"; capturas no claro, no escuro e em 390 px; sem erros de JavaScript. Workflow concluído; FindLook v39 no ar, componente conferido no pacote publicado.
 
 ## 2026-11-03 · FindLook: mascote e cenas de volta em PNG/WebP (publicado: FindLook v38)
 
