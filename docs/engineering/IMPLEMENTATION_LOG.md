@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-03 · FindLook: card de peça com estoque, escassez e última atualização (publicação em andamento)
+
+- **Origem:** dona do produto: no card de produto, quantidade de peças disponíveis no lugar de "A confirmar"/"Confirmado há 1 dia"; tag de urgência/escassez quando há poucas peças; informação de quando o estoque foi atualizado pela última vez.
+- **Verificação prévia (D-041):** `main` remota igual à local.
+- **Feito** (commit `9ab603d` FindLook): `ProductCard` trocou `status` por `estoque: { quantidade, poucasAte?, atualizadoHa? }`. Linha de estoque acima da ação, separada por um fio: "N disponíveis" com ícone de pacote (verde em `--success` quando há peças) ou "Sem peças no momento"; à direita, "Atualizado há …" com o tempo relativo informado pelo produto. Tag de escassez sobre a imagem, canto superior esquerdo, em `--warning` com ícone de chama, quando a quantidade vai de 1 até `poucasAte` (padrão 3): "Só N restantes" ou "Última peça"; a contagem do rodapé fica âmbar. Zero mostra "Esgotada" em neutro. Tudo com ícone + texto. Documentação: exemplos (2 e 8 peças; última peça; esgotada; sem data; 3 peças no limite), regras "Estoque" e "Tag de escassez", "faça" (sempre com a data) e "não faça" (não simular escassez), código e changelog. Primeira versão colocava o estoque ao lado do botão e quebrava mal nos cards estreitos; movido para linha própria.
+- **Verificação:** build sem erros; capturas no claro, no escuro e em 390 px; sem erros de JavaScript. Workflow disparado; conferir versão.
+
 ## 2026-11-03 · FindLook: card de peça (ProductCard) a partir do protótipo (publicado: FindLook v39)
 
 - **Origem:** dona do produto, com protótipo de dois cards de produto (imagem, coração de favorito, "Novo", bairro, nome, loja · estilo, preço, botão "Ver peça", "A confirmar"/"Confirmado há 1 dia"): "seguindo as guidelines do design system, reproduza o card de produto; o estilo tem que seguir o DS".
