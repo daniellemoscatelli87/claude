@@ -360,12 +360,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
-## 2026-11-03 · FindLook: seção Ilustrações com a ilustração da página 404 (publicação em andamento)
+## 2026-11-03 · FindLook: seção Ilustrações com a ilustração da página 404 (publicado: FindLook v30)
 
 - **Origem:** dona do produto ("Você vai criar uma seção de ilustrações, e essa seção é apenas no design system da FindLook. Estou enviando a primeira ilustração, que é para a página 404"), com a imagem (WebP 1536×1024, fundo transparente: 404 com o pin da marca e o cabide no lugar do zero, gato de óculos escuros numa sacola pink, botas).
 - **Feito** (commit `bc9228a` FindLook): `IllustrationsShowcase.tsx` no grupo Marca, item "Ilustrações" (subitens Estilo e Página 404): estilo observado na peça (formas chapadas, paleta pink/grafite/branco, pin com cabide, gato, peças de moda), aviso de que as ilustrações são fornecidas pela dona da marca e não geradas no produto, catálogo com status. A peça: `public/ilustracoes/findlook-404.webp` (original) e `.png` (convertido), prévia sobre superfície branca nos dois temas (o gato e o número são grafite), botões de download, tabela de atributos (uso, arquivo, dimensões, fundo, texto alternativo, elementos), faça/não faça e código de uso. Changelog. Nada no DM.
 - **Integração:** a outra sessão (produto FindLook) havia mesclado na `main` do DS o PR #1 (componente `IconeModa` em `ui/fashion-icons.tsx` e seção em Ícones); o commit das ilustrações foi rebaseado sobre ele, com conflito só no changelog, resolvido mantendo as duas entradas.
-- **Verificação:** build sem erros; imagem carregada no navegador nos dois temas (1536×1024) e capturas da seção; sem erros de JavaScript. Workflow `publish-findlook.yml` disparado; conferir versão.
+- **Verificação:** build sem erros; imagem carregada no navegador nos dois temas (1536×1024) e capturas da seção; sem erros de JavaScript. Workflow concluído; FindLook v30 no ar, arquivo da ilustração respondendo 200 no GitHub Pages.
 
 ## 2026-11-02 · FindLook: textura doodle só com peças de moda (publicado: FindLook v29)
 
