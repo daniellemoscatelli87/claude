@@ -360,12 +360,20 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
-## 2026-11-03 · FindLook: card de peça sem bairro, estoque acima do divisor, botões com ícone (publicação em andamento)
+## 2026-11-03 · Selo de seção nos dois design systems (publicação em andamento)
+
+- **Origem:** dona do produto: além do "selo do hero" já existente, criar o selo de seção a partir do modelo das seções de `danimoscatelli.com.br/experience-intelligence-2/` ("Cenário Atual").
+- **Verificação prévia (D-041):** `main` remota igual à local nos dois; não existia selo de seção.
+- **Fonte:** `public/experience-intelligence-2/index.html`: pílula `rounded-full bg-brand-50 border border-brand-200/80 shadow-2xs` com texto `text-xs font-bold tracking-[0.2em] uppercase text-brand-600`, sem ponto, centralizada acima do título de cada seção.
+- **Feito** (commits DM e FindLook, ver hashes no resumo da sessão): `ui/selo-secao.tsx` com os tokens equivalentes (`--primary-muted` no fundo, primária a 25 % na borda, `--primary-text` no texto, `--shadow-xs`, caixa alta com espaçamento 0,2em), tamanhos md/sm e ícone opcional; documentado na subseção "Selo de seção" logo após o selo do hero em Componentes › Rótulos, com exemplo centralizado acima de um título, variações, código, regras (um por seção, uma a três palavras, nunca status; hero usa o Selo, seções usam este) e tokens; subitem no menu e changelog nos dois.
+- **Verificação:** builds sem erros; capturas no claro (DM) e no escuro (FindLook); sem erros de JavaScript. Workflows disparados; conferir versões.
+
+## 2026-11-03 · FindLook: card de peça sem bairro, estoque acima do divisor, botões com ícone (publicado: FindLook v44)
 
 - **Origem:** dona do produto, com recorte do card compacto: remover o bairro; quantidade e atualização acima do divisor; preço antigo em vermelho acima do atual com o percentual ao lado; "Ver peça" com chevron; "Avise-me" como botão de contorno pink; o card compacto do anexo pode ser removido.
 - **Verificação prévia (D-041):** `main` remota igual à local.
-- **Feito** (commit FindLook, ver abaixo): prop `bairro` removida do `ProductCard` e dos exemplos; bloco de estoque (quantidade + "Atualizado há …") movido para antes do divisor, ficando só a ação abaixo dele; `precoAntigo` riscado na cor primária em linha própria acima do preço atual, pílula "-N%" ao lado do atual; `ChevronRight` no "Ver peça"; esgotada usa `variant="outline"` com borda e texto na primária e `Bell`; exemplo "Camiseta oversized" (compacto vertical) retirado e grade de variações com três colunas; regras "Preço", "Ação" e "Estoque" reescritas; linha "Bairro" removida da tabela; changelog.
-- **Verificação:** build sem erros; capturas das variações verticais e horizontais no claro; sem erros de JavaScript. Workflow disparado; conferir versão.
+- **Feito** (commit `09071e5` FindLook): prop `bairro` removida do `ProductCard` e dos exemplos; bloco de estoque (quantidade + "Atualizado há …") movido para antes do divisor, ficando só a ação abaixo dele; `precoAntigo` riscado na cor primária em linha própria acima do preço atual, pílula "-N%" ao lado do atual; `ChevronRight` no "Ver peça"; esgotada usa `variant="outline"` com borda e texto na primária e `Bell`; exemplo "Camiseta oversized" (compacto vertical) retirado e grade de variações com três colunas; regras "Preço", "Ação" e "Estoque" reescritas; linha "Bairro" removida da tabela; changelog.
+- **Verificação:** build sem erros; capturas das variações verticais e horizontais no claro; sem erros de JavaScript. Workflow concluído; FindLook v44 no ar ("Avise-me" em contorno conferido no pacote; a palavra "bairro" ainda aparece no pacote só no histórico do changelog).
 
 ## 2026-11-03 · Linha do tempo (Timeline) do site nos dois design systems, com a animação (publicado: DM v25 e FindLook v43)
 
