@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-03 · FindLook: ilustração "Favoritos vazios" (publicação em andamento)
+
+- **Origem:** dona do produto, com a imagem (WebP 1448×1086, fundo transparente): "para a página de favoritos da área logada do consumidor, quando não há favoritos adicionados ainda".
+- **Verificação prévia (D-041):** `main` remota igual à local (nenhum commit novo da outra conversa) e nenhuma ilustração de favoritos existente.
+- **Feito** (commit `223c628` FindLook): `public/ilustracoes/findlook-favoritos-vazio.webp` e `.png`; segunda entrada na seção Ilustrações (uso, arquivo, dimensões com proporção calculada por peça, fundo, texto alternativo, elementos, faça/não faça, código), subitem no menu, catálogo e changelog atualizados; a regra de proporção passou de "3:2" fixo para "proporção original".
+- **Verificação:** build sem erros; imagem carregada no navegador (1448×1086) e captura da seção; sem erros de JavaScript. Workflow `publish-findlook.yml` disparado; conferir versão.
+
 ## 2026-11-03 · FindLook: seção Ilustrações com a ilustração da página 404 (publicado: FindLook v30)
 
 - **Origem:** dona do produto ("Você vai criar uma seção de ilustrações, e essa seção é apenas no design system da FindLook. Estou enviando a primeira ilustração, que é para a página 404"), com a imagem (WebP 1536×1024, fundo transparente: 404 com o pin da marca e o cabide no lugar do zero, gato de óculos escuros numa sacola pink, botas).
