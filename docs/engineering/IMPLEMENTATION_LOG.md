@@ -360,6 +360,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-04 · Template de preços atualizado pelo print de planos (publicado: DM v29 e FindLook v47)
+
+- **Origem:** dona do produto, com print de três planos (Básico, Intermediário, Premium): atualizar o componente de preço no que ele não atendesse. Respostas da dona do produto: atualizar nos dois DS; "Para quem" com no máximo duas linhas; manter a troca Mensal/Anual e os ícones dos planos.
+- **Verificação prévia (D-041):** `main` remota igual à local nos dois; o único componente de preço é o template "Preços e planos" (Templates › Preços), igual nos dois.
+- **O que faltava e foi feito** (commits `5eb5076` DM e `c33e9e5` FindLook): selo de seção (`SeloSecao`) acima do nome; nome e preço na cor primária, em R$ e com "/ mês"; caixa "Para quem" (ícone de informação, tom claro da primária), cortada em duas linhas, com o texto completo no `title` e lido inteiro pelo leitor de tela; descrição; divisor; lista com check nos itens incluídos e traço em cinza nos não incluídos, com "Incluído/Não incluído" para leitor de tela; etiqueta "Recomendado" e borda de 2 px no plano em destaque; botão "Selecionar" em contorno na primária em todos; cards da mesma altura; uma coluna no celular. A troca Mensal/Anual ganhou `role="switch"`. Os textos são os do print (DM com tradução para o inglês).
+- **Observação:** no print, os textos de "Para quem" estavam cortados. Usei os trechos visíveis e completei o mínimo para fechar as frases ("…ampliar a presença local.", "…encontra seus produtos.", "…com inteligência."). Se houver o texto original, basta enviar.
+- **Verificação:** builds sem erros; capturas do DM (português e inglês, escuro) e do FindLook (claro e 390 px); preços R$ 79/149/299 no mensal e R$ 63/119/239 no anual; corte de duas linhas ativo quando o texto passa disso; sem erros de JavaScript. Workflows concluídos; DM v29 e FindLook v47 no ar, conferidos nos pacotes publicados.
+
 ## 2026-11-04 · DM: revisão dos textos em português no modo inglês (publicado: DM v28)
 
 - **Origem:** dona do produto: algumas seções do DS Dani Moscatelli Studio aparecem em português quando deveriam estar em inglês; revisar.
