@@ -360,6 +360,21 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-04 · DM: revisão dos textos em português no modo inglês (publicado: DM v28)
+
+- **Origem:** dona do produto: algumas seções do DS Dani Moscatelli Studio aparecem em português quando deveriam estar em inglês; revisar.
+- **Verificação prévia (D-041):** `main` remota igual à local (`0634358`).
+- **Como foi revisado:** varredura automática de todas as seções no modo inglês (texto visível com cara de português) e varredura do código (textos em português fora do lado `pt` de uma tradução).
+- **Encontrado e corrigido** (commit `a4add70`):
+  - Upload (área de soltar, lista de arquivos, imagem única, galeria): os textos estavam fixos em português no componente. Agora vêm de um contexto (`UploadTextsProvider`, `useUploadTexts`) com `uploadTextosPt` (padrão) e `uploadTextosEn`; o showcase escolhe pelo idioma. Inclui mensagens de validação, estados ("Concluído", "Falha no envio"…), botões e rótulos acessíveis; erro simulado e regras em inglês.
+  - Tipografia: os três exemplos do Heading e a regra do destaque ("ativo estratégico") estavam só em português.
+  - Selo de seção: o texto em inglês citava "Cenário Atual", "O Desafio", "Método".
+  - Painel lateral: o texto em inglês citava a mensagem de falha e o rótulo "Fechar formulário de contato".
+  - Card de vidro: números de contraste com vírgula decimal no modo inglês.
+- **Mantido de propósito:** nomes próprios ("São Paulo, SP — Brazil", "Clínica Horizonte") e código dentro de blocos de exemplo.
+- **FindLook:** não alterado (só português; o padrão do upload continua em português).
+- **Verificação:** build sem erros; nova varredura no modo inglês sem textos em português além dos nomes próprios; teste de upload: arquivo .txt gerou "“teste.txt” is not an accepted format." em inglês e "“teste.txt” não é um formato aceito." em português, rótulos "Drag…", "Take photo", "Add photos" em inglês. Workflow concluído; DM v28 no ar, conferido no pacote publicado.
+
 ## 2026-11-03 · Campo de senha com confirmação nos dois design systems (publicado: DM v27 e FindLook v46)
 
 - **Origem:** dona do produto, com protótipo: componente de senha com dois campos (senha e confirmar senha), força da senha, dica de preenchimento em que cada requisito ganha um check verde quando atendido, e ícone de exibir/ocultar. Nos dois DS.
