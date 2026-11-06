@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-06 · Template de preços: textos de "Para quem" encurtados (publicado: DM v32 e FindLook v50)
+
+- **Origem:** dona do produto autorizou encurtar os textos que passavam de 3 linhas em 320 px (pendência do item abaixo).
+- **Verificação prévia (D-041):** `main` remota igual à local nos dois.
+- **Feito** (commits `8243100` DM e `a254b8d` FindLook): Desempenho "Para negócios que querem medir o desempenho."; Oportunidades "Para marcas que planejam sortimento e crescimento."; no DM em inglês, os três encurtados no mesmo sentido (o de Visibility também passava em 320 px): "For stores and brands that want more local presence.", "For businesses that want to measure performance.", "For brands that plan assortment and growth.".
+- **Verificação:** builds sem erros; medição automática em 320, 360, 390, 768, 1024, 1280 e 1440 px (FindLook; DM em inglês e em português): nenhum texto passa de 3 linhas; sem erros de JavaScript. Workflows concluídos; DM v32 e FindLook v50 no ar, conferidos nos pacotes publicados. Pendência de 320 px resolvida.
+
 ## 2026-11-06 · Template de preços: caixa "Para quem" amarela, com lâmpada e 3 linhas fixas (publicado: DM v31 e FindLook v49)
 
 - **Origem:** dona do produto: sem reticências no "Para quem"; no máximo 3 linhas; altura da caixa fixa; trocar o vermelho por amarelo-claro; trocar o ícone de informação por uma lâmpada.
