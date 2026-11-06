@@ -360,6 +360,40 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-06 · FindLook: painel da loja como protótipo navegável em uma janela só (publicado: FindLook v54)
+
+- **Origem:** dona do produto: em vez de várias telas e telas compridas, uma tela só em que se navega pelas páginas pelo próprio menu, com rolagem dentro do mockup; o comportamento do menu estava errado e o logo, esticado; refinar interações e comportamentos.
+- **Verificação prévia (D-041):** `main` remota igual à local (`4e03878`).
+- **Feito** (commit `939d672` no FindLook):
+  - **`PrototipoDoPainel`:**
+    - Janela com altura fixa (até 780 px ou 85% da tela) e rolagem só no conteúdo.
+    - O menu lateral troca de página: Início, Produtos, Importar produtos (área de soltar e lista de envio), Buscas e interesse, Inteligência de vendas, Perfil da loja, Equipe, Planos e assinatura, Configurações, Ajuda e suporte e Notificações.
+    - Estoque, Pedidos e reservas, Relatórios e Integrações mostram um aviso honesto de página ainda sem template.
+    - A barra de endereço da janela acompanha a página.
+  - **Templates genéricos reaproveitados:** Configurações, Equipe, Planos, Notificações e Suporte entram no protótipo sem moldura nem menu próprio, pelo contexto `PainelEmbutido`. Configurações abre na aba Notificações, e Perfil da loja na aba Perfil.
+  - **Menu:**
+    - Rolagem própria.
+    - Card de plano compacto fixo no rodapé.
+    - Barra indicadora no item ativo e `aria-current`.
+    - Em janelas estreitas, vira gaveta dentro do mockup (container nomeado `@container/painel`): Esc fecha, o foco vai ao primeiro item e volta ao botão ao fechar.
+  - **Logo:** proporção corrigida (`self-start`, `w-auto`, `object-contain`), de 3,07 natural = 3,07 exibido.
+  - **Barra superior:**
+    - A busca abre uma paleta que leva a páginas e produtos.
+    - O sino mostra as últimas notificações, "Marcar como lidas" e "Ver todas".
+    - O menu da conta leva a Perfil, Planos, Configurações e Ajuda.
+  - **Troca de página:** transição curta (desligada com movimento reduzido), volta ao topo do conteúdo e foco no título da página.
+  - **Ligações entre blocos:** links internos ligam os blocos, por exemplo "Ver todos os produtos", insights, próximas ações e "Ver mais oportunidades".
+  - **Menu do DS:** Templates passa a ter Painel da loja (protótipo), Entrar e criar conta e Landing page. As âncoras antigas do changelog apontam para o protótipo. A publicação foi feita com `aceitar_remocoes`, porque saíram itens de menu.
+- **Verificação:**
+  - Build sem erros.
+  - Teste automatizado no claro e no escuro (1440 px) e no claro (390 px):
+    - 9 páginas abertas pelo menu, cada uma com item ativo, título focado e endereço corretos.
+    - A altura da janela não muda entre páginas (916 px).
+    - O sino marca como lidas e leva a Notificações; o menu da conta leva a Planos; a busca "inteli" + Enter leva a Inteligência de vendas.
+    - No celular, a gaveta fica dentro da janela e o foco vai para "Início".
+    - Sem rolagem lateral e sem erros de JavaScript.
+- **Publicação:** o workflow terminou e o `gh-pages` já tem a v54 (`B7mw5fCt`). A implantação do GitHub Pages falhou do lado do GitHub ("Deployment failed, try again later", fila esgotada às 18h16 UTC). Pedi uma nova execução às 18h30 UTC, que ainda estava na fila às 18h41 UTC; até lá, o site continuava mostrando a v53.
+
 ## 2026-11-06 · FindLook: painel da loja no DS e templates adaptados (publicado: FindLook v53)
 
 - **Origem:** dona do produto, com três telas de referência do painel da loja. Primeiro foi feito o planejamento `docs/design-system/PLANO_PAINEL_FINDLOOK.md`; as decisões estão em D-042.
