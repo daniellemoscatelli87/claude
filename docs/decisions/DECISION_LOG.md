@@ -409,6 +409,20 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-043 · 06/11/2026 · Ícones: Lucide completa (1.70.0) e ícones de marca preservados
+
+- **Origem:** dona do produto: "Importe toda a biblioteca do lucide para dentro de ambos os design systems... e se tiver ícones a mais, que não estão na lucide, mantenha. Não remova."
+- **Decisão:**
+  - Os dois DS passam a usar lucide-react 1.70.0, a versão atual, com 2.029 ícones, e a Biblioteca mostra todos.
+  - Os 18 ícones de marca que a Lucide removeu na 1.x ficam no DS, com o desenho da versão anterior, em `ui/icones-preservados.tsx`.
+- **Fundamento:** "toda a biblioteca" só é possível na versão atual. "Não remova" obriga a manter o que a nova versão tirou.
+- **Trade-off:**
+  - O salto 0.x → 1.x muda o pacote de ícones dos dois DS; todos os nomes usados foram conferidos.
+  - Os ícones de marca não recebem mais correções da Lucide.
+  - As marcas pertencem aos seus donos; servem só para indicar o serviço.
+
+---
+
 ## D-042 · 06/11/2026 · FindLook: painel da loja no design system (componentes e templates)
 
 - **Origem:** Dona do produto, ao responder o planejamento `docs/design-system/PLANO_PAINEL_FINDLOOK.md` sobre três telas de referência do painel da loja: "Junta o melhor de cada uma, fazendo uma versão top e completa. Escolha as melhores copys. As cores devem seguir a paleta atual do DS, adapte o que for necessário. O card de planos mantém o atual. Os templates genéricos adapte ao FindLook. Pode corrigir o que tiver em inglês para português."

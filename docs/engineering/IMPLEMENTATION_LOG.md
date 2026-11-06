@@ -360,6 +360,62 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-06 · Biblioteca Lucide completa nos dois design systems (publicado: DM v34 e FindLook v58)
+
+- **Origem:** a dona do produto pediu: "Importe toda a biblioteca do lucide para dentro de ambos os design systems... e se tiver ícones a mais, que não estão na lucide, mantenha. Não remova."
+- **Verificação prévia (D-041):** `main` remota igual à local nos dois. Situação encontrada:
+  - Os DS usavam lucide-react 0.487.0 (1.565 ícones).
+  - A Biblioteca mostrava uma seleção de cerca de 455 ícones.
+  - A Lucide atual (1.70.0) tem 2.029 ícones.
+- **Feito** (commits `3c2591a` DM e `2a20d93` FindLook):
+  - **Atualização:** lucide-react 0.487.0 → 1.70.0 (`package.json`; `pnpm-lock.yaml` do FindLook).
+  - **Biblioteca:** passa a mostrar os 2.029 ícones nas categorias oficiais da Lucide, traduzidas (DM bilíngue).
+    - Catálogo em `ui/lucide-catalogo.ts`, gerado de `lucide.dev/api/categories`.
+    - Cada ícone aparece na primeira categoria; a busca continua funcionando.
+  - **Ícones mantidos:** a 1.x removeu 18 ícones de marca (Chrome, Codepen, Codesandbox, Dribbble, Facebook, Figma, Framer, Github, Gitlab, Instagram, Linkedin, Pocket, RailSymbol, Slack, Trello, Twitch, Twitter, Youtube).
+    - Ficam em `ui/icones-preservados.tsx`, com o desenho da 0.487.0 (licença ISC) e a mesma API.
+    - Aparecem no grupo "Marcas (mantidas no DS)".
+    - O ícone Figma da página Integração passa a vir desse arquivo.
+  - **Ícones de moda do FindLook:** continuam na seção própria.
+  - **`GitBranch2`:** a lista antiga citava esse nome, que nunca existiu na Lucide e já era ignorado; não houve perda.
+- **Verificação:**
+  - Todos os nomes de ícone usados nos dois DS existem na 1.70.0 (156 no DM e 183 no FindLook).
+  - Builds sem erros.
+  - Teste no navegador (FindLook; DM em português e em inglês):
+    - 2.047 ícones em 42 categorias, todos desenhados.
+    - A busca "github" acha o ícone mantido e "house" acha os da Lucide.
+    - O Figma continua na Integração.
+    - O protótipo do painel do FindLook segue funcionando.
+    - Sem erros de JavaScript.
+  - Workflows concluídos: DM v34 (`DMXw88zq`) e FindLook v58 (`D94uLWSx`) no ar às 20h51 UTC.
+
+## 2026-11-06 · FindLook: componentes do painel alinhados aos do DS (publicado: FindLook v57)
+
+- **Origem:** a dona do produto achou estranhos:
+  - os botões do cabeçalho um abaixo do outro;
+  - os anéis bagunçados;
+  - a tabela com elementos "voando" e checkbox fora do padrão;
+  - as explicações fora do padrão de documentação.
+  - Ela também pediu que o gráfico de anel estivesse em Gráficos e que os componentes novos conversassem com os que já existiam.
+- **Observação:** duas das capturas eram da página antiga "Painel da loja", já removida (versão em cache no navegador). Os pontos valiam mesmo assim e foram tratados.
+- **Feito** (commit `eda005b`):
+  - **Indicador:** segue a anatomia do Card de KPI.
+  - **Tabela de produtos:** segue o desenho da Tabela de dados: card com título e ferramentas, cabeçalho em caixa alta, `Checkbox` do DS com estado parcial, etiquetas e rodapé iguais.
+  - **Abas com contador:** iguais às Abas.
+  - **Status de publicação:** usa o chip compacto dos Estados.
+  - **Botão dividido, seletor de período e botões do painel:** nas medidas do botão e do select documentados no DS.
+  - **Cabeçalho:** ações lado a lado.
+  - **Gráfico:** legenda em pontos clicáveis, como os gráficos do DS.
+  - **Anel:** documentado como "Gráfico de anel" em Gráficos.
+  - **Documentação das 16 seções novas:** no padrão das seções originais (título, descrição, exemplos), sem blocos de código e regras soltos.
+- **Verificação:**
+  - Build sem erros.
+  - Capturas das 16 seções revisadas por mim.
+  - Largura correta em 390 px.
+  - Protótipo com as 9 páginas, gaveta e menus funcionando.
+  - Sem erros.
+  - FindLook v57 publicado.
+
 ## 2026-11-06 · FindLook: DS abre no modo claro (publicado: FindLook v56)
 
 - **Origem:** dona do produto: "no findlook a versão light mode é a oficial, então ao entrar no DS ele abre em light mode".
