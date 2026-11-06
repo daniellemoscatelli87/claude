@@ -360,6 +360,53 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-06 · FindLook: painel da loja no DS e templates adaptados (publicado: FindLook v53)
+
+- **Origem:** dona do produto, com três telas de referência do painel da loja. Primeiro foi feito o planejamento `docs/design-system/PLANO_PAINEL_FINDLOOK.md`; as decisões estão em D-042.
+- **Verificação prévia (D-041):** `main` remota igual à local (`3a960dc`). Não existiam componentes nem templates do painel da loja; os templates eram genéricos (Dashboard, Settings, Auth, Team, Inbox, Contact, Landing).
+- **Feito** (commits `7528344` e `4e03878` no FindLook):
+  - **`ui/painel-shell.tsx`:** seletor de loja, item e grupo do menu (contador com texto para leitor de tela), card de plano, card de ajuda, busca global (Ctrl + K), botão de notificações e gatilho da conta.
+  - **`ui/painel-cabecalho.tsx`:** cabeçalho da página (destaque `**…**`), seletor de período, botão dividido e banner promocional fechável.
+  - **`ui/painel-dados.tsx`:**
+    - Formatação pt-BR (`Intl`).
+    - Card de indicador, com explicação em popover (toque, teclado e mouse) e variação com seta e texto.
+    - Gráfico de área com legenda em caixas de seleção, destaque do último valor e resumo para leitor de tela.
+    - Itens de lista: atividade, ação (insight ou próxima ação), tendências e checklist.
+    - Anel de pontuação (`role="meter"`).
+    - Carrossel de dicas sem passagem automática, faixa de benefícios e card de seção.
+  - **`ui/painel-produtos.tsx`:**
+    - Abas com contagem (setas do teclado).
+    - Célula de produto com `IconeModa` ou foto.
+    - Medidor de desempenho com o número em texto.
+    - Status de publicação: publicado, pendente com motivo, esgotado, reservado, rascunho.
+    - Barra de ações em lote.
+    - Tabela de produtos com busca, filtros, seleção, menu por linha nomeado e rodapé; vira cards em quadros estreitos.
+  - **Templates:**
+    - "Início do painel da loja" substitui o Dashboard genérico; a âncora `template-dashboard` foi mantida.
+    - Template novo "Produtos".
+    - Seção nova Componentes › Painel da loja, com 7 subseções, demonstrações e regras.
+  - **Templates genéricos:** um agente desta conversa adaptou ao FindLook, em português, Configurações da loja, Entrar e criar conta, Equipe da loja, Notificações, Suporte e Landing page para lojistas. Também traduziu os rótulos do menu.
+  - **Revisão do trabalho do agente:** corrigi uma rolagem lateral no celular causada por `sr-only` dentro da tabela de planos sem caixa posicionada. Troquei por texto neutro ou exemplo o domínio e o e-mail inventados (`findlook.com.br`).
+  - **Changelog:** duas entradas.
+- **Verificação:**
+  - Build sem erros.
+  - Teste automatizado no claro e no escuro (1440 px), no claro em 768 px e no escuro em 390 px:
+    - 5 indicadores.
+    - A legenda liga a segunda série (2 áreas).
+    - Selecionar uma linha mostra "1 produto selecionado".
+    - A seta do teclado troca a aba para "Publicados (128)".
+    - O carrossel vai para "2 de 3".
+    - O banner fecha.
+    - O menu da linha mostra Ver na vitrine, Editar, Duplicar e Excluir.
+    - A explicação abre.
+    - A seção Painel da loja abre pela busca.
+  - Sem rolagem lateral na página em 360, 390 e 768 px.
+  - Sem textos em inglês nos templates e sem erros de JavaScript.
+- **Publicação:** workflow concluído; FindLook v53 no ar, conferido no pacote publicado.
+- **Pendências:**
+  - Os números das dicas e dos insights são exemplos.
+  - O menu ainda tem estrangeirismos comuns, mantidos de propósito: Tokens, Cards, Feedback, Upload, Toasts, Tooltips etc.
+
 ## 2026-11-06 · Template de preços: textos novos em "Para quem" e modo escuro mais sóbrio (publicado: DM v33 e FindLook v51)
 
 - **Origem:** dona do produto: textos novos para as caixas "Para quem" (Visibilidade, Desempenho, Oportunidades); e o modo escuro estava "meio carnavalesco". Como os textos novos precisam de 4 linhas, ela escolheu caixa com altura fixa de 4 linhas; para o modo escuro, escolheu nome, preço e caixa neutros.

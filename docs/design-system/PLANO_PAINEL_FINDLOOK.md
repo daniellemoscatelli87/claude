@@ -1,6 +1,6 @@
 # Planejamento: painel da loja no DS FindLook
 
-**Situação:** proposta para aprovação. Nada foi implementado ainda.
+**Situação:** aprovado pela dona do produto em 06/11/2026 (decisões em D-042) e implementado no FindLook v53. Ver o Implementation Log.
 **Base:** três telas de referência do painel da loja (Início), enviadas pela dona do produto em 06/11/2026, comparadas com o que o DS FindLook tem hoje (commit `3a960dc`).
 
 Legenda:

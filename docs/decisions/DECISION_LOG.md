@@ -409,6 +409,21 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-042 · 06/11/2026 · FindLook: painel da loja no design system (componentes e templates)
+
+- **Origem:** Dona do produto, ao responder o planejamento `docs/design-system/PLANO_PAINEL_FINDLOOK.md` sobre três telas de referência do painel da loja: "Junta o melhor de cada uma, fazendo uma versão top e completa. Escolha as melhores copys. As cores devem seguir a paleta atual do DS, adapte o que for necessário. O card de planos mantém o atual. Os templates genéricos adapte ao FindLook. Pode corrigir o que tiver em inglês para português."
+- **Decisão:**
+  - **Início do painel:** junta as três telas.
+  - **Menu:** Início, Produtos, Importar produtos, Estoque, Pedidos e reservas, Buscas e interesse, Inteligência de vendas, Relatórios; o grupo "Minha loja" tem Perfil da loja, Planos e assinatura, Integrações e Configurações. Ficou fora o item "Clientes" de uma das telas, porque a FindLook trata contatos de interesse e não cadastro de clientes.
+  - **Indicadores:** "Contatos e reservas" no lugar de "Contatos de interesse" e "Contatos / reservas".
+  - **Gráfico:** usa a paleta do DS (`--chart-1` rosa, `--chart-2` e `--chart-3` grafites), no lugar do roxo e do laranja das telas.
+  - **Card de plano do menu:** mostra o plano atual do template de preços (Visibilidade, Desempenho, Oportunidades).
+  - **Templates genéricos:** foram adaptados ao FindLook, e os nomes do menu foram traduzidos.
+- **Fundamento:** design system oficial obrigatório (D-032) e "nunca só cor". Também não inventar eficácia nem dados: as dicas sem fonte não citam percentuais ("até 40%" virou texto sem número), e endereços e e-mails da FindLook que não existem foram trocados por texto neutro ou exemplo.
+- **Trade-off:** o painel no DS é demonstração com dados de exemplo, sem integração com o produto. A variação do indicador mostra o número na cor do texto e deixa o verde ou vermelho só na seta, para manter o contraste (as telas usavam texto verde). Em quadros estreitos (até 44rem), a tabela de produtos esconde colunas e vira cards.
+
+---
+
 ## D-041 · 03/11/2026 · Design systems editados por mais de uma conversa: verificar antes de fazer
 
 - **Origem:** Dona do produto, após o conflito entre esta conversa e a conversa do produto FindLook no repositório `FindLook-DesignSystem` (PR #1 com `IconeModa` mesclado enquanto a seção Ilustrações era preparada): "não vou pedir alterações no DS só por essa conversa, mas tudo que eu pedir verifique se já não foi feito antes".
