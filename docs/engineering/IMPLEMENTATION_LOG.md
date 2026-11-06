@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-06 · Template de preços: nomes dos planos e estado selecionado (publicado: DM v30 e FindLook v48)
+
+- **Origem:** dona do produto: as tags "Comece a ser encontrado", "Conheça seu desempenho" e "Antecipe oportunidades" devem inspirar os nomes dos planos no lugar de Básico, Intermediário e Premium, e a tag deve sair do card; faltava o estado selecionado do botão, que passa a se chamar "Selecionar Plano". Sobre os nomes, a dona do produto recusou as opções com referências de moda e pediu para traduzir o que cada tag dizia.
+- **Verificação prévia (D-041):** `main` remota igual à local nos dois; não existia estado selecionado.
+- **Feito** (commits `cab1b99` DM e `bd27f41` FindLook): planos Visibilidade, Desempenho e Oportunidades (DM: Visibility, Performance, Opportunities); selo removido; descrição do plano do meio ajustada para "Todos os recursos do plano Visibilidade…". Botão "Selecionar Plano" em contorno; ao clicar, fica preenchido na primária com check e "Plano selecionado", com `aria-pressed` e rótulo acessível com o nome do plano; um plano selecionado por vez; o card escolhido ganha borda de 2 px na primária e um anel suave.
+- **Verificação:** builds sem erros; teste automatizado nos dois: ao clicar, só o botão clicado ficou com `aria-pressed=true` e "Plano selecionado" ("Plan selected" no DM em inglês); capturas no claro e no escuro, com seleção no plano recomendado e no primeiro plano; nomes alinhados nos três cards; sem erros de JavaScript. Workflows concluídos; DM v30 e FindLook v48 no ar, conferidos nos pacotes publicados.
+
 ## 2026-11-04 · Template de preços atualizado pelo print de planos (publicado: DM v29 e FindLook v47)
 
 - **Origem:** dona do produto, com print de três planos (Básico, Intermediário, Premium): atualizar o componente de preço no que ele não atendesse. Respostas da dona do produto: atualizar nos dois DS; "Para quem" com no máximo duas linhas; manter a troca Mensal/Anual e os ícones dos planos.
