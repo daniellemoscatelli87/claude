@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-06 · Template de preços: caixa "Para quem" amarela, com lâmpada e 3 linhas fixas (publicado: DM v31 e FindLook v49)
+
+- **Origem:** dona do produto: sem reticências no "Para quem"; no máximo 3 linhas; altura da caixa fixa; trocar o vermelho por amarelo-claro; trocar o ícone de informação por uma lâmpada.
+- **Verificação prévia (D-041):** `main` remota igual à local nos dois.
+- **Feito** (commits `5d00906` DM e `1109b66` FindLook): caixa em `--warning-muted` (o amarelo-claro do DS) com borda `warning/30` e ícone `Lightbulb` em `--warning`; texto sem `line-clamp`, com altura fixa de 3 linhas (4,125em) em todos os cards. Para o texto caber em 3 linhas: três colunas só a partir de 1280 px (antes 768 px), padding menor no celular, e o texto do plano Desempenho encurtado para "Para negócios que querem entender como o público os encontra." (o final anterior tinha sido completado por mim; DM em inglês: "…how people find them.").
+- **Verificação:** builds sem erros; medição automática da caixa nos três cards em 320, 360, 390, 768, 1024, 1280 e 1440 px (FindLook; DM em inglês e em português): altura igual (75,6 px) nos três; texto cabe em 3 linhas de 360 px para cima; **em 320 px os textos dos planos Desempenho e Oportunidades passam de 3 linhas** (pendente: decidir com a dona do produto); captura no claro; sem erros de JavaScript. Workflows concluídos; DM v31 e FindLook v49 no ar, conferidos nos pacotes publicados.
+
 ## 2026-11-06 · Template de preços: nomes dos planos e estado selecionado (publicado: DM v30 e FindLook v48)
 
 - **Origem:** dona do produto: as tags "Comece a ser encontrado", "Conheça seu desempenho" e "Antecipe oportunidades" devem inspirar os nomes dos planos no lugar de Básico, Intermediário e Premium, e a tag deve sair do card; faltava o estado selecionado do botão, que passa a se chamar "Selecionar Plano". Sobre os nomes, a dona do produto recusou as opções com referências de moda e pediu para traduzir o que cada tag dizia.
