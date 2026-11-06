@@ -360,6 +360,17 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-06 · FindLook: DS abre no modo claro (publicado: FindLook v56)
+
+- **Origem:** dona do produto: "no findlook a versão light mode é a oficial, então ao entrar no DS ele abre em light mode".
+- **Verificação prévia (D-041):** `main` remota igual à local (`d1705dd`); o tema começava no escuro (`useState(true)` em `App.tsx`).
+- **Feito** (commit `80ab606` no FindLook): o estado inicial do tema passou a ser claro; o botão Escuro continua alternando. Entrada no changelog. O DS Dani Moscatelli não mudou.
+- **Verificação:**
+  - **Build:** sem erros.
+  - **Teste local:** com o sistema em claro e em escuro, o DS abre no claro, e o botão Escuro aplica o tema escuro.
+  - **Publicação:** workflow concluído; v56 no ar às 19h31 UTC (`BtyCP_t1`).
+  - **Site publicado:** abre no claro com o sistema em claro e em escuro.
+
 ## 2026-11-06 · FindLook: componentes do painel nas seções do DS (publicado: FindLook v55, inclui a v54)
 
 - **Origem:** a dona do produto viu a tela de Templates ainda no formato antigo, porque a v54 não tinha entrado no ar (implantação do GitHub Pages travada). Ela também achou a aba "Painel da loja" confusa e desalinhada. Escolheu: tirar a aba e documentar cada componente na seção do DS onde ele já se encaixa.
