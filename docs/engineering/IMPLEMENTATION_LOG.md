@@ -360,6 +360,39 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-06 · FindLook: componentes do painel nas seções do DS (publicado: FindLook v55, inclui a v54)
+
+- **Origem:** a dona do produto viu a tela de Templates ainda no formato antigo, porque a v54 não tinha entrado no ar (implantação do GitHub Pages travada). Ela também achou a aba "Painel da loja" confusa e desalinhada. Escolheu: tirar a aba e documentar cada componente na seção do DS onde ele já se encaixa.
+- **Feito** (commits `1e14a9a`, `4a915b6`, `b0e877e`, `5c2a33b`, `e39c4c2` e `d1705dd` no FindLook):
+  - **Aba removida:** saíram a aba "Painel da loja" e o `PainelShowcase.tsx`.
+  - **Componentes por seção**, cada um com demonstração, código e regras no padrão de cada arquivo, escrito por três agentes desta conversa em arquivos separados e revisado por mim:
+    - **Exibição de dados:** Indicador do painel, Gráfico de desempenho, Tabela de produtos (com anatomia) e Pontuação e checklist.
+    - **Estados:** Status de publicação do produto.
+    - **Botões:** Botão dividido e Seletor de período.
+    - **Navegação:** Menu do painel, Barra superior e Cabeçalho da página.
+    - **Feedback:** Abas com contador e Banner promocional.
+    - **Rótulos:** Listas de atividade e ações.
+    - **Cards:** Card de plano, Card de dica e Faixa de benefícios.
+  - **Itens no menu do DS** para todas essas seções novas.
+  - **Correções nos componentes:**
+    - Botão do card de plano opaco, para dar contraste no escuro.
+    - `data-slot` preservado nos gatilhos de menu.
+    - Nível de título no cabeçalho e no card do painel.
+    - Rótulo do anel dentro do círculo.
+    - Eixo do gráfico com folga para o destaque do último valor.
+    - Legenda com caixa neutra e traço da cor da série.
+    - Carrossel de dicas com destino na ação e foco preservado nas setas.
+  - **Correção de rolagem lateral em 390 px:** na Feedback (abas de exemplo) e na Cards (grade do card de peça e controle de acabamento do vidro).
+- **Verificação:**
+  - Build sem erros.
+  - Largura da página igual à da tela em 390 e 1440 px nas seções Exibição de dados, Estados, Botões, Navegação, Feedback, Rótulos e Cards (Cards também em 360 px).
+  - Capturas das 16 seções novas no claro, em 1440 px, revisadas por mim: alinhadas, com título, demonstração, código e regras.
+  - Sem erros de JavaScript.
+- **Publicação:**
+  - O GitHub Pages falhou na v54 ("Deployment failed, try again later"), e a nova tentativa ficou na fila.
+  - A v55 (fonte `d1705dd`, publicada com `aceitar_remocoes`) entrou no ar às 19h13 UTC (`Dq66mLTm`).
+  - No site real: o protótipo de uma janela só está em Templates (916 px de altura, 14 itens no menu lateral), sem a aba "Painel da loja" e sem erros.
+
 ## 2026-11-06 · FindLook: painel da loja como protótipo navegável em uma janela só (publicado: FindLook v54)
 
 - **Origem:** dona do produto: em vez de várias telas e telas compridas, uma tela só em que se navega pelas páginas pelo próprio menu, com rolagem dentro do mockup; o comportamento do menu estava errado e o logo, esticado; refinar interações e comportamentos.
@@ -392,7 +425,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - O sino marca como lidas e leva a Notificações; o menu da conta leva a Planos; a busca "inteli" + Enter leva a Inteligência de vendas.
     - No celular, a gaveta fica dentro da janela e o foco vai para "Início".
     - Sem rolagem lateral e sem erros de JavaScript.
-- **Publicação:** o workflow terminou e o `gh-pages` já tem a v54 (`B7mw5fCt`). A implantação do GitHub Pages falhou do lado do GitHub ("Deployment failed, try again later", fila esgotada às 18h16 UTC). Pedi uma nova execução às 18h30 UTC, que ainda estava na fila às 18h41 UTC; até lá, o site continuava mostrando a v53.
+- **Publicação:** o workflow terminou e o `gh-pages` já tem a v54 (`B7mw5fCt`). A implantação do GitHub Pages falhou do lado do GitHub ("Deployment failed, try again later", fila esgotada às 18h16 UTC). Pedi uma nova execução às 18h30 UTC, que ainda estava na fila às 18h41 UTC; até lá, o site continuava mostrando a v53. Resolvido com a publicação da v55, que inclui a v54 (ver o registro acima).
 
 ## 2026-11-06 · FindLook: painel da loja no DS e templates adaptados (publicado: FindLook v53)
 
