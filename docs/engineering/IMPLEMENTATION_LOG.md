@@ -360,6 +360,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-06 · Template de preços: textos novos em "Para quem" e modo escuro mais sóbrio (publicado: DM v33 e FindLook v51)
+
+- **Origem:** dona do produto: textos novos para as caixas "Para quem" (Visibilidade, Desempenho, Oportunidades); e o modo escuro estava "meio carnavalesco". Como os textos novos precisam de 4 linhas, ela escolheu caixa com altura fixa de 4 linhas; para o modo escuro, escolheu nome, preço e caixa neutros.
+- **Verificação prévia (D-041):** `main` remota igual à local nos dois.
+- **Feito** (commits `7ad8071` DM e `3a960dc` FindLook): textos da dona do produto aplicados como enviados (DM com tradução para o inglês); caixa com altura fixa de 4 linhas (5,5em), sem reticências; no modo escuro, nome e preço em `foreground`, quadrado do ícone em `muted` com ícone em `muted-foreground`, caixa "Para quem" em `muted` com borda `border`, e só a lâmpada em `--warning`; a primária fica na etiqueta Recomendado, nos checks, na borda do destaque e no botão. Modo claro sem mudança.
+- **Verificação:** builds sem erros; medição automática em 320, 360, 390, 768, 1024, 1280 e 1440 px (FindLook; DM em inglês e em português): caixas com a mesma altura (93,5 px) nos três cards; textos cabem em 4 linhas de 360 px para cima; **em 320 px ainda passam** (aceito pela dona do produto ao escolher a opção de 4 linhas); capturas no escuro e no claro; sem erros de JavaScript. Workflows concluídos; DM v33 e FindLook v51 no ar, conferidos nos pacotes publicados.
+
 ## 2026-11-06 · Template de preços: textos de "Para quem" encurtados (publicado: DM v32 e FindLook v50)
 
 - **Origem:** dona do produto autorizou encurtar os textos que passavam de 3 linhas em 320 px (pendência do item abaixo).
