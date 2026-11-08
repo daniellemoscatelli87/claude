@@ -10,6 +10,14 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 **Cortes 1 e 2, acesso master, acesso por convite e limites da IA implementados, não publicados.** Banco, regras e telas testados (ver entradas abaixo). As migrações de 20/10 estão aplicadas, a função da IA publicada é a versão 3 e **a IA está desligada** (D-017). Ainda não houve teste com login real e IA real, porque a aplicação não está no ar.
 
+## 2026-11-08 · Site do estúdio migrado para o Cloudflare Pages; aplicação fora do ar
+
+- **Motivo:** o time do Netlify excedeu o limite de créditos do plano gratuito e todos os projetos foram pausados, incluindo o site do estúdio e a aplicação `dm-experience-intelligence`.
+- **Site do estúdio:** publicado no Cloudflare Pages (projeto `danimoscatelli`, branch `main`, `npm run build`, pasta `dist`, `NODE_VERSION=22`). O proxy de `/designsystem` passou a ser feito por Pages Functions (`functions/`, PR #71), porque o Cloudflare não aceita as regras 200 externas de `public/_redirects`.
+- **DNS:** os nameservers de `danimoscatelli.com.br` e `danimoscatelli.com` foram trocados da Hostinger para o Cloudflare. Os registros de e-mail (Hostinger, Resend), o TXT do Google e o DMARC foram conferidos contra uma cópia feita antes da troca. `danimoscatelli.com` redireciona (301) para `www.danimoscatelli.com.br`, mantendo caminho e parâmetros.
+- **Verificado em 08/11/2026:** `www.danimoscatelli.com.br`, `danimoscatelli.com.br`, `/designsystem/`, `/store/`, `/experience-intelligence-3/` e `/admin/` respondem 200 com HTTPS; os redirecionamentos do `.com` respondem 301.
+- **Aplicação (produto): não está publicada.** `app.danimoscatelli.com.br` continua com CNAME para `dm-experience-intelligence.netlify.app`, que está pausado. Pendente: decidir onde publicar a aplicação ao retomar o produto (ver C2-11 no backlog).
+
 ## 2026-10-19 · Organização da documentação
 
 - **Feito:** documentos do kit copiados para o repositório e registros permanentes criados (ver D-004 no Decision Log).
