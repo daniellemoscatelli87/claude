@@ -245,3 +245,45 @@ form.addEventListener('change', (e) => {
   window.matchMedia('(min-width: 640px)').addEventListener('change', (m) => { if (m.matches) definir(false); });
 })();
 
+
+/* ---------- Mapa mental do Escopo: fios do núcleo até cada frente (computador) ---------- */
+(() => {
+  const mapa = document.getElementById('mapa-frentes');
+  const nucleo = document.getElementById('mapa-nucleo');
+  const svg = mapa?.querySelector<SVGSVGElement>('.mapa-fios');
+  if (!mapa || !nucleo || !svg) return;
+  const nos = Array.from(mapa.querySelectorAll<HTMLElement>('.no-mapa'));
+  const NS = 'http://www.w3.org/2000/svg';
+  const desenhar = () => {
+    if (window.innerWidth < 1024) { svg.innerHTML = ''; return; }
+    const m = mapa.getBoundingClientRect();
+    const n = nucleo.getBoundingClientRect();
+    const cx = n.left + n.width / 2 - m.left, cy = n.top + n.height / 2 - m.top, raio = n.width / 2;
+    svg.innerHTML = '';
+    nos.forEach((no) => {
+      const r = no.getBoundingClientRect();
+      const esquerda = r.left + r.width / 2 < n.left + n.width / 2;
+      const fx = (esquerda ? r.right : r.left) - m.left, fy = r.top + r.height / 2 - m.top;
+      const ang = Math.atan2(fy - cy, fx - cx);
+      const sx = cx + Math.cos(ang) * (raio + 6), sy = cy + Math.sin(ang) * (raio + 6);
+      const mx = (sx + fx) / 2;
+      const path = document.createElementNS(NS, 'path');
+      path.setAttribute('d', `M${sx} ${sy} C ${mx} ${sy}, ${mx} ${fy}, ${fx} ${fy}`);
+      path.dataset.no = no.dataset.no;
+      const ponto = document.createElementNS(NS, 'circle');
+      ponto.setAttribute('cx', String(fx)); ponto.setAttribute('cy', String(fy)); ponto.setAttribute('r', '4');
+      svg.append(path, ponto);
+    });
+  };
+  nos.forEach((no) => {
+    const marcar = (on: boolean) => svg.querySelector(`path[data-no="${no.dataset.no}"]`)?.classList.toggle('ativo', on);
+    no.addEventListener('mouseenter', () => marcar(true));
+    no.addEventListener('mouseleave', () => marcar(false));
+    no.addEventListener('focusin', () => marcar(true));
+    no.addEventListener('focusout', () => marcar(false));
+  });
+  desenhar();
+  window.addEventListener('resize', desenhar);
+  if ('ResizeObserver' in window) new ResizeObserver(desenhar).observe(mapa);
+  document.fonts?.ready.then(desenhar);
+})();
