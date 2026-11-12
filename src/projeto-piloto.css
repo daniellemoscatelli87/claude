@@ -147,3 +147,18 @@ body {
 /* Âncoras ("Saiba mais", menu): a seção para exatamente abaixo do cabeçalho fixo, sem sobrar faixa do hero */
 html { scroll-padding-top: 77px; }
 @media (min-width: 640px) { html { scroll-padding-top: 81px; } }
+
+/* Troca de valor entre os cards "Para sua empresa" e "Para o Studio": dois fluxos em sentidos opostos */
+.ponte-rotulo { display: inline-block; text-align: center; font-size: 12px; font-weight: 700; line-height: 1.3; padding: 6px 12px; border-radius: 9999px; border-width: 1px; width: 176px; }
+.fluxo { stroke-dasharray: 7 9; animation: fluxo-correr 1.4s linear infinite; }
+@keyframes fluxo-correr { to { stroke-dashoffset: -32; } }
+.ponto-ida { offset-path: path("M-14 96 C 40 6, 160 6, 214 96"); animation: ponto-andar 2.6s cubic-bezier(0.42, 0, 0.58, 1) infinite; }
+.ponto-volta { offset-path: path("M214 104 C 160 194, 40 194, -14 104"); animation: ponto-andar 2.6s cubic-bezier(0.42, 0, 0.58, 1) 1.3s infinite; }
+@keyframes ponto-andar { 0% { offset-distance: 0%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { offset-distance: 100%; opacity: 0; } }
+.fluxo-mob { animation: fluxo-mob 1.6s ease-in-out infinite; }
+.fluxo-mob + * { }
+@keyframes fluxo-mob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+@media (prefers-reduced-motion: reduce) {
+  .fluxo, .fluxo-mob { animation: none; }
+  .ponto-ida, .ponto-volta { animation: none; opacity: 0; }
+}
