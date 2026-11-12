@@ -232,3 +232,20 @@ form.addEventListener('change', (e) => {
     });
   });
 })();
+
+/* ---------- Botão flutuante "Cadastrar minha empresa" ---------- */
+(() => {
+  const btn = document.getElementById('cta-flutuante');
+  const hero = document.getElementById('hero');
+  const form = document.getElementById('inscricao');
+  if (!btn || !hero || !form || !('IntersectionObserver' in window)) return;
+  let heroVisivel = true, formVisivel = false;
+  const atualizar = () => {
+    const mostrar = !heroVisivel && !formVisivel;
+    btn.classList.toggle('visivel', mostrar);
+    btn.setAttribute('aria-hidden', String(!mostrar));
+    btn.tabIndex = mostrar ? 0 : -1;
+  };
+  new IntersectionObserver(([e]) => { heroVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.15 }).observe(hero);
+  new IntersectionObserver(([e]) => { formVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.1 }).observe(form);
+})();
