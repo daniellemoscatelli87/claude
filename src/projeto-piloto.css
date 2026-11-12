@@ -231,3 +231,7 @@ main a.bg-coral-600:hover, main button.bg-coral-600:hover { background-color: #8
 .secao-escura .card-frente:hover .frente-num { color: #E88080; }
 /* Títulos grandes (≥ 24px) podem manter o vermelho primário: 3:1 basta para texto grande */
 main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D44D4D; }
+/* Cards de vidro: ícone branco em repouso (vermelho só no hover) e tags só com borda */
+.secao-escura .card-frente .frente-icone { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); color: #FFFFFF; }
+.secao-escura .card-frente .tag-frente { background: transparent; border-color: rgba(255, 255, 255, 0.2); color: #B3BDD0; }
+.secao-escura .card-frente:hover .tag-frente { background: transparent; border-color: rgba(232, 128, 128, 0.6); color: #F3B3B3; }
