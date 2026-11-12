@@ -245,3 +245,17 @@ form.addEventListener('change', (e) => {
   window.matchMedia('(min-width: 640px)').addEventListener('change', (m) => { if (m.matches) definir(false); });
 })();
 
+
+/* ---------- Escopo: luz que segue o cursor e ordem da cascata ---------- */
+(() => {
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.card-frente'));
+  cards.forEach((card, i) => {
+    card.style.setProperty('--i', String(i));
+    card.querySelectorAll<HTMLElement>('.tag-frente').forEach((t, j) => t.style.setProperty('--t', String(j)));
+    card.addEventListener('pointermove', (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      card.style.setProperty('--my', `${e.clientY - r.top}px`);
+    });
+  });
+})();

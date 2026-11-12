@@ -150,3 +150,28 @@ html { scroll-padding-top: 77px; }
 
 
 
+
+/* ---------- Escopo de atuação: mais vida (Motion do design system) ---------- */
+/* Luz que segue o cursor dentro do card */
+.frente-luz { opacity: 0; transition: opacity .3s ease; background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(212, 77, 77, 0.08), transparent 70%); }
+.card-frente:hover .frente-luz { opacity: 1; }
+/* Barra vermelha que cresce no topo */
+.frente-barra { width: 0; transition: width .5s cubic-bezier(0.16, 1, 0.3, 1); }
+.card-frente:hover .frente-barra { width: 100%; }
+/* Número grande decorativo desliza levemente */
+.frente-num { transition: color .3s ease, transform .5s cubic-bezier(0.16, 1, 0.3, 1); }
+.card-frente:hover .frente-num { transform: translateY(4px) scale(1.06); }
+/* Ícone: pequeno balanço no hover (Back easing) */
+@keyframes frente-balanco { 0% { transform: rotate(0) scale(1); } 30% { transform: rotate(-8deg) scale(1.12); } 60% { transform: rotate(5deg) scale(1.1); } 100% { transform: rotate(0) scale(1.08); } }
+.card-frente:hover .frente-icone { animation: frente-balanco .6s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+/* Entrada: ícone "salta" e tags aparecem em cascata depois do card */
+@keyframes frente-pop { from { opacity: 0; transform: scale(.6) rotate(-10deg); } to { opacity: 1; transform: none; } }
+@keyframes tag-entra { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.anima-pronto .rv-grupo:not(.visivel) .frente-icone, .anima-pronto .rv-grupo:not(.visivel) .tag-frente { opacity: 0; }
+.anima-pronto .rv-grupo.visivel .frente-icone { animation: frente-pop .55s cubic-bezier(0.34, 1.56, 0.64, 1) both; animation-delay: calc(var(--i, 0) * .07s + .2s); }
+.anima-pronto .rv-grupo.visivel .tag-frente { animation: tag-entra .45s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(var(--i, 0) * .07s + .35s + var(--t, 0) * .06s); }
+.anima-pronto .rv-grupo.visivel .card-frente:hover .frente-icone { animation: frente-balanco .6s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .frente-luz, .frente-barra, .frente-num { transition: none; }
+  .card-frente:hover .frente-icone, .anima-pronto .rv-grupo .frente-icone, .anima-pronto .rv-grupo .tag-frente { animation: none !important; opacity: 1 !important; }
+}
