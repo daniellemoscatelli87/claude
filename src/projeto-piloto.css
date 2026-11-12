@@ -368,3 +368,4 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 /* Base do ícone de compromisso no tom de cada bloco (um passo mais escuro que o box) */
 #sobre-o-programa .compromisso-icone { background: #F9DADA; border-color: #F9DADA; }
 #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { background: #D6DCE6; border-color: #D6DCE6; }
+#sobre-o-programa .lado-troca > div:first-child { border-bottom-width: 1px !important; } /* filete fininho */
