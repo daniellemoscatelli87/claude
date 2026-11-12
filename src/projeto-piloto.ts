@@ -177,7 +177,12 @@ form.addEventListener('change', (e) => {
   let agendado = false;
   const recolher = () => {
     agendado = false;
-    alvos.forEach((el) => { if (el.classList.contains('visivel') && el.getBoundingClientRect().top > window.innerHeight) el.classList.remove('visivel'); });
+    alvos.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (el.classList.contains('visivel') && r.top > window.innerHeight) el.classList.remove('visivel');
+      // Rolagem rápida pode pular um bloco sem disparar o observador: o que já ficou acima da tela aparece.
+      else if (!el.classList.contains('visivel') && r.bottom < 0) el.classList.add('visivel');
+    });
   };
   window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(recolher); } }, { passive: true });
 })();

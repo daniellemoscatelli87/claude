@@ -22,9 +22,31 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
 (() => {
   const h = document.getElementById('site-header');
   if (!h) return;
-  const f = () => h.classList.toggle('is-scrolled', window.scrollY > 8);
+  // Esconde ao rolar para baixo e volta ao rolar para cima (fica sempre visível no topo
+  // e enquanto o menu do celular estiver aberto).
+  let ultimoY = window.scrollY;
+  // Ao usar um link de âncora (ex.: "Saiba mais"), o cabeçalho fica visível para a seção parar logo abaixo dele.
+  let ancoraAte = 0;
+  document.addEventListener('click', (e) => {
+    const link = (e.target as HTMLElement).closest('a[href^="#"]');
+    if (link) { ancoraAte = Date.now() + 1500; h.classList.remove('is-hidden'); }
+  });
+  let agendado = false;
+  const f = () => {
+    agendado = false;
+    const y = window.scrollY;
+    h.classList.toggle('is-scrolled', y > 8);
+    const menuAberto = document.getElementById('menu-botao')?.getAttribute('aria-expanded') === 'true';
+    const delta = y - ultimoY;
+    if (y < h.offsetHeight || menuAberto || Date.now() < ancoraAte) h.classList.remove('is-hidden');
+    else if (delta > 6) h.classList.add('is-hidden');
+    else if (delta < -6) h.classList.remove('is-hidden');
+    if (Math.abs(delta) > 6) ultimoY = y;
+  };
   f();
-  window.addEventListener('scroll', f, { passive: true });
+  window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(f); } }, { passive: true });
+  // Navegar pelo teclado até o cabeçalho sempre o mostra.
+  h.addEventListener('focusin', () => h.classList.remove('is-hidden'));
   const medir = () => document.documentElement.style.setProperty('--altura-cabecalho', `${h.offsetHeight}px`);
   medir();
   window.addEventListener('resize', medir);
