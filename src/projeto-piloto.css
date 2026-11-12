@@ -172,7 +172,7 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
    background graphite-950, card rgba(19,26,39,.75), border .07/.12, foreground #E4E9F0, muted graphite-300,
    primary crimson-400, primary-muted .15 com crimson-300, muted rgba(40,48,67,.6), sombras escuras do DS. */
 .transicao-escopo.secao-escura { background: #0D1119; }
-.secao-escura .rv-cabecalho > p:first-child { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #E88080; }
+.secao-escura .rv-cabecalho > p:first-child { background: transparent; border-color: transparent; color: #E88080; }
 .secao-escura .rv-cabecalho > p:first-child > span { background: #E88080; }
 .secao-escura .rv-cabecalho h2 { color: #E4E9F0; }
 .secao-escura .rv-cabecalho .text-coral-600 { color: #D44D4D; }
@@ -269,3 +269,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .divisao-hero-cartao { max-width: 1400px; margin: 0 auto; border-radius: 36px; overflow: hidden; background: #FFFFFF; }
 @media (min-width: 640px) { .divisao-hero { padding: 0 1rem; } .divisao-hero-cartao { border-radius: 48px; } }
 @media (min-width: 1024px) { .divisao-hero { padding: 0 1.5rem; } .divisao-hero-cartao { border-radius: 56px; } }
+/* Sobre o programa: sem a mancha avermelhada no canto superior esquerdo do cartão */
+#sobre-o-programa .fundo-gradiente span:nth-child(1) { display: none; }
