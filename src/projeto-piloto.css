@@ -167,3 +167,22 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 .transicao-escopo.secao-escura::after { top: -60px; opacity: .8; }
 .transicao-escopo .fundo-gradiente-escuro span:nth-child(1) { top: 12%; }
 .transicao-escopo .fundo-gradiente-escuro { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); }
+
+/* ---------- Seção escura (Escopo): tudo no padrão dark mode do design system ----------
+   Cards em G-800, bordas claras translúcidas, títulos brancos, textos em cinza claro e vermelho mais claro para contraste. */
+.secao-escura .rv-cabecalho > p:first-child { background: rgb(212 77 77 / .15); border-color: rgb(212 77 77 / .35); color: #F5C6C6; }
+.secao-escura .rv-cabecalho > p:first-child > span { background: #E88080; }
+.secao-escura .rv-cabecalho .text-coral-600 { color: #E88080; }
+.secao-escura .card-frente { background: #1C2333; border-color: rgb(255 255 255 / .08); }
+.secao-escura .card-frente:hover { border-color: rgb(232 128 128 / .45); box-shadow: 0 20px 40px -16px rgb(0 0 0 / .6); }
+.secao-escura .card-frente h3 { color: #fff; }
+.secao-escura .card-frente h3 + p { color: #E88080; }
+.secao-escura .card-frente h3 + p + p { color: #B3BDD0; }
+.secao-escura .card-frente ul { border-color: rgb(255 255 255 / .08); }
+.secao-escura .card-frente .tag-frente { background: rgb(255 255 255 / .05); border-color: rgb(255 255 255 / .1); color: #B3BDD0; }
+.secao-escura .card-frente:hover .tag-frente { background: rgb(212 77 77 / .15); border-color: rgb(212 77 77 / .35); color: #F5C6C6; }
+.secao-escura .card-frente .frente-icone { background: rgb(212 77 77 / .15); border-color: rgb(212 77 77 / .35); color: #E88080; }
+.secao-escura .card-frente:hover .frente-icone { background: #D44D4D; border-color: #D44D4D; color: #fff; }
+.secao-escura .card-frente .frente-num { color: rgb(255 255 255 / .05); }
+.secao-escura .card-frente:hover .frente-num { color: rgb(212 77 77 / .18); }
+.secao-escura .frente-luz { background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(232, 128, 128, 0.12), transparent 70%); }
