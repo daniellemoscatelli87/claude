@@ -289,3 +289,36 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #accordion-group .accordion-item.active .accordion-sinal .sinal-menos { display: block; }
 #accordion-group .accordion-item.active .accordion-sinal { background: #D44D4D; border-color: #D44D4D; color: #FFFFFF; }
 #accordion-group .accordion-content > div > div { padding: 0 0 1rem; font-size: .875rem; line-height: 1.625; color: #627288; border-top: 0; }
+
+/* ---------- Sobre o programa: base G-50 com dois cards brancos elevados (DS) ----------
+   Card branco sobre fundo G-50: fundo --card, borda --border, raio 16px e sombra --shadow do DS.
+   Os dois lados ficam iguais (mesmo fundo, mesma elevação), separados por espaço em vez de divisor. */
+.divisao-hero-cartao, .transicao-sobre { background: #EDF0F5; }
+#sobre-o-programa article { background: transparent; border: 0; border-radius: 0; overflow: visible; }
+#sobre-o-programa .troca-grade { column-gap: 1.5rem; row-gap: 0; }
+#sobre-o-programa .lado-troca { background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); border-radius: 16px; box-shadow: 0 2px 6px rgba(13, 17, 25, 0.07), 0 6px 20px rgba(13, 17, 25, 0.05); }
+@media (max-width: 1023px) { #sobre-o-programa .lado-troca + .lado-troca { margin-top: 1.5rem; } }
+#sobre-o-programa .lado-troca + .lado-troca p.text-slate-500 { color: #495669; }
+
+/* ---------- Cabeçalho colorido de cada card (Sobre o programa) ----------
+   Versão leve: faixa em tom claro com filete de 3px no topo.
+   "Para sua empresa": crimson-50 (#FDF2F2), filete crimson-500, texto/ícone crimson-500.
+   "Para o Studio": graphite-50 (#EDF0F5), filete graphite-900, texto/ícone graphite-900. */
+#sobre-o-programa .lado-troca { overflow: hidden; }
+#sobre-o-programa .lado-troca > div:first-child { margin: -1.75rem -1.75rem 1.75rem; padding: 1.125rem 1.75rem; background: #FDF2F2; border-top: 3px solid #B82828; border-bottom: 1px solid #F9DADA; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child { background: #EDF0F5; border-top-color: #131A27; border-bottom-color: #D6DCE6; }
+@media (min-width: 640px) { #sobre-o-programa .lado-troca > div:first-child { margin: -2.5rem -2.5rem 2rem; padding: 1.25rem 2.5rem; } }
+@media (min-width: 1024px) { #sobre-o-programa .lado-troca > div:first-child { margin: -3rem -3rem 2.25rem; padding: 1.25rem 3rem; } }
+#sobre-o-programa .lado-troca > div:first-child > p { color: #B82828; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child > p { color: #131A27; }
+#sobre-o-programa .lado-troca > div:first-child > span { background: #FFFFFF; border-color: #F9DADA; color: #B82828; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child > span { border-color: #D6DCE6; }
+
+/* Mobile: no topo, sobre a foto, o cabeçalho mostra o ícone da empresa (no desktop segue sem logo até rolar) */
+@media (max-width: 767px) {
+  .cabecalho-sobre-hero .site-header:not(.is-scrolled) header > a:first-child { visibility: visible; }
+  .cabecalho-sobre-hero .site-header:not(.is-scrolled) .logo-completo { display: none; }
+  .cabecalho-sobre-hero .site-header:not(.is-scrolled) .logo-icone { display: block; }
+}
+/* Cards do Sobre: topo reto (sem cantos arredondados), base arredondada */
+#sobre-o-programa .lado-troca { border-radius: 0 0 16px 16px; }
