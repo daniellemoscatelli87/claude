@@ -253,9 +253,10 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (max-width: 639px) { .cta-flutuante { left: 20px; right: 88px; } }
 
 /* ---------- Citação de fechamento do bloco "Para sua empresa / Para o Studio" ----------
-   DS: citações usam a fonte de destaque (Fraunces, itálico regular). */
+   Texto em Plus Jakarta; só as palavras em vermelho na fonte de destaque do DS (Fraunces, itálico regular). */
 .citacao-equilibrio { position: relative; max-width: 46rem; margin-left: auto; margin-right: auto; padding: .75rem 0 .25rem; text-align: center; }
 .citacao-aspas { display: block; font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 4rem; line-height: .6; height: 1.75rem; color: #B82828; }
 .citacao-equilibrio blockquote { margin: 0; }
-.citacao-equilibrio blockquote p { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.25rem; line-height: 1.5; color: #131A27; }
+.citacao-equilibrio blockquote p { font-weight: 700; font-size: 1.25rem; line-height: 1.5; letter-spacing: -0.01em; color: #131A27; }
+.citacao-equilibrio blockquote p .text-coral-600 { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.12em; letter-spacing: 0; }
 @media (min-width: 640px) { .citacao-equilibrio blockquote p { font-size: 1.5rem; } }
