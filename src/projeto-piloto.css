@@ -167,3 +167,78 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 .transicao-escopo.secao-escura::after { top: -60px; opacity: .8; }
 .transicao-escopo .fundo-gradiente-escuro span:nth-child(1) { top: 12%; }
 .transicao-escopo .fundo-gradiente-escuro { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); }
+
+/* ---------- Seção escura (Escopo): tokens do modo escuro (.dark) do design system ----------
+   background graphite-950, card rgba(19,26,39,.75), border .07/.12, foreground #E4E9F0, muted graphite-300,
+   primary crimson-400, primary-muted .15 com crimson-300, muted rgba(40,48,67,.6), sombras escuras do DS. */
+.transicao-escopo.secao-escura { background: #0D1119; }
+.secao-escura .rv-cabecalho > p:first-child { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #E88080; }
+.secao-escura .rv-cabecalho > p:first-child > span { background: #E88080; }
+.secao-escura .rv-cabecalho h2 { color: #E4E9F0; }
+.secao-escura .rv-cabecalho .text-coral-600 { color: #D44D4D; }
+.secao-escura .rv-cabecalho > p:last-child { color: #8898B0; }
+.secao-escura > .relative > p.rv { color: #627288; }
+/* Cards em vidro (GlassCard do DS, tom claro no tema escuro, intensidade leve):
+   branco 8%, borda branca 15%, desfoque xl com saturação, filete de luz no topo e sombra suave. */
+.secao-escura .card-frente { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); -webkit-backdrop-filter: blur(24px) saturate(150%); backdrop-filter: blur(24px) saturate(150%); box-shadow: 0 8px 32px rgba(6, 6, 8, 0.08); isolation: isolate; }
+.secao-escura .card-frente::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent); pointer-events: none; }
+.secao-escura .card-frente:hover { border-color: rgba(255, 255, 255, 0.22); box-shadow: 0 16px 40px rgba(6, 6, 8, 0.16); }
+@media (prefers-reduced-transparency: reduce) { .secao-escura .card-frente { -webkit-backdrop-filter: none; backdrop-filter: none; background: #1C2333; } }
+.secao-escura .card-frente h3 { color: #E4E9F0; }
+.secao-escura .card-frente h3 + p { color: #D44D4D; }
+.secao-escura .card-frente h3 + p + p { color: #8898B0; }
+.secao-escura .card-frente ul { border-color: rgba(255, 255, 255, 0.07); }
+.secao-escura .card-frente .tag-frente { background: rgba(40, 48, 67, 0.6); border-color: rgba(255, 255, 255, 0.07); color: #8898B0; }
+.secao-escura .card-frente:hover .tag-frente { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #E88080; }
+.secao-escura .card-frente .frente-icone { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #E88080; }
+.secao-escura .card-frente:hover .frente-icone { background: #D44D4D; border-color: #D44D4D; color: #fff; }
+.secao-escura .card-frente .frente-num { color: rgba(255, 255, 255, 0.04); }
+.secao-escura .card-frente:hover .frente-num { color: rgba(212, 77, 77, 0.15); }
+.secao-escura .frente-luz { background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(212, 77, 77, 0.10), transparent 70%); }
+
+/* ---------- Tipografia e contraste (escala do design system + WCAG AA) ----------
+   Escala DS: H1 2.5rem/700, H2 2rem/700, H3 1.5rem/600, H4 1.25rem/600, Subtítulo 1.125rem/500,
+   Corpo 1rem, Corpo pequeno 0.875rem, Rótulo 0.75rem/600 (0.08em).
+   Texto pequeno em vermelho sobre fundo claro usa crimson-500 (#B82828) e sobre fundo escuro crimson-300 (#E88080),
+   porque o crimson-400 (#D44D4D) não chega a 4,5:1 nesses tamanhos. */
+#hero-titulo { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+main section h2 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.015em; line-height: 1.2; }
+@media (min-width: 640px) { #hero-titulo { font-size: 2.5rem; } main section h2 { font-size: 2rem; } }
+.lado-troca h3 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; }
+.card-frente h3, .cf-cartao h3, #como-funciona .rv h3 { font-size: 1.25rem; font-weight: 600; }
+.accordion-header { font-size: 1.125rem; font-weight: 600; }
+.rv-cabecalho > p.text-coral-600 { font-size: 1.125rem; font-weight: 500; }
+.lado-troca + .lado-troca p.text-slate-500 { color: #495669; }
+
+/* Rótulos (selos e eyebrows) */
+main .rv-cabecalho > p:first-child, #hero p:first-of-type { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; }
+
+/* Vermelho com contraste AA sobre fundo claro */
+main .text-coral-600:not(.secao-escura *), #hero .text-coral-600 { color: #B82828; }
+.accordion-item.active .accordion-header, .accordion-item.active .accordion-chevron { color: #B82828; }
+.cf-num > span { color: #B82828; }
+.cf-etapa.feita .cf-num > span, .cf-etapa.atual .cf-num > span { color: #fff; }
+/* Botões vermelhos: texto branco precisa de 4,5:1 → crimson-500, hover crimson-600 */
+main a.bg-coral-600, main button.bg-coral-600 { background-color: #B82828; }
+main a.bg-coral-600:hover, main button.bg-coral-600:hover { background-color: #8C1B1B; }
+
+/* Fundo escuro: vermelho claro (crimson-300) para texto pequeno e cinzas do tema escuro */
+.secao-escura .rv-cabecalho > p.text-coral-600 { color: #E88080; }
+.secao-escura .card-frente h3 + p { color: #E88080; }
+.secao-escura > .relative > p.rv { color: #8898B0; }
+/* Números dos cards: decorativos, mas legíveis (≥ 3:1 para texto grande) */
+.secao-escura .card-frente .frente-num { color: #627288; font-weight: 700; font-size: 48px; }
+.secao-escura .card-frente:hover .frente-num { color: #E88080; }
+/* Títulos grandes (≥ 24px) podem manter o vermelho primário: 3:1 basta para texto grande */
+main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D44D4D; }
+/* Cards de vidro: ícone branco em repouso (vermelho só no hover) e tags só com borda */
+.secao-escura .card-frente .frente-icone { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); color: #FFFFFF; }
+.secao-escura .card-frente .tag-frente { background: transparent; border-color: rgba(255, 255, 255, 0.2); color: #B3BDD0; }
+.secao-escura .card-frente:hover .tag-frente { background: transparent; border-color: rgba(232, 128, 128, 0.6); color: #F3B3B3; }
+/* Vidro mais transparente (acabamento "translúcido" do GlassCard no tema escuro): branco 4%, borda 12%, desfoque menor */
+.secao-escura .card-frente { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.12); -webkit-backdrop-filter: blur(10px) saturate(150%); backdrop-filter: blur(10px) saturate(150%); }
+/* Números dos cards de vidro: mesma cor da base do ícone (branco 8%); no hover continuam em crimson-300 */
+.secao-escura .card-frente .frente-num { color: rgba(255, 255, 255, 0.08); }
+/* Ícones e tags dos cards aparecem quase juntos (cascata curta) */
+.anima-pronto .rv-grupo.visivel .frente-icone { animation-delay: calc(var(--i, 0) * .03s + .1s); }
+.anima-pronto .rv-grupo.visivel .tag-frente { animation-delay: calc(var(--i, 0) * .03s + .2s + var(--t, 0) * .04s); }
