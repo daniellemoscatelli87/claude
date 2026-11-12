@@ -178,8 +178,12 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 .secao-escura .rv-cabecalho .text-coral-600 { color: #D44D4D; }
 .secao-escura .rv-cabecalho > p:last-child { color: #8898B0; }
 .secao-escura > .relative > p.rv { color: #627288; }
-.secao-escura .card-frente { background: rgba(19, 26, 39, 0.75); border-color: rgba(255, 255, 255, 0.07); }
-.secao-escura .card-frente:hover { border-color: rgba(255, 255, 255, 0.12); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 16px 48px rgba(0, 0, 0, 0.30); }
+/* Cards em vidro (GlassCard do DS, tom claro no tema escuro, intensidade leve):
+   branco 8%, borda branca 15%, desfoque xl com saturação, filete de luz no topo e sombra suave. */
+.secao-escura .card-frente { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); -webkit-backdrop-filter: blur(24px) saturate(150%); backdrop-filter: blur(24px) saturate(150%); box-shadow: 0 8px 32px rgba(6, 6, 8, 0.08); isolation: isolate; }
+.secao-escura .card-frente::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent); pointer-events: none; }
+.secao-escura .card-frente:hover { border-color: rgba(255, 255, 255, 0.22); box-shadow: 0 16px 40px rgba(6, 6, 8, 0.16); }
+@media (prefers-reduced-transparency: reduce) { .secao-escura .card-frente { -webkit-backdrop-filter: none; backdrop-filter: none; background: #1C2333; } }
 .secao-escura .card-frente h3 { color: #E4E9F0; }
 .secao-escura .card-frente h3 + p { color: #D44D4D; }
 .secao-escura .card-frente h3 + p + p { color: #8898B0; }
