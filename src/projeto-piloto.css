@@ -361,3 +361,7 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #sobre-o-programa .lado-troca + .lado-troca p:has(.compromisso-icone) { background: #EDF0F5; border-color: #D6DCE6; }
 #sobre-o-programa .compromisso-icone, #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { margin-top: 0; background: #FFFFFF; }
 #sobre-o-programa .lado-troca > div:first-child { border-bottom-width: 2px !important; } /* filete mais fino */
+/* Mais respiro: entre as duas colunas e entre elas e a citação */
+@media (min-width: 1024px) { #sobre-o-programa .troca-grade { column-gap: 6rem; } }
+#sobre-o-programa .citacao-equilibrio { margin-top: 4.5rem; }
+@media (min-width: 640px) { #sobre-o-programa .citacao-equilibrio { margin-top: 6.5rem; } }
