@@ -378,7 +378,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - Também os componentes: card de peça, timeline, card de parceiro, card do painel, seletor de loja, card de ajuda, busca do painel, card de plano, tabela de produtos e indicador.
     - Ficaram de fora: a escala de sombras em Fundamentos, os controles (slider, barra de menu, controle segmentado), as etiquetas e botões, as sobreposições e os estados de hover.
   - **DM:** só a documentação. A página do DM é off-white (graphite-50), não branca, e a regra de card aninhado já pedia `shadow-none`.
-  - **Site:** branch `claude/projeto-piloto-card-borda`, criado a partir do `main` (`1d866b7`), com uma linha no card do formulário: `border shadow-xl shadow-slate-200/50 border-slate-100` virou `border border-slate-200`. Pull request: https://github.com/daniellemoscatelli87/claude/pull/79. Ainda não foi mesclado; não está no ar.
+  - **Site:** branch `claude/projeto-piloto-card-borda`, criado a partir do `main` (`1d866b7`), com uma linha no card do formulário: `border shadow-xl shadow-slate-200/50 border-slate-100` virou `border border-slate-200`. Pull request: https://github.com/daniellemoscatelli87/claude/pull/79, mesclado a pedido da dona do produto ("pode mesclar"; commit `4a1e052` no `main`). No ar em www.danimoscatelli.com.br/projeto-piloto/ às 18h43 UTC, conferido no HTML publicado.
 - **Verificação:**
   - Builds sem erros.
   - Protótipo do painel do FindLook com as 9 páginas funcionando e sem erros.
