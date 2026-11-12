@@ -148,7 +148,13 @@ body {
 html { scroll-padding-top: 77px; }
 @media (min-width: 640px) { html { scroll-padding-top: 81px; } }
 
-/* Troca de valor: um único componente. Os fios ligam o que cada lado oferece ao que o outro recebe (desenhados pelo script) */
-.fluxo { stroke-dasharray: 7 9; animation: fluxo-correr 1.4s linear infinite; }
-@keyframes fluxo-correr { to { stroke-dashoffset: -32; } }
-@media (prefers-reduced-motion: reduce) { .fluxo { animation: none; } }
+/* Tabela "Troca de valor" (Data Table do design system). No celular, cada linha vira um bloco com as duas partes. */
+@media (max-width: 767px) {
+  .tabela-troca thead { display: none; }
+  .tabela-troca table, .tabela-troca tbody, .tabela-troca tr, .tabela-troca th, .tabela-troca td { display: block; width: 100%; }
+  .tabela-troca .tabela-rotulo { padding: 16px 20px 4px; background: rgba(232, 237, 243, 0.3); }
+  .tabela-troca td { padding: 12px 20px; }
+  .tabela-troca td::before { content: attr(data-coluna); display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #627288; margin-bottom: 6px; }
+  .tabela-troca td + td { border-top: 1px dashed rgba(19, 26, 39, 0.09); }
+}
+

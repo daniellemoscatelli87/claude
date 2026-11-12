@@ -245,26 +245,3 @@ form.addEventListener('change', (e) => {
   window.matchMedia('(min-width: 640px)').addEventListener('change', (m) => { if (m.matches) definir(false); });
 })();
 
-/* ---------- Troca de valor: fios do que cada lado oferece até o que o outro recebe (só no computador) ---------- */
-(() => {
-  const caixa = document.getElementById('troca-valor');
-  if (!caixa) return;
-  const ponto = (id: string, lado: 'esq' | 'dir') => {
-    const r = document.getElementById(id)!.getBoundingClientRect();
-    const c = caixa.getBoundingClientRect();
-    return { x: (lado === 'dir' ? r.right : r.left) - c.left, y: r.top + r.height / 2 - c.top };
-  };
-  const curva = (a: { x: number; y: number }, b: { x: number; y: number }) => {
-    const meio = (a.x + b.x) / 2;
-    return `M${a.x + 4} ${a.y} C ${meio} ${a.y}, ${meio} ${b.y}, ${b.x - (b.x > a.x ? 10 : -10)} ${b.y}`;
-  };
-  const desenhar = () => {
-    if (window.innerWidth < 768) return;
-    document.getElementById('fio-empresa')!.setAttribute('d', curva(ponto('oferta-empresa', 'dir'), ponto('recebe-studio', 'esq')));
-    document.getElementById('fio-studio')!.setAttribute('d', curva(ponto('oferta-studio', 'esq'), ponto('recebe-empresa', 'dir')));
-  };
-  desenhar();
-  window.addEventListener('resize', desenhar);
-  if ('ResizeObserver' in window) new ResizeObserver(desenhar).observe(caixa);
-  document.fonts?.ready.then(desenhar);
-})();
