@@ -360,3 +360,4 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #sobre-o-programa .lado-troca p:has(.compromisso-icone) { border-top: 0; padding: 1rem 1.25rem; border-radius: 12px; background: #FDF2F2; border: 1px solid #F9DADA; align-items: center; }
 #sobre-o-programa .lado-troca + .lado-troca p:has(.compromisso-icone) { background: #EDF0F5; border-color: #D6DCE6; }
 #sobre-o-programa .compromisso-icone, #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { margin-top: 0; background: #FFFFFF; }
+#sobre-o-programa .lado-troca > div:first-child { border-bottom-width: 2px !important; } /* filete mais fino */
