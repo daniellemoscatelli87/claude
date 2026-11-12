@@ -103,3 +103,35 @@ select.field option { color: var(--color-ds-fg); }
 .site-header.is-scrolled .btn-contato, .cabecalho-sobre-hero .site-header:not(.is-scrolled) .btn-contato { border-color: rgb(255 255 255 / .85); color: #fff; }
 .site-header.is-scrolled .btn-contato:hover, .cabecalho-sobre-hero .site-header:not(.is-scrolled) .btn-contato:hover { background: #fff; color: #131A27; }
 .btn-contato:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.4); }
+
+/* ---------- Rodapé padrão (src/compartilhado/partes.ts) ----------
+   Mesma estrutura em todas as páginas: logo + links / copyright, cidade e crédito do design system.
+   Versão clara (Home, Rede de Parceiros) e escura (Projeto Piloto). Tokens do DS. */
+.rodape { max-width: 80rem; margin: 0 auto; padding: 0 1.5rem; font-family: "Plus Jakarta Sans", sans-serif; }
+@media (min-width: 1024px) { .rodape { padding: 0 2.5rem; } }
+.rodape-topo { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(19, 26, 39, 0.09); }
+@media (min-width: 768px) { .rodape-topo { flex-direction: row; justify-content: space-between; } }
+.rodape-logo { display: inline-flex; border-radius: 6px; }
+.rodape-logo img { height: 2.75rem; width: auto; display: block; }
+.rodape-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 1.5rem; font-size: .875rem; font-weight: 500; }
+.rodape-links a, .rodape-links button { color: #283043; text-decoration: none; background: none; border: 0; padding: 0; font: inherit; cursor: pointer; transition: color .2s ease; }
+.rodape-links a:hover, .rodape-links button:hover { color: #B82828; }
+.rodape-base { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding-top: 1.25rem; font-size: .75rem; line-height: 1.6; color: #495669; text-align: center; }
+.rodape-base p { margin: 0; }
+@media (min-width: 640px) { .rodape-base { flex-direction: row; justify-content: space-between; text-align: left; } }
+.rodape-base span[aria-hidden] { margin: 0 .375rem; color: #B3BDD0; }
+.rodape-ds { font-weight: 600; color: #B82828; text-decoration: underline; text-decoration-color: rgba(184, 40, 40, .3); text-underline-offset: 2px; }
+.rodape-ds:hover { text-decoration-color: #B82828; }
+.rodape a:focus-visible, .rodape button:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); border-radius: 4px; }
+/* Escuro */
+.rodape-escuro .rodape-topo { border-bottom-color: rgba(255, 255, 255, 0.1); }
+.rodape-escuro .rodape-logo img { height: 3.25rem; }
+.rodape-escuro .rodape-links a, .rodape-escuro .rodape-links button { color: #E4E9F0; }
+.rodape-escuro .rodape-links a:hover, .rodape-escuro .rodape-links button:hover { color: #FFFFFF; }
+.rodape-escuro .rodape-base { color: #8898B0; }
+.rodape-escuro .rodape-base span[aria-hidden] { color: rgba(255, 255, 255, .25); }
+.rodape-escuro .rodape-ds { color: #F9DADA; text-decoration-color: rgba(249, 218, 218, .4); }
+.rodape-escuro .rodape-ds:hover { text-decoration-color: #F9DADA; }
+/* Rede de Parceiros: rodapé com espaço próprio e acima dos botões fixos do celular */
+.rodape-pagina-parceiros { border-top: 1px solid rgba(19, 26, 39, 0.09); padding: 2rem 0 2.5rem; margin-top: 3rem; }
+@media (max-width: 767px) { .rodape-pagina-parceiros { padding-bottom: 7rem; } }
