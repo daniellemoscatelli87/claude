@@ -58,16 +58,16 @@
   <div class="relative">
   <button type="button" data-open-contact aria-describedby="cta-contato-texto" class="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 rounded-full bg-brand-red hover:bg-[#c13e3e] text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer">Contato</button>
     <!-- Chamada para ação apontando para o botão Contato -->
-    <div id="cta-contato" class="cta-contato absolute right-0 top-full mt-4 z-20 w-[min(320px,calc(100vw-2rem))] sm:w-[350px]">
+    <div id="cta-contato" class="cta-contato absolute right-0 top-full mt-4 z-20 w-max max-w-[calc(100vw-2rem)]">
       <span aria-hidden="true" class="absolute -top-[7px] right-[37px] sm:right-[45px] w-3.5 h-3.5 rotate-45 rounded-[3px] bg-white border-l border-t border-ds-border"></span>
       <div class="relative rounded-2xl bg-white text-ds-fg border border-ds-border shadow-ds-xl">
-        <button type="button" data-open-contact class="flex w-full items-start gap-3 text-left p-4 pr-11 rounded-2xl cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ds-ring">
+        <button type="button" data-open-contact class="flex w-full items-center gap-3 text-left py-3.5 pl-4 pr-11 rounded-2xl cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ds-ring">
           <span aria-hidden="true" class="shrink-0 w-10 h-10 rounded-full bg-ds-primary-muted text-ds-primary flex items-center justify-center">
             <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
           </span>
           <span id="cta-contato-texto" class="block">
-            <span class="block text-sm sm:text-[15px] font-bold leading-snug text-ds-fg">Tem um desafio ou uma ideia que gostaria de tirar do papel?</span>
-            <span class="mt-1.5 block text-[13px] sm:text-sm leading-relaxed text-ds-muted-fg">Vamos conversar sobre seu projeto! Entre em contato ou cadastre seu e-mail para receber as novidades e o aviso de lançamento do novo site.</span>
+            <span class="block text-sm sm:text-[15px] font-bold leading-snug text-ds-fg">Tem um desafio ou uma ideia?</span>
+            <span class="mt-0.5 block text-[13px] sm:text-sm leading-relaxed text-ds-muted-fg">Vamos conversar sobre seu projeto.</span>
           </span>
         </button>
         <button type="button" id="cta-contato-fechar" aria-label="Fechar aviso" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full text-ds-muted-fg hover:text-ds-fg hover:bg-ds-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ds-ring cursor-pointer">
