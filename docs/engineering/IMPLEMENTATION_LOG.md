@@ -360,6 +360,23 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-12 · Site: regra de card sobre fundo branco aplicada a todos os cards (PR #81, no ar)
+
+- **Origem:** a dona do produto esclareceu: "a regra não é só pra card de formulário, mas para qualquer card que esteja direto sobre fundo branco". Sobre o fundo #FAFAFA, ela decidiu que não conta como branco: a regra vale só para branco puro.
+- **Inventário** de todas as páginas HTML do site, com script que procura sombra parada e o fundo real abaixo de cada elemento:
+  - **Sobre branco puro:** só a página Projeto Piloto tinha cards com sombra.
+  - **Experience Intelligence 2 e 3 e página inicial:** sobre branco havia só etiquetas, chips e botões, que não mudaram.
+  - **Sem mudança:** os cards sobre #FAFAFA (áreas e FAQ) e sobre fundo escuro (etapas).
+- **Ocorrido:** o PR #80, de outra conversa, mesclado durante este trabalho, partiu de uma versão anterior da página e desfez a correção do formulário feita no #79. O branch foi refeito sobre o novo `main` (`5f4d7b8`).
+- **Feito** (branch `claude/site-cards-sem-sombra`, PR #81, mesclado a pedido da dona do produto; commit `2e3b413` no `main`):
+  - sem sombra parada nos cards "Para sua empresa" e "Para o Studio" (o hover com sombra continua);
+  - sem sombra parada no card "Sua empresa amplia…";
+  - de novo, no card do formulário.
+- **Verificação:**
+  - Novo inventário: nenhum card com sombra parada sobre `bg-white`.
+  - Verificação do Cloudflare Pages com sucesso.
+  - No ar às 18h54 UTC: o HTML publicado tem as novas classes nos dois cards e no formulário.
+
 ## 2026-11-12 · Cards sobre fundo branco: borda e nenhuma sombra (publicado: DM v39 e FindLook v62; site em PR)
 
 - **Origem:** a dona do produto, com captura do formulário da página `/projeto-piloto/` do site: "no design system quando temos um card sobre um fundo branco ele não tem sombra, ele tem borda cinza clara". Ela escolheu registrar a regra nos dois DS e corrigir o site.
@@ -378,7 +395,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - Também os componentes: card de peça, timeline, card de parceiro, card do painel, seletor de loja, card de ajuda, busca do painel, card de plano, tabela de produtos e indicador.
     - Ficaram de fora: a escala de sombras em Fundamentos, os controles (slider, barra de menu, controle segmentado), as etiquetas e botões, as sobreposições e os estados de hover.
   - **DM:** só a documentação. A página do DM é off-white (graphite-50), não branca, e a regra de card aninhado já pedia `shadow-none`.
-  - **Site:** branch `claude/projeto-piloto-card-borda`, criado a partir do `main` (`1d866b7`), com uma linha no card do formulário: `border shadow-xl shadow-slate-200/50 border-slate-100` virou `border border-slate-200`. Pull request: https://github.com/daniellemoscatelli87/claude/pull/79, mesclado a pedido da dona do produto ("pode mesclar"; commit `4a1e052` no `main`). No ar em www.danimoscatelli.com.br/projeto-piloto/ às 18h43 UTC, conferido no HTML publicado.
+  - **Site:** branch `claude/projeto-piloto-card-borda`, criado a partir do `main` (`1d866b7`), com uma linha no card do formulário: `border shadow-xl shadow-slate-200/50 border-slate-100` virou `border border-slate-200`. Pull request: https://github.com/daniellemoscatelli87/claude/pull/79, mesclado a pedido da dona do produto ("pode mesclar"; commit `4a1e052` no `main`). No ar em www.danimoscatelli.com.br/projeto-piloto/ às 18h43 UTC, conferido no HTML publicado. (Desfeito pelo PR #80 e refeito no PR #81; ver acima.)
 - **Verificação:**
   - Builds sem erros.
   - Protótipo do painel do FindLook com as 9 páginas funcionando e sem erros.
