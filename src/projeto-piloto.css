@@ -320,3 +320,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .cabecalho-sobre-hero .site-header:not(.is-scrolled) .logo-completo { display: none; }
   .cabecalho-sobre-hero .site-header:not(.is-scrolled) .logo-icone { display: block; }
 }
+/* Cards do Sobre: topo reto (sem cantos arredondados), base arredondada */
+#sobre-o-programa .lado-troca { border-radius: 0 0 16px 16px; }
