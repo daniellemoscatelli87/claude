@@ -143,3 +143,7 @@ body {
 /* Sombras dos cartões no fundo escuro (a sombra clara vira "brilho" no escuro) */
 .secao-escura .cf-cartao, .secao-escura .rv.bg-white { box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.55); }
 .secao-escura .cf-cartao:hover { box-shadow: 0 28px 56px -16px rgba(0, 0, 0, 0.65); }
+
+/* Âncoras ("Saiba mais", menu): a seção para exatamente abaixo do cabeçalho fixo, sem sobrar faixa do hero */
+html { scroll-padding-top: 77px; }
+@media (min-width: 640px) { html { scroll-padding-top: 81px; } }
