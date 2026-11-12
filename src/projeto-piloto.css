@@ -299,3 +299,22 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #sobre-o-programa .lado-troca { background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); border-radius: 16px; box-shadow: 0 2px 6px rgba(13, 17, 25, 0.07), 0 6px 20px rgba(13, 17, 25, 0.05); }
 @media (max-width: 1023px) { #sobre-o-programa .lado-troca + .lado-troca { margin-top: 1.5rem; } }
 #sobre-o-programa .lado-troca + .lado-troca p.text-slate-500 { color: #495669; }
+
+/* ---------- Cabeçalho colorido de cada card (Sobre o programa) ----------
+   Faixa de topo de ponta a ponta: "Para sua empresa" em crimson-500 (#B82828), "Para o Studio" em graphite-900 (#131A27).
+   Texto branco (label DS 0.75rem/700, tracking largo); ícone em círculo branco 15%. */
+#sobre-o-programa .lado-troca { overflow: hidden; }
+#sobre-o-programa .lado-troca > div:first-child { margin: -1.75rem -1.75rem 1.75rem; padding: 1.125rem 1.75rem; background: #B82828; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child { background: #131A27; }
+@media (min-width: 640px) { #sobre-o-programa .lado-troca > div:first-child { margin: -2.5rem -2.5rem 2rem; padding: 1.25rem 2.5rem; } }
+@media (min-width: 1024px) { #sobre-o-programa .lado-troca > div:first-child { margin: -3rem -3rem 2.25rem; padding: 1.25rem 3rem; } }
+#sobre-o-programa .lado-troca > div:first-child > p { color: #FFFFFF; }
+#sobre-o-programa .lado-troca > div:first-child > span { background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.25); color: #FFFFFF; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child > p { color: #FFFFFF; }
+
+/* Mobile: no topo, sobre a foto, o cabeçalho mostra o ícone da empresa (no desktop segue sem logo até rolar) */
+@media (max-width: 767px) {
+  .cabecalho-sobre-hero .site-header:not(.is-scrolled) header > a:first-child { visibility: visible; }
+  .cabecalho-sobre-hero .site-header:not(.is-scrolled) .logo-completo { display: none; }
+  .cabecalho-sobre-hero .site-header:not(.is-scrolled) .logo-icone { display: block; }
+}
