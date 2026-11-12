@@ -360,6 +360,29 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-12 · Menu "Comece aqui", brilho do cabeçalho no claro e versão real nas páginas (publicado: DM v36 a v38; FindLook v59 a v61)
+
+- **Origem:** três pedidos da dona do produto:
+  - "ficou estranho inicio e inicio nos design systems": o grupo e o primeiro item do menu tinham o mesmo nome. Ela escolheu renomear o grupo para "Comece aqui".
+  - "A animação que tem na palavra 'Design System' no header do DS não dá pra ver no modo claro".
+  - "achei no DS a informação Versão 1.0 · 2024 e não entendi pq 2024". Ela escolheu mostrar a versão real.
+- **Verificação prévia (D-041):** `main` remota igual à local nos dois DS e no repositório de publicação.
+- **Feito:**
+  - **Menu** (DM `e1fd7be`, FindLook `f04dde5`; DM v36 e FindLook v59): `"Start": "Comece aqui"` em `ptLabels`. Em inglês, o DM continua "Start".
+  - **Brilho do cabeçalho** (DM `52a97ad`, FindLook `ff74fee`; DM v37 e FindLook v60):
+    - No claro, o degradê era de cinza para cinza mais escuro, quase invisível. Passou a ser grafite com a faixa na cor primária (`var(--primary)`), e o movimento fica visível.
+    - No escuro, nada mudou.
+    - Conferi em 4 quadros da animação nos dois DS.
+  - **Versão real** (repositório de publicação `74f234d`; DM `05eecbd`, FindLook `f7ef23b`; DM v38 e FindLook v61):
+    - Os fluxos `publish.yml` e `publish-findlook.yml` passam `VITE_VERSAO` (a versão planejada) e `VITE_VERSAO_ANO` (o ano da publicação) para a construção.
+    - `src/app/versao.ts` mostra "Versão 38 · 2026" ("Version 38 · 2026" no DM em inglês). Fora da publicação, mostra "Versão em desenvolvimento".
+    - Substitui o texto fixo herdado do modelo em: Primeiros passos, Princípios e Desenvolvimento (DM), Desenvolvimento (FindLook) e no exemplo de tipografia da Marca (DM).
+- **Verificação:**
+  - Builds sem erros.
+  - Teste local com versão de teste (v99): o texto aparece nas quatro páginas do DM e na do FindLook, sem erros.
+  - O menu mostra "Comece aqui" nos dois DS.
+  - Workflows concluídos: os pacotes publicados contêm "v38" e "v61" com "2026", no ar às 18h26 UTC.
+
 ## 2026-11-12 · DM: DS abre no modo claro; logo da Área de respiro em branco no escuro (publicado: DM v35)
 
 - **Origem:** a dona do produto fez dois pedidos:
