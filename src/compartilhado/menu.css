@@ -37,7 +37,13 @@
 }
 
 /* Cabeçalho: ao rolar, ganha fundo e o logo completo dá lugar só ao ícone */
-.site-header.is-scrolled { background: rgb(255 255 255 / .85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 rgb(15 23 42 / .06), 0 8px 24px -16px rgb(15 23 42 / .25); }
+/* Ao rolar: grafite do DS (G-900) translúcido com desfoque; textos e botão do menu em branco */
+.site-header.is-scrolled { background: rgb(19 26 39 / .86); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); box-shadow: 0 8px 24px -16px rgb(0 0 0 / .45); }
+.site-header.is-scrolled nav[aria-label="Principal"] a { color: #fff; }
+.site-header.is-scrolled nav[aria-label="Principal"] a:hover { color: #FBCACA; }
+.site-header.is-scrolled nav[aria-label="Principal"] a[aria-current="page"] { color: #fff; text-decoration-color: #D44D4D; }
+.site-header.is-scrolled #menu-botao { color: #fff; }
+.site-header.is-scrolled #menu-botao:hover { background: rgb(255 255 255 / .12); }
 .site-header.is-scrolled .logo-completo { display: none; }
 .site-header.is-scrolled .logo-icone { display: block; animation: logo-icone-in .3s ease-out; }
 @keyframes logo-icone-in { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }

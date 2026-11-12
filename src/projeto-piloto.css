@@ -108,7 +108,7 @@ body {
 @keyframes blob-b { 0% { transform: translate(0, 0); } 50% { transform: translate(-40%, 48%); } 100% { transform: translate(14%, 16%); } }
 @keyframes blob-c { 0% { transform: translate(0, 0); } 50% { transform: translate(-30%, -40%); } 100% { transform: translate(24%, -12%); } }
 @media (prefers-reduced-motion: reduce) { .fundo-gradiente span { animation: none; } }
-.secao-escura > :not(.fundo-gradiente) { position: relative; z-index: 1; }
+.secao-escura > :not(.fundo-gradiente):not(.curva-secao) { position: relative; z-index: 1; }
 .secao-escura .cf-etapa.feita .cf-num, .secao-escura .cf-etapa.atual .cf-num { background-color: #D44D4D; }
 /* Sombras dos cartões no fundo escuro (a sombra clara vira "brilho" no escuro) */
 .secao-escura .cf-cartao, .secao-escura .rv.bg-white { box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.55); }
@@ -117,7 +117,16 @@ body {
 /* Âncoras ("Saiba mais", menu): a seção para exatamente abaixo do cabeçalho fixo, sem sobrar faixa do hero */
 html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 /* Hero ocupa o resto da tela abaixo do cabeçalho */
-.hero-piloto { min-height: calc(100svh - var(--altura-cabecalho, 96px)); }
+/* Cabeçalho transparente sobre a foto do hero: o hero sobe por baixo dele e ocupa a tela inteira */
+.hero-piloto { min-height: 100svh; margin-top: calc(-1 * var(--altura-cabecalho, 80px)); padding-top: calc(var(--altura-cabecalho, 80px) + 2rem) !important; }
+.cabecalho-sobre-hero .site-header:not(.is-scrolled) { background: transparent; }
+/* Sem logo enquanto está sobre a foto (o logo já aparece na parede); volta ao rolar */
+.cabecalho-sobre-hero .site-header:not(.is-scrolled) header > a:first-child { visibility: hidden; }
+/* Links e botão do menu em branco sobre a foto; a página atual mantém o sublinhado vermelho */
+.cabecalho-sobre-hero .site-header:not(.is-scrolled) nav[aria-label="Principal"] a { color: #fff; text-shadow: 0 1px 2px rgb(0 0 0 / .35); text-decoration-color: #D44D4D; }
+.cabecalho-sobre-hero .site-header:not(.is-scrolled) nav[aria-label="Principal"] a:hover { color: #FBCACA; }
+.cabecalho-sobre-hero .site-header:not(.is-scrolled) #menu-botao { color: #fff; }
+.cabecalho-sobre-hero .site-header:not(.is-scrolled) #menu-botao:hover { background: rgb(255 255 255 / .15); }
 
 
 
@@ -147,15 +156,14 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
   .card-frente:hover .frente-icone, .anima-pronto .rv-grupo .frente-icone, .anima-pronto .rv-grupo .tag-frente { animation: none !important; opacity: 1 !important; }
 }
 
-/* ---------- Transições suaves de fundo entre as seções ----------
-   Cada seção termina na cor de fundo da seguinte (paleta do DS: branco, G-50 #EDF0F5, G-900 #131A27, #FAFAFA). */
-.transicao-sobre  { background: linear-gradient(to bottom, #FFFFFF 0, #FFFFFF calc(100% - 260px), #EDF0F5 100%); }
-.transicao-escopo { background: linear-gradient(to bottom, #EDF0F5 0, #EDF0F5 calc(100% - 320px), #9AA5B8 calc(100% - 140px), #131A27 100%); }
-.transicao-como   { background: linear-gradient(to bottom, #131A27 0, #131A27 calc(100% - 320px), #4A5568 calc(100% - 170px), #FAFAFA 100%); }
+/* ---------- Passagem entre as seções ----------
+   Entre fundos claros, degradê leve; onde o fundo fica escuro (Como funciona e rodapé), a borda é uma curva suave. */
+.transicao-sobre  { background: linear-gradient(to bottom, #FFFFFF 0, #FFFFFF calc(100% - 200px), #EDF0F5 100%); }
+.transicao-escopo { background: #EDF0F5; }
+.transicao-como   { background: #131A27; }
 .transicao-guia   { background: #FAFAFA; }
-/* Formulário: começa claro e escurece até o grafite do rodapé */
-.transicao-form   { background: linear-gradient(to bottom, #FAFAFA 0, #EDF0F5 35%, #8898B0 70%, #131A27 100%); }
+.transicao-form   { background: #FAFAFA; }
 /* Brilhos da seção escura começam um pouco abaixo do topo, para a transição vinda do Escopo não marcar uma linha */
 .transicao-como.secao-escura::after { top: -60px; opacity: .8; }
 .transicao-como .fundo-gradiente-escuro span:nth-child(1) { top: 12%; }
-.transicao-como .fundo-gradiente-escuro { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 220px, #000 calc(100% - 360px), transparent calc(100% - 140px)); mask-image: linear-gradient(to bottom, transparent 0, #000 220px, #000 calc(100% - 360px), transparent calc(100% - 140px)); }
+.transicao-como .fundo-gradiente-escuro { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); }
