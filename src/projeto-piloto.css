@@ -168,21 +168,26 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 .transicao-escopo .fundo-gradiente-escuro span:nth-child(1) { top: 12%; }
 .transicao-escopo .fundo-gradiente-escuro { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); }
 
-/* ---------- Seção escura (Escopo): tudo no padrão dark mode do design system ----------
-   Cards em G-800, bordas claras translúcidas, títulos brancos, textos em cinza claro e vermelho mais claro para contraste. */
-.secao-escura .rv-cabecalho > p:first-child { background: rgb(212 77 77 / .15); border-color: rgb(212 77 77 / .35); color: #F5C6C6; }
+/* ---------- Seção escura (Escopo): tokens do modo escuro (.dark) do design system ----------
+   background graphite-950, card rgba(19,26,39,.75), border .07/.12, foreground #E4E9F0, muted graphite-300,
+   primary crimson-400, primary-muted .15 com crimson-300, muted rgba(40,48,67,.6), sombras escuras do DS. */
+.transicao-escopo.secao-escura { background: #0D1119; }
+.secao-escura .rv-cabecalho > p:first-child { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #E88080; }
 .secao-escura .rv-cabecalho > p:first-child > span { background: #E88080; }
-.secao-escura .rv-cabecalho .text-coral-600 { color: #E88080; }
-.secao-escura .card-frente { background: #1C2333; border-color: rgb(255 255 255 / .08); }
-.secao-escura .card-frente:hover { border-color: rgb(232 128 128 / .45); box-shadow: 0 20px 40px -16px rgb(0 0 0 / .6); }
-.secao-escura .card-frente h3 { color: #fff; }
-.secao-escura .card-frente h3 + p { color: #E88080; }
-.secao-escura .card-frente h3 + p + p { color: #B3BDD0; }
-.secao-escura .card-frente ul { border-color: rgb(255 255 255 / .08); }
-.secao-escura .card-frente .tag-frente { background: rgb(255 255 255 / .05); border-color: rgb(255 255 255 / .1); color: #B3BDD0; }
-.secao-escura .card-frente:hover .tag-frente { background: rgb(212 77 77 / .15); border-color: rgb(212 77 77 / .35); color: #F5C6C6; }
-.secao-escura .card-frente .frente-icone { background: rgb(212 77 77 / .15); border-color: rgb(212 77 77 / .35); color: #E88080; }
+.secao-escura .rv-cabecalho h2 { color: #E4E9F0; }
+.secao-escura .rv-cabecalho .text-coral-600 { color: #D44D4D; }
+.secao-escura .rv-cabecalho > p:last-child { color: #8898B0; }
+.secao-escura > .relative > p.rv { color: #627288; }
+.secao-escura .card-frente { background: rgba(19, 26, 39, 0.75); border-color: rgba(255, 255, 255, 0.07); }
+.secao-escura .card-frente:hover { border-color: rgba(255, 255, 255, 0.12); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 16px 48px rgba(0, 0, 0, 0.30); }
+.secao-escura .card-frente h3 { color: #E4E9F0; }
+.secao-escura .card-frente h3 + p { color: #D44D4D; }
+.secao-escura .card-frente h3 + p + p { color: #8898B0; }
+.secao-escura .card-frente ul { border-color: rgba(255, 255, 255, 0.07); }
+.secao-escura .card-frente .tag-frente { background: rgba(40, 48, 67, 0.6); border-color: rgba(255, 255, 255, 0.07); color: #8898B0; }
+.secao-escura .card-frente:hover .tag-frente { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #E88080; }
+.secao-escura .card-frente .frente-icone { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #E88080; }
 .secao-escura .card-frente:hover .frente-icone { background: #D44D4D; border-color: #D44D4D; color: #fff; }
-.secao-escura .card-frente .frente-num { color: rgb(255 255 255 / .05); }
-.secao-escura .card-frente:hover .frente-num { color: rgb(212 77 77 / .18); }
-.secao-escura .frente-luz { background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(232, 128, 128, 0.12), transparent 70%); }
+.secao-escura .card-frente .frente-num { color: rgba(255, 255, 255, 0.04); }
+.secao-escura .card-frente:hover .frente-num { color: rgba(212, 77, 77, 0.15); }
+.secao-escura .frente-luz { background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(212, 77, 77, 0.10), transparent 70%); }
