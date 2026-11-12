@@ -50,3 +50,19 @@ html { overflow-x: clip; }
 }
 /* "Meu negócio é..." com o mesmo tamanho de texto dos outros campos. */
 .biz-label { font-size: 13px; }
+
+/* Botão "Notificar lançamento": padrão vermelho (crimson-500) com texto branco */
+.notify-btn { background-color: #B82828; color: #fff; box-shadow: 0 10px 25px -3px rgba(184, 40, 40, 0.3); }
+.notify-btn[data-state="idle"]:hover { background-color: #8C1B1B; box-shadow: 0 12px 28px -3px rgba(184, 40, 40, 0.4); }
+.notify-btn:focus-visible { box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.4); }
+
+/* Home: botão Contato do cabeçalho em vermelho outline */
+.pagina-inicio .site-header:not(.is-scrolled) .btn-contato { border-color: #B82828; color: #B82828; }
+.pagina-inicio .site-header:not(.is-scrolled) .btn-contato:hover { background: #B82828; color: #fff; }
+
+/* Home: rolagem travada em telas grandes, onde todo o conteúdo cabe na tela.
+   Em telas menores (celular, notebooks baixos) a rolagem continua, para nenhum conteúdo ficar inacessível. */
+@media (min-width: 1024px) and (min-height: 860px) {
+  html:has(body.pagina-inicio), body.pagina-inicio { height: 100dvh; overflow: hidden; }
+  body.pagina-inicio > footer { padding-bottom: 1.5rem; }
+}
