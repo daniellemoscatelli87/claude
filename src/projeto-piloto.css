@@ -235,3 +235,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .secao-escura .card-frente .frente-icone { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); color: #FFFFFF; }
 .secao-escura .card-frente .tag-frente { background: transparent; border-color: rgba(255, 255, 255, 0.2); color: #B3BDD0; }
 .secao-escura .card-frente:hover .tag-frente { background: transparent; border-color: rgba(232, 128, 128, 0.6); color: #F3B3B3; }
+/* Vidro mais transparente (acabamento "translúcido" do GlassCard no tema escuro): branco 4%, borda 12%, desfoque menor */
+.secao-escura .card-frente { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.12); -webkit-backdrop-filter: blur(10px) saturate(150%); backdrop-filter: blur(10px) saturate(150%); }
