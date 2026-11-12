@@ -34,20 +34,20 @@ const AVISO = `
     </div>`;
 
 export function cabecalhoHtml(pagina: Pagina): string {
-  const links = ITENS.map((i) => `<a href="${i.href}"${atual(i.id, pagina)} ${evento(i.evento)} class="text-sm font-semibold text-brand-red underline underline-offset-4 whitespace-nowrap hover:text-brand-dark-red aria-[current=page]:text-ds-fg aria-[current=page]:no-underline">${i.texto}</a>`).join('\n    ');
+  const links = ITENS.map((i) => `<a href="${i.href}"${atual(i.id, pagina)} ${evento(i.evento)} class="text-sm font-semibold text-ds-fg no-underline underline-offset-[6px] decoration-2 whitespace-nowrap transition-colors hover:text-brand-red aria-[current=page]:text-brand-red aria-[current=page]:underline">${i.texto}</a>`).join('\n    ');
   const linksMobile = ITENS.map((i) => `<a href="${i.href}"${atual(i.id, pagina)} ${evento(i.evento)} class="flex items-center justify-between px-4 py-3.5 rounded-xl text-[15px] font-semibold text-ds-fg hover:bg-ds-muted aria-[current=page]:bg-ds-primary-muted aria-[current=page]:text-ds-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ds-ring">${i.texto}<svg aria-hidden="true" viewBox="0 0 24 24" class="w-4 h-4 text-ds-primary" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></a>`).join('\n  ');
   return `<!-- Cabeçalho (componente compartilhado: src/compartilhado/partes.ts) -->
 <div id="site-header" class="site-header sticky top-0 z-30 w-full font-sans text-ds-fg transition-[background-color,box-shadow,backdrop-filter] duration-200">
-<header class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 md:py-8 flex items-center justify-between gap-3 sm:gap-4">
-  <a href="/" class="flex items-center shrink-0 h-10 sm:h-12 md:h-16" aria-label="Dani Moscatelli Experience Design Studio: página inicial">
-    <img alt="" class="logo-icone h-10 sm:h-12 md:h-14 w-auto object-contain sm:hidden" src="/favicon-dm.png">
-    <img alt="" class="logo-completo hidden sm:block sm:h-12 md:h-16 w-auto object-contain" src="/logo-dm.png">
+<header class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-3 md:py-4 flex items-center justify-between gap-3 sm:gap-4">
+  <a href="/" class="flex items-center shrink-0 h-10 sm:h-12" aria-label="Dani Moscatelli Experience Design Studio: página inicial">
+    <img alt="" class="logo-icone h-10 sm:h-11 w-auto object-contain sm:hidden" src="/favicon-dm.png">
+    <img alt="" class="logo-completo hidden sm:block sm:h-12 w-auto object-contain" src="/logo-dm.png">
   </a>
   <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
   <nav aria-label="Principal" class="hidden md:flex items-center gap-5 lg:gap-6">
     ${links}
   </nav>
-  <div class="relative">
+  <div class="relative hidden md:block">
   <button type="button" data-open-contact${pagina === 'inicio' ? ' aria-describedby="cta-contato-texto"' : ''} class="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 rounded-full bg-brand-red hover:bg-[#c13e3e] text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer">Contato</button>${pagina === 'inicio' ? AVISO : ''}
   </div>
   <button type="button" id="menu-botao" aria-expanded="false" aria-controls="menu-mobile" aria-label="Abrir menu" class="md:hidden -mr-1 w-11 h-11 flex items-center justify-center rounded-full text-ds-fg hover:bg-ds-muted transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ds-ring">
@@ -57,6 +57,7 @@ export function cabecalhoHtml(pagina: Pagina): string {
 </header>
 <nav id="menu-mobile" aria-label="Menu" class="hidden md:hidden absolute left-4 right-4 top-full z-40 rounded-2xl bg-white border border-ds-border shadow-ds-xl p-2">
   ${linksMobile}
+  <button type="button" data-open-contact class="mt-2 w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-brand-red hover:bg-[#c13e3e] text-white text-[15px] font-semibold cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ds-ring"><svg aria-hidden="true" viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>Contato</button>
 </nav>
 </div>`;
 }

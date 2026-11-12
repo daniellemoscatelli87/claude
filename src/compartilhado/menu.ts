@@ -75,7 +75,8 @@ function closeDrawer() {
     backdrop.classList.add('pointer-events-none');
     drawer.classList.add('invisible');
     document.body.style.overflow = '';
-    lastFocus?.focus();
+    // Se o botão de origem sumiu (Contato dentro do menu sanduíche), o foco volta para o botão do menu.
+    (lastFocus && lastFocus.offsetParent ? lastFocus : document.getElementById('menu-botao'))?.focus();
   }, 300);
 }
 
@@ -293,4 +294,6 @@ contactForm.addEventListener('change', salvarRascunho);
     if (aberto() && !painel.contains(e.target as Node) && !botao.contains(e.target as Node)) definir(false);
   });
   window.matchMedia('(min-width: 768px)').addEventListener('change', (m) => { if (m.matches) definir(false); });
+  // Contato dentro do menu: fecha o menu antes de abrir a gaveta.
+  painel.querySelectorAll('[data-open-contact]').forEach((b) => b.addEventListener('click', () => definir(false)));
 })();
