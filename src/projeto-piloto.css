@@ -301,16 +301,18 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #sobre-o-programa .lado-troca + .lado-troca p.text-slate-500 { color: #495669; }
 
 /* ---------- Cabeçalho colorido de cada card (Sobre o programa) ----------
-   Faixa de topo de ponta a ponta: "Para sua empresa" em crimson-500 (#B82828), "Para o Studio" em graphite-900 (#131A27).
-   Texto branco (label DS 0.75rem/700, tracking largo); ícone em círculo branco 15%. */
+   Versão leve: faixa em tom claro com filete de 3px no topo.
+   "Para sua empresa": crimson-50 (#FDF2F2), filete crimson-500, texto/ícone crimson-500.
+   "Para o Studio": graphite-50 (#EDF0F5), filete graphite-900, texto/ícone graphite-900. */
 #sobre-o-programa .lado-troca { overflow: hidden; }
-#sobre-o-programa .lado-troca > div:first-child { margin: -1.75rem -1.75rem 1.75rem; padding: 1.125rem 1.75rem; background: #B82828; }
-#sobre-o-programa .lado-troca + .lado-troca > div:first-child { background: #131A27; }
+#sobre-o-programa .lado-troca > div:first-child { margin: -1.75rem -1.75rem 1.75rem; padding: 1.125rem 1.75rem; background: #FDF2F2; border-top: 3px solid #B82828; border-bottom: 1px solid #F9DADA; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child { background: #EDF0F5; border-top-color: #131A27; border-bottom-color: #D6DCE6; }
 @media (min-width: 640px) { #sobre-o-programa .lado-troca > div:first-child { margin: -2.5rem -2.5rem 2rem; padding: 1.25rem 2.5rem; } }
 @media (min-width: 1024px) { #sobre-o-programa .lado-troca > div:first-child { margin: -3rem -3rem 2.25rem; padding: 1.25rem 3rem; } }
-#sobre-o-programa .lado-troca > div:first-child > p { color: #FFFFFF; }
-#sobre-o-programa .lado-troca > div:first-child > span { background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.25); color: #FFFFFF; }
-#sobre-o-programa .lado-troca + .lado-troca > div:first-child > p { color: #FFFFFF; }
+#sobre-o-programa .lado-troca > div:first-child > p { color: #B82828; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child > p { color: #131A27; }
+#sobre-o-programa .lado-troca > div:first-child > span { background: #FFFFFF; border-color: #F9DADA; color: #B82828; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child > span { border-color: #D6DCE6; }
 
 /* Mobile: no topo, sobre a foto, o cabeçalho mostra o ícone da empresa (no desktop segue sem logo até rolar) */
 @media (max-width: 767px) {
