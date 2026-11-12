@@ -29,6 +29,9 @@
   --color-ds-primary-muted: rgba(212, 77, 77, 0.1);
   --color-ds-ring: rgba(212, 77, 77, 0.35);
   --color-ds-error: #D44D4D;
+
+  /* Verde oficial do WhatsApp, só no botão flutuante (escolha da dona do produto, fora do design system) */
+  --color-whatsapp: #25D366;
   --shadow-ds-md: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06);
   --shadow-ds-xl: 0 16px 48px rgba(13, 17, 25, 0.10), 0 40px 96px rgba(13, 17, 25, 0.08);
 }
