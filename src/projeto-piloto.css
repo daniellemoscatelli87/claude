@@ -249,3 +249,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .cta-flutuante.visivel { opacity: 1; transform: none; pointer-events: auto; }
 @media (min-width: 640px) { .cta-flutuante { right: 96px; bottom: 28px; } }
 @media (prefers-reduced-motion: reduce) { .cta-flutuante { transition: none; } }
+/* Celular: o botão ocupa toda a largura livre, da margem esquerda até o WhatsApp */
+@media (max-width: 639px) { .cta-flutuante { left: 20px; right: 88px; } }
