@@ -1,0 +1,21 @@
+/* Rede de Parceiros: utilitários do Tailwind só para o cabeçalho e a gaveta compartilhados.
+   Sem o "preflight" (reset) do Tailwind, para não mexer no visual próprio da página. */
+@import "tailwindcss/theme.css" layer(theme) source(none);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@import "./compartilhado/menu.css";
+
+/* Reset mínimo, só dentro do cabeçalho, do menu e da gaveta (o que o preflight faria) */
+@layer compartilhado {
+  .site-header, .site-header *, #contact-drawer, #contact-drawer *, #drawer-backdrop, #menu-mobile, #menu-mobile * {
+    box-sizing: border-box; border: 0 solid; margin: 0; padding: 0;
+  }
+  .site-header img { display: block; max-width: 100%; }
+  .site-header button, #contact-drawer button, #contact-drawer input, #contact-drawer select, #contact-drawer textarea, #menu-mobile button {
+    font: inherit; color: inherit; background: transparent; border-radius: 0;
+  }
+  .site-header a, #menu-mobile a, #contact-drawer a { color: inherit; text-decoration: inherit; }
+  #contact-drawer ul, #contact-drawer ol { list-style: none; }
+  #contact-drawer h2, #contact-drawer h3, #contact-drawer p { font-size: inherit; font-weight: inherit; }
+  #contact-drawer svg, .site-header svg, #menu-mobile svg { display: block; }
+  .site-header, #contact-drawer, #menu-mobile { line-height: 1.5; -webkit-font-smoothing: antialiased; }
+}
