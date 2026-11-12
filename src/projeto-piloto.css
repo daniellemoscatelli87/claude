@@ -239,3 +239,6 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .secao-escura .card-frente { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.12); -webkit-backdrop-filter: blur(10px) saturate(150%); backdrop-filter: blur(10px) saturate(150%); }
 /* Números dos cards de vidro: mesma cor da base do ícone (branco 8%); no hover continuam em crimson-300 */
 .secao-escura .card-frente .frente-num { color: rgba(255, 255, 255, 0.08); }
+/* Ícones e tags dos cards aparecem quase juntos (cascata curta) */
+.anima-pronto .rv-grupo.visivel .frente-icone { animation-delay: calc(var(--i, 0) * .03s + .1s); }
+.anima-pronto .rv-grupo.visivel .tag-frente { animation-delay: calc(var(--i, 0) * .03s + .2s + var(--t, 0) * .04s); }
