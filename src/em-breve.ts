@@ -285,3 +285,32 @@ function restaurarRascunho() {
 restaurarRascunho();
 contactForm.addEventListener('input', salvarRascunho);
 contactForm.addEventListener('change', salvarRascunho);
+
+/* ---------- Menu sanduíche (celular) ---------- */
+(() => {
+  const botao = document.getElementById('menu-botao') as HTMLButtonElement | null;
+  const painel = document.getElementById('menu-mobile');
+  if (!botao || !painel) return;
+  const iconeAbrir = botao.querySelector('[data-menu="aberto"]')!;
+  const iconeFechar = botao.querySelector('[data-menu="fechado"]')!;
+  const definir = (aberto: boolean) => {
+    painel.classList.toggle('hidden', !aberto);
+    botao.setAttribute('aria-expanded', String(aberto));
+    botao.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
+    iconeAbrir.classList.toggle('hidden', aberto);
+    iconeFechar.classList.toggle('hidden', !aberto);
+  };
+  const aberto = () => botao.getAttribute('aria-expanded') === 'true';
+  botao.addEventListener('click', () => {
+    const abrir = !aberto();
+    definir(abrir);
+    if (abrir) painel.querySelector<HTMLElement>('a')?.focus();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && aberto()) { definir(false); botao.focus(); }
+  });
+  document.addEventListener('click', (e) => {
+    if (aberto() && !painel.contains(e.target as Node) && !botao.contains(e.target as Node)) definir(false);
+  });
+  window.matchMedia('(min-width: 640px)').addEventListener('change', (m) => { if (m.matches) definir(false); });
+})();
