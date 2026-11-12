@@ -29,12 +29,12 @@
 <script type="module" src="/src/em-breve.ts"></script>
 <script src="/analytics.js" defer></script>
 <style>
-  /* Ao rolar, o logo completo dá lugar só ao ícone (também no tablet e no computador) */
   .cta-contato { animation: cta-entrada .45s ease-out .6s both, cta-flutua 2.6s ease-in-out 1.2s 3; }
   @keyframes cta-entrada { from { opacity: 0; transform: translateY(-6px) scale(.97); } to { opacity: 1; transform: none; } }
   @keyframes cta-flutua { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
   @media (prefers-reduced-motion: reduce) { .cta-contato { animation: none; } }
   .cta-contato.is-oculto { display: none; }
+  /* Ao rolar, o logo completo dá lugar só ao ícone (também no tablet e no computador) */
   #site-header.is-scrolled .logo-completo { display: none; }
   #site-header.is-scrolled .logo-icone { display: block; animation: logo-icone-in .3s ease-out; }
   @keyframes logo-icone-in { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }

@@ -1,0 +1,73 @@
+@import "tailwindcss" source(none);
+@source "../parceiro-piloto/index.html";
+@source "./parceiro-piloto.ts";
+
+/* Cores e fonte do protótipo aprovado, todas do design system oficial (primária #D44D4D). */
+@theme {
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+
+  --color-coral-50: #FFF5F5;
+  --color-coral-100: #FFE5E5;
+  --color-coral-200: #FBCACA;
+  --color-coral-500: #E14D4D;
+  --color-coral-600: #D44D4D;
+  --color-coral-700: #B93636;
+  --color-slate-850: #151F32;
+}
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  background-color: #FAFAFA;
+  color: #1E293B;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Accordion do Guia */
+.accordion-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+.accordion-content > div { overflow: hidden; }
+.accordion-item.active .accordion-content { grid-template-rows: 1fr; opacity: 1; }
+.accordion-item.active .accordion-chevron { transform: rotate(180deg); color: #D44D4D; }
+.accordion-item.active .accordion-header { color: #D44D4D; }
+
+/* Cabeçalho ao rolar */
+#main-header {
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
+}
+#main-header.scrolled {
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom-color: rgba(226, 232, 240, 0.8);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+#main-header:not(.scrolled) {
+  background-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  .accordion-content, .accordion-chevron, #main-header { transition: none !important; }
+}
+
+/* Sobre a foto escura do topo: logo e "Home" claros; com o cabeçalho branco, versão para fundo claro */
+#main-header .logo-claro { display: none; }
+#main-header.scrolled .logo-claro { display: block; }
+#main-header.scrolled .logo-escuro { display: none; }
+#main-header .link-home { color: #fff; text-shadow: 0 1px 2px rgb(0 0 0 / .35); }
+#main-header.scrolled .link-home { color: #334155; text-shadow: none; }
+/* No computador a foto já mostra o logo na parede: o logo do cabeçalho só aparece depois de rolar (como no protótipo) */
+@media (min-width: 1024px) {
+  #main-header:not(.scrolled) .logo-link { visibility: hidden; }
+}
