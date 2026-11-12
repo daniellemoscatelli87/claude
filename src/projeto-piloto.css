@@ -321,3 +321,10 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #sobre-o-programa .lado-troca { border-radius: 0 0 16px 16px; }
 /* Escopo: sem numeração nos cards */
 .card-frente .frente-num { display: none; }
+
+/* ---------- Botão "subir": aparece ao chegar no rodapé, ao lado do WhatsApp ---------- */
+.botao-subir { right: 88px; bottom: 28px; opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .3s ease, transform .4s cubic-bezier(0.16, 1, 0.3, 1), background-color .2s ease; }
+.botao-subir.visivel { opacity: 1; transform: none; pointer-events: auto; }
+@media (min-width: 640px) { .botao-subir { right: 96px; bottom: 32px; } }
+@media (prefers-reduced-motion: reduce) { .botao-subir { transition: none; } }
+@media (min-width: 1024px) { .citacao-equilibrio { max-width: 52rem; } }

@@ -249,3 +249,20 @@ form.addEventListener('change', (e) => {
   new IntersectionObserver(([e]) => { heroVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.15 }).observe(hero);
   new IntersectionObserver(([e]) => { formVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.1 }).observe(form);
 })();
+
+// Botão "subir": aparece quando o rodapé entra na tela e leva de volta ao topo.
+(() => {
+  const btn = document.getElementById('botao-subir');
+  const rodape = document.querySelector('footer');
+  if (!btn || !rodape || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(([e]) => {
+    const mostrar = e.isIntersecting;
+    btn.classList.toggle('visivel', mostrar);
+    btn.setAttribute('aria-hidden', String(!mostrar));
+    btn.tabIndex = mostrar ? 0 : -1;
+  }, { threshold: 0.1 }).observe(rodape);
+  btn.addEventListener('click', () => {
+    const suave = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: suave ? 'smooth' : 'auto' });
+  });
+})();
