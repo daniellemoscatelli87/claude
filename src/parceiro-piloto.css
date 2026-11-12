@@ -60,3 +60,14 @@ body {
   html { scroll-behavior: auto !important; }
   .accordion-content, .accordion-chevron, #main-header { transition: none !important; }
 }
+
+/* Sobre a foto escura do topo: logo e "Home" claros; com o cabeçalho branco, versão para fundo claro */
+#main-header .logo-claro { display: none; }
+#main-header.scrolled .logo-claro { display: block; }
+#main-header.scrolled .logo-escuro { display: none; }
+#main-header .link-home { color: #fff; text-shadow: 0 1px 2px rgb(0 0 0 / .35); }
+#main-header.scrolled .link-home { color: #334155; text-shadow: none; }
+/* No computador a foto já mostra o logo na parede: o logo do cabeçalho só aparece depois de rolar (como no protótipo) */
+@media (min-width: 1024px) {
+  #main-header:not(.scrolled) .logo-link { visibility: hidden; }
+}
