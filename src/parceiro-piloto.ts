@@ -1,0 +1,163 @@
+import './parceiro-piloto.css';
+
+/* Mesmo projeto Supabase e mesma chave publicável já usados no formulário de contato da página inicial.
+   A tabela parceiro_piloto só aceita inserção pelo site (RLS); a leitura é restrita ao admin. */
+const SUPABASE_URL = 'https://lipfvnerohkaajegqvwr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej';
+const TABELA = 'parceiro_piloto';
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const TEMPO_LIMITE_MS = 15000;
+
+const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+
+/* ---------- Cabeçalho ao rolar ---------- */
+const header = $('main-header');
+const atualizarHeader = () => header.classList.toggle('scrolled', window.scrollY > 20);
+window.addEventListener('scroll', atualizarHeader, { passive: true });
+atualizarHeader();
+
+/* ---------- Accordion do Guia (um aberto por vez) ---------- */
+const itens = Array.from(document.querySelectorAll<HTMLElement>('.accordion-item'));
+function definirAberto(item: HTMLElement, aberto: boolean) {
+  const botao = item.querySelector<HTMLButtonElement>('.accordion-trigger')!;
+  const painel = item.querySelector<HTMLElement>('.accordion-content')!;
+  item.classList.toggle('active', aberto);
+  botao.setAttribute('aria-expanded', String(aberto));
+  painel.toggleAttribute('inert', !aberto);
+}
+itens.forEach((item) => {
+  item.querySelector('.accordion-trigger')!.addEventListener('click', () => {
+    const abrir = !item.classList.contains('active');
+    itens.forEach((outro) => definirAberto(outro, outro === item ? abrir : false));
+  });
+});
+if (itens[0]) definirAberto(itens[0], true);
+
+/* ---------- Formulário ---------- */
+const form = $<HTMLFormElement>('form-piloto');
+const botao = $<HTMLButtonElement>('form-enviar');
+const botaoTexto = $('form-enviar-texto');
+const erroGeral = $('form-erro-geral');
+const sucesso = $('form-sucesso');
+const iconeEnviando = botao.querySelector<SVGElement>('[data-estado="enviando"]')!;
+const iconeParado = botao.querySelector<SVGElement>('[data-estado="parado"]')!;
+
+/* Identificador do envio: o mesmo valor é reaproveitado se a pessoa reenviar após uma falha de rede,
+   e a coluna é única no banco, então o cadastro nunca é gravado duas vezes. */
+let envioId = crypto.randomUUID();
+let enviando = false;
+
+type Campo = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+const campo = (id: string) => $<Campo>(id);
+
+function mostrarErro(id: string, msg: string) {
+  const el = campo(id);
+  const p = $(`${id}-erro`);
+  el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+  p.textContent = msg;
+  p.classList.toggle('hidden', !msg);
+}
+
+function validar(): string[] {
+  const erros: string[] = [];
+  const checar = (id: string, msg: string, ok: boolean) => {
+    mostrarErro(id, ok ? '' : msg);
+    if (!ok) erros.push(id);
+  };
+  const v = (id: string) => campo(id).value.trim();
+  checar('nome', 'Informe o nome do responsável.', v('nome').length >= 2);
+  checar('email', 'Informe um e-mail válido.', EMAIL_RE.test(v('email')));
+  const digitos = v('telefone').replace(/\D/g, '');
+  checar('telefone', 'Informe um telefone com DDD.', digitos.length >= 10 && digitos.length <= 13);
+  checar('empresa', 'Informe o nome da empresa.', v('empresa').length >= 1);
+  checar('segmento', 'Selecione o segmento de atuação.', v('segmento') !== '');
+  checar('cidade', 'Informe a cidade e o estado.', v('cidade').length >= 2);
+  checar('desafio', 'Use no máximo 2.000 caracteres.', v('desafio').length <= 2000);
+  checar('consentimento', 'Para continuar, aceite a Política de Privacidade.', $<HTMLInputElement>('consentimento').checked);
+  return erros;
+}
+
+function estadoEnviando(sim: boolean) {
+  enviando = sim;
+  botao.disabled = sim;
+  botao.setAttribute('aria-busy', String(sim));
+  botaoTexto.textContent = sim ? 'Enviando cadastro…' : 'Cadastrar minha empresa';
+  iconeEnviando.classList.toggle('hidden', !sim);
+  iconeParado.classList.toggle('hidden', sim);
+}
+
+function mostrarErroGeral(msg: string) {
+  erroGeral.textContent = msg;
+  erroGeral.classList.toggle('hidden', !msg);
+}
+
+async function enviar(linha: Record<string, unknown>) {
+  const controle = new AbortController();
+  const timer = window.setTimeout(() => controle.abort(), TEMPO_LIMITE_MS);
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABELA}`, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify(linha),
+      signal: controle.signal,
+    });
+    // 409: este mesmo envio já tinha sido gravado (reenvio após falha de rede).
+    if (res.ok || res.status === 409) return;
+    throw new Error(`HTTP ${res.status}`);
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (enviando) return;
+  mostrarErroGeral('');
+
+  const erros = validar();
+  if (erros.length) {
+    mostrarErroGeral(erros.length === 1 ? 'Corrija o campo destacado para continuar.' : `Corrija os ${erros.length} campos destacados para continuar.`);
+    campo(erros[0]).focus();
+    return;
+  }
+
+  const v = (id: string) => campo(id).value.trim();
+  const linha = {
+    envio_id: envioId,
+    nome: v('nome'),
+    email: v('email'),
+    telefone: v('telefone'),
+    empresa: v('empresa'),
+    segmento: v('segmento'),
+    cidade_estado: v('cidade'),
+    desafio: v('desafio') || null,
+    frente: v('frente') || null,
+    consentimento: true,
+  };
+
+  estadoEnviando(true);
+  try {
+    await enviar(linha);
+    (window as any).dmEvento?.('cadastro_parceiro_piloto');
+    form.reset();
+    envioId = crypto.randomUUID();
+    form.classList.add('hidden');
+    sucesso.classList.remove('hidden');
+    sucesso.focus();
+  } catch {
+    mostrarErroGeral('Não foi possível enviar o cadastro agora. Verifique sua conexão e tente novamente. Seus dados continuam preenchidos.');
+    botao.focus();
+  } finally {
+    estadoEnviando(false);
+  }
+});
+
+/* Limpa o erro do campo assim que a pessoa corrige */
+form.addEventListener('input', (e) => {
+  const alvo = e.target as Campo;
+  if (alvo.id && alvo.getAttribute('aria-invalid') === 'true') mostrarErro(alvo.id, '');
+});
+form.addEventListener('change', (e) => {
+  const alvo = e.target as Campo;
+  if (alvo.id && alvo.getAttribute('aria-invalid') === 'true') mostrarErro(alvo.id, '');
+});
