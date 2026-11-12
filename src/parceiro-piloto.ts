@@ -161,3 +161,58 @@ form.addEventListener('change', (e) => {
   const alvo = e.target as Campo;
   if (alvo.id && alvo.getAttribute('aria-invalid') === 'true') mostrarErro(alvo.id, '');
 });
+
+/* ---------- Animações ao rolar (Motion do design system) ----------
+   Cada bloco entra quando chega na tela. Ao rolar para cima, o que volta a ficar abaixo da tela
+   é recolhido e anima de novo na próxima descida (mesmo comportamento da página do Experience Intelligence 3). */
+(() => {
+  const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduzir || !('IntersectionObserver' in window)) return;
+  document.body.classList.add('anima-pronto');
+  const alvos = document.querySelectorAll<HTMLElement>('.rv, .rv-cabecalho, .rv-grupo, .cf-etapa');
+  const obs = new IntersectionObserver((entradas) => {
+    entradas.forEach((e) => {
+      const el = e.target as HTMLElement;
+      if (e.isIntersecting) el.classList.add('visivel');
+      else if (e.boundingClientRect.top > window.innerHeight) el.classList.remove('visivel');
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
+  alvos.forEach((el) => obs.observe(el));
+  // Pulos grandes de rolagem (ex.: "Voltar ao início") não disparam o observador para o que estava acima da tela.
+  let agendado = false;
+  const recolher = () => {
+    agendado = false;
+    alvos.forEach((el) => { if (el.classList.contains('visivel') && el.getBoundingClientRect().top > window.innerHeight) el.classList.remove('visivel'); });
+  };
+  window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(recolher); } }, { passive: true });
+})();
+
+/* ---------- Linha do tempo: etapa atual, etapas feitas e linha preenchida conforme a rolagem ---------- */
+(() => {
+  const lista = document.querySelector<HTMLElement>('.cf-etapas');
+  const linha = document.querySelector<HTMLElement>('.cf-linha');
+  if (!lista || !linha) return;
+  const etapas = Array.from(lista.querySelectorAll<HTMLElement>('.cf-etapa'));
+  const trilho = linha.parentElement!;
+  let agendado = false;
+  const atualizar = () => {
+    agendado = false;
+    const limite = window.innerHeight * 0.6;
+    let atual = -1;
+    etapas.forEach((e, i) => {
+      const r = e.querySelector('.cf-num')!.getBoundingClientRect();
+      if (r.top + r.height / 2 < limite) atual = i;
+    });
+    etapas.forEach((e, i) => {
+      e.classList.toggle('feita', i < atual);
+      e.classList.toggle('atual', i === atual);
+    });
+    const t = trilho.getBoundingClientRect();
+    const progresso = Math.min(1, Math.max(0, (limite - t.top) / t.height));
+    linha.style.setProperty('--progresso', progresso.toFixed(3));
+  };
+  const pedir = () => { if (!agendado) { agendado = true; requestAnimationFrame(atualizar); } };
+  window.addEventListener('scroll', pedir, { passive: true });
+  window.addEventListener('resize', pedir);
+  atualizar();
+})();
