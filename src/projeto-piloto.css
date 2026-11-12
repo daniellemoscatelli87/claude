@@ -211,7 +211,7 @@ main section h2 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.015em
 .lado-troca + .lado-troca p.text-slate-500 { color: #495669; }
 
 /* Rótulos (selos e eyebrows) */
-main .rv-cabecalho > p:first-child, #hero p:first-of-type { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; }
+main .rv-cabecalho > p:first-child, .hero-card > p:first-child { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; }
 
 /* Vermelho com contraste AA sobre fundo claro */
 main .text-coral-600:not(.secao-escura *), #hero .text-coral-600 { color: #B82828; }
@@ -242,3 +242,15 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 /* Ícones e tags dos cards aparecem quase juntos (cascata curta) */
 .anima-pronto .rv-grupo.visivel .frente-icone { animation-delay: calc(var(--i, 0) * .03s + .1s); }
 .anima-pronto .rv-grupo.visivel .tag-frente { animation-delay: calc(var(--i, 0) * .03s + .2s + var(--t, 0) * .04s); }
+
+/* ---------- Card do hero em vidro (GlassCard do DS, tom escuro, para fotos) ----------
+   graphite-950 translúcido com desfoque forte, borda branca 15%, filete de luz no topo e texto claro. */
+.hero-card { background: rgba(13, 17, 25, 0.62) !important; border-color: rgba(255, 255, 255, 0.15) !important; -webkit-backdrop-filter: blur(24px) saturate(150%); backdrop-filter: blur(24px) saturate(150%); box-shadow: 0 8px 32px rgba(6, 6, 8, 0.25) !important; position: relative; isolation: isolate; overflow: hidden; }
+.hero-card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.35), transparent); pointer-events: none; }
+.hero-card #hero-titulo { color: #FFFFFF; }
+.hero-card #hero-titulo + p { color: #D6DCE6; }
+.hero-card > div:first-of-type, .hero-card > div:first-of-type p { color: #B3BDD0; }
+.hero-card strong { color: #FFFFFF; }
+#hero .hero-card > p:first-child { background: rgba(212, 77, 77, 0.18); border-color: rgba(232, 128, 128, 0.35); color: #F3B3B3; }
+.hero-card > p:first-child > span { background: #E88080; }
+@media (prefers-reduced-transparency: reduce) { .hero-card { -webkit-backdrop-filter: none; backdrop-filter: none; background: #131A27 !important; } }
