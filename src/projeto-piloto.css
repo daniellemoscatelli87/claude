@@ -157,12 +157,12 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 }
 
 /* ---------- Passagem entre as seções ----------
-   Entre fundos claros, degradê leve; onde o fundo fica escuro (Como funciona e rodapé), a borda é uma curva suave. */
-.transicao-sobre  { background: linear-gradient(to bottom, #FFFFFF 0, #FFFFFF calc(100% - 200px), #EDF0F5 100%); }
+   Fundos alternados (branco, G-50, grafite, branco, G-50) para nunca repetir a cor em seções seguidas; onde o fundo fica escuro (Como funciona e rodapé), a borda é uma curva suave. */
+.transicao-sobre  { background: #FFFFFF; }
 .transicao-escopo { background: #EDF0F5; }
 .transicao-como   { background: #131A27; }
-.transicao-guia   { background: #FAFAFA; }
-.transicao-form   { background: #FAFAFA; }
+.transicao-guia   { background: #FFFFFF; }
+.transicao-form   { background: #EDF0F5; }
 /* Brilhos da seção escura começam um pouco abaixo do topo, para a transição vinda do Escopo não marcar uma linha */
 .transicao-como.secao-escura::after { top: -60px; opacity: .8; }
 .transicao-como .fundo-gradiente-escuro span:nth-child(1) { top: 12%; }
