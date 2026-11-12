@@ -365,3 +365,6 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (min-width: 1024px) { #sobre-o-programa .troca-grade { column-gap: 6rem; } }
 #sobre-o-programa .citacao-equilibrio { margin-top: 4.5rem; }
 @media (min-width: 640px) { #sobre-o-programa .citacao-equilibrio { margin-top: 6.5rem; } }
+/* Base do ícone de compromisso no tom de cada bloco (um passo mais escuro que o box) */
+#sobre-o-programa .compromisso-icone { background: #F9DADA; border-color: #F9DADA; }
+#sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { background: #D6DCE6; border-color: #D6DCE6; }
