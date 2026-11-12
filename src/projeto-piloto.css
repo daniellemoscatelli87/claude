@@ -147,3 +147,5 @@ body {
 /* Âncoras ("Saiba mais", menu): a seção para exatamente abaixo do cabeçalho fixo, sem sobrar faixa do hero */
 html { scroll-padding-top: 77px; }
 @media (min-width: 640px) { html { scroll-padding-top: 81px; } }
+
+
