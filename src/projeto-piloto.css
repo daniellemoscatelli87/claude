@@ -328,3 +328,19 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (min-width: 640px) { .botao-subir { right: 96px; bottom: 32px; } }
 @media (prefers-reduced-motion: reduce) { .botao-subir { transition: none; } }
 @media (min-width: 1024px) { .citacao-equilibrio { max-width: 52rem; } }
+
+/* ---------- Sobre o programa: proposta sem "card sobre card" ----------
+   Os dois blocos deixam de ser cards: viram colunas abertas direto no cartão branco da seção.
+   A diferenciação fica no filete de 4px no topo de cada coluna (crimson-500 x graphite-900),
+   na cor do rótulo e nos ícones. Sem fundo, borda lateral ou sombra. */
+.divisao-hero-cartao, .transicao-sobre { background: #FFFFFF; }
+#sobre-o-programa .troca-grade { column-gap: 4rem; }
+#sobre-o-programa .lado-troca { background: transparent; border: 0; border-top: 4px solid #B82828; border-radius: 0; box-shadow: none; overflow: visible; padding: 1.75rem 0 0; }
+#sobre-o-programa .lado-troca + .lado-troca { border-top-color: #131A27; }
+@media (max-width: 1023px) { #sobre-o-programa .lado-troca + .lado-troca { margin-top: 3rem; } }
+#sobre-o-programa .lado-troca > div:first-child,
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child { margin: 0 0 1.5rem; padding: 0; background: transparent; border: 0; }
+@media (min-width: 640px) { #sobre-o-programa .lado-troca > div:first-child { margin: 0 0 1.5rem; padding: 0; } }
+@media (min-width: 1024px) { #sobre-o-programa .lado-troca > div:first-child { margin: 0 0 1.5rem; padding: 0; } }
+#sobre-o-programa .lado-troca > div:first-child > span { background: #FDF2F2; border-color: #F9DADA; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child > span { background: #EDF0F5; border-color: #D6DCE6; }
