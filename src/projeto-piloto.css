@@ -328,3 +328,36 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (min-width: 640px) { .botao-subir { right: 96px; bottom: 32px; } }
 @media (prefers-reduced-motion: reduce) { .botao-subir { transition: none; } }
 @media (min-width: 1024px) { .citacao-equilibrio { max-width: 52rem; } }
+
+/* ---------- Sobre o programa: proposta sem "card sobre card" ----------
+   Os dois blocos deixam de ser cards: viram colunas abertas direto no cartão branco da seção.
+   A diferenciação fica no filete de 4px no topo de cada coluna (crimson-500 x graphite-900),
+   na cor do rótulo e nos ícones. Sem fundo, borda lateral ou sombra. */
+.divisao-hero-cartao, .transicao-sobre { background: #FFFFFF; }
+#sobre-o-programa .troca-grade { column-gap: 4rem; }
+#sobre-o-programa .lado-troca { background: transparent; border: 0; border-top: 4px solid #B82828; border-radius: 0; box-shadow: none; overflow: visible; padding: 1.75rem 0 0; }
+#sobre-o-programa .lado-troca + .lado-troca { border-top-color: #131A27; }
+@media (max-width: 1023px) { #sobre-o-programa .lado-troca + .lado-troca { margin-top: 3rem; } }
+#sobre-o-programa .lado-troca > div:first-child,
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child { margin: 0 0 1.5rem; padding: 0; background: transparent; border: 0; }
+@media (min-width: 640px) { #sobre-o-programa .lado-troca > div:first-child { margin: 0 0 1.5rem; padding: 0; } }
+@media (min-width: 1024px) { #sobre-o-programa .lado-troca > div:first-child { margin: 0 0 1.5rem; padding: 0; } }
+#sobre-o-programa .lado-troca > div:first-child > span { background: #FDF2F2; border-color: #F9DADA; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child > span { background: #EDF0F5; border-color: #D6DCE6; }
+/* Filete colorido abaixo do ícone + rótulo (e não no topo da coluna) */
+#sobre-o-programa .lado-troca, #sobre-o-programa .lado-troca + .lado-troca { border-top: 0; padding-top: 0; }
+#sobre-o-programa .lado-troca > div:first-child { padding-bottom: 1rem !important; border-bottom: 4px solid #B82828 !important; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child { border-bottom-color: #131A27 !important; }
+/* Ícone de compromisso com base, no mesmo estilo dos checks de cada coluna */
+#sobre-o-programa .compromisso-icone { width: 2.25rem; height: 2.25rem; margin-top: -0.375rem; border-radius: .625rem; border: 1px solid #F9DADA; background: #FDF2F2; display: inline-flex; align-items: center; justify-content: center; }
+#sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { border-color: rgba(19, 26, 39, 0.09); background: #FFFFFF; }
+#sobre-o-programa .compromisso-icone svg { width: 1.125rem; height: 1.125rem; }
+/* Listas do Sobre: só o check, sem a base */
+#sobre-o-programa .lado-troca li > span:first-child { width: auto; height: auto; background: transparent; border: 0; border-radius: 0; margin-top: .125rem; }
+#sobre-o-programa .lado-troca li > span:first-child svg { width: 1.25rem; height: 1.25rem; stroke-width: 2.5; }
+#sobre-o-programa .lado-troca li > span:last-child { padding-top: 0; }
+/* Compromissos em boxes (sem divisor): tom claro de cada coluna; ícone com base branca */
+#sobre-o-programa .lado-troca p:has(.compromisso-icone) { border-top: 0; padding: 1rem 1.25rem; border-radius: 12px; background: #FDF2F2; border: 1px solid #F9DADA; align-items: center; }
+#sobre-o-programa .lado-troca + .lado-troca p:has(.compromisso-icone) { background: #EDF0F5; border-color: #D6DCE6; }
+#sobre-o-programa .compromisso-icone, #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { margin-top: 0; background: #FFFFFF; }
+#sobre-o-programa .lado-troca > div:first-child { border-bottom-width: 2px !important; } /* filete mais fino */
