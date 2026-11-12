@@ -30,6 +30,11 @@
 <script src="/analytics.js" defer></script>
 <style>
   /* Ao rolar, o logo completo dá lugar só ao ícone (também no tablet e no computador) */
+  .cta-contato { animation: cta-entrada .45s ease-out .6s both, cta-flutua 2.6s ease-in-out 1.2s 3; }
+  @keyframes cta-entrada { from { opacity: 0; transform: translateY(-6px) scale(.97); } to { opacity: 1; transform: none; } }
+  @keyframes cta-flutua { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+  @media (prefers-reduced-motion: reduce) { .cta-contato { animation: none; } }
+  .cta-contato.is-oculto { display: none; }
   #site-header.is-scrolled .logo-completo { display: none; }
   #site-header.is-scrolled .logo-icone { display: block; animation: logo-icone-in .3s ease-out; }
   @keyframes logo-icone-in { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
@@ -50,7 +55,24 @@
   </a>
   <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
   <a href="/rede-parceiros/" onclick="window.dmEvento &amp;&amp; window.dmEvento('clique_quero_ser_parceiro')" class="text-[13px] sm:text-sm font-semibold text-brand-red underline underline-offset-4 whitespace-nowrap">Quero ser parceiro</a>
-  <button type="button" data-open-contact class="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 rounded-full bg-brand-red hover:bg-[#c13e3e] text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer">Contato</button>
+  <div class="relative">
+  <button type="button" data-open-contact aria-describedby="cta-contato-texto" class="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 rounded-full bg-brand-red hover:bg-[#c13e3e] text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer">Contato</button>
+    <!-- Chamada para ação apontando para o botão Contato -->
+    <div id="cta-contato" class="cta-contato absolute right-0 top-full mt-4 z-20 w-[min(320px,calc(100vw-2rem))] sm:w-[340px]">
+      <span aria-hidden="true" class="absolute -top-1.5 right-[37px] sm:right-[45px] w-3.5 h-3.5 rotate-45 rounded-[3px] bg-ds-primary"></span>
+      <div class="relative rounded-2xl bg-ds-primary text-white shadow-ds-xl">
+        <button type="button" data-open-contact class="block w-full text-left px-5 py-4 pr-11 rounded-2xl cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ds-ring">
+          <span id="cta-contato-texto" class="block">
+            <span class="block text-sm sm:text-[15px] font-bold leading-snug">Tem um desafio ou uma ideia que gostaria de tirar do papel?</span>
+            <span class="mt-1.5 block text-[13px] sm:text-sm leading-relaxed text-white/90">Vamos conversar sobre seu projeto! Entre em contato ou cadastre seu e-mail para receber as novidades e o aviso de lançamento do novo site.</span>
+          </span>
+        </button>
+        <button type="button" id="cta-contato-fechar" aria-label="Fechar aviso" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full text-white/80 hover:text-white hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer">
+          <svg aria-hidden="true" viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
   </div>
 </header>
 </div>
@@ -69,8 +91,6 @@
 
       <div class="text-base sm:text-lg text-brand-muted font-normal leading-relaxed max-w-xl space-y-3">
         <p>Enquanto preparo a nova experiência digital do estúdio, continuo colocando meus 20 anos de experiência a serviço de empresas de diferentes segmentos, ajudando a repensar seus produtos, serviços e jornadas.</p>
-        <p class="font-semibold text-brand-dark">Tem um desafio ou uma ideia que gostaria de tirar do papel?</p>
-        <p>Vamos conversar sobre seu projeto! Entre em contato ou cadastre seu e-mail para receber as novidades e o aviso de lançamento do novo site.</p>
       </div>
 
       <div class="w-full max-w-lg pt-1">
@@ -262,6 +282,7 @@
 </aside>
 <script>
   // Header fixo: ganha fundo e sombra quando a página rola.
+  (() => { const c = document.getElementById("cta-contato"); if (!c) return; let fechado = false; try { fechado = sessionStorage.getItem("cta-contato-fechado") === "1"; } catch (e) {} const esconder = () => { c.classList.add("is-oculto"); try { sessionStorage.setItem("cta-contato-fechado", "1"); } catch (e) {} }; if (fechado) c.classList.add("is-oculto"); document.getElementById("cta-contato-fechar").addEventListener("click", esconder); document.querySelectorAll("[data-open-contact]").forEach((b) => b.addEventListener("click", esconder)); })();
   (() => { const h = document.getElementById("site-header"); const f = () => h.classList.toggle("is-scrolled", window.scrollY > 8); f(); window.addEventListener("scroll", f, { passive: true }); })();
 </script>
 </body>
