@@ -30,6 +30,11 @@
 <script src="/analytics.js" defer></script>
 <style>
   /* Ao rolar, o logo completo dá lugar só ao ícone (também no tablet e no computador) */
+  .cta-contato { animation: cta-entrada .45s ease-out .6s both, cta-flutua 2.6s ease-in-out 1.2s 3; }
+  @keyframes cta-entrada { from { opacity: 0; transform: translateY(-6px) scale(.97); } to { opacity: 1; transform: none; } }
+  @keyframes cta-flutua { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+  @media (prefers-reduced-motion: reduce) { .cta-contato { animation: none; } }
+  .cta-contato.is-oculto { display: none; }
   #site-header.is-scrolled .logo-completo { display: none; }
   #site-header.is-scrolled .logo-icone { display: block; animation: logo-icone-in .3s ease-out; }
   @keyframes logo-icone-in { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
@@ -50,14 +55,34 @@
   </a>
   <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
   <a href="/rede-parceiros/" onclick="window.dmEvento &amp;&amp; window.dmEvento('clique_quero_ser_parceiro')" class="text-[13px] sm:text-sm font-semibold text-brand-red underline underline-offset-4 whitespace-nowrap">Quero ser parceiro</a>
-  <button type="button" data-open-contact class="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 rounded-full bg-brand-red hover:bg-[#c13e3e] text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer">Contato</button>
+  <div class="relative">
+  <button type="button" data-open-contact aria-describedby="cta-contato-texto" class="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 rounded-full bg-brand-red hover:bg-[#c13e3e] text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer">Contato</button>
+    <!-- Chamada para ação apontando para o botão Contato -->
+    <div id="cta-contato" class="cta-contato absolute right-0 top-full mt-4 z-20 w-max max-w-[calc(100vw-2rem)]">
+      <span aria-hidden="true" class="absolute -top-[7px] right-[37px] sm:right-[45px] w-3.5 h-3.5 rotate-45 rounded-[3px] bg-white border-l border-t border-ds-border"></span>
+      <div class="relative rounded-2xl bg-white text-ds-fg border border-ds-border shadow-ds-xl">
+        <button type="button" data-open-contact class="flex w-full items-center gap-3 text-left py-3.5 pl-4 pr-11 rounded-2xl cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ds-ring">
+          <span aria-hidden="true" class="shrink-0 w-10 h-10 rounded-full bg-ds-primary-muted text-ds-primary flex items-center justify-center">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+          </span>
+          <span id="cta-contato-texto" class="block">
+            <span class="block text-sm sm:text-[15px] font-bold leading-snug text-ds-fg">Tem um desafio ou uma ideia?</span>
+            <span class="mt-0.5 block text-[13px] sm:text-sm leading-relaxed text-ds-muted-fg">Vamos conversar sobre seu projeto.</span>
+          </span>
+        </button>
+        <button type="button" id="cta-contato-fechar" aria-label="Fechar aviso" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full text-ds-muted-fg hover:text-ds-fg hover:bg-ds-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ds-ring cursor-pointer">
+          <svg aria-hidden="true" viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
   </div>
 </header>
 </div>
 
 <!-- Conteúdo principal -->
 <main class="flex-1 w-full max-w-7xl mx-auto px-6 lg:px-10 py-6 md:py-10 z-10 flex flex-col justify-center">
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center lg:items-stretch">
 
     <!-- Lado esquerdo -->
     <div class="lg:col-span-6 flex flex-col items-start text-left space-y-6 md:space-y-7">
@@ -69,11 +94,9 @@
 
       <div class="text-base sm:text-lg text-brand-muted font-normal leading-relaxed max-w-xl space-y-3">
         <p>Enquanto preparo a nova experiência digital do estúdio, continuo colocando meus 20 anos de experiência a serviço de empresas de diferentes segmentos, ajudando a repensar seus produtos, serviços e jornadas.</p>
-        <p class="font-semibold text-brand-dark">Tem um desafio ou uma ideia que gostaria de tirar do papel?</p>
-        <p>Vamos conversar sobre seu projeto! Entre em contato ou cadastre seu e-mail para receber as novidades e o aviso de lançamento do novo site.</p>
       </div>
 
-      <div class="w-full max-w-lg pt-1">
+      <div class="w-full max-w-lg pt-1 lg:mt-auto">
         <form id="notify-form" novalidate class="p-2 bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-full shadow-floating-input flex flex-col sm:flex-row items-center gap-2 transition-all hover:shadow-xl">
           <div class="w-full relative flex-1">
             <label for="notify-email" class="sr-only">Seu e-mail corporativo</label>
@@ -91,8 +114,8 @@
     </div>
 
     <!-- Lado direito -->
-    <div class="contents lg:col-span-6 lg:flex justify-center items-center relative flex-col">
-      <div class="relative w-full max-w-[560px] mx-auto flex items-center justify-center order-first lg:order-none">
+    <div class="contents lg:col-span-6 lg:flex justify-center lg:justify-between items-center relative flex-col">
+      <div class="relative w-full max-w-[560px] mx-auto flex items-center justify-center order-first lg:order-none lg:mt-[35px]">
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 select-none">
           <div class="w-[320px] h-[320px] sm:w-[500px] sm:h-[500px] rounded-full bg-gradient-to-tr from-red-200/50 via-rose-100/40 to-transparent blur-3xl opacity-80 animate-pulse [animation-duration:6s]"></div>
           <div class="absolute w-[260px] h-[260px] sm:w-[360px] sm:h-[360px] rounded-full border border-red-200/40 opacity-60"></div>
@@ -102,7 +125,7 @@
         <img alt="Dani Moscatelli - Metodologia & Visão Sistêmica de Design de Experiência" src="/dani-post-its.webp" width="1341" height="1173" class="w-full max-h-[600px] h-auto object-contain select-none drop-shadow-2xl relative z-10 transition-transform duration-500 hover:scale-[1.02]">
       </div>
 
-      <div class="pt-4 lg:pb-3 flex flex-col items-center gap-3 z-10 w-full">
+      <div class="pt-4 lg:pb-[28px] flex flex-col items-center gap-3 z-10 w-full">
         <span class="text-base sm:text-lg font-semibold text-brand-dark leading-relaxed">Me siga nas redes sociais:</span>
         <div class="flex flex-wrap items-center justify-center gap-2.5">
           <a class="group inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/95 backdrop-blur-md text-brand-charcoal text-xs font-medium shadow-subtle-card hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:text-brand-red" href="https://www.linkedin.com/in/danimoscatelli/" rel="noopener noreferrer" target="_blank" onclick="window.dmEvento &amp;&amp; window.dmEvento('clique_rede_social', { rede: 'linkedin_perfil' })">
@@ -262,6 +285,7 @@
 </aside>
 <script>
   // Header fixo: ganha fundo e sombra quando a página rola.
+  (() => { const c = document.getElementById("cta-contato"); if (!c) return; let fechado = false; try { fechado = sessionStorage.getItem("cta-contato-fechado") === "1"; } catch (e) {} const esconder = () => { c.classList.add("is-oculto"); try { sessionStorage.setItem("cta-contato-fechado", "1"); } catch (e) {} }; if (fechado) c.classList.add("is-oculto"); document.getElementById("cta-contato-fechar").addEventListener("click", esconder); document.querySelectorAll("[data-open-contact]").forEach((b) => b.addEventListener("click", esconder)); })();
   (() => { const h = document.getElementById("site-header"); const f = () => h.classList.toggle("is-scrolled", window.scrollY > 8); f(); window.addEventListener("scroll", f, { passive: true }); })();
 </script>
 </body>
