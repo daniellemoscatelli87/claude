@@ -356,3 +356,7 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #sobre-o-programa .lado-troca li > span:first-child { width: auto; height: auto; background: transparent; border: 0; border-radius: 0; margin-top: .125rem; }
 #sobre-o-programa .lado-troca li > span:first-child svg { width: 1.25rem; height: 1.25rem; stroke-width: 2.5; }
 #sobre-o-programa .lado-troca li > span:last-child { padding-top: 0; }
+/* Compromissos em boxes (sem divisor): tom claro de cada coluna; ícone com base branca */
+#sobre-o-programa .lado-troca p:has(.compromisso-icone) { border-top: 0; padding: 1rem 1.25rem; border-radius: 12px; background: #FDF2F2; border: 1px solid #F9DADA; align-items: center; }
+#sobre-o-programa .lado-troca + .lado-troca p:has(.compromisso-icone) { background: #EDF0F5; border-color: #D6DCE6; }
+#sobre-o-programa .compromisso-icone, #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { margin-top: 0; background: #FFFFFF; }
