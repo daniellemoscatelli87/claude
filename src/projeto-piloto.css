@@ -162,7 +162,7 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 .transicao-escopo { background: #131A27; }
 .transicao-como   { background: #EDF0F5; }
 .transicao-guia   { background: linear-gradient(to bottom, #EDF0F5 0, #FFFFFF 240px); } /* transição difusa vinda do Como funciona (G-50) */
-.transicao-form   { background: #EDF0F5; }
+.transicao-form   { background: linear-gradient(to bottom, #FFFFFF 0, #EDF0F5 240px); } /* transição difusa vinda do Guia completo (branco) */
 /* Brilhos da seção escura começam um pouco abaixo do topo, para a transição vinda do Escopo não marcar uma linha */
 .transicao-escopo.secao-escura::after { top: -60px; opacity: .8; }
 .transicao-escopo .fundo-gradiente-escuro span:nth-child(1) { top: 12%; }
@@ -172,7 +172,7 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
    background graphite-950, card rgba(19,26,39,.75), border .07/.12, foreground #E4E9F0, muted graphite-300,
    primary crimson-400, primary-muted .15 com crimson-300, muted rgba(40,48,67,.6), sombras escuras do DS. */
 .transicao-escopo.secao-escura { background: #0D1119; }
-.secao-escura .rv-cabecalho > p:first-child { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #E88080; }
+.secao-escura .rv-cabecalho > p:first-child { background: transparent; border-color: transparent; color: #E88080; }
 .secao-escura .rv-cabecalho > p:first-child > span { background: #E88080; }
 .secao-escura .rv-cabecalho h2 { color: #E4E9F0; }
 .secao-escura .rv-cabecalho .text-coral-600 { color: #D44D4D; }
@@ -269,3 +269,23 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .divisao-hero-cartao { max-width: 1400px; margin: 0 auto; border-radius: 36px; overflow: hidden; background: #FFFFFF; }
 @media (min-width: 640px) { .divisao-hero { padding: 0 1rem; } .divisao-hero-cartao { border-radius: 48px; } }
 @media (min-width: 1024px) { .divisao-hero { padding: 0 1.5rem; } .divisao-hero-cartao { border-radius: 56px; } }
+/* Sobre o programa: sem a mancha avermelhada no canto superior esquerdo do cartão */
+#sobre-o-programa .fundo-gradiente span:nth-child(1) { display: none; }
+
+/* ---------- Guia completo: accordion no padrão do DS, variante "Flush" ----------
+   Sem borda externa; itens separados por divisor --border. Gatilho py 16px, 0.9375rem semibold --foreground (hover: primary).
+   À direita, círculo 20px com borda --border e "+" --muted-foreground; aberto: círculo preenchido primary com "−" branco.
+   Conteúdo: pb 16px, 0.875rem, --muted-foreground, linha relaxada. A numeração ocupa o lugar do ícone da variante. */
+#accordion-group > * { margin-block: 0 !important; }
+#accordion-group .accordion-item { border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
+#accordion-group .accordion-item + .accordion-item { border-top: 1px solid rgba(19, 26, 39, 0.09); }
+#accordion-group .accordion-trigger { padding: 1rem 0; border-radius: 0; gap: 1rem; }
+#accordion-group .accordion-header, #accordion-group .accordion-item.active .accordion-header { font-size: .9375rem; font-weight: 600; line-height: 1.4; color: #131A27; gap: .75rem; transition: color .2s ease; }
+#accordion-group .accordion-trigger:hover .accordion-header { color: #B82828; }
+#accordion-group .accordion-header > span:first-child { font-size: .875rem; font-weight: 600; letter-spacing: 0; color: #B82828; min-width: 1.25rem; }
+#accordion-group .accordion-sinal { width: 1.25rem; height: 1.25rem; flex-shrink: 0; border-radius: 9999px; border: 1px solid rgba(19, 26, 39, 0.09); display: flex; align-items: center; justify-content: center; color: #627288; transition: background-color .2s ease, border-color .2s ease, color .2s ease; }
+#accordion-group .accordion-sinal svg { width: .75rem; height: .75rem; }
+#accordion-group .accordion-sinal .sinal-menos, #accordion-group .accordion-item.active .accordion-sinal .sinal-mais { display: none; }
+#accordion-group .accordion-item.active .accordion-sinal .sinal-menos { display: block; }
+#accordion-group .accordion-item.active .accordion-sinal { background: #D44D4D; border-color: #D44D4D; color: #FFFFFF; }
+#accordion-group .accordion-content > div > div { padding: 0 0 1rem; font-size: .875rem; line-height: 1.625; color: #627288; border-top: 0; }
