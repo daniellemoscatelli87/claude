@@ -251,3 +251,11 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (prefers-reduced-motion: reduce) { .cta-flutuante { transition: none; } }
 /* Celular: o botão ocupa toda a largura livre, da margem esquerda até o WhatsApp */
 @media (max-width: 639px) { .cta-flutuante { left: 20px; right: 88px; } }
+
+/* ---------- Citação de fechamento do bloco "Para sua empresa / Para o Studio" ----------
+   DS: citações usam a fonte de destaque (Fraunces, itálico regular). */
+.citacao-equilibrio { position: relative; max-width: 46rem; margin: 0 auto; padding: .75rem 0 .25rem; text-align: center; }
+.citacao-aspas { display: block; font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 4rem; line-height: .6; height: 1.75rem; color: #B82828; }
+.citacao-equilibrio blockquote { margin: 0; }
+.citacao-equilibrio blockquote p { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.25rem; line-height: 1.5; color: #131A27; }
+@media (min-width: 640px) { .citacao-equilibrio blockquote p { font-size: 1.5rem; } }
