@@ -360,6 +360,24 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-12 · DM: DS abre no modo claro; logo da Área de respiro em branco no escuro (publicado: DM v35)
+
+- **Origem:** a dona do produto fez dois pedidos:
+  - "a versão padrão do design system que tem que carregar quando o usuário entra no design system de dani moscatelli studio é a light mode";
+  - "No dark mode esse 'Dani Moscatelli' deveria ser branco", sobre o logo da Área de respiro.
+- **Verificação prévia (D-041):** `main` remota igual à local (`3c2591a`). O tema começava no escuro (`useState(true)`), e a Área de respiro usava sempre o logo de texto escuro.
+- **Feito** (commit `654f8b2`):
+  - O tema inicial passou a ser claro.
+  - Na Área de respiro, o logo de texto escuro aparece no tema claro (`Logo-Horizontal-DarkMode-1.png`). No tema escuro aparece o de texto branco (`Logo-Horizontal-LightMode.png`). Os nomes dos arquivos estão invertidos em relação ao uso, como já acontecia nos cards "Para fundos claros/escuros".
+  - Changelog atualizado.
+- **Verificação:**
+  - Build sem erros.
+  - Teste local:
+    - Com o sistema em claro e em escuro, o DS abre no claro, e o botão Escuro aplica o tema escuro.
+    - Na Área de respiro, o logo troca de arquivo conforme o tema (captura no escuro com "Dani Moscatelli" em branco).
+  - Workflow concluído: v35 no ar às 17h21 UTC (`Dvjdi7MB`).
+  - O site publicado abre no claro com o sistema em claro e em escuro.
+
 ## 2026-11-06 · Biblioteca Lucide completa nos dois design systems (publicado: DM v34 e FindLook v58)
 
 - **Origem:** a dona do produto pediu: "Importe toda a biblioteca do lucide para dentro de ambos os design systems... e se tiver ícones a mais, que não estão na lucide, mantenha. Não remova."
