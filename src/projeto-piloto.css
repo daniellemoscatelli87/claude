@@ -211,7 +211,7 @@ main section h2 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.015em
 .lado-troca + .lado-troca p.text-slate-500 { color: #495669; }
 
 /* Rótulos (selos e eyebrows) */
-main .rv-cabecalho > p:first-child, #hero p:first-of-type { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; }
+main .rv-cabecalho > p:first-child, .hero-card > p:first-child { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; }
 
 /* Vermelho com contraste AA sobre fundo claro */
 main .text-coral-600:not(.secao-escura *), #hero .text-coral-600 { color: #B82828; }
@@ -242,3 +242,12 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 /* Ícones e tags dos cards aparecem quase juntos (cascata curta) */
 .anima-pronto .rv-grupo.visivel .frente-icone { animation-delay: calc(var(--i, 0) * .03s + .1s); }
 .anima-pronto .rv-grupo.visivel .tag-frente { animation-delay: calc(var(--i, 0) * .03s + .2s + var(--t, 0) * .04s); }
+
+
+/* Botão flutuante "Cadastrar minha empresa": ao lado do WhatsApp depois que o hero sai da tela; some no formulário */
+.cta-flutuante { right: 88px; bottom: 24px; opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .3s ease, transform .4s cubic-bezier(0.16, 1, 0.3, 1); }
+.cta-flutuante.visivel { opacity: 1; transform: none; pointer-events: auto; }
+@media (min-width: 640px) { .cta-flutuante { right: 96px; bottom: 28px; } }
+@media (prefers-reduced-motion: reduce) { .cta-flutuante { transition: none; } }
+/* Celular: o botão ocupa toda a largura livre, da margem esquerda até o WhatsApp */
+@media (max-width: 639px) { .cta-flutuante { left: 20px; right: 88px; } }
