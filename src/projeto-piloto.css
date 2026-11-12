@@ -1,6 +1,6 @@
 @import "tailwindcss" source(none);
-@source "../parceiro-piloto/index.html";
-@source "./parceiro-piloto.ts";
+@source "../projeto-piloto/index.html";
+@source "./projeto-piloto.ts";
 
 /* Cores e fonte do protótipo aprovado, todas do design system oficial (primária #D44D4D). */
 @theme {
@@ -118,3 +118,9 @@ body {
   .hero-card, .anima-pronto .rv, .anima-pronto .rv-cabecalho > *, .anima-pronto .rv-grupo > *, .anima-pronto .cf-cartao { animation: none !important; opacity: 1 !important; }
   .cf-linha, .cf-num { transition: none; }
 }
+
+/* Indicador "Saiba mais" na base do hero: seta quica suavemente (Bounce do design system) */
+@keyframes rolar-quica { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+.rolar-seta { animation: rolar-quica 1.6s cubic-bezier(0.42, 0, 0.58, 1) 1.3s 3; }
+.rolar-abaixo { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) .6s both; }
+@media (prefers-reduced-motion: reduce) { .rolar-seta, .rolar-abaixo { animation: none; } }

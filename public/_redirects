@@ -3,4 +3,7 @@
 /designsystem                    https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/        200
 /designsystem/*                  https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/:splat  200
 /DaniMoscatelli-DesignSystem/*   https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/:splat  200
+# Nome antigo da página do Programa Projeto Piloto.
+/parceiro-piloto                 /projeto-piloto/                                                            301
+/parceiro-piloto/*               /projeto-piloto/:splat                                                      301
 # Endereços que não existem mostram a página 404.html (status 404), em vez da página inicial.
