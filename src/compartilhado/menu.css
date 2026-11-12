@@ -95,3 +95,11 @@ select.field option { color: var(--color-ds-fg); }
 }
 #contact-drawer .biz-label { font-size: 13px; }
 #contact-drawer, #menu-mobile { font-family: var(--font-sans); }
+
+/* Botão Contato do cabeçalho: contorno (outline). Branco sobre fundo escuro (cabeçalho rolado e sobre a foto do hero);
+   grafite sobre fundo claro, onde o branco não apareceria. */
+.btn-contato { background: transparent; border-color: #131A27; color: #131A27; }
+.btn-contato:hover { background: #131A27; color: #fff; }
+.site-header.is-scrolled .btn-contato, .cabecalho-sobre-hero .site-header:not(.is-scrolled) .btn-contato { border-color: rgb(255 255 255 / .85); color: #fff; }
+.site-header.is-scrolled .btn-contato:hover, .cabecalho-sobre-hero .site-header:not(.is-scrolled) .btn-contato:hover { background: #fff; color: #131A27; }
+.btn-contato:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.4); }

@@ -243,3 +243,9 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .anima-pronto .rv-grupo.visivel .frente-icone { animation-delay: calc(var(--i, 0) * .03s + .1s); }
 .anima-pronto .rv-grupo.visivel .tag-frente { animation-delay: calc(var(--i, 0) * .03s + .2s + var(--t, 0) * .04s); }
 
+
+/* Botão flutuante "Cadastrar minha empresa": ao lado do WhatsApp depois que o hero sai da tela; some no formulário */
+.cta-flutuante { right: 88px; bottom: 24px; opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .3s ease, transform .4s cubic-bezier(0.16, 1, 0.3, 1); }
+.cta-flutuante.visivel { opacity: 1; transform: none; pointer-events: auto; }
+@media (min-width: 640px) { .cta-flutuante { right: 96px; bottom: 28px; } }
+@media (prefers-reduced-motion: reduce) { .cta-flutuante { transition: none; } }
