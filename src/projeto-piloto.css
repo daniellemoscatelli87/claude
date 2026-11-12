@@ -162,7 +162,7 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 .transicao-escopo { background: #131A27; }
 .transicao-como   { background: #EDF0F5; }
 .transicao-guia   { background: linear-gradient(to bottom, #EDF0F5 0, #FFFFFF 240px); } /* transição difusa vinda do Como funciona (G-50) */
-.transicao-form   { background: #EDF0F5; }
+.transicao-form   { background: linear-gradient(to bottom, #FFFFFF 0, #EDF0F5 240px); } /* transição difusa vinda do Guia completo (branco) */
 /* Brilhos da seção escura começam um pouco abaixo do topo, para a transição vinda do Escopo não marcar uma linha */
 .transicao-escopo.secao-escura::after { top: -60px; opacity: .8; }
 .transicao-escopo .fundo-gradiente-escuro span:nth-child(1) { top: 12%; }
