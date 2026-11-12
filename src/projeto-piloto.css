@@ -146,3 +146,16 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
   .frente-luz, .frente-barra, .frente-num { transition: none; }
   .card-frente:hover .frente-icone, .anima-pronto .rv-grupo .frente-icone, .anima-pronto .rv-grupo .tag-frente { animation: none !important; opacity: 1 !important; }
 }
+
+/* ---------- Transições suaves de fundo entre as seções ----------
+   Cada seção termina na cor de fundo da seguinte (paleta do DS: branco, G-50 #EDF0F5, G-900 #131A27, #FAFAFA). */
+.transicao-sobre  { background: linear-gradient(to bottom, #FFFFFF 0, #FFFFFF calc(100% - 260px), #EDF0F5 100%); }
+.transicao-escopo { background: linear-gradient(to bottom, #EDF0F5 0, #EDF0F5 calc(100% - 320px), #9AA5B8 calc(100% - 140px), #131A27 100%); }
+.transicao-como   { background: linear-gradient(to bottom, #131A27 0, #131A27 calc(100% - 320px), #4A5568 calc(100% - 170px), #FAFAFA 100%); }
+.transicao-guia   { background: #FAFAFA; }
+/* Formulário: começa claro e escurece até o grafite do rodapé */
+.transicao-form   { background: linear-gradient(to bottom, #FAFAFA 0, #EDF0F5 35%, #8898B0 70%, #131A27 100%); }
+/* Brilhos da seção escura começam um pouco abaixo do topo, para a transição vinda do Escopo não marcar uma linha */
+.transicao-como.secao-escura::after { top: -60px; opacity: .8; }
+.transicao-como .fundo-gradiente-escuro span:nth-child(1) { top: 12%; }
+.transicao-como .fundo-gradiente-escuro { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 220px, #000 calc(100% - 360px), transparent calc(100% - 140px)); mask-image: linear-gradient(to bottom, transparent 0, #000 220px, #000 calc(100% - 360px), transparent calc(100% - 140px)); }
