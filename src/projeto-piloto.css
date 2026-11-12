@@ -1,4 +1,5 @@
 @import "tailwindcss" source(none);
+@import "./compartilhado/menu.css";
 @source "../projeto-piloto/index.html";
 @source "./projeto-piloto.ts";
 
@@ -35,42 +36,11 @@ body {
 .accordion-item.active .accordion-chevron { transform: rotate(180deg); color: #D44D4D; }
 .accordion-item.active .accordion-header { color: #D44D4D; }
 
-/* Cabeçalho ao rolar */
-#main-header {
-  transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
-}
-#main-header.scrolled {
-  background-color: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom-color: rgba(226, 232, 240, 0.8);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-#main-header:not(.scrolled) {
-  background-color: transparent;
-  border-bottom-color: transparent;
-  box-shadow: none;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; }
-  .accordion-content, .accordion-chevron, #main-header { transition: none !important; }
+  .accordion-content, .accordion-chevron { transition: none !important; }
 }
 
-/* Sobre a foto escura do topo: logo e "Home" claros; com o cabeçalho branco, versão para fundo claro */
-#main-header .logo-claro { display: none; }
-#main-header.scrolled .logo-claro { display: block; }
-#main-header.scrolled .logo-escuro { display: none; }
-#main-header .link-home { color: #fff; text-shadow: 0 1px 2px rgb(0 0 0 / .35); }
-#main-header.scrolled .link-home { color: #334155; text-shadow: none; }
-/* No computador a foto já mostra o logo na parede: o logo do cabeçalho só aparece depois de rolar (como no protótipo) */
-@media (min-width: 1024px) {
-  #main-header:not(.scrolled) .logo-link { visibility: hidden; }
-}
 
 /* ---------- Motion do design system (Slide Up .7s snappy, stagger .07s) ---------- */
 @keyframes ds-slide-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
@@ -145,8 +115,9 @@ body {
 .secao-escura .cf-cartao:hover { box-shadow: 0 28px 56px -16px rgba(0, 0, 0, 0.65); }
 
 /* Âncoras ("Saiba mais", menu): a seção para exatamente abaixo do cabeçalho fixo, sem sobrar faixa do hero */
-html { scroll-padding-top: 77px; }
-@media (min-width: 640px) { html { scroll-padding-top: 81px; } }
+html { scroll-padding-top: var(--altura-cabecalho, 96px); }
+/* Hero ocupa o resto da tela abaixo do cabeçalho */
+.hero-piloto { min-height: calc(100svh - var(--altura-cabecalho, 96px)); }
 
 
 

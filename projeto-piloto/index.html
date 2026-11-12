@@ -25,29 +25,12 @@
 <body class="bg-[#FAFAFA] text-slate-800 antialiased selection:bg-rose-100 selection:text-coral-600">
 <a href="#conteudo" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-4 focus:py-2 focus:rounded-full focus:bg-white focus:text-coral-700 focus:font-semibold focus:shadow-lg">Pular para o conteúdo</a>
 
-<header class="fixed top-0 left-0 right-0 z-50 border-b border-transparent bg-transparent" id="main-header">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-    <a href="/" class="logo-link flex items-center shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500">
-      <img alt="Dani Moscatelli Experience Design Studio: página inicial" class="logo-claro h-10 sm:h-12 w-auto object-contain" src="/logo-dm.png">
-      <img alt="" aria-hidden="true" class="logo-escuro h-9 sm:h-11 w-auto object-contain" src="/logo-dm-fundo-escuro.svg">
-    </a>
-    <nav aria-label="Principal" class="flex items-center gap-3 sm:gap-6">
-      <a class="link-home hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold hover:text-coral-600 transition-colors px-2 py-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500" href="/"><svg aria-hidden="true" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></a>
-      <a class="link-home hidden sm:inline-flex items-center text-sm font-semibold hover:text-coral-600 transition-colors px-2 py-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500" href="/rede-parceiros/">Quero ser parceiro</a>
-      <a class="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-full text-sm font-semibold text-coral-600 bg-white/95 backdrop-blur-sm border border-[#E2E8F0] shadow-sm hover:shadow-md hover:border-coral-200 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500" href="#inscricao"><svg aria-hidden="true" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewBox="0 0 24 24"><rect height="16" rx="2" width="20" x="2" y="4"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg><span>Contato</span></a>
-      <button type="button" id="menu-botao" aria-expanded="false" aria-controls="menu-mobile" aria-label="Abrir menu" class="link-home sm:hidden -mr-1 w-11 h-11 flex items-center justify-center rounded-full hover:bg-white/15 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500"><svg aria-hidden="true" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path data-menu="aberto" d="M4 7h16M4 12h16M4 17h16"/><path data-menu="fechado" class="hidden" d="M18 6 6 18M6 6l12 12"/></svg></button>
-    </nav>
-  </div>
-  <nav id="menu-mobile" aria-label="Menu" class="hidden sm:hidden absolute left-4 right-4 top-full mt-1 z-50 rounded-2xl bg-white border border-slate-200 shadow-2xl p-2">
-    <a href="/" class="flex items-center justify-between px-4 py-3.5 rounded-xl text-[15px] font-semibold text-slate-900 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500">Home<svg aria-hidden="true" viewBox="0 0 24 24" class="w-4 h-4 text-coral-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></a>
-    <a href="/rede-parceiros/" class="flex items-center justify-between px-4 py-3.5 rounded-xl text-[15px] font-semibold text-slate-900 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500">Quero ser parceiro<svg aria-hidden="true" viewBox="0 0 24 24" class="w-4 h-4 text-coral-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></a>
-  </nav>
-</header>
+<!-- @cabecalho:projeto -->
 
 <main id="conteudo">
-<section class="relative min-h-svh flex items-center pt-28 pb-[104px] overflow-hidden" id="hero" aria-labelledby="hero-titulo">
+<section class="hero-piloto relative flex items-center pt-8 lg:pt-6 pb-[104px] overflow-hidden" id="hero" aria-labelledby="hero-titulo">
   <div class="absolute inset-0 -z-10 overflow-hidden bg-slate-900" id="hero-fundo"><img alt="Dani Moscatelli em reunião com clientes no escritório do Dani Moscatelli Experience Design Studio" class="w-full h-full object-cover object-[35%_center] lg:object-[28%_center]" src="/projeto-piloto-hero.webp" srcset="/projeto-piloto-hero-960.webp 960w, /projeto-piloto-hero.webp 1600w" sizes="100vw" width="1600" height="900" fetchpriority="high"><div aria-hidden="true" class="absolute inset-0 bg-black/40"></div></div>
-  <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 relative z-10 flex justify-end items-center">
+  <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-0 relative z-10 flex justify-end items-center">
     <div class="hero-card w-full bg-white/95 backdrop-blur-md rounded-3xl p-8 sm:py-12 sm:px-9 shadow-2xl border border-white/60 text-left flex flex-col items-start justify-center min-h-[580px] max-w-[528px]">
       <p class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold tracking-wide mb-4"><span aria-hidden="true" class="w-2 h-2 rounded-full bg-coral-600 motion-safe:animate-pulse"></span>PROGRAMA CONTÍNUO</p>
       <h1 id="hero-titulo" class="font-extrabold text-slate-900 tracking-tight leading-tight mb-3 text-2xl sm:text-[34px] lg:text-[36px]">Programa Projeto Piloto</h1>
@@ -138,7 +121,7 @@
     </div>
   </div>
 </div></section>
-<section class="relative overflow-hidden py-16 sm:py-24 bg-[#FAFAFA] border-b border-slate-200/60" id="atuacao" aria-labelledby="atuacao-titulo"><div aria-hidden="true" class="fundo-gradiente"><span></span><span></span><span></span></div><div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="relative overflow-hidden py-16 sm:py-24 bg-[#EDF0F5]" id="atuacao" aria-labelledby="atuacao-titulo"><div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <div class="rv-cabecalho text-center max-w-3xl mx-auto mb-16">
     <p class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold tracking-wide uppercase mb-4">
       <span aria-hidden="true" class="w-1.5 h-1.5 rounded-full bg-coral-600"></span>Escopo de atuação</p>
@@ -607,5 +590,6 @@
     </div>
   </div>
 </footer>
+<!-- @gaveta -->
 </body>
 </html>

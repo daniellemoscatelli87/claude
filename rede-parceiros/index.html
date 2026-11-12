@@ -23,8 +23,12 @@
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script type="module" src="/src/rede-parceiros.ts"></script>
 <style>
+/* Ordem das camadas: o estilo próprio desta página fica abaixo do cabeçalho e da gaveta compartilhados. */
+@layer theme, base, pagina, compartilhado, utilities;
+@layer pagina {
   :root {
     --coral: #ff5656;
     --coral-soft: #fe6a62;
@@ -178,7 +182,8 @@
   .end .sign { margin-top: 20px; }
   .end .sign p { margin: 0; }
   .end .sign .motto { color: var(--coral); font-weight: 600; }
-  .hidden { display: none !important; }
+  /* Não vale para o cabeçalho, o menu e a gaveta compartilhados (eles usam o "hidden" do Tailwind) */
+  .hidden:not(.site-header, .site-header *, #menu-mobile, #menu-mobile *, #contact-drawer, #contact-drawer *, #drawer-backdrop) { display: none !important; }
   .other { margin: -2px 0 8px 34px; }
   /* Lista com um item por linha */
   .list-rows { display: grid; gap: 8px; }
@@ -228,14 +233,12 @@
   .end-head h2 { margin: 0; }
   .end-icon { flex-shrink: 0; width: 64px; height: 64px; margin: 0; border-radius: 16px; background: var(--coral-tint); color: var(--coral); display: grid; place-items: center; }
   .end-icon svg { width: 32px; height: 32px; }
+}
 </style>
 <script src="/analytics.js" defer></script>
 </head>
 <body>
-<header class="topbar">
-  <a href="/"><img class="logo-icon" src="/favicon-dm.png" alt="Dani Moscatelli | Experience Design Studio"><img class="logo-full" src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
-  <a href="/" class="btn-back">Sair</a>
-</header>
+<!-- @cabecalho:parceiros -->
 <div class="wrap">
 
   <div id="progressBox" class="hidden">
@@ -1007,6 +1010,7 @@ const isText = (t) => t.matches && t.matches('textarea, input:not([type="checkbo
 document.addEventListener("focusin", (e) => { if (isText(e.target)) document.body.classList.add("kb"); });
 document.addEventListener("focusout", (e) => { if (isText(e.target)) document.body.classList.remove("kb"); });
 </script>
+<!-- @gaveta -->
 <script src="/whatsapp.js" defer></script>
 </body>
 </html>
