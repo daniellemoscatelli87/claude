@@ -161,7 +161,7 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 .transicao-sobre  { background: #FFFFFF; }
 .transicao-escopo { background: #131A27; }
 .transicao-como   { background: #EDF0F5; }
-.transicao-guia   { background: #FFFFFF; }
+.transicao-guia   { background: linear-gradient(to bottom, #EDF0F5 0, #FFFFFF 240px); } /* transição difusa vinda do Como funciona (G-50) */
 .transicao-form   { background: #EDF0F5; }
 /* Brilhos da seção escura começam um pouco abaixo do topo, para a transição vinda do Escopo não marcar uma linha */
 .transicao-escopo.secao-escura::after { top: -60px; opacity: .8; }
