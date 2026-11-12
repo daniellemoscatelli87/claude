@@ -159,11 +159,11 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 /* ---------- Passagem entre as seções ----------
    Fundos alternados (branco, G-50, grafite, branco, G-50) para nunca repetir a cor em seções seguidas; onde o fundo fica escuro (Como funciona e rodapé), a borda é uma curva suave. */
 .transicao-sobre  { background: #FFFFFF; }
-.transicao-escopo { background: #EDF0F5; }
-.transicao-como   { background: #131A27; }
+.transicao-escopo { background: #131A27; }
+.transicao-como   { background: #EDF0F5; }
 .transicao-guia   { background: #FFFFFF; }
 .transicao-form   { background: #EDF0F5; }
 /* Brilhos da seção escura começam um pouco abaixo do topo, para a transição vinda do Escopo não marcar uma linha */
-.transicao-como.secao-escura::after { top: -60px; opacity: .8; }
-.transicao-como .fundo-gradiente-escuro span:nth-child(1) { top: 12%; }
-.transicao-como .fundo-gradiente-escuro { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); }
+.transicao-escopo.secao-escura::after { top: -60px; opacity: .8; }
+.transicao-escopo .fundo-gradiente-escuro span:nth-child(1) { top: 12%; }
+.transicao-escopo .fundo-gradiente-escuro { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); }
