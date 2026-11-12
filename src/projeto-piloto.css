@@ -322,3 +322,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 }
 /* Cards do Sobre: topo reto (sem cantos arredondados), base arredondada */
 #sobre-o-programa .lado-troca { border-radius: 0 0 16px 16px; }
+/* Escopo: sem numeração nos cards */
+.card-frente .frente-num { display: none; }
