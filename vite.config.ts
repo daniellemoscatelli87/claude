@@ -10,7 +10,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(import.meta.dirname, 'index.html'),
-        parceiroPiloto: resolve(import.meta.dirname, 'parceiro-piloto/index.html'),
+        projetoPiloto: resolve(import.meta.dirname, 'projeto-piloto/index.html'),
       },
     },
   },

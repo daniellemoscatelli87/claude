@@ -1,6 +1,6 @@
 @import "tailwindcss" source(none);
-@source "../parceiro-piloto/index.html";
-@source "./parceiro-piloto.ts";
+@source "../projeto-piloto/index.html";
+@source "./projeto-piloto.ts";
 
 /* Cores e fonte do protótipo aprovado, todas do design system oficial (primária #D44D4D). */
 @theme {
@@ -118,3 +118,28 @@ body {
   .hero-card, .anima-pronto .rv, .anima-pronto .rv-cabecalho > *, .anima-pronto .rv-grupo > *, .anima-pronto .cf-cartao { animation: none !important; opacity: 1 !important; }
   .cf-linha, .cf-num { transition: none; }
 }
+
+/* Indicador "Saiba mais" na base do hero: seta quica suavemente (Bounce do design system) */
+@keyframes rolar-quica { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+.rolar-seta { animation: rolar-quica 1.6s cubic-bezier(0.42, 0, 0.58, 1) 1.3s 3; }
+.rolar-abaixo { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) .6s both; }
+@media (prefers-reduced-motion: reduce) { .rolar-seta, .rolar-abaixo { animation: none; } }
+
+/* Fundo "Gradient Animated" do design system: manchas desfocadas que se movem devagar */
+.fundo-gradiente { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.fundo-gradiente span { position: absolute; border-radius: 9999px; filter: blur(90px); will-change: transform; }
+.fundo-gradiente span:nth-child(1) { width: 620px; height: 620px; top: -12%; left: -8%; background: rgba(245, 198, 198, 0.55); animation: blob-a 18s ease-in-out infinite alternate; }
+.fundo-gradiente span:nth-child(2) { width: 520px; height: 520px; top: -10%; left: 60%; background: rgba(214, 220, 230, 0.70); animation: blob-b 23s ease-in-out infinite alternate; }
+.fundo-gradiente span:nth-child(3) { width: 460px; height: 460px; top: 55%; left: 30%; background: rgba(253, 242, 242, 0.95); animation: blob-c 16s ease-in-out infinite alternate; }
+.fundo-gradiente-escuro span:nth-child(1) { background: rgba(139, 27, 27, 0.45); }
+.fundo-gradiente-escuro span:nth-child(2) { background: rgba(55, 65, 85, 0.60); }
+.fundo-gradiente-escuro span:nth-child(3) { background: rgba(212, 77, 77, 0.18); }
+@keyframes blob-a { 0% { transform: translate(0, 0); } 50% { transform: translate(28%, 22%); } 100% { transform: translate(-18%, 42%); } }
+@keyframes blob-b { 0% { transform: translate(0, 0); } 50% { transform: translate(-40%, 48%); } 100% { transform: translate(14%, 16%); } }
+@keyframes blob-c { 0% { transform: translate(0, 0); } 50% { transform: translate(-30%, -40%); } 100% { transform: translate(24%, -12%); } }
+@media (prefers-reduced-motion: reduce) { .fundo-gradiente span { animation: none; } }
+.secao-escura > :not(.fundo-gradiente) { position: relative; z-index: 1; }
+.secao-escura .cf-etapa.feita .cf-num, .secao-escura .cf-etapa.atual .cf-num { background-color: #D44D4D; }
+/* Sombras dos cartões no fundo escuro (a sombra clara vira "brilho" no escuro) */
+.secao-escura .cf-cartao, .secao-escura .rv.bg-white { box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.55); }
+.secao-escura .cf-cartao:hover { box-shadow: 0 28px 56px -16px rgba(0, 0, 0, 0.65); }

@@ -1,4 +1,4 @@
-import './parceiro-piloto.css';
+import './projeto-piloto.css';
 
 /* Mesmo projeto Supabase e mesma chave publicável já usados no formulário de contato da página inicial.
    A tabela parceiro_piloto só aceita inserção pelo site (RLS); a leitura é restrita ao admin. */
@@ -138,7 +138,7 @@ form.addEventListener('submit', async (e) => {
   estadoEnviando(true);
   try {
     await enviar(linha);
-    (window as any).dmEvento?.('cadastro_parceiro_piloto');
+    (window as any).dmEvento?.('cadastro_projeto_piloto');
     form.reset();
     envioId = crypto.randomUUID();
     form.classList.add('hidden');
@@ -215,4 +215,32 @@ form.addEventListener('change', (e) => {
   window.addEventListener('scroll', pedir, { passive: true });
   window.addEventListener('resize', pedir);
   atualizar();
+})();
+/* ---------- Menu sanduíche (celular) ---------- */
+(() => {
+  const botao = document.getElementById('menu-botao') as HTMLButtonElement | null;
+  const painel = document.getElementById('menu-mobile');
+  if (!botao || !painel) return;
+  const iconeAbrir = botao.querySelector('[data-menu="aberto"]')!;
+  const iconeFechar = botao.querySelector('[data-menu="fechado"]')!;
+  const definir = (aberto: boolean) => {
+    painel.classList.toggle('hidden', !aberto);
+    botao.setAttribute('aria-expanded', String(aberto));
+    botao.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
+    iconeAbrir.classList.toggle('hidden', aberto);
+    iconeFechar.classList.toggle('hidden', !aberto);
+  };
+  const aberto = () => botao.getAttribute('aria-expanded') === 'true';
+  botao.addEventListener('click', () => {
+    const abrir = !aberto();
+    definir(abrir);
+    if (abrir) painel.querySelector<HTMLElement>('a')?.focus();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && aberto()) { definir(false); botao.focus(); }
+  });
+  document.addEventListener('click', (e) => {
+    if (aberto() && !painel.contains(e.target as Node) && !botao.contains(e.target as Node)) definir(false);
+  });
+  window.matchMedia('(min-width: 640px)').addEventListener('change', (m) => { if (m.matches) definir(false); });
 })();

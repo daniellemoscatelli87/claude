@@ -3,23 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Programa Parceiro Piloto | Dani Moscatelli Experience Design Studio</title>
-<meta name="description" content="O Programa Parceiro Piloto conecta o Dani Moscatelli Experience Design Studio a empresas interessadas em compreender e aprimorar suas experiências, serviços e operações, com diagnóstico especializado sem cobrança de honorários profissionais.">
-<link rel="canonical" href="https://www.danimoscatelli.com.br/parceiro-piloto/">
+<title>Programa Projeto Piloto | Dani Moscatelli Experience Design Studio</title>
+<meta name="description" content="O Programa Projeto Piloto conecta o Dani Moscatelli Experience Design Studio a empresas interessadas em compreender e aprimorar suas experiências, serviços e operações, com diagnóstico especializado sem cobrança de honorários profissionais.">
+<link rel="canonical" href="https://www.danimoscatelli.com.br/projeto-piloto/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Dani Moscatelli Experience Design Studio">
-<meta property="og:title" content="Programa Parceiro Piloto | Dani Moscatelli Experience Design Studio">
+<meta property="og:title" content="Programa Projeto Piloto | Dani Moscatelli Experience Design Studio">
 <meta property="og:description" content="Uma nova perspectiva sobre os desafios de experiência do seu negócio.">
-<meta property="og:url" content="https://www.danimoscatelli.com.br/parceiro-piloto/">
+<meta property="og:url" content="https://www.danimoscatelli.com.br/projeto-piloto/">
 <meta property="og:image" content="https://www.danimoscatelli.com.br/compartilhar.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-<script type="module" src="/src/parceiro-piloto.ts"></script>
+<script type="module" src="/src/projeto-piloto.ts"></script>
 <script src="/analytics.js" defer></script>
+<script src="/whatsapp.js" defer></script>
 </head>
 <body class="bg-[#FAFAFA] text-slate-800 antialiased selection:bg-rose-100 selection:text-coral-600">
 <a href="#conteudo" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-4 focus:py-2 focus:rounded-full focus:bg-white focus:text-coral-700 focus:font-semibold focus:shadow-lg">Pular para o conteúdo</a>
@@ -30,34 +31,43 @@
       <img alt="Dani Moscatelli Experience Design Studio: página inicial" class="logo-claro h-10 sm:h-12 w-auto object-contain" src="/logo-dm.png">
       <img alt="" aria-hidden="true" class="logo-escuro h-9 sm:h-11 w-auto object-contain" src="/logo-dm-fundo-escuro.svg">
     </a>
-    <nav aria-label="Principal" class="flex items-center gap-4 sm:gap-7">
+    <nav aria-label="Principal" class="flex items-center gap-3 sm:gap-6">
       <a class="link-home hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold hover:text-coral-600 transition-colors px-2 py-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500" href="/"><svg aria-hidden="true" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></a>
+      <a class="link-home hidden sm:inline-flex items-center text-sm font-semibold hover:text-coral-600 transition-colors px-2 py-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500" href="/rede-parceiros/">Quero ser parceiro</a>
       <a class="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-full text-sm font-semibold text-coral-600 bg-white/95 backdrop-blur-sm border border-[#E2E8F0] shadow-sm hover:shadow-md hover:border-coral-200 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500" href="#inscricao"><svg aria-hidden="true" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewBox="0 0 24 24"><rect height="16" rx="2" width="20" x="2" y="4"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg><span>Contato</span></a>
+      <button type="button" id="menu-botao" aria-expanded="false" aria-controls="menu-mobile" aria-label="Abrir menu" class="link-home sm:hidden -mr-1 w-11 h-11 flex items-center justify-center rounded-full hover:bg-white/15 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500"><svg aria-hidden="true" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path data-menu="aberto" d="M4 7h16M4 12h16M4 17h16"/><path data-menu="fechado" class="hidden" d="M18 6 6 18M6 6l12 12"/></svg></button>
     </nav>
   </div>
+  <nav id="menu-mobile" aria-label="Menu" class="hidden sm:hidden absolute left-4 right-4 top-full mt-1 z-50 rounded-2xl bg-white border border-slate-200 shadow-2xl p-2">
+    <a href="/" class="flex items-center justify-between px-4 py-3.5 rounded-xl text-[15px] font-semibold text-slate-900 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500">Home<svg aria-hidden="true" viewBox="0 0 24 24" class="w-4 h-4 text-coral-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></a>
+    <a href="/rede-parceiros/" class="flex items-center justify-between px-4 py-3.5 rounded-xl text-[15px] font-semibold text-slate-900 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500">Quero ser parceiro<svg aria-hidden="true" viewBox="0 0 24 24" class="w-4 h-4 text-coral-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></a>
+  </nav>
 </header>
 
 <main id="conteudo">
-<section class="relative min-h-[100vh] min-h-[780px] flex items-center pt-28 pb-16 lg:pt-32 lg:pb-24 overflow-hidden border-b border-slate-200/60" id="hero" aria-labelledby="hero-titulo">
-  <div class="absolute inset-0 -z-10 overflow-hidden bg-slate-900" id="hero-fundo"><img alt="Dani Moscatelli em reunião com clientes no escritório do Dani Moscatelli Experience Design Studio" class="w-full h-full object-cover object-[35%_center] lg:object-[28%_center]" src="/parceiro-piloto-hero.webp" srcset="/parceiro-piloto-hero-960.webp 960w, /parceiro-piloto-hero.webp 1600w" sizes="100vw" width="1600" height="900" fetchpriority="high"><div aria-hidden="true" class="absolute inset-0 bg-black/40"></div></div>
+<section class="relative min-h-svh flex items-center pt-28 pb-[104px] overflow-hidden" id="hero" aria-labelledby="hero-titulo">
+  <div class="absolute inset-0 -z-10 overflow-hidden bg-slate-900" id="hero-fundo"><img alt="Dani Moscatelli em reunião com clientes no escritório do Dani Moscatelli Experience Design Studio" class="w-full h-full object-cover object-[35%_center] lg:object-[28%_center]" src="/projeto-piloto-hero.webp" srcset="/projeto-piloto-hero-960.webp 960w, /projeto-piloto-hero.webp 1600w" sizes="100vw" width="1600" height="900" fetchpriority="high"><div aria-hidden="true" class="absolute inset-0 bg-black/40"></div></div>
   <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 relative z-10 flex justify-end items-center">
-    <div class="hero-card w-full bg-white/95 backdrop-blur-md rounded-3xl p-8 sm:py-14 sm:px-9 shadow-2xl border border-white/60 text-left flex flex-col items-start justify-center min-h-[580px] max-w-[528px]">
+    <div class="hero-card w-full bg-white/95 backdrop-blur-md rounded-3xl p-8 sm:py-12 sm:px-9 shadow-2xl border border-white/60 text-left flex flex-col items-start justify-center min-h-[580px] max-w-[528px]">
       <p class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold tracking-wide mb-4"><span aria-hidden="true" class="w-2 h-2 rounded-full bg-coral-600 motion-safe:animate-pulse"></span>PROGRAMA CONTÍNUO</p>
-      <h1 id="hero-titulo" class="font-extrabold text-slate-900 tracking-tight leading-tight mb-3 text-2xl sm:text-[34px] lg:text-[36px]">Programa Parceiro Piloto</h1>
+      <h1 id="hero-titulo" class="font-extrabold text-slate-900 tracking-tight leading-tight mb-3 text-2xl sm:text-[34px] lg:text-[36px]">Programa Projeto Piloto</h1>
       <p class="font-bold text-slate-700 leading-snug mb-5 text-base sm:text-lg">Uma nova perspectiva sobre os desafios de experiência do seu negócio.</p>
       <div class="space-y-3 text-slate-600 text-sm md:text-base leading-relaxed max-w-full mb-6 text-left">
-        <p>O <strong>Programa Parceiro Piloto</strong> conecta o Dani Moscatelli Experience Design Studio a empresas que desejam aprimorar suas experiências, serviços e operações.</p>
+        <p>O <strong>Programa Projeto Piloto</strong> conecta o Dani Moscatelli Experience Design Studio a empresas que desejam aprimorar suas experiências, serviços e operações.</p>
         <p>As empresas selecionadas recebem um <strong>diagnóstico especializado</strong>, com identificação de oportunidades e recomendações estratégicas, <strong>sem custos de honorários profissionais</strong>.</p>
         <p>Em contrapartida, o Studio desenvolve estudos aplicados e, mediante acordo, documenta aprendizados e resultados.</p>
       </div>
       <div class="flex flex-col sm:flex-row sm:flex-wrap items-center sm:items-start justify-start gap-3 w-full sm:w-auto">
         <a class="w-full sm:w-auto whitespace-nowrap inline-flex items-center justify-center px-7 py-3.5 rounded-full text-sm sm:text-base font-bold text-white bg-coral-600 hover:bg-coral-700 shadow-lg shadow-coral-600/20 active:scale-[0.98] transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-coral-200" href="#inscricao"><svg aria-hidden="true" class="mr-2 w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M3 21h18"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path><path d="M9 9h1"></path><path d="M9 13h1"></path><path d="M9 17h1"></path><path d="M14 9h1"></path><path d="M14 13h1"></path><path d="M14 17h1"></path></svg>Cadastrar minha empresa</a>
-        <a class="group w-full sm:w-auto whitespace-nowrap inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-sm sm:text-base font-semibold text-slate-700 hover:text-slate-900 bg-transparent hover:bg-slate-50/80 border border-slate-300 hover:border-slate-400 transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-coral-200" href="#sobre-o-programa"><span>Saiba mais</span><svg aria-hidden="true" class="w-4 h-4 text-slate-600 transition-transform group-hover:translate-y-0.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg></a>
       </div>
     </div>
   </div>
+  <a href="#sobre-o-programa" class="rolar-abaixo group absolute bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-white text-sm font-semibold rounded-2xl px-3 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white" style="text-shadow:0 1px 2px rgb(0 0 0 / .4)">
+    <span>Saiba mais</span>
+    <span aria-hidden="true" class="rolar-seta w-10 h-10 rounded-full border border-white/50 bg-white/10 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/20 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg></span>
+  </a>
 </section>
-<section class="scroll-mt-24 py-16 sm:py-24 bg-white border-b border-slate-200/60" id="sobre-o-programa" aria-labelledby="sobre-titulo"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="relative overflow-hidden scroll-mt-24 py-16 sm:py-24 bg-white border-b border-slate-200/60" id="sobre-o-programa" aria-labelledby="sobre-titulo"><div aria-hidden="true" class="fundo-gradiente"><span></span><span></span><span></span></div><div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <div class="rv-cabecalho max-w-3xl mx-auto text-center mb-16">
     <p class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold tracking-wide uppercase mb-4">
       <span aria-hidden="true" class="w-1.5 h-1.5 rounded-full bg-coral-600"></span>Sobre o Programa</p>
@@ -134,7 +144,7 @@
     </div>
   </div>
 </div></section>
-<section class="scroll-mt-24 py-16 sm:py-24 bg-[#FAFAFA] border-b border-slate-200/60" id="atuacao" aria-labelledby="atuacao-titulo"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="relative overflow-hidden scroll-mt-24 py-16 sm:py-24 bg-[#FAFAFA] border-b border-slate-200/60" id="atuacao" aria-labelledby="atuacao-titulo"><div aria-hidden="true" class="fundo-gradiente"><span></span><span></span><span></span></div><div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <div class="rv-cabecalho text-center max-w-3xl mx-auto mb-16">
     <p class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold tracking-wide uppercase mb-4">
       <span aria-hidden="true" class="w-1.5 h-1.5 rounded-full bg-coral-600"></span>Escopo de atuação</p>
@@ -144,9 +154,9 @@
   </div>
 
   <div class="rv-grupo grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-    <article class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full" aria-labelledby="frente-1">
+    <article class="card-frente group bg-white border border-slate-100 hover:border-coral-200 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full" aria-labelledby="frente-1">
       <div>
-        <span class="w-12 h-12 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 mb-6 shadow-sm border border-coral-100"><svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+        <span class="w-14 h-14 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 mb-6 shadow-sm border border-coral-100 transition-all duration-300 group-hover:bg-coral-600 group-hover:text-white group-hover:border-coral-600 motion-safe:group-hover:scale-110 motion-safe:group-hover:-rotate-3"><svg aria-hidden="true" class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
         <h3 id="frente-1" class="text-xl font-bold text-slate-900 mb-1.5">Pesquisa e Estratégia de Experiência</h3>
         <p class="text-sm font-semibold text-coral-600 mb-3">Compreender pessoas e identificar oportunidades</p>
         <p class="text-sm text-slate-600 leading-relaxed mb-6">Investigamos necessidades, expectativas e comportamentos para compreender problemas, apoiar decisões e revelar oportunidades de evolução.</p>
@@ -157,9 +167,9 @@
         <li class="bg-slate-50 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-200/60">Diagnóstico</li>
         <li class="bg-slate-50 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-200/60">Estratégia</li>
       </ul>
-    </article><article class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full" aria-labelledby="frente-2">
+    </article><article class="card-frente group bg-white border border-slate-100 hover:border-coral-200 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full" aria-labelledby="frente-2">
       <div>
-        <span class="w-12 h-12 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 mb-6 shadow-sm border border-coral-100"><svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+        <span class="w-14 h-14 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 mb-6 shadow-sm border border-coral-100 transition-all duration-300 group-hover:bg-coral-600 group-hover:text-white group-hover:border-coral-600 motion-safe:group-hover:scale-110 motion-safe:group-hover:-rotate-3"><svg aria-hidden="true" class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
         <h3 id="frente-2" class="text-xl font-bold text-slate-900 mb-1.5">Jornadas e Experiência do Cliente</h3>
         <p class="text-sm font-semibold text-coral-600 mb-3">Melhorar cada interação ao longo da jornada</p>
         <p class="text-sm text-slate-600 leading-relaxed mb-6">Analisamos e redesenhamos jornadas físicas, digitais e híbridas para reduzir atritos e tornar as interações mais simples, integradas e relevantes.</p>
@@ -170,9 +180,9 @@
         <li class="bg-slate-50 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-200/60">Pontos de contato</li>
         <li class="bg-slate-50 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-200/60">CX</li>
       </ul>
-    </article><article class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full" aria-labelledby="frente-3">
+    </article><article class="card-frente group bg-white border border-slate-100 hover:border-coral-200 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full" aria-labelledby="frente-3">
       <div>
-        <span class="w-12 h-12 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 mb-6 shadow-sm border border-coral-100"><svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span>
+        <span class="w-14 h-14 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 mb-6 shadow-sm border border-coral-100 transition-all duration-300 group-hover:bg-coral-600 group-hover:text-white group-hover:border-coral-600 motion-safe:group-hover:scale-110 motion-safe:group-hover:-rotate-3"><svg aria-hidden="true" class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span>
         <h3 id="frente-3" class="text-xl font-bold text-slate-900 mb-1.5">Design e Transformação de Serviços</h3>
         <p class="text-sm font-semibold text-coral-600 mb-3">Alinhar operações à experiência desejada</p>
         <p class="text-sm text-slate-600 leading-relaxed mb-6">Investigamos e redesenhamos os elementos que sustentam a entrega dos serviços, conectando processos, pessoas e operações às necessidades dos clientes.</p>
@@ -183,9 +193,9 @@
         <li class="bg-slate-50 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-200/60">Operações</li>
         <li class="bg-slate-50 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-200/60">Integração</li>
       </ul>
-    </article><article class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full" aria-labelledby="frente-4">
+    </article><article class="card-frente group bg-white border border-slate-100 hover:border-coral-200 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full" aria-labelledby="frente-4">
       <div>
-        <span class="w-12 h-12 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 mb-6 shadow-sm border border-coral-100"><svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><line x1="9" y1="18" x2="15" y2="18"></line><line x1="10" y1="22" x2="14" y2="22"></line><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg></span>
+        <span class="w-14 h-14 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 mb-6 shadow-sm border border-coral-100 transition-all duration-300 group-hover:bg-coral-600 group-hover:text-white group-hover:border-coral-600 motion-safe:group-hover:scale-110 motion-safe:group-hover:-rotate-3"><svg aria-hidden="true" class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><line x1="9" y1="18" x2="15" y2="18"></line><line x1="10" y1="22" x2="14" y2="22"></line><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg></span>
         <h3 id="frente-4" class="text-xl font-bold text-slate-900 mb-1.5">Inovação e Desenvolvimento de Serviços</h3>
         <p class="text-sm font-semibold text-coral-600 mb-3">Criar e reinventar serviços a partir de necessidades reais</p>
         <p class="text-sm text-slate-600 leading-relaxed mb-6">Identificamos oportunidades para conceber, aprimorar e validar serviços e experiências que gerem valor para as pessoas e para o negócio.</p>
@@ -196,9 +206,9 @@
         <li class="bg-slate-50 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-200/60">Validação</li>
         <li class="bg-slate-50 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-200/60">Inovação</li>
       </ul>
-    </article><article class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full" aria-labelledby="frente-5">
+    </article><article class="card-frente group bg-white border border-slate-100 hover:border-coral-200 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full" aria-labelledby="frente-5">
       <div>
-        <span class="w-12 h-12 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 mb-6 shadow-sm border border-coral-100"><svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></span>
+        <span class="w-14 h-14 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 mb-6 shadow-sm border border-coral-100 transition-all duration-300 group-hover:bg-coral-600 group-hover:text-white group-hover:border-coral-600 motion-safe:group-hover:scale-110 motion-safe:group-hover:-rotate-3"><svg aria-hidden="true" class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></span>
         <h3 id="frente-5" class="text-xl font-bold text-slate-900 mb-1.5">Experiência do Colaborador</h3>
         <p class="text-sm font-semibold text-coral-600 mb-3">Melhorar a experiência de quem faz o serviço acontecer</p>
         <p class="text-sm text-slate-600 leading-relaxed mb-6">Investigamos jornadas, ferramentas e interações de trabalho que influenciam a experiência das equipes e a qualidade dos serviços entregues.</p>
@@ -209,9 +219,9 @@
         <li class="bg-slate-50 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-200/60">Colaboração</li>
         <li class="bg-slate-50 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-200/60">EX</li>
       </ul>
-    </article><article class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full" aria-labelledby="frente-6">
+    </article><article class="card-frente group bg-white border border-slate-100 hover:border-coral-200 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full" aria-labelledby="frente-6">
       <div>
-        <span class="w-12 h-12 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 mb-6 shadow-sm border border-coral-100"><svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></span>
+        <span class="w-14 h-14 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 mb-6 shadow-sm border border-coral-100 transition-all duration-300 group-hover:bg-coral-600 group-hover:text-white group-hover:border-coral-600 motion-safe:group-hover:scale-110 motion-safe:group-hover:-rotate-3"><svg aria-hidden="true" class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></span>
         <h3 id="frente-6" class="text-xl font-bold text-slate-900 mb-1.5">Estratégia e Gestão da Experiência</h3>
         <p class="text-sm font-semibold text-coral-600 mb-3">Orientar decisões e a evolução contínua da experiência</p>
         <p class="text-sm text-slate-600 leading-relaxed mb-6">Apoiamos organizações na definição de prioridades, iniciativas e indicadores para estruturar e acompanhar a evolução da experiência.</p>
@@ -225,48 +235,48 @@
     </article>
   </div>
 
-  <p class="rv max-w-3xl mx-auto mt-10 text-center text-sm text-slate-500 leading-relaxed">As frentes de atuação representam possibilidades de investigação e desenvolvimento de projetos. No Programa Parceiro Piloto, o escopo será delimitado conforme o desafio selecionado e as condições acordadas com cada empresa.</p>
+  <p class="rv max-w-3xl mx-auto mt-10 text-center text-sm text-slate-500 leading-relaxed">As frentes de atuação representam possibilidades de investigação e desenvolvimento de projetos. No Programa Projeto Piloto, o escopo será delimitado conforme o desafio selecionado e as condições acordadas com cada empresa.</p>
 </div></section>
-<section class="scroll-mt-24 py-16 bg-white border-b border-slate-200/60" id="como-funciona" aria-labelledby="como-titulo"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="secao-escura relative overflow-hidden scroll-mt-24 py-16 sm:py-24 bg-[#131A27]" id="como-funciona" aria-labelledby="como-titulo"><div aria-hidden="true" class="fundo-gradiente fundo-gradiente-escuro"><span></span><span></span><span></span></div><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <div class="rv-cabecalho text-center max-w-3xl mx-auto mb-16">
     <p class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold tracking-wide uppercase mb-4">
       <span aria-hidden="true" class="w-1.5 h-1.5 rounded-full bg-coral-600"></span>O Projeto</p>
-    <h2 id="como-titulo" class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Como funciona o <span class="text-coral-600">Programa Parceiro Piloto</span></h2>
-    <p class="text-slate-600 text-base sm:text-lg leading-relaxed">Cada projeto parte de um desafio real e segue um escopo previamente acordado, com investigação especializada e recomendações para orientar melhorias.</p>
+    <h2 id="como-titulo" class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">Como funciona o <span class="text-coral-600">Programa Projeto Piloto</span></h2>
+    <p class="text-slate-300 text-base sm:text-lg leading-relaxed">Cada projeto parte de um desafio real e segue um escopo previamente acordado, com investigação especializada e recomendações para orientar melhorias.</p>
   </div>
 
   <div class="relative max-w-4xl mx-auto mb-20 px-4 sm:px-6">
-    <div aria-hidden="true" class="absolute left-4 sm:left-1/2 top-4 bottom-4 w-0.5 bg-slate-200 -translate-x-1/2"><div class="cf-linha absolute inset-x-0 top-0 bg-coral-600 origin-top"></div></div>
+    <div aria-hidden="true" class="absolute left-4 sm:left-1/2 top-4 bottom-4 w-0.5 bg-white/15 -translate-x-1/2"><div class="cf-linha absolute inset-x-0 top-0 bg-coral-600 origin-top"></div></div>
     <ol class="cf-etapas space-y-12 sm:space-y-16 relative">
       <li class="cf-etapa relative flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-12">
-        <div class="hidden sm:block sm:w-1/2 sm:text-right pr-2" aria-hidden="true"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold">Etapa 01</span></div>
-        <div class="cf-num absolute left-4 sm:left-1/2 -translate-x-1/2 z-10 flex items-center justify-center w-12 h-12 rounded-full bg-white border-2 border-coral-600 shadow-md" aria-hidden="true"><span class="text-coral-600 font-extrabold text-sm sm:text-base leading-none">01</span></div>
+        <div class="hidden sm:block sm:w-1/2" aria-hidden="true"></div>
+        <div class="cf-num absolute left-4 sm:left-1/2 -translate-x-1/2 z-10 flex items-center justify-center w-12 h-12 rounded-full bg-[#131A27] border-2 border-coral-600 shadow-md" aria-hidden="true"><span class="text-coral-500 leading-none"><svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span></div>
         <div class="w-full sm:w-1/2 pl-12 sm:pl-2">
           <div class="cf-cartao bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 ">
-            <p class="sm:hidden mb-3 text-left"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold">Etapa 01</span></p>
-            <h3 class="text-xl font-bold text-slate-900 mb-2.5 flex items-center  gap-2.5"><span class="w-12 h-12 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 flex-shrink-0 shadow-sm border border-coral-100 "><svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span><span><span class="sr-only">Etapa 01: </span>Seleção e Alinhamento</span></h3>
+            <p class="mb-3" aria-hidden="true"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold">Etapa 01</span></p>
+            <h3 class="text-xl font-bold text-slate-900 mb-2.5 flex items-center  gap-2.5"><span><span class="sr-only">Etapa 01: </span>Seleção e Alinhamento</span></h3>
             <p class="text-slate-600 text-sm leading-relaxed mb-4">Avaliamos a aderência da empresa ao programa e definimos o desafio, os objetivos, os acessos e as condições da parceria.</p>
             <p class="pt-4 border-t border-slate-100 text-xs font-semibold text-coral-600 flex items-center  gap-1.5"><span aria-hidden="true" class="w-1.5 h-1.5 rounded-full bg-coral-600"></span><span>Escopo formalizado antes do início</span></p>
           </div>
         </div>
       </li><li class="cf-etapa relative flex flex-col sm:flex-row-reverse items-start sm:items-center gap-6 sm:gap-12">
-        <div class="hidden sm:block sm:w-1/2 sm:text-left pl-2" aria-hidden="true"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold">Etapa 02</span></div>
-        <div class="cf-num absolute left-4 sm:left-1/2 -translate-x-1/2 z-10 flex items-center justify-center w-12 h-12 rounded-full bg-white border-2 border-coral-600 shadow-md" aria-hidden="true"><span class="text-coral-600 font-extrabold text-sm sm:text-base leading-none">02</span></div>
+        <div class="hidden sm:block sm:w-1/2" aria-hidden="true"></div>
+        <div class="cf-num absolute left-4 sm:left-1/2 -translate-x-1/2 z-10 flex items-center justify-center w-12 h-12 rounded-full bg-[#131A27] border-2 border-coral-600 shadow-md" aria-hidden="true"><span class="text-coral-500 leading-none"><svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span></div>
         <div class="w-full sm:w-1/2 pl-12 sm:pr-2 sm:pl-0">
           <div class="cf-cartao bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 sm:text-right">
-            <p class="sm:hidden mb-3 text-left"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold">Etapa 02</span></p>
-            <h3 class="text-xl font-bold text-slate-900 mb-2.5 flex items-center sm:justify-end gap-2.5"><span class="w-12 h-12 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 flex-shrink-0 shadow-sm border border-coral-100 order-first sm:order-last"><svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span><span><span class="sr-only">Etapa 02: </span>Investigação e Diagnóstico</span></h3>
+            <p class="mb-3" aria-hidden="true"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold">Etapa 02</span></p>
+            <h3 class="text-xl font-bold text-slate-900 mb-2.5 flex items-center sm:justify-end gap-2.5"><span><span class="sr-only">Etapa 02: </span>Investigação e Diagnóstico</span></h3>
             <p class="text-slate-600 text-sm leading-relaxed mb-4">Analisamos a experiência selecionada, identificando necessidades, pontos de atrito e oportunidades de melhoria.</p>
             <p class="pt-4 border-t border-slate-100 text-xs font-semibold text-coral-600 flex items-center sm:justify-end gap-1.5"><span aria-hidden="true" class="w-1.5 h-1.5 rounded-full bg-coral-600"></span><span>Investigação orientada por Service Design</span></p>
           </div>
         </div>
       </li><li class="cf-etapa relative flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-12">
-        <div class="hidden sm:block sm:w-1/2 sm:text-right pr-2" aria-hidden="true"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold">Etapa 03</span></div>
-        <div class="cf-num absolute left-4 sm:left-1/2 -translate-x-1/2 z-10 flex items-center justify-center w-12 h-12 rounded-full bg-white border-2 border-coral-600 shadow-md" aria-hidden="true"><span class="text-coral-600 font-extrabold text-sm sm:text-base leading-none">03</span></div>
+        <div class="hidden sm:block sm:w-1/2" aria-hidden="true"></div>
+        <div class="cf-num absolute left-4 sm:left-1/2 -translate-x-1/2 z-10 flex items-center justify-center w-12 h-12 rounded-full bg-[#131A27] border-2 border-coral-600 shadow-md" aria-hidden="true"><span class="text-coral-500 leading-none"><svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span></div>
         <div class="w-full sm:w-1/2 pl-12 sm:pl-2">
           <div class="cf-cartao bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 motion-safe:hover:-translate-y-1.5 transition-all duration-300 ">
-            <p class="sm:hidden mb-3 text-left"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold">Etapa 03</span></p>
-            <h3 class="text-xl font-bold text-slate-900 mb-2.5 flex items-center  gap-2.5"><span class="w-12 h-12 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-600 flex-shrink-0 shadow-sm border border-coral-100 "><svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span><span><span class="sr-only">Etapa 03: </span>Recomendações Estratégicas</span></h3>
+            <p class="mb-3" aria-hidden="true"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-coral-50 border border-coral-100 text-coral-600 text-xs font-semibold">Etapa 03</span></p>
+            <h3 class="text-xl font-bold text-slate-900 mb-2.5 flex items-center  gap-2.5"><span><span class="sr-only">Etapa 03: </span>Recomendações Estratégicas</span></h3>
             <p class="text-slate-600 text-sm leading-relaxed mb-4">Consolidamos os principais achados e apresentamos recomendações priorizadas para apoiar as próximas decisões da empresa.</p>
             <p class="pt-4 border-t border-slate-100 text-xs font-semibold text-coral-600 flex items-center  gap-1.5"><span aria-hidden="true" class="w-1.5 h-1.5 rounded-full bg-coral-600"></span><span>Diagnóstico e direcionamentos</span></p>
           </div>
@@ -275,7 +285,7 @@
     </ol>
   </div>
 
-  <div class="rv bg-white border border-slate-100 rounded-3xl p-8 sm:p-10 mb-24 shadow-xl shadow-slate-200/50">
+  <div class="rv bg-white border border-slate-100 rounded-3xl p-8 sm:p-10 shadow-xl shadow-slate-200/50">
     <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
       <div class="space-y-2">
         <h3 class="text-lg sm:text-xl font-bold text-slate-900">E depois do projeto-piloto?</h3>
@@ -296,7 +306,7 @@
 <div class="accordion-item bg-white border border-slate-100 rounded-2xl shadow-sm transition-all duration-200 overflow-hidden">
   <h3>
     <button class="accordion-trigger w-full px-6 py-5 sm:px-8 sm:py-6 text-left flex items-center justify-between gap-4 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-coral-500 cursor-pointer" type="button" id="guia-botao-01" aria-expanded="false" aria-controls="guia-resposta-01">
-      <span class="text-base sm:text-lg font-bold text-slate-900 accordion-header flex items-center gap-3"><span class="text-coral-600 text-sm sm:text-base font-semibold tracking-wider">01</span>O que é o Programa Parceiro Piloto?</span>
+      <span class="text-base sm:text-lg font-bold text-slate-900 accordion-header flex items-center gap-3"><span class="text-coral-600 text-sm sm:text-base font-semibold tracking-wider">01</span>O que é o Programa Projeto Piloto?</span>
       <svg aria-hidden="true" class="accordion-chevron w-5 h-5 text-slate-400 transition-transform duration-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
     </button>
   </h3>
@@ -469,12 +479,15 @@
 </div>
 </section>
 <section class="scroll-mt-24 py-16 sm:py-24 bg-white border-t border-slate-200/70" id="inscricao" aria-labelledby="form-titulo">
-<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl lg:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 lg:grid lg:grid-cols-[5fr_7fr] lg:gap-10 lg:items-stretch">
+<figure class="rv hidden lg:block relative rounded-3xl overflow-hidden shadow-xl shadow-slate-200/50">
+  <img src="/projeto-piloto-formulario.webp" alt="Mesa de trabalho com caneca do Dani Moscatelli Experience Design Studio, notebook com uma jornada do cliente e caderno com um fluxo desenhado" width="841" height="1870" loading="lazy" class="absolute inset-0 w-full h-full object-cover object-center">
+  </figure>
 <div class="rv bg-white rounded-3xl p-6 sm:p-12 border shadow-xl shadow-slate-200/50 border-slate-100">
   <div class="text-center mb-10">
     <span aria-hidden="true" class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-coral-50 text-coral-600 mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></span>
     <h2 id="form-titulo" class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-3">Quer investigar os desafios de experiência do seu negócio?</h2>
-    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">Cadastre sua empresa para ser considerada em futuros projetos do Programa Parceiro Piloto. A seleção depende da aderência do desafio e da disponibilidade do Studio.</p>
+    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">Cadastre sua empresa para ser considerada em futuros projetos do Programa Projeto Piloto. A seleção depende da aderência do desafio e da disponibilidade do Studio.</p>
   </div>
 
   <form class="space-y-6" id="form-piloto" novalidate>
@@ -533,7 +546,7 @@
     <div>
       <div class="flex items-start gap-3 pt-1">
         <input class="mt-1 w-4 h-4 accent-coral-600 rounded border-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 flex-shrink-0" id="consentimento" name="consentimento" type="checkbox" required aria-required="true" aria-describedby="consentimento-erro">
-        <label class="text-xs text-slate-600 leading-relaxed cursor-pointer" for="consentimento">Li a <a href="/privacidade/" target="_blank" rel="noopener" class="font-semibold text-coral-700 underline underline-offset-2 hover:text-coral-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 rounded-sm">Política de Privacidade<span class="sr-only"> (abre em nova aba)</span></a> e concordo com o uso dos dados informados para avaliação no Programa Parceiro Piloto. Estou ciente de que o cadastro é uma manifestação de interesse e não garante seleção. <span aria-hidden="true">*</span></label>
+        <label class="text-xs text-slate-600 leading-relaxed cursor-pointer" for="consentimento">Li a <a href="/privacidade/" target="_blank" rel="noopener" class="font-semibold text-coral-700 underline underline-offset-2 hover:text-coral-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 rounded-sm">Política de Privacidade<span class="sr-only"> (abre em nova aba)</span></a> e concordo com o uso dos dados informados para avaliação no Programa Projeto Piloto. Estou ciente de que o cadastro é uma manifestação de interesse e não garante seleção. <span aria-hidden="true">*</span></label>
       </div>
       <p id="consentimento-erro" class="hidden mt-1.5 text-xs font-medium text-coral-700"></p>
     </div>
@@ -555,7 +568,7 @@
   <div id="form-sucesso" class="hidden text-center py-6" tabindex="-1" role="status">
     <span aria-hidden="true" class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-coral-50 text-coral-600 border border-coral-100 mb-4"><svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
     <p class="text-xl font-extrabold text-slate-900 mb-2">Cadastro recebido</p>
-    <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-md mx-auto">Obrigado pelo interesse no Programa Parceiro Piloto. Se houver aderência entre o desafio da sua empresa e um projeto, o Studio entrará em contato. Não há prazo definido para esse contato.</p>
+    <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-md mx-auto">Obrigado pelo interesse no Programa Projeto Piloto. Se houver aderência entre o desafio da sua empresa e um projeto, o Studio entrará em contato. Não há prazo definido para esse contato.</p>
   </div>
 </div>
 </div>
