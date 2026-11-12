@@ -124,3 +124,28 @@ body {
 .rolar-seta { animation: rolar-quica 1.6s cubic-bezier(0.42, 0, 0.58, 1) 1.3s 3; }
 .rolar-abaixo { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) .6s both; }
 @media (prefers-reduced-motion: reduce) { .rolar-seta, .rolar-abaixo { animation: none; } }
+
+/* Fundos do design system (mesma grade sutil da página inicial) */
+.grade-sutil {
+  background-size: 48px 48px;
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+}
+/* "Como funciona" em fundo escuro: grade clara e brilho vermelho discreto */
+.secao-escura::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-size: 48px 48px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+.secao-escura::after {
+  content: ""; position: absolute; left: 50%; top: -220px; width: 760px; height: 520px; transform: translateX(-50%);
+  border-radius: 9999px; background: radial-gradient(closest-side, rgba(212, 77, 77, 0.28), transparent); filter: blur(20px); pointer-events: none;
+}
+.secao-escura > * { position: relative; z-index: 1; }
+.secao-escura .cf-etapa.feita .cf-num, .secao-escura .cf-etapa.atual .cf-num { background-color: #D44D4D; }
+/* Sombras dos cartões no fundo escuro (a sombra clara vira "brilho" no escuro) */
+.secao-escura .cf-cartao, .secao-escura .rv.bg-white { box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.55); }
+.secao-escura .cf-cartao:hover { box-shadow: 0 28px 56px -16px rgba(0, 0, 0, 0.65); }
