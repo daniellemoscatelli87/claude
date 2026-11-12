@@ -161,7 +161,7 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 .transicao-sobre  { background: #FFFFFF; }
 .transicao-escopo { background: #131A27; }
 .transicao-como   { background: #EDF0F5; }
-.transicao-guia   { background: #FFFFFF; }
+.transicao-guia   { background: linear-gradient(to bottom, #EDF0F5 0, #FFFFFF 240px); } /* transição difusa vinda do Como funciona (G-50) */
 .transicao-form   { background: #EDF0F5; }
 /* Brilhos da seção escura começam um pouco abaixo do topo, para a transição vinda do Escopo não marcar uma linha */
 .transicao-escopo.secao-escura::after { top: -60px; opacity: .8; }
@@ -251,3 +251,11 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (prefers-reduced-motion: reduce) { .cta-flutuante { transition: none; } }
 /* Celular: o botão ocupa toda a largura livre, da margem esquerda até o WhatsApp */
 @media (max-width: 639px) { .cta-flutuante { left: 20px; right: 88px; } }
+
+/* ---------- Citação de fechamento do bloco "Para sua empresa / Para o Studio" ----------
+   Toda em Plus Jakarta itálico; palavras de destaque em vermelho. */
+.citacao-equilibrio { position: relative; max-width: 46rem; margin-left: auto; margin-right: auto; padding: .75rem 0 .25rem; text-align: center; }
+.citacao-aspas { display: block; font-style: italic; font-weight: 700; font-size: 4rem; line-height: .6; height: 1.75rem; color: #B82828; }
+.citacao-equilibrio blockquote { margin: 0; }
+.citacao-equilibrio blockquote p { font-style: italic; font-weight: 700; font-size: 1.25rem; line-height: 1.5; letter-spacing: -0.01em; color: #131A27; }
+@media (min-width: 640px) { .citacao-equilibrio blockquote p { font-size: 1.5rem; } }
