@@ -360,6 +360,31 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-12 · Cards sobre fundo branco: borda e nenhuma sombra (publicado: DM v39 e FindLook v62; site em PR)
+
+- **Origem:** a dona do produto, com captura do formulário da página `/projeto-piloto/` do site: "no design system quando temos um card sobre um fundo branco ele não tem sombra, ele tem borda cinza clara". Ela escolheu registrar a regra nos dois DS e corrigir o site.
+- **Verificação prévia (D-041):**
+  - `main` remota igual à local nos dois DS.
+  - O componente base `Card` já tinha borda e nenhuma sombra.
+  - A documentação de Cards dizia "Elevação: var(--shadow-sm)", e muitos exemplos usavam sombra parada.
+  - A página `/projeto-piloto/` é do `main` do site, alterada pouco antes por outra conversa (PR #77).
+- **Feito:**
+  - **Regra nos dois DS** (DM `b9a61dc`, FindLook `b4c333a`), na seção Cards:
+    - nas diretrizes ("Sobre fundo branco, use borda cinza clara (--border) e nenhuma sombra" e "Não coloque sombra em card parado sobre fundo branco");
+    - na regra de elevação;
+    - na tabela de especificação ("Nenhuma sobre fundo branco (--border); sombra só em hover, sobreposições ou fundo que não é branco").
+  - **FindLook** (página branca): saiu a sombra parada de todos os cards com borda sobre o branco.
+    - Foram 101 ocorrências nos exemplos e templates.
+    - Também os componentes: card de peça, timeline, card de parceiro, card do painel, seletor de loja, card de ajuda, busca do painel, card de plano, tabela de produtos e indicador.
+    - Ficaram de fora: a escala de sombras em Fundamentos, os controles (slider, barra de menu, controle segmentado), as etiquetas e botões, as sobreposições e os estados de hover.
+  - **DM:** só a documentação. A página do DM é off-white (graphite-50), não branca, e a regra de card aninhado já pedia `shadow-none`.
+  - **Site:** branch `claude/projeto-piloto-card-borda`, criado a partir do `main` (`1d866b7`), com uma linha no card do formulário: `border shadow-xl shadow-slate-200/50 border-slate-100` virou `border border-slate-200`. Pull request: https://github.com/daniellemoscatelli87/claude/pull/79. Ainda não foi mesclado; não está no ar.
+- **Verificação:**
+  - Builds sem erros.
+  - Protótipo do painel do FindLook com as 9 páginas funcionando e sem erros.
+  - Captura dos cards de indicador só com borda.
+  - Workflows concluídos: DM v39 e FindLook v62 no ar às 18h39 UTC.
+
 ## 2026-11-12 · Menu "Comece aqui", brilho do cabeçalho no claro e versão real nas páginas (publicado: DM v36 a v38; FindLook v59 a v61)
 
 - **Origem:** três pedidos da dona do produto:

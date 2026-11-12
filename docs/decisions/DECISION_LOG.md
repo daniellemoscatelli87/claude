@@ -409,6 +409,20 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-044 · 12/11/2026 · Card sobre fundo branco: borda cinza clara, sem sombra
+
+- **Origem:** dona do produto: "no design system quando temos um card sobre um fundo branco ele não tem sombra, ele tem borda cinza clara". Vale para os dois design systems e para o site.
+- **Decisão:**
+  - Card parado sobre fundo branco usa borda cinza clara (`--border` nos DS; `border-slate-200` no site) e nenhuma sombra.
+  - A sombra fica para hover, sobreposições (menus, diálogos, painéis) e cards sobre fundo que não é branco.
+  - Card aninhado continua sem sombra.
+- **Fundamento:** hierarquia limpa e coerente com o componente base `Card`, que já não tinha sombra.
+- **Trade-off:**
+  - O FindLook, de página branca, ficou mais plano.
+  - A escala de sombras continua documentada em Fundamentos, para os usos permitidos.
+
+---
+
 ## D-043 · 06/11/2026 · Ícones: Lucide completa (1.70.0) e ícones de marca preservados
 
 - **Origem:** dona do produto: "Importe toda a biblioteca do lucide para dentro de ambos os design systems... e se tiver ícones a mais, que não estão na lucide, mantenha. Não remova."
