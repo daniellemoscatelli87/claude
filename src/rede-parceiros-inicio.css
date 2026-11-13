@@ -838,3 +838,37 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-orbita-area { display: flex; justify-content: center; margin-top: 3rem; }
 .rx-orbita-area .rx-orbita { margin: 0 auto !important; }
 @media (max-width: 1023px) { .rx-orbita-area .rx-orbita { display: block !important; --r0: 64px; --r1: 104px; --r2: 146px; width: min(340px, 100%) !important; } .rx-orbita-area .rx-centro { width: 4rem !important; height: 4rem !important; } .rx-orbita-area .rx-av { width: 38px; height: 38px; } }
+/* Especialidades em bento grid: Design maior, depois Tecnologia, Dados e Pesquisa */
+.rx-quem .rx-bento { display: grid !important; grid-template-columns: repeat(20, minmax(0, 1fr)) !important; gap: .875rem !important; max-width: 72rem !important; width: 100%; margin: 0 auto !important; padding: 0 !important; list-style: none; background: none !important; border: 0 !important; border-radius: 0 !important; }
+.rx-quem .rx-bento::before { content: none !important; display: none !important; }
+.rx-quem .rx-bento li { grid-column: span 4 !important; display: flex !important; flex-direction: column; justify-content: space-between; gap: 1.25rem !important; padding: 1.25rem !important; border: 1px solid #EDF0F5 !important; border-radius: 20px !important; background: #F6F7FA !important; box-shadow: none !important; }
+.rx-quem .rx-bento .rx-ic { width: 2.5rem !important; height: 2.5rem !important; border-radius: 12px !important; background: rgba(212, 77, 77, 0.10) !important; box-shadow: none !important; }
+.rx-quem .rx-bento .rx-ic svg { width: 1.25rem; height: 1.25rem; }
+.rx-quem .rx-bento h3 { margin: 0 0 .375rem !important; font-size: 1rem !important; font-weight: 700; color: #131A27; }
+.rx-quem .rx-bento p { display: block !important; margin: 0; font-size: .875rem; line-height: 1.55; color: #495669; }
+.rx-quem .rx-bento .rx-b-design { grid-column: span 10 !important; grid-row: span 2; padding: 2rem !important; }
+.rx-quem .rx-bento .rx-b-design .rx-ic { width: 3.5rem !important; height: 3.5rem !important; border-radius: 16px !important; }
+.rx-quem .rx-bento .rx-b-design .rx-ic svg { width: 1.75rem; height: 1.75rem; }
+.rx-quem .rx-bento .rx-b-design h3 { font-size: 1.75rem !important; margin-bottom: .5rem !important; }
+.rx-quem .rx-bento .rx-b-design p { font-size: 1.0625rem; max-width: 26rem; }
+.rx-quem .rx-bento .rx-b-tec { grid-column: span 10 !important; }
+.rx-quem .rx-bento .rx-b-tec h3 { font-size: 1.25rem !important; }
+.rx-quem .rx-bento .rx-b-dados, .rx-quem .rx-bento .rx-b-pesq { grid-column: span 5 !important; }
+.rx-quem .rx-bento .rx-b-dados h3, .rx-quem .rx-bento .rx-b-pesq h3 { font-size: 1.125rem !important; }
+@media (max-width: 1023px) {
+  .rx-quem .rx-bento { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .rx-quem .rx-bento li { grid-column: span 1 !important; }
+  .rx-quem .rx-bento .rx-b-design, .rx-quem .rx-bento .rx-b-tec, .rx-quem .rx-bento li:last-child { grid-column: 1 / -1 !important; grid-row: auto; }
+  .rx-quem .rx-bento .rx-b-dados, .rx-quem .rx-bento .rx-b-pesq { grid-column: span 1 !important; }
+  .rx-quem .rx-bento .rx-b-design { padding: 1.5rem !important; }
+  .rx-quem .rx-bento .rx-b-design h3 { font-size: 1.5rem !important; }
+}
+@media (max-width: 639px) {
+  .rx-quem .rx-bento { grid-template-columns: 1fr !important; }
+  .rx-quem .rx-bento li, .rx-quem .rx-bento .rx-b-dados, .rx-quem .rx-bento .rx-b-pesq { grid-column: 1 / -1 !important; }
+  .rx-quem .rx-bento li:not(.rx-b-design) { flex-direction: row; align-items: flex-start; justify-content: flex-start; gap: .875rem !important; padding: 1rem !important; }
+  .rx-quem .rx-bento li:not(.rx-b-design) .rx-ic { flex: none; }
+}
+.rx-quem .rx-bento li { align-items: flex-start !important; text-align: left !important; }
+.rx-quem .rx-bento .rx-ic { margin: 0 !important; align-self: flex-start !important; flex: none; }
+.rx-quem .rx-bento li > div { margin: 0 !important; padding: 0 !important; width: 100%; }
