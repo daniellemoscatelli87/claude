@@ -854,3 +854,34 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .rolar-abaixo:hover .rolar-seta { background: #FDF2F2 !important; }
   .rolar-abaixo:focus-visible { box-shadow: inset 0 0 0 2px #D44D4D; }
 }
+/* Desktop: a foto do hero fica parada enquanto o painel arredondado sobe na rolagem (efeito janela, como no modelo) */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  #hero-fundo { background-image: image-set(url("/projeto-piloto-hero-v6.webp") 1x); background-size: cover; background-position: 28% center; background-repeat: no-repeat; background-attachment: fixed; }
+  #hero-fundo img { opacity: 0; }
+}
+
+/* Desktop: menu em pílula clara centralizada (ícone + opções), no estilo do modelo, encaixado no hero arredondado */
+@media (min-width: 1024px) {
+  .cabecalho-sobre-hero .site-header, .cabecalho-sobre-hero .site-header.is-scrolled { background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; pointer-events: none; }
+  .cabecalho-sobre-hero .site-header header { pointer-events: auto; width: fit-content !important; max-width: none; margin: 1.75rem auto 0; padding: .5rem .5rem .5rem .75rem !important; justify-content: center; gap: 2.25rem;
+    background: rgba(255, 255, 255, 0.92); -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 9999px;
+    box-shadow: 0 8px 24px -12px rgba(13, 17, 25, 0.35); transition: box-shadow .3s ease; }
+  .cabecalho-sobre-hero .site-header.is-scrolled header { box-shadow: 0 10px 30px -10px rgba(13, 17, 25, 0.35); }
+  /* só o ícone da marca */
+  .cabecalho-sobre-hero .site-header header > a:first-child { visibility: visible !important; height: 2.75rem !important; }
+  .cabecalho-sobre-hero .site-header .logo-completo { display: none !important; }
+  .cabecalho-sobre-hero .site-header .logo-icone { display: block !important; height: 2.5rem !important; animation: none !important; }
+  .cabecalho-sobre-hero .site-header header > div { gap: 2.25rem; }
+  /* opções em grafite, página atual em vermelho sublinhado */
+  .cabecalho-sobre-hero .site-header nav[aria-label="Principal"] { gap: 2.25rem; }
+  .cabecalho-sobre-hero .site-header nav[aria-label="Principal"] a { color: #131A27 !important; text-shadow: none !important; font-size: .9375rem; font-weight: 500; }
+  .cabecalho-sobre-hero .site-header nav[aria-label="Principal"] a:hover { color: #D44D4D !important; }
+  .cabecalho-sobre-hero .site-header nav[aria-label="Principal"] a[aria-current="page"] { color: #D44D4D !important; text-decoration-color: #D44D4D; }
+  /* "Contato" vira uma opção como as outras */
+  .cabecalho-sobre-hero .site-header .btn-contato { padding: 0 1.25rem 0 0 !important; border: 0 !important; background: transparent !important; color: #131A27 !important; font-size: .9375rem; font-weight: 500; transform: none !important; }
+  .cabecalho-sobre-hero .site-header .btn-contato:hover { color: #D44D4D !important; background: transparent !important; }
+}
+@media (min-width: 1024px) {
+  .cabecalho-sobre-hero .site-header { padding-top: 2rem; }
+  .cabecalho-sobre-hero .site-header header { margin: 0 auto !important; }
+}
