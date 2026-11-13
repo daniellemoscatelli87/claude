@@ -443,3 +443,13 @@ html.cadastro-aberto { overflow: hidden; }
 .cadastro-tela-topo { display: none !important; }
 .rp-checklist-caixas p a { color: #D44D4D; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
 .rp-checklist-caixas p a:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); border-radius: 3px; }
+
+/* Desktop: cadastro numa modal grande centralizada, sobre fundo escurecido (clicar fora fecha) */
+@media (min-width: 1024px) {
+  .cadastro-tela { align-items: center; justify-content: center; padding: 2rem; background: rgba(13, 17, 25, 0.55); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    transform: none; opacity: 0; transition: opacity .2s ease, visibility 0s linear .2s; }
+  .cadastro-tela.aberta { opacity: 1; transition: opacity .25s ease, visibility 0s; }
+  .cadastro-tela iframe { flex: none; width: min(960px, 100%); height: min(90vh, 920px); border-radius: 24px; overflow: hidden;
+    box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 24px 64px rgba(13, 17, 25, 0.25); transform: translateY(16px); transition: transform .35s cubic-bezier(0.16, 1, 0.3, 1); }
+  .cadastro-tela.aberta iframe { transform: none; }
+}
