@@ -579,3 +579,8 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .cf-cartao-depois .depois-cta:hover { background: #FFFFFF; color: #131A27; }
 }
 @media (max-width: 359px) { .cf-cartao-depois .depois-cta { white-space: nowrap; height: 2.75rem; min-height: 0; padding: 0 1rem; } }
+/* Card "E depois" (celular): outline no padrão vermelho */
+@media (max-width: 639px) {
+  .cf-cartao-depois .depois-cta { border-color: #E88080; color: #E88080; }
+  .cf-cartao-depois .depois-cta:hover { background: #B82828; border-color: #B82828; color: #FFFFFF; }
+}
