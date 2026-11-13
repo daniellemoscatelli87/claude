@@ -622,3 +622,34 @@ body.parceiros-inicio { background: #EEF2F7 linear-gradient(#FFFFFF, #FFFFFF) to
 }
 @media (max-width: 639px) { .rx-lgpd { grid-template-columns: 1fr; padding: 1.25rem; } }
 #formatos .rx-passo-ic { box-shadow: 0 0 0 6px #F6F7FA; }
+
+/* Formatos: lista numerada editorial (01–04), fios finos, ícone à direita */
+.rx-numerada { list-style: none; margin: 3rem auto 0; padding: 0; max-width: 48rem; }
+.rx-numerada li { display: grid; grid-template-columns: 4.5rem 1fr 3rem; align-items: center; gap: 1rem; padding: 1.375rem 0; border-top: 1px solid #E8EDF3; }
+.rx-numerada li:last-child { border-bottom: 1px solid #E8EDF3; }
+.rx-num { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: #D44D4D; }
+.rx-numerada h3 { margin: 0; font-size: 1.25rem; font-weight: 600; line-height: 1.35; color: #131A27; }
+.rx-num-ic { width: 3rem; height: 3rem; border-radius: 9999px; display: flex; align-items: center; justify-content: center; background: #FFFFFF; color: #495669; box-shadow: 0 0 0 1px rgba(19, 26, 39, 0.09); }
+.rx-num-ic svg { width: 1.25rem; height: 1.25rem; stroke-width: 1.75; }
+@media (max-width: 639px) { .rx-numerada li { grid-template-columns: 3rem 1fr 2.5rem; padding: 1.125rem 0; } .rx-num { font-size: 1.5rem; } .rx-numerada h3 { font-size: 1.0625rem; } .rx-num-ic { width: 2.5rem; height: 2.5rem; } }
+
+/* Sobre este cadastro: accordion no padrão do FAQ do Projeto Piloto */
+.rx-saber-lista, .rx-lgpd { display: none !important; }
+.rx-acc { display: grid; gap: .75rem; }
+.rx-acc-item { border-radius: 16px; border: 1px solid rgba(19, 26, 39, 0.09); background: #FFFFFF; overflow: hidden; }
+.rx-acc-item summary { list-style: none; display: flex; align-items: center; gap: .875rem; padding: 1.25rem 1.5rem; cursor: pointer; }
+.rx-acc-item summary::-webkit-details-marker { display: none; }
+.rx-acc-num { font-size: .9375rem; font-weight: 600; letter-spacing: .04em; color: #D44D4D; flex: none; }
+.rx-acc-tit { flex: 1; font-size: 1.0625rem; font-weight: 600; line-height: 1.4; color: #131A27; transition: color .2s ease; }
+.rx-acc-seta { flex: none; width: 1.25rem; height: 1.25rem; color: #627288; transition: transform .2s ease, color .2s ease; }
+.rx-acc-item[open] .rx-acc-seta { transform: rotate(180deg); color: #D44D4D; }
+.rx-acc-item summary:hover .rx-acc-tit, .rx-acc-item summary:hover .rx-acc-seta { color: #D44D4D; }
+.rx-acc-item summary:focus-visible { outline: none; box-shadow: inset 0 0 0 2px rgba(212, 77, 77, 0.45); border-radius: 16px; }
+.rx-acc-corpo { padding: 0 1.5rem 1.375rem calc(1.5rem + 1.75rem); }
+.rx-acc-corpo p { margin: 0; padding-top: 1rem; border-top: 1px solid #EDF0F5; font-size: .9375rem; line-height: 1.65; color: #495669; }
+.rx-acc-corpo a { color: #D44D4D; text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 639px) { .rx-acc-item summary { padding: 1rem 1.125rem; } .rx-acc-corpo { padding: 0 1.125rem 1.125rem; } .rx-acc-tit { font-size: 1rem; } }
+/* números do accordion com a mesma largura, para os títulos alinharem */
+.rx-acc-num { width: 1.5rem; }
+.rx-acc-corpo { padding-left: calc(1.5rem + 1.5rem + .875rem); }
+@media (max-width: 639px) { .rx-acc-corpo { padding-left: 1.125rem; } }
