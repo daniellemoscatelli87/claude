@@ -865,3 +865,13 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .hero-forma-circulo { left: calc(50% + .6rem) !important; }
   .hero-piloto { padding-top: calc(4.75rem + min(74vw, 19rem) * 1.25 + 1.5rem) !important; }
 }
+/* tags distribuídas em volta das cápsulas (desktop) */
+@media (min-width: 1024px) {
+  .hero-chips { display: block !important; left: 9% !important; top: 11% !important; bottom: auto !important; width: min(34vw, 62vh) !important; aspect-ratio: 4 / 5; pointer-events: none; }
+  .hero-chip { position: absolute; margin: 0 !important; }
+  .hero-chip:nth-child(1) { top: 19%; left: -14%; }
+  .hero-chip:nth-child(2) { top: 50%; right: -24%; }
+  .hero-chip:nth-child(3) { top: 93%; left: 22%; }
+}
+@media (min-width: 1024px) { .hero-chip:nth-child(2) { top: 69%; right: -26%; } }
+@media (min-width: 1024px) { .hero-chip:nth-child(2) { top: 76%; } }
