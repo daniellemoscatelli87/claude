@@ -441,3 +441,5 @@ html.cadastro-aberto { overflow: hidden; }
 
 /* O cabeçalho da janela (título, X e progresso) vem do próprio formulário */
 .cadastro-tela-topo { display: none !important; }
+.rp-checklist-caixas p a { color: #D44D4D; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
+.rp-checklist-caixas p a:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); border-radius: 3px; }
