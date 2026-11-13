@@ -409,3 +409,103 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (prefers-reduced-motion: no-preference) { .card-frente:hover::after { animation-duration: 6s; } }
 /* Escopo: borda animada mais refinada, vermelho com grafite claro (receita do DS: primary, chart-2, primary), 1.5px */
 .secao-escura .card-frente::after { padding: 1.5px; background-image: radial-gradient(transparent, #D44D4D, #B3BDD0, #D44D4D, transparent); }
+
+/* ---------- Guia: tipografia única dentro das respostas do accordion ----------
+   Corpo: 13px/400 --muted-foreground (#627288). Ênfases (frases de abertura, "Não.", negritos): 13px/600 --foreground (#131A27).
+   Notas finais no mesmo tamanho e cor do corpo. */
+#accordion-group .accordion-content p, #accordion-group .accordion-content li, #accordion-group .accordion-content span:not(.text-coral-600) { font-size: .8125rem; line-height: 1.625; }
+#accordion-group .accordion-content p.text-slate-500 { font-size: .8125rem; color: #627288; }
+#accordion-group .accordion-content p.text-slate-800, #accordion-group .accordion-content p.text-slate-900,
+#accordion-group .accordion-content strong { font-size: .8125rem; font-weight: 600; color: #131A27; }
+/* Botão subir com o mesmo tamanho (56px) e a mesma linha de base do botão do WhatsApp, 12px de distância */
+.botao-subir { width: 3.5rem; height: 3.5rem; right: 88px; bottom: 20px; }
+@media (min-width: 640px) { .botao-subir { right: 92px; bottom: 24px; } }
+.botao-subir svg { width: 1.5rem; height: 1.5rem; }
+/* Mobile: card do hero logo abaixo do cabeçalho (sem centralizar na tela) */
+@media (max-width: 767px) {
+  .hero-piloto { align-items: flex-start; padding-top: calc(var(--altura-cabecalho, 68px) + .75rem) !important; }
+}
+@media (max-width: 767px) { .rolar-abaixo { display: none !important; } } /* sem "Saiba mais" no celular */
+@media (max-width: 767px) { .hero-piloto { padding-bottom: 2.5rem !important; min-height: 0; } } /* sem o "Saiba mais", o hero termina logo após o card */
+
+/* ---------- Celular: "Para sua empresa" e "Para o Studio" como accordion (o primeiro abre aberto) ---------- */
+.lado-seta { display: none; }
+@media (max-width: 767px) {
+  #sobre-o-programa .lado-troca.lado-acordeao > div:first-child { cursor: pointer; margin-bottom: 0 !important; }
+  #sobre-o-programa .lado-troca.lado-acordeao:not(.fechado) > div:first-child { margin-bottom: 1.5rem !important; }
+  #sobre-o-programa .lado-troca.lado-acordeao > div:first-child:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); border-radius: 6px; }
+  #sobre-o-programa .lado-troca.fechado > :not(:first-child) { display: none !important; }
+  #sobre-o-programa .lado-troca + .lado-troca { margin-top: 2rem !important; }
+  .lado-acordeao .lado-seta { display: block; margin-left: auto; width: 1.25rem; height: 1.25rem; color: #627288; transition: transform .2s ease; }
+  .lado-acordeao:not(.fechado) .lado-seta { transform: rotate(180deg); color: #B82828; }
+}
+
+/* ---------- Celular: Escopo como carrossel (rolagem lateral com encaixe), sempre mostrando parte do próximo card ---------- */
+@media (max-width: 767px) {
+  .escopo-carrossel { display: flex; gap: 1rem; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+    margin-left: -1rem; margin-right: -1rem; padding: .25rem 1rem 1rem; scroll-padding-inline: 1rem; scrollbar-width: none; }
+  .escopo-carrossel::-webkit-scrollbar { display: none; }
+  .escopo-carrossel { align-items: stretch !important; }
+  .escopo-carrossel > .card-frente { flex: 0 0 84%; scroll-snap-align: start; height: auto !important; align-self: stretch !important; }
+  .escopo-carrossel:focus-visible { outline: none; box-shadow: inset 0 0 0 2px rgba(232, 128, 128, 0.6); border-radius: 1.5rem; }
+}
+/* Celular: "E depois do projeto-piloto?" centralizado e sem o botão (o botão flutuante já está sempre na tela) */
+@media (max-width: 767px) {
+  .depois-piloto { align-items: center; text-align: center; }
+  .depois-piloto > a[href="#inscricao"] { display: none; }
+}
+/* Celular: conteúdo do card do hero centralizado */
+@media (max-width: 767px) { .hero-card, .hero-card * { text-align: center !important; } .hero-card { align-items: center; } }
+
+/* ---------- Aviso de uso dos dados: alerta "warning" do DS (fundo --warning-muted, borda warning/20, ícone --warning) ---------- */
+.aviso-dados { display: flex; align-items: flex-start; gap: .75rem; margin: 0; padding: .875rem 1rem; border-radius: 12px;
+  background: rgba(229, 169, 78, 0.1); border: 1px solid rgba(229, 169, 78, 0.2);
+  font-size: .875rem; line-height: 1.625; color: #495669; text-align: left; }
+.aviso-dados-icone { width: 1.25rem; height: 1.25rem; flex-shrink: 0; margin-top: .125rem; color: #e5a94e; }
+
+/* ---------- Card de convite (DS: "Card de convite ao parceiro", horizontal, tamanho G, superfície card) ---------- */
+.convite-card { position: relative; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; gap: 1.5rem;
+  border-radius: 24px; border: 1px solid rgba(19, 26, 39, 0.09); background: #FFFFFF; color: #131A27; padding: 2rem;
+  box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); transition: box-shadow .2s ease; }
+.convite-card:hover { box-shadow: 0 8px 24px rgba(13, 17, 25, 0.09), 0 20px 48px rgba(13, 17, 25, 0.07); }
+@media (min-width: 640px) { .convite-card { flex-direction: row; align-items: center; padding: 3rem; } }
+.convite-luz { position: absolute; z-index: -1; pointer-events: none; border-radius: 9999px; filter: blur(64px); }
+.convite-luz-1 { right: -4rem; top: -4rem; width: 14rem; height: 14rem; background: rgba(212, 77, 77, 0.10); }
+.convite-luz-2 { left: -2.5rem; bottom: -5rem; width: 10rem; height: 10rem; background: rgba(212, 77, 77, 0.05); }
+.convite-visual { flex-shrink: 0; width: 6rem; height: 6rem; border-radius: 18px; background: #FDF2F2; color: #D44D4D; display: flex; align-items: center; justify-content: center; }
+.convite-visual svg { width: 3rem; height: 3rem; }
+@media (min-width: 640px) { .convite-visual { order: 2; } }
+.convite-conteudo { min-width: 0; flex: 1; }
+.convite-selo { display: inline-flex; align-items: center; gap: .5rem; margin: 0 0 .75rem; padding: .375rem .875rem; border-radius: 9999px; border: 1px solid rgba(19, 26, 39, 0.09); background: #FFFFFF;
+  font-size: .75rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #283043; white-space: nowrap; }
+.convite-selo span { width: .5rem; height: .5rem; border-radius: 9999px; background: #D44D4D; }
+.convite-titulo { margin: 0; font-size: 2rem; line-height: 1.1; letter-spacing: -0.03em; font-weight: 700; color: #131A27; text-wrap: balance; }
+@media (min-width: 640px) { .convite-titulo { font-size: 2.5rem; } }
+.convite-texto { margin: .5rem 0 0; max-width: 65ch; font-size: 1.0625rem; line-height: 1.625; color: #495669; }
+.convite-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin-top: 1.5rem; }
+.convite-cta { display: inline-flex; align-items: center; gap: .5rem; height: 3rem; padding: 0 1.5rem; border: 0; border-radius: 9999px; background: #B82828; color: #FFFFFF;
+  font: inherit; font-size: .9375rem; font-weight: 600; cursor: pointer; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease; }
+.convite-cta:hover { transform: translateY(-2px); background: #8C1B1B; box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06); }
+.convite-cta:focus-visible, .convite-link:focus-visible { outline: none; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px rgba(212, 77, 77, 0.6); border-radius: 9999px; }
+.convite-seta { width: 1.25rem; height: 1.25rem; transition: transform .2s ease; }
+.convite-cta:hover .convite-seta { transform: translateX(2px); }
+.convite-link { font-size: .8125rem; font-weight: 600; color: #B82828; text-underline-offset: 4px; }
+.convite-link:hover { text-decoration: underline; }
+@media (max-width: 639px) { .convite-card { text-align: center; align-items: center; } .convite-acoes { justify-content: center; } .convite-texto { margin-left: auto; margin-right: auto; } }
+/* Gaveta do cadastro: o formulário ocupa a largura da gaveta */
+#cadastro-gaveta .cadastro-corpo form .grid { gap: 1rem; }
+/* Gaveta do cadastro fica fora do <main>: mesmas cores AA do formulário de antes (crimson-500 / -600) */
+#cadastro-gaveta .text-coral-600 { color: #B82828; }
+#cadastro-gaveta button.bg-coral-600 { background-color: #B82828; }
+#cadastro-gaveta button.bg-coral-600:hover { background-color: #8C1B1B; }
+
+/* Celular: faixa escura com desfoque no pé da tela, por trás dos botões flutuantes (só quando eles aparecem) */
+.faixa-flutuante { display: none; }
+@media (max-width: 767px) {
+  .faixa-flutuante { display: block; position: fixed; left: 0; right: 0; bottom: 0; height: 7.5rem; z-index: 43; pointer-events: none;
+    background: linear-gradient(to top, rgba(13, 17, 25, 0.6) 0%, rgba(13, 17, 25, 0.35) 45%, rgba(13, 17, 25, 0) 100%);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    -webkit-mask-image: linear-gradient(to top, #000 40%, transparent); mask-image: linear-gradient(to top, #000 40%, transparent);
+    opacity: 0; transition: opacity .3s ease; }
+  body:has(.cta-flutuante.visivel) .faixa-flutuante, body:has(.botao-subir.visivel) .faixa-flutuante { opacity: 1; }
+}

@@ -55,7 +55,9 @@ export function cabecalhoHtml(pagina: Pagina): string {
   </button>
   </div>
 </header>
-<nav id="menu-mobile" aria-label="Menu" class="hidden md:hidden absolute left-4 right-4 top-full z-40 rounded-2xl bg-white border border-ds-border shadow-ds-xl p-2">
+<div id="menu-fundo" class="menu-fundo md:hidden" aria-hidden="true"></div>
+<nav id="menu-mobile" aria-label="Menu" class="menu-sheet md:hidden bg-white text-ds-fg">
+  <div class="menu-sheet-topo"><span class="menu-sheet-alca" aria-hidden="true"></span><button type="button" id="menu-fechar" aria-label="Fechar menu" class="menu-sheet-fechar"><svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
   ${linksMobile}
   <button type="button" data-open-contact class="mt-2 w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-[#B82828] hover:bg-[#8C1B1B] text-white text-[15px] font-semibold cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ds-ring"><svg aria-hidden="true" viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>Contato</button>
 </nav>

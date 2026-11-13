@@ -140,3 +140,23 @@ select.field option { color: var(--color-ds-fg); }
 .rodape-compacto .rodape-base p + p { margin-top: .125rem; }
 .rodape-compacto .rodape-links { font-size: .75rem; font-weight: 400; gap: .5rem 1.25rem; }
 .rodape-compacto .rodape-links a, .rodape-compacto .rodape-links button { color: #495669; }
+
+/* ---------- Menu do celular em "bottom sheet": sobe do rodapé da tela ao abrir e desce ao fechar ---------- */
+.menu-sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; max-height: 85dvh; overflow-y: auto;
+  border-radius: 24px 24px 0 0; border-top: 1px solid rgba(19, 26, 39, 0.09);
+  box-shadow: 0 -12px 36px rgba(13, 17, 25, 0.12); padding: .5rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  transform: translateY(100%); visibility: hidden;
+  transition: transform .26s cubic-bezier(0.4, 0, 1, 1), visibility 0s linear .26s; }
+.menu-sheet.aberto { transform: none; visibility: visible; transition: transform .38s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s; }
+.menu-fundo { position: fixed; inset: 0; z-index: 59; background: rgba(13, 17, 25, 0.55); opacity: 0; visibility: hidden;
+  transition: opacity .26s ease, visibility 0s linear .26s; }
+.menu-fundo.aberto { opacity: 1; visibility: visible; transition: opacity .3s ease, visibility 0s; }
+.menu-sheet-topo { position: relative; display: flex; justify-content: center; align-items: center; height: 2.5rem; margin-bottom: .25rem; }
+.menu-sheet-alca { width: 2.5rem; height: .3125rem; border-radius: 9999px; background: #D6DCE6; }
+.menu-sheet-fechar { position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 2.25rem; height: 2.25rem; border-radius: 9999px;
+  display: flex; align-items: center; justify-content: center; color: #495669; background: transparent; border: 0; cursor: pointer; }
+.menu-sheet-fechar:hover { background: #EDF0F5; color: #131A27; }
+.menu-sheet-fechar:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+html.menu-aberto { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { .menu-sheet, .menu-sheet.aberto, .menu-fundo, .menu-fundo.aberto { transition: none; } }
+@media (min-width: 768px) { .menu-sheet, .menu-fundo { display: none; } }

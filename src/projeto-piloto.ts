@@ -195,8 +195,21 @@ form.addEventListener('change', (e) => {
   const etapas = Array.from(lista.querySelectorAll<HTMLElement>('.cf-etapa'));
   const trilho = linha.parentElement!;
   let agendado = false;
+  // O trilho começa no centro do primeiro ícone e termina no centro do último.
+  const ajustarTrilho = () => {
+    const pai = trilho.offsetParent as HTMLElement | null;
+    const nums = etapas.map((e) => e.querySelector<HTMLElement>('.cf-num')!);
+    if (!pai || !nums.length) return;
+    const base = pai.getBoundingClientRect().top;
+    const centro = (n: HTMLElement) => { const r = n.getBoundingClientRect(); return r.top + r.height / 2 - base; };
+    const ini = centro(nums[0]), fim = centro(nums[nums.length - 1]);
+    trilho.style.top = `${ini}px`;
+    trilho.style.bottom = 'auto';
+    trilho.style.height = `${Math.max(0, fim - ini)}px`;
+  };
   const atualizar = () => {
     agendado = false;
+    ajustarTrilho();
     const limite = window.innerHeight * 0.6;
     let atual = -1;
     etapas.forEach((e, i) => {
@@ -265,4 +278,93 @@ form.addEventListener('change', (e) => {
     const suave = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.scrollTo({ top: 0, behavior: suave ? 'smooth' : 'auto' });
   });
+})();
+
+// Celular: os blocos "Para sua empresa" e "Para o Studio" viram accordion; o primeiro começa aberto.
+(() => {
+  const lados = Array.from(document.querySelectorAll<HTMLElement>('#sobre-o-programa .lado-troca'));
+  if (!lados.length) return;
+  const mq = window.matchMedia('(max-width: 767px)');
+  const cabecas = lados.map((lado, i) => {
+    const cab = lado.firstElementChild as HTMLElement;
+    lado.id ||= `lado-sobre-${i + 1}`;
+    const seta = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    seta.setAttribute('viewBox', '0 0 24 24'); seta.setAttribute('fill', 'none'); seta.setAttribute('stroke', 'currentColor');
+    seta.setAttribute('stroke-width', '2'); seta.setAttribute('stroke-linecap', 'round'); seta.setAttribute('stroke-linejoin', 'round');
+    seta.setAttribute('aria-hidden', 'true'); seta.classList.add('lado-seta');
+    seta.innerHTML = '<path d="m6 9 6 6 6-6"/>';
+    cab.appendChild(seta);
+    const alternar = () => {
+      if (!mq.matches) return;
+      const fechado = lado.classList.toggle('fechado');
+      cab.setAttribute('aria-expanded', String(!fechado));
+    };
+    cab.addEventListener('click', alternar);
+    cab.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); alternar(); } });
+    return cab;
+  });
+  const aplicar = () => {
+    lados.forEach((lado, i) => {
+      const cab = cabecas[i];
+      if (mq.matches) {
+        lado.classList.add('lado-acordeao');
+        lado.classList.toggle('fechado', i !== 0);
+        cab.setAttribute('role', 'button'); cab.tabIndex = 0;
+        cab.setAttribute('aria-controls', lado.id);
+        cab.setAttribute('aria-expanded', String(i === 0));
+      } else {
+        lado.classList.remove('lado-acordeao', 'fechado');
+        cab.removeAttribute('role'); cab.removeAttribute('tabindex');
+        cab.removeAttribute('aria-controls'); cab.removeAttribute('aria-expanded');
+      }
+    });
+  };
+  aplicar();
+  mq.addEventListener('change', aplicar);
+})();
+
+/* ---------- Gaveta do cadastro: abre pelo card de convite e por qualquer link para #inscricao ---------- */
+(() => {
+  const gaveta = document.getElementById('cadastro-gaveta');
+  const fundo = document.getElementById('cadastro-fundo');
+  if (!gaveta || !fundo) return;
+  let origem: HTMLElement | null = null;
+  const aberta = () => !gaveta.classList.contains('translate-x-full');
+  const abrir = (de?: HTMLElement | null) => {
+    origem = de ?? (document.activeElement as HTMLElement | null);
+    (window as any).dmEvento?.('cadastro_piloto_aberto');
+    gaveta.classList.remove('invisible');
+    requestAnimationFrame(() => { fundo.classList.remove('pointer-events-none', 'opacity-0'); gaveta.classList.remove('translate-x-full'); });
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => { if (!document.getElementById('form-piloto')?.classList.contains('hidden')) gaveta.querySelector<HTMLElement>('input, select, textarea')?.focus(); }, 300);
+  };
+  const fechar = () => {
+    gaveta.classList.add('translate-x-full');
+    fundo.classList.add('opacity-0');
+    setTimeout(() => {
+      fundo.classList.add('pointer-events-none');
+      gaveta.classList.add('invisible');
+      document.body.style.overflow = '';
+      if (origem && origem.offsetParent) origem.focus();
+    }, 300);
+  };
+  document.addEventListener('click', (e) => {
+    const alvo = (e.target as HTMLElement).closest<HTMLElement>('[data-abrir-cadastro], a[href="#inscricao"]');
+    if (!alvo || gaveta.contains(alvo)) return;
+    e.preventDefault();
+    abrir(alvo);
+  });
+  document.getElementById('cadastro-fechar')?.addEventListener('click', fechar);
+  fundo.addEventListener('click', fechar);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && aberta() && !document.querySelector('dialog[open]')) fechar();
+    if (e.key === 'Tab' && aberta()) {
+      const focaveis = Array.from(gaveta.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]), select, textarea')).filter((el) => el.offsetParent);
+      if (!focaveis.length) return;
+      const primeiro = focaveis[0], ultimo = focaveis[focaveis.length - 1];
+      if (e.shiftKey && document.activeElement === primeiro) { e.preventDefault(); ultimo.focus(); }
+      else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primeiro.focus(); }
+    }
+  });
+  if (location.hash === '#inscricao' || location.hash === '#cadastro') setTimeout(() => abrir(null), 400);
 })();
