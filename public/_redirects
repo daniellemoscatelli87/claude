@@ -1,8 +1,8 @@
-# Design system oficial (publicado no GitHub Pages a partir do Figma Make), mostrado no domínio do site.
-# Os arquivos do design system usam o endereço /DaniMoscatelli-DesignSystem/; a última regra antes do site faz eles carregarem aqui.
-/designsystem                    https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/        200
-/designsystem/*                  https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/:splat  200
-/DaniMoscatelli-DesignSystem/*   https://daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem/:splat  200
+# Design system oficial: desde 13/11/2026 fica no subdomínio designsystem.danimoscatelli.com.br.
+# Os endereços antigos no domínio do site levam para ele (as funções em functions/ fazem o mesmo).
+/designsystem                    https://designsystem.danimoscatelli.com.br/        301
+/designsystem/*                  https://designsystem.danimoscatelli.com.br/:splat  301
+/DaniMoscatelli-DesignSystem/*   https://designsystem.danimoscatelli.com.br/:splat  301
 # Nome antigo da página do Programa Projeto Piloto.
 /parceiro-piloto                 /projeto-piloto/                                                            301
 /parceiro-piloto/*               /projeto-piloto/:splat                                                      301

@@ -205,7 +205,7 @@ export function rodapeHtml(variante: 'claro' | 'escuro'): string {
     </div>
     <div class="rodape-base">
       <p>© 2026 Dani Moscatelli Experience Design Studio. Todos os direitos reservados. <span aria-hidden="true">•</span> Curitiba - PR</p>
-      <p>Desenvolvido a partir de <a class="rodape-ds" href="/designsystem/" target="_blank" rel="noopener">Dani Moscatelli - Design System<span class="sr-only"> (abre em nova aba)</span></a></p>
+      <p>Desenvolvido a partir de <a class="rodape-ds" href="https://designsystem.danimoscatelli.com.br/" target="_blank" rel="noopener">Dani Moscatelli - Design System<span class="sr-only"> (abre em nova aba)</span></a></p>
     </div>
   </div>`;
 }
@@ -222,7 +222,7 @@ export function rodapeCompactoHtml(): string {
         <a href="/privacidade/">Política de privacidade</a>
         <button type="button" data-preferencias-cookies>Preferências de cookies</button>
         <a href="/admin/">Área restrita</a>
-        <a href="/designsystem/" target="_blank" rel="noopener">Design System<span class="sr-only"> (abre em nova aba)</span></a>
+        <a href="https://designsystem.danimoscatelli.com.br/" target="_blank" rel="noopener">Design System<span class="sr-only"> (abre em nova aba)</span></a>
       </nav>
     </div>
   </div>`;
