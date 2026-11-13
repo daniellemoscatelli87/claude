@@ -160,7 +160,7 @@ html.cadastro-aberto { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .cadastro-tela, .cadastro-tela.aberta { transition: none; } }
 
 /* Botões flutuantes e cadastro em tela cheia: só no celular */
-@media (min-width: 768px) { .cadastro-tela { display: none !important; } } /* botões flutuantes também no computador, como no Projeto Piloto */
+/* cadastro abre na janela (modal) em todos os tamanhos */
 /* Rodapé escuro (mesmo do Projeto Piloto) */
 .parceiros-inicio footer.relative { position: relative; }
 

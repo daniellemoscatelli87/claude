@@ -27,7 +27,6 @@ const fecharCadastro = () => {
 document.addEventListener('click', (e) => {
   const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href="/rede-parceiros/cadastro/"]');
   if (!a || !tela || e.ctrlKey || e.metaKey || e.shiftKey || (e as MouseEvent).button === 1) return;
-  if (!window.matchMedia('(max-width: 767px)').matches) return; // no computador, o link abre a página do formulário
   e.preventDefault();
   abrirCadastro(a);
 });

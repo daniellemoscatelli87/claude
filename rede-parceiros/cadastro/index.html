@@ -24,12 +24,23 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script>try{if(window.self!==window.top)document.documentElement.classList.add('embutido')}catch(e){document.documentElement.classList.add('embutido')}</script>
+<script>(function(){var h=document.documentElement;var dentro=false;try{dentro=window.self!==window.top}catch(e){dentro=true}h.classList.add('embutido');if(!dentro)h.classList.add('modal-direto');})();</script>
 <style>
 /* Aberto dentro da janela da página de apresentação: só o formulário, sem cabeçalho, rodapé e botões flutuantes */
 html.embutido #site-header, html.embutido .topbar, html.embutido footer, html.embutido [data-whatsapp-flutuante], html.embutido #cta-contato { display: none !important; }
 html.embutido body { background: #FFFFFF; }
 html.embutido .wrap { padding-top: 16px; }
+/* Aberto direto pelo endereço: mesma aparência da janela (modal) da página de apresentação, com X para fechar */
+.modal-topo { display: none; }
+html.modal-direto .modal-topo { position: sticky; top: 0; z-index: 60; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .875rem 1.25rem; background: #FFFFFF; border-bottom: 1px solid rgba(19, 26, 39, 0.09); font-family: "Plus Jakarta Sans", sans-serif; }
+html.modal-direto .modal-topo p { margin: 0 0 .25rem; display: inline-flex; align-items: center; gap: .5rem; padding: .125rem .625rem; border-radius: 9999px; border: 1px solid #F9DADA; background: #FDF2F2; color: #D44D4D; font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+html.modal-direto .modal-topo p span { width: .5rem; height: .5rem; border-radius: 9999px; background: #D44D4D; }
+html.modal-direto .modal-topo h1 { margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; color: #131A27; }
+html.modal-direto .modal-fechar { flex-shrink: 0; width: 2.5rem; height: 2.5rem; border: 0; border-radius: 9999px; background: transparent; color: #495669; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+html.modal-direto .modal-fechar { padding: 0; } html.modal-direto .modal-fechar svg { width: 22px; height: 22px; flex-shrink: 0; }
+html.modal-direto .modal-fechar:hover { background: #EDF0F5; color: #131A27; }
+html.modal-direto .modal-fechar:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+@media (min-width: 640px) { html.modal-direto .modal-topo { padding: 1rem 2rem; } }
 </style>
 <script type="module" src="/src/rede-parceiros.ts"></script>
 <style>
@@ -169,7 +180,7 @@ html.embutido .wrap { padding-top: 16px; }
     border: 1px solid var(--coral);
   }
   .btn-primary { background: var(--coral); color: #fff; margin-left: auto; border-radius: 999px; }
-  .btn-primary:hover { background: #f04848; }
+  .btn-primary:hover { background: #B82828; }
   .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
   .btn-arrow { width: 18px; height: 18px; flex-shrink: 0; }
   .btn-primary:disabled { opacity: .6; cursor: wait; }
@@ -246,6 +257,8 @@ html.embutido .wrap { padding-top: 16px; }
 </head>
 <body>
 <!-- @cabecalho:parceiros -->
+<div class="modal-topo"><div><p><span aria-hidden="true"></span>Rede de Parceiros</p><h1>Quero ser parceiro</h1></div><button type="button" class="modal-fechar" aria-label="Fechar cadastro"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+<script>(function(){var b=document.querySelector('.modal-fechar');if(!b)return;function fechar(){try{if(document.referrer&&new URL(document.referrer).origin===location.origin&&history.length>1){history.back();return}}catch(e){}location.href='/rede-parceiros/';}b.addEventListener('click',fechar);document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!document.querySelector('dialog[open]'))fechar();});})();</script>
 <div class="wrap">
 
   <div id="progressBox" class="hidden">
