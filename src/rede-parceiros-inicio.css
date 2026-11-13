@@ -210,3 +210,17 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-check svg { width: 1rem; height: 1rem; }
 .rp-checklist p { margin: 0; font-size: 1rem; line-height: 1.65; color: #283043; }
 @media (min-width: 640px) { .rp-carrossel-nav { justify-content: center; } } /* setas centralizadas abaixo do carrossel */
+
+/* Checklist mais atraente: painel com tom de apoio do DS, check em selo, frase-chave em destaque */
+.rp-checklist-card { position: relative; overflow: hidden; isolation: isolate; padding: .5rem 1.5rem; border-radius: 24px;
+  background: linear-gradient(135deg, #FDF2F2 0%, #FFFFFF 60%); border: 1px solid rgba(212, 77, 77, 0.15);
+  box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+.rp-checklist-card::before { content: ""; position: absolute; z-index: -1; right: -4rem; top: -4rem; width: 14rem; height: 14rem; border-radius: 9999px; background: rgba(212, 77, 77, 0.08); filter: blur(48px); }
+@media (min-width: 640px) { .rp-checklist-card { padding: .75rem 2.5rem; } }
+.rp-checklist-card li, .rp-checklist-card li:first-child { border-top: 0; border-bottom: 1px dashed rgba(19, 26, 39, 0.12); padding: 1.375rem 0; gap: 1.125rem; }
+.rp-checklist-card li:last-child { border-bottom: 0; }
+.rp-checklist-card .rp-check { width: 2.5rem; height: 2.5rem; margin-top: 0; background: #FFFFFF; color: #B82828; border: 1px solid #F9DADA;
+  box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.08); }
+.rp-checklist-card .rp-check svg { width: 1.125rem; height: 1.125rem; }
+.rp-checklist-card p { color: #495669; font-size: .9375rem; }
+.rp-checklist-card p strong { display: block; margin-bottom: .25rem; color: #131A27; font-size: 1.0625rem; font-weight: 600; line-height: 1.4; }
