@@ -421,3 +421,7 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .botao-subir { width: 3.5rem; height: 3.5rem; right: 88px; bottom: 20px; }
 @media (min-width: 640px) { .botao-subir { right: 92px; bottom: 24px; } }
 .botao-subir svg { width: 1.5rem; height: 1.5rem; }
+/* Mobile: card do hero logo abaixo do cabeçalho (sem centralizar na tela) */
+@media (max-width: 767px) {
+  .hero-piloto { align-items: flex-start; padding-top: calc(var(--altura-cabecalho, 68px) + .75rem) !important; }
+}
