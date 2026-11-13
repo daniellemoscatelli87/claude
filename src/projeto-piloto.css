@@ -425,3 +425,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (max-width: 767px) {
   .hero-piloto { align-items: flex-start; padding-top: calc(var(--altura-cabecalho, 68px) + .75rem) !important; }
 }
+@media (max-width: 767px) { .rolar-abaixo { display: none !important; } } /* sem "Saiba mais" no celular */
+@media (max-width: 767px) { .hero-piloto { padding-bottom: 2.5rem !important; min-height: 0; } } /* sem o "Saiba mais", o hero termina logo após o card */
