@@ -435,3 +435,98 @@ form.addEventListener('change', (e) => {
   // rolagem por outros meios (teclado, barra, links internos): acompanha a posição real
   window.addEventListener('scroll', () => { if (!animando) { atual = alvo = window.scrollY; } }, { passive: true });
 })();
+
+/* ---------- Diagrama do programa: feixes animados (padrão "Animated Beam") ligando os dois lados ao núcleo ----------
+   Desenha em SVG uma curva suave de cada participante até o "Projeto Piloto" e faz um feixe de luz percorrer a curva
+   em direção ao núcleo. Recalcula ao redimensionar (no celular as curvas ficam verticais) e pausa fora da tela. */
+(() => {
+  const diag = document.querySelector<HTMLElement>('.pp-diagrama');
+  const nucleo = diag?.querySelector<HTMLElement>('.pp-nucleo');
+  const lados = diag ? Array.from(diag.querySelectorAll<HTMLElement>('.pp-no-lado .pp-anel')) : [];
+  if (!diag || !nucleo || lados.length !== 2) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('class', 'pp-feixes');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('fill', 'none');
+  const defs = document.createElementNS(NS, 'defs');
+  svg.appendChild(defs);
+  type Feixe = { base: SVGPathElement; luz: SVGPathElement; grad: SVGLinearGradientElement; s: [number, number]; e: [number, number]; atraso: number };
+  const feixes: Feixe[] = lados.map((_, i) => {
+    const grad = document.createElementNS(NS, 'linearGradient');
+    grad.id = `pp-feixe-${i}`;
+    grad.setAttribute('gradientUnits', 'userSpaceOnUse');
+    [['0', '#F9DADA', '0'], ['0.35', '#F9DADA', '1'], ['0.8', '#D44D4D', '1'], ['1', '#D44D4D', '0']].forEach(([o, c, op]) => {
+      const st = document.createElementNS(NS, 'stop');
+      st.setAttribute('offset', o); st.setAttribute('stop-color', c); st.setAttribute('stop-opacity', op);
+      grad.appendChild(st);
+    });
+    defs.appendChild(grad);
+    const base = document.createElementNS(NS, 'path');
+    base.setAttribute('class', 'pp-feixe-base');
+    const luz = document.createElementNS(NS, 'path');
+    luz.setAttribute('class', 'pp-feixe-luz');
+    luz.setAttribute('stroke', `url(#pp-feixe-${i})`);
+    svg.append(base, luz);
+    return { base, luz, grad, s: [0, 0], e: [0, 0], atraso: i * 0.5 };
+  });
+  diag.appendChild(svg);
+
+  const centro = (el: HTMLElement, ref: DOMRect): [number, number, number] => {
+    const r = el.getBoundingClientRect();
+    return [r.left - ref.left + r.width / 2, r.top - ref.top + r.height / 2, r.width / 2];
+  };
+  const desenhar = () => {
+    const ref = diag.getBoundingClientRect();
+    svg.setAttribute('viewBox', `0 0 ${ref.width} ${ref.height}`);
+    svg.setAttribute('width', String(ref.width)); svg.setAttribute('height', String(ref.height));
+    const [nx, ny, nr] = centro(nucleo, ref);
+    feixes.forEach((f, i) => {
+      const [ax, ay, ar] = centro(lados[i], ref);
+      const dx = nx - ax, dy = ny - ay, d = Math.hypot(dx, dy) || 1, ux = dx / d, uy = dy / d;
+      const s: [number, number] = [ax + ux * (ar + 10), ay + uy * (ar + 10)];
+      const e: [number, number] = [nx - ux * (nr + 16), ny - uy * (nr + 16)];
+      const vertical = Math.abs(dy) > Math.abs(dx);
+      if (vertical) {
+        // celular: o feixe corre no espaço entre os blocos, sem atravessar os textos
+        const blocoLado = lados[i].closest<HTMLElement>('.pp-no')!.getBoundingClientRect();
+        const blocoCentro = nucleo.closest<HTMLElement>('.pp-no')!.getBoundingClientRect();
+        const x = nx;
+        if (ay < ny) { s[0] = x; s[1] = blocoLado.bottom - ref.top + 10; e[0] = x; e[1] = ny - nr - 34; }
+        else { s[0] = x; s[1] = ay - ar - 14; e[0] = x; e[1] = blocoCentro.bottom - ref.top + 10; }
+      }
+      const curva = (i === 0 ? -1 : 1) * Math.min(48, d * 0.18);
+      const cx = (s[0] + e[0]) / 2 + (vertical ? curva : 0);
+      const cy = (s[1] + e[1]) / 2 + (vertical ? 0 : -Math.abs(curva));
+      const dPath = `M ${s[0]},${s[1]} Q ${cx},${cy} ${e[0]},${e[1]}`;
+      f.base.setAttribute('d', dPath); f.luz.setAttribute('d', dPath);
+      f.s = s; f.e = e;
+    });
+  };
+  // posição do feixe: a "cabeça" vai do participante até o núcleo; a cauda vem 30% atrás
+  const posicionar = (f: Feixe, t: number) => {
+    const p = -0.3 + 1.6 * t;
+    const head = [f.s[0] + (f.e[0] - f.s[0]) * p, f.s[1] + (f.e[1] - f.s[1]) * p];
+    const tail = [head[0] - (f.e[0] - f.s[0]) * 0.45, head[1] - (f.e[1] - f.s[1]) * 0.45];
+    f.grad.setAttribute('x1', String(tail[0])); f.grad.setAttribute('y1', String(tail[1]));
+    f.grad.setAttribute('x2', String(head[0])); f.grad.setAttribute('y2', String(head[1]));
+  };
+  const DUR = 3.2;
+  let visivel = false, raf = 0, t0 = 0;
+  const quadro = (t: number) => {
+    if (!t0) t0 = t;
+    const seg = (t - t0) / 1000;
+    feixes.forEach((f) => { posicionar(f, (((seg - f.atraso) % DUR) + DUR) % DUR / DUR); });
+    raf = visivel ? requestAnimationFrame(quadro) : 0;
+  };
+  const iniciar = () => {
+    desenhar();
+    if (reduzir.matches) { feixes.forEach((f) => posicionar(f, 0.6)); return; }
+    if (visivel && !raf) raf = requestAnimationFrame(quadro);
+  };
+  new ResizeObserver(() => desenhar()).observe(diag);
+  new IntersectionObserver(([en]) => { visivel = en.isIntersecting; iniciar(); }).observe(diag);
+  reduzir.addEventListener('change', iniciar);
+  iniciar();
+})();

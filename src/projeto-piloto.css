@@ -1064,3 +1064,11 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .pp-diagrama { grid-template-columns: 1.6fr minmax(40px, 1fr) var(--nucleo) minmax(40px, 1fr) 1.6fr !important; }
   .pp-no-lado p { max-width: 16rem; }
 }
+/* feixes animados do diagrama (substituem os fios tracejados) */
+.pp-diagrama { position: relative; }
+.pp-con { visibility: hidden; }
+.pp-feixes { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: visible; }
+.pp-no { position: relative; z-index: 1; }
+.pp-feixe-base { stroke: #D6DCE6; stroke-width: 2; stroke-linecap: round; }
+.pp-feixe-luz { stroke-width: 2.5; stroke-linecap: round; }
+.pp-feixe-luz { stroke-width: 3; }
