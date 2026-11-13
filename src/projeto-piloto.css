@@ -736,3 +736,9 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #accordion-group .accordion-item, #accordion-group .accordion-item.active { background: #FFFFFF !important; box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.5), 0 8px 10px -6px rgba(226, 232, 240, 0.5) !important; }
 /* "E depois do projeto-piloto?" com a mesma largura da linha do tempo (alinhado aos cards das etapas) */
 .depois-convite { width: min(53rem, calc(100% - 3rem)); margin-inline: auto; }
+/* coluna "Para o Studio" com as mesmas cores da coluna "Para sua empresa": selo, checks e box de compromisso */
+#sobre-o-programa .lado-troca > div.selo-studio > p { background: #FFF5F5 !important; border-color: #FFE5E5 !important; color: #D44D4D !important; }
+#sobre-o-programa .selo-studio p > span { background: #D44D4D !important; }
+#sobre-o-programa .lado-troca + .lado-troca li > span:first-child { color: #D44D4D !important; }
+#sobre-o-programa .lado-troca + .lado-troca p:has(.compromisso-icone) { background: #FDF2F2 !important; border-color: #F9DADA !important; }
+#sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { color: #D44D4D !important; background: #F9DADA !important; border-color: #F9DADA !important; }
