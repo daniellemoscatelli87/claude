@@ -37,8 +37,8 @@ html.embutido .wrap { padding-top: 16px; }
 @layer theme, base, pagina, compartilhado, utilities;
 @layer pagina {
   :root {
-    --coral: #ff5656;
-    --coral-soft: #fe6a62;
+    --coral: #D44D4D;
+    --coral-soft: #D44D4D;
     --coral-tint: #fff1f0;
     --slate: #5c6986;
     --ink: #111111;
@@ -824,7 +824,7 @@ function confetti() {
   const ctx = cv.getContext("2d"), dpr = window.devicePixelRatio || 1;
   const W = innerWidth, H = innerHeight;
   cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
-  const colors = ["#ff5656", "#fe6a62", "#ffb3ae", "#5c6986", "#a8afbd", "#ffd166"];
+  const colors = ["#D44D4D", "#D44D4D", "#ffb3ae", "#5c6986", "#a8afbd", "#ffd166"];
   const ps = Array.from({ length: 160 }, () => ({
     x: Math.random() * W, y: -20 - Math.random() * H * 0.4,
     vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3,

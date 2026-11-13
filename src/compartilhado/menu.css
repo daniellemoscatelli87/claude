@@ -115,13 +115,13 @@ select.field option { color: var(--color-ds-fg); }
 .rodape-logo img { height: 2.75rem; width: auto; display: block; }
 .rodape-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 1.5rem; font-size: .875rem; font-weight: 500; }
 .rodape-links a, .rodape-links button { color: #283043; text-decoration: none; background: none; border: 0; padding: 0; font: inherit; cursor: pointer; transition: color .2s ease; }
-.rodape-links a:hover, .rodape-links button:hover { color: #B82828; }
+.rodape-links a:hover, .rodape-links button:hover { color: #D44D4D; }
 .rodape-base { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding-top: 1.25rem; font-size: .75rem; line-height: 1.6; color: #495669; text-align: center; }
 .rodape-base p { margin: 0; }
 @media (min-width: 640px) { .rodape-base { flex-direction: row; justify-content: space-between; text-align: left; } }
 .rodape-base span[aria-hidden] { margin: 0 .375rem; color: #B3BDD0; }
-.rodape-ds { font-weight: 600; color: #B82828; text-decoration: underline; text-decoration-color: rgba(184, 40, 40, .3); text-underline-offset: 2px; }
-.rodape-ds:hover { text-decoration-color: #B82828; }
+.rodape-ds { font-weight: 600; color: #D44D4D; text-decoration: underline; text-decoration-color: rgba(212, 77, 77, .3); text-underline-offset: 2px; }
+.rodape-ds:hover { text-decoration-color: #D44D4D; }
 .rodape a:focus-visible, .rodape button:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); border-radius: 4px; }
 /* Escuro */
 .rodape-escuro .rodape-topo { border-bottom-color: rgba(255, 255, 255, 0.1); }

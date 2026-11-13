@@ -52,13 +52,13 @@ html { overflow-x: clip; }
 .biz-label { font-size: 13px; }
 
 /* Botão "Notificar lançamento": padrão vermelho (crimson-500) com texto branco */
-.notify-btn { background-color: #B82828; color: #fff; box-shadow: 0 10px 25px -3px rgba(184, 40, 40, 0.3); }
-.notify-btn[data-state="idle"]:hover { background-color: #8C1B1B; box-shadow: 0 12px 28px -3px rgba(184, 40, 40, 0.4); }
+.notify-btn { background-color: #D44D4D; color: #fff; box-shadow: 0 10px 25px -3px rgba(212, 77, 77, 0.3); }
+.notify-btn[data-state="idle"]:hover { background-color: #B82828; box-shadow: 0 12px 28px -3px rgba(212, 77, 77, 0.4); }
 .notify-btn:focus-visible { box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.4); }
 
 /* Home: botão Contato do cabeçalho em vermelho outline */
-.pagina-inicio .site-header:not(.is-scrolled) .btn-contato { border-color: #B82828; color: #B82828; }
-.pagina-inicio .site-header:not(.is-scrolled) .btn-contato:hover { background: #B82828; color: #fff; }
+.pagina-inicio .site-header:not(.is-scrolled) .btn-contato { border-color: #D44D4D; color: #D44D4D; }
+.pagina-inicio .site-header:not(.is-scrolled) .btn-contato:hover { background: #D44D4D; color: #fff; }
 
 /* Home: rolagem travada em telas grandes, onde todo o conteúdo cabe na tela.
    Em telas menores (celular, notebooks baixos) a rolagem continua, para nenhum conteúdo ficar inacessível. */

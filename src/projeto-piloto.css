@@ -172,8 +172,8 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
    background graphite-950, card rgba(19,26,39,.75), border .07/.12, foreground #E4E9F0, muted graphite-300,
    primary crimson-400, primary-muted .15 com crimson-300, muted rgba(40,48,67,.6), sombras escuras do DS. */
 .transicao-escopo.secao-escura { background: #0D1119; }
-.secao-escura .rv-cabecalho > p:first-child { background: transparent; border-color: rgba(232, 128, 128, 0.6); color: #E88080; }
-.secao-escura .rv-cabecalho > p:first-child > span { background: #E88080; }
+.secao-escura .rv-cabecalho > p:first-child { background: transparent; border-color: rgba(232, 128, 128, 0.6); color: #D44D4D; }
+.secao-escura .rv-cabecalho > p:first-child > span { background: #D44D4D; }
 .secao-escura .rv-cabecalho h2 { color: #E4E9F0; }
 .secao-escura .rv-cabecalho .text-coral-600 { color: #D44D4D; }
 .secao-escura .rv-cabecalho > p:last-child { color: #8898B0; }
@@ -189,8 +189,8 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 .secao-escura .card-frente h3 + p + p { color: #8898B0; }
 .secao-escura .card-frente ul { border-color: rgba(255, 255, 255, 0.07); }
 .secao-escura .card-frente .tag-frente { background: rgba(40, 48, 67, 0.6); border-color: rgba(255, 255, 255, 0.07); color: #8898B0; }
-.secao-escura .card-frente:hover .tag-frente { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #E88080; }
-.secao-escura .card-frente .frente-icone { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #E88080; }
+.secao-escura .card-frente:hover .tag-frente { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #D44D4D; }
+.secao-escura .card-frente .frente-icone { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #D44D4D; }
 .secao-escura .card-frente:hover .frente-icone { background: #D44D4D; border-color: #D44D4D; color: #fff; }
 .secao-escura .card-frente .frente-num { color: rgba(255, 255, 255, 0.04); }
 .secao-escura .card-frente:hover .frente-num { color: rgba(212, 77, 77, 0.15); }
@@ -199,7 +199,7 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 /* ---------- Tipografia e contraste (escala do design system + WCAG AA) ----------
    Escala DS: H1 2.5rem/700, H2 2rem/700, H3 1.5rem/600, H4 1.25rem/600, Subtítulo 1.125rem/500,
    Corpo 1rem, Corpo pequeno 0.875rem, Rótulo 0.75rem/600 (0.08em).
-   Texto pequeno em vermelho sobre fundo claro usa crimson-500 (#B82828) e sobre fundo escuro crimson-300 (#E88080),
+   Texto pequeno em vermelho sobre fundo claro usa crimson-500 (#D44D4D) e sobre fundo escuro crimson-300 (#D44D4D),
    porque o crimson-400 (#D44D4D) não chega a 4,5:1 nesses tamanhos. */
 #hero-titulo { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
 main section h2 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.015em; line-height: 1.2; }
@@ -214,21 +214,21 @@ main section h2 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.015em
 main .rv-cabecalho > p:first-child, .hero-card > p:first-child { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; }
 
 /* Vermelho com contraste AA sobre fundo claro */
-main .text-coral-600:not(.secao-escura *), #hero .text-coral-600 { color: #B82828; }
-.accordion-item.active .accordion-header, .accordion-item.active .accordion-chevron { color: #B82828; }
-.cf-num > span { color: #B82828; }
+main .text-coral-600:not(.secao-escura *), #hero .text-coral-600 { color: #D44D4D; }
+.accordion-item.active .accordion-header, .accordion-item.active .accordion-chevron { color: #D44D4D; }
+.cf-num > span { color: #D44D4D; }
 .cf-etapa.feita .cf-num > span, .cf-etapa.atual .cf-num > span { color: #fff; }
 /* Botões vermelhos: texto branco precisa de 4,5:1 → crimson-500, hover crimson-600 */
-main a.bg-coral-600, main button.bg-coral-600 { background-color: #B82828; }
-main a.bg-coral-600:hover, main button.bg-coral-600:hover { background-color: #8C1B1B; }
+main a.bg-coral-600, main button.bg-coral-600 { background-color: #D44D4D; }
+main a.bg-coral-600:hover, main button.bg-coral-600:hover { background-color: #B82828; }
 
 /* Fundo escuro: vermelho claro (crimson-300) para texto pequeno e cinzas do tema escuro */
-.secao-escura .rv-cabecalho > p.text-coral-600 { color: #E88080; }
-.secao-escura .card-frente h3 + p { color: #E88080; }
+.secao-escura .rv-cabecalho > p.text-coral-600 { color: #D44D4D; }
+.secao-escura .card-frente h3 + p { color: #D44D4D; }
 .secao-escura > .relative > p.rv { color: #8898B0; }
 /* Números dos cards: decorativos, mas legíveis (≥ 3:1 para texto grande) */
 .secao-escura .card-frente .frente-num { color: #627288; font-weight: 700; font-size: 48px; }
-.secao-escura .card-frente:hover .frente-num { color: #E88080; }
+.secao-escura .card-frente:hover .frente-num { color: #D44D4D; }
 /* Títulos grandes (≥ 24px) podem manter o vermelho primário: 3:1 basta para texto grande */
 main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D44D4D; }
 /* Cards de vidro: ícone branco em repouso (vermelho só no hover) e tags só com borda */
@@ -255,7 +255,7 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 /* ---------- Citação de fechamento do bloco "Para sua empresa / Para o Studio" ----------
    Toda em Plus Jakarta itálico; palavras de destaque em vermelho. */
 .citacao-equilibrio { position: relative; max-width: 46rem; margin-left: auto; margin-right: auto; padding: .75rem 0 .25rem; text-align: center; }
-.citacao-aspas { display: block; font-style: italic; font-weight: 700; font-size: 4rem; line-height: .6; height: 1.75rem; color: #B82828; }
+.citacao-aspas { display: block; font-style: italic; font-weight: 700; font-size: 4rem; line-height: .6; height: 1.75rem; color: #D44D4D; }
 .citacao-equilibrio blockquote { margin: 0; }
 .citacao-equilibrio blockquote p { font-style: italic; font-weight: 700; font-size: 1.25rem; line-height: 1.5; letter-spacing: -0.01em; color: #131A27; }
 @media (min-width: 640px) { .citacao-equilibrio blockquote p { font-size: 1.5rem; } }
@@ -302,13 +302,13 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
    "Para sua empresa": crimson-50 (#FDF2F2), filete crimson-500, texto/ícone crimson-500.
    "Para o Studio": graphite-50 (#EDF0F5), filete graphite-900, texto/ícone graphite-900. */
 #sobre-o-programa .lado-troca { overflow: hidden; }
-#sobre-o-programa .lado-troca > div:first-child { margin: -1.75rem -1.75rem 1.75rem; padding: 1.125rem 1.75rem; background: #FDF2F2; border-top: 3px solid #B82828; border-bottom: 1px solid #F9DADA; }
+#sobre-o-programa .lado-troca > div:first-child { margin: -1.75rem -1.75rem 1.75rem; padding: 1.125rem 1.75rem; background: #FDF2F2; border-top: 3px solid #D44D4D; border-bottom: 1px solid #F9DADA; }
 #sobre-o-programa .lado-troca + .lado-troca > div:first-child { background: #EDF0F5; border-top-color: #131A27; border-bottom-color: #D6DCE6; }
 @media (min-width: 640px) { #sobre-o-programa .lado-troca > div:first-child { margin: -2.5rem -2.5rem 2rem; padding: 1.25rem 2.5rem; } }
 @media (min-width: 1024px) { #sobre-o-programa .lado-troca > div:first-child { margin: -3rem -3rem 2.25rem; padding: 1.25rem 3rem; } }
-#sobre-o-programa .lado-troca > div:first-child > p { color: #B82828; }
+#sobre-o-programa .lado-troca > div:first-child > p { color: #D44D4D; }
 #sobre-o-programa .lado-troca + .lado-troca > div:first-child > p { color: #131A27; }
-#sobre-o-programa .lado-troca > div:first-child > span { background: #FFFFFF; border-color: #F9DADA; color: #B82828; }
+#sobre-o-programa .lado-troca > div:first-child > span { background: #FFFFFF; border-color: #F9DADA; color: #D44D4D; }
 #sobre-o-programa .lado-troca + .lado-troca > div:first-child > span { border-color: #D6DCE6; }
 
 /* Mobile: no topo, sobre a foto, o cabeçalho mostra o ícone da empresa (no desktop segue sem logo até rolar) */
@@ -335,7 +335,7 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
    na cor do rótulo e nos ícones. Sem fundo, borda lateral ou sombra. */
 .divisao-hero-cartao, .transicao-sobre { background: #FFFFFF; }
 #sobre-o-programa .troca-grade { column-gap: 4rem; }
-#sobre-o-programa .lado-troca { background: transparent; border: 0; border-top: 4px solid #B82828; border-radius: 0; box-shadow: none; overflow: visible; padding: 1.75rem 0 0; }
+#sobre-o-programa .lado-troca { background: transparent; border: 0; border-top: 4px solid #D44D4D; border-radius: 0; box-shadow: none; overflow: visible; padding: 1.75rem 0 0; }
 #sobre-o-programa .lado-troca + .lado-troca { border-top-color: #131A27; }
 @media (max-width: 1023px) { #sobre-o-programa .lado-troca + .lado-troca { margin-top: 3rem; } }
 #sobre-o-programa .lado-troca > div:first-child,
@@ -346,7 +346,7 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #sobre-o-programa .lado-troca + .lado-troca > div:first-child > span { background: #EDF0F5; border-color: #D6DCE6; }
 /* Filete colorido abaixo do ícone + rótulo (e não no topo da coluna) */
 #sobre-o-programa .lado-troca, #sobre-o-programa .lado-troca + .lado-troca { border-top: 0; padding-top: 0; }
-#sobre-o-programa .lado-troca > div:first-child { padding-bottom: 1rem !important; border-bottom: 4px solid #B82828 !important; }
+#sobre-o-programa .lado-troca > div:first-child { padding-bottom: 1rem !important; border-bottom: 4px solid #D44D4D !important; }
 #sobre-o-programa .lado-troca + .lado-troca > div:first-child { border-bottom-color: #131A27 !important; }
 /* Ícone de compromisso com base, no mesmo estilo dos checks de cada coluna */
 #sobre-o-programa .compromisso-icone { width: 2.25rem; height: 2.25rem; margin-top: -0.375rem; border-radius: .625rem; border: 1px solid #F9DADA; background: #FDF2F2; display: inline-flex; align-items: center; justify-content: center; }
@@ -370,12 +370,12 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { background: #D6DCE6; border-color: #D6DCE6; }
 #sobre-o-programa .lado-troca > div:first-child { border-bottom-width: 1px !important; } /* filete fininho */
 /* Filete do rótulo em tom mais claro: crimson-300 / graphite-300 */
-#sobre-o-programa .lado-troca > div:first-child { border-bottom-color: #E88080 !important; }
+#sobre-o-programa .lado-troca > div:first-child { border-bottom-color: #D44D4D !important; }
 #sobre-o-programa .lado-troca + .lado-troca > div:first-child { border-bottom-color: #8898B0 !important; }
 /* Accordion do Guia: no hover, número, título e seta em vermelho */
 #accordion-group .accordion-trigger:hover .accordion-header,
 #accordion-group .accordion-trigger:hover .accordion-header > span:first-child,
-#accordion-group .accordion-trigger:hover .accordion-chevron { color: #B82828; }
+#accordion-group .accordion-trigger:hover .accordion-chevron { color: #D44D4D; }
 #accordion-group .accordion-header, #accordion-group .accordion-header > span:first-child { transition: color .2s ease; }
 /* Escopo: tags numa linha só no computador (3 tags por card) */
 @media (min-width: 1280px) { .card-frente ul[aria-label="Temas"] { flex-wrap: nowrap; gap: .25rem; } .card-frente .tag-frente { white-space: nowrap; padding-left: .4375rem; padding-right: .4375rem; } }
@@ -402,10 +402,10 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 /* Hero: Shine Border mais visível (2px, parâmetro borderWidth do componente do DS) */
 .hero-card::after { padding: 2px; }
 /* Hero: brilho mais concentrado e rápido, para aparecer no card grande sobre a foto */
-.hero-card::after { padding: 2px; background-image: radial-gradient(transparent, #D44D4D, #B82828, #D44D4D, transparent); background-size: 250% 250%; }
+.hero-card::after { padding: 2px; background-image: radial-gradient(transparent, #D44D4D, #D44D4D, #D44D4D, transparent); background-size: 250% 250%; }
 @media (prefers-reduced-motion: no-preference) { .hero-card:hover::after { animation-duration: 6s; } }
 /* Escopo: mesma Shine Border do hero (2px, brilho vermelho concentrado, 6s), em tons para fundo escuro */
-.secao-escura .card-frente::after { padding: 2px; background-image: radial-gradient(transparent, #E88080, #D44D4D, #E88080, transparent); background-size: 250% 250%; }
+.secao-escura .card-frente::after { padding: 2px; background-image: radial-gradient(transparent, #D44D4D, #D44D4D, #D44D4D, transparent); background-size: 250% 250%; }
 @media (prefers-reduced-motion: no-preference) { .card-frente:hover::after { animation-duration: 6s; } }
 /* Escopo: borda animada mais refinada, vermelho com grafite claro (receita do DS: primary, chart-2, primary), 1.5px */
 .secao-escura .card-frente::after { padding: 1.5px; background-image: radial-gradient(transparent, #D44D4D, #B3BDD0, #D44D4D, transparent); }
@@ -438,7 +438,7 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   #sobre-o-programa .rv-cabecalho > p:first-child { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.15); color: rgba(255, 255, 255, 0.85); }
   #sobre-o-programa .rv-cabecalho > p:first-child > span { background: #D44D4D; }
   #sobre-o-programa .rv-cabecalho h2 { color: #E4E9F0; }
-  #sobre-o-programa .rv-cabecalho h2 .text-coral-600 { color: #E88080; }
+  #sobre-o-programa .rv-cabecalho h2 .text-coral-600 { color: #D44D4D; }
   #sobre-o-programa .rv-cabecalho > p:last-child { color: #B3BDD0; }
   #sobre-o-programa article { background: #FFFFFF !important; border-radius: 24px !important; padding: .5rem 1.25rem 1.5rem; }
   #sobre-o-programa .lado-troca > div:first-child { display: none !important; }
@@ -452,8 +452,8 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .sobre-aba:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
   #sobre-o-programa .citacao-equilibrio { margin-top: 3rem; }
   #sobre-o-programa .citacao-equilibrio blockquote p { color: #E4E9F0; }
-  #sobre-o-programa .citacao-equilibrio blockquote p .text-coral-600 { color: #E88080; }
-  #sobre-o-programa .citacao-aspas { color: #E88080; }
+  #sobre-o-programa .citacao-equilibrio blockquote p .text-coral-600 { color: #D44D4D; }
+  #sobre-o-programa .citacao-aspas { color: #D44D4D; }
 }
 
 /* ---------- Celular: Escopo como carrossel (rolagem lateral com encaixe), sempre mostrando parte do próximo card ---------- */
@@ -499,21 +499,21 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (min-width: 640px) { .convite-titulo { font-size: 2.5rem; } }
 .convite-texto { margin: .5rem 0 0; max-width: 65ch; font-size: 1.0625rem; line-height: 1.625; color: #495669; }
 .convite-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin-top: 1.5rem; }
-.convite-cta { display: inline-flex; align-items: center; gap: .5rem; height: 3rem; padding: 0 1.5rem; border: 0; border-radius: 9999px; background: #B82828; color: #FFFFFF;
+.convite-cta { display: inline-flex; align-items: center; gap: .5rem; height: 3rem; padding: 0 1.5rem; border: 0; border-radius: 9999px; background: #D44D4D; color: #FFFFFF;
   font: inherit; font-size: .9375rem; font-weight: 600; cursor: pointer; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease; }
-.convite-cta:hover { transform: translateY(-2px); background: #8C1B1B; box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06); }
+.convite-cta:hover { transform: translateY(-2px); background: #B82828; box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06); }
 .convite-cta:focus-visible, .convite-link:focus-visible { outline: none; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px rgba(212, 77, 77, 0.6); border-radius: 9999px; }
 .convite-seta { width: 1.25rem; height: 1.25rem; transition: transform .2s ease; }
 .convite-cta:hover .convite-seta { transform: translateX(2px); }
-.convite-link { font-size: .8125rem; font-weight: 600; color: #B82828; text-underline-offset: 4px; }
+.convite-link { font-size: .8125rem; font-weight: 600; color: #D44D4D; text-underline-offset: 4px; }
 .convite-link:hover { text-decoration: underline; }
 @media (max-width: 639px) { .convite-card { text-align: center; align-items: center; } .convite-acoes { justify-content: center; } .convite-texto { margin-left: auto; margin-right: auto; } }
 /* Gaveta do cadastro: o formulário ocupa a largura da gaveta */
 #cadastro-gaveta .cadastro-corpo form .grid { gap: 1rem; }
 /* Gaveta do cadastro fica fora do <main>: mesmas cores AA do formulário de antes (crimson-500 / -600) */
-#cadastro-gaveta .text-coral-600 { color: #B82828; }
-#cadastro-gaveta button.bg-coral-600 { background-color: #B82828; }
-#cadastro-gaveta button.bg-coral-600:hover { background-color: #8C1B1B; }
+#cadastro-gaveta .text-coral-600 { color: #D44D4D; }
+#cadastro-gaveta button.bg-coral-600 { background-color: #D44D4D; }
+#cadastro-gaveta button.bg-coral-600:hover { background-color: #B82828; }
 
 /* Celular: faixa escura com desfoque no pé da tela, por trás dos botões flutuantes (só quando eles aparecem) */
 .faixa-flutuante { display: none; }
@@ -535,7 +535,7 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (max-width: 639px) {
   .cf-etapa-depois { display: flex !important; }
   .depois-piloto-card { display: none !important; }
-  .cf-cartao-depois { background: #B82828; border: 1px solid #B82828; color: #FFFFFF; box-shadow: 0 16px 40px rgba(184, 40, 40, 0.25); }
+  .cf-cartao-depois { background: #D44D4D; border: 1px solid #D44D4D; color: #FFFFFF; box-shadow: 0 16px 40px rgba(212, 77, 77, 0.25); }
   .cf-cartao-depois h3 { color: #FFFFFF; }
   .cf-cartao-depois p { color: rgba(255, 255, 255, 0.9); }
 }
@@ -562,12 +562,12 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
     background: #0D1119 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #FFFFFF;
     box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06) !important; }
   .cf-cartao-depois .depois-luz { position: absolute; z-index: -1; right: -4rem; top: -4rem; width: 14rem; height: 14rem; border-radius: 9999px; background: rgba(212, 77, 77, 0.10); filter: blur(64px); pointer-events: none; }
-  .cf-cartao-depois .depois-visual { display: flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; margin-bottom: 1rem; border-radius: 16px; background: rgba(255, 255, 255, 0.1); color: #E88080; }
+  .cf-cartao-depois .depois-visual { display: flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; margin-bottom: 1rem; border-radius: 16px; background: rgba(255, 255, 255, 0.1); color: #D44D4D; }
   .cf-cartao-depois h3 { margin: 0 0 .5rem; font-size: 1.375rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: #FFFFFF !important; }
-  .cf-cartao-depois .depois-destaque { color: #E88080; }
+  .cf-cartao-depois .depois-destaque { color: #D44D4D; }
   .cf-cartao-depois p { margin: 0; font-size: .9375rem; line-height: 1.6; color: rgba(255, 255, 255, 0.7) !important; }
   .cf-cartao-depois .depois-cta { display: inline-flex; align-items: center; gap: .5rem; height: 2.75rem; margin-top: 1.25rem; padding: 0 1.25rem; border: 0; border-radius: 9999px;
-    background: #B82828; color: #FFFFFF; font: inherit; font-size: .875rem; font-weight: 600; cursor: pointer; }
+    background: #D44D4D; color: #FFFFFF; font: inherit; font-size: .875rem; font-weight: 600; cursor: pointer; }
   .cf-cartao-depois .depois-cta svg { width: 1.125rem; height: 1.125rem; }
   .cf-cartao-depois .depois-cta:focus-visible { outline: none; box-shadow: 0 0 0 2px #0D1119, 0 0 0 4px rgba(212, 77, 77, 0.6); }
 }
@@ -581,22 +581,22 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (max-width: 359px) { .cf-cartao-depois .depois-cta { white-space: nowrap; height: 2.75rem; min-height: 0; padding: 0 1rem; } }
 /* Card "E depois" (celular): outline no padrão vermelho */
 @media (max-width: 639px) {
-  .cf-cartao-depois .depois-cta { border-color: #E88080; color: #E88080; }
-  .cf-cartao-depois .depois-cta:hover { background: #B82828; border-color: #B82828; color: #FFFFFF; }
+  .cf-cartao-depois .depois-cta { border-color: #D44D4D; color: #D44D4D; }
+  .cf-cartao-depois .depois-cta:hover { background: #D44D4D; border-color: #D44D4D; color: #FFFFFF; }
 }
 
 /* Desktop/tablet: card horizontal "E depois" abaixo da timeline, no mesmo padrão escuro do card do celular */
 .depois-piloto-card { position: relative; isolation: isolate; overflow: hidden; background: #0D1119 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important;
   box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06) !important; }
 .depois-piloto-card::before { content: ""; position: absolute; z-index: -1; right: -4rem; top: -4rem; width: 16rem; height: 16rem; border-radius: 9999px; background: rgba(212, 77, 77, 0.10); filter: blur(64px); pointer-events: none; }
-.depois-piloto-card > .depois-piloto > span:first-child { background: rgba(255, 255, 255, 0.1) !important; border-color: transparent !important; color: #E88080 !important; box-shadow: none !important; }
+.depois-piloto-card > .depois-piloto > span:first-child { background: rgba(255, 255, 255, 0.1) !important; border-color: transparent !important; color: #D44D4D !important; box-shadow: none !important; }
 .depois-piloto-card h3 { color: #FFFFFF !important; font-weight: 700; letter-spacing: -0.02em; }
-.depois-piloto-card .depois-destaque { color: #E88080; }
+.depois-piloto-card .depois-destaque { color: #D44D4D; }
 .depois-piloto-card h3 + p { color: rgba(255, 255, 255, 0.7) !important; }
-.depois-cta-desk { display: inline-flex; align-items: center; gap: .5rem; height: 3rem; padding: 0 1.5rem; border-radius: 9999px; border: 1.5px solid #E88080; color: #E88080;
+.depois-cta-desk { display: inline-flex; align-items: center; gap: .5rem; height: 3rem; padding: 0 1.5rem; border-radius: 9999px; border: 1.5px solid #D44D4D; color: #D44D4D;
   background: transparent; font-size: .9375rem; font-weight: 600; white-space: nowrap; text-decoration: none; transition: background-color .2s ease, color .2s ease, border-color .2s ease; }
 .depois-cta-desk svg { width: 1.125rem; height: 1.125rem; transition: transform .2s ease; }
-.depois-cta-desk:hover { background: #B82828; border-color: #B82828; color: #FFFFFF; }
+.depois-cta-desk:hover { background: #D44D4D; border-color: #D44D4D; color: #FFFFFF; }
 .depois-cta-desk:hover svg { transform: translateX(2px); }
 .depois-cta-desk:focus-visible { outline: none; box-shadow: 0 0 0 2px #0D1119, 0 0 0 4px rgba(212, 77, 77, 0.6); }
 
@@ -624,8 +624,8 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .depois-piloto-card .luz-card span:nth-child(3), .cf-cartao-depois .luz-card span:nth-child(3) { display: none; }
 .depois-piloto-card > .depois-piloto > span:first-child { background: rgba(212, 77, 77, 0.10) !important; color: #D44D4D !important; }
 .depois-piloto-card h3, .cf-cartao-depois h3 { color: #131A27 !important; }
-.depois-piloto-card .depois-destaque, .cf-cartao-depois .depois-destaque { color: #B82828; }
+.depois-piloto-card .depois-destaque, .cf-cartao-depois .depois-destaque { color: #D44D4D; }
 .depois-piloto-card h3 + p, .cf-cartao-depois p { color: #495669 !important; }
-.depois-cta-desk, .cf-cartao-depois .depois-cta { background: #B82828 !important; border-color: #B82828 !important; color: #FFFFFF !important; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
-.depois-cta-desk:hover, .cf-cartao-depois .depois-cta:hover { background: #8C1B1B !important; border-color: #8C1B1B !important; }
+.depois-cta-desk, .cf-cartao-depois .depois-cta { background: #D44D4D !important; border-color: #D44D4D !important; color: #FFFFFF !important; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+.depois-cta-desk:hover, .cf-cartao-depois .depois-cta:hover { background: #B82828 !important; border-color: #B82828 !important; }
 .depois-cta-desk:focus-visible, .cf-cartao-depois .depois-cta:focus-visible { box-shadow: 0 0 0 2px #FDF2F2, 0 0 0 4px rgba(212, 77, 77, 0.6) !important; }
