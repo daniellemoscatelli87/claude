@@ -115,6 +115,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     { tipo: 'Painel de vendas do varejo', av: 4, s: 2 },
     { tipo: 'Onboarding de conta digital', av: 5, s: 0 },
     { tipo: 'Automação com IA na fábrica', av: 2, s: 2 },
+    { tipo: 'Treinamento da equipe de atendimento', av: 5, s: 1 },
   ];
   const cols = Array.from(quadro.querySelectorAll<HTMLElement>('.rx-kb-col'));
   const listas = cols.map((c) => c.querySelector<HTMLUListElement>('.rx-kb-cards')!);
