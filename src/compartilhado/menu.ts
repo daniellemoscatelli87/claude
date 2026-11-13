@@ -344,3 +344,32 @@ contactForm.addEventListener('change', salvarRascunho);
   // Contato dentro do menu: fecha o menu antes de abrir a gaveta.
   painel.querySelectorAll('[data-open-contact]').forEach((b) => b.addEventListener('click', () => definir(false)));
 })();
+
+/* ---------- Faixa de fundo atrás do menu (desktop): clara sobre seções claras, escura sobre seções escuras ---------- */
+(() => {
+  const header = document.getElementById('site-header');
+  if (!header || !window.matchMedia('(min-width: 1024px)').matches) return;
+  const corDeFundo = (el: Element | null): [number, number, number] | null => {
+    for (let n = el; n && n !== document.documentElement; n = n.parentElement) {
+      const c = getComputedStyle(n);
+      const m = c.backgroundColor.match(/[\d.]+/g);
+      if (m && (m.length < 4 || +m[3] > 0.5)) return [+m[0], +m[1], +m[2]];
+      if (c.backgroundImage !== 'none' && n instanceof HTMLElement && n.matches('section')) {
+        const g = c.backgroundImage.match(/rgba?\(([^)]+)\)/);
+        if (g) { const v = g[1].split(',').map(Number); return [v[0], v[1], v[2]]; }
+      }
+    }
+    return null;
+  };
+  let pendente = false;
+  const avaliar = () => {
+    pendente = false;
+    const y = header.getBoundingClientRect().bottom + 12;
+    const sob = document.elementsFromPoint(window.innerWidth / 2, y).find((el) => !header.contains(el));
+    const cor = corDeFundo(sob || null);
+    const escuro = !!cor && (0.2126 * cor[0] + 0.7152 * cor[1] + 0.0722 * cor[2]) < 110;
+    header.classList.toggle('sobre-escuro', escuro);
+  };
+  window.addEventListener('scroll', () => { if (!pendente) { pendente = true; requestAnimationFrame(avaliar); } }, { passive: true });
+  avaliar();
+})();
