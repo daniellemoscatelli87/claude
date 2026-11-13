@@ -970,3 +970,5 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
   .rx-orbita-area .rx-orbita { position: relative; z-index: 1; }
 }
 @media (max-width: 639px) { .rx-kb-status { white-space: normal; line-height: 1.2; padding: .1875rem .375rem; } .rx-kb-status::before { align-self: center; } }
+/* Celular e tablet: sem a modelo ao lado do ecossistema */
+@media (max-width: 1023px) { .rx-modelo-aponta { display: none !important; } }
