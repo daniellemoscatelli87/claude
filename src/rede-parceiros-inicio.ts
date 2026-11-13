@@ -39,7 +39,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   const cta = document.getElementById('cta-flutuante');
   const subir = document.getElementById('botao-subir');
   const hero = document.querySelector('.rp-hero');
-  const convite = document.querySelector('.rp-convite');
+  const convite = document.querySelector('.rp-carta');
   const rodape = document.querySelector('footer');
   if (!('IntersectionObserver' in window)) return;
   const mostrar = (el: HTMLElement | null, sim: boolean) => {
