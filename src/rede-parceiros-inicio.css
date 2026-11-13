@@ -897,3 +897,5 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-setores h3 { max-width: 30rem; margin: 0 auto !important; font-size: 1.5rem !important; font-weight: 700 !important; line-height: 1.3; letter-spacing: -0.01em; color: #131A27 !important; text-wrap: balance; }
 .rx-orbita-area { margin-top: 1rem !important; }
 @media (max-width: 639px) { .rx-setores { margin-top: 3.5rem !important; } .rx-setores h3 { font-size: 1.25rem !important; max-width: 20rem; } }
+.rx-setores h3 { max-width: 42rem; font-size: 1.375rem !important; line-height: 1.4; }
+@media (max-width: 639px) { .rx-setores h3 { font-size: 1.125rem !important; max-width: 22rem; } }
