@@ -1331,3 +1331,15 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .pz-painel { max-width: 74rem; padding: 2.75rem 1.5rem; }
   .pz-faixa { max-width: 62rem; }
 }
+/* ícones no padrão "Icon Container" do DS: fundo --primary-muted (vermelho a 10%), sem sombra nem degradê,
+   64px com raio de 20px e ícone "feature" de 32px com traço 1.75 */
+.pz-ic, .pz-ic-p { width: 4rem !important; height: 4rem !important; border-radius: 20px !important; background: rgba(212, 77, 77, 0.10) !important; box-shadow: none !important; }
+.pz-ic svg, .pz-ic-p svg { width: 2rem !important; height: 2rem !important; stroke-width: 1.75 !important; }
+.pz-lig { margin-top: calc(2rem - 1px); }
+.pz-lado { grid-template-columns: 4rem 1fr; }
+@media (max-width: 767px) {
+  .pz-lado { grid-template-columns: 3.5rem 1fr; }
+  .pz-ic-p { width: 3.5rem !important; height: 3.5rem !important; border-radius: 16px !important; }
+  .pz-ic-p svg { width: 1.75rem !important; height: 1.75rem !important; }
+  .pz-lig { margin-top: 1.5rem; }
+}
