@@ -677,3 +677,23 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .hero-piloto { padding-top: 25svh !important; }
   .hero-card { min-height: calc(75svh - 8.75rem); }
 }
+/* celular: título do hero sempre em uma linha */
+@media (max-width: 639px) { #hero-titulo { font-size: min(1.625rem, 6.3vw); white-space: nowrap; } }
+/* celulares baixos: card mais para cima e um pouco mais compacto, para tudo caber na primeira tela */
+@media (max-width: 767px) and (max-height: 760px) {
+  #hero-fundo img { height: 19svh !important; }
+  .hero-piloto { padding-top: 19svh !important; }
+  .hero-card { min-height: 0; padding-top: 1.5rem; padding-bottom: 1.5rem; }
+  .hero-card > p:first-child { margin-bottom: .75rem; }
+  .hero-card .space-y-3 > * + * { margin-top: .5rem; }
+}
+@media (max-width: 767px) and (max-height: 680px) {
+  #hero-fundo img { height: 17svh !important; }
+  .hero-piloto { padding-top: 17svh !important; }
+  .hero-card .space-y-3 { font-size: .8125rem; line-height: 1.55; }
+  .hero-card > p:nth-child(3) { font-size: .9375rem; margin-bottom: .75rem; }
+}
+@media (max-width: 767px) and (max-height: 680px) {
+  #hero-fundo img { height: 20svh !important; object-position: center 30%; }
+  .hero-piloto { padding-top: 20svh !important; }
+}
