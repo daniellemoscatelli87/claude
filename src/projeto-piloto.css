@@ -652,3 +652,11 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 /* celular: o botão do card do hero sai, porque o "Cadastrar empresa" flutuante fica sempre visível no rodapé */
 @media (max-width: 767px) { .hero-acoes { display: none !important; } .hero-card .space-y-3 { margin-bottom: 0; } }
 @media (max-width: 767px) { .hero-piloto { min-height: 0; padding-bottom: 5.5rem !important; } } /* card logo abaixo da foto, acima do botão flutuante */
+/* celular: primeira tela = 30% do topo para a foto do hero, o restante para o card */
+@media (max-width: 767px) {
+  #hero-fundo img { top: var(--altura-cabecalho, 68px); height: calc(30svh - var(--altura-cabecalho, 68px)) !important; aspect-ratio: auto; object-fit: cover; object-position: center 40%;
+    -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent); mask-image: linear-gradient(to bottom, #000 70%, transparent); }
+  .hero-piloto { padding-top: 30svh !important; padding-bottom: 5.5rem !important; align-items: stretch; }
+  .hero-piloto > div:has(.hero-card) { padding-top: 0; padding-bottom: 0; }
+  .hero-card { min-height: calc(70svh - 5.5rem); }
+}
