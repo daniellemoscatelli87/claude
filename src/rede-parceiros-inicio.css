@@ -372,3 +372,10 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-checklist-caixas p { margin: 0; font-size: .9375rem; line-height: 1.65; color: #495669; }
 .rp-checklist-caixas p strong { display: block; margin-bottom: .25rem; color: #131A27; font-size: 1.0625rem; font-weight: 600; line-height: 1.4; }
 @media (prefers-reduced-motion: reduce) { .rp-caixa path { transition: none; } .rp-checklist-caixas li.marcado .rp-caixa { animation: none; } }
+/* Celular: conteúdo do card de convite centralizado */
+@media (max-width: 767px) {
+  .rp-carta { text-align: center !important; justify-items: center; }
+  .rp-carta-foto img { margin: 0 auto; }
+  .rp-carta-rodape { align-items: center !important; }
+  .rp-carta-assinatura { align-items: center; }
+}
