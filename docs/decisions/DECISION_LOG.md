@@ -409,6 +409,20 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-047 · 13/11/2026 · Design system do DM no subdomínio designsystem.danimoscatelli.com.br
+
+- **Origem:** pedido da dona do produto ("quero que o ds do dani moscatelli tb fique em um designsystem.danimoscatelli.com.br"). É o mesmo caminho já feito com o FindLook (designsystem.findlook.com.br).
+- **Decisão:**
+  - **DNS:** CNAME `designsystem` → `daniellemoscatelli87.github.io` no Cloudflare, só DNS (nuvem cinza). Criado pela dona do produto.
+  - **DS:** build na raiz (`base: '/'`).
+  - **Publicação:** o fluxo grava o CNAME a cada versão e confere a base `/`.
+  - **Endereços antigos:** `github.io/DaniMoscatelli-DesignSystem/` redireciona pelo GitHub; `danimoscatelli.com.br/designsystem` e `/DaniMoscatelli-DesignSystem` redirecionam (301) pelo site (PR #124).
+- **Trade-off:**
+  - Voltar a uma versão anterior a v44 pelo fluxo fica bloqueado pela conferência da base, porque as versões antigas usam a base antiga.
+  - Até o PR #124 ser mesclado, `danimoscatelli.com.br/designsystem` abre sem estilos.
+
+---
+
 ## D-046 · 13/11/2026 · Header e menus: correções da dona do produto (substitui partes da D-045)
 
 - **Origem:** cinco correções da dona do produto:

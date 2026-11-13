@@ -360,6 +360,23 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-13 · DS do DM no subdomínio designsystem.danimoscatelli.com.br (D-047; publicado: v44)
+
+- **DNS:** a dona do produto criou o CNAME no Cloudflare. Conferido no dns.google e no cloudflare-dns.com: `daniellemoscatelli87.github.io`.
+- **DS:** `vite.config.ts` com `base: '/'` e README atualizado (commit `41db5ad`). Build local servido na raiz: sem 404, foto `/fotos/...` carregada e testes da seção Header e menus passando.
+- **Publicação** (`publish.yml` no Deploy, commit `d269d3d`): `VITE_BASE: /`, conferência da base `/` e `cname: designsystem.danimoscatelli.com.br`.
+- **No ar (v44):**
+  - `gh-pages/CNAME` com o subdomínio;
+  - `github.io/DaniMoscatelli-DesignSystem/` responde 301 para o subdomínio;
+  - `https://designsystem.danimoscatelli.com.br` responde 200 com certificado válido;
+  - Playwright no subdomínio sem erros e sem falhas de rede.
+- **Site:** PR #124 (branch `claude/designsystem-subdominio`).
+  - `functions/_lib/proxy-design-system.js` passa a responder 301 para o subdomínio, com caminho e busca preservados (testado isoladamente).
+  - `public/_redirects` também passa a 301.
+  - Os links do rodapé em `partes.ts` apontam para o subdomínio.
+  - **Pendente:** mesclar o PR e ligar o "Enforce HTTPS" no GitHub Pages.
+- **Docs:** `CLAUDE.md` com o novo endereço.
+
 ## 2026-11-13 · Header e menus: modelo atual do site e correções (D-046; publicado: DM v43 e FindLook v67)
 
 - **Origem:** cinco correções da dona do produto (ver D-046).
