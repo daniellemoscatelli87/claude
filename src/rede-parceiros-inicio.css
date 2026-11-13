@@ -399,3 +399,8 @@ html.cadastro-aberto { overflow: hidden; }
   .rp-espectro .rp-icone { width: 3rem !important; height: 3rem !important; }
   .rp-espectro h3 { padding-top: 0; max-width: 14rem; }
 }
+/* Celular: título em três linhas, uma frase por linha, com tamanho que cabe na largura */
+@media (max-width: 767px) {
+  .rp-hero h1 { font-size: clamp(1.25rem, 6.3vw, 1.875rem); line-height: 1.2; }
+  .rp-h1-linha { display: block; white-space: nowrap; }
+}
