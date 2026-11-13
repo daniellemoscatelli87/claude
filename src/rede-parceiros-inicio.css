@@ -295,3 +295,25 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-carta-conteudo > p.rp-carta-selo + h2 { margin-top: 0; }
 /* Carta-convite no fim da página (no lugar do card de convite) */
 #cadastro .rp-carta { margin-top: 3rem; }
+
+/* Carta-convite em modo claro: superfície "tint" do Card de convite ao parceiro do DS (rosa claro) */
+.rp-carta { background: #FDF2F2; border: 1px solid rgba(212, 77, 77, 0.15); color: #131A27;
+  box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); transition: box-shadow .2s ease; }
+.rp-carta:hover { box-shadow: 0 8px 24px rgba(13, 17, 25, 0.09), 0 20px 48px rgba(13, 17, 25, 0.07); }
+.rp-carta-luz span { animation: none; filter: blur(64px); }
+.rp-carta-luz span:nth-child(1) { width: 14rem; height: 14rem; top: -4rem; left: auto; right: -4rem; background: rgba(212, 77, 77, 0.10); }
+.rp-carta-luz span:nth-child(2) { width: 10rem; height: 10rem; top: auto; right: auto; bottom: -5rem; left: -2.5rem; background: rgba(212, 77, 77, 0.05); }
+.rp-carta-luz span:nth-child(3) { display: none; }
+.rp-carta-foto img { border-color: #FFFFFF; box-shadow: 0 0 0 6px rgba(212, 77, 77, 0.10); }
+.rp-carta-conteudo > p.rp-carta-selo { background: #FFFFFF; border-color: #F9DADA; color: #B82828; }
+.rp-carta h2 { color: #131A27; }
+.rp-carta h2 span { color: #B82828; }
+.rp-carta-conteudo > p { color: #495669; }
+.rp-carta-conteudo strong { color: #131A27; }
+.rp-carta-rodape { border-top-color: rgba(212, 77, 77, 0.15); }
+.rp-carta-assinatura strong { color: #131A27; }
+.rp-carta-assinatura span { color: #627288; }
+.rp-carta-cta { background: #B82828; border-color: #B82828; color: #FFFFFF; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+.rp-carta-cta:hover { background: #8C1B1B; border-color: #8C1B1B; }
+.rp-carta-cta:focus-visible { box-shadow: 0 0 0 2px #FDF2F2, 0 0 0 4px rgba(212, 77, 77, 0.6); }
+.rp-carta-assinatura span { color: #495669; } /* AA sobre o rosa claro */
