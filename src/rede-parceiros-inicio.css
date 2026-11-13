@@ -291,5 +291,5 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-carta-cta:hover { background: #B82828; border-color: #B82828; color: #FFFFFF; }
 .rp-carta-cta:focus-visible { outline: none; box-shadow: 0 0 0 2px #0D1119, 0 0 0 4px rgba(212, 77, 77, 0.6); }
 @media (max-width: 767px) { .rp-carta { text-align: left; } .rp-carta-rodape { flex-direction: column; align-items: flex-start; } }
-.rp-carta-conteudo > p.rp-carta-selo { font-size: .6875rem; line-height: 1.4; color: rgba(255, 255, 255, 0.85); margin-bottom: 1rem; }
+.rp-carta-conteudo > p.rp-carta-selo { font-size: .75rem; line-height: 1.4; color: rgba(255, 255, 255, 0.85); margin-bottom: 1rem; }
 .rp-carta-conteudo > p.rp-carta-selo + h2 { margin-top: 0; }
