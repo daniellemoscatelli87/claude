@@ -908,7 +908,7 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 }
 /* foto v7 (com o título do programa na própria arte, à direita): enquadramento central para não cortar o texto */
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-  #hero-fundo { background-image: url("/projeto-piloto-hero-v7.webp") !important; background-position: center center !important; }
+  #hero-fundo { background-image: url("/projeto-piloto-hero-v10.webp") !important; background-position: center center !important; }
 }
 @media (min-width: 1024px) { #hero-fundo img { object-position: center center !important; } }
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) { #hero-fundo { background-position: 75% center !important; } }
@@ -1370,3 +1370,15 @@ main + footer.relative { margin-top: 0; padding-top: 4rem !important; }
 /* painel de ganhos sem ícones: só a tag, o título e os checks */
 .pz-lado { grid-template-columns: 1fr !important; padding: 0 2.5rem; }
 @media (max-width: 767px) { .pz-lado { padding: 0; } }
+/* card de convite ~20px mais para cima */
+#inscricao { padding-top: calc(4rem - 20px) !important; }
+@media (min-width: 640px) { #inscricao { padding-top: calc(6rem - 20px) !important; } }
+/* card de convite mais perto do FAQ e mais longe das informações do rodapé; fundo escuro começa mais alto */
+#guia { padding-bottom: 3rem !important; }
+#inscricao { padding-top: 1.5rem !important; background: linear-gradient(to bottom, transparent calc(100% - 13rem), #0D1119 calc(100% - 13rem)), #EDF0F5 !important; }
+main + footer.relative { padding-top: 6rem !important; }
+@media (max-width: 767px) {
+  #guia { padding-bottom: 2.5rem !important; }
+  #inscricao { padding-top: 1rem !important; background: linear-gradient(to bottom, transparent calc(100% - 9rem), #0D1119 calc(100% - 9rem)), #EDF0F5 !important; }
+  main + footer.relative { padding-top: 4.5rem !important; }
+}
