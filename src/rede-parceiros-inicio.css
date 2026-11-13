@@ -910,3 +910,6 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
   .rx-orbita-area .rx-orbita { margin: 0 !important; }
   .rx-modelo-aponta { width: 440px; margin: 0 -1.5rem 0 -8rem; position: relative; top: 1.5rem; }
 }
+@media (min-width: 1024px) { .rx-modelo-aponta { width: 400px; margin: 0 -1rem 0 -6rem; top: 0; } }
+@media (min-width: 1024px) { .rx-modelo-aponta { margin-right: 1.5rem; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .rx-modelo-aponta { width: 360px; margin-left: -4rem; } }
