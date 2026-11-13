@@ -584,3 +584,18 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .cf-cartao-depois .depois-cta { border-color: #E88080; color: #E88080; }
   .cf-cartao-depois .depois-cta:hover { background: #B82828; border-color: #B82828; color: #FFFFFF; }
 }
+
+/* Desktop/tablet: card horizontal "E depois" abaixo da timeline, no mesmo padrão escuro do card do celular */
+.depois-piloto-card { position: relative; isolation: isolate; overflow: hidden; background: #0D1119 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06) !important; }
+.depois-piloto-card::before { content: ""; position: absolute; z-index: -1; right: -4rem; top: -4rem; width: 16rem; height: 16rem; border-radius: 9999px; background: rgba(212, 77, 77, 0.10); filter: blur(64px); pointer-events: none; }
+.depois-piloto-card > .depois-piloto > span:first-child { background: rgba(255, 255, 255, 0.1) !important; border-color: transparent !important; color: #E88080 !important; box-shadow: none !important; }
+.depois-piloto-card h3 { color: #FFFFFF !important; font-weight: 700; letter-spacing: -0.02em; }
+.depois-piloto-card .depois-destaque { color: #E88080; }
+.depois-piloto-card h3 + p { color: rgba(255, 255, 255, 0.7) !important; }
+.depois-cta-desk { display: inline-flex; align-items: center; gap: .5rem; height: 3rem; padding: 0 1.5rem; border-radius: 9999px; border: 1.5px solid #E88080; color: #E88080;
+  background: transparent; font-size: .9375rem; font-weight: 600; white-space: nowrap; text-decoration: none; transition: background-color .2s ease, color .2s ease, border-color .2s ease; }
+.depois-cta-desk svg { width: 1.125rem; height: 1.125rem; transition: transform .2s ease; }
+.depois-cta-desk:hover { background: #B82828; border-color: #B82828; color: #FFFFFF; }
+.depois-cta-desk:hover svg { transform: translateX(2px); }
+.depois-cta-desk:focus-visible { outline: none; box-shadow: 0 0 0 2px #0D1119, 0 0 0 4px rgba(212, 77, 77, 0.6); }
