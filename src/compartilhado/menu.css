@@ -179,3 +179,18 @@ html.menu-aberto { overflow: hidden; }
   html body .site-header .btn-contato { padding: 0 !important; border: 0 !important; background: transparent !important; color: #131A27 !important; font-size: .9375rem; font-weight: 500; transform: none !important; box-shadow: none !important; }
   html body .site-header .btn-contato:hover { color: #D44D4D !important; background: transparent !important; }
 }
+/* mais respiro nas laterais da pílula do menu */
+@media (min-width: 1024px) { html body .site-header header { padding: .5rem 2.75rem .5rem 2rem !important; } }
+@media (min-width: 1024px) { html body .site-header header.w-full, html body.cabecalho-sobre-hero .site-header header { padding: .5rem 2.75rem .5rem 2rem !important; gap: 3rem !important; } }
+@media (min-width: 1024px) { html body .site-header header.w-full > div, html body .site-header header.w-full nav[aria-label="Principal"] { gap: 2.75rem !important; } }
+/* pílula do menu sem desfoque de fundo (pesa na rolagem); quase opaca, o visual fica o mesmo */
+@media (min-width: 1024px) { html body .site-header header.w-full { background: rgba(255, 255, 255, 0.96) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; } }
+
+/* Desktop: aviso "Tem um desafio ou uma ideia?" flutuando acima do botão do WhatsApp, com a seta apontando para ele;
+   o clique abre a conversa no WhatsApp (o script move o aviso para o fim da página e troca a ação) */
+@media (min-width: 1024px) {
+  #cta-contato.cta-whats { position: fixed !important; top: auto !important; left: auto !important; right: 1.5rem !important; bottom: calc(1.5rem + 3.5rem + 1rem) !important; margin: 0 !important; z-index: 30; }
+  #cta-contato.cta-whats > span[aria-hidden="true"] { top: auto !important; bottom: -7px !important; left: auto !important; right: 21px !important; rotate: 225deg; }
+  .cta-contato.cta-whats { animation: cta-entrada-whats .45s ease-out .6s both, cta-flutua 2.6s ease-in-out 1.2s 3; }
+  @keyframes cta-entrada-whats { from { opacity: 0; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
+}
