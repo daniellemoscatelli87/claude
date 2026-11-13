@@ -409,3 +409,11 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (prefers-reduced-motion: no-preference) { .card-frente:hover::after { animation-duration: 6s; } }
 /* Escopo: borda animada mais refinada, vermelho com grafite claro (receita do DS: primary, chart-2, primary), 1.5px */
 .secao-escura .card-frente::after { padding: 1.5px; background-image: radial-gradient(transparent, #D44D4D, #B3BDD0, #D44D4D, transparent); }
+
+/* ---------- Guia: tipografia única dentro das respostas do accordion ----------
+   Corpo: 13px/400 --muted-foreground (#627288). Ênfases (frases de abertura, "Não.", negritos): 13px/600 --foreground (#131A27).
+   Notas finais no mesmo tamanho e cor do corpo. */
+#accordion-group .accordion-content p, #accordion-group .accordion-content li, #accordion-group .accordion-content span:not(.text-coral-600) { font-size: .8125rem; line-height: 1.625; }
+#accordion-group .accordion-content p.text-slate-500 { font-size: .8125rem; color: #627288; }
+#accordion-group .accordion-content p.text-slate-800, #accordion-group .accordion-content p.text-slate-900,
+#accordion-group .accordion-content strong { font-size: .8125rem; font-weight: 600; color: #131A27; }
