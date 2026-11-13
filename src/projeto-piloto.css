@@ -417,3 +417,7 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #accordion-group .accordion-content p.text-slate-500 { font-size: .8125rem; color: #627288; }
 #accordion-group .accordion-content p.text-slate-800, #accordion-group .accordion-content p.text-slate-900,
 #accordion-group .accordion-content strong { font-size: .8125rem; font-weight: 600; color: #131A27; }
+/* Botão subir com o mesmo tamanho (56px) e a mesma linha de base do botão do WhatsApp, 12px de distância */
+.botao-subir { width: 3.5rem; height: 3.5rem; right: 88px; bottom: 20px; }
+@media (min-width: 640px) { .botao-subir { right: 92px; bottom: 24px; } }
+.botao-subir svg { width: 1.5rem; height: 1.5rem; }
