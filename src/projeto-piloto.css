@@ -397,3 +397,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .secao-escura .card-frente::after { background-image: radial-gradient(transparent, transparent, #D44D4D, #627288, #D44D4D, transparent, transparent); }
 .hero-card:hover::after, .card-frente:hover::after { opacity: 1; }
 @media (prefers-reduced-motion: no-preference) { .hero-card:hover::after, .card-frente:hover::after { animation: ds-shine 12s linear infinite; } }
+/* Escopo: sem a barra vermelha do topo no hover (a Shine Border já marca o hover) */
+.card-frente .frente-barra { display: none; }
