@@ -178,3 +178,50 @@ export const GAVETA_HTML = `<!-- Gaveta de contato -->
   </div>
 </aside>
 `;
+
+// Rodapé padrão (mesma estrutura em todas as páginas), em versão clara ou escura conforme o estilo de cada página.
+// Inserido no build no comentário <!-- @rodape:claro|escuro -->, dentro do <footer> de cada página.
+const LINKS_RODAPE: { href: string; texto: string }[] = [
+  { href: '/', texto: 'Home' },
+  { href: '/projeto-piloto/', texto: 'Projeto Piloto' },
+  { href: '/rede-parceiros/', texto: 'Seja Parceiro' },
+  { href: '/privacidade/', texto: 'Política de privacidade' },
+];
+
+export function rodapeHtml(variante: 'claro' | 'escuro'): string {
+  const logo = variante === 'escuro' ? '/logo-dm-fundo-escuro.svg' : '/logo-dm.png';
+  const links = LINKS_RODAPE.map((l) => `<a href="${l.href}">${l.texto}</a>`).join('\n        ');
+  return `<!-- Rodapé (componente compartilhado: src/compartilhado/partes.ts) -->
+  <div class="rodape rodape-${variante}">
+    <div class="rodape-topo">
+      <a class="rodape-logo" href="/"><img alt="Dani Moscatelli Experience Design Studio: página inicial" src="${logo}"></a>
+      <nav aria-label="Rodapé" class="rodape-links">
+        ${links}
+        <button type="button" data-preferencias-cookies>Preferências de cookies</button>
+        <a href="/admin/">Área restrita</a>
+      </nav>
+    </div>
+    <div class="rodape-base">
+      <p>© 2026 Dani Moscatelli Experience Design Studio. Todos os direitos reservados. <span aria-hidden="true">•</span> Curitiba - PR</p>
+      <p>Desenvolvido a partir de <a class="rodape-ds" href="/designsystem/" target="_blank" rel="noopener">Dani Moscatelli - Design System<span class="sr-only"> (abre em nova aba)</span></a></p>
+    </div>
+  </div>`;
+}
+
+// Versão compacta (página "Em breve"): sem logo nem links de navegação, que já estão no cabeçalho.
+export function rodapeCompactoHtml(): string {
+  return `<!-- Rodapé compacto (componente compartilhado: src/compartilhado/partes.ts) -->
+  <div class="rodape rodape-claro rodape-compacto">
+    <div class="rodape-base">
+      <div>
+        <p>© 2026 Dani Moscatelli Experience Design Studio. Todos os direitos reservados. <span aria-hidden="true">•</span> Curitiba - PR</p>
+        <p>Desenvolvido a partir de <a class="rodape-ds" href="/designsystem/" target="_blank" rel="noopener">Dani Moscatelli - Design System<span class="sr-only"> (abre em nova aba)</span></a></p>
+      </div>
+      <nav aria-label="Rodapé" class="rodape-links">
+        <a href="/privacidade/">Política de privacidade</a>
+        <button type="button" data-preferencias-cookies>Preferências de cookies</button>
+        <a href="/admin/">Área restrita</a>
+      </nav>
+    </div>
+  </div>`;
+}
