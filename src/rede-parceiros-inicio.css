@@ -1,0 +1,108 @@
+@import "tailwindcss" source(none);
+@import "./compartilhado/menu.css";
+@source "../rede-parceiros/index.html";
+
+/* Rede de Parceiros: apresentação clara, só com tokens do design system oficial.
+   graphite-50 #EDF0F5 · 300 #8898B0 · 400 #627288 · 500 #495669 · 700 #283043 · 900 #131A27
+   crimson-50 #FDF2F2 · 100 #F9DADA · 400 #D44D4D (primary) · 500 #B82828 · 600 #8C1B1B
+   --border rgba(19,26,39,.09) · --shadow-sm · raio 16/24px · tipografia: H1 2.5rem/700, H2 2rem/700, H3 1.25rem/600, label .75rem/600 .08em */
+body.parceiros-inicio { font-family: "Plus Jakarta Sans", sans-serif; background: #FFFFFF; color: #131A27; -webkit-font-smoothing: antialiased; }
+.parceiros-inicio main { display: block; }
+.rp-container { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem; }
+@media (min-width: 640px) { .rp-container { padding: 0 1.5rem; } }
+@media (min-width: 1024px) { .rp-container { padding: 0 2rem; } }
+.rp-estreito { max-width: 48rem; }
+.rp-centro { text-align: center; }
+.rp-destaque { color: #B82828; }
+
+/* Selo (DS "Selo", tom primário) */
+.rp-selo { display: inline-flex; align-items: center; gap: .5rem; margin: 0 0 1rem; padding: .375rem .875rem; border-radius: 9999px;
+  border: 1px solid #F9DADA; background: #FDF2F2; color: #B82828; font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.rp-selo span { width: .5rem; height: .5rem; border-radius: 9999px; background: #D44D4D; }
+
+/* Botões (DS primário e link secundário) */
+.rp-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin-top: 2rem; }
+.rp-botao { display: inline-flex; align-items: center; gap: .5rem; height: 3rem; padding: 0 1.5rem; border-radius: 9999px; background: #B82828; color: #FFFFFF;
+  font-size: .9375rem; font-weight: 600; text-decoration: none; box-shadow: 0 1px 3px rgba(13,17,25,.07), 0 2px 6px rgba(13,17,25,.05);
+  transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease; }
+.rp-botao svg { width: 1.25rem; height: 1.25rem; transition: transform .2s ease; }
+.rp-botao:hover { transform: translateY(-2px); background: #8C1B1B; box-shadow: 0 4px 12px rgba(13,17,25,.08), 0 12px 36px rgba(13,17,25,.06); }
+.rp-botao:hover svg { transform: translateX(2px); }
+.rp-link { font-size: .875rem; font-weight: 600; color: #B82828; text-underline-offset: 4px; }
+.rp-link:hover { text-decoration: underline; }
+.rp-botao:focus-visible, .rp-link:focus-visible { outline: none; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px rgba(212, 77, 77, 0.6); border-radius: 9999px; }
+
+/* Card (DS: fundo branco, borda --border, raio 16px; sobre fundo branco só borda, sobre G-50 sombra suave) */
+.rp-card { position: relative; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); border-radius: 16px; padding: 1.5rem; }
+.rp-fundo-g50 .rp-card { box-shadow: 0 1px 3px rgba(13,17,25,.07), 0 2px 6px rgba(13,17,25,.05); }
+@media (min-width: 640px) { .rp-card { padding: 2rem; } }
+.rp-card h3 { margin: 0; font-size: 1.25rem; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; color: #131A27; }
+.rp-card p { margin: 0; font-size: .9375rem; line-height: 1.65; color: #495669; }
+.rp-icone { display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; margin-bottom: 1rem; border-radius: 12px;
+  background: #FDF2F2; border: 1px solid #F9DADA; color: #B82828; }
+.rp-icone svg { width: 1.375rem; height: 1.375rem; }
+
+/* Hero */
+.rp-hero { padding: 3rem 0 4rem; background: linear-gradient(to bottom, #FFFFFF, #FDF2F2 140%); }
+@media (min-width: 1024px) { .rp-hero { padding: 5rem 0 6rem; } }
+.rp-hero-grade { display: grid; gap: 2.5rem; align-items: center; }
+@media (min-width: 1024px) { .rp-hero-grade { grid-template-columns: 7fr 5fr; gap: 4rem; } }
+.rp-hero h1 { margin: 0; font-size: 2rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.025em; color: #131A27; text-wrap: balance; }
+@media (min-width: 640px) { .rp-hero h1 { font-size: 2.5rem; } }
+.rp-lead { margin: 1.25rem 0 0; max-width: 40rem; font-size: 1.125rem; line-height: 1.65; color: #495669; }
+.rp-lead strong { color: #131A27; font-weight: 600; }
+.rp-assinatura { margin: 0; }
+.rp-assinatura img { width: 4rem; height: 4rem; border-radius: 9999px; object-fit: cover; border: 2px solid #FFFFFF; box-shadow: 0 1px 3px rgba(13,17,25,.07), 0 2px 6px rgba(13,17,25,.05); }
+.rp-assinatura blockquote { margin: 1.25rem 0 0; }
+.rp-assinatura blockquote p { font-size: 1rem; line-height: 1.7; color: #283043; }
+.rp-assinatura figcaption { display: flex; flex-direction: column; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(19, 26, 39, 0.09); }
+.rp-assinatura figcaption strong { font-size: .9375rem; font-weight: 600; color: #131A27; }
+.rp-assinatura figcaption span { font-size: .8125rem; color: #627288; }
+
+/* Seções */
+.rp-secao { padding: 4rem 0; }
+@media (min-width: 1024px) { .rp-secao { padding: 6rem 0; } }
+.rp-fundo-g50 { background: #EDF0F5; }
+.rp-secao h2 { margin: 0; font-size: 1.75rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: #131A27; text-wrap: balance; }
+@media (min-width: 640px) { .rp-secao h2 { font-size: 2rem; } }
+.rp-texto { margin: 1rem auto 0; max-width: 42rem; font-size: 1.125rem; line-height: 1.65; color: #495669; }
+.rp-cabecalho { max-width: 44rem; margin: 0 auto 2.5rem; text-align: center; }
+@media (min-width: 1024px) { .rp-cabecalho { margin-bottom: 3.5rem; } }
+
+.rp-grade-2, .rp-grade-3, .rp-grade-4 { display: grid; gap: 1.25rem; margin: 0; padding: 0; list-style: none; }
+@media (min-width: 768px) { .rp-grade-2 { grid-template-columns: repeat(2, 1fr); } .rp-grade-3 { grid-template-columns: repeat(3, 1fr); } .rp-grade-4 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .rp-grade-4 { grid-template-columns: repeat(4, 1fr); } }
+.rp-formato h3 { font-size: 1.0625rem; }
+
+/* Tags (DS: contorno, sem fundo) */
+.rp-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+.rp-tags li { padding: .3125rem .75rem; border-radius: 9999px; border: 1px solid rgba(19, 26, 39, 0.12); font-size: .8125rem; font-weight: 500; color: #283043; }
+
+/* Card de convite (DS "Card de convite ao parceiro", horizontal, tamanho G, superfície apoio) */
+.rp-convite { position: relative; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; gap: 1.5rem; margin-top: 3rem;
+  border-radius: 24px; border: 1px solid rgba(212, 77, 77, 0.15); background: #FDF2F2; padding: 2rem;
+  box-shadow: 0 1px 3px rgba(13,17,25,.07), 0 2px 6px rgba(13,17,25,.05); transition: box-shadow .2s ease; }
+.rp-convite:hover { box-shadow: 0 8px 24px rgba(13,17,25,.09), 0 20px 48px rgba(13,17,25,.07); }
+@media (min-width: 640px) { .rp-convite { flex-direction: row; align-items: center; padding: 3rem; } }
+.rp-convite-luz { position: absolute; z-index: -1; pointer-events: none; border-radius: 9999px; filter: blur(64px); }
+.rp-convite-luz-1 { right: -4rem; top: -4rem; width: 14rem; height: 14rem; background: rgba(212, 77, 77, 0.10); }
+.rp-convite-luz-2 { left: -2.5rem; bottom: -5rem; width: 10rem; height: 10rem; background: rgba(212, 77, 77, 0.05); }
+.rp-convite-visual { flex-shrink: 0; width: 6rem; height: 6rem; border-radius: 18px; background: #FFFFFF; color: #D44D4D; display: flex; align-items: center; justify-content: center; }
+.rp-convite-visual svg { width: 3rem; height: 3rem; }
+@media (min-width: 640px) { .rp-convite-visual { order: 2; } }
+.rp-convite-conteudo { min-width: 0; flex: 1; }
+.rp-convite .rp-selo { background: #FFFFFF; }
+.rp-convite-titulo { font-size: 2rem !important; line-height: 1.1 !important; letter-spacing: -0.03em !important; }
+@media (min-width: 640px) { .rp-convite-titulo { font-size: 2.5rem !important; } }
+.rp-convite-texto { margin: .5rem 0 0; max-width: 60ch; font-size: 1.0625rem; line-height: 1.625; color: #495669; }
+.rp-convite .rp-acoes { margin-top: 1.5rem; }
+
+/* Celular: conteúdo centralizado, como nas outras páginas */
+@media (max-width: 767px) {
+  .rp-hero-texto, .rp-convite { text-align: center; align-items: center; }
+  .rp-hero-texto .rp-acoes, .rp-convite .rp-acoes { justify-content: center; }
+  .rp-lead, .rp-convite-texto { margin-left: auto; margin-right: auto; }
+  .rp-assinatura { text-align: center; }
+  .rp-assinatura img { margin: 0 auto; }
+}
+@media (prefers-reduced-motion: reduce) { .rp-botao, .rp-botao svg, .rp-convite { transition: none; } }
