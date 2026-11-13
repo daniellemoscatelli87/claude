@@ -978,3 +978,12 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-num-txt { min-width: 0; }
 .rx-num-txt p { margin: .375rem 0 0; font-size: .9375rem; line-height: 1.55; color: #495669; }
 @media (max-width: 639px) { .rx-numerada li { grid-template-columns: 3rem 1fr !important; } .rx-num-txt p { font-size: .875rem; } }
+/* Celular: kanban substituído por um card de tarefa único */
+.rx-kb-unico { display: none; }
+@media (max-width: 639px) {
+  .rx-kanban .rx-kb-quadro { display: none !important; }
+  .rx-kb-unico { display: flex; align-items: center; gap: .875rem; margin: .875rem; padding: 1rem; border-radius: 16px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.07); box-shadow: 0 1px 2px rgba(13, 17, 25, 0.05), 0 4px 12px rgba(13, 17, 25, 0.05); }
+  .rx-kb-unico img { flex: none; width: 3rem; height: 3rem; border-radius: 9999px; object-fit: cover; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px rgba(19, 26, 39, 0.08); }
+  .rx-kb-unico .rx-kb-corpo strong { font-size: .9375rem; }
+  .rx-kb-unico .rx-kb-status { white-space: nowrap; font-size: .75rem; padding: .125rem .5rem; }
+}

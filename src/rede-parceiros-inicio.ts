@@ -132,6 +132,17 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   const contar = () => cols.forEach((c, k) => { c.querySelector('.rx-kb-qtd')!.textContent = String(listas[k].children.length); });
   cards.forEach((li, i) => { aplicarStatus(i); listas[projetos[i].s].appendChild(li); });
   contar();
+  // Celular: no lugar do quadro, um card de tarefa único (foto + tarefa + status) que mostra o projeto que acabou de mudar
+  const unico = document.createElement('div');
+  unico.className = 'rx-kb-unico';
+  unico.setAttribute('aria-live', 'off');
+  quadro.after(unico);
+  const mostrarUnico = (i: number, animar: boolean) => {
+    const p = projetos[i];
+    unico.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="48" height="48" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-status" data-s="${p.s}">${STATUS[p.s]}</span></span>`;
+    if (animar && unico.offsetParent) unico.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
+  };
+  mostrarUnico(0, false);
   const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let pausado = reduzido;
   const ICO_PAUSA = '<span class="rp-ico-pausa" aria-hidden="true"><i></i><i></i></span>';
@@ -168,10 +179,11 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
       if (!dx && !dy) return;
       c.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], { duration: c === cards[i] ? 650 : 450, easing: MOLA });
     });
+    mostrarUnico(i, true);
     cards[i].animate([{ boxShadow: '0 0 0 2px rgba(212, 77, 77, 0.45)' }, { boxShadow: '0 0 0 2px rgba(212, 77, 77, 0)' }], { duration: 1400, easing: 'ease-out' });
   };
   let visivel = false;
-  new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }, { threshold: 0.3 }).observe(quadro);
+  new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }, { threshold: 0.3 }).observe(quadro.closest('.rx-kanban') || quadro);
   setInterval(() => { if (!pausado && visivel && !document.hidden) avancar(); }, 2600);
 })();
 
