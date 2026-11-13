@@ -360,6 +360,30 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-13 · Header e menus: modelo atual do site e correções (D-046; publicado: DM v43 e FindLook v67)
+
+- **Origem:** cinco correções da dona do produto (ver D-046).
+- **Leitura do site:** `src/compartilhado/partes.ts`, `menu.ts` e `menu.css`, além de `src/projeto-piloto.css`. O `@cabecalho:projeto` é inserido no build.
+- **Feito (`HeaderShowcase.tsx`, nos dois DS):**
+  - **Modelos:**
+    - pílula flutuante, o atual do site e o padrão;
+    - faixa inteira.
+  - **Chaves de rolagem:** transparente no topo, logo vira ícone ao rolar e some ao descer/volta ao subir. Limites de 8 px e 6 px, iguais aos do site.
+  - **Função `versaoDoLogo(superficie)`:** a superfície é calculada pelo modelo, pelo estado e pelo fundo.
+  - **Menu do celular:** folha inferior (padrão), gaveta e tela cheia; barra inferior sem menu no header.
+  - **Doc:** nova seção "Modelos" (`header-models` no menu) e o callout "Regra do logo completo".
+  - **DM:** foto `public/fotos/projeto-piloto-hero.webp`, copiada do site.
+  - **FindLook:** símbolo SVG no lugar do ícone e ação "Cadastrar minha loja" com ícone de loja na folha.
+- **Ocorrido:** outra conversa mudou o FindLook DS para a raiz (`base: '/'`, designsystem.findlook.com.br). Os testes locais passaram a servir em `/`. O teste do logo no FindLook lê a cor do texto dentro do SVG embutido.
+- **Verificação:** `pnpm build` e Playwright nos dois DS, em claro e escuro:
+  - pílula com ícone e página atual marcada (DM);
+  - some ao descer, volta ao subir e não some com a chave desligada;
+  - faixa com logo completo e versão certa nos 4 fundos, com a chave do ícone ligada e desligada;
+  - celular com ícone, botão de menu e sem barra; com a barra, sem botão e sem links;
+  - folha, gaveta e tela cheia: foco no primeiro link, página atual e Esc devolvendo o foco;
+  - sem rolagem horizontal e sem erros.
+- **Commits:** DM `172b7af` e FindLook `e955761`. Os mesmos testes passaram nos endereços públicos: daniellemoscatelli87.github.io/DaniMoscatelli-DesignSystem e designsystem.findlook.com.br.
+
 ## 2026-11-13 · Header e menus: seção nova nos dois DS (D-045; publicado: DM v42 e FindLook v65)
 
 - **Origem:** padrão de header e menus para DM e FindLook. As variações foram escolhidas pela dona do produto (ver D-045).

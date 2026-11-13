@@ -409,6 +409,31 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-046 · 13/11/2026 · Header e menus: correções da dona do produto (substitui partes da D-045)
+
+- **Origem:** cinco correções da dona do produto:
+  1. "Você não trouxe o modelo atual do header que está em dani moscatelli — veja a página do projeto piloto."
+  2. Sumir ao descer e voltar ao subir é configurável.
+  3. Na versão compacta, o logo some e fica só o ícone.
+  4. "Se o menu está ativo no topo, não pode estar ativo no bottom."
+  5. O logo completo precisa considerar se está sobre fundo escuro, claro ou imagem, porque o "Experience Design Studio" pode ficar ilegível.
+- **Decisão:**
+  - **Padrão:** o cabeçalho compartilhado do site (`src/compartilhado/partes.ts`, `menu.ts` e `menu.css`).
+    - **Desktop:** pílula clara flutuante com o ícone, os links (atual em vermelho e sublinhado) e "Contato"; faixa translúcida em degradê por trás ao rolar.
+    - **Celular:** faixa transparente no topo e grafite 92% ao rolar, com o ícone.
+    - **Menu do celular:** folha inferior.
+    - A "faixa inteira" fica como segundo modelo.
+  - **Rolagem:** três chaves independentes: transparente no topo, logo vira ícone ao rolar e some ao descer/volta ao subir. Substituem as três opções exclusivas da D-045.
+  - **Compacto:** troca o logo completo pelo ícone; não diminui a altura.
+  - **Menu em um lugar só:**
+    - Com a barra inferior de app, o header fica sem links e sem botão de menu; com menu no header, não há barra.
+    - A página atual (`aria-current`) aparece em um lugar só.
+    - Esta é a leitura do item 4.
+  - **Logo completo:** a versão é escolhida pela superfície atrás dele: clara usa texto escuro; escura ou foto usa texto claro. A foto tem véu de 45%, mais 60% no topo. Isso vale também para a pílula e para os menus.
+- **Trade-off:** a foto do DM é a do hero do Projeto Piloto, copiada do site para `public/fotos/`. O FindLook continua com foto do Unsplash.
+
+---
+
 ## D-045 · 13/11/2026 · Padrão de header e menus (DM e FindLook)
 
 - **Origem:** a dona do produto pediu um padrão de menus e header para os dois DS, a partir do que já existe no Dani Moscatelli, com variações para desktop e celular, comportamentos de rolagem e fundos por trás do header. Ela escolheu as variações abaixo.
