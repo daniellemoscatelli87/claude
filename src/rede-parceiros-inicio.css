@@ -106,3 +106,215 @@ body.parceiros-inicio { font-family: "Plus Jakarta Sans", sans-serif; background
   .rp-assinatura img { margin: 0 auto; }
 }
 @media (prefers-reduced-motion: reduce) { .rp-botao, .rp-botao svg, .rp-convite { transition: none; } }
+
+/* ---------- Passagens suaves entre as seções (sem divisória marcada) ---------- */
+@media (max-width: 767px) {
+  .rp-hero { background: linear-gradient(to bottom, #FFFFFF 0%, #FDF2F2 70%, #EDF0F5 100%); }
+  .rp-de-g50 { background: linear-gradient(to bottom, #EDF0F5 0, #FFFFFF 160px); }
+  #formatos.rp-fundo-g50 { background: linear-gradient(to bottom, #FFFFFF 0, #EDF0F5 160px); }
+}
+
+/* ---------- Botões flutuantes (mesmo padrão do Projeto Piloto) ---------- */
+.cta-flutuante { position: fixed; z-index: 44; right: 88px; bottom: 24px; display: inline-flex; align-items: center; justify-content: center; gap: .5rem; height: 3rem; padding: 0 1.25rem;
+  border-radius: 9999px; background: #B82828; color: #FFFFFF; font-size: .875rem; font-weight: 600; text-decoration: none; white-space: nowrap;
+  box-shadow: 0 10px 25px -5px rgba(13, 17, 25, 0.25); opacity: 0; transform: translateY(16px); pointer-events: none;
+  transition: opacity .3s ease, transform .4s cubic-bezier(0.16, 1, 0.3, 1), background-color .2s ease; }
+.cta-flutuante svg { width: 1.125rem; height: 1.125rem; }
+.cta-flutuante:hover { background: #8C1B1B; }
+.cta-flutuante.visivel { opacity: 1; transform: none; pointer-events: auto; }
+@media (min-width: 640px) { .cta-flutuante { right: 96px; bottom: 28px; } }
+@media (max-width: 639px) { .cta-flutuante { left: 20px; right: 88px; bottom: 24px; } }
+.botao-subir { position: fixed; z-index: 44; right: 88px; bottom: 20px; width: 3.5rem; height: 3.5rem; border-radius: 9999px; border: 1px solid rgba(19, 26, 39, 0.09); background: #FFFFFF; color: #131A27;
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 25px -5px rgba(13, 17, 25, 0.2);
+  opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .3s ease, transform .4s cubic-bezier(0.16, 1, 0.3, 1), background-color .2s ease; }
+.botao-subir svg { width: 1.5rem; height: 1.5rem; }
+.botao-subir:hover { background: #EDF0F5; }
+.botao-subir.visivel { opacity: 1; transform: none; pointer-events: auto; }
+@media (min-width: 640px) { .botao-subir { right: 92px; bottom: 24px; } }
+.cta-flutuante:focus-visible, .botao-subir:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.45); }
+.faixa-flutuante { display: none; }
+@media (max-width: 767px) {
+  .faixa-flutuante { display: block; position: fixed; left: 0; right: 0; bottom: 0; height: 7.5rem; z-index: 43; pointer-events: none;
+    background: linear-gradient(to top, rgba(13, 17, 25, 0.6) 0%, rgba(13, 17, 25, 0.35) 45%, rgba(13, 17, 25, 0) 100%);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    -webkit-mask-image: linear-gradient(to top, #000 40%, transparent); mask-image: linear-gradient(to top, #000 40%, transparent);
+    opacity: 0; transition: opacity .3s ease; }
+  body:has(.cta-flutuante.visivel) .faixa-flutuante, body:has(.botao-subir.visivel) .faixa-flutuante { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .cta-flutuante, .botao-subir, .faixa-flutuante { transition: none; } }
+
+/* ---------- Cadastro em janela de tela cheia (sobe de baixo para cima) ---------- */
+.cadastro-tela { position: fixed; inset: 0; z-index: 70; display: flex; flex-direction: column; background: #FFFFFF;
+  transform: translateY(100%); visibility: hidden; transition: transform .28s cubic-bezier(0.4, 0, 1, 1), visibility 0s linear .28s; }
+.cadastro-tela.aberta { transform: none; visibility: visible; transition: transform .42s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s; }
+.cadastro-tela-topo { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .875rem 1.25rem; border-bottom: 1px solid rgba(19, 26, 39, 0.09); }
+@media (min-width: 640px) { .cadastro-tela-topo { padding: 1rem 2rem; } }
+.cadastro-tela-topo .rp-selo { margin: 0 0 .25rem; padding: .125rem .625rem; font-size: .6875rem; }
+.cadastro-tela-topo h2 { margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; color: #131A27; }
+#cadastro-parceiro-fechar { flex-shrink: 0; width: 2.5rem; height: 2.5rem; border: 0; border-radius: 9999px; background: transparent; color: #495669; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+#cadastro-parceiro-fechar svg { width: 1.375rem; height: 1.375rem; }
+#cadastro-parceiro-fechar:hover { background: #EDF0F5; color: #131A27; }
+#cadastro-parceiro-fechar:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+.cadastro-tela iframe { flex: 1; width: 100%; border: 0; background: #FFFFFF; }
+html.cadastro-aberto { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { .cadastro-tela, .cadastro-tela.aberta { transition: none; } }
+
+/* Botões flutuantes e cadastro em tela cheia: só no celular */
+@media (min-width: 768px) { .cta-flutuante, .botao-subir, .cadastro-tela { display: none !important; } }
+/* Rodapé escuro (mesmo do Projeto Piloto) */
+.parceiros-inicio footer.relative { position: relative; }
+
+/* ---------- Formatos de parceria: lista informativa (sem cards, para não parecer clicável) ---------- */
+.rp-formatos { display: grid; margin: 0 auto; padding: 0; list-style: none; max-width: 64rem; border-top: 1px solid rgba(19, 26, 39, 0.12); }
+.rp-formato { display: flex; align-items: center; gap: 1rem; padding: 1.125rem 0; border-bottom: 1px solid rgba(19, 26, 39, 0.12); }
+.rp-formato .rp-icone { flex-shrink: 0; margin: 0; width: 2.5rem; height: 2.5rem; border-radius: 9999px; border: 0; background: rgba(212, 77, 77, 0.1); }
+.rp-formato .rp-icone svg { width: 1.25rem; height: 1.25rem; }
+.rp-formato h3 { margin: 0; font-size: 1rem !important; font-weight: 600; line-height: 1.4; color: #131A27; }
+@media (min-width: 768px) {
+  .rp-formatos { grid-template-columns: repeat(4, 1fr); border-top: 0; }
+  .rp-formato { flex-direction: column; align-items: center; text-align: center; gap: .875rem; padding: .5rem 1.5rem; border-bottom: 0; }
+  .rp-formato + .rp-formato { border-left: 1px solid rgba(19, 26, 39, 0.12); }
+  .rp-formato .rp-icone { width: 3rem; height: 3rem; }
+  .rp-formato .rp-icone svg { width: 1.375rem; height: 1.375rem; }
+}
+
+/* ---------- Quem buscamos: carrossel de perfis (rolagem lateral com encaixe; setas no computador) ---------- */
+.rp-carrossel-area { position: relative; }
+.rp-carrossel { display: flex; gap: 1.25rem; margin: 0 -1.25rem; padding: .25rem 1.25rem 1rem; list-style: none; overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory; scroll-padding-inline: 1.25rem; scrollbar-width: none; }
+.rp-carrossel::-webkit-scrollbar { display: none; }
+.rp-carrossel:focus-visible { outline: none; box-shadow: inset 0 0 0 2px rgba(212, 77, 77, 0.45); border-radius: 16px; }
+.rp-perfil { flex: 0 0 82%; scroll-snap-align: start; }
+@media (min-width: 640px) { .rp-carrossel { margin: 0; padding: .25rem 0 1rem; scroll-padding-inline: 0; } .rp-perfil { flex-basis: calc((100% - 2.5rem) / 3); } }
+@media (min-width: 1024px) { .rp-perfil { flex-basis: calc((100% - 3.75rem) / 4); } }
+.rp-perfil h3 { font-size: 1.125rem !important; }
+.rp-perfil p { margin-top: .5rem !important; font-size: .9375rem; }
+.rp-carrossel-nav { display: none; }
+@media (min-width: 640px) {
+  .rp-carrossel-nav { display: flex; justify-content: flex-end; gap: .5rem; margin-top: .75rem; }
+  .rp-seta { width: 2.75rem; height: 2.75rem; border-radius: 9999px; border: 1px solid rgba(19, 26, 39, 0.12); background: #FFFFFF; color: #131A27; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color .2s ease, opacity .2s ease; }
+  .rp-seta svg { width: 1.25rem; height: 1.25rem; }
+  .rp-seta:hover { background: #EDF0F5; }
+  .rp-seta:disabled { opacity: .4; cursor: default; }
+  .rp-seta:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+}
+.rp-setores { margin-top: 2rem; text-align: center; }
+.rp-setores h3 { margin: 0; font-size: 1rem; font-weight: 600; color: #131A27; }
+.rp-setores .rp-tags { justify-content: center; }
+
+/* ---------- Sobre este cadastro: checklist ---------- */
+.rp-checklist { max-width: 48rem; margin: 0 auto; padding: 0; list-style: none; }
+.rp-checklist li { display: flex; align-items: flex-start; gap: 1rem; padding: 1.125rem 0; border-bottom: 1px solid rgba(19, 26, 39, 0.09); }
+.rp-checklist li:first-child { border-top: 1px solid rgba(19, 26, 39, 0.09); }
+.rp-check { flex-shrink: 0; width: 1.75rem; height: 1.75rem; margin-top: .0625rem; border-radius: 9999px; background: #B82828; color: #FFFFFF; display: flex; align-items: center; justify-content: center; }
+.rp-check svg { width: 1rem; height: 1rem; }
+.rp-checklist p { margin: 0; font-size: 1rem; line-height: 1.65; color: #283043; }
+@media (min-width: 640px) { .rp-carrossel-nav { justify-content: center; } } /* setas centralizadas abaixo do carrossel */
+
+/* Checklist mais atraente: painel com tom de apoio do DS, check em selo, frase-chave em destaque */
+.rp-checklist-card { position: relative; overflow: hidden; isolation: isolate; padding: .5rem 1.5rem; border-radius: 24px;
+  background: linear-gradient(135deg, #FDF2F2 0%, #FFFFFF 60%); border: 1px solid rgba(212, 77, 77, 0.15);
+  box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+.rp-checklist-card::before { content: ""; position: absolute; z-index: -1; right: -4rem; top: -4rem; width: 14rem; height: 14rem; border-radius: 9999px; background: rgba(212, 77, 77, 0.08); filter: blur(48px); }
+@media (min-width: 640px) { .rp-checklist-card { padding: .75rem 2.5rem; } }
+.rp-checklist-card li, .rp-checklist-card li:first-child { border-top: 0; border-bottom: 1px dashed rgba(19, 26, 39, 0.12); padding: 1.375rem 0; gap: 1.125rem; }
+.rp-checklist-card li:last-child { border-bottom: 0; }
+.rp-checklist-card .rp-check { width: 2.5rem; height: 2.5rem; margin-top: 0; background: #FFFFFF; color: #B82828; border: 1px solid #F9DADA;
+  box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.08); }
+.rp-checklist-card .rp-check svg { width: 1.125rem; height: 1.125rem; }
+.rp-checklist-card p { color: #495669; font-size: .9375rem; }
+.rp-checklist-card p strong { display: block; margin-bottom: .25rem; color: #131A27; font-size: 1.0625rem; font-weight: 600; line-height: 1.4; }
+/* Passagens suaves entre as seções também no computador */
+.rp-hero { background: linear-gradient(to bottom, #FFFFFF 0%, #FDF2F2 70%, #EDF0F5 100%); }
+.rp-de-g50 { background: linear-gradient(to bottom, #EDF0F5 0, #FFFFFF 160px); }
+#formatos.rp-fundo-g50 { background: linear-gradient(to bottom, #FFFFFF 0, #EDF0F5 160px); }
+/* Checklist em tom neutro (graphite-50), para não competir com o card de convite rosado logo abaixo */
+.rp-checklist-card { background: #EDF0F5; border: 1px solid rgba(19, 26, 39, 0.06); box-shadow: none; }
+.rp-checklist-card::before { display: none; }
+.rp-checklist-card li, .rp-checklist-card li:first-child { border-bottom-color: rgba(19, 26, 39, 0.1); }
+.rp-checklist-card li:last-child { border-bottom: 0; }
+.rp-checklist-card .rp-check { background: #131A27; border-color: #131A27; color: #FFFFFF; box-shadow: none; }
+
+/* Apresentação + convite (une a assinatura da Dani e o objetivo da rede) */
+.rp-convite-pessoal .rp-assinatura-topo { display: flex; align-items: center; gap: .875rem; margin: 0; padding: 0 0 1rem; border: 0; border-bottom: 1px solid rgba(19, 26, 39, 0.09); flex-direction: row; }
+.rp-convite-pessoal .rp-assinatura-topo img { width: 3.5rem; height: 3.5rem; margin: 0; }
+.rp-convite-pessoal .rp-assinatura-topo > span { display: flex; flex-direction: column; }
+.rp-convite-pessoal .rp-assinatura-topo strong { font-size: 1rem; font-weight: 600; color: #131A27; }
+.rp-convite-pessoal .rp-assinatura-topo > span > span { font-size: .8125rem; color: #627288; }
+.rp-convite-pessoal blockquote { margin: 1rem 0 0; }
+.rp-convite-pessoal blockquote p { font-size: .9375rem; line-height: 1.7; color: #283043; }
+.rp-convite-pessoal blockquote p + p { margin-top: .875rem; }
+.rp-convite-pessoal blockquote strong { color: #B82828; font-weight: 600; }
+@media (max-width: 767px) {
+  .rp-convite-pessoal { text-align: left !important; }
+  .rp-convite-pessoal .rp-assinatura-topo img { margin: 0 !important; }
+}
+
+/* Hero só com o texto, centralizado */
+.rp-hero-unico { grid-template-columns: 1fr !important; max-width: 52rem; text-align: center; }
+.rp-hero-unico .rp-lead { margin-left: auto; margin-right: auto; }
+.rp-hero-unico .rp-acoes { justify-content: center; }
+
+/* ---------- Carta-convite da Dani (DS: superfície grafite escura, como o card "E depois") ---------- */
+.rp-secao-carta { padding-top: 1rem; }
+@media (min-width: 1024px) { .rp-secao-carta { padding-top: 2rem; } }
+.rp-carta { position: relative; isolation: isolate; overflow: hidden; display: grid; gap: 1.5rem; padding: 2rem 1.5rem; border-radius: 24px;
+  background: #0D1119; border: 1px solid rgba(255, 255, 255, 0.1); color: #FFFFFF; box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06); }
+@media (min-width: 768px) { .rp-carta { grid-template-columns: auto 1fr; gap: 3rem; padding: 3.5rem; align-items: start; } }
+.rp-carta-luz { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.rp-carta-luz span { position: absolute; border-radius: 9999px; filter: blur(70px); }
+.rp-carta-luz span:nth-child(1) { width: 260px; height: 260px; top: -80px; left: -60px; background: rgba(139, 27, 27, 0.45); animation: carta-a 18s ease-in-out infinite alternate; }
+.rp-carta-luz span:nth-child(2) { width: 240px; height: 240px; top: 30%; right: -60px; background: rgba(55, 65, 85, 0.6); animation: carta-b 22s ease-in-out infinite alternate; }
+.rp-carta-luz span:nth-child(3) { width: 200px; height: 200px; bottom: -80px; left: 35%; background: rgba(212, 77, 77, 0.18); animation: carta-c 16s ease-in-out infinite alternate; }
+@keyframes carta-a { to { transform: translate(40px, 30px); } }
+@keyframes carta-b { to { transform: translate(-50px, 40px); } }
+@keyframes carta-c { to { transform: translate(30px, -30px); } }
+@media (prefers-reduced-motion: reduce) { .rp-carta-luz span { animation: none; } }
+.rp-carta-foto img { display: block; width: 6rem; height: 6rem; border-radius: 9999px; object-fit: cover; border: 3px solid rgba(255, 255, 255, 0.15); box-shadow: 0 0 0 6px rgba(212, 77, 77, 0.15); }
+@media (min-width: 768px) { .rp-carta-foto img { width: 10rem; height: 10rem; } }
+.rp-carta-selo { display: inline-flex; align-items: center; gap: .5rem; margin: 0 0 1rem; padding: .25rem .75rem; border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.1);
+  font-size: .6875rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, 0.85); }
+.rp-carta-selo span { width: .375rem; height: .375rem; border-radius: 9999px; background: #D44D4D; }
+.rp-carta h2 { margin: 0 0 1rem; font-size: 1.75rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: #FFFFFF; }
+@media (min-width: 640px) { .rp-carta h2 { font-size: 2.25rem; } }
+.rp-carta h2 span { color: #E88080; }
+.rp-carta-conteudo > p { margin: 0; font-size: 1rem; line-height: 1.7; color: rgba(255, 255, 255, 0.75); }
+.rp-carta-conteudo > p + p { margin-top: .875rem; }
+.rp-carta-conteudo strong { color: #FFFFFF; font-weight: 600; }
+.rp-carta-rodape { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem; margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.rp-carta-assinatura { margin: 0; display: flex; flex-direction: column; }
+.rp-carta-assinatura strong { font-size: 1rem; color: #FFFFFF; }
+.rp-carta-assinatura span { font-size: .8125rem; color: rgba(255, 255, 255, 0.6); }
+.rp-carta-cta { display: inline-flex; align-items: center; gap: .5rem; height: 3rem; padding: 0 1.5rem; border-radius: 9999px; border: 1.5px solid #E88080; color: #E88080;
+  font-size: .9375rem; font-weight: 600; text-decoration: none; white-space: nowrap; transition: background-color .2s ease, border-color .2s ease, color .2s ease; }
+.rp-carta-cta svg { width: 1.125rem; height: 1.125rem; }
+.rp-carta-cta:hover { background: #B82828; border-color: #B82828; color: #FFFFFF; }
+.rp-carta-cta:focus-visible { outline: none; box-shadow: 0 0 0 2px #0D1119, 0 0 0 4px rgba(212, 77, 77, 0.6); }
+@media (max-width: 767px) { .rp-carta { text-align: left; } .rp-carta-rodape { flex-direction: column; align-items: flex-start; } }
+.rp-carta-conteudo > p.rp-carta-selo { font-size: .75rem; line-height: 1.4; color: rgba(255, 255, 255, 0.85); margin-bottom: 1rem; }
+.rp-carta-conteudo > p.rp-carta-selo + h2 { margin-top: 0; }
+/* Carta-convite no fim da página (no lugar do card de convite) */
+#cadastro .rp-carta { margin-top: 3rem; }
+
+/* Carta-convite em modo claro: superfície "tint" do Card de convite ao parceiro do DS (rosa claro) */
+.rp-carta { background: #FDF2F2; border: 1px solid rgba(212, 77, 77, 0.15); color: #131A27;
+  box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); transition: box-shadow .2s ease; }
+.rp-carta:hover { box-shadow: 0 8px 24px rgba(13, 17, 25, 0.09), 0 20px 48px rgba(13, 17, 25, 0.07); }
+.rp-carta-luz span { animation: none; filter: blur(64px); }
+.rp-carta-luz span:nth-child(1) { width: 14rem; height: 14rem; top: -4rem; left: auto; right: -4rem; background: rgba(212, 77, 77, 0.10); }
+.rp-carta-luz span:nth-child(2) { width: 10rem; height: 10rem; top: auto; right: auto; bottom: -5rem; left: -2.5rem; background: rgba(212, 77, 77, 0.05); }
+.rp-carta-luz span:nth-child(3) { display: none; }
+.rp-carta-foto img { border-color: #FFFFFF; box-shadow: 0 0 0 6px rgba(212, 77, 77, 0.10); }
+.rp-carta-conteudo > p.rp-carta-selo { background: #FFFFFF; border-color: #F9DADA; color: #B82828; }
+.rp-carta h2 { color: #131A27; }
+.rp-carta h2 span { color: #B82828; }
+.rp-carta-conteudo > p { color: #495669; }
+.rp-carta-conteudo strong { color: #131A27; }
+.rp-carta-rodape { border-top-color: rgba(212, 77, 77, 0.15); }
+.rp-carta-assinatura strong { color: #131A27; }
+.rp-carta-assinatura span { color: #627288; }
+.rp-carta-cta { background: #B82828; border-color: #B82828; color: #FFFFFF; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+.rp-carta-cta:hover { background: #8C1B1B; border-color: #8C1B1B; }
+.rp-carta-cta:focus-visible { box-shadow: 0 0 0 2px #FDF2F2, 0 0 0 4px rgba(212, 77, 77, 0.6); }
+.rp-carta-assinatura span { color: #495669; } /* AA sobre o rosa claro */
+@media (min-width: 768px) { #cadastro .rp-carta { margin-top: 5rem; } } /* mais respiro entre o checklist e o convite */

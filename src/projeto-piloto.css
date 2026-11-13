@@ -599,3 +599,18 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .depois-cta-desk:hover { background: #B82828; border-color: #B82828; color: #FFFFFF; }
 .depois-cta-desk:hover svg { transform: translateX(2px); }
 .depois-cta-desk:focus-visible { outline: none; box-shadow: 0 0 0 2px #0D1119, 0 0 0 4px rgba(212, 77, 77, 0.6); }
+
+/* Card "E depois" (desktop e celular): mesma iluminação animada do fundo do Escopo */
+.depois-piloto-card::before { display: none; }
+.depois-piloto-card > .depois-piloto, .cf-cartao-depois > :not(.luz-card) { position: relative; z-index: 1; }
+.luz-card { z-index: 0; border-radius: inherit; }
+.luz-card span:nth-child(1) { width: 420px; height: 420px; top: -40%; left: -10%; }
+.luz-card span:nth-child(2) { width: 360px; height: 360px; top: -30%; left: 55%; }
+.luz-card span:nth-child(3) { width: 320px; height: 320px; top: 50%; left: 30%; }
+/* Celular: luzes menores e nos cantos, para o card manter o fundo escuro com pontos de cor */
+@media (max-width: 639px) {
+  .cf-cartao-depois .luz-card span { filter: blur(48px); }
+  .cf-cartao-depois .luz-card span:nth-child(1) { width: 180px; height: 180px; top: -60px; left: -60px; }
+  .cf-cartao-depois .luz-card span:nth-child(2) { width: 160px; height: 160px; top: 35%; left: 70%; }
+  .cf-cartao-depois .luz-card span:nth-child(3) { width: 150px; height: 150px; top: 80%; left: 5%; }
+}
