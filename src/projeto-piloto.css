@@ -1091,3 +1091,96 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .pp-eyebrow { position: relative; background: #FFFFFF; width: fit-content; margin-inline: auto !important; padding: .25rem .75rem; }
 @media (min-width: 768px) { .pp-ramo span, .pp-ramo::before { display: none; } }
 @media (min-width: 768px) { .pp-ramo { height: 6rem; } }
+
+/* =========================================================================
+   SEÇÃO DO PROGRAMA, versão da referência enviada: eyebrow com traço, título com destaque, pílulas
+   "Sua empresa" e "O Studio" ligadas ao núcleo DM, duas colunas de benefícios, faixa "Uma troca transparente" e CTA.
+   ========================================================================= */
+.divisao-hero .divisao-hero-cartao, .pv.transicao-sobre { background: linear-gradient(180deg, #F6F7FA 0%, #FFFFFF 55%, #F6F7FA 100%) !important; }
+@media (max-width: 1023px) { .divisao-hero .divisao-hero-cartao { border-radius: 28px 28px 0 0 !important; overflow: hidden !important; } }
+.pv { color: #131A27; }
+.pv-intro { max-width: 52rem; margin: 0 auto; text-align: center; }
+.pv-eyebrow { display: inline-flex; align-items: center; gap: .875rem; margin: 0 0 1.25rem; font-size: .8125rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; color: #283043; }
+.pv-eyebrow span { width: 2.75rem; height: 2px; border-radius: 2px; background: #D44D4D; }
+.pv-eyebrow strong { font-weight: 700; color: #131A27; }
+.pv-intro h2 { margin: 0 0 1.25rem; font-size: clamp(1.75rem, 1.1rem + 2.6vw, 2.75rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: #131A27; }
+.pv-desc { max-width: 44rem; margin: 0 auto; font-size: 1.0625rem; line-height: 1.65; color: #495669; }
+
+/* diagrama: duas pílulas ligadas ao núcleo */
+.pv-diagrama { display: grid; grid-template-columns: 1fr minmax(32px, 90px) auto minmax(32px, 90px) 1fr; align-items: center; margin: 4rem auto 0; }
+.pv-pilula { display: flex; align-items: center; gap: 1.125rem; padding: 1.25rem 2rem 1.25rem 1.25rem; border-radius: 9999px; background: rgba(237, 240, 245, 0.7); }
+.pv-pilula-ic { flex: none; width: 4.5rem; height: 4.5rem; border-radius: 9999px; display: flex; align-items: center; justify-content: center; color: #D44D4D; background: #FFFFFF; box-shadow: 0 6px 18px -10px rgba(212, 77, 77, 0.45); }
+.pv-pilula-ic svg { stroke-width: 1.5; }
+.pv-pilula strong { display: block; margin-bottom: .25rem; font-size: 1.25rem; font-weight: 700; color: #131A27; }
+.pv-pilula > span:last-child > span { display: block; font-size: .9375rem; line-height: 1.5; color: #495669; }
+.pv-linha { position: relative; height: 2px; background: #D44D4D; }
+.pv-linha::before, .pv-linha::after { content: ""; position: absolute; top: 50%; width: 2px; height: 10px; background: #D44D4D; translate: 0 -50%; }
+.pv-linha::before { left: 0; } .pv-linha::after { right: 0; }
+.pv-nucleo { position: relative; width: 8.5rem; height: 8.5rem; border-radius: 9999px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 35% 30%, #E06666, #D44D4D 45%, #B82828);
+  box-shadow: 0 0 0 18px rgba(212, 77, 77, 0.08), 0 0 0 36px rgba(212, 77, 77, 0.04), 0 18px 40px -16px rgba(184, 40, 40, 0.6); }
+.pv-nucleo img { width: 3.5rem; height: auto; }
+
+/* colunas de benefícios */
+.pv-colunas { display: grid; grid-template-columns: 1fr 1fr; margin: 5rem auto 0; }
+.pv-col { padding: 0 3rem; }
+.pv-col:first-child { padding-left: 2rem; }
+.pv-col + .pv-col { border-left: 1px solid #D6DCE6; }
+.pv-col-eyebrow { margin: 0 0 1rem; font-size: .875rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #D44D4D; }
+.pv-col h3 { margin: 0 0 2rem; font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: #131A27; max-width: 22rem; }
+.pv-bens { margin: 0; padding: 0; list-style: none; display: grid; gap: 1.75rem; }
+.pv-ben { display: grid; grid-template-columns: 4rem 1fr; gap: 1.25rem; align-items: start; }
+.pv-ben-ic { width: 4rem; height: 4rem; border-radius: 1.125rem; display: flex; align-items: center; justify-content: center; color: #D44D4D; background: #FFFFFF; box-shadow: 0 6px 18px -10px rgba(212, 77, 77, 0.35), inset 0 0 0 1px rgba(212, 77, 77, 0.06); }
+.pv-ben-ic svg { stroke-width: 1.75; }
+.pv-ben strong { display: block; margin: .25rem 0 .25rem; font-size: 1.125rem; font-weight: 700; color: #131A27; }
+.pv-ben > span:last-child > span { display: block; font-size: .9375rem; line-height: 1.55; color: #495669; }
+
+/* faixa de transparência */
+.pv-faixa { display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 2.25rem; margin: 4.5rem auto 0; padding: 1.75rem 2.75rem; border-radius: 9999px; background: linear-gradient(90deg, #FDF2F2, #FFFFFF 70%); box-shadow: 0 10px 30px -18px rgba(212, 77, 77, 0.35); }
+.pv-faixa-ic { color: #D44D4D; display: flex; padding-right: 2.25rem; border-right: 1px solid #B3BDD0; }
+.pv-faixa-ic svg { stroke-width: 1.5; }
+.pv-faixa-titulo { margin: 0; font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; color: #131A27; white-space: nowrap; }
+.pv-faixa-texto { margin: 0; font-size: 1rem; line-height: 1.6; color: #495669; }
+.pv-faixa-texto strong { color: #131A27; font-weight: 600; }
+
+/* CTA */
+.pv-cta { display: flex; justify-content: center; margin-top: 2.5rem; }
+.pv-botao { display: inline-flex; align-items: center; gap: .875rem; padding: 1rem 2.25rem; border-radius: 9999px; background: #D44D4D; color: #FFFFFF; font-size: 1.0625rem; font-weight: 700; text-decoration: none; box-shadow: 0 14px 30px -12px rgba(212, 77, 77, 0.6); transition: background-color .2s ease, transform .2s ease; }
+.pv-botao:hover { background: #B82828; }
+.pv-botao:hover svg:last-child { transform: translateX(3px); }
+.pv-botao svg:last-child { transition: transform .2s ease; }
+.pv-botao:focus-visible { outline: none; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 5px rgba(212, 77, 77, 0.6); }
+
+/* tablet */
+@media (max-width: 1023px) {
+  .pv-pilula { padding: 1rem 1.25rem 1rem 1rem; gap: .875rem; }
+  .pv-pilula-ic { width: 3.5rem; height: 3.5rem; }
+  .pv-pilula strong { font-size: 1.0625rem; }
+  .pv-pilula > span:last-child > span { font-size: .875rem; }
+  .pv-nucleo { width: 6.5rem; height: 6.5rem; }
+  .pv-nucleo img { width: 2.75rem; }
+  .pv-col { padding: 0 1.75rem !important; }
+  .pv-faixa { gap: 1.5rem; padding: 1.5rem 2rem; }
+  .pv-faixa-ic { padding-right: 1.5rem; }
+  .pv-faixa-titulo { font-size: 1.375rem; }
+}
+/* celular: pílulas empilhadas ligadas pelo núcleo, colunas uma abaixo da outra */
+@media (max-width: 767px) {
+  .pv-diagrama { grid-template-columns: 1fr; justify-items: center; margin-top: 2.75rem; }
+  .pv-pilula { width: 100%; border-radius: 1.5rem; }
+  .pv-linha { width: 2px; height: 2rem; }
+  .pv-linha::before, .pv-linha::after { width: 10px; height: 2px; left: 50% !important; right: auto !important; translate: -50% 0; }
+  .pv-linha::before { top: 0; } .pv-linha::after { top: auto; bottom: 0; }
+  .pv-nucleo { box-shadow: 0 0 0 12px rgba(212, 77, 77, 0.08), 0 18px 40px -16px rgba(184, 40, 40, 0.6); }
+  .pv-colunas { grid-template-columns: 1fr; gap: 3rem; margin-top: 3.5rem; }
+  .pv-col { padding: 0 !important; }
+  .pv-col + .pv-col { border-left: 0; border-top: 1px solid #D6DCE6; padding-top: 3rem !important; }
+  .pv-ben { grid-template-columns: 3.25rem 1fr; gap: 1rem; }
+  .pv-ben-ic { width: 3.25rem; height: 3.25rem; border-radius: 1rem; }
+  .pv-faixa { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: .75rem; border-radius: 1.75rem; padding: 1.75rem 1.5rem; margin-top: 3rem; }
+  .pv-faixa-ic { border-right: 0; padding-right: 0; }
+  .pv-faixa-titulo { white-space: normal; font-size: 1.375rem; }
+  .pv-cta .pv-botao { width: 100%; justify-content: center; }
+}
+.pv-ben-ic svg { width: 1.75rem; height: 1.75rem; }
+.pv-pilula-ic svg { width: 2.25rem; height: 2.25rem; }
+@media (max-width: 767px) { .pv-ben-ic svg { width: 1.5rem; height: 1.5rem; } .pv-pilula-ic svg { width: 1.875rem; height: 1.875rem; } }
