@@ -704,3 +704,37 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 }
 @keyframes hero-texto-entra { to { opacity: 1; transform: none; } }
 @media (max-width: 1023px) { .hero-chip:nth-child(1) { display: none; } .hero-chip:nth-child(3) { display: inline-flex !important; } } /* celular: um destaque só, sem encostar nas bordas */
+
+/* =========================================================================
+   HERO: conceito "recorte" — a foto vira um arco recortado, sobreposto a formas geométricas
+   (moldura em arco vermelha deslocada, círculo vermelho, bloco grafite e linhas), num fundo grafite sólido.
+   O conteúdo ocupa o outro lado. Substitui o hero dividido/véu anteriores.
+   ========================================================================= */
+#hero-fundo { background: #131A27 !important; }
+#hero-fundo::before, #hero-fundo::after, .hero-pontos { display: none !important; }
+#hero-fundo img { position: absolute !important; z-index: 2; right: auto !important; bottom: auto !important; opacity: 1 !important; filter: none;
+  border-radius: 999px 999px 28px 28px; object-fit: cover; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35); }
+.hero-forma { position: absolute; display: block; pointer-events: none; }
+@media (min-width: 1024px) {
+  #hero-fundo img { left: 8% !important; top: 15% !important; width: 34% !important; height: 72% !important; object-position: 34% 30% !important; }
+  .hero-forma-arco { z-index: 1; left: calc(8% + 26px); top: calc(15% + 26px); width: 34%; height: 72%; border-radius: 999px 999px 28px 28px; border: 2px solid #D44D4D; }
+  .hero-forma-circulo { z-index: 3; left: calc(8% + 34% - 3.5rem); top: calc(15% + 2rem); width: 7rem; height: 7rem; border-radius: 9999px; background: #D44D4D; opacity: .9; box-shadow: 0 16px 40px rgba(212, 77, 77, 0.35); }
+  .hero-forma-bloco { z-index: 0; left: 0; bottom: 0; width: 30%; height: 42%; background: #1C2333; border-top-right-radius: 48px; }
+  .hero-forma-linhas { z-index: 0; right: 4%; top: 14%; width: 9rem; height: 9rem;
+    background: repeating-linear-gradient(135deg, rgba(212, 77, 77, 0.35) 0 2px, transparent 2px 12px); border-radius: 9999px; opacity: .6; }
+  .hero-chips { left: calc(8% - 1.5rem); bottom: 18%; z-index: 4; }
+}
+@media (max-width: 1023px) {
+  #hero-fundo img { left: 50% !important; top: 5.5rem !important; width: min(68vw, 20rem) !important; height: 42vh !important; translate: -50% 0; object-position: 30% 25% !important; }
+  .hero-forma-arco { z-index: 1; left: calc(50% + 14px); top: calc(5.5rem + 14px); width: min(68vw, 20rem); height: 42vh; transform: translateX(-50%); border-radius: 999px 999px 24px 24px; border: 2px solid #D44D4D; }
+  .hero-forma-circulo { z-index: 3; left: calc(50% + min(34vw, 10rem) - 2.5rem); top: 7rem; width: 4.5rem; height: 4.5rem; border-radius: 9999px; background: #D44D4D; opacity: .9; box-shadow: 0 16px 40px rgba(212, 77, 77, 0.35); }
+  .hero-forma-bloco { z-index: 0; left: 0; top: 30vh; width: 40%; height: 22vh; background: #1C2333; border-top-right-radius: 32px; border-bottom-right-radius: 32px; }
+  .hero-forma-linhas { display: none; }
+  .hero-piloto { padding-top: calc(5.5rem + 42vh + 2.5rem) !important; }
+  .hero-chips { top: calc(5.5rem + 42vh - 1.25rem) !important; z-index: 4; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-forma-arco { animation: hero-forma-entra 1s cubic-bezier(0.16, 1, 0.3, 1) .3s both; }
+  .hero-forma-circulo { animation: hero-forma-entra 1s cubic-bezier(0.16, 1, 0.3, 1) .5s both, hero-chip-flutua 7s ease-in-out 1.5s infinite; }
+}
+@keyframes hero-forma-entra { from { opacity: 0; translate: -18px -18px; } to { opacity: 1; translate: 0 0; } }
