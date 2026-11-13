@@ -158,3 +158,17 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   };
   setInterval(() => { if (!pausado && !document.hidden) avancar(); }, 2000);
 })();
+
+/* ---------- Checklist: o check de cada item é desenhado quando ele entra na tela, um após o outro ---------- */
+(() => {
+  const itens = Array.from(document.querySelectorAll<HTMLElement>('.rp-checklist-caixas li'));
+  if (!itens.length) return;
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) { itens.forEach((li) => li.classList.add('marcado')); return; }
+  const obs = new IntersectionObserver((es) => {
+    es.filter((e) => e.isIntersecting).forEach((e, i) => {
+      setTimeout(() => e.target.classList.add('marcado'), i * 250);
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0.6, rootMargin: '0px 0px -10% 0px' });
+  itens.forEach((li) => obs.observe(li));
+})();
