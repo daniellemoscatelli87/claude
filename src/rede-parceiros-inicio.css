@@ -317,3 +317,4 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-carta-cta:hover { background: #8C1B1B; border-color: #8C1B1B; }
 .rp-carta-cta:focus-visible { box-shadow: 0 0 0 2px #FDF2F2, 0 0 0 4px rgba(212, 77, 77, 0.6); }
 .rp-carta-assinatura span { color: #495669; } /* AA sobre o rosa claro */
+@media (min-width: 768px) { #cadastro .rp-carta { margin-top: 5rem; } } /* mais respiro entre o checklist e o convite */
