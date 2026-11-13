@@ -404,3 +404,17 @@ html.cadastro-aberto { overflow: hidden; }
   .rp-hero h1 { font-size: clamp(1.25rem, 6.3vw, 1.875rem); line-height: 1.2; }
   .rp-h1-linha { display: block; white-space: nowrap; }
 }
+
+/* ---------- Formatos de parceria: composição editorial (número grande vazado + nome), sem cards nem botões ----------
+   2 colunas no celular e 4 no computador; um filete curto vermelho marca cada item. */
+.rp-editorial { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem 1.25rem; max-width: 64rem; margin: 0 auto; padding: 0; list-style: none; border: 0 !important; }
+@media (min-width: 768px) { .rp-editorial { grid-template-columns: repeat(4, 1fr); gap: 2.5rem; } }
+.rp-editorial .rp-formato { display: block !important; text-align: left !important; padding: 0 !important; border: 0 !important; }
+.rp-editorial .rp-formato + .rp-formato { border-left: 0 !important; }
+.rp-editorial .rp-icone { display: none !important; }
+.rp-num { display: block; font-size: 3rem; font-weight: 800; line-height: 1; letter-spacing: -0.04em; color: transparent; -webkit-text-stroke: 1.5px #D44D4D; }
+@media (min-width: 768px) { .rp-num { font-size: 4rem; } }
+.rp-editorial h3 { position: relative; margin: .875rem 0 0 !important; padding-top: .875rem !important; font-size: 1rem !important; font-weight: 600; line-height: 1.4; color: #131A27; text-align: left !important; max-width: none !important; }
+.rp-editorial h3::before { content: ""; position: absolute; left: 0; top: 0; width: 2rem; height: 3px; border-radius: 9999px; background: #B82828; }
+@media (min-width: 768px) { .rp-editorial h3 { font-size: 1.0625rem !important; } }
+.rp-num { color: #E88080; -webkit-text-stroke: 0; } /* sólido em crimson-300: o contorno mostrava cruzamentos internos no "4" */
