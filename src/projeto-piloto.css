@@ -369,3 +369,6 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #sobre-o-programa .compromisso-icone { background: #F9DADA; border-color: #F9DADA; }
 #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { background: #D6DCE6; border-color: #D6DCE6; }
 #sobre-o-programa .lado-troca > div:first-child { border-bottom-width: 1px !important; } /* filete fininho */
+/* Filete do rótulo em tom mais claro: crimson-300 / graphite-300 */
+#sobre-o-programa .lado-troca > div:first-child { border-bottom-color: #E88080 !important; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child { border-bottom-color: #8898B0 !important; }
