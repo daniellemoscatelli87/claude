@@ -1054,3 +1054,13 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 }
 @keyframes pp-pulso-desce { 0% { top: 10px; opacity: 0; } 15%, 85% { opacity: 1; } 100% { top: calc(100% - 17px); opacity: 0; } }
 @keyframes pp-pulso-sobe { 0% { top: calc(100% - 17px); opacity: 0; } 15%, 85% { opacity: 1; } 100% { top: 10px; opacity: 0; } }
+/* diagrama: os dois lados com o mesmo volume (nome numa linha, descrição curta de mesma largura) */
+.pp-no-lado h3 { white-space: nowrap; }
+.pp-no-lado p { max-width: 13.5rem; }
+/* cabeçalho escondido ao rolar: some por inteiro, sem deixar a sombra da pílula aparecendo no topo */
+@media (min-width: 1024px) { .site-header.is-hidden { transform: translateY(calc(-100% - 40px)) !important; } }
+.pp-no-lado p { max-width: 15rem; }
+@media (min-width: 768px) {
+  .pp-diagrama { grid-template-columns: 1.6fr minmax(40px, 1fr) var(--nucleo) minmax(40px, 1fr) 1.6fr !important; }
+  .pp-no-lado p { max-width: 16rem; }
+}
