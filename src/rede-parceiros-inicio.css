@@ -418,3 +418,23 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-editorial h3::before { content: ""; position: absolute; left: 0; top: 0; width: 2rem; height: 3px; border-radius: 9999px; background: #D44D4D; }
 @media (min-width: 768px) { .rp-editorial h3 { font-size: 1.0625rem !important; } }
 .rp-num { color: #D44D4D; -webkit-text-stroke: 0; } /* sólido em crimson-300: o contorno mostrava cruzamentos internos no "4" */
+
+/* ---------- Formatos de parceria: um único painel dividido em quadrantes (não são itens separados nem sequência) ----------
+   Superfície branca única com divisórias finas; ícone vermelho sem fundo + nome. 2x2 no celular, 4 colunas no computador. */
+.rp-painel { display: grid; grid-template-columns: repeat(2, 1fr); max-width: 64rem; margin: 0 auto; padding: 0; list-style: none;
+  background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09) !important; border-radius: 16px; overflow: hidden; }
+@media (min-width: 768px) { .rp-painel { grid-template-columns: repeat(4, 1fr); } }
+.rp-painel .rp-formato { display: flex !important; flex-direction: column !important; align-items: flex-start !important; text-align: left !important; gap: .875rem !important;
+  padding: 1.5rem 1.25rem !important; border: 0 !important; }
+@media (min-width: 768px) { .rp-painel .rp-formato { padding: 2rem 1.75rem !important; } }
+/* divisórias internas */
+.rp-painel .rp-formato:nth-child(2n) { border-left: 1px solid rgba(19, 26, 39, 0.09) !important; }
+.rp-painel .rp-formato:nth-child(n+3) { border-top: 1px solid rgba(19, 26, 39, 0.09) !important; }
+@media (min-width: 768px) {
+  .rp-painel .rp-formato:nth-child(n+3) { border-top: 0 !important; }
+  .rp-painel .rp-formato + .rp-formato { border-left: 1px solid rgba(19, 26, 39, 0.09) !important; }
+}
+.rp-painel .rp-icone { display: flex !important; width: auto !important; height: auto !important; margin: 0 !important; padding: 0; border: 0 !important; background: none !important; box-shadow: none !important; color: #D44D4D; }
+.rp-painel .rp-icone svg { width: 1.75rem !important; height: 1.75rem !important; }
+.rp-painel h3 { margin: 0 !important; padding: 0 !important; font-size: 1rem !important; font-weight: 600; line-height: 1.4; color: #131A27; text-align: left !important; max-width: none !important; }
+.rp-painel h3::before { display: none !important; }
