@@ -1343,3 +1343,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .pz-ic-p svg { width: 1.75rem !important; height: 1.75rem !important; }
   .pz-lig { margin-top: 1.5rem; }
 }
+/* ícones dos três passos redondos (container circular do DS, como "h-12 w-12 rounded-full bg-primary/10") */
+.pz-passo .pz-ic { border-radius: 9999px !important; }
