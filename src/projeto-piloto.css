@@ -738,3 +738,33 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .hero-forma-circulo { animation: hero-forma-entra 1s cubic-bezier(0.16, 1, 0.3, 1) .5s both, hero-chip-flutua 7s ease-in-out 1.5s infinite; }
 }
 @keyframes hero-forma-entra { from { opacity: 0; translate: -18px -18px; } to { opacity: 1; translate: 0 0; } }
+
+/* =========================================================================
+   HERO, versão "fatias": a foto aparece através de uma máscara vetorial com três cápsulas verticais desencontradas;
+   um traço vetorial vermelho contorna a composição e um ponto vermelho fecha o desenho. Substitui o arco.
+   ========================================================================= */
+#hero-fundo img {
+  border-radius: 0 !important; box-shadow: none !important;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400' preserveAspectRatio='none'%3E%3Crect x='0' y='70' width='92' height='300' rx='46'/%3E%3Crect x='104' y='0' width='92' height='360' rx='46'/%3E%3Crect x='208' y='40' width='92' height='320' rx='46'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400' preserveAspectRatio='none'%3E%3Crect x='0' y='70' width='92' height='300' rx='46'/%3E%3Crect x='104' y='0' width='92' height='360' rx='46'/%3E%3Crect x='208' y='40' width='92' height='320' rx='46'/%3E%3C/svg%3E");
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+.hero-forma-bloco, .hero-forma-linhas { display: none !important; }
+/* traço vetorial: uma curva vermelha que passa por trás e por baixo das fatias */
+.hero-forma-arco { border: 0 !important; border-radius: 0 !important; z-index: 1 !important; background: no-repeat center / 100% 100%
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400' preserveAspectRatio='none'%3E%3Cpath d='M-20 300 C 40 420, 220 430, 290 330 S 330 120, 250 40' fill='none' stroke='%23D44D4D' stroke-width='2.5' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"); }
+.hero-forma-circulo { box-shadow: none !important; opacity: 1 !important; }
+@media (min-width: 1024px) {
+  #hero-fundo img { left: 9% !important; top: 14% !important; width: 33% !important; height: 72% !important; object-position: 36% 30% !important; }
+  .hero-forma-arco { left: 5% !important; top: 12% !important; width: 41% !important; height: 82% !important; }
+  .hero-forma-circulo { left: calc(9% + 33% - 1rem) !important; top: calc(14% + 72% - 5rem) !important; width: 1.75rem !important; height: 1.75rem !important; }
+  .hero-chips { left: calc(9% + 1rem) !important; bottom: 9% !important; }
+}
+@media (max-width: 1023px) {
+  #hero-fundo img { top: 5.5rem !important; width: min(72vw, 21rem) !important; height: 42vh !important; object-position: 32% 25% !important; }
+  .hero-forma-arco { left: 50% !important; translate: -50% 0; top: 5rem !important; width: min(86vw, 25rem) !important; height: 46vh !important; transform: none !important; }
+  .hero-forma-circulo { left: calc(50% + min(36vw, 10.5rem) - .5rem) !important; top: calc(5.5rem + 42vh - 3.5rem) !important; width: 1.25rem !important; height: 1.25rem !important; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  #hero-fundo img { animation: hero-fatias-entra 1.2s cubic-bezier(0.16, 1, 0.3, 1) both !important; }
+}
+@keyframes hero-fatias-entra { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
