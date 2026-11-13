@@ -900,3 +900,8 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .hero-mini-card:nth-child(1) { display: none; }
 }
 @media (max-width: 1023px) { .hero-piloto { padding-top: calc(4.75rem + min(74vw, 19rem) * 1.25 + 4.5rem) !important; } }
+/* mini cards só com ícone e título */
+.hero-mini-card { width: auto; align-items: center; padding: .75rem 1.125rem .75rem .75rem; white-space: nowrap; }
+.hero-mini-card strong { font-size: .9375rem; }
+@media (min-width: 1024px) { .hero-mini-card:nth-child(1) { top: 16%; left: -14%; } .hero-mini-card:nth-child(2) { top: 76%; right: -20%; } }
+@media (max-width: 1023px) { .hero-mini-card { width: auto; } .hero-piloto { padding-top: calc(4.75rem + min(74vw, 19rem) * 1.25 + 3rem) !important; } }
