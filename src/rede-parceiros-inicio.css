@@ -201,3 +201,11 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-setores { margin-top: 2rem; text-align: center; }
 .rp-setores h3 { margin: 0; font-size: 1rem; font-weight: 600; color: #131A27; }
 .rp-setores .rp-tags { justify-content: center; }
+
+/* ---------- Sobre este cadastro: checklist ---------- */
+.rp-checklist { max-width: 48rem; margin: 0 auto; padding: 0; list-style: none; }
+.rp-checklist li { display: flex; align-items: flex-start; gap: 1rem; padding: 1.125rem 0; border-bottom: 1px solid rgba(19, 26, 39, 0.09); }
+.rp-checklist li:first-child { border-top: 1px solid rgba(19, 26, 39, 0.09); }
+.rp-check { flex-shrink: 0; width: 1.75rem; height: 1.75rem; margin-top: .0625rem; border-radius: 9999px; background: #B82828; color: #FFFFFF; display: flex; align-items: center; justify-content: center; }
+.rp-check svg { width: 1rem; height: 1rem; }
+.rp-checklist p { margin: 0; font-size: 1rem; line-height: 1.65; color: #283043; }
