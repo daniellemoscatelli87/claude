@@ -198,7 +198,7 @@ form.addEventListener('change', (e) => {
   // O trilho começa no centro do primeiro ícone e termina no centro do último.
   const ajustarTrilho = () => {
     const pai = trilho.offsetParent as HTMLElement | null;
-    const nums = etapas.map((e) => e.querySelector<HTMLElement>('.cf-num')!);
+    const nums = etapas.filter((e) => e.offsetParent).map((e) => e.querySelector<HTMLElement>('.cf-num')!);
     if (!pai || !nums.length) return;
     const base = pai.getBoundingClientRect().top;
     const centro = (n: HTMLElement) => { const r = n.getBoundingClientRect(); return r.top + r.height / 2 - base; };
@@ -213,6 +213,7 @@ form.addEventListener('change', (e) => {
     const limite = window.innerHeight * 0.6;
     let atual = -1;
     etapas.forEach((e, i) => {
+      if (!e.offsetParent) return;
       const r = e.querySelector('.cf-num')!.getBoundingClientRect();
       if (r.top + r.height / 2 < limite) atual = i;
     });

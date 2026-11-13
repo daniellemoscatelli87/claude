@@ -529,3 +529,13 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .hero-card::after { display: none !important; }
 /* Celular: card do hero 5px mais alto */
 @media (max-width: 767px) { .hero-piloto { padding-top: calc(var(--altura-cabecalho, 68px) + .4375rem) !important; } }
+
+/* Celular (linha do tempo em coluna única): "E depois do projeto-piloto?" vira a última etapa, com o card em cores invertidas (vermelho) */
+.cf-etapa-depois { display: none !important; }
+@media (max-width: 639px) {
+  .cf-etapa-depois { display: flex !important; }
+  .depois-piloto-card { display: none !important; }
+  .cf-cartao-depois { background: #B82828; border: 1px solid #B82828; color: #FFFFFF; box-shadow: 0 16px 40px rgba(184, 40, 40, 0.25); }
+  .cf-cartao-depois h3 { color: #FFFFFF; }
+  .cf-cartao-depois p { color: rgba(255, 255, 255, 0.9); }
+}
