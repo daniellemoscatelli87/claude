@@ -722,3 +722,15 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .depois-convite .depois-cta-desk { margin-top: 1.25rem !important; }
 .depois-convite-icone { flex: none; width: 4.5rem; height: 4.5rem; border-radius: 1.25rem; display: flex; align-items: center; justify-content: center; background: rgba(212, 77, 77, 0.10); color: #D44D4D; }
 @media (max-width: 639px) { .depois-convite { display: none !important; } } /* no celular segue como última etapa da linha do tempo */
+/* Guia Completo: fundo cinza clarinho do DS para os accordions brancos se destacarem; o cadastro segue no mesmo tom */
+#guia, #inscricao { background: #EDF0F5 !important; }
+/* "E depois do projeto-piloto?": área do texto ~20% mais larga */
+.depois-convite-texto { max-width: 55rem; }
+/* tablet: ícone sobe para o canto, liberando largura para o texto */
+@media (max-width: 1023px) {
+  .depois-convite { display: block; }
+  .depois-convite-icone { position: absolute; top: 2rem; right: 2rem; width: 3.5rem; height: 3.5rem; border-radius: 1rem; }
+  .depois-convite-texto { max-width: none; }
+}
+/* accordions brancos com a mesma sombra dos cards da linha do tempo */
+#accordion-group .accordion-item, #accordion-group .accordion-item.active { background: #FFFFFF !important; box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.5), 0 8px 10px -6px rgba(226, 232, 240, 0.5) !important; }
