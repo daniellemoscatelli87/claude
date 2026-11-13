@@ -734,3 +734,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 }
 /* accordions brancos com a mesma sombra dos cards da linha do tempo */
 #accordion-group .accordion-item, #accordion-group .accordion-item.active { background: #FFFFFF !important; box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.5), 0 8px 10px -6px rgba(226, 232, 240, 0.5) !important; }
+/* "E depois do projeto-piloto?" com a mesma largura da linha do tempo (alinhado aos cards das etapas) */
+.depois-convite { width: min(53rem, calc(100% - 3rem)); margin-inline: auto; }

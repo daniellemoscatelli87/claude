@@ -31,6 +31,8 @@ document.addEventListener('click', (e) => {
   abrirCadastro(a);
 });
 document.getElementById('cadastro-parceiro-fechar')?.addEventListener('click', fecharCadastro);
+// desktop: clicar no fundo escurecido, fora da modal, fecha o cadastro
+tela?.addEventListener('click', (e) => { if (e.target === tela) fecharCadastro(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.classList.contains('aberta')) fecharCadastro(); });
 window.addEventListener('message', (e) => { if (e.origin === location.origin && e.data === 'dm-fechar-cadastro') fecharCadastro(); });
 
