@@ -641,3 +641,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   #sobre-o-programa .troca-grade::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: #D6DCE6; opacity: .6; pointer-events: none; }
 }
 @media (max-width: 639px) { #hero-titulo { font-size: 1.625rem; } } /* título do hero menor no celular */
+/* celular: card perto da dobra, deixando a foto do hero aparecer em cima */
+@media (max-width: 767px) { .hero-piloto { min-height: 100svh; align-items: flex-end; padding-bottom: 1.25rem !important; } }
