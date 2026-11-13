@@ -802,3 +802,4 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 @media (min-width: 1280px) { .rp-modelo-sobe { right: -2.75rem; } }
 @media (min-width: 1024px) and (max-width: 1279px) { .rp-modelo-sobe { width: min(520px, 46vw) !important; right: -2rem; } .rp-hero .rp-lead { max-width: 28rem; } }
 @media (max-width: 1023px) { .rp-hero-modelo { margin-bottom: -70px !important; } }
+.rp-prova p strong { font-weight: 600; color: #131A27; }
