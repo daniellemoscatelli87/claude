@@ -195,8 +195,21 @@ form.addEventListener('change', (e) => {
   const etapas = Array.from(lista.querySelectorAll<HTMLElement>('.cf-etapa'));
   const trilho = linha.parentElement!;
   let agendado = false;
+  // O trilho começa no centro do primeiro ícone e termina no centro do último.
+  const ajustarTrilho = () => {
+    const pai = trilho.offsetParent as HTMLElement | null;
+    const nums = etapas.map((e) => e.querySelector<HTMLElement>('.cf-num')!);
+    if (!pai || !nums.length) return;
+    const base = pai.getBoundingClientRect().top;
+    const centro = (n: HTMLElement) => { const r = n.getBoundingClientRect(); return r.top + r.height / 2 - base; };
+    const ini = centro(nums[0]), fim = centro(nums[nums.length - 1]);
+    trilho.style.top = `${ini}px`;
+    trilho.style.bottom = 'auto';
+    trilho.style.height = `${Math.max(0, fim - ini)}px`;
+  };
   const atualizar = () => {
     agendado = false;
+    ajustarTrilho();
     const limite = window.innerHeight * 0.6;
     let atual = -1;
     etapas.forEach((e, i) => {
