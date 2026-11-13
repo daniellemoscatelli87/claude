@@ -175,16 +175,52 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   itens.forEach((li) => obs.observe(li));
 })();
 
-/* ---------- Quem buscamos: órbita de áreas; ao escolher uma área, o detalhe ao lado mostra a descrição ---------- */
+/* ---------- Quem buscamos: componente do DS "Avatares com tooltip" (órbita de avatares) ----------
+   Cada anel gira em velocidade própria; os avatares ficam de pé. Ao passar o mouse (ou focar/tocar) num avatar,
+   todos os anéis pausam, o avatar cresce e aparece a dica com a área; o card ao lado mostra a descrição. */
 (() => {
-  const nos = Array.from(document.querySelectorAll<HTMLButtonElement>('.rx-no'));
+  const orbita = document.querySelector<HTMLElement>('.rx-orbita');
   const detalhe = document.querySelector<HTMLElement>('.rx-detalhe');
-  if (!nos.length || !detalhe) return;
-  const escolher = (b: HTMLButtonElement) => {
-    const t = document.querySelector<HTMLTemplateElement>(`.rx-quem-texto template[data-i="${b.dataset.i}"]`);
-    if (!t) return;
-    detalhe.replaceChildren(t.content.cloneNode(true));
-    nos.forEach((n) => n.setAttribute('aria-pressed', String(n === b)));
+  if (!orbita) return;
+  const avs = Array.from(orbita.querySelectorAll<HTMLButtonElement>('.rx-av'));
+  const dica = orbita.querySelector<HTMLElement>('.rx-dica')!;
+  const DUR = [9, 15, 22]; // segundos por volta, como no DS
+  const ang = [0, 0, 0];
+  let pausado = false, ultimo = 0, visivel = false;
+  const reduzir = matchMedia('(prefers-reduced-motion: reduce)');
+  const raio = (k: number) => parseFloat(getComputedStyle(orbita).getPropertyValue(`--r${k}`)) || 0;
+  const posicionar = () => {
+    avs.forEach((b) => {
+      const k = Number(b.closest<HTMLElement>('.rx-giro')!.dataset.anel);
+      const a = (Number(b.style.getPropertyValue('--ang')) + ang[k]) * Math.PI / 180;
+      b.style.transform = `translate(-50%, -50%) translate(${Math.cos(a) * raio(k)}px, ${Math.sin(a) * raio(k)}px)`;
+    });
   };
-  nos.forEach((b) => { b.addEventListener('click', () => escolher(b)); b.addEventListener('mouseenter', () => escolher(b)); b.addEventListener('focus', () => escolher(b)); });
+  const quadro = (t: number) => {
+    if (ultimo && !pausado && !reduzir.matches) { const dt = Math.min(64, t - ultimo); DUR.forEach((d, k) => { ang[k] = (ang[k] + 360 * dt / (d * 1000)) % 360; }); posicionar(); }
+    ultimo = t;
+    if (visivel) requestAnimationFrame(quadro); else ultimo = 0;
+  };
+  new IntersectionObserver(([e]) => { const antes = visivel; visivel = e.isIntersecting; if (visivel && !antes) requestAnimationFrame(quadro); }).observe(orbita);
+  new ResizeObserver(posicionar).observe(orbita);
+  const mostrar = (b: HTMLButtonElement) => {
+    pausado = true;
+    avs.forEach((x) => x.classList.toggle('ativo', x === b));
+    const ro = orbita.getBoundingClientRect(), rb = b.getBoundingClientRect();
+    dica.querySelector('strong')!.textContent = b.getAttribute('aria-label');
+    dica.style.left = `${rb.left - ro.left + rb.width / 2}px`;
+    dica.style.top = `${rb.top - ro.top}px`;
+    dica.hidden = false;
+    const t = document.querySelector<HTMLTemplateElement>(`.rx-quem-texto template[data-i="${b.dataset.i}"]`);
+    if (t && detalhe) detalhe.replaceChildren(t.content.cloneNode(true));
+  };
+  const esconder = () => { pausado = false; dica.hidden = true; avs.forEach((x) => x.classList.remove('ativo')); };
+  avs.forEach((b) => {
+    b.addEventListener('mouseenter', () => mostrar(b));
+    b.addEventListener('focus', () => mostrar(b));
+    b.addEventListener('click', () => mostrar(b));
+    b.addEventListener('mouseleave', esconder);
+    b.addEventListener('blur', esconder);
+  });
+  posicionar();
 })();
