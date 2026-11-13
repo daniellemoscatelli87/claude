@@ -835,3 +835,22 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   #sobre-o-programa .lado-troca + .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca + .lado-troca > h3, #sobre-o-programa .lado-troca + .lado-troca > h3 + p,
   #sobre-o-programa .lado-troca + .lado-troca li, #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { box-shadow: inset 1px 0 0 #EDF0F5 !important; }
 }
+
+/* Desktop: transição do hero no estilo do modelo de referência — hero como painel arredondado com respiro nas bordas
+   e uma aba recortada no centro da base (com cantos côncavos) onde fica o "Saiba mais", na cor da seção seguinte */
+@media (min-width: 1024px) {
+  body:has(#hero.hero-piloto) { background: #FFFFFF; }
+  .hero-piloto { margin-inline: 1rem; margin-top: calc(-1 * var(--altura-cabecalho, 80px) + 1rem) !important; border-radius: 32px; isolation: isolate; }
+  #hero-fundo { border-radius: 32px; }
+  .divisao-hero { background: #FFFFFF !important; padding: 0 !important; }
+  .divisao-hero-cartao { border-radius: 0 !important; max-width: none; }
+  /* aba "Saiba mais" */
+  .rolar-abaixo { bottom: 0 !important; padding: 1rem 2.25rem .875rem !important; border-radius: 28px 28px 0 0 !important; background: #FFFFFF; color: #131A27 !important; text-shadow: none !important; gap: .75rem; }
+  .rolar-abaixo::before, .rolar-abaixo::after { content: ""; position: absolute; bottom: 0; width: 28px; height: 28px; pointer-events: none;
+    background: radial-gradient(circle at 0 0, transparent 27.5px, #FFFFFF 28px); }
+  .rolar-abaixo::before { right: 100%; background: radial-gradient(circle at 0 0, transparent 27.5px, #FFFFFF 28px); }
+  .rolar-abaixo::after { left: 100%; background: radial-gradient(circle at 100% 0, transparent 27.5px, #FFFFFF 28px); }
+  .rolar-abaixo .rolar-seta { border-color: rgba(19, 26, 39, 0.15) !important; background: transparent !important; color: #D44D4D; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .rolar-abaixo:hover .rolar-seta { background: #FDF2F2 !important; }
+  .rolar-abaixo:focus-visible { box-shadow: inset 0 0 0 2px #D44D4D; }
+}
