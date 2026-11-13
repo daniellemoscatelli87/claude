@@ -1362,3 +1362,8 @@ main + footer.relative { margin-top: 0; padding-top: 4rem !important; }
 .rodape-escuro > :not(.fundo-gradiente) { position: relative; z-index: 1; }
 #inscricao { background: linear-gradient(to bottom, transparent calc(100% - 9rem), #0D1119 calc(100% - 9rem)), #EDF0F5 !important; }
 @media (max-width: 767px) { #inscricao { background: linear-gradient(to bottom, transparent calc(100% - 6rem), #0D1119 calc(100% - 6rem)), #EDF0F5 !important; } }
+/* painel de ganhos: ícones neutros (grafite em quadrado branco) e texto em lista com checks discretos */
+.pz-ic-p { background: #FFFFFF !important; color: #495669 !important; box-shadow: 0 0 0 1px rgba(19, 26, 39, 0.09) !important; }
+.pz-lista { list-style: none; margin: 1.125rem 0 0; padding: 0; display: grid; gap: .75rem; }
+.pz-lista li { display: grid; grid-template-columns: 1.25rem 1fr; gap: .625rem; align-items: start; font-size: .9375rem; line-height: 1.5; color: #283043; }
+.pz-lista svg { width: 1rem; height: 1rem; margin-top: .2rem; color: #8898B0; stroke-width: 2.25; }
