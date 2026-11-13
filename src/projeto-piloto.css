@@ -1345,3 +1345,9 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 }
 /* ícones dos três passos redondos (container circular do DS, como "h-12 w-12 rounded-full bg-primary/10") */
 .pz-passo .pz-ic { border-radius: 9999px !important; }
+/* Escopo (seção escura): curva para baixo no topo, vinda da seção clara; mais respiro para o conteúdo */
+#atuacao { padding-top: calc(4rem + 3rem) !important; }
+@media (min-width: 640px) { #atuacao { padding-top: calc(6rem + 5rem) !important; } }
+@media (min-width: 1024px) { #atuacao { padding-top: calc(6rem + 6rem) !important; } }
+/* rodapé sem a curva: começa reto */
+footer.relative { padding-top: 4rem; }
