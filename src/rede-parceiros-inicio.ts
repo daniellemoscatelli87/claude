@@ -83,15 +83,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   const lista = document.querySelector<HTMLUListElement>('.rp-lista-itens');
   const pausa = document.querySelector<HTMLButtonElement>('.rp-lista-pausa');
   if (!lista) return;
-  // Avatares ilustrativos (dois estilos de silhueta) em tons do DS.
-  const avatar = (estilo: number, tom: number) => {
-    const fundos = ['#FDF2F2', '#EDF0F5', '#F9DADA', '#D6DCE6'];
-    const cores = ['#B82828', '#283043', '#8C1B1B', '#495669'];
-    const cabelo = estilo === 0
-      ? '<path d="M12 4.2c-2.6 0-4.4 1.9-4.4 4.5 0 .5.1 1 .2 1.4.4-2 2-3.3 4.2-3.3s3.8 1.3 4.2 3.3c.1-.4.2-.9.2-1.4 0-2.6-1.8-4.5-4.4-4.5z"/>'
-      : '<path d="M12 4c-3 0-5 2.2-5 5.2v5.3c0 .6.5 1 1 1h.6V9.6c0-1.9 1.5-3.4 3.4-3.4s3.4 1.5 3.4 3.4v5.9h.6c.5 0 1-.4 1-1V9.2C17 6.2 15 4 12 4z"/>';
-    return `<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="12" fill="${fundos[tom]}"/><g fill="${cores[tom]}">${cabelo}<circle cx="12" cy="10" r="3.4"/><path d="M5.5 21c.7-3.4 3.3-5.4 6.5-5.4s5.8 2 6.5 5.4z"/></g></svg>`;
-  };
+  // Avatares gerados por IA (pessoas fictícias), em public/rede-parceiros/avatares/.
   // Papéis variados conforme os perfis e setores que a rede procura.
   const papeis = [
     'UX/UI Designer', 'Service Designer', 'Pesquisa em UX', 'Consultoria de Negócios', 'Desenvolvimento Front-end',
@@ -104,7 +96,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
     const li = document.createElement('li');
     if (animar) li.className = 'entrando';
     const papel = papeis[n % papeis.length];
-    li.innerHTML = `<span class="rp-lista-avatar">${avatar(n % 2, n % 4)}</span><span class="rp-lista-corpo"><strong>${papel}</strong><span class="txt">Novo cadastro na Rede de Parceiros</span></span>`;
+    li.innerHTML = `<span class="rp-lista-avatar"><img src="/rede-parceiros/avatares/avatar-${(n % 5) + 1}.webp" alt="" width="40" height="40" loading="lazy"></span><span class="rp-lista-corpo"><strong>${papel}</strong><span class="txt">Novo cadastro na Rede de Parceiros</span></span>`;
     n++;
     return li;
   };
