@@ -885,3 +885,10 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .cabecalho-sobre-hero .site-header { padding-top: 2rem; }
   .cabecalho-sobre-hero .site-header header { margin: 0 auto !important; }
 }
+/* Desktop: aba "Saiba mais" igual à referência — 320 x 56, topo bem arredondado, sem cantos côncavos, seta longa numa cápsula */
+@media (min-width: 1024px) {
+  .rolar-abaixo { width: 320px; height: 56px; padding: 12px !important; gap: 16px !important; border-radius: 40px 40px 0 0 !important; justify-content: center; font-size: 1rem !important; }
+  .rolar-abaixo::before, .rolar-abaixo::after { display: none !important; }
+  .rolar-abaixo .rolar-seta { width: 20px !important; height: 32px !important; border-radius: 9999px !important; border: 1px solid #D6DCE6 !important; animation: none !important; }
+  .rolar-abaixo .rolar-seta svg { width: 14px !important; height: 14px !important; }
+}
