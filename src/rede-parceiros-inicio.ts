@@ -38,7 +38,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
 (() => {
   const cta = document.getElementById('cta-flutuante');
   const subir = document.getElementById('botao-subir');
-  const hero = document.querySelector('.rp-hero');
+  const hero = document.querySelector('.rp-hero .rp-botao'); // aparece assim que o botão do topo sai da tela
   const convite = document.querySelector('.rp-carta');
   const rodape = document.querySelector('footer');
   if (!('IntersectionObserver' in window)) return;
@@ -50,7 +50,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   };
   let heroVisivel = true, conviteVisivel = false;
   const atualizar = () => mostrar(cta, !heroVisivel && !conviteVisivel);
-  if (hero) new IntersectionObserver(([e]) => { heroVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.15 }).observe(hero);
+  if (hero) new IntersectionObserver(([e]) => { heroVisivel = e.isIntersecting; atualizar(); }, { threshold: 0 }).observe(hero);
   if (convite) new IntersectionObserver(([e]) => { conviteVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.1 }).observe(convite);
   if (rodape) new IntersectionObserver(([e]) => mostrar(subir, e.isIntersecting), { threshold: 0.1 }).observe(rodape);
   subir?.addEventListener('click', () => {
@@ -76,6 +76,26 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   lista.addEventListener('scroll', atualizar, { passive: true });
   window.addEventListener('resize', atualizar);
   atualizar();
+  // Avanço automático: um perfil a cada 4,5 s (tempo para ler e ver o próximo); volta ao início no fim.
+  // Pausa enquanto a pessoa interage (mouse, toque ou foco) e não roda para quem prefere menos movimento.
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let interagindo = false;
+  const parar = () => { interagindo = true; };
+  const seguir = () => { interagindo = false; };
+  const area = lista.closest('.rp-carrossel-area') || lista;
+  area.addEventListener('pointerenter', parar); area.addEventListener('pointerleave', seguir);
+  area.addEventListener('focusin', parar); area.addEventListener('focusout', seguir);
+  lista.addEventListener('touchstart', parar, { passive: true });
+  lista.addEventListener('touchend', () => setTimeout(seguir, 4000), { passive: true });
+  let visivel = false;
+  new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }, { threshold: 0.3 }).observe(lista);
+  setInterval(() => {
+    if (interagindo || !visivel || document.hidden) return;
+    const item = lista.querySelector<HTMLElement>('li');
+    const passo = item ? item.offsetWidth + 20 : lista.clientWidth;
+    const fim = lista.scrollLeft >= lista.scrollWidth - lista.clientWidth - 2;
+    lista.scrollTo({ left: fim ? 0 : lista.scrollLeft + passo, behavior: 'smooth' });
+  }, 4500);
 })();
 
 /* ---------- Hero: Lista animada (componente do DS): animação de novos cadastros (sem nomes, data ou hora) ---------- */
