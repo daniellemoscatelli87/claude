@@ -57,7 +57,7 @@
   </section>
 
   <!-- Quem buscamos -->
-  <section class="rp-secao" id="quem" aria-labelledby="quem-titulo">
+  <section class="rp-secao rp-de-g50" id="quem" aria-labelledby="quem-titulo">
     <div class="rp-container">
       <div class="rp-cabecalho">
         <h2 id="quem-titulo">Quem <span class="rp-destaque">buscamos</span></h2>
@@ -97,7 +97,7 @@
   </section>
 
   <!-- Sobre o cadastro + convite -->
-  <section class="rp-secao" id="cadastro" aria-labelledby="cadastro-titulo">
+  <section class="rp-secao rp-de-g50" id="cadastro" aria-labelledby="cadastro-titulo">
     <div class="rp-container">
       <div class="rp-cabecalho">
         <h2 id="cadastro-titulo">Sobre este <span class="rp-destaque">cadastro</span></h2>
@@ -127,6 +127,16 @@
 <footer class="rodape-pagina rodape-pagina-parceiros">
 <!-- @rodape:claro -->
 </footer>
+<div class="faixa-flutuante" aria-hidden="true"></div>
+<button type="button" id="botao-subir" aria-label="Voltar ao topo da página" aria-hidden="true" tabindex="-1" class="botao-subir"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg></button>
+<a href="/rede-parceiros/cadastro/" id="cta-flutuante" aria-hidden="true" tabindex="-1" class="cta-flutuante">Quero ser parceiro<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+<div id="cadastro-parceiro" class="cadastro-tela" role="dialog" aria-modal="true" aria-labelledby="cadastro-parceiro-titulo" aria-hidden="true">
+  <div class="cadastro-tela-topo">
+    <div><p class="rp-selo"><span aria-hidden="true"></span>Rede de Parceiros</p><h2 id="cadastro-parceiro-titulo">Quero ser parceiro</h2></div>
+    <button type="button" id="cadastro-parceiro-fechar" aria-label="Fechar cadastro"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+  <iframe title="Formulário de cadastro na Rede de Parceiros" data-src="/rede-parceiros/cadastro/"></iframe>
+</div>
 <!-- @gaveta -->
 <script src="/whatsapp.js" defer></script>
 <script src="/privacidade-modal.js" defer></script>
