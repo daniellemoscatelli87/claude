@@ -697,3 +697,28 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   #hero-fundo img { height: 20svh !important; object-position: center 30%; }
   .hero-piloto { padding-top: 20svh !important; }
 }
+/* "E depois do projeto-piloto?" (desktop): mais compacto, botão abaixo do texto */
+.depois-piloto-card { padding: 1.75rem 2rem !important; }
+.depois-piloto { gap: 1.5rem !important; align-items: flex-start !important; }
+.depois-piloto > span:first-child { width: 3.5rem !important; height: 3.5rem !important; border-radius: 1rem !important; }
+.depois-piloto > span:first-child svg { width: 1.75rem; height: 1.75rem; }
+.depois-piloto .space-y-2 > p { max-width: 46rem; }
+.depois-cta-desk { height: 2.75rem; padding: 0 1.25rem; font-size: .9375rem; margin-top: 1rem !important; }
+
+/* "E depois do projeto-piloto?" (desktop) no modelo do card de convite da Rede de Parceiros:
+   card branco, selo no topo, título, texto, botão abaixo e ícone à direita; brilho rosado suave no canto */
+.depois-convite { position: relative; overflow: hidden; isolation: isolate; display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+  padding: 2rem 2rem; border-radius: 24px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09);
+  box-shadow: 0 2px 6px rgba(13, 17, 25, 0.07), 0 6px 20px rgba(13, 17, 25, 0.05); }
+.depois-convite::before { content: ""; position: absolute; z-index: -1; right: -6rem; top: -6rem; width: 24rem; height: 24rem; border-radius: 9999px;
+  background: radial-gradient(closest-side, rgba(212, 77, 77, 0.12), transparent); pointer-events: none; }
+.depois-convite-texto { max-width: 46rem; }
+.depois-convite-selo { display: inline-flex; align-items: center; gap: .5rem; padding: .375rem .875rem; margin: 0 0 1rem; border-radius: 9999px;
+  background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); color: #131A27; font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.depois-convite-selo span { width: .5rem; height: .5rem; border-radius: 9999px; background: #D44D4D; }
+.depois-convite h3 { margin: 0 0 .5rem; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; color: #131A27; }
+.depois-convite h3 .depois-destaque { color: #D44D4D; }
+.depois-convite-texto > p:not(.depois-convite-selo) { margin: 0; font-size: 1rem; line-height: 1.6; color: #495669; }
+.depois-convite .depois-cta-desk { margin-top: 1.25rem !important; }
+.depois-convite-icone { flex: none; width: 4.5rem; height: 4.5rem; border-radius: 1.25rem; display: flex; align-items: center; justify-content: center; background: rgba(212, 77, 77, 0.10); color: #D44D4D; }
+@media (max-width: 639px) { .depois-convite { display: none !important; } } /* no celular segue como última etapa da linha do tempo */
