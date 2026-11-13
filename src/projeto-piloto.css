@@ -539,3 +539,18 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .cf-cartao-depois h3 { color: #FFFFFF; }
   .cf-cartao-depois p { color: rgba(255, 255, 255, 0.9); }
 }
+
+/* Celular: menos espaço entre as seções para encurtar a rolagem */
+@media (max-width: 639px) {
+  #atuacao { padding-top: 2.5rem !important; padding-bottom: 4rem !important; }
+  #como-funciona, #guia, #inscricao { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+  #sobre-o-programa { padding-bottom: 2.5rem !important; }
+  #sobre-o-programa .citacao-equilibrio { margin-top: 2rem !important; }
+  main .rv-cabecalho { margin-bottom: 2rem !important; }
+  .cf-etapas { row-gap: 0; }
+  .cf-etapas > * + * { margin-top: 2rem !important; }
+  .cf-etapas { margin-bottom: 0; }
+  #como-funciona .cf-etapas.relative { margin-bottom: 0; }
+  #como-funciona .max-w-4xl.mb-20 { margin-bottom: 0 !important; }
+  footer.relative { padding-top: 4rem !important; }
+}
