@@ -997,3 +997,8 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
   #quem, #formatos, #cadastro { padding-top: 2.75rem !important; padding-bottom: 2.75rem !important; }
   .rx-formatos-grade { margin-top: 2rem !important; gap: 2rem !important; }
 }
+/* Kanban um pouco mais largo e títulos dos projetos menores */
+@media (min-width: 1024px) { .rx-formatos-grade { grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr) !important; max-width: 80rem !important; } }
+.rx-kb-quadro .rx-kb-corpo strong { font-size: .75rem; }
+@media (min-width: 640px) { .rx-kb-cards { height: 17rem; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .rx-kb-cards { height: 19.25rem; } }
