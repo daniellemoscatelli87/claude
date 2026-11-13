@@ -1367,3 +1367,6 @@ main + footer.relative { margin-top: 0; padding-top: 4rem !important; }
 .pz-lista { list-style: none; margin: 1.125rem 0 0; padding: 0; display: grid; gap: .75rem; }
 .pz-lista li { display: grid; grid-template-columns: 1.25rem 1fr; gap: .625rem; align-items: start; font-size: .9375rem; line-height: 1.5; color: #283043; }
 .pz-lista svg { width: 1rem; height: 1rem; margin-top: .2rem; color: #8898B0; stroke-width: 2.25; }
+/* painel de ganhos sem ícones: só a tag, o título e os checks */
+.pz-lado { grid-template-columns: 1fr !important; padding: 0 2.5rem; }
+@media (max-width: 767px) { .pz-lado { padding: 0; } }
