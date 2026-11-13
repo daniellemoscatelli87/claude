@@ -209,3 +209,4 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-check { flex-shrink: 0; width: 1.75rem; height: 1.75rem; margin-top: .0625rem; border-radius: 9999px; background: #B82828; color: #FFFFFF; display: flex; align-items: center; justify-content: center; }
 .rp-check svg { width: 1rem; height: 1rem; }
 .rp-checklist p { margin: 0; font-size: 1rem; line-height: 1.65; color: #283043; }
+@media (min-width: 640px) { .rp-carrossel-nav { justify-content: center; } } /* setas centralizadas abaixo do carrossel */
