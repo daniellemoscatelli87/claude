@@ -1011,3 +1011,11 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
   .rx-numerada h3 { font-size: 1.125rem !important; }
 }
 @media (min-width: 640px) { .rx-numerada li { align-content: start; } }
+/* Formatos: itens 01–04 abaixo do mockup, em todas as telas */
+.rx-formatos-grade { display: flex !important; flex-direction: column; align-items: stretch; max-width: 48rem !important; gap: 2.5rem !important; }
+.rx-formatos-lista { order: -1; }
+.rx-formatos-lista .rx-kanban { max-width: none !important; margin: 0 auto; }
+@media (max-width: 1023px) { .rx-formatos-grade { gap: 2rem !important; } }
+@media (min-width: 640px) { .rx-kb-cards { height: 15rem !important; } }
+@media (min-width: 640px) and (max-width: 1023px) { .rx-kb-cards { height: 19.5rem !important; } }
+@media (min-width: 840px) and (max-width: 1023px) { .rx-kb-cards { height: 16.5rem !important; } }
