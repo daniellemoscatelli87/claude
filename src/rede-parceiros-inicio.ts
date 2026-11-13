@@ -78,7 +78,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   atualizar();
 })();
 
-/* ---------- Hero: Lista animada (componente do DS): exemplo ilustrativo de novos cadastros (sem nomes) ---------- */
+/* ---------- Hero: Lista animada (componente do DS): animação de novos cadastros (sem nomes, data ou hora) ---------- */
 (() => {
   const lista = document.querySelector<HTMLUListElement>('.rp-lista-itens');
   const pausa = document.querySelector<HTMLButtonElement>('.rp-lista-pausa');
@@ -99,19 +99,16 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
     'Especialista em Hospitalidade', 'Especialista em Educação', 'Especialista em Varejo', 'Especialista em Serviços financeiros',
     'Especialista em Indústria', 'Product Designer', 'Desenvolvimento Back-end', 'Análise de Dados',
   ];
-  const hora = (d: Date) => d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-  const data = (d: Date) => d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
   let n = 0;
-  const criar = (quando: Date, animar: boolean) => {
+  const criar = (animar: boolean) => {
     const li = document.createElement('li');
     if (animar) li.className = 'entrando';
     const papel = papeis[n % papeis.length];
-    li.innerHTML = `<span class="rp-lista-avatar">${avatar(n % 2, n % 4)}</span><span class="rp-lista-corpo"><strong>${papel}</strong><span class="txt">Novo cadastro na Rede de Parceiros</span></span><time class="rp-lista-hora" datetime="${quando.toISOString()}">${data(quando)}<br>${hora(quando)}</time>`;
+    li.innerHTML = `<span class="rp-lista-avatar">${avatar(n % 2, n % 4)}</span><span class="rp-lista-corpo"><strong>${papel}</strong><span class="txt">Novo cadastro na Rede de Parceiros</span></span>`;
     n++;
     return li;
   };
-  const agora = Date.now();
-  for (let i = 4; i >= 0; i--) lista.insertBefore(criar(new Date(agora - (i + 1) * 4 * 60000), false), lista.firstChild);
+  for (let i = 4; i >= 0; i--) lista.insertBefore(criar(false), lista.firstChild);
   const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let pausado = reduzido;
   if (pausa) {
@@ -124,7 +121,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   }
   setInterval(() => {
     if (pausado || document.hidden) return;
-    lista.insertBefore(criar(new Date(), true), lista.firstChild);
+    lista.insertBefore(criar(true), lista.firstChild);
     while (lista.children.length > 5) lista.lastElementChild?.remove();
   }, 2500);
 })();
