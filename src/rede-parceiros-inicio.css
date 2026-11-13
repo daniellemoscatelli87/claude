@@ -653,3 +653,153 @@ body.parceiros-inicio { background: #EEF2F7 linear-gradient(#FFFFFF, #FFFFFF) to
 .rx-acc-num { width: 1.5rem; }
 .rx-acc-corpo { padding-left: calc(1.5rem + 1.5rem + .875rem); }
 @media (max-width: 639px) { .rx-acc-corpo { padding-left: 1.125rem; } }
+/* hero ocupa a primeira tela inteira: a seção seguinte só aparece ao rolar */
+.rp-hero { min-height: calc(100svh - var(--altura-cabecalho, 100px)); display: flex; align-items: center; padding-top: 2rem !important; padding-bottom: 3rem !important; }
+.rp-hero > .rp-container { width: 100%; }
+@media (max-width: 1023px) { .rp-hero { min-height: 0; } }
+
+/* Troca: ecossistema de avatares no hero; lista animada de cadastros na seção "Quem buscamos" */
+.rp-hero .rx-orbita { margin: 0 auto; }
+.rx-av:hover { scale: 1 !important; } /* o destaque vem só do avatar ativo (evita conflito com o movimento) */
+.rx-av.ativo { scale: 1.5 !important; z-index: 5; }
+.rx-dica { max-width: 15rem; white-space: normal; text-align: left; }
+.rx-dica span { font-size: .75rem !important; line-height: 1.45; color: #495669 !important; }
+.rx-dica.abaixo { translate: -50% 56px; }
+.rx-dica.abaixo::after { top: auto; bottom: 100%; translate: -50% 5px; rotate: 225deg; }
+.rx-quem-lista { display: flex; justify-content: flex-end; }
+.rx-quem-lista .rp-lista { width: 100%; max-width: 30rem; }
+@media (max-width: 1023px) {
+  .rp-hero .rx-orbita { display: block !important; --r0: 64px; --r1: 104px; --r2: 146px; width: min(340px, 100%) !important; margin-top: 1rem; }
+  .rp-hero .rx-orbita .rx-centro { width: 4rem !important; height: 4rem !important; }
+  .rp-hero .rx-av { width: 38px; height: 38px; }
+  .rx-quem-lista { justify-content: center; }
+}
+/* destaque do avatar ativo aplicado ao conteúdo (img/ícone), não ao botão: escalar o botão multiplicava o deslocamento
+   da órbita, o avatar "pulava" para fora do ponteiro e o hover piscava */
+.rx-av, .rx-av:hover, .rx-av.ativo { scale: 1 !important; }
+.rx-av > img, .rx-av > .rx-av-ic { border-radius: 9999px; box-shadow: 0 0 0 2px rgba(19, 26, 39, 0.09), 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); transition: scale .25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.rx-av { box-shadow: none !important; background: transparent !important; }
+.rx-av.ativo > img, .rx-av.ativo > .rx-av-ic { scale: 1.5; }
+.rx-av.ativo { z-index: 5; }
+.rx-dica { width: 15rem; }
+
+/* Nova distribuição: imagem no hero (sobe de trás da folha branca, como na Experience Intelligence 3),
+   ecossistema de avatares em "Quem buscamos", lista dinâmica em "Formatos de parceria" */
+.rp-hero { padding-bottom: 0 !important; align-items: stretch !important; overflow: hidden; }
+.rp-hero-grade { align-items: end; }
+.rp-hero-texto { align-self: center; padding-bottom: 3rem; }
+.rp-hero-modelo { align-self: end; display: flex; justify-content: center; overflow: hidden; }
+.rp-modelo-sobe { width: 100%; max-width: 460px; }
+.rp-modelo-sobe img { display: block; width: 100%; height: auto; }
+@media (prefers-reduced-motion: no-preference) {
+  .rp-modelo-sobe { animation: rp-modelo-sobe 1.1s cubic-bezier(0.16, 1, 0.3, 1) .25s both; will-change: transform; }
+}
+@keyframes rp-modelo-sobe { from { transform: translateY(110%); } to { transform: translateY(0); } }
+.rx-quem .rx-orbita { margin-left: auto; }
+.rx-formatos-grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); gap: 3.5rem; align-items: center; max-width: 64rem; margin: 3rem auto 0; }
+.rx-formatos-grade .rx-numerada { margin: 0; max-width: none; }
+.rx-formatos-lista .rp-lista { width: 100%; }
+@media (max-width: 1023px) {
+  .rx-formatos-grade { grid-template-columns: 1fr; gap: 2.5rem; }
+  .rx-formatos-lista { display: flex; justify-content: center; }
+  .rx-formatos-lista .rp-lista { max-width: 30rem; }
+  .rp-hero-texto { padding-bottom: 2rem; }
+  .rp-modelo-sobe { max-width: 340px; }
+}
+@media (min-width: 1024px) { .rp-modelo-sobe img { max-height: calc(100svh - 9rem); width: auto; max-width: 100%; margin: 0 auto; object-fit: contain; object-position: bottom; } }
+/* imagem do hero (horizontal, fundo transparente): ocupa a coluna da direita e encosta na folha branca */
+@media (min-width: 1024px) {
+  .rp-hero-grade { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) !important; gap: 2rem !important; }
+  .rp-modelo-sobe { max-width: 680px; }
+  .rp-modelo-sobe img { width: 100%; height: auto; max-height: calc(100svh - 9rem); }
+}
+@media (max-width: 1023px) { .rp-modelo-sobe { max-width: 520px; } }
+@media (min-width: 1024px) { .rp-hero-grade { grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr) !important; } .rp-h1-linha { white-space: nowrap; } }
+
+/* HERO com a diagramação da Experience Intelligence 3: grade de 12 colunas (texto 7, imagem 5) em 72rem,
+   selo branco com ponto pulsando, título 2.65rem, texto 17px, CTA + "Como funciona" com seta; a imagem
+   sobe 50px e o pé dela fica por trás da folha branca, que começa logo abaixo (cantos de 56px) */
+.rp-hero { min-height: 0 !important; display: block !important; padding: 2rem 0 3rem !important; overflow: visible !important; background: transparent !important; }
+@media (min-width: 768px) { .rp-hero { padding-top: 3.5rem !important; } }
+@media (min-width: 1024px) { .rp-hero { padding-bottom: 0 !important; } }
+.rp-hero > .rp-container { max-width: 72rem; }
+.rp-hero-grade { display: grid; grid-template-columns: 1fr !important; gap: 2rem !important; align-items: center !important; }
+@media (min-width: 1024px) { .rp-hero-grade { grid-template-columns: 7fr 5fr !important; } }
+.rp-hero-texto { align-self: center !important; padding-bottom: 0 !important; display: flex; flex-direction: column; align-items: flex-start; position: relative; z-index: 10; }
+.rp-hero .rp-selo { margin-bottom: 2rem; padding: .375rem 1rem; background: rgba(255, 255, 255, 0.95); border: 1px solid #B3BDD0; color: #283043; box-shadow: 0 1px 2px rgba(13, 17, 25, 0.05); }
+.rp-hero .rp-selo span { position: relative; }
+@media (prefers-reduced-motion: no-preference) { .rp-hero .rp-selo span::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: #D44D4D; opacity: .75; animation: rp-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; } }
+@keyframes rp-ping { 75%, 100% { transform: scale(2); opacity: 0; } }
+.rp-hero h1 { margin: 0 0 2rem !important; font-size: 1.875rem !important; font-weight: 700; line-height: 1.18 !important; letter-spacing: -0.025em; }
+@media (min-width: 640px) { .rp-hero h1 { font-size: 2.25rem !important; } }
+@media (min-width: 1024px) { .rp-hero h1 { font-size: 2.65rem !important; } }
+.rp-h1-linha { white-space: normal !important; }
+.rp-hero .rp-lead { margin: 0 0 2.5rem !important; max-width: 36rem; font-size: 1rem; line-height: 1.65; color: #495669; }
+@media (min-width: 640px) { .rp-hero .rp-lead { font-size: 17px; } }
+.rp-hero .rp-acoes { margin-top: 0 !important; gap: 1rem; }
+.rp-hero .rp-botao { padding: .75rem 1.5rem; font-size: .875rem; }
+.rp-link-seta { display: inline-flex; align-items: center; gap: .375rem; padding: .75rem 1.25rem; color: #495669 !important; text-decoration: none !important; }
+.rp-link-seta svg { width: 1rem; height: 1rem; color: #8898B0; }
+.rp-link-seta:hover { color: #D44D4D !important; }
+/* imagem: coluna da direita, sobe 50px e o pé fica por trás da folha */
+.rp-hero-modelo { align-self: end !important; display: flex; justify-content: center; overflow: visible !important; position: relative; pointer-events: none; }
+@media (min-width: 1024px) { .rp-hero-modelo { justify-content: flex-end; margin-bottom: -6rem; transform: translateY(-50px); } }
+.rp-modelo-sobe { width: 100%; max-width: 360px; }
+@media (min-width: 640px) { .rp-modelo-sobe { max-width: 400px; } }
+@media (min-width: 1024px) { .rp-modelo-sobe { max-width: 460px; } }
+.rp-modelo-sobe img { width: 100% !important; height: auto !important; max-height: none !important; filter: drop-shadow(0 20px 25px rgba(13, 17, 25, 0.10)); }
+/* folha branca logo abaixo, por cima do pé da imagem */
+.rx-folha { position: relative; z-index: 20; max-width: 1400px; margin: 43px auto 1.5rem !important; border-radius: 36px; border: 1px solid rgba(226, 232, 240, 0.7); }
+@media (min-width: 640px) { .rx-folha { border-radius: 48px; margin-left: 1rem !important; margin-right: 1rem !important; } }
+@media (min-width: 1024px) { .rx-folha { border-radius: 56px; margin-left: 1.5rem !important; margin-right: 1.5rem !important; } }
+@media (min-width: 1448px) { .rx-folha { margin-left: auto !important; margin-right: auto !important; } }
+@media (max-width: 1023px) { .rp-hero-texto { align-items: center; text-align: center; } .rp-hero .rp-acoes { justify-content: center; } .rp-hero-modelo { margin-bottom: -4.5rem; } }
+body.parceiros-inicio { background: #EEF2F7 !important; }
+.rp-hero { padding-top: 5.75rem !important; }
+@media (max-width: 1023px) { .rp-hero { padding-top: 2.5rem !important; } }
+.rp-hero .rp-selo { font-size: .75rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #283043; }
+.rp-hero h1 { margin-bottom: 2.25rem !important; }
+.rp-prova { display: flex; align-items: center; gap: .875rem; margin: 0 0 2.5rem; }
+.rp-prova-avs { display: flex; flex: none; }
+.rp-prova-avs img { width: 2rem; height: 2rem; border-radius: 9999px; object-fit: cover; box-shadow: 0 0 0 2px #FFFFFF; }
+.rp-prova-avs img + img { margin-left: -.5rem; }
+.rp-prova p { margin: 0; max-width: 24rem; font-size: .875rem; font-weight: 500; line-height: 1.35; color: #495669; }
+@media (min-width: 1024px) { .rp-modelo-sobe { max-width: 540px; } }
+@media (max-width: 1023px) { .rp-prova { justify-content: center; text-align: left; } }
+/* composição dos três profissionais no quadro da EI3 (460px de largura, ~587px até a folha branca) */
+@media (min-width: 1024px) { .rp-modelo-sobe { max-width: 460px !important; } }
+@media (min-width: 640px) and (max-width: 1023px) { .rp-modelo-sobe { max-width: 400px !important; } }
+@media (max-width: 639px) { .rp-modelo-sobe { max-width: 360px !important; } }
+/* bordas laterais da composição esmaecidas (as pessoas das pontas não terminam em corte reto) e altura próxima à da EI3 */
+.rp-modelo-sobe img { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 12%, #000 88%, transparent 100%); mask-image: linear-gradient(to right, transparent 0, #000 12%, #000 88%, transparent 100%); }
+@media (min-width: 1024px) { .rp-modelo-sobe { max-width: 500px !important; } }
+/* grupo de três pessoas separadas e levemente sobrepostas: imagem mais larga, sem esmaecer as laterais */
+.rp-modelo-sobe img { -webkit-mask-image: none !important; mask-image: none !important; }
+@media (min-width: 1024px) {
+  .rp-hero-grade { grid-template-columns: 6fr 6fr !important; }
+  .rp-modelo-sobe { max-width: 660px !important; margin-right: -3rem; }
+  .rp-hero-modelo { margin-bottom: -3rem !important; transform: translateY(-20px) !important; }
+}
+@media (max-width: 1023px) { .rp-modelo-sobe { max-width: 560px !important; } .rp-hero-modelo { margin-bottom: -2.5rem !important; } }
+/* desktop: texto mantém as 7 colunas da EI3; o grupo ocupa o espaço à direita até a margem da tela e o pé fica atrás da folha */
+@media (min-width: 1024px) {
+  .rp-hero-grade { grid-template-columns: 7fr 5fr !important; }
+  .rp-hero-modelo { position: relative; align-self: stretch !important; min-height: 100%; margin-bottom: 0 !important; transform: none !important; }
+  .rp-modelo-sobe { position: absolute; right: -6rem; bottom: -2.75rem; width: min(640px, 48vw) !important; max-width: none !important; margin: 0 !important; }
+}
+@media (max-width: 1023px) { .rp-hero { padding-bottom: 0 !important; } .rp-hero-modelo { margin-bottom: -95px !important; } }
+/* composição de referência: designer à esquerda e programadora à direita atrás, pesquisadora à frente ao centro */
+@media (min-width: 1024px) { .rp-modelo-sobe { width: min(740px, 51vw) !important; right: -7rem; bottom: -2.5rem; } }
+@media (max-width: 1023px) { .rp-modelo-sobe { max-width: 520px !important; } .rp-hero-modelo { margin-bottom: -40px !important; } }
+/* como na referência: conteúdo mais largo, texto mais estreito à esquerda e o grupo à direita sem invadir o texto */
+@media (min-width: 1024px) {
+  .rp-hero { overflow-x: clip !important; }
+  .rp-hero > .rp-container { max-width: 80rem; }
+  .rp-hero .rp-lead { max-width: 33rem; }
+  .rp-modelo-sobe { width: min(730px, 50vw) !important; right: -1.5rem; bottom: -3.5rem; }
+}
+@media (min-width: 1024px) and (max-width: 1279px) { .rp-modelo-sobe { width: min(600px, 47vw) !important; right: -1rem; } }
+@media (min-width: 1280px) { .rp-modelo-sobe { right: -2.75rem; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .rp-modelo-sobe { width: min(520px, 46vw) !important; right: -2rem; } .rp-hero .rp-lead { max-width: 28rem; } }
+@media (max-width: 1023px) { .rp-hero-modelo { margin-bottom: -70px !important; } }
+.rp-prova p strong { font-weight: 600; color: #131A27; }
