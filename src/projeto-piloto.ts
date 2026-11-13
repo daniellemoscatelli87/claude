@@ -254,16 +254,19 @@ form.addEventListener('change', (e) => {
   const hero = document.getElementById('hero');
   const form = document.getElementById('inscricao');
   if (!btn || !hero || !form || !('IntersectionObserver' in window)) return;
-  let heroVisivel = true, formVisivel = false;
+  let heroVisivel = true, formVisivel = false, ctaSecaoVisivel = false;
+  // enquanto o botão "Cadastrar empresa" da seção do programa está na tela, o flutuante sai para não repetir
+  const ctaSecao = document.querySelector('#sobre-o-programa .pv-cta');
   const celular = window.matchMedia('(max-width: 767px)'); // no celular ele fica sempre no rodapé, ao lado do WhatsApp
   const atualizar = () => {
-    const mostrar = (celular.matches || !heroVisivel) && !formVisivel;
+    const mostrar = (celular.matches || !heroVisivel) && !formVisivel && !ctaSecaoVisivel;
     btn.classList.toggle('visivel', mostrar);
     btn.setAttribute('aria-hidden', String(!mostrar));
     btn.tabIndex = mostrar ? 0 : -1;
   };
   new IntersectionObserver(([e]) => { heroVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.15 }).observe(hero);
   new IntersectionObserver(([e]) => { formVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.1 }).observe(form);
+  if (ctaSecao) new IntersectionObserver(([e]) => { ctaSecaoVisivel = e.isIntersecting; atualizar(); }, { threshold: 0 }).observe(ctaSecao);
   celular.addEventListener('change', atualizar);
   atualizar();
 })();
