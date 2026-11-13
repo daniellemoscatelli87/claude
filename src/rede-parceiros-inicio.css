@@ -788,3 +788,17 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
   .rp-modelo-sobe { position: absolute; right: -6rem; bottom: -2.75rem; width: min(640px, 48vw) !important; max-width: none !important; margin: 0 !important; }
 }
 @media (max-width: 1023px) { .rp-hero { padding-bottom: 0 !important; } .rp-hero-modelo { margin-bottom: -95px !important; } }
+/* composição de referência: designer à esquerda e programadora à direita atrás, pesquisadora à frente ao centro */
+@media (min-width: 1024px) { .rp-modelo-sobe { width: min(740px, 51vw) !important; right: -7rem; bottom: -2.5rem; } }
+@media (max-width: 1023px) { .rp-modelo-sobe { max-width: 520px !important; } .rp-hero-modelo { margin-bottom: -40px !important; } }
+/* como na referência: conteúdo mais largo, texto mais estreito à esquerda e o grupo à direita sem invadir o texto */
+@media (min-width: 1024px) {
+  .rp-hero { overflow-x: clip !important; }
+  .rp-hero > .rp-container { max-width: 80rem; }
+  .rp-hero .rp-lead { max-width: 33rem; }
+  .rp-modelo-sobe { width: min(730px, 50vw) !important; right: -1.5rem; bottom: -3.5rem; }
+}
+@media (min-width: 1024px) and (max-width: 1279px) { .rp-modelo-sobe { width: min(600px, 47vw) !important; right: -1rem; } }
+@media (min-width: 1280px) { .rp-modelo-sobe { right: -2.75rem; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .rp-modelo-sobe { width: min(520px, 46vw) !important; right: -2rem; } .rp-hero .rp-lead { max-width: 28rem; } }
+@media (max-width: 1023px) { .rp-hero-modelo { margin-bottom: -70px !important; } }
