@@ -906,3 +906,10 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .sobre-intro-txt strong { color: #131A27; font-weight: 600; }
   .sobre-intro-acao { margin-top: 2rem; display: flex; justify-content: center; }
 }
+/* foto v7 (com o título do programa na própria arte, à direita): enquadramento central para não cortar o texto */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  #hero-fundo { background-image: url("/projeto-piloto-hero-v7.webp") !important; background-position: center center !important; }
+}
+@media (min-width: 1024px) { #hero-fundo img { object-position: center center !important; } }
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) { #hero-fundo { background-position: 75% center !important; } }
+@media (min-width: 1024px) { #hero-fundo img { object-position: 75% center !important; } }
