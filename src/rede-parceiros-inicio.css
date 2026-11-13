@@ -224,3 +224,7 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-checklist-card .rp-check svg { width: 1.125rem; height: 1.125rem; }
 .rp-checklist-card p { color: #495669; font-size: .9375rem; }
 .rp-checklist-card p strong { display: block; margin-bottom: .25rem; color: #131A27; font-size: 1.0625rem; font-weight: 600; line-height: 1.4; }
+/* Passagens suaves entre as seções também no computador */
+.rp-hero { background: linear-gradient(to bottom, #FFFFFF 0%, #FDF2F2 70%, #EDF0F5 100%); }
+.rp-de-g50 { background: linear-gradient(to bottom, #EDF0F5 0, #FFFFFF 160px); }
+#formatos.rp-fundo-g50 { background: linear-gradient(to bottom, #FFFFFF 0, #EDF0F5 160px); }
