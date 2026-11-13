@@ -509,3 +509,7 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
     opacity: 0; transition: opacity .3s ease; }
   body:has(.cta-flutuante.visivel) .faixa-flutuante, body:has(.botao-subir.visivel) .faixa-flutuante { opacity: 1; }
 }
+/* Card do hero sem a borda animada (desktop e celular) */
+.hero-card::after { display: none !important; }
+/* Celular: card do hero 5px mais alto */
+@media (max-width: 767px) { .hero-piloto { padding-top: calc(var(--altura-cabecalho, 68px) + .4375rem) !important; } }
