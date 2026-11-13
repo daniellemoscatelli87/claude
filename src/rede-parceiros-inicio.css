@@ -653,3 +653,7 @@ body.parceiros-inicio { background: #EEF2F7 linear-gradient(#FFFFFF, #FFFFFF) to
 .rx-acc-num { width: 1.5rem; }
 .rx-acc-corpo { padding-left: calc(1.5rem + 1.5rem + .875rem); }
 @media (max-width: 639px) { .rx-acc-corpo { padding-left: 1.125rem; } }
+/* hero ocupa a primeira tela inteira: a seção seguinte só aparece ao rolar */
+.rp-hero { min-height: calc(100svh - var(--altura-cabecalho, 100px)); display: flex; align-items: center; padding-top: 2rem !important; padding-bottom: 3rem !important; }
+.rp-hero > .rp-container { width: 100%; }
+@media (max-width: 1023px) { .rp-hero { min-height: 0; } }
