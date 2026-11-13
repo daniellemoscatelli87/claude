@@ -100,65 +100,79 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   }, 4500);
 })();
 
-/* ---------- Hero: Lista animada (componente do DS): animação de novos cadastros (sem nomes, data ou hora) ---------- */
+/* ---------- Formatos de parceria: kanban animado de projetos (exemplos) ----------
+   Cada card é um projeto: avatar do profissional (pessoa fictícia gerada por IA), tipo de projeto e status.
+   A cada poucos segundos um card avança de coluna (A iniciar → Em andamento → Entregue → volta ao início). */
 (() => {
-  const lista = document.querySelector<HTMLUListElement>('.rp-lista-itens');
-  const pausa = document.querySelector<HTMLButtonElement>('.rp-lista-pausa');
-  if (!lista) return;
-  // Avatares gerados por IA (pessoas fictícias), em public/rede-parceiros/avatares/.
-  // Papéis variados conforme os perfis e setores que a rede procura.
-  const papeis = [
-    'UX/UI Designer', 'Service Designer', 'Pesquisa em UX', 'Consultoria de Negócios', 'Desenvolvimento Front-end',
-    'Arquitetura de Soluções', 'Ciência de Dados', 'Especialista em IA', 'Gestão de Inovação', 'Especialista em Saúde',
-    'Especialista em Hospitalidade', 'Especialista em Educação', 'Especialista em Varejo', 'Especialista em Serviços financeiros',
-    'Especialista em Indústria', 'Product Designer', 'Desenvolvimento Back-end', 'Análise de Dados',
+  const quadro = document.querySelector<HTMLElement>('.rx-kb-quadro');
+  const pausa = document.querySelector<HTMLButtonElement>('.rx-kanban .rp-lista-pausa');
+  if (!quadro) return;
+  const STATUS = ['A iniciar', 'Em andamento', 'Entregue'];
+  const projetos = [
+    { tipo: 'Pesquisa com pacientes', av: 3, s: 1 },
+    { tipo: 'Jornada de check-in de hotel', av: 2, s: 0 },
+    { tipo: 'App de matrícula escolar', av: 1, s: 1 },
+    { tipo: 'Painel de vendas do varejo', av: 4, s: 2 },
+    { tipo: 'Onboarding de conta digital', av: 5, s: 0 },
+    { tipo: 'Automação com IA na fábrica', av: 2, s: 2 },
   ];
-  let n = 0;
-  const criar = (animar: boolean) => {
+  const cols = Array.from(quadro.querySelectorAll<HTMLElement>('.rx-kb-col'));
+  const listas = cols.map((c) => c.querySelector<HTMLUListElement>('.rx-kb-cards')!);
+  const cards = projetos.map((p) => {
     const li = document.createElement('li');
-    if (animar) li.className = 'entrando';
-    const papel = papeis[n % papeis.length];
-    li.innerHTML = `<span class="rp-lista-avatar"><img src="/rede-parceiros/avatares/avatar-${(n % 5) + 1}.webp" alt="" width="40" height="40" loading="lazy"></span><span class="rp-lista-corpo"><strong>${papel}</strong><span class="txt">Novo cadastro na Rede de Parceiros</span></span>`;
-    n++;
+    li.className = 'rx-kb-card';
+    li.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="32" height="32" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-status"></span></span>`;
     return li;
+  });
+  const aplicarStatus = (i: number) => {
+    const st = cards[i].querySelector<HTMLElement>('.rx-kb-status')!;
+    st.textContent = STATUS[projetos[i].s];
+    st.dataset.s = String(projetos[i].s);
   };
-  for (let i = 4; i >= 0; i--) lista.insertBefore(criar(false), lista.firstChild);
-  const ICO_PAUSA = '<span class="rp-ico-pausa" aria-hidden="true"><i></i><i></i></span>';
-  const ICO_PLAY = '<svg class="rp-ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>';
+  const contar = () => cols.forEach((c, k) => { c.querySelector('.rx-kb-qtd')!.textContent = String(listas[k].children.length); });
+  cards.forEach((li, i) => { aplicarStatus(i); listas[projetos[i].s].appendChild(li); });
+  contar();
   const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let pausado = reduzido;
+  const ICO_PAUSA = '<span class="rp-ico-pausa" aria-hidden="true"><i></i><i></i></span>';
+  const ICO_PLAY = '<svg class="rp-ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>';
   if (pausa) {
     pausa.innerHTML = reduzido ? ICO_PLAY + 'Retomar' : ICO_PAUSA + 'Pausar';
-    if (reduzido) pausa.setAttribute('aria-pressed', 'true');
+    pausa.setAttribute('aria-pressed', String(reduzido));
     pausa.addEventListener('click', () => {
       pausado = !pausado;
       pausa.innerHTML = pausado ? ICO_PLAY + 'Retomar' : ICO_PAUSA + 'Pausar';
       pausa.setAttribute('aria-pressed', String(pausado));
     });
   }
-  // Mesma coreografia da Lista animada do DS: o novo item cai do topo (mola), os demais deslizam para baixo
-  // (animação de layout) e o último sai para a direita, esmaecendo.
   const MOLA = 'cubic-bezier(0.34, 1.32, 0.64, 1)';
+  let vez = 0;
   const avancar = () => {
-    const antes = new Map<Element, number>();
-    Array.from(lista.children).forEach((el) => antes.set(el, (el as HTMLElement).getBoundingClientRect().top));
-    const saindo = lista.children.length >= 5 ? (lista.lastElementChild as HTMLElement) : null;
-    if (saindo) {
-      const r = saindo.getBoundingClientRect(), base = lista.getBoundingClientRect();
-      saindo.style.position = 'absolute'; saindo.style.left = `${r.left - base.left}px`; saindo.style.top = `${r.top - base.top}px`; saindo.style.width = `${r.width}px`;
-      saindo.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(60px) scale(.9)' }], { duration: 200, easing: 'ease-in', fill: 'forwards' })
-        .finished.then(() => saindo.remove());
-    }
-    const novo = criar(false);
-    lista.insertBefore(novo, lista.firstChild);
-    novo.animate([{ opacity: 0, transform: 'translateY(-32px) scale(.93)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: MOLA });
-    antes.forEach((y, el) => {
-      if (el === saindo) return;
-      const dy = y - (el as HTMLElement).getBoundingClientRect().top;
-      if (dy) (el as HTMLElement).animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 520, easing: MOLA });
+    // rodízio em 3 passos (Entregue → A iniciar, Em andamento → Entregue, A iniciar → Em andamento):
+    // cada coluna fica sempre com 1 a 3 cards, então a altura do quadro não muda
+    const origem = [2, 1, 0][vez % 3]; vez++;
+    const primeiro = listas[origem].firstElementChild as HTMLLIElement | null;
+    if (!primeiro) return;
+    const i = cards.indexOf(primeiro);
+    const antes = new Map<HTMLElement, DOMRect>();
+    cards.forEach((c) => antes.set(c, c.getBoundingClientRect()));
+    projetos[i].s = (projetos[i].s + 1) % 3;
+    aplicarStatus(i);
+    const destino = listas[projetos[i].s];
+    destino.appendChild(cards[i]);
+    contar();
+    // animação de layout (FLIP): o card viaja até a nova coluna; os demais se reacomodam
+    antes.forEach((r, c) => {
+      const n = c.getBoundingClientRect();
+      const dx = r.left - n.left, dy = r.top - n.top;
+      if (!dx && !dy) return;
+      c.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], { duration: c === cards[i] ? 650 : 450, easing: MOLA });
     });
+    cards[i].animate([{ boxShadow: '0 0 0 2px rgba(212, 77, 77, 0.45)' }, { boxShadow: '0 0 0 2px rgba(212, 77, 77, 0)' }], { duration: 1400, easing: 'ease-out' });
   };
-  setInterval(() => { if (!pausado && !document.hidden) avancar(); }, 2000);
+  let visivel = false;
+  new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }, { threshold: 0.3 }).observe(quadro);
+  setInterval(() => { if (!pausado && visivel && !document.hidden) avancar(); }, 2600);
 })();
 
 /* ---------- Checklist: o check de cada item é desenhado quando ele entra na tela, um após o outro ---------- */

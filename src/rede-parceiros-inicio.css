@@ -918,3 +918,37 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 /* modelo 10% menor */
 @media (min-width: 1024px) { .rx-modelo-aponta { width: 414px; margin-left: -7rem; } }
 @media (min-width: 1024px) and (max-width: 1279px) { .rx-modelo-aponta { width: 369px; margin-left: -5rem; } }
+/* Formatos de parceria: kanban de projetos (substitui a lista animada) */
+@media (min-width: 1024px) { .rx-formatos-grade { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) !important; max-width: 76rem !important; gap: 3rem !important; } }
+.rx-kanban { width: 100%; }
+.rx-kb-quadro { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .625rem; padding: .75rem; }
+.rx-kb-col { min-width: 0; padding: .625rem; border-radius: 14px; background: #F6F7FA; }
+.rx-kb-tit { display: flex; align-items: center; gap: .375rem; margin: 0 0 .625rem; padding: 0 .125rem; font-size: .75rem !important; font-weight: 700; color: #283043; }
+.rx-kb-ponto { width: .5rem; height: .5rem; border-radius: 9999px; background: #8898B0; flex: none; }
+.rx-kb-col[data-s="1"] .rx-kb-ponto { background: #448ABC; }
+.rx-kb-col[data-s="2"] .rx-kb-ponto { background: #4FB57B; }
+.rx-kb-qtd { margin-left: auto; min-width: 1.25rem; padding: 0 .375rem; border-radius: 9999px; background: #FFFFFF; border: 1px solid #EDF0F5; font-size: .6875rem; font-weight: 600; line-height: 1.25rem; text-align: center; color: #495669; }
+.rx-kb-cards { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; min-height: 15rem; }
+.rx-kb-card { position: relative; display: flex; flex-direction: column; gap: .5rem; padding: .625rem; border-radius: 12px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.07); box-shadow: 0 1px 2px rgba(13, 17, 25, 0.05); }
+.rx-kb-card img { width: 2rem; height: 2rem; border-radius: 9999px; object-fit: cover; display: block; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px rgba(19, 26, 39, 0.08); }
+.rx-kb-corpo { display: flex; flex-direction: column; gap: .375rem; min-width: 0; }
+.rx-kb-corpo strong { font-size: .8125rem; font-weight: 700; line-height: 1.3; color: #131A27; }
+.rx-kb-status { align-self: flex-start; display: inline-flex; align-items: center; gap: .3125rem; padding: .125rem .5rem; border-radius: 9999px; background: #EDF0F5; font-size: .6875rem; font-weight: 600; color: #283043; white-space: nowrap; }
+.rx-kb-status::before { content: ""; width: .375rem; height: .375rem; border-radius: 9999px; background: #8898B0; }
+.rx-kb-status[data-s="1"] { background: rgba(68, 138, 188, 0.1); }
+.rx-kb-status[data-s="1"]::before { background: #448ABC; }
+.rx-kb-status[data-s="2"] { background: rgba(79, 181, 123, 0.1); }
+.rx-kb-status[data-s="2"]::before { background: #4FB57B; }
+@media (max-width: 1023px) { .rx-formatos-lista .rx-kanban { max-width: 40rem !important; } }
+@media (max-width: 639px) {
+  .rx-kb-quadro { grid-template-columns: repeat(3, minmax(11rem, 1fr)); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .rx-kb-quadro::-webkit-scrollbar { display: none; }
+  .rx-kb-col { scroll-snap-align: start; }
+}
+/* kanban: card compacto (avatar ao lado), altura fixa para 4 cards (sem saltos de layout) e sem estourar no celular */
+.rx-kb-card { flex-direction: row; align-items: flex-start; gap: .5rem; }
+.rx-kb-card img { flex: none; width: 1.75rem; height: 1.75rem; }
+.rx-kb-cards { min-height: 0; height: 22.5rem; }
+.rx-formatos-lista, .rx-formatos-lista .rx-kanban { min-width: 0; }
+@media (max-width: 1023px) { .rx-formatos-lista { display: block !important; } .rx-formatos-lista .rx-kanban { margin: 0 auto; } }
+.rx-kb-cards { height: 21.5rem; }
