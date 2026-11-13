@@ -122,9 +122,12 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   const cards = projetos.map((p) => {
     const li = document.createElement('li');
     li.className = 'rx-kb-card';
-    li.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="32" height="32" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-status"></span></span>`;
+    li.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="32" height="32" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-status"></span><span class="rx-kb-barra" aria-hidden="true"><i></i></span></span>`;
     return li;
   });
+  // progresso de cada projeto: A iniciar = 0, Em andamento = avança aos poucos, Entregue = 100
+  const prog = projetos.map((p) => (p.s === 0 ? 0 : p.s === 2 ? 100 : 25 + Math.round(Math.random() * 35)));
+  const pintar = (i: number) => { cards[i].querySelector<HTMLElement>('.rx-kb-barra i')!.style.width = `${prog[i]}%`; };
   const aplicarStatus = (i: number) => {
     const st = cards[i].querySelector<HTMLElement>('.rx-kb-status')!;
     st.textContent = STATUS[projetos[i].s];
@@ -132,6 +135,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   };
   const contar = () => cols.forEach((c, k) => { c.querySelector('.rx-kb-qtd')!.textContent = String(listas[k].children.length); });
   cards.forEach((li, i) => { aplicarStatus(i); listas[projetos[i].s].appendChild(li); });
+  cards.forEach((_, i) => pintar(i));
   contar();
   // Celular: no lugar do quadro, um card de tarefa único (foto + tarefa + status) que mostra o projeto que acabou de mudar
   const unico = document.createElement('div');
@@ -170,6 +174,8 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     const antes = new Map<HTMLElement, DOMRect>();
     cards.forEach((c) => antes.set(c, c.getBoundingClientRect()));
     projetos[i].s = (projetos[i].s + 1) % 3;
+    prog[i] = projetos[i].s === 0 ? 0 : projetos[i].s === 2 ? 100 : 6;
+    pintar(i);
     aplicarStatus(i);
     const destino = listas[projetos[i].s];
     destino.appendChild(cards[i]);
@@ -187,7 +193,12 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   };
   let visivel = false;
   new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }, { threshold: 0.3 }).observe(quadro.closest('.rx-kanban') || quadro);
-  setInterval(() => { if (!pausado && visivel && !document.hidden) avancar(); }, 2600);
+  // ritmo moderado: um card muda de coluna a cada 3,2 s e, entre uma mudança e outra, as barras dos projetos em andamento avançam
+  setInterval(() => { if (!pausado && visivel && !document.hidden) avancar(); }, 3200);
+  setInterval(() => {
+    if (pausado || !visivel || document.hidden) return;
+    projetos.forEach((p, i) => { if (p.s === 1 && prog[i] < 94) { prog[i] = Math.min(94, prog[i] + 2 + Math.round(Math.random() * 4)); pintar(i); } });
+  }, 800);
 })();
 
 /* ---------- Checklist: o check de cada item é desenhado quando ele entra na tela, um após o outro ---------- */

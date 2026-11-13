@@ -1019,3 +1019,13 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 @media (min-width: 640px) { .rx-kb-cards { height: 15rem !important; } }
 @media (min-width: 640px) and (max-width: 1023px) { .rx-kb-cards { height: 19.5rem !important; } }
 @media (min-width: 840px) and (max-width: 1023px) { .rx-kb-cards { height: 16.5rem !important; } }
+/* Kanban vivo: barra de progresso nos cards (avança nos projetos em andamento) */
+.rx-kb-barra { display: block; height: 4px; margin-top: .125rem; border-radius: 9999px; background: #EDF0F5; overflow: hidden; }
+.rx-kb-barra i { display: block; height: 100%; width: 0; border-radius: inherit; background: #8898B0; transition: width .8s cubic-bezier(0.16, 1, 0.3, 1), background-color .4s ease; }
+.rx-kb-card:has(.rx-kb-status[data-s="1"]) .rx-kb-barra i { background: #448ABC; }
+.rx-kb-card:has(.rx-kb-status[data-s="2"]) .rx-kb-barra i { background: #4FB57B; }
+.rx-kb-card:has(.rx-kb-status[data-s="0"]) .rx-kb-barra { display: none; }
+.rx-kb-unico .rx-kb-barra { display: none; }
+@media (prefers-reduced-motion: reduce) { .rx-kb-barra i { transition: none; } }
+@media (min-width: 840px) { .rx-kb-cards { height: 17.75rem !important; } }
+@media (min-width: 640px) and (max-width: 839px) { .rx-kb-cards { height: 21.5rem !important; } }
