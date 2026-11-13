@@ -174,3 +174,17 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   }, { threshold: 0.6, rootMargin: '0px 0px -10% 0px' });
   itens.forEach((li) => obs.observe(li));
 })();
+
+/* ---------- Quem buscamos: órbita de áreas; ao escolher uma área, o detalhe ao lado mostra a descrição ---------- */
+(() => {
+  const nos = Array.from(document.querySelectorAll<HTMLButtonElement>('.rx-no'));
+  const detalhe = document.querySelector<HTMLElement>('.rx-detalhe');
+  if (!nos.length || !detalhe) return;
+  const escolher = (b: HTMLButtonElement) => {
+    const t = document.querySelector<HTMLTemplateElement>(`.rx-quem-texto template[data-i="${b.dataset.i}"]`);
+    if (!t) return;
+    detalhe.replaceChildren(t.content.cloneNode(true));
+    nos.forEach((n) => n.setAttribute('aria-pressed', String(n === b)));
+  };
+  nos.forEach((b) => { b.addEventListener('click', () => escolher(b)); b.addEventListener('mouseenter', () => escolher(b)); b.addEventListener('focus', () => escolher(b)); });
+})();

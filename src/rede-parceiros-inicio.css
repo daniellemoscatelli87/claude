@@ -453,3 +453,113 @@ html.cadastro-aberto { overflow: hidden; }
     box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 24px 64px rgba(13, 17, 25, 0.25); transform: translateY(16px); transition: transform .35s cubic-bezier(0.16, 1, 0.3, 1); }
   .cadastro-tela.aberta iframe { transform: none; }
 }
+
+/* =========================================================================
+   SEJA PARCEIRO no estilo da Experience Intelligence 3: fundo cinza-azulado claro, folha branca arredondada
+   com as seções separadas por fios finos, diagrama em órbitas, trilha em zigue-zague, grade de cards e card de fechamento.
+   ========================================================================= */
+body.parceiros-inicio { background: #EEF2F7 !important; }
+.rp-hero { background: linear-gradient(to bottom, #FFFFFF 0%, #F6F7FA 70%, #EEF2F7 100%) !important; }
+.rx-folha { margin: 0 1rem; background: #FFFFFF; border-radius: 40px; box-shadow: 0 1px 2px rgba(13, 17, 25, 0.03), 0 20px 48px -28px rgba(13, 17, 25, 0.16); overflow: hidden; }
+@media (max-width: 639px) { .rx-folha { margin: 0 .5rem; border-radius: 28px; } }
+.rx-secao { padding: 5.5rem 0; }
+.rx-secao + .rx-secao { border-top: 1px solid #EDF0F5; }
+@media (max-width: 767px) { .rx-secao { padding: 3.5rem 0; } }
+
+/* hero: lista animada como elemento flutuante, com anéis suaves por trás */
+.rp-hero-grade { position: relative; }
+.rp-lista { position: relative; border-radius: 24px !important; border: 1px solid rgba(19, 26, 39, 0.06) !important; box-shadow: 0 24px 60px -24px rgba(13, 17, 25, 0.22), 0 4px 12px rgba(13, 17, 25, 0.04) !important; }
+@media (min-width: 1024px) {
+  .rp-lista::before, .rp-lista::after { content: ""; position: absolute; z-index: -1; left: 50%; top: 50%; border-radius: 9999px; translate: -50% -50%; pointer-events: none; }
+  .rp-lista::before { width: 130%; aspect-ratio: 1; border: 1px solid rgba(212, 77, 77, 0.14); }
+  .rp-lista::after { width: 165%; aspect-ratio: 1; border: 1px dashed rgba(136, 152, 176, 0.25); }
+}
+
+/* Quem buscamos: texto + detalhe à esquerda, órbitas à direita */
+.rx-quem { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 4rem; align-items: center; }
+.rx-quem-texto h2 { text-align: left !important; }
+.rx-quem-texto .rp-texto { text-align: left !important; margin-left: 0 !important; }
+.rx-quem-texto template { display: none; }
+.rx-detalhe { display: grid; grid-template-columns: 3rem 1fr; gap: 1rem; align-items: start; margin-top: 2rem; padding: 1.5rem; border-radius: 20px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); box-shadow: 0 10px 30px -18px rgba(13, 17, 25, 0.25); }
+.rx-detalhe h3 { margin: .125rem 0 .375rem; font-size: 1.125rem; font-weight: 700; color: #131A27; }
+.rx-detalhe p { margin: 0; font-size: .9375rem; line-height: 1.6; color: #495669; }
+.rx-ic { width: 3rem; height: 3rem; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(212, 77, 77, 0.10); color: #D44D4D; }
+.rx-ic svg { width: 1.375rem; height: 1.375rem; stroke-width: 1.75; }
+.rx-orbita { --r1: 32%; --r2: 47%; position: relative; aspect-ratio: 1; width: 100%; max-width: 520px; margin-left: auto; }
+.rx-orbita-anel { position: absolute; left: 50%; top: 50%; border-radius: 9999px; translate: -50% -50%; pointer-events: none; }
+.rx-o1 { width: calc(var(--r1) * 2); aspect-ratio: 1; border: 1px solid #E8EDF3; background: radial-gradient(circle, rgba(212, 77, 77, 0.05), transparent 70%); }
+.rx-o2 { width: calc(var(--r2) * 2); aspect-ratio: 1; border: 1px dashed #D6DCE6; }
+.rx-centro { position: absolute; left: 50%; top: 50%; width: 5.5rem; height: 5.5rem; translate: -50% -50%; border-radius: 9999px; background: #D44D4D; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 10px rgba(212, 77, 77, 0.10), 0 14px 30px -12px rgba(184, 40, 40, 0.55); }
+.rx-centro img { width: 2.5rem; height: auto; }
+.rx-no { position: absolute; left: 50%; top: 50%; display: inline-flex; flex-direction: column; align-items: center; gap: .375rem; padding: 0; border: 0; background: none; cursor: pointer; font: inherit;
+  transform: translate(-50%, -50%) rotate(var(--a)) translateX(var(--raio)) rotate(calc(-1 * var(--a))); }
+.rx-anel1 { --raio: calc(520px * 0.32); }
+.rx-anel2 { --raio: calc(520px * 0.47); }
+.rx-no-ic { width: 2.75rem; height: 2.75rem; border-radius: 9999px; display: flex; align-items: center; justify-content: center; background: #FFFFFF; color: #495669; border: 1px solid rgba(19, 26, 39, 0.09); box-shadow: 0 6px 16px -10px rgba(13, 17, 25, 0.35); transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease; }
+.rx-no-ic svg { width: 1.25rem; height: 1.25rem; stroke-width: 1.75; }
+.rx-no-nome { padding: .1875rem .625rem; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); font-size: .75rem; font-weight: 600; color: #283043; white-space: nowrap; }
+.rx-no:hover .rx-no-ic, .rx-no[aria-pressed="true"] .rx-no-ic { background: #D44D4D; color: #FFFFFF; border-color: #D44D4D; transform: scale(1.06); }
+.rx-no[aria-pressed="true"] .rx-no-nome { color: #D44D4D; border-color: #F9DADA; background: #FDF2F2; }
+.rx-no:focus-visible { outline: none; }
+.rx-no:focus-visible .rx-no-ic { box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.4); }
+.rx-areas-lista { display: none; }
+.rx-setores { margin-top: 3.5rem; text-align: center; }
+.rx-setores h3 { margin: 0 0 1rem; font-size: 1rem; font-weight: 600; color: #283043; }
+@media (max-width: 1279px) { .rx-anel1 { --raio: calc(440px * 0.32); } .rx-anel2 { --raio: calc(440px * 0.47); } .rx-orbita { max-width: 440px; } }
+/* tablet e celular: sem órbita, áreas em lista de cards */
+@media (max-width: 1023px) {
+  .rx-quem { grid-template-columns: 1fr; gap: 2rem; }
+  .rx-quem-texto { text-align: center; }
+  .rx-quem-texto h2, .rx-quem-texto .rp-texto { text-align: center !important; margin-inline: auto !important; }
+  .rx-orbita, .rx-detalhe { display: none; }
+  .rx-areas-lista { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .875rem; list-style: none; margin: 0; padding: 0; }
+  .rx-areas-lista li { display: grid; grid-template-columns: 2.75rem 1fr; gap: .875rem; align-items: start; padding: 1.125rem; border-radius: 18px; border: 1px solid rgba(19, 26, 39, 0.09); background: #FFFFFF; }
+  .rx-areas-lista .rx-ic { width: 2.75rem; height: 2.75rem; border-radius: 12px; }
+  .rx-areas-lista h3 { margin: .125rem 0 .25rem; font-size: 1rem; font-weight: 700; color: #131A27; }
+  .rx-areas-lista p { margin: 0; font-size: .875rem; line-height: 1.55; color: #495669; }
+}
+@media (max-width: 639px) { .rx-areas-lista { grid-template-columns: 1fr; } }
+
+/* Formatos: trilha em zigue-zague (como as etapas do EI3) */
+.rx-trilha { position: relative; list-style: none; margin: 3.5rem auto 0; padding: 0; max-width: 52rem; display: grid; gap: 1.25rem; }
+.rx-trilha::before { content: ""; position: absolute; left: 50%; top: 1.5rem; bottom: 1.5rem; width: 2px; translate: -50% 0; background: linear-gradient(#F9DADA, #D6DCE6); }
+.rx-passo { position: relative; display: grid; grid-template-columns: 1fr 3.5rem 1fr; align-items: center; gap: 1.5rem; }
+.rx-passo-ic { grid-column: 2; position: relative; z-index: 1; width: 3.5rem; height: 3.5rem; border-radius: 9999px; display: flex; align-items: center; justify-content: center; background: #FFFFFF; color: #D44D4D; border: 1px solid rgba(19, 26, 39, 0.09); box-shadow: 0 0 0 6px #FFFFFF; }
+.rx-passo-ic svg { width: 1.375rem; height: 1.375rem; stroke-width: 1.75; }
+.rx-passo-card { grid-column: 3; grid-row: 1; padding: 1.25rem 1.5rem; border-radius: 18px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); box-shadow: 0 10px 28px -20px rgba(13, 17, 25, 0.3); }
+.rx-passo:nth-child(even) .rx-passo-card { grid-column: 1; text-align: right; }
+.rx-passo-num { margin: 0 0 .25rem; font-size: .75rem; font-weight: 700; letter-spacing: .14em; color: #D44D4D; }
+.rx-passo-card h3 { margin: 0; font-size: 1.0625rem; font-weight: 700; line-height: 1.35; color: #131A27; }
+@media (max-width: 767px) {
+  .rx-trilha { margin-top: 2.5rem; }
+  .rx-trilha::before { left: 1.75rem; }
+  .rx-passo { grid-template-columns: 3.5rem 1fr; gap: 1rem; }
+  .rx-passo-ic { grid-column: 1; }
+  .rx-passo-card, .rx-passo:nth-child(even) .rx-passo-card { grid-column: 2; text-align: left; }
+}
+
+/* O que saber: grade 2x2 de cards com borda fina, checks grandes mantidos */
+.rx-grade-saber { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; max-width: 64rem !important; margin: 3rem auto 0 !important; }
+.rx-grade-saber > li { margin: 0 !important; padding: 1.75rem !important; border: 1px solid rgba(19, 26, 39, 0.09) !important; border-radius: 20px; background: #FFFFFF; }
+.rx-grade-saber > li + li { border-top: 1px solid rgba(19, 26, 39, 0.09) !important; }
+.rx-grade-saber > li:last-child { grid-column: 1 / -1; }
+@media (max-width: 767px) { .rx-grade-saber { grid-template-columns: 1fr; } .rx-grade-saber > li { padding: 1.25rem !important; } }
+
+/* Fechamento: convite como card branco arredondado (como o "Vamos conversar?" do EI3) */
+.rx-fechamento { padding: 1.5rem 0 4rem; }
+.rx-fechamento .rp-carta { margin: 0 auto !important; max-width: none; border-radius: 40px !important; background: #FFFFFF !important; border: 0 !important; box-shadow: 0 1px 2px rgba(13, 17, 25, 0.03), 0 20px 48px -28px rgba(13, 17, 25, 0.16) !important; }
+.rx-fechamento .rp-carta-luz { opacity: .6; }
+@media (min-width: 1024px) { .rx-fechamento > .rp-container { max-width: none; padding: 0 1rem; } }
+@media (max-width: 639px) { .rx-fechamento { padding: 1rem 0 3rem; } .rx-fechamento > .rp-container { padding: 0 .5rem; } .rx-fechamento .rp-carta { border-radius: 28px !important; } }
+/* rodapé sem curva */
+.parceiros-inicio footer.relative { padding-top: 4rem !important; }
+/* ajustes da versão EI3 */
+body.parceiros-inicio { background: #EEF2F7 linear-gradient(#FFFFFF, #FFFFFF) top / 100% 140px no-repeat !important; }
+.rx-secao h2 { margin: 0; font-size: 1.75rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: #131A27; text-wrap: balance; }
+@media (min-width: 640px) { .rx-secao h2 { font-size: 2.25rem; } }
+.rx-quem-texto .rp-texto { margin-top: 1rem; }
+.rx-quem-texto h2 { margin-top: .25rem; }
+.rx-grade-saber { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rx-grade-saber > li { border-bottom: 1px solid rgba(19, 26, 39, 0.09) !important; }
+@media (max-width: 1023px) { .rx-grade-saber { grid-template-columns: 1fr; } }
+.rx-setores .rp-tags { justify-content: center; }
