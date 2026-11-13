@@ -177,3 +177,27 @@ html.cadastro-aberto { overflow: hidden; }
   .rp-formato .rp-icone { width: 3rem; height: 3rem; }
   .rp-formato .rp-icone svg { width: 1.375rem; height: 1.375rem; }
 }
+
+/* ---------- Quem buscamos: carrossel de perfis (rolagem lateral com encaixe; setas no computador) ---------- */
+.rp-carrossel-area { position: relative; }
+.rp-carrossel { display: flex; gap: 1.25rem; margin: 0 -1.25rem; padding: .25rem 1.25rem 1rem; list-style: none; overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory; scroll-padding-inline: 1.25rem; scrollbar-width: none; }
+.rp-carrossel::-webkit-scrollbar { display: none; }
+.rp-carrossel:focus-visible { outline: none; box-shadow: inset 0 0 0 2px rgba(212, 77, 77, 0.45); border-radius: 16px; }
+.rp-perfil { flex: 0 0 82%; scroll-snap-align: start; }
+@media (min-width: 640px) { .rp-carrossel { margin: 0; padding: .25rem 0 1rem; scroll-padding-inline: 0; } .rp-perfil { flex-basis: calc((100% - 2.5rem) / 3); } }
+@media (min-width: 1024px) { .rp-perfil { flex-basis: calc((100% - 3.75rem) / 4); } }
+.rp-perfil h3 { font-size: 1.125rem !important; }
+.rp-perfil p { margin-top: .5rem !important; font-size: .9375rem; }
+.rp-carrossel-nav { display: none; }
+@media (min-width: 640px) {
+  .rp-carrossel-nav { display: flex; justify-content: flex-end; gap: .5rem; margin-top: .75rem; }
+  .rp-seta { width: 2.75rem; height: 2.75rem; border-radius: 9999px; border: 1px solid rgba(19, 26, 39, 0.12); background: #FFFFFF; color: #131A27; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color .2s ease, opacity .2s ease; }
+  .rp-seta svg { width: 1.25rem; height: 1.25rem; }
+  .rp-seta:hover { background: #EDF0F5; }
+  .rp-seta:disabled { opacity: .4; cursor: default; }
+  .rp-seta:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+}
+.rp-setores { margin-top: 2rem; text-align: center; }
+.rp-setores h3 { margin: 0; font-size: 1rem; font-weight: 600; color: #131A27; }
+.rp-setores .rp-tags { justify-content: center; }

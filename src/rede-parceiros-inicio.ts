@@ -58,3 +58,22 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
     window.scrollTo({ top: 0, behavior: suave ? 'smooth' : 'auto' });
   });
 })();
+
+/* ---------- Carrossel de perfis: setas no computador ---------- */
+(() => {
+  const lista = document.getElementById('perfis');
+  if (!lista) return;
+  const setas = Array.from(document.querySelectorAll<HTMLButtonElement>('.rp-seta'));
+  const atualizar = () => {
+    const fim = lista.scrollWidth - lista.clientWidth - 2;
+    setas.forEach((b) => { b.disabled = b.dataset.dir === '-1' ? lista.scrollLeft <= 2 : lista.scrollLeft >= fim; });
+  };
+  setas.forEach((b) => b.addEventListener('click', () => {
+    const item = lista.querySelector<HTMLElement>('li');
+    const passo = item ? item.offsetWidth + 20 : lista.clientWidth;
+    lista.scrollBy({ left: Number(b.dataset.dir) * passo, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }));
+  lista.addEventListener('scroll', atualizar, { passive: true });
+  window.addEventListener('resize', atualizar);
+  atualizar();
+})();
