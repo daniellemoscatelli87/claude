@@ -913,3 +913,19 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (min-width: 1024px) { #hero-fundo img { object-position: center center !important; } }
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) { #hero-fundo { background-position: 75% center !important; } }
 @media (min-width: 1024px) { #hero-fundo img { object-position: 75% center !important; } }
+/* Efeito janela mais leve: a foto fica fixa via position: fixed recortada pelo painel (clip-path), composta na GPU,
+   em vez de background-attachment: fixed, que redesenha a imagem a cada quadro e deixa a rolagem travada */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  #hero-fundo { background-image: none !important; background-attachment: scroll !important; clip-path: inset(0 round 32px); }
+  #hero-fundo img { opacity: 1 !important; position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; object-fit: cover; will-change: transform; }
+}
+
+/* Desempenho da rolagem: as manchas de luz deixam de usar filter: blur (redesenhado a cada quadro) e passam a ser
+   degradês radiais com o mesmo aspecto difuso; o movimento lento continua, agora só com transform (GPU) */
+.fundo-gradiente span { filter: none !important; background: radial-gradient(closest-side, var(--mancha, rgba(245, 198, 198, 0.55)) 0%, transparent 100%) !important; transform-origin: center; scale: 1.35; }
+.fundo-gradiente span:nth-child(1) { --mancha: rgba(245, 198, 198, 0.55); }
+.fundo-gradiente span:nth-child(2) { --mancha: rgba(214, 220, 230, 0.70); }
+.fundo-gradiente span:nth-child(3) { --mancha: rgba(253, 242, 242, 0.95); }
+.fundo-gradiente-escuro span:nth-child(1) { --mancha: rgba(139, 27, 27, 0.45); }
+.fundo-gradiente-escuro span:nth-child(2) { --mancha: rgba(55, 65, 85, 0.60); }
+.fundo-gradiente-escuro span:nth-child(3) { --mancha: rgba(212, 77, 77, 0.18); }

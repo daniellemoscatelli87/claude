@@ -179,3 +179,9 @@ html.menu-aberto { overflow: hidden; }
   html body .site-header .btn-contato { padding: 0 !important; border: 0 !important; background: transparent !important; color: #131A27 !important; font-size: .9375rem; font-weight: 500; transform: none !important; box-shadow: none !important; }
   html body .site-header .btn-contato:hover { color: #D44D4D !important; background: transparent !important; }
 }
+/* mais respiro nas laterais da pílula do menu */
+@media (min-width: 1024px) { html body .site-header header { padding: .5rem 2.75rem .5rem 2rem !important; } }
+@media (min-width: 1024px) { html body .site-header header.w-full, html body.cabecalho-sobre-hero .site-header header { padding: .5rem 2.75rem .5rem 2rem !important; gap: 3rem !important; } }
+@media (min-width: 1024px) { html body .site-header header.w-full > div, html body .site-header header.w-full nav[aria-label="Principal"] { gap: 2.75rem !important; } }
+/* pílula do menu sem desfoque de fundo (pesa na rolagem); quase opaca, o visual fica o mesmo */
+@media (min-width: 1024px) { html body .site-header header.w-full { background: rgba(255, 255, 255, 0.96) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; } }

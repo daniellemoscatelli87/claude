@@ -409,23 +409,27 @@ form.addEventListener('change', (e) => {
     return false;
   };
 
-  const passo = () => {
-    atual += (alvo - atual) * 0.12;
+  let ultimo = 0;
+  const passo = (t: number) => {
+    // suavização independente da taxa de quadros (60 ou 120 Hz): ~0.1 por quadro a 60 Hz
+    const dt = ultimo ? Math.min(64, t - ultimo) : 16.7;
+    ultimo = t;
+    atual += (alvo - atual) * (1 - Math.pow(1 - 0.1, dt / 16.7));
     if (Math.abs(alvo - atual) < 0.5) atual = alvo;
-    window.scrollTo({ top: atual, behavior: 'instant' as ScrollBehavior });
+    window.scrollTo(0, atual);
     if (atual !== alvo) requestAnimationFrame(passo);
-    else animando = false;
+    else { animando = false; ultimo = 0; document.documentElement.style.scrollBehavior = ''; }
   };
 
   window.addEventListener('wheel', (e) => {
     if (!desktop.matches || reduzir.matches || e.ctrlKey || e.defaultPrevented || travada()) return;
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-    if (rolaveis(e.target as Element, e.deltaY)) return;
+    if (e.target instanceof Element && rolaveis(e.target, e.deltaY)) return;
     e.preventDefault();
     const fator = e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? window.innerHeight : 1;
     if (!animando) { atual = window.scrollY; alvo = atual; }
     alvo = Math.max(0, Math.min(max(), alvo + e.deltaY * fator));
-    if (!animando) { animando = true; requestAnimationFrame(passo); }
+    if (!animando) { animando = true; document.documentElement.style.scrollBehavior = 'auto'; requestAnimationFrame(passo); }
   }, { passive: false });
 
   // rolagem por outros meios (teclado, barra, links internos): acompanha a posição real
