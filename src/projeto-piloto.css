@@ -1373,3 +1373,12 @@ main + footer.relative { margin-top: 0; padding-top: 4rem !important; }
 /* card de convite ~20px mais para cima */
 #inscricao { padding-top: calc(4rem - 20px) !important; }
 @media (min-width: 640px) { #inscricao { padding-top: calc(6rem - 20px) !important; } }
+/* card de convite mais perto do FAQ e mais longe das informações do rodapé; fundo escuro começa mais alto */
+#guia { padding-bottom: 3rem !important; }
+#inscricao { padding-top: 1.5rem !important; background: linear-gradient(to bottom, transparent calc(100% - 13rem), #0D1119 calc(100% - 13rem)), #EDF0F5 !important; }
+main + footer.relative { padding-top: 6rem !important; }
+@media (max-width: 767px) {
+  #guia { padding-bottom: 2.5rem !important; }
+  #inscricao { padding-top: 1rem !important; background: linear-gradient(to bottom, transparent calc(100% - 9rem), #0D1119 calc(100% - 9rem)), #EDF0F5 !important; }
+  main + footer.relative { padding-top: 4.5rem !important; }
+}
