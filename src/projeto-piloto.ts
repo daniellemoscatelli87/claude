@@ -248,21 +248,24 @@ form.addEventListener('change', (e) => {
   });
 })();
 
-/* ---------- Botão flutuante "Cadastrar minha empresa" ---------- */
+/* ---------- Botão flutuante "Cadastrar empresa" ---------- */
 (() => {
   const btn = document.getElementById('cta-flutuante');
   const hero = document.getElementById('hero');
   const form = document.getElementById('inscricao');
   if (!btn || !hero || !form || !('IntersectionObserver' in window)) return;
   let heroVisivel = true, formVisivel = false;
+  const celular = window.matchMedia('(max-width: 767px)'); // no celular ele fica sempre no rodapé, ao lado do WhatsApp
   const atualizar = () => {
-    const mostrar = !heroVisivel && !formVisivel;
+    const mostrar = (celular.matches || !heroVisivel) && !formVisivel;
     btn.classList.toggle('visivel', mostrar);
     btn.setAttribute('aria-hidden', String(!mostrar));
     btn.tabIndex = mostrar ? 0 : -1;
   };
   new IntersectionObserver(([e]) => { heroVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.15 }).observe(hero);
   new IntersectionObserver(([e]) => { formVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.1 }).observe(form);
+  celular.addEventListener('change', atualizar);
+  atualizar();
 })();
 
 // Botão "subir": aparece quando o rodapé entra na tela e leva de volta ao topo.
