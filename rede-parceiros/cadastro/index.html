@@ -202,6 +202,13 @@ html.embutido .modal-topo .step-label { margin-bottom: 0; font-size: .75rem; }
     /* Com o teclado aberto, a barra volta para o fim da etapa para não ficar solta no meio da tela */
     body.kb .nav-bar { position: static; box-shadow: none; }
   }
+  /* Na janela (modal) do desktop, os botões também ficam fixos no rodapé */
+  @media (min-width: 561px) {
+    html.embutido body { overflow-x: clip; }
+    html.embutido .nav-bar { position: sticky; bottom: 0; z-index: 10; margin: 24px 0 -64px; padding: 16px 0 20px; background: var(--card); }
+    html.embutido .nav-bar::before { content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: -100vw; right: -100vw; background: var(--card); border-top: 1px solid var(--line); box-shadow: 0 -6px 16px -8px rgb(17 17 17 / .12); }
+    html.embutido .nav-bar .nav { margin-top: 0; }
+  }
   .end p { margin: 0 0 14px; }
   .end .sign { margin-top: 20px; }
   .end .sign p { margin: 0; }
