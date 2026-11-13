@@ -160,3 +160,22 @@ select.field option { color: var(--color-ds-fg); }
 html.menu-aberto { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .menu-sheet, .menu-sheet.aberto, .menu-fundo, .menu-fundo.aberto { transition: none; } }
 @media (min-width: 768px) { .menu-sheet, .menu-fundo { display: none; } }
+
+/* Desktop (todas as páginas): menu em pílula clara centralizada, só com o ícone e as opções; fica flutuando ao rolar */
+@media (min-width: 1024px) {
+  html body .site-header, html body .site-header.is-scrolled { padding-top: calc(2rem + 5px) !important; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; pointer-events: none; }
+  html body .site-header header { pointer-events: auto; width: fit-content !important; max-width: none !important; margin: 0 auto !important; padding: .5rem 1.75rem .5rem .75rem !important; justify-content: center !important; gap: 3rem !important;
+    background: rgba(255, 255, 255, 0.92); -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 9999px;
+    box-shadow: 0 8px 24px -12px rgba(13, 17, 25, 0.35); }
+  html body .site-header.is-scrolled header { box-shadow: 0 10px 30px -10px rgba(13, 17, 25, 0.35); }
+  html body .site-header header > a:first-child { visibility: visible !important; height: 2.75rem !important; }
+  html body .site-header .logo-completo { display: none !important; }
+  html body .site-header .logo-icone { display: block !important; height: 2.5rem !important; animation: none !important; }
+  html body .site-header header > div { gap: 2.75rem !important; }
+  html body .site-header nav[aria-label="Principal"] { gap: 2.75rem !important; }
+  html body .site-header nav[aria-label="Principal"] a { color: #131A27 !important; text-shadow: none !important; font-size: .9375rem; font-weight: 500; }
+  html body .site-header nav[aria-label="Principal"] a:hover { color: #D44D4D !important; }
+  html body .site-header nav[aria-label="Principal"] a[aria-current="page"] { color: #D44D4D !important; text-decoration-color: #D44D4D !important; }
+  html body .site-header .btn-contato { padding: 0 !important; border: 0 !important; background: transparent !important; color: #131A27 !important; font-size: .9375rem; font-weight: 500; transform: none !important; box-shadow: none !important; }
+  html body .site-header .btn-contato:hover { color: #D44D4D !important; background: transparent !important; }
+}

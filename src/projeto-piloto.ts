@@ -380,3 +380,54 @@ form.addEventListener('change', (e) => {
   });
   if (location.hash === '#inscricao' || location.hash === '#cadastro') setTimeout(() => abrir(null), 400);
 })();
+
+/* ---------- Rolagem suave com o mouse (desktop): a roda do mouse desliza com leve inércia em vez de dar saltos ----------
+   Só com mouse/trackpad em telas grandes; respeita "reduzir movimento"; não interfere em janelas, listas com rolagem própria,
+   zoom (Ctrl + roda) nem quando a página está travada (modal aberta). */
+(() => {
+  const desktop = window.matchMedia('(min-width: 1024px) and (pointer: fine)');
+  const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let alvo = window.scrollY;
+  let atual = window.scrollY;
+  let animando = false;
+
+  const max = () => document.documentElement.scrollHeight - window.innerHeight;
+  const travada = () => {
+    const h = getComputedStyle(document.documentElement).overflowY;
+    const b = getComputedStyle(document.body).overflowY;
+    return h === 'hidden' || b === 'hidden';
+  };
+  // algum elemento entre o alvo e a página consegue rolar nessa direção? então deixa o navegador cuidar
+  const rolaveis = (el: Element | null, dy: number) => {
+    for (let n = el; n && n !== document.body && n !== document.documentElement; n = n.parentElement) {
+      const s = getComputedStyle(n);
+      if (/(auto|scroll)/.test(s.overflowY) && n.scrollHeight > n.clientHeight) {
+        if ((dy > 0 && n.scrollTop + n.clientHeight < n.scrollHeight - 1) || (dy < 0 && n.scrollTop > 0)) return true;
+      }
+      if (n.tagName === 'IFRAME' || n.tagName === 'TEXTAREA' || n.tagName === 'SELECT' || n.matches('dialog[open]')) return true;
+    }
+    return false;
+  };
+
+  const passo = () => {
+    atual += (alvo - atual) * 0.12;
+    if (Math.abs(alvo - atual) < 0.5) atual = alvo;
+    window.scrollTo({ top: atual, behavior: 'instant' as ScrollBehavior });
+    if (atual !== alvo) requestAnimationFrame(passo);
+    else animando = false;
+  };
+
+  window.addEventListener('wheel', (e) => {
+    if (!desktop.matches || reduzir.matches || e.ctrlKey || e.defaultPrevented || travada()) return;
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    if (rolaveis(e.target as Element, e.deltaY)) return;
+    e.preventDefault();
+    const fator = e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? window.innerHeight : 1;
+    if (!animando) { atual = window.scrollY; alvo = atual; }
+    alvo = Math.max(0, Math.min(max(), alvo + e.deltaY * fator));
+    if (!animando) { animando = true; requestAnimationFrame(passo); }
+  }, { passive: false });
+
+  // rolagem por outros meios (teclado, barra, links internos): acompanha a posição real
+  window.addEventListener('scroll', () => { if (!animando) { atual = alvo = window.scrollY; } }, { passive: true });
+})();
