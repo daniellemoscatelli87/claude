@@ -1035,3 +1035,15 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-num-icone { width: 2.75rem; height: 2.75rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(212, 77, 77, 0.10); color: #D44D4D; }
 .rx-num-icone svg { width: 1.375rem; height: 1.375rem; stroke-width: 1.75; }
 @media (max-width: 639px) { .rx-num-icone { width: 2.5rem; height: 2.5rem; } .rx-num-icone svg { width: 1.25rem; height: 1.25rem; } .rx-numerada li { grid-template-columns: 2.5rem 1fr !important; gap: 1rem !important; } }
+/* Ecossistema no estilo "Orbiting Circles" do DS, com fundos sólidos (sem transparência):
+   cada ícone com sua cor do DS (fundo = cor a 15% sobre branco, borda = cor a 40%), trilhos tracejados #B3BDD0
+   e centro em tom claro do primário com brilho e pulso suave */
+.rx-orbita .rx-trilho { border: 1px dashed #B3BDD0 !important; background: none !important; }
+.rx-seg .rx-av-ic { border: 1px solid var(--borda, #EEB8B8); background: var(--fundo, #F9E4E4) !important; color: var(--cor, #D44D4D) !important; box-shadow: 0 1px 2px rgba(13, 17, 25, 0.06), 0 1px 3px rgba(13, 17, 25, 0.08) !important; }
+.rx-seg[data-cor="vermelho"] { --cor: #D44D4D; --fundo: #F9E4E4; --borda: #EEB8B8; }
+.rx-seg[data-cor="laranja"]  { --cor: #FA9852; --fundo: #FEF0E5; --borda: #FDD6BA; }
+.rx-seg[data-cor="violeta"]  { --cor: #BA69DC; --fundo: #F5E9FA; --borda: #E3C3F1; }
+.rx-seg[data-cor="amarelo"]  { --cor: #E5A94E; --fundo: #FBF2E4; --borda: #F5DDB8; }
+.rx-seg[data-cor="azul"]     { --cor: #448ABC; --fundo: #E3EDF5; --borda: #B4D0E4; }
+.rx-seg[data-cor="verde"]    { --cor: #4FB57B; --fundo: #E5F4EB; --borda: #B9E1CA; }
+.rx-orbita-area .rx-centro { background: #FAEAEA !important; color: #D44D4D !important; border: 1px solid #F2CACA !important; box-shadow: 0 0 30px 6px rgba(212, 77, 77, 0.15), 0 16px 48px rgba(13, 17, 25, 0.10) !important; }
