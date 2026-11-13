@@ -135,3 +135,8 @@ select.field option { color: var(--color-ds-fg); }
 /* Rede de Parceiros: rodapé com espaço próprio e acima dos botões fixos do celular */
 .rodape-pagina-parceiros { border-top: 1px solid rgba(19, 26, 39, 0.09); padding: 2rem 0 2.5rem; margin-top: 3rem; }
 @media (max-width: 767px) { .rodape-pagina-parceiros { padding-bottom: 7rem; } }
+/* Rodapé compacto: uma faixa só, textos discretos */
+.rodape-compacto .rodape-base { padding-top: 0; align-items: center; }
+.rodape-compacto .rodape-base p + p { margin-top: .125rem; }
+.rodape-compacto .rodape-links { font-size: .75rem; font-weight: 400; gap: .5rem 1.25rem; }
+.rodape-compacto .rodape-links a, .rodape-compacto .rodape-links button { color: #495669; }

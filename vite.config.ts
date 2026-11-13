@@ -2,7 +2,7 @@ import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'node:path'
-import { cabecalhoHtml, GAVETA_HTML, rodapeHtml } from './src/compartilhado/partes.ts'
+import { cabecalhoHtml, GAVETA_HTML, rodapeHtml, rodapeCompactoHtml } from './src/compartilhado/partes.ts'
 
 // Insere o cabeçalho e a gaveta de contato compartilhados em cada página (mesmo HTML no site todo).
 function partesCompartilhadas(): Plugin {
@@ -14,6 +14,7 @@ function partesCompartilhadas(): Plugin {
         return html
           .replace(/<!-- @cabecalho:(inicio|projeto|parceiros) -->/g, (_, p) => cabecalhoHtml(p))
           .replace('<!-- @gaveta -->', GAVETA_HTML)
+          .replace('<!-- @rodape:compacto -->', rodapeCompactoHtml())
           .replace(/<!-- @rodape:(claro|escuro) -->/g, (_, v) => rodapeHtml(v))
       },
     },
