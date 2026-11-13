@@ -629,3 +629,20 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .depois-cta-desk, .cf-cartao-depois .depois-cta { background: #D44D4D !important; border-color: #D44D4D !important; color: #FFFFFF !important; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
 .depois-cta-desk:hover, .cf-cartao-depois .depois-cta:hover { background: #B82828 !important; border-color: #B82828 !important; }
 .depois-cta-desk:focus-visible, .cf-cartao-depois .depois-cta:focus-visible { box-shadow: 0 0 0 2px #FDF2F2, 0 0 0 4px rgba(212, 77, 77, 0.6) !important; }
+
+/* ---------- Hero sem card: o conteúdo fica direto sobre a foto, com um véu grafite que escurece o lado do texto ----------
+   DS modo escuro: título #FFFFFF, destaque #D44D4D, subtítulo #E4E9F0, corpo graphite-200 (#B3BDD0), selo vazado. */
+#hero-fundo::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(90deg, rgba(13, 17, 25, 0) 30%, rgba(13, 17, 25, 0.72) 58%, rgba(13, 17, 25, 0.92) 100%); }
+@media (max-width: 1023px) { #hero-fundo::before { background: linear-gradient(180deg, rgba(13, 17, 25, 0.55) 0%, rgba(13, 17, 25, 0.82) 45%, rgba(13, 17, 25, 0.92) 100%); } }
+.hero-card { background: transparent !important; border: 0 !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  border-radius: 0 !important; min-height: 0 !important; padding: 0 !important; max-width: 34rem !important; }
+.hero-card > p:first-child { background: rgba(255, 255, 255, 0.08) !important; border-color: rgba(255, 255, 255, 0.22) !important; color: #FFFFFF !important; }
+.hero-card > p:first-child span { background: #D44D4D !important; }
+.hero-card h1 { color: #FFFFFF !important; }
+.hero-card h1 .text-coral-600 { color: #D44D4D !important; }
+.hero-card h1 + p { color: #E4E9F0 !important; padding-left: 1rem; border-left: 3px solid #D44D4D; }
+.hero-card .space-y-3 { color: #B3BDD0 !important; }
+.hero-card .space-y-3 strong, .hero-card .space-y-3 b { color: #FFFFFF !important; }
+@media (min-width: 1024px) { #hero > div { justify-content: flex-end; } .hero-card { margin-right: 1rem; } }
+@media (max-width: 767px) { .hero-card h1 + p { padding-left: 0; border-left: 0; } }
