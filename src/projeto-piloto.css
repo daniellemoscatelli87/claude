@@ -428,16 +428,32 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (max-width: 767px) { .rolar-abaixo { display: none !important; } } /* sem "Saiba mais" no celular */
 @media (max-width: 767px) { .hero-piloto { padding-bottom: 2.5rem !important; min-height: 0; } } /* sem o "Saiba mais", o hero termina logo após o card */
 
-/* ---------- Celular: "Para sua empresa" e "Para o Studio" como accordion (o primeiro abre aberto) ---------- */
-.lado-seta { display: none; }
+/* ---------- Celular: "Sobre o programa" com cabeçalho e citação no fundo escuro e as duas abas num card branco ---------- */
+.sobre-abas[hidden] { display: none; }
 @media (max-width: 767px) {
-  #sobre-o-programa .lado-troca.lado-acordeao > div:first-child { cursor: pointer; margin-bottom: 0 !important; }
-  #sobre-o-programa .lado-troca.lado-acordeao:not(.fechado) > div:first-child { margin-bottom: 1.5rem !important; }
-  #sobre-o-programa .lado-troca.lado-acordeao > div:first-child:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); border-radius: 6px; }
-  #sobre-o-programa .lado-troca.fechado > :not(:first-child) { display: none !important; }
-  #sobre-o-programa .lado-troca + .lado-troca { margin-top: 2rem !important; }
-  .lado-acordeao .lado-seta { display: block; margin-left: auto; width: 1.25rem; height: 1.25rem; color: #627288; transition: transform .2s ease; }
-  .lado-acordeao:not(.fechado) .lado-seta { transform: rotate(180deg); color: #B82828; }
+  .divisao-hero-cartao, .transicao-sobre { background: transparent !important; border-radius: 0; overflow: visible; }
+  #sobre-o-programa { padding-top: 1rem !important; padding-bottom: 3.5rem !important; overflow: visible; }
+  #sobre-o-programa .fundo-gradiente { display: none; }
+  #sobre-o-programa .rv-cabecalho { margin-bottom: 2rem; }
+  #sobre-o-programa .rv-cabecalho > p:first-child { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.15); color: rgba(255, 255, 255, 0.85); }
+  #sobre-o-programa .rv-cabecalho > p:first-child > span { background: #D44D4D; }
+  #sobre-o-programa .rv-cabecalho h2 { color: #E4E9F0; }
+  #sobre-o-programa .rv-cabecalho h2 .text-coral-600 { color: #E88080; }
+  #sobre-o-programa .rv-cabecalho > p:last-child { color: #B3BDD0; }
+  #sobre-o-programa article { background: #FFFFFF !important; border-radius: 24px !important; padding: .5rem 1.25rem 1.5rem; }
+  #sobre-o-programa .lado-troca > div:first-child { display: none !important; }
+  #sobre-o-programa .lado-troca + .lado-troca { margin-top: 0 !important; }
+  #sobre-o-programa .lado-troca.aba-oculta { display: none !important; }
+  #sobre-o-programa .lado-troca > h3 { margin-top: 1.25rem; }
+  .sobre-abas { display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; padding: .25rem; margin: .75rem 0 0; border-radius: 12px; background: #EDF0F5; }
+  #sobre-o-programa article { display: flex; flex-direction: column; }
+  .sobre-aba { height: 2.5rem; border: 0; border-radius: 9px; background: transparent; color: #627288; font: inherit; font-size: .875rem; font-weight: 600; cursor: pointer; transition: background-color .2s ease, color .2s ease, box-shadow .2s ease; }
+  .sobre-aba[aria-selected="true"] { background: #FFFFFF; color: #131A27; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+  .sobre-aba:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+  #sobre-o-programa .citacao-equilibrio { margin-top: 3rem; }
+  #sobre-o-programa .citacao-equilibrio blockquote p { color: #E4E9F0; }
+  #sobre-o-programa .citacao-equilibrio blockquote p .text-coral-600 { color: #E88080; }
+  #sobre-o-programa .citacao-aspas { color: #E88080; }
 }
 
 /* ---------- Celular: Escopo como carrossel (rolagem lateral com encaixe), sempre mostrando parte do próximo card ---------- */
