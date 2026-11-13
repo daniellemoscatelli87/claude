@@ -76,7 +76,7 @@ function estadoEnviando(sim: boolean) {
   enviando = sim;
   botao.disabled = sim;
   botao.setAttribute('aria-busy', String(sim));
-  botaoTexto.textContent = sim ? 'Enviando cadastro…' : 'Cadastrar minha empresa';
+  botaoTexto.textContent = sim ? 'Enviando cadastro…' : 'Enviar cadastro';
   iconeEnviando.classList.toggle('hidden', !sim);
   iconeParado.classList.toggle('hidden', sim);
 }
@@ -137,6 +137,7 @@ form.addEventListener('submit', async (e) => {
     form.reset();
     envioId = crypto.randomUUID();
     form.classList.add('hidden');
+    document.getElementById('cadastro-rodape')?.classList.add('hidden');
     sucesso.classList.remove('hidden');
     sucesso.focus();
   } catch {
@@ -198,7 +199,7 @@ form.addEventListener('change', (e) => {
   // O trilho começa no centro do primeiro ícone e termina no centro do último.
   const ajustarTrilho = () => {
     const pai = trilho.offsetParent as HTMLElement | null;
-    const nums = etapas.map((e) => e.querySelector<HTMLElement>('.cf-num')!);
+    const nums = etapas.filter((e) => e.offsetParent).map((e) => e.querySelector<HTMLElement>('.cf-num')!);
     if (!pai || !nums.length) return;
     const base = pai.getBoundingClientRect().top;
     const centro = (n: HTMLElement) => { const r = n.getBoundingClientRect(); return r.top + r.height / 2 - base; };
@@ -213,6 +214,7 @@ form.addEventListener('change', (e) => {
     const limite = window.innerHeight * 0.6;
     let atual = -1;
     etapas.forEach((e, i) => {
+      if (!e.offsetParent) return;
       const r = e.querySelector('.cf-num')!.getBoundingClientRect();
       if (r.top + r.height / 2 < limite) atual = i;
     });
@@ -280,44 +282,51 @@ form.addEventListener('change', (e) => {
   });
 })();
 
-// Celular: os blocos "Para sua empresa" e "Para o Studio" viram accordion; o primeiro começa aberto.
+// Celular: "Para sua empresa" e "Para o Studio" viram duas abas (padrão Tabs do DS), dentro de um card branco.
 (() => {
   const lados = Array.from(document.querySelectorAll<HTMLElement>('#sobre-o-programa .lado-troca'));
-  if (!lados.length) return;
+  const grade = document.querySelector<HTMLElement>('#sobre-o-programa .troca-grade');
+  if (lados.length !== 2 || !grade) return;
   const mq = window.matchMedia('(max-width: 767px)');
-  const cabecas = lados.map((lado, i) => {
-    const cab = lado.firstElementChild as HTMLElement;
+  const lista = document.createElement('div');
+  lista.className = 'sobre-abas';
+  lista.setAttribute('role', 'tablist');
+  lista.setAttribute('aria-label', 'Para quem é o programa');
+  const abas = lados.map((lado, i) => {
     lado.id ||= `lado-sobre-${i + 1}`;
-    const seta = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    seta.setAttribute('viewBox', '0 0 24 24'); seta.setAttribute('fill', 'none'); seta.setAttribute('stroke', 'currentColor');
-    seta.setAttribute('stroke-width', '2'); seta.setAttribute('stroke-linecap', 'round'); seta.setAttribute('stroke-linejoin', 'round');
-    seta.setAttribute('aria-hidden', 'true'); seta.classList.add('lado-seta');
-    seta.innerHTML = '<path d="m6 9 6 6 6-6"/>';
-    cab.appendChild(seta);
-    const alternar = () => {
-      if (!mq.matches) return;
-      const fechado = lado.classList.toggle('fechado');
-      cab.setAttribute('aria-expanded', String(!fechado));
-    };
-    cab.addEventListener('click', alternar);
-    cab.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); alternar(); } });
-    return cab;
+    const rotulo = (lado.firstElementChild?.querySelector('p')?.textContent || '').trim();
+    const aba = document.createElement('button');
+    aba.type = 'button';
+    aba.id = `aba-sobre-${i + 1}`;
+    aba.className = 'sobre-aba';
+    aba.textContent = ['Para sua empresa', 'Para o Studio'][i] || rotulo;
+    aba.addEventListener('click', () => selecionar(i, false));
+    lista.appendChild(aba);
+    return aba;
   });
-  const aplicar = () => {
-    lados.forEach((lado, i) => {
-      const cab = cabecas[i];
-      if (mq.matches) {
-        lado.classList.add('lado-acordeao');
-        lado.classList.toggle('fechado', i !== 0);
-        cab.setAttribute('role', 'button'); cab.tabIndex = 0;
-        cab.setAttribute('aria-controls', lado.id);
-        cab.setAttribute('aria-expanded', String(i === 0));
-      } else {
-        lado.classList.remove('lado-acordeao', 'fechado');
-        cab.removeAttribute('role'); cab.removeAttribute('tabindex');
-        cab.removeAttribute('aria-controls'); cab.removeAttribute('aria-expanded');
-      }
+  lista.addEventListener('keydown', (e) => {
+    const atual = abas.findIndex((a) => a.getAttribute('aria-selected') === 'true');
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); selecionar((atual + (e.key === 'ArrowRight' ? 1 : abas.length - 1)) % abas.length, true); }
+  });
+  grade.parentElement!.insertBefore(lista, grade);
+  function selecionar(i: number, focar: boolean) {
+    abas.forEach((aba, j) => {
+      const ativa = i === j;
+      aba.setAttribute('aria-selected', String(ativa));
+      aba.tabIndex = ativa ? 0 : -1;
+      lados[j].classList.toggle('aba-oculta', !ativa);
     });
+    if (focar) abas[i].focus();
+  }
+  const aplicar = () => {
+    if (mq.matches) {
+      lista.hidden = false;
+      lados.forEach((lado, i) => { lado.setAttribute('role', 'tabpanel'); lado.setAttribute('aria-labelledby', abas[i].id); abas[i].setAttribute('aria-controls', lado.id); });
+      selecionar(abas.findIndex((a) => a.getAttribute('aria-selected') === 'true') < 0 ? 0 : abas.findIndex((a) => a.getAttribute('aria-selected') === 'true'), false);
+    } else {
+      lista.hidden = true;
+      lados.forEach((lado) => { lado.classList.remove('aba-oculta'); lado.removeAttribute('role'); lado.removeAttribute('aria-labelledby'); });
+    }
   };
   aplicar();
   mq.addEventListener('change', aplicar);
