@@ -635,3 +635,8 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #sobre-o-programa .lado-troca > div.selo-lado > p { color: #D44D4D; }
 #sobre-o-programa .lado-troca > div.selo-studio > p { background: #EDF0F5; border: 1px solid #D6DCE6; color: #131A27; }
 #sobre-o-programa .selo-studio p > span { background: #131A27; }
+/* divider vertical bem clarinho entre os 2 blocos (desktop) */
+@media (min-width: 1024px) {
+  #sobre-o-programa .troca-grade { position: relative; }
+  #sobre-o-programa .troca-grade::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: #D6DCE6; opacity: .6; pointer-events: none; }
+}
