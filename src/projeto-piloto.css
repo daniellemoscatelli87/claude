@@ -643,3 +643,9 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (max-width: 639px) { #hero-titulo { font-size: 1.625rem; } } /* título do hero menor no celular */
 /* celular: card perto da dobra, deixando a foto do hero aparecer em cima */
 @media (max-width: 767px) { .hero-piloto { min-height: 100svh; align-items: flex-end; padding-bottom: 1.25rem !important; } }
+/* celular: foto inteira (sem corte) no topo, acima do card, com fade suave para o fundo */
+@media (max-width: 767px) {
+  #hero-fundo img { position: absolute; top: var(--altura-cabecalho, 68px); left: 0; width: 100%; height: auto !important; aspect-ratio: 1672 / 941; object-fit: cover; object-position: center;
+    -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent); mask-image: linear-gradient(to bottom, #000 78%, transparent); }
+  .hero-piloto { padding-top: calc(var(--altura-cabecalho, 68px) + 56.3vw + .75rem) !important; }
+}
