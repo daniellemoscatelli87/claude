@@ -573,3 +573,9 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 }
 @media (max-width: 639px) { .cf-cartao-depois .depois-cta { white-space: nowrap; padding: 0 1rem; font-size: .8125rem; } }
 @media (max-width: 359px) { .cf-cartao-depois { padding: 1.25rem; } .cf-cartao-depois .depois-cta { width: 100%; justify-content: center; white-space: normal; height: auto; min-height: 2.75rem; padding: .625rem 1rem; text-align: center; } }
+/* Card "E depois" (celular): botão outline, só borda e rótulo */
+@media (max-width: 639px) {
+  .cf-cartao-depois .depois-cta { background: transparent; border: 1.5px solid rgba(255, 255, 255, 0.85); color: #FFFFFF; transition: background-color .2s ease, color .2s ease; }
+  .cf-cartao-depois .depois-cta:hover { background: #FFFFFF; color: #131A27; }
+}
+@media (max-width: 359px) { .cf-cartao-depois .depois-cta { white-space: nowrap; height: 2.75rem; min-height: 0; padding: 0 1rem; } }
