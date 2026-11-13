@@ -78,43 +78,40 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   atualizar();
 })();
 
-/* ---------- Hero: Lista animada (componente do DS) com os perfis que a rede busca ---------- */
+/* ---------- Hero: Lista animada (componente do DS): exemplo ilustrativo de novos cadastros (sem nomes) ---------- */
 (() => {
   const lista = document.querySelector<HTMLUListElement>('.rp-lista-itens');
   const pausa = document.querySelector<HTMLButtonElement>('.rp-lista-pausa');
   if (!lista) return;
-  const svg = (d: string) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
-  const ico = {
-    pessoa: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
-    setor: '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01"/>',
+  // Avatares ilustrativos (dois estilos de silhueta) em tons do DS.
+  const avatar = (estilo: number, tom: number) => {
+    const fundos = ['#FDF2F2', '#EDF0F5', '#F9DADA', '#D6DCE6'];
+    const cores = ['#B82828', '#283043', '#8C1B1B', '#495669'];
+    const cabelo = estilo === 0
+      ? '<path d="M12 4.2c-2.6 0-4.4 1.9-4.4 4.5 0 .5.1 1 .2 1.4.4-2 2-3.3 4.2-3.3s3.8 1.3 4.2 3.3c.1-.4.2-.9.2-1.4 0-2.6-1.8-4.5-4.4-4.5z"/>'
+      : '<path d="M12 4c-3 0-5 2.2-5 5.2v5.3c0 .6.5 1 1 1h.6V9.6c0-1.9 1.5-3.4 3.4-3.4s3.4 1.5 3.4 3.4v5.9h.6c.5 0 1-.4 1-1V9.2C17 6.2 15 4 12 4z"/>';
+    return `<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="12" fill="${fundos[tom]}"/><g fill="${cores[tom]}">${cabelo}<circle cx="12" cy="10" r="3.4"/><path d="M5.5 21c.7-3.4 3.3-5.4 6.5-5.4s5.8 2 6.5 5.4z"/></g></svg>`;
   };
-  // Mesmos perfis e setores apresentados na página (nada inventado).
-  const itens: [string, string, string][] = [
-    ['pessoa', 'Design', 'Traduz estratégia em experiências, serviços e interfaces.'],
-    ['pessoa', 'UX/UI', 'Projeta jornadas e interfaces digitais simples e acessíveis.'],
-    ['setor', 'Especialista em Saúde', 'Conhecimento do setor para projetos em saúde.'],
-    ['pessoa', 'Pesquisa', 'Investiga pessoas e contextos para orientar decisões.'],
-    ['pessoa', 'Negócios', 'Conecta as soluções a metas e indicadores.'],
-    ['setor', 'Especialista em Hospitalidade', 'Conhecimento do setor para hotéis e serviços.'],
-    ['pessoa', 'Tecnologia', 'Avalia caminhos técnicos viáveis para cada solução.'],
-    ['pessoa', 'Desenvolvimento', 'Constrói e implementa produtos e serviços digitais.'],
-    ['setor', 'Especialista em Educação', 'Conhecimento do setor para projetos em educação.'],
-    ['pessoa', 'Dados', 'Organiza e analisa dados para medir resultados.'],
-    ['pessoa', 'IA', 'Aplica inteligência artificial com responsabilidade.'],
-    ['setor', 'Especialista em Varejo', 'Conhecimento do setor para projetos no varejo.'],
-    ['pessoa', 'Inovação', 'Facilita a criação e o teste de novas ideias.'],
-    ['setor', 'Especialista em Serviços financeiros', 'Conhecimento do setor financeiro.'],
-    ['setor', 'Especialista em Indústria', 'Conhecimento do setor industrial.'],
+  // Papéis variados conforme os perfis e setores que a rede procura.
+  const papeis = [
+    'UX/UI Designer', 'Service Designer', 'Pesquisa em UX', 'Consultoria de Negócios', 'Desenvolvimento Front-end',
+    'Arquitetura de Soluções', 'Ciência de Dados', 'Especialista em IA', 'Gestão de Inovação', 'Especialista em Saúde',
+    'Especialista em Hospitalidade', 'Especialista em Educação', 'Especialista em Varejo', 'Especialista em Serviços financeiros',
+    'Especialista em Indústria', 'Product Designer', 'Desenvolvimento Back-end', 'Análise de Dados',
   ];
+  const hora = (d: Date) => d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const data = (d: Date) => d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
   let n = 0;
-  const criar = ([tipo, titulo, texto]: [string, string, string], animar: boolean) => {
+  const criar = (quando: Date, animar: boolean) => {
     const li = document.createElement('li');
     if (animar) li.className = 'entrando';
-    li.innerHTML = `<span class="rp-lista-ico">${svg(ico[tipo as 'pessoa' | 'setor'])}</span><span><strong>${titulo}</strong><span class="txt">${texto}</span></span>`;
+    const papel = papeis[n % papeis.length];
+    li.innerHTML = `<span class="rp-lista-avatar">${avatar(n % 2, n % 4)}</span><span class="rp-lista-corpo"><strong>${papel}</strong><span class="txt">Novo cadastro na Rede de Parceiros</span></span><time class="rp-lista-hora" datetime="${quando.toISOString()}">${data(quando)}<br>${hora(quando)}</time>`;
+    n++;
     return li;
   };
-  for (let i = 4; i >= 0; i--) lista.appendChild(criar(itens[i], false));
-  n = 5;
+  const agora = Date.now();
+  for (let i = 4; i >= 0; i--) lista.insertBefore(criar(new Date(agora - (i + 1) * 4 * 60000), false), lista.firstChild);
   const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let pausado = reduzido;
   if (pausa) {
@@ -127,8 +124,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   }
   setInterval(() => {
     if (pausado || document.hidden) return;
-    lista.insertBefore(criar(itens[n % itens.length], true), lista.firstChild);
-    n++;
+    lista.insertBefore(criar(new Date(), true), lista.firstChild);
     while (lista.children.length > 5) lista.lastElementChild?.remove();
-  }, 2000);
+  }, 2500);
 })();
