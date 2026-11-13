@@ -372,8 +372,10 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 /* Filete do rótulo em tom mais claro: crimson-300 / graphite-300 */
 #sobre-o-programa .lado-troca > div:first-child { border-bottom-color: #E88080 !important; }
 #sobre-o-programa .lado-troca + .lado-troca > div:first-child { border-bottom-color: #8898B0 !important; }
-/* Accordion do Guia como cards brancos: sombra suave do DS (--shadow-sm), por escolha da dona do produto */
-#accordion-group .accordion-item, #accordion-group .accordion-item.active { box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
-#accordion-group > * + * { margin-top: .75rem !important; }
+/* Accordion do Guia: no hover, número, título e seta em vermelho */
+#accordion-group .accordion-trigger:hover .accordion-header,
+#accordion-group .accordion-trigger:hover .accordion-header > span:first-child,
+#accordion-group .accordion-trigger:hover .accordion-chevron { color: #B82828; }
+#accordion-group .accordion-header, #accordion-group .accordion-header > span:first-child { transition: color .2s ease; }
 /* Escopo: tags numa linha só no computador (3 tags por card) */
 @media (min-width: 1280px) { .card-frente ul[aria-label="Temas"] { flex-wrap: nowrap; gap: .25rem; } .card-frente .tag-frente { white-space: nowrap; padding-left: .4375rem; padding-right: .4375rem; } }
