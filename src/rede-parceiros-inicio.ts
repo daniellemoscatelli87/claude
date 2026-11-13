@@ -77,3 +77,58 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   window.addEventListener('resize', atualizar);
   atualizar();
 })();
+
+/* ---------- Hero: Lista animada (componente do DS) com os perfis que a rede busca ---------- */
+(() => {
+  const lista = document.querySelector<HTMLUListElement>('.rp-lista-itens');
+  const pausa = document.querySelector<HTMLButtonElement>('.rp-lista-pausa');
+  if (!lista) return;
+  const svg = (d: string) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const ico = {
+    pessoa: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    setor: '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01"/>',
+  };
+  // Mesmos perfis e setores apresentados na página (nada inventado).
+  const itens: [string, string, string][] = [
+    ['pessoa', 'Design', 'Traduz estratégia em experiências, serviços e interfaces.'],
+    ['pessoa', 'UX/UI', 'Projeta jornadas e interfaces digitais simples e acessíveis.'],
+    ['setor', 'Especialista em Saúde', 'Conhecimento do setor para projetos em saúde.'],
+    ['pessoa', 'Pesquisa', 'Investiga pessoas e contextos para orientar decisões.'],
+    ['pessoa', 'Negócios', 'Conecta as soluções a metas e indicadores.'],
+    ['setor', 'Especialista em Hospitalidade', 'Conhecimento do setor para hotéis e serviços.'],
+    ['pessoa', 'Tecnologia', 'Avalia caminhos técnicos viáveis para cada solução.'],
+    ['pessoa', 'Desenvolvimento', 'Constrói e implementa produtos e serviços digitais.'],
+    ['setor', 'Especialista em Educação', 'Conhecimento do setor para projetos em educação.'],
+    ['pessoa', 'Dados', 'Organiza e analisa dados para medir resultados.'],
+    ['pessoa', 'IA', 'Aplica inteligência artificial com responsabilidade.'],
+    ['setor', 'Especialista em Varejo', 'Conhecimento do setor para projetos no varejo.'],
+    ['pessoa', 'Inovação', 'Facilita a criação e o teste de novas ideias.'],
+    ['setor', 'Especialista em Serviços financeiros', 'Conhecimento do setor financeiro.'],
+    ['setor', 'Especialista em Indústria', 'Conhecimento do setor industrial.'],
+  ];
+  let n = 0;
+  const criar = ([tipo, titulo, texto]: [string, string, string], animar: boolean) => {
+    const li = document.createElement('li');
+    if (animar) li.className = 'entrando';
+    li.innerHTML = `<span class="rp-lista-ico">${svg(ico[tipo as 'pessoa' | 'setor'])}</span><span><strong>${titulo}</strong><span class="txt">${texto}</span></span>`;
+    return li;
+  };
+  for (let i = 4; i >= 0; i--) lista.appendChild(criar(itens[i], false));
+  n = 5;
+  const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let pausado = reduzido;
+  if (pausa) {
+    if (reduzido) { pausa.textContent = 'Retomar'; pausa.setAttribute('aria-pressed', 'true'); }
+    pausa.addEventListener('click', () => {
+      pausado = !pausado;
+      pausa.textContent = pausado ? 'Retomar' : 'Pausar';
+      pausa.setAttribute('aria-pressed', String(pausado));
+    });
+  }
+  setInterval(() => {
+    if (pausado || document.hidden) return;
+    lista.insertBefore(criar(itens[n % itens.length], true), lista.firstChild);
+    n++;
+    while (lista.children.length > 5) lista.lastElementChild?.remove();
+  }, 2000);
+})();

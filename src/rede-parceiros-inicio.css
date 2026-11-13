@@ -318,3 +318,26 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-carta-cta:focus-visible { box-shadow: 0 0 0 2px #FDF2F2, 0 0 0 4px rgba(212, 77, 77, 0.6); }
 .rp-carta-assinatura span { color: #495669; } /* AA sobre o rosa claro */
 @media (min-width: 768px) { #cadastro .rp-carta { margin-top: 5rem; } } /* mais respiro entre o checklist e o convite */
+
+/* ---------- Hero: texto à esquerda e "Lista animada" do DS à direita (perfis que a rede busca) ---------- */
+@media (min-width: 1024px) { .rp-hero-grade { grid-template-columns: 7fr 5fr; } }
+.rp-lista { border-radius: 16px; border: 1px solid rgba(19, 26, 39, 0.09); background: #FFFFFF; overflow: hidden;
+  box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06); }
+.rp-lista-topo { display: flex; align-items: center; gap: .5rem; padding: .75rem 1rem; border-bottom: 1px solid rgba(19, 26, 39, 0.09); background: rgba(237, 240, 245, 0.4);
+  font-size: .8125rem; font-weight: 700; color: #131A27; }
+.rp-lista-pulso { width: .5rem; height: .5rem; border-radius: 9999px; background: #D44D4D; animation: rp-pulso 1.8s ease-in-out infinite; }
+@keyframes rp-pulso { 50% { transform: scale(1.5); opacity: .5; } }
+.rp-lista-pausa { margin-left: auto; padding: .25rem .625rem; border-radius: 7px; border: 1px solid rgba(19, 26, 39, 0.09); background: #EDF0F5; color: #495669; font: inherit; font-size: .75rem; font-weight: 600; cursor: pointer; }
+.rp-lista-pausa:hover { color: #131A27; }
+.rp-lista-pausa:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+.rp-lista-itens { list-style: none; margin: 0; padding: .75rem; min-height: 21rem; overflow: hidden; }
+.rp-lista-itens li { display: flex; align-items: center; gap: .625rem; padding: .625rem .75rem; margin-bottom: .5rem; border-radius: 10px; border: 1px solid rgba(19, 26, 39, 0.09);
+  background: rgba(255, 255, 255, 0.6); box-shadow: 0 1px 2px rgba(13, 17, 25, 0.05); }
+.rp-lista-itens li.entrando { animation: rp-entra .45s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes rp-entra { from { opacity: 0; transform: translateY(-32px) scale(.93); } to { opacity: 1; transform: none; } }
+.rp-lista-ico { width: 2rem; height: 2rem; flex-shrink: 0; border-radius: 9px; display: flex; align-items: center; justify-content: center; background: rgba(212, 77, 77, 0.1); color: #B82828; }
+.rp-lista-ico svg { width: 1rem; height: 1rem; }
+.rp-lista-itens strong { display: block; font-size: .8125rem; font-weight: 700; color: #131A27; }
+.rp-lista-itens span.txt { display: block; font-size: .75rem; line-height: 1.4; color: #495669; }
+@media (prefers-reduced-motion: reduce) { .rp-lista-pulso, .rp-lista-itens li.entrando { animation: none; } }
+@media (max-width: 1023px) { .rp-lista { max-width: 32rem; margin: 0 auto; width: 100%; } }
