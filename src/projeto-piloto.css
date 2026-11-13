@@ -1351,3 +1351,8 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (min-width: 1024px) { #atuacao { padding-top: calc(6rem + 6rem) !important; } }
 /* rodapé sem a curva: começa reto */
 footer.relative { padding-top: 4rem; }
+/* rodapé escuro sobe e fica parcialmente por baixo do card de convite */
+#inscricao { position: relative; z-index: 2; padding-bottom: 0 !important; background: linear-gradient(to bottom, transparent calc(100% - 9rem), #131A27 calc(100% - 9rem)) , #EDF0F5 !important; }
+#inscricao .convite-card { position: relative; z-index: 1; }
+main + footer.relative { margin-top: 0; padding-top: 4rem !important; }
+@media (max-width: 767px) { #inscricao { background: linear-gradient(to bottom, transparent calc(100% - 6rem), #131A27 calc(100% - 6rem)), #EDF0F5 !important; } }
