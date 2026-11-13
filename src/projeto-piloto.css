@@ -1249,3 +1249,85 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .pv-linha { height: 2.75rem; }
 }
 @keyframes pv-onda-menor { from { transform: scale(1); opacity: .8; } to { transform: scale(1.45); opacity: 0; } }
+
+/* =========================================================================
+   SEÇÃO DO PROGRAMA, referência mais recente: três passos ligados por linhas com nós,
+   painel com os ganhos de cada lado, faixa "Uma parceria com transparência" e CTA.
+   ========================================================================= */
+.pz .pv-intro h2 { max-width: 46rem; margin-inline: auto; }
+.pz-passos { list-style: none; margin: 4.5rem auto 0; padding: 0; display: grid; grid-template-columns: 1fr minmax(60px, 1fr) 1fr minmax(60px, 1fr) 1fr; align-items: start; max-width: 64rem; }
+.pz-passo { text-align: center; }
+.pz-ic { width: 5.5rem; height: 5.5rem; margin: 0 auto; border-radius: 1.5rem; display: flex; align-items: center; justify-content: center; color: #D44D4D;
+  background: linear-gradient(160deg, #FFFFFF, #FDF2F2); box-shadow: 0 10px 26px -14px rgba(212, 77, 77, 0.45), inset 0 0 0 1px rgba(212, 77, 77, 0.06); }
+.pz-ic svg { width: 2.5rem; height: 2.5rem; stroke-width: 1.5; }
+.pz-passo h3 { margin: 1.5rem 0 .75rem; font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; color: #131A27; }
+.pz-passo p { margin: 0 auto; max-width: 18rem; font-size: 1rem; line-height: 1.6; color: #495669; }
+/* ligação entre os passos: linha fina com um nó no meio e um feixe de luz percorrendo (Animated Beam) */
+.pz-lig { position: relative; height: 2px; margin-top: calc(2.75rem - 1px); margin-inline: -.5rem; background: rgba(212, 77, 77, 0.3); }
+.pz-no { position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; border-radius: 9999px; background: #FFFFFF; border: 2px solid #D44D4D; translate: -50% -50%; }
+.pz-feixe { position: absolute; inset: 0; overflow: hidden; }
+.pz-feixe::after { content: ""; position: absolute; top: 0; bottom: 0; width: 55%; left: -55%; background: linear-gradient(90deg, rgba(249, 218, 218, 0), #F2B8B8 30%, #D44D4D 85%, rgba(212, 77, 77, 0)); }
+@media (prefers-reduced-motion: no-preference) {
+  .pz-feixe::after { animation: pz-feixe 2.8s cubic-bezier(0.33, 0.1, 0.25, 1) infinite; }
+  .pz-lig + .pz-passo + .pz-lig .pz-feixe::after { animation-delay: 1.1s; }
+  .pz-no { animation: pz-no 2.8s ease-in-out infinite; }
+  .pz-lig + .pz-passo + .pz-lig .pz-no { animation-delay: 1.1s; }
+}
+@keyframes pz-feixe { 0% { left: -55%; } 62%, 100% { left: 100%; } }
+@keyframes pz-no { 0%, 20%, 100% { box-shadow: 0 0 0 0 rgba(212, 77, 77, 0); } 32% { box-shadow: 0 0 0 6px rgba(212, 77, 77, 0.18); } }
+
+/* painel com os ganhos de cada lado */
+.pz-painel { display: grid; grid-template-columns: 1fr 1fr; margin: 5rem auto 0; padding: 2.75rem 2.5rem; border-radius: 2rem; background: rgba(237, 240, 245, 0.55); }
+.pz-lado { display: grid; grid-template-columns: 4.75rem 1fr; gap: 1.75rem; align-items: start; padding: 0 2rem; }
+.pz-lado + .pz-lado { border-left: 1px solid #D6DCE6; }
+.pz-ic-p { width: 4.75rem; height: 4.75rem; border-radius: 1.25rem; }
+.pz-ic-p svg { width: 2.25rem; height: 2.25rem; }
+.pz-eyebrow { margin: 0 0 .75rem; font-size: .8125rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: #D44D4D; }
+.pz-lado h3 { margin: 0 0 .75rem; font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; color: #131A27; }
+.pz-lado p:last-child { margin: 0; font-size: .9375rem; line-height: 1.6; color: #495669; }
+
+/* faixa de transparência */
+.pz-faixa { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 2.75rem; max-width: 60rem; margin: 4.5rem auto 0; }
+.pz-faixa-titulo { margin: 0; padding-left: 1.75rem; border-left: 3px solid #D44D4D; font-size: 1.875rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: #131A27; }
+.pz-faixa-texto { margin: 0; padding-left: 2.75rem; border-left: 1px solid #D6DCE6; font-size: 1.0625rem; line-height: 1.65; color: #495669; }
+.pz .pv-cta { margin-top: 3rem; }
+
+/* tablet */
+@media (max-width: 1023px) {
+  .pz-passos { grid-template-columns: 1fr minmax(24px, .5fr) 1fr minmax(24px, .5fr) 1fr; }
+  .pz-ic { width: 4.5rem; height: 4.5rem; border-radius: 1.25rem; }
+  .pz-ic svg { width: 2rem; height: 2rem; }
+  .pz-lig { margin-top: calc(2.25rem - 1px); }
+  .pz-passo h3 { font-size: 1.1875rem; }
+  .pz-passo p { font-size: .9375rem; }
+  .pz-painel { padding: 2rem 1.25rem; }
+  .pz-lado { grid-template-columns: 1fr; gap: 1rem; padding: 0 1.5rem; }
+  .pz-faixa-titulo { font-size: 1.5rem; }
+}
+/* celular: passos em sequência vertical, painel e faixa empilhados */
+@media (max-width: 767px) {
+  .pz-passos { grid-template-columns: 1fr; justify-items: center; margin-top: 3rem; }
+  .pz-lig { width: 2px; height: 3.5rem; margin: 1.5rem 0; }
+  .pz-feixe::after { width: auto; left: 0; right: 0; height: 55%; top: -55%; bottom: auto; background: linear-gradient(180deg, rgba(249, 218, 218, 0), #F2B8B8 30%, #D44D4D 85%, rgba(212, 77, 77, 0)); }
+  @media (prefers-reduced-motion: no-preference) { .pz-feixe::after { animation-name: pz-feixe-v; } }
+  .pz-passo h3 br { display: none; }
+  .pz-painel { grid-template-columns: 1fr; gap: 2rem; margin-top: 3.5rem; padding: 2rem 1.5rem; border-radius: 1.5rem; }
+  .pz-lado { grid-template-columns: 3.75rem 1fr; gap: 1.125rem; padding: 0; }
+  .pz-lado + .pz-lado { border-left: 0; border-top: 1px solid #D6DCE6; padding-top: 2rem; }
+  .pz-ic-p { width: 3.75rem; height: 3.75rem; border-radius: 1rem; }
+  .pz-ic-p svg { width: 1.75rem; height: 1.75rem; }
+  .pz-lado h3 { font-size: 1.25rem; }
+  .pz-faixa { grid-template-columns: 1fr; gap: 1rem; margin-top: 3rem; }
+  .pz-faixa-titulo { font-size: 1.5rem; padding-left: 1.25rem; }
+  .pz-faixa-titulo br { display: none; }
+  .pz-faixa-texto { padding-left: 1.25rem; border-left: 0; }
+}
+@keyframes pz-feixe-v { 0% { top: -55%; } 62%, 100% { top: 100%; } }
+.pz .pv-intro { max-width: 60rem; }
+.pz .pv-intro h2 { max-width: 52rem; }
+@media (min-width: 1024px) {
+  .pz-passos { grid-template-columns: 1.5fr minmax(60px, .8fr) 1.5fr minmax(60px, .8fr) 1.5fr; max-width: 72rem; }
+  .pz-passo p { max-width: 20rem; }
+  .pz-painel { max-width: 74rem; padding: 2.75rem 1.5rem; }
+  .pz-faixa { max-width: 62rem; }
+}
