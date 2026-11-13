@@ -348,3 +348,11 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-lista-corpo { flex: 1; min-width: 0; }
 .rp-lista-hora { flex-shrink: 0; text-align: right; font-size: .75rem; line-height: 1.35; color: #495669; font-variant-numeric: tabular-nums; }
 @media (max-width: 400px) { .rp-lista-topo { flex-wrap: wrap; } }
+/* Lista animada: acabamento igual ao componente do DS */
+.rp-lista-itens { position: relative; }
+.rp-lista-itens li { background: rgba(237, 240, 245, 0.6); }
+.rp-lista-pausa { display: inline-flex; align-items: center; gap: .375rem; }
+.rp-ico-pausa { display: inline-flex; gap: .125rem; align-items: center; }
+.rp-ico-pausa i { display: block; width: .125rem; height: .625rem; border-radius: 9999px; background: currentColor; }
+.rp-ico-play { width: .625rem; height: .625rem; }
+.rp-lista-pulso { background: #D44D4D; }

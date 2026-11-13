@@ -109,19 +109,40 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
     return li;
   };
   for (let i = 4; i >= 0; i--) lista.insertBefore(criar(false), lista.firstChild);
+  const ICO_PAUSA = '<span class="rp-ico-pausa" aria-hidden="true"><i></i><i></i></span>';
+  const ICO_PLAY = '<svg class="rp-ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>';
   const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let pausado = reduzido;
   if (pausa) {
-    if (reduzido) { pausa.textContent = 'Retomar'; pausa.setAttribute('aria-pressed', 'true'); }
+    pausa.innerHTML = reduzido ? ICO_PLAY + 'Retomar' : ICO_PAUSA + 'Pausar';
+    if (reduzido) pausa.setAttribute('aria-pressed', 'true');
     pausa.addEventListener('click', () => {
       pausado = !pausado;
-      pausa.textContent = pausado ? 'Retomar' : 'Pausar';
+      pausa.innerHTML = pausado ? ICO_PLAY + 'Retomar' : ICO_PAUSA + 'Pausar';
       pausa.setAttribute('aria-pressed', String(pausado));
     });
   }
-  setInterval(() => {
-    if (pausado || document.hidden) return;
-    lista.insertBefore(criar(true), lista.firstChild);
-    while (lista.children.length > 5) lista.lastElementChild?.remove();
-  }, 2500);
+  // Mesma coreografia da Lista animada do DS: o novo item cai do topo (mola), os demais deslizam para baixo
+  // (animação de layout) e o último sai para a direita, esmaecendo.
+  const MOLA = 'cubic-bezier(0.34, 1.32, 0.64, 1)';
+  const avancar = () => {
+    const antes = new Map<Element, number>();
+    Array.from(lista.children).forEach((el) => antes.set(el, (el as HTMLElement).getBoundingClientRect().top));
+    const saindo = lista.children.length >= 5 ? (lista.lastElementChild as HTMLElement) : null;
+    if (saindo) {
+      const r = saindo.getBoundingClientRect(), base = lista.getBoundingClientRect();
+      saindo.style.position = 'absolute'; saindo.style.left = `${r.left - base.left}px`; saindo.style.top = `${r.top - base.top}px`; saindo.style.width = `${r.width}px`;
+      saindo.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(60px) scale(.9)' }], { duration: 200, easing: 'ease-in', fill: 'forwards' })
+        .finished.then(() => saindo.remove());
+    }
+    const novo = criar(false);
+    lista.insertBefore(novo, lista.firstChild);
+    novo.animate([{ opacity: 0, transform: 'translateY(-32px) scale(.93)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: MOLA });
+    antes.forEach((y, el) => {
+      if (el === saindo) return;
+      const dy = y - (el as HTMLElement).getBoundingClientRect().top;
+      if (dy) (el as HTMLElement).animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 520, easing: MOLA });
+    });
+  };
+  setInterval(() => { if (!pausado && !document.hidden) avancar(); }, 2000);
 })();
