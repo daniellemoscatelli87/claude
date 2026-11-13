@@ -228,3 +228,9 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-hero { background: linear-gradient(to bottom, #FFFFFF 0%, #FDF2F2 70%, #EDF0F5 100%); }
 .rp-de-g50 { background: linear-gradient(to bottom, #EDF0F5 0, #FFFFFF 160px); }
 #formatos.rp-fundo-g50 { background: linear-gradient(to bottom, #FFFFFF 0, #EDF0F5 160px); }
+/* Checklist em tom neutro (graphite-50), para não competir com o card de convite rosado logo abaixo */
+.rp-checklist-card { background: #EDF0F5; border: 1px solid rgba(19, 26, 39, 0.06); box-shadow: none; }
+.rp-checklist-card::before { display: none; }
+.rp-checklist-card li, .rp-checklist-card li:first-child { border-bottom-color: rgba(19, 26, 39, 0.1); }
+.rp-checklist-card li:last-child { border-bottom: 0; }
+.rp-checklist-card .rp-check { background: #131A27; border-color: #131A27; color: #FFFFFF; box-shadow: none; }
