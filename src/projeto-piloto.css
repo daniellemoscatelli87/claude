@@ -555,3 +555,21 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   footer.relative { padding-top: 4rem !important; }
 }
 #cadastro-rodape { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
+
+/* Celular: card "E depois" no padrão do card de convite do DS, superfície grafite (dark) */
+@media (max-width: 639px) {
+  .cf-cartao-depois { position: relative; isolation: isolate; overflow: hidden; padding: 1.5rem; border-radius: 24px;
+    background: #0D1119 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06) !important; }
+  .cf-cartao-depois .depois-luz { position: absolute; z-index: -1; right: -4rem; top: -4rem; width: 14rem; height: 14rem; border-radius: 9999px; background: rgba(212, 77, 77, 0.10); filter: blur(64px); pointer-events: none; }
+  .cf-cartao-depois .depois-visual { display: flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; margin-bottom: 1rem; border-radius: 16px; background: rgba(255, 255, 255, 0.1); color: #E88080; }
+  .cf-cartao-depois h3 { margin: 0 0 .5rem; font-size: 1.375rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: #FFFFFF !important; }
+  .cf-cartao-depois .depois-destaque { color: #E88080; }
+  .cf-cartao-depois p { margin: 0; font-size: .9375rem; line-height: 1.6; color: rgba(255, 255, 255, 0.7) !important; }
+  .cf-cartao-depois .depois-cta { display: inline-flex; align-items: center; gap: .5rem; height: 2.75rem; margin-top: 1.25rem; padding: 0 1.25rem; border: 0; border-radius: 9999px;
+    background: #B82828; color: #FFFFFF; font: inherit; font-size: .875rem; font-weight: 600; cursor: pointer; }
+  .cf-cartao-depois .depois-cta svg { width: 1.125rem; height: 1.125rem; }
+  .cf-cartao-depois .depois-cta:focus-visible { outline: none; box-shadow: 0 0 0 2px #0D1119, 0 0 0 4px rgba(212, 77, 77, 0.6); }
+}
+@media (max-width: 639px) { .cf-cartao-depois .depois-cta { white-space: nowrap; padding: 0 1rem; font-size: .8125rem; } }
+@media (max-width: 359px) { .cf-cartao-depois { padding: 1.25rem; } .cf-cartao-depois .depois-cta { width: 100%; justify-content: center; white-space: normal; height: auto; min-height: 2.75rem; padding: .625rem 1rem; text-align: center; } }
