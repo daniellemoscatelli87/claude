@@ -899,3 +899,14 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 @media (max-width: 639px) { .rx-setores { margin-top: 3.5rem !important; } .rx-setores h3 { font-size: 1.25rem !important; max-width: 20rem; } }
 .rx-setores h3 { max-width: 42rem; font-size: 1.375rem !important; line-height: 1.4; }
 @media (max-width: 639px) { .rx-setores h3 { font-size: 1.125rem !important; max-width: 22rem; } }
+/* Modelo apontando para o ecossistema (só no computador) */
+.rx-modelo-aponta { display: none; }
+@media (min-width: 1024px) {
+  .rx-orbita-area { align-items: center; gap: 1rem; }
+  .rx-modelo-aponta { display: block; flex: none; width: 400px; height: auto; margin-left: -6rem; }
+}
+@media (min-width: 1024px) {
+  .rx-orbita-area { gap: 0; }
+  .rx-orbita-area .rx-orbita { margin: 0 !important; }
+  .rx-modelo-aponta { width: 440px; margin: 0 -1.5rem 0 -8rem; position: relative; top: 1.5rem; }
+}
