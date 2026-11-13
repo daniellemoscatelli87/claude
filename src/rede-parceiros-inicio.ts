@@ -256,9 +256,8 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     dica.hidden = false;
   };
   const limpar = () => { ativo = null; if (dica) dica.hidden = true; avs.forEach((x) => x.classList.remove('ativo')); };
-  // pausa enquanto o ponteiro estiver em qualquer parte do ecossistema; troca de avatar sem retomar o giro
-  orbita.addEventListener('pointerenter', () => { pausado = true; });
-  orbita.addEventListener('pointerleave', () => { pausado = false; limpar(); });
+  // nesta página o ecossistema não pausa quando o ponteiro passa por cima: o giro é contínuo
+  orbita.addEventListener('pointerleave', () => { limpar(); });
   orbita.addEventListener('pointerover', (e) => { const b = (e.target as Element).closest<HTMLButtonElement>('.rx-av'); if (b) mostrar(b); });
   orbita.addEventListener('pointerout', (e) => { const b = (e.target as Element).closest<HTMLButtonElement>('.rx-av'); const para = (e.relatedTarget as Element | null)?.closest('.rx-av'); if (b && !para) limpar(); });
   avs.filter((b): b is HTMLButtonElement => b instanceof HTMLButtonElement).forEach((b) => {

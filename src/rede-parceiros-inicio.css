@@ -574,7 +574,7 @@ body.parceiros-inicio { background: #EEF2F7 linear-gradient(#FFFFFF, #FFFFFF) to
 .rx-orbita .rx-centro { width: 5.5rem !important; height: 5.5rem !important; z-index: 2; color: #FFFFFF; border: 2px solid rgba(212, 77, 77, 0.5); box-shadow: 0 0 28px 6px rgba(212, 77, 77, 0.25), 0 16px 48px rgba(13, 17, 25, 0.10) !important; }
 .rx-orbita .rx-centro svg { width: 2.5rem; height: 2.5rem; }
 @media (prefers-reduced-motion: no-preference) { .rx-orbita .rx-centro { animation: rx-pulso 3s ease-in-out infinite; } }
-@keyframes rx-pulso { 0%, 100% { scale: 1; } 50% { scale: 1.06; } }
+@keyframes rx-pulso { 0%, 100% { scale: 1; } 50% { scale: 1.07; } }
 .rx-giro { position: absolute; inset: 0; pointer-events: none; }
 .rx-av { position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; padding: 0; border: 0; border-radius: 9999px; background: #FFFFFF; cursor: pointer; pointer-events: auto; z-index: 1;
   box-shadow: 0 0 0 2px rgba(19, 26, 39, 0.09), 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); transition: scale .25s cubic-bezier(0.34, 1.56, 0.64, 1); }
@@ -1029,3 +1029,39 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 @media (prefers-reduced-motion: reduce) { .rx-kb-barra i { transition: none; } }
 @media (min-width: 840px) { .rx-kb-cards { height: 17.75rem !important; } }
 @media (min-width: 640px) and (max-width: 839px) { .rx-kb-cards { height: 21.5rem !important; } }
+/* Header do mockup: ícone do logo (símbolo DM do DS) */
+.rx-kb-logo { flex: none; width: 1.25rem; height: 1.25rem; display: block; object-fit: contain; }
+/* Formatos: ícones no padrão do DS (base rosa clara, ícone vermelho) no lugar dos números */
+.rx-num-icone { width: 2.75rem; height: 2.75rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(212, 77, 77, 0.10); color: #D44D4D; }
+.rx-num-icone svg { width: 1.375rem; height: 1.375rem; stroke-width: 1.75; }
+@media (max-width: 639px) { .rx-num-icone { width: 2.5rem; height: 2.5rem; } .rx-num-icone svg { width: 1.25rem; height: 1.25rem; } .rx-numerada li { grid-template-columns: 2.5rem 1fr !important; gap: 1rem !important; } }
+/* Ecossistema no estilo "Orbiting Circles" do DS, com fundos sólidos (sem transparência):
+   cada ícone com sua cor do DS (fundo = cor a 15% sobre branco, borda = cor a 40%), trilhos tracejados #B3BDD0
+   e centro em tom claro do primário com brilho e pulso suave */
+.rx-orbita .rx-trilho { border: 1px dashed #B3BDD0 !important; background: none !important; }
+.rx-seg .rx-av-ic { border: 1px solid var(--borda, #EEB8B8); background: var(--fundo, #F9E4E4) !important; color: var(--cor, #D44D4D) !important; box-shadow: 0 1px 2px rgba(13, 17, 25, 0.06), 0 1px 3px rgba(13, 17, 25, 0.08) !important; }
+.rx-seg[data-cor="vermelho"] { --cor: #D44D4D; --fundo: #F9E4E4; --borda: #EEB8B8; }
+.rx-seg[data-cor="laranja"]  { --cor: #FA9852; --fundo: #FEF0E5; --borda: #FDD6BA; }
+.rx-seg[data-cor="violeta"]  { --cor: #BA69DC; --fundo: #F5E9FA; --borda: #E3C3F1; }
+.rx-seg[data-cor="amarelo"]  { --cor: #E5A94E; --fundo: #FBF2E4; --borda: #F5DDB8; }
+.rx-seg[data-cor="azul"]     { --cor: #448ABC; --fundo: #E3EDF5; --borda: #B4D0E4; }
+.rx-seg[data-cor="verde"]    { --cor: #4FB57B; --fundo: #E5F4EB; --borda: #B9E1CA; }
+.rx-orbita-area .rx-centro { background: #FAEAEA !important; color: #D44D4D !important; border: 1px solid #F2CACA !important; box-shadow: 0 0 30px 6px rgba(212, 77, 77, 0.15), 0 16px 48px rgba(13, 17, 25, 0.10) !important; }
+/* Citação abaixo da modelo (fonte de destaque do DS para citações: Fraunces itálico) */
+.rx-modelo-col { margin: 0; display: flex; flex-direction: column; align-items: center; }
+.rx-citacao { position: relative; margin: 0; padding: 0 0 0 1.25rem; border-left: 2px solid #D44D4D; text-align: left; }
+.rx-citacao p { margin: 0; font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.0625rem; line-height: 1.55; color: #283043; }
+.rx-citacao .rp-destaque { color: #D44D4D; }
+@media (min-width: 1024px) {
+  .rx-modelo-col { flex: none; width: 414px; margin: 0 1.5rem 0 -7rem; }
+  .rx-modelo-col .rx-modelo-aponta { width: 100% !important; margin: 0 !important; top: 0 !important; }
+  .rx-citacao { margin-top: 1.25rem; max-width: 22rem; }
+}
+@media (min-width: 1024px) and (max-width: 1279px) { .rx-modelo-col { width: 369px; margin-left: -5rem; } }
+@media (max-width: 1023px) {
+  .rx-modelo-col { width: 100%; max-width: 24rem; margin: 0 auto 1.75rem; }
+  .rx-citacao p { font-size: 1rem; }
+}
+.rx-orbita-area { margin-top: 0 !important; }
+.rx-orbita-area { margin-top: 3rem !important; }
+@media (max-width: 1023px) { .rx-orbita-area { margin-top: 2.5rem !important; } }
