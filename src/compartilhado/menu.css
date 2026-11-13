@@ -185,3 +185,16 @@ html.menu-aberto { overflow: hidden; }
 @media (min-width: 1024px) { html body .site-header header.w-full > div, html body .site-header header.w-full nav[aria-label="Principal"] { gap: 2.75rem !important; } }
 /* pílula do menu sem desfoque de fundo (pesa na rolagem); quase opaca, o visual fica o mesmo */
 @media (min-width: 1024px) { html body .site-header header.w-full { background: rgba(255, 255, 255, 0.96) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; } }
+
+/* Desktop largo: aviso "Tem um desafio ou uma ideia?" ao lado direito da pílula do menu, com a seta apontando para "Contato"
+   e um fio pontilhado vermelho ligando o "Contato" ao aviso */
+@media (min-width: 1380px) {
+  #cta-contato { top: 50% !important; right: auto !important; left: calc(100% + 4.25rem) !important; margin-top: 0 !important; translate: 0 -50%; }
+  #cta-contato > span[aria-hidden="true"] { top: 50% !important; right: auto !important; left: -7px !important; translate: 0 -50%; rotate: -45deg !important; border-top-width: 0 !important; border-bottom-width: 1px !important; border-bottom-style: solid; }
+  #cta-contato::before { content: ""; position: absolute; top: 50%; right: calc(100% + 10px); width: calc(4.25rem - 26px); border-top: 2px dotted #D44D4D; translate: 0 -1px; }
+  #cta-contato::after { content: ""; position: absolute; top: 50%; right: calc(100% + 4.25rem - 16px); width: 7px; height: 7px; border-radius: 9999px; background: #D44D4D; translate: 50% -50%; box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.16); }
+  .cta-contato { animation: cta-entrada-lado .45s ease-out .6s both, cta-flutua-lado 2.6s ease-in-out 1.2s 3; }
+  @keyframes cta-entrada-lado { from { opacity: 0; transform: translateX(-8px) scale(.97); } to { opacity: 1; transform: none; } }
+  @keyframes cta-flutua-lado { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+}
+@media (min-width: 1380px) and (prefers-reduced-motion: reduce) { .cta-contato { animation: none; } }
