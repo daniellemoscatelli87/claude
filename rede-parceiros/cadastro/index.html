@@ -46,6 +46,14 @@ html.embutido .modal-fechar:focus-visible { outline: none; box-shadow: 0 0 0 3px
 html.embutido .modal-topo #progressBox { max-width: 760px; margin: .75rem auto 0; }
 html.embutido .modal-topo .progress { margin-bottom: 6px; }
 html.embutido .modal-topo .step-label { margin-bottom: 0; font-size: .75rem; }
+/* cabeçalho da janela em vermelho, com texto branco (cores invertidas) */
+html.embutido .modal-topo { background: #D44D4D; border-bottom-color: #D44D4D; }
+html.embutido .modal-topo h1, html.embutido .modal-destaque, html.embutido .modal-obs, html.embutido .modal-obs span[aria-hidden], html.embutido .modal-topo .step-label { color: #FFFFFF; }
+html.embutido .modal-fechar { color: #FFFFFF; }
+html.embutido .modal-fechar:hover { background: rgba(255, 255, 255, 0.15); color: #FFFFFF; }
+html.embutido .modal-fechar:focus-visible { box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7); }
+html.embutido .modal-topo .progress { background: rgba(255, 255, 255, 0.3); }
+html.embutido .modal-topo .progress > div { background: #FFFFFF; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
 <script type="module" src="/src/rede-parceiros.ts"></script>
