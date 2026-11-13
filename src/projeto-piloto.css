@@ -379,3 +379,21 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #accordion-group .accordion-header, #accordion-group .accordion-header > span:first-child { transition: color .2s ease; }
 /* Escopo: tags numa linha só no computador (3 tags por card) */
 @media (min-width: 1280px) { .card-frente ul[aria-label="Temas"] { flex-wrap: nowrap; gap: .25rem; } .card-frente .tag-frente { white-space: nowrap; padding-left: .4375rem; padding-right: .4375rem; } }
+
+/* ---------- Shine Border do DS no hover (card do hero e cards do Escopo) ----------
+   Mesma receita do componente do design system: borda de 1px com gradiente radial (primary, chart-2, primary)
+   que percorre o contorno (keyframes "shine", 12s), máscara recortando só a borda, decorativa (sem eventos de ponteiro).
+   Aparece só no hover; com movimento reduzido a borda aparece parada. */
+@keyframes ds-shine { 0% { background-position: 0 0; } 50% { background-position: 100% 100%; } 100% { background-position: 0 0; } }
+.hero-card, .card-frente { position: relative; }
+.hero-card::after, .card-frente::after {
+  content: ""; position: absolute; inset: 0; z-index: 3; border-radius: inherit; padding: 1px; pointer-events: none;
+  background-image: radial-gradient(transparent, transparent, #D44D4D, #495669, #D44D4D, transparent, transparent);
+  background-size: 300% 300%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude;
+  opacity: 0; transition: opacity .3s ease;
+}
+.secao-escura .card-frente::after { background-image: radial-gradient(transparent, transparent, #D44D4D, #627288, #D44D4D, transparent, transparent); }
+.hero-card:hover::after, .card-frente:hover::after { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) { .hero-card:hover::after, .card-frente:hover::after { animation: ds-shine 12s linear infinite; } }
