@@ -614,3 +614,18 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .cf-cartao-depois .luz-card span:nth-child(2) { width: 160px; height: 160px; top: 35%; left: 70%; }
   .cf-cartao-depois .luz-card span:nth-child(3) { width: 150px; height: 150px; top: 80%; left: 5%; }
 }
+
+/* ---------- Card "E depois" (desktop e celular) no padrão claro: superfície "tint" do Card de convite do DS ---------- */
+.depois-piloto-card, .cf-cartao-depois { background: #FDF2F2 !important; border: 1px solid rgba(212, 77, 77, 0.15) !important;
+  box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05) !important; color: #131A27 !important; }
+.depois-piloto-card .luz-card span, .cf-cartao-depois .luz-card span { animation: none !important; filter: blur(64px) !important; }
+.depois-piloto-card .luz-card span:nth-child(1), .cf-cartao-depois .luz-card span:nth-child(1) { width: 14rem !important; height: 14rem !important; top: -4rem !important; left: auto !important; right: -4rem; background: rgba(212, 77, 77, 0.10) !important; }
+.depois-piloto-card .luz-card span:nth-child(2), .cf-cartao-depois .luz-card span:nth-child(2) { width: 10rem !important; height: 10rem !important; top: auto !important; bottom: -5rem; left: -2.5rem !important; background: rgba(212, 77, 77, 0.05) !important; }
+.depois-piloto-card .luz-card span:nth-child(3), .cf-cartao-depois .luz-card span:nth-child(3) { display: none; }
+.depois-piloto-card > .depois-piloto > span:first-child { background: rgba(212, 77, 77, 0.10) !important; color: #D44D4D !important; }
+.depois-piloto-card h3, .cf-cartao-depois h3 { color: #131A27 !important; }
+.depois-piloto-card .depois-destaque, .cf-cartao-depois .depois-destaque { color: #B82828; }
+.depois-piloto-card h3 + p, .cf-cartao-depois p { color: #495669 !important; }
+.depois-cta-desk, .cf-cartao-depois .depois-cta { background: #B82828 !important; border-color: #B82828 !important; color: #FFFFFF !important; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+.depois-cta-desk:hover, .cf-cartao-depois .depois-cta:hover { background: #8C1B1B !important; border-color: #8C1B1B !important; }
+.depois-cta-desk:focus-visible, .cf-cartao-depois .depois-cta:focus-visible { box-shadow: 0 0 0 2px #FDF2F2, 0 0 0 4px rgba(212, 77, 77, 0.6) !important; }
