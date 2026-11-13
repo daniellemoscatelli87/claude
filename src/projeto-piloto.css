@@ -428,16 +428,32 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (max-width: 767px) { .rolar-abaixo { display: none !important; } } /* sem "Saiba mais" no celular */
 @media (max-width: 767px) { .hero-piloto { padding-bottom: 2.5rem !important; min-height: 0; } } /* sem o "Saiba mais", o hero termina logo após o card */
 
-/* ---------- Celular: "Para sua empresa" e "Para o Studio" como accordion (o primeiro abre aberto) ---------- */
-.lado-seta { display: none; }
+/* ---------- Celular: "Sobre o programa" com cabeçalho e citação no fundo escuro e as duas abas num card branco ---------- */
+.sobre-abas[hidden] { display: none; }
 @media (max-width: 767px) {
-  #sobre-o-programa .lado-troca.lado-acordeao > div:first-child { cursor: pointer; margin-bottom: 0 !important; }
-  #sobre-o-programa .lado-troca.lado-acordeao:not(.fechado) > div:first-child { margin-bottom: 1.5rem !important; }
-  #sobre-o-programa .lado-troca.lado-acordeao > div:first-child:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); border-radius: 6px; }
-  #sobre-o-programa .lado-troca.fechado > :not(:first-child) { display: none !important; }
-  #sobre-o-programa .lado-troca + .lado-troca { margin-top: 2rem !important; }
-  .lado-acordeao .lado-seta { display: block; margin-left: auto; width: 1.25rem; height: 1.25rem; color: #627288; transition: transform .2s ease; }
-  .lado-acordeao:not(.fechado) .lado-seta { transform: rotate(180deg); color: #B82828; }
+  .divisao-hero-cartao, .transicao-sobre { background: transparent !important; border-radius: 0; overflow: visible; }
+  #sobre-o-programa { padding-top: 1rem !important; padding-bottom: 3.5rem !important; overflow: visible; }
+  #sobre-o-programa .fundo-gradiente { display: none; }
+  #sobre-o-programa .rv-cabecalho { margin-bottom: 2rem; }
+  #sobre-o-programa .rv-cabecalho > p:first-child { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.15); color: rgba(255, 255, 255, 0.85); }
+  #sobre-o-programa .rv-cabecalho > p:first-child > span { background: #D44D4D; }
+  #sobre-o-programa .rv-cabecalho h2 { color: #E4E9F0; }
+  #sobre-o-programa .rv-cabecalho h2 .text-coral-600 { color: #E88080; }
+  #sobre-o-programa .rv-cabecalho > p:last-child { color: #B3BDD0; }
+  #sobre-o-programa article { background: #FFFFFF !important; border-radius: 24px !important; padding: .5rem 1.25rem 1.5rem; }
+  #sobre-o-programa .lado-troca > div:first-child { display: none !important; }
+  #sobre-o-programa .lado-troca + .lado-troca { margin-top: 0 !important; }
+  #sobre-o-programa .lado-troca.aba-oculta { display: none !important; }
+  #sobre-o-programa .lado-troca > h3 { margin-top: 1.25rem; }
+  .sobre-abas { display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; padding: .25rem; margin: .75rem 0 0; border-radius: 12px; background: #EDF0F5; }
+  #sobre-o-programa article { display: flex; flex-direction: column; }
+  .sobre-aba { height: 2.5rem; border: 0; border-radius: 9px; background: transparent; color: #627288; font: inherit; font-size: .875rem; font-weight: 600; cursor: pointer; transition: background-color .2s ease, color .2s ease, box-shadow .2s ease; }
+  .sobre-aba[aria-selected="true"] { background: #FFFFFF; color: #131A27; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+  .sobre-aba:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+  #sobre-o-programa .citacao-equilibrio { margin-top: 3rem; }
+  #sobre-o-programa .citacao-equilibrio blockquote p { color: #E4E9F0; }
+  #sobre-o-programa .citacao-equilibrio blockquote p .text-coral-600 { color: #E88080; }
+  #sobre-o-programa .citacao-aspas { color: #E88080; }
 }
 
 /* ---------- Celular: Escopo como carrossel (rolagem lateral com encaixe), sempre mostrando parte do próximo card ---------- */
@@ -509,3 +525,77 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
     opacity: 0; transition: opacity .3s ease; }
   body:has(.cta-flutuante.visivel) .faixa-flutuante, body:has(.botao-subir.visivel) .faixa-flutuante { opacity: 1; }
 }
+/* Card do hero sem a borda animada (desktop e celular) */
+.hero-card::after { display: none !important; }
+/* Celular: card do hero 5px mais alto */
+@media (max-width: 767px) { .hero-piloto { padding-top: calc(var(--altura-cabecalho, 68px) + .4375rem) !important; } }
+
+/* Celular (linha do tempo em coluna única): "E depois do projeto-piloto?" vira a última etapa, com o card em cores invertidas (vermelho) */
+.cf-etapa-depois { display: none !important; }
+@media (max-width: 639px) {
+  .cf-etapa-depois { display: flex !important; }
+  .depois-piloto-card { display: none !important; }
+  .cf-cartao-depois { background: #B82828; border: 1px solid #B82828; color: #FFFFFF; box-shadow: 0 16px 40px rgba(184, 40, 40, 0.25); }
+  .cf-cartao-depois h3 { color: #FFFFFF; }
+  .cf-cartao-depois p { color: rgba(255, 255, 255, 0.9); }
+}
+
+/* Celular: menos espaço entre as seções para encurtar a rolagem */
+@media (max-width: 639px) {
+  #atuacao { padding-top: 2.5rem !important; padding-bottom: 4rem !important; }
+  #como-funciona, #guia, #inscricao { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+  #sobre-o-programa { padding-bottom: 2.5rem !important; }
+  #sobre-o-programa .citacao-equilibrio { margin-top: 2rem !important; }
+  main .rv-cabecalho { margin-bottom: 2rem !important; }
+  .cf-etapas { row-gap: 0; }
+  .cf-etapas > * + * { margin-top: 2rem !important; }
+  .cf-etapas { margin-bottom: 0; }
+  #como-funciona .cf-etapas.relative { margin-bottom: 0; }
+  #como-funciona .max-w-4xl.mb-20 { margin-bottom: 0 !important; }
+  footer.relative { padding-top: 4rem !important; }
+}
+#cadastro-rodape { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
+
+/* Celular: card "E depois" no padrão do card de convite do DS, superfície grafite (dark) */
+@media (max-width: 639px) {
+  .cf-cartao-depois { position: relative; isolation: isolate; overflow: hidden; padding: 1.5rem; border-radius: 24px;
+    background: #0D1119 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06) !important; }
+  .cf-cartao-depois .depois-luz { position: absolute; z-index: -1; right: -4rem; top: -4rem; width: 14rem; height: 14rem; border-radius: 9999px; background: rgba(212, 77, 77, 0.10); filter: blur(64px); pointer-events: none; }
+  .cf-cartao-depois .depois-visual { display: flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; margin-bottom: 1rem; border-radius: 16px; background: rgba(255, 255, 255, 0.1); color: #E88080; }
+  .cf-cartao-depois h3 { margin: 0 0 .5rem; font-size: 1.375rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: #FFFFFF !important; }
+  .cf-cartao-depois .depois-destaque { color: #E88080; }
+  .cf-cartao-depois p { margin: 0; font-size: .9375rem; line-height: 1.6; color: rgba(255, 255, 255, 0.7) !important; }
+  .cf-cartao-depois .depois-cta { display: inline-flex; align-items: center; gap: .5rem; height: 2.75rem; margin-top: 1.25rem; padding: 0 1.25rem; border: 0; border-radius: 9999px;
+    background: #B82828; color: #FFFFFF; font: inherit; font-size: .875rem; font-weight: 600; cursor: pointer; }
+  .cf-cartao-depois .depois-cta svg { width: 1.125rem; height: 1.125rem; }
+  .cf-cartao-depois .depois-cta:focus-visible { outline: none; box-shadow: 0 0 0 2px #0D1119, 0 0 0 4px rgba(212, 77, 77, 0.6); }
+}
+@media (max-width: 639px) { .cf-cartao-depois .depois-cta { white-space: nowrap; padding: 0 1rem; font-size: .8125rem; } }
+@media (max-width: 359px) { .cf-cartao-depois { padding: 1.25rem; } .cf-cartao-depois .depois-cta { width: 100%; justify-content: center; white-space: normal; height: auto; min-height: 2.75rem; padding: .625rem 1rem; text-align: center; } }
+/* Card "E depois" (celular): botão outline, só borda e rótulo */
+@media (max-width: 639px) {
+  .cf-cartao-depois .depois-cta { background: transparent; border: 1.5px solid rgba(255, 255, 255, 0.85); color: #FFFFFF; transition: background-color .2s ease, color .2s ease; }
+  .cf-cartao-depois .depois-cta:hover { background: #FFFFFF; color: #131A27; }
+}
+@media (max-width: 359px) { .cf-cartao-depois .depois-cta { white-space: nowrap; height: 2.75rem; min-height: 0; padding: 0 1rem; } }
+/* Card "E depois" (celular): outline no padrão vermelho */
+@media (max-width: 639px) {
+  .cf-cartao-depois .depois-cta { border-color: #E88080; color: #E88080; }
+  .cf-cartao-depois .depois-cta:hover { background: #B82828; border-color: #B82828; color: #FFFFFF; }
+}
+
+/* Desktop/tablet: card horizontal "E depois" abaixo da timeline, no mesmo padrão escuro do card do celular */
+.depois-piloto-card { position: relative; isolation: isolate; overflow: hidden; background: #0D1119 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06) !important; }
+.depois-piloto-card::before { content: ""; position: absolute; z-index: -1; right: -4rem; top: -4rem; width: 16rem; height: 16rem; border-radius: 9999px; background: rgba(212, 77, 77, 0.10); filter: blur(64px); pointer-events: none; }
+.depois-piloto-card > .depois-piloto > span:first-child { background: rgba(255, 255, 255, 0.1) !important; border-color: transparent !important; color: #E88080 !important; box-shadow: none !important; }
+.depois-piloto-card h3 { color: #FFFFFF !important; font-weight: 700; letter-spacing: -0.02em; }
+.depois-piloto-card .depois-destaque { color: #E88080; }
+.depois-piloto-card h3 + p { color: rgba(255, 255, 255, 0.7) !important; }
+.depois-cta-desk { display: inline-flex; align-items: center; gap: .5rem; height: 3rem; padding: 0 1.5rem; border-radius: 9999px; border: 1.5px solid #E88080; color: #E88080;
+  background: transparent; font-size: .9375rem; font-weight: 600; white-space: nowrap; text-decoration: none; transition: background-color .2s ease, color .2s ease, border-color .2s ease; }
+.depois-cta-desk svg { width: 1.125rem; height: 1.125rem; transition: transform .2s ease; }
+.depois-cta-desk:hover { background: #B82828; border-color: #B82828; color: #FFFFFF; }
+.depois-cta-desk:hover svg { transform: translateX(2px); }
+.depois-cta-desk:focus-visible { outline: none; box-shadow: 0 0 0 2px #0D1119, 0 0 0 4px rgba(212, 77, 77, 0.6); }
