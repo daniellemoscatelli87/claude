@@ -427,3 +427,15 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 }
 @media (max-width: 767px) { .rolar-abaixo { display: none !important; } } /* sem "Saiba mais" no celular */
 @media (max-width: 767px) { .hero-piloto { padding-bottom: 2.5rem !important; min-height: 0; } } /* sem o "Saiba mais", o hero termina logo após o card */
+
+/* ---------- Celular: "Para sua empresa" e "Para o Studio" como accordion (o primeiro abre aberto) ---------- */
+.lado-seta { display: none; }
+@media (max-width: 767px) {
+  #sobre-o-programa .lado-troca.lado-acordeao > div:first-child { cursor: pointer; margin-bottom: 0 !important; }
+  #sobre-o-programa .lado-troca.lado-acordeao:not(.fechado) > div:first-child { margin-bottom: 1.5rem !important; }
+  #sobre-o-programa .lado-troca.lado-acordeao > div:first-child:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); border-radius: 6px; }
+  #sobre-o-programa .lado-troca.fechado > :not(:first-child) { display: none !important; }
+  #sobre-o-programa .lado-troca + .lado-troca { margin-top: 2rem !important; }
+  .lado-acordeao .lado-seta { display: block; margin-left: auto; width: 1.25rem; height: 1.25rem; color: #627288; transition: transform .2s ease; }
+  .lado-acordeao:not(.fechado) .lado-seta { transform: rotate(180deg); color: #B82828; }
+}

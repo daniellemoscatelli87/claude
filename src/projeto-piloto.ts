@@ -266,3 +266,46 @@ form.addEventListener('change', (e) => {
     window.scrollTo({ top: 0, behavior: suave ? 'smooth' : 'auto' });
   });
 })();
+
+// Celular: os blocos "Para sua empresa" e "Para o Studio" viram accordion; o primeiro começa aberto.
+(() => {
+  const lados = Array.from(document.querySelectorAll<HTMLElement>('#sobre-o-programa .lado-troca'));
+  if (!lados.length) return;
+  const mq = window.matchMedia('(max-width: 767px)');
+  const cabecas = lados.map((lado, i) => {
+    const cab = lado.firstElementChild as HTMLElement;
+    lado.id ||= `lado-sobre-${i + 1}`;
+    const seta = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    seta.setAttribute('viewBox', '0 0 24 24'); seta.setAttribute('fill', 'none'); seta.setAttribute('stroke', 'currentColor');
+    seta.setAttribute('stroke-width', '2'); seta.setAttribute('stroke-linecap', 'round'); seta.setAttribute('stroke-linejoin', 'round');
+    seta.setAttribute('aria-hidden', 'true'); seta.classList.add('lado-seta');
+    seta.innerHTML = '<path d="m6 9 6 6 6-6"/>';
+    cab.appendChild(seta);
+    const alternar = () => {
+      if (!mq.matches) return;
+      const fechado = lado.classList.toggle('fechado');
+      cab.setAttribute('aria-expanded', String(!fechado));
+    };
+    cab.addEventListener('click', alternar);
+    cab.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); alternar(); } });
+    return cab;
+  });
+  const aplicar = () => {
+    lados.forEach((lado, i) => {
+      const cab = cabecas[i];
+      if (mq.matches) {
+        lado.classList.add('lado-acordeao');
+        lado.classList.toggle('fechado', i !== 0);
+        cab.setAttribute('role', 'button'); cab.tabIndex = 0;
+        cab.setAttribute('aria-controls', lado.id);
+        cab.setAttribute('aria-expanded', String(i === 0));
+      } else {
+        lado.classList.remove('lado-acordeao', 'fechado');
+        cab.removeAttribute('role'); cab.removeAttribute('tabindex');
+        cab.removeAttribute('aria-controls'); cab.removeAttribute('aria-expanded');
+      }
+    });
+  };
+  aplicar();
+  mq.addEventListener('change', aplicar);
+})();
