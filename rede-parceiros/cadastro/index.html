@@ -36,6 +36,7 @@ html.embutido .modal-topo { position: sticky; top: 0; z-index: 60; display: bloc
 @media (min-width: 640px) { html.embutido .modal-topo { padding: 1rem 2rem .875rem; } }
 html.embutido .modal-topo-linha { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; max-width: 760px; margin: 0 auto; }
 html.embutido .modal-topo h1 { margin: 0; font-size: 1.25rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; color: #131A27; }
+html.embutido .modal-destaque { color: #D44D4D; }
 html.embutido .modal-obs { margin: .25rem 0 0; font-size: .8125rem; line-height: 1.4; color: #495669; }
 html.embutido .modal-obs span[aria-hidden] { color: #D44D4D; font-weight: 700; }
 html.embutido .modal-fechar { flex-shrink: 0; width: 2.5rem; height: 2.5rem; margin: -.25rem -.5rem 0 0; padding: 0; border: 0; border-radius: 9999px; background: transparent; color: #495669; display: flex; align-items: center; justify-content: center; cursor: pointer; }
@@ -262,7 +263,7 @@ html.embutido .modal-topo .step-label { margin-bottom: 0; font-size: .75rem; }
 </head>
 <body>
 <!-- @cabecalho:parceiros -->
-<div class="modal-topo"><div class="modal-topo-linha"><div><h1>Cadastro na Rede de Parceiros</h1><p class="modal-obs">Campos marcados com <span aria-hidden="true">*</span><span class="sr-only">asterisco</span> são obrigatórios.</p></div><button type="button" class="modal-fechar" aria-label="Fechar cadastro"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div></div>
+<div class="modal-topo"><div class="modal-topo-linha"><div><h1>Cadastro na <span class="modal-destaque">Rede de Parceiros</span></h1><p class="modal-obs">Campos marcados com <span aria-hidden="true">*</span><span class="sr-only">asterisco</span> são obrigatórios.</p></div><button type="button" class="modal-fechar" aria-label="Fechar cadastro"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div></div>
 <script>(function(){var b=document.querySelector('.modal-fechar');if(!b)return;function fechar(){if(window.self!==window.top){try{window.parent.postMessage('dm-fechar-cadastro','*')}catch(e){}return;}try{if(document.referrer&&new URL(document.referrer).origin===location.origin&&history.length>1){history.back();return}}catch(e){}location.href='/rede-parceiros/';}b.addEventListener('click',fechar);document.addEventListener('DOMContentLoaded',function(){var pb=document.getElementById('progressBox'),topo=document.querySelector('.modal-topo');if(pb&&topo)topo.appendChild(pb);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!document.querySelector('dialog[open]'))fechar();});})();</script>
 <div class="wrap">
 
