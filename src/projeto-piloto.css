@@ -1189,3 +1189,63 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .rolar-abaixo { background: #F6F7FA !important; }
   body:has(#hero.hero-piloto), .divisao-hero { background: #F6F7FA !important; }
 }
+
+/* Ligações animadas no padrão "Animated Beam": linha base translúcida e um feixe de luz que corre até o núcleo
+   (rápido no início e desacelerando, easeOutExpo), de cada lado em direção ao centro; núcleo pulsando com os halos */
+.pv-linha { background: rgba(212, 77, 77, 0.28); }
+.pv-feixe { position: absolute; inset: 0; overflow: hidden; }
+.pv-feixe::after { content: ""; position: absolute; top: 0; bottom: 0; width: 45%; left: -45%;
+  background: linear-gradient(90deg, rgba(249, 218, 218, 0) 0%, #F2B8B8 30%, #D44D4D 85%, rgba(212, 77, 77, 0) 100%); }
+.pv-linha-b .pv-feixe::after { left: auto; right: -45%; background: linear-gradient(270deg, rgba(249, 218, 218, 0) 0%, #F2B8B8 30%, #D44D4D 85%, rgba(212, 77, 77, 0) 100%); }
+.pv-linha { height: 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  .pv-linha-a .pv-feixe::after { animation: pv-feixe-dir 3s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+  .pv-linha-b .pv-feixe::after { animation: pv-feixe-esq 3s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+  .pv-nucleo { animation: pv-pulso 3s ease-in-out infinite; }
+  .pv-nucleo::before, .pv-nucleo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: rgba(212, 77, 77, 0.16); z-index: -1; animation: pv-onda 3s ease-out infinite; }
+  .pv-nucleo::after { animation-delay: 1.5s; }
+}
+@keyframes pv-feixe-dir { from { left: -45%; } to { left: 100%; } }
+@keyframes pv-feixe-esq { from { right: -45%; } to { right: 100%; } }
+/* o núcleo "respira" quando os feixes chegam e os halos acompanham */
+@keyframes pv-pulso {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 18px rgba(212, 77, 77, 0.08), 0 0 0 36px rgba(212, 77, 77, 0.04), 0 18px 40px -16px rgba(184, 40, 40, 0.6); }
+  50% { transform: scale(1.04); box-shadow: 0 0 0 24px rgba(212, 77, 77, 0.11), 0 0 0 48px rgba(212, 77, 77, 0.05), 0 22px 48px -16px rgba(184, 40, 40, 0.7); }
+}
+@keyframes pv-onda { from { transform: scale(1); opacity: .9; } to { transform: scale(1.9); opacity: 0; } }
+.pv-nucleo { isolation: isolate; }
+/* celular: ligações verticais, feixe descendo/subindo até o núcleo */
+@media (max-width: 767px) {
+  .pv-linha { width: 3px; height: 2.25rem; }
+  .pv-feixe::after, .pv-linha-b .pv-feixe::after { left: 0 !important; right: 0 !important; width: auto; height: 45%; top: -45%; bottom: auto;
+    background: linear-gradient(180deg, rgba(249, 218, 218, 0) 0%, #F2B8B8 30%, #D44D4D 85%, rgba(212, 77, 77, 0) 100%); }
+  .pv-linha-b .pv-feixe::after { top: auto; bottom: -45%; background: linear-gradient(0deg, rgba(249, 218, 218, 0) 0%, #F2B8B8 30%, #D44D4D 85%, rgba(212, 77, 77, 0) 100%); }
+  @media (prefers-reduced-motion: no-preference) {
+    .pv-linha-a .pv-feixe::after { animation: pv-feixe-desce 3s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+    .pv-linha-b .pv-feixe::after { animation: pv-feixe-sobe 3s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+  }
+}
+@keyframes pv-feixe-desce { from { top: -45%; } to { top: 100%; } }
+@keyframes pv-feixe-sobe { from { bottom: -45%; } to { bottom: 100%; } }
+/* feixe visível por mais tempo na linha curta: percorre em ~1,6s (desacelerando no fim) e descansa antes de repetir */
+@media (prefers-reduced-motion: no-preference) {
+  .pv-linha-a .pv-feixe::after { animation: pv-feixe-dir 2.6s cubic-bezier(0.33, 0.1, 0.25, 1) infinite; }
+  .pv-linha-b .pv-feixe::after { animation: pv-feixe-esq 2.6s cubic-bezier(0.33, 0.1, 0.25, 1) infinite; }
+  .pv-nucleo { animation-duration: 2.6s; }
+  .pv-nucleo::before, .pv-nucleo::after { animation-duration: 2.6s; }
+  .pv-nucleo::after { animation-delay: 1.3s; }
+}
+@keyframes pv-feixe-dir { 0% { left: -45%; } 62%, 100% { left: 100%; } }
+@keyframes pv-feixe-esq { 0% { right: -45%; } 62%, 100% { right: 100%; } }
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .pv-linha-a .pv-feixe::after { animation: pv-feixe-desce 2.6s cubic-bezier(0.33, 0.1, 0.25, 1) infinite; }
+  .pv-linha-b .pv-feixe::after { animation: pv-feixe-sobe 2.6s cubic-bezier(0.33, 0.1, 0.25, 1) infinite; }
+}
+@keyframes pv-feixe-desce { 0% { top: -45%; } 62%, 100% { top: 100%; } }
+@keyframes pv-feixe-sobe { 0% { bottom: -45%; } 62%, 100% { bottom: 100%; } }
+.pv-feixe::after { width: 55%; }
+@media (max-width: 767px) {
+  .pv-nucleo::before, .pv-nucleo::after { animation-name: pv-onda-menor !important; }
+  .pv-linha { height: 2.75rem; }
+}
+@keyframes pv-onda-menor { from { transform: scale(1); opacity: .8; } to { transform: scale(1.45); opacity: 0; } }
