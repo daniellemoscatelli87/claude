@@ -175,18 +175,17 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   itens.forEach((li) => obs.observe(li));
 })();
 
-/* ---------- Quem buscamos: componente do DS "Avatares com tooltip" (órbita de avatares) ----------
-   Cada anel gira em velocidade própria; os avatares ficam de pé. Ao passar o mouse (ou focar/tocar) num avatar,
-   todos os anéis pausam, o avatar cresce e aparece a dica com a área; o card ao lado mostra a descrição. */
+/* ---------- Hero: componente do DS "Avatares com tooltip" (ecossistema de áreas em órbita) ----------
+   Anéis girando devagar; com o ponteiro sobre o ecossistema tudo pausa (sem conflito com o movimento),
+   e o avatar sob o ponteiro cresce e mostra a dica com a área e a descrição. Teclado: foco em cada área. */
 (() => {
   const orbita = document.querySelector<HTMLElement>('.rx-orbita');
-  const detalhe = document.querySelector<HTMLElement>('.rx-detalhe');
   if (!orbita) return;
   const avs = Array.from(orbita.querySelectorAll<HTMLButtonElement>('.rx-av'));
   const dica = orbita.querySelector<HTMLElement>('.rx-dica')!;
-  const DUR = [9, 15, 22]; // segundos por volta, como no DS
+  const DUR = [48, 72, 96]; // segundos por volta: movimento lento e legível
   const ang = [0, 0, 0];
-  let pausado = false, ultimo = 0, visivel = false;
+  let pausado = false, ultimo = 0, visivel = false, ativo: HTMLButtonElement | null = null;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)');
   const raio = (k: number) => parseFloat(getComputedStyle(orbita).getPropertyValue(`--r${k}`)) || 0;
   const posicionar = () => {
@@ -203,24 +202,29 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   };
   new IntersectionObserver(([e]) => { const antes = visivel; visivel = e.isIntersecting; if (visivel && !antes) requestAnimationFrame(quadro); }).observe(orbita);
   new ResizeObserver(posicionar).observe(orbita);
+  const descricao = (i: string) => document.querySelector<HTMLTemplateElement>(`.rx-quem-texto template[data-i="${i}"]`)?.content.querySelector('p')?.textContent || '';
   const mostrar = (b: HTMLButtonElement) => {
-    pausado = true;
+    if (ativo === b) return;
+    ativo = b;
     avs.forEach((x) => x.classList.toggle('ativo', x === b));
     const ro = orbita.getBoundingClientRect(), rb = b.getBoundingClientRect();
     dica.querySelector('strong')!.textContent = b.getAttribute('aria-label');
+    dica.querySelector('span')!.textContent = descricao(b.dataset.i || '');
     dica.style.left = `${rb.left - ro.left + rb.width / 2}px`;
     dica.style.top = `${rb.top - ro.top}px`;
+    dica.classList.toggle('abaixo', rb.top - ro.top < 120);
     dica.hidden = false;
-    const t = document.querySelector<HTMLTemplateElement>(`.rx-quem-texto template[data-i="${b.dataset.i}"]`);
-    if (t && detalhe) detalhe.replaceChildren(t.content.cloneNode(true));
   };
-  const esconder = () => { pausado = false; dica.hidden = true; avs.forEach((x) => x.classList.remove('ativo')); };
+  const limpar = () => { ativo = null; dica.hidden = true; avs.forEach((x) => x.classList.remove('ativo')); };
+  // pausa enquanto o ponteiro estiver em qualquer parte do ecossistema; troca de avatar sem retomar o giro
+  orbita.addEventListener('pointerenter', () => { pausado = true; });
+  orbita.addEventListener('pointerleave', () => { pausado = false; limpar(); });
+  orbita.addEventListener('pointerover', (e) => { const b = (e.target as Element).closest<HTMLButtonElement>('.rx-av'); if (b) mostrar(b); });
+  orbita.addEventListener('pointerout', (e) => { const b = (e.target as Element).closest<HTMLButtonElement>('.rx-av'); const para = (e.relatedTarget as Element | null)?.closest('.rx-av'); if (b && !para) limpar(); });
   avs.forEach((b) => {
-    b.addEventListener('mouseenter', () => mostrar(b));
-    b.addEventListener('focus', () => mostrar(b));
-    b.addEventListener('click', () => mostrar(b));
-    b.addEventListener('mouseleave', esconder);
-    b.addEventListener('blur', esconder);
+    b.addEventListener('focus', () => { pausado = true; mostrar(b); });
+    b.addEventListener('blur', () => { pausado = false; limpar(); });
+    b.addEventListener('click', () => { pausado = true; mostrar(b); });
   });
   posicionar();
 })();
