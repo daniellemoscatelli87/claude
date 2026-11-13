@@ -449,3 +449,8 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .escopo-carrossel > .card-frente { flex: 0 0 84%; scroll-snap-align: start; height: auto !important; align-self: stretch !important; }
   .escopo-carrossel:focus-visible { outline: none; box-shadow: inset 0 0 0 2px rgba(232, 128, 128, 0.6); border-radius: 1.5rem; }
 }
+/* Celular: "E depois do projeto-piloto?" centralizado e sem o botão (o botão flutuante já está sempre na tela) */
+@media (max-width: 767px) {
+  .depois-piloto { align-items: center; text-align: center; }
+  .depois-piloto > a[href="#inscricao"] { display: none; }
+}
