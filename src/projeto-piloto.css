@@ -875,3 +875,28 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 }
 @media (min-width: 1024px) { .hero-chip:nth-child(2) { top: 69%; right: -26%; } }
 @media (min-width: 1024px) { .hero-chip:nth-child(2) { top: 76%; } }
+
+/* HERO: 2 mini cards (o que a empresa ganha + a troca com o Studio) no lugar das tags */
+.hero-chips { display: none !important; }
+.hero-mini { position: absolute; z-index: 4; pointer-events: none; }
+.hero-mini-card { position: absolute; display: flex; align-items: flex-start; gap: .75rem; width: 15.5rem; padding: .875rem 1rem; border-radius: 16px;
+  background: rgba(13, 17, 25, 0.72); border: 1px solid rgba(255, 255, 255, 0.12); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  box-shadow: 0 12px 36px rgba(13, 17, 25, 0.35); color: #fff;
+  opacity: 0; transform: translateY(12px); animation: hero-chip-entra .7s cubic-bezier(0.16, 1, 0.3, 1) forwards, hero-chip-flutua 6s ease-in-out infinite; }
+.hero-mini-card:nth-child(1) { animation-delay: .6s, 1.3s; }
+.hero-mini-card:nth-child(2) { animation-delay: .85s, 1.6s; }
+.hero-mini-icone { flex: none; width: 2.25rem; height: 2.25rem; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(212, 77, 77, 0.16); color: #D44D4D; }
+.hero-mini-card strong { display: block; font-size: .875rem; font-weight: 600; line-height: 1.3; }
+.hero-mini-card small { display: block; margin-top: .2rem; font-size: .8125rem; line-height: 1.4; color: #B3BDD0; }
+@media (prefers-reduced-motion: reduce) { .hero-mini-card { animation: none; opacity: 1; transform: none; } }
+@media (min-width: 1024px) {
+  .hero-mini { left: 9%; top: 11%; width: min(34vw, 62vh); aspect-ratio: 4 / 5; }
+  .hero-mini-card:nth-child(1) { top: 12%; left: -16%; }
+  .hero-mini-card:nth-child(2) { top: 72%; right: -22%; }
+}
+@media (max-width: 1023px) {
+  .hero-mini { left: 50%; translate: -50% 0; top: calc(4.75rem + min(74vw, 19rem) * 1.25 - 2.5rem); }
+  .hero-mini-card { position: relative; width: min(84vw, 18rem); }
+  .hero-mini-card:nth-child(1) { display: none; }
+}
+@media (max-width: 1023px) { .hero-piloto { padding-top: calc(4.75rem + min(74vw, 19rem) * 1.25 + 4.5rem) !important; } }
