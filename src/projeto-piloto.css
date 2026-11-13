@@ -742,3 +742,19 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #sobre-o-programa .lado-troca + .lado-troca li > span:first-child { color: #D44D4D !important; }
 #sobre-o-programa .lado-troca + .lado-troca p:has(.compromisso-icone) { background: #FDF2F2 !important; border-color: #F9DADA !important; }
 #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { color: #D44D4D !important; background: #F9DADA !important; border-color: #F9DADA !important; }
+
+/* Desktop: "Para sua empresa" x "Para o Studio" numa grade comparativa (um card branco, linhas alinhadas lado a lado) */
+@media (min-width: 1024px) {
+  #sobre-o-programa .troca-grade { column-gap: 0 !important; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); border-radius: 24px; overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.5), 0 8px 10px -6px rgba(226, 232, 240, 0.5); }
+  #sobre-o-programa .troca-grade::before { display: none; }
+  #sobre-o-programa .lado-troca + .lado-troca { border-left: 1px solid rgba(19, 26, 39, 0.09) !important; }
+  /* cabeçalho de cada coluna (selo, título e descrição) em rosa bem claro */
+  #sobre-o-programa .lado-troca > div.selo-lado { margin: 0 !important; padding: 2rem 2.5rem 1.25rem !important; background: #FDF8F8 !important; }
+  #sobre-o-programa .lado-troca > h3 { margin: 0 !important; padding: 0 2.5rem .75rem; background: #FDF8F8; }
+  #sobre-o-programa .lado-troca > h3 + p { margin: 0 !important; padding: 0 2.5rem 2rem; background: #FDF8F8; }
+  /* cada benefício numa linha da grade, com divisória alinhada entre as colunas */
+  #sobre-o-programa .lado-troca li { margin: 0 !important; padding: 1.25rem 2.5rem; border-top: 1px solid rgba(19, 26, 39, 0.09); align-items: center; }
+  /* compromisso no rodapé da grade */
+  #sobre-o-programa .lado-troca > p:has(.compromisso-icone) { margin: 0 !important; padding: 1.5rem 2.5rem !important; border: 0 !important; border-top: 1px solid rgba(19, 26, 39, 0.09) !important; border-radius: 0 !important; align-self: stretch; }
+}
