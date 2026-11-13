@@ -407,3 +407,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 /* Escopo: mesma Shine Border do hero (2px, brilho vermelho concentrado, 6s), em tons para fundo escuro */
 .secao-escura .card-frente::after { padding: 2px; background-image: radial-gradient(transparent, #E88080, #D44D4D, #E88080, transparent); background-size: 250% 250%; }
 @media (prefers-reduced-motion: no-preference) { .card-frente:hover::after { animation-duration: 6s; } }
+/* Escopo: borda animada mais refinada, vermelho com grafite claro (receita do DS: primary, chart-2, primary), 1.5px */
+.secao-escura .card-frente::after { padding: 1.5px; background-image: radial-gradient(transparent, #D44D4D, #B3BDD0, #D44D4D, transparent); }
