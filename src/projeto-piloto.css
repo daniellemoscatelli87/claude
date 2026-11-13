@@ -372,3 +372,6 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 /* Filete do rótulo em tom mais claro: crimson-300 / graphite-300 */
 #sobre-o-programa .lado-troca > div:first-child { border-bottom-color: #E88080 !important; }
 #sobre-o-programa .lado-troca + .lado-troca > div:first-child { border-bottom-color: #8898B0 !important; }
+/* Accordion do Guia como cards brancos: sombra suave do DS (--shadow-sm), por escolha da dona do produto */
+#accordion-group .accordion-item, #accordion-group .accordion-item.active { box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+#accordion-group > * + * { margin-top: .75rem !important; }
