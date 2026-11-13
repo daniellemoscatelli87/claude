@@ -294,20 +294,25 @@ contactForm.addEventListener('change', salvarRascunho);
   const botao = document.getElementById('menu-botao') as HTMLButtonElement | null;
   const painel = document.getElementById('menu-mobile');
   if (!botao || !painel) return;
-  const iconeAbrir = botao.querySelector('[data-menu="aberto"]')!;
-  const iconeFechar = botao.querySelector('[data-menu="fechado"]')!;
+  // Painel em "bottom sheet": sobe de baixo para cima ao abrir e desce ao fechar.
+  // Vai para o <body> para ficar fixo na tela (o cabeçalho tem blur, que prenderia o position: fixed).
+  const fundo = document.getElementById('menu-fundo');
+  document.body.appendChild(painel);
+  if (fundo) document.body.appendChild(fundo);
   const definir = (aberto: boolean) => {
-    painel.classList.toggle('hidden', !aberto);
+    painel.classList.toggle('aberto', aberto);
+    fundo?.classList.toggle('aberto', aberto);
+    document.documentElement.classList.toggle('menu-aberto', aberto);
     botao.setAttribute('aria-expanded', String(aberto));
     botao.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
-    iconeAbrir.classList.toggle('hidden', aberto);
-    iconeFechar.classList.toggle('hidden', !aberto);
   };
+  document.getElementById('menu-fechar')?.addEventListener('click', () => { definir(false); botao.focus(); });
+  fundo?.addEventListener('click', () => definir(false));
   const aberto = () => botao.getAttribute('aria-expanded') === 'true';
   botao.addEventListener('click', () => {
     const abrir = !aberto();
     definir(abrir);
-    if (abrir) painel.querySelector<HTMLElement>('a')?.focus();
+    if (abrir) setTimeout(() => painel.querySelector<HTMLElement>('a')?.focus({ preventScroll: true }), 50);
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && aberto()) { definir(false); botao.focus(); }
