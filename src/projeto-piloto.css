@@ -629,3 +629,9 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .depois-cta-desk, .cf-cartao-depois .depois-cta { background: #D44D4D !important; border-color: #D44D4D !important; color: #FFFFFF !important; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
 .depois-cta-desk:hover, .cf-cartao-depois .depois-cta:hover { background: #B82828 !important; border-color: #B82828 !important; }
 .depois-cta-desk:focus-visible, .cf-cartao-depois .depois-cta:focus-visible { box-shadow: 0 0 0 2px #FDF2F2, 0 0 0 4px rgba(212, 77, 77, 0.6) !important; }
+
+/* "Para sua empresa" e "Para o Studio" como selo (mesmo padrão da tag do hero), sem divider */
+#sobre-o-programa .lado-troca > div.selo-lado { border-bottom: 0 !important; padding: 0 !important; margin: 0 0 1.25rem !important; background: transparent !important; }
+#sobre-o-programa .lado-troca > div.selo-lado > p { color: #D44D4D; }
+#sobre-o-programa .lado-troca > div.selo-studio > p { background: #EDF0F5; border: 1px solid #D6DCE6; color: #131A27; }
+#sobre-o-programa .selo-studio p > span { background: #131A27; }
