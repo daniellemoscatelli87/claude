@@ -18,10 +18,10 @@
     "#dm-politica .dm-pol-corpo h1,#dm-politica .dm-pol-corpo .tag{display:none}" +
     "#dm-politica .dm-pol-corpo h2{margin:24px 0 8px;font-size:1rem;font-weight:600;color:#131A27}" +
     "#dm-politica .dm-pol-corpo p,#dm-politica .dm-pol-corpo ul{margin:0 0 12px}" +
-    "#dm-politica .dm-pol-corpo ul{padding-left:20px;list-style:disc}#dm-politica .dm-pol-corpo li::marker{color:#B82828}" +
+    "#dm-politica .dm-pol-corpo ul{padding-left:20px;list-style:disc}#dm-politica .dm-pol-corpo li::marker{color:#D44D4D}" +
     "#dm-politica .dm-pol-corpo li{margin-bottom:6px}" +
     "#dm-politica .dm-pol-corpo strong{color:#131A27;font-weight:600}" +
-    "#dm-politica .dm-pol-corpo a{color:#B82828;text-decoration:underline;text-underline-offset:2px}" +
+    "#dm-politica .dm-pol-corpo a{color:#D44D4D;text-decoration:underline;text-underline-offset:2px}" +
     "#dm-politica .dm-pol-corpo .updated{font-size:.8125rem;color:#627288}" +
     "@media (max-width:639px){#dm-politica .dm-pol-topo{padding:16px 20px}#dm-politica .dm-pol-corpo{padding:16px 20px 24px}}";
   document.head.appendChild(css);

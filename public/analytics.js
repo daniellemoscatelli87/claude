@@ -49,7 +49,7 @@
       "padding:16px 18px;border-radius:16px;background:#fff;color:#0f172a;border:1px solid rgba(19,26,39,.09);box-shadow:0 8px 24px rgba(13,17,25,.09),0 24px 64px rgba(13,17,25,.07);" +
       "font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px;line-height:1.5}" +
       ".dm-cookies p{margin:0;flex:1 1 320px}" +
-      ".dm-cookies a{color:#b82828;font-weight:600;text-underline-offset:3px}" +
+      ".dm-cookies a{color:#D44D4D;font-weight:600;text-underline-offset:3px}" +
       ".dm-cookies-acoes{display:flex;gap:8px;flex:0 0 auto;margin-left:auto}" +
       ".dm-cookies button{min-height:44px;padding:0 20px;border-radius:999px;font:inherit;font-weight:600;cursor:pointer}" +
       ".dm-cookies .recusar{background:#fff;color:#0f172a;border:1px solid rgba(19,26,39,.16)}" +
