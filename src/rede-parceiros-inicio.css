@@ -1031,3 +1031,7 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 @media (min-width: 640px) and (max-width: 839px) { .rx-kb-cards { height: 21.5rem !important; } }
 /* Header do mockup: ícone do logo (símbolo DM do DS) */
 .rx-kb-logo { flex: none; width: 1.25rem; height: 1.25rem; display: block; object-fit: contain; }
+/* Formatos: ícones no padrão do DS (base rosa clara, ícone vermelho) no lugar dos números */
+.rx-num-icone { width: 2.75rem; height: 2.75rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(212, 77, 77, 0.10); color: #D44D4D; }
+.rx-num-icone svg { width: 1.375rem; height: 1.375rem; stroke-width: 1.75; }
+@media (max-width: 639px) { .rx-num-icone { width: 2.5rem; height: 2.5rem; } .rx-num-icone svg { width: 1.25rem; height: 1.25rem; } .rx-numerada li { grid-template-columns: 2.5rem 1fr !important; gap: 1rem !important; } }
