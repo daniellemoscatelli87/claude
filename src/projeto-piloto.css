@@ -660,3 +660,9 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .hero-piloto > div:has(.hero-card) { padding-top: 0; padding-bottom: 0; }
   .hero-card { min-height: calc(70svh - 5.5rem); }
 }
+/* celular: 30% foto; 70% card + "Saiba mais" (acima do botão flutuante) */
+@media (max-width: 767px) {
+  .rolar-abaixo { display: flex !important; bottom: 5.25rem !important; }
+  .hero-piloto { padding-bottom: calc(5.5rem + 3.25rem) !important; }
+  .hero-card { min-height: calc(70svh - 8.75rem); }
+}
