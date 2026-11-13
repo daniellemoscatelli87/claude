@@ -24,6 +24,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script>try{if(window.self!==window.top)document.documentElement.classList.add('embutido')}catch(e){document.documentElement.classList.add('embutido')}</script>
+<style>
+/* Aberto dentro da janela da página de apresentação: só o formulário, sem cabeçalho, rodapé e botões flutuantes */
+html.embutido #site-header, html.embutido .topbar, html.embutido footer, html.embutido [data-whatsapp-flutuante], html.embutido #cta-contato { display: none !important; }
+html.embutido body { background: #FFFFFF; }
+html.embutido .wrap { padding-top: 16px; }
+</style>
 <script type="module" src="/src/rede-parceiros.ts"></script>
 <style>
 /* Ordem das camadas: o estilo próprio desta página fica abaixo do cabeçalho e da gaveta compartilhados. */
@@ -795,10 +802,11 @@ form.addEventListener("input", e => {
 const JOIN_LABEL = '<svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M10.8 7.2 6.2 15.8M13.2 7.2l4.6 8.6M7.5 18h9"/></svg>Quero fazer parte da rede';
 // Botão de envio com seta.
 const SEND_LABEL = 'Enviar cadastro<svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+const EMBUTIDO = document.documentElement.classList.contains("embutido");
 function show(i) {
   steps.forEach((s, n) => s.classList.toggle("hidden", n !== i));
   current = i;
-  document.getElementById("back").classList.toggle("hidden", i === 0);
+  document.getElementById("back").classList.toggle("hidden", i === 0 || (EMBUTIDO && i === 1));
   const next = document.getElementById("next");
   if (i === total) next.innerHTML = SEND_LABEL; else if (i === 0) next.innerHTML = JOIN_LABEL; else next.textContent = "Próxima";
   document.getElementById("progressBox").classList.toggle("hidden", i === 0);
@@ -1003,7 +1011,7 @@ document.addEventListener("click", async (e) => {
   } catch { body.innerHTML = '<p>Não foi possível carregar a política agora. <a href="/privacidade/" target="_blank" rel="noopener">Abrir em outra aba</a>.</p>'; }
 });
 
-show(0);
+show(EMBUTIDO ? 1 : 0);
 restaurarRascunho();
 // Teclado aberto no celular: marca o body enquanto um campo de texto está em foco.
 const isText = (t) => t.matches && t.matches('textarea, input:not([type="checkbox"]):not([type="radio"]), select');
