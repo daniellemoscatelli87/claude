@@ -15,7 +15,7 @@ const abrirCadastro = (de: HTMLElement | null) => {
   tela.setAttribute('aria-hidden', 'false');
   document.documentElement.classList.add('cadastro-aberto');
   (window as any).dmEvento?.('cadastro_parceiro_aberto');
-  setTimeout(() => document.getElementById('cadastro-parceiro-fechar')?.focus(), 350);
+  setTimeout(() => quadro.focus(), 350);
 };
 const fecharCadastro = () => {
   if (!tela) return;
@@ -32,6 +32,7 @@ document.addEventListener('click', (e) => {
 });
 document.getElementById('cadastro-parceiro-fechar')?.addEventListener('click', fecharCadastro);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.classList.contains('aberta')) fecharCadastro(); });
+window.addEventListener('message', (e) => { if (e.origin === location.origin && e.data === 'dm-fechar-cadastro') fecharCadastro(); });
 
 /* ---------- Botões flutuantes: "Quero ser parceiro" fora do topo e do convite; "subir" no rodapé ---------- */
 (() => {

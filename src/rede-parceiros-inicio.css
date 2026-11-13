@@ -438,3 +438,6 @@ html.cadastro-aberto { overflow: hidden; }
 .rp-painel .rp-icone svg { width: 1.75rem !important; height: 1.75rem !important; }
 .rp-painel h3 { margin: 0 !important; padding: 0 !important; font-size: 1rem !important; font-weight: 600; line-height: 1.4; color: #131A27; text-align: left !important; max-width: none !important; }
 .rp-painel h3::before { display: none !important; }
+
+/* O cabeçalho da janela (título, X e progresso) vem do próprio formulário */
+.cadastro-tela-topo { display: none !important; }
