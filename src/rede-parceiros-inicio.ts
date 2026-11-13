@@ -15,7 +15,7 @@ const abrirCadastro = (de: HTMLElement | null) => {
   tela.setAttribute('aria-hidden', 'false');
   document.documentElement.classList.add('cadastro-aberto');
   (window as any).dmEvento?.('cadastro_parceiro_aberto');
-  setTimeout(() => document.getElementById('cadastro-parceiro-fechar')?.focus(), 350);
+  setTimeout(() => quadro.focus(), 350);
 };
 const fecharCadastro = () => {
   if (!tela) return;
@@ -27,18 +27,18 @@ const fecharCadastro = () => {
 document.addEventListener('click', (e) => {
   const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href="/rede-parceiros/cadastro/"]');
   if (!a || !tela || e.ctrlKey || e.metaKey || e.shiftKey || (e as MouseEvent).button === 1) return;
-  if (!window.matchMedia('(max-width: 767px)').matches) return; // no computador, o link abre a página do formulário
   e.preventDefault();
   abrirCadastro(a);
 });
 document.getElementById('cadastro-parceiro-fechar')?.addEventListener('click', fecharCadastro);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.classList.contains('aberta')) fecharCadastro(); });
+window.addEventListener('message', (e) => { if (e.origin === location.origin && e.data === 'dm-fechar-cadastro') fecharCadastro(); });
 
 /* ---------- Botões flutuantes: "Quero ser parceiro" fora do topo e do convite; "subir" no rodapé ---------- */
 (() => {
   const cta = document.getElementById('cta-flutuante');
   const subir = document.getElementById('botao-subir');
-  const hero = document.querySelector('.rp-hero');
+  const hero = document.querySelector('.rp-hero .rp-botao'); // aparece assim que o botão do topo sai da tela
   const convite = document.querySelector('.rp-carta');
   const rodape = document.querySelector('footer');
   if (!('IntersectionObserver' in window)) return;
@@ -50,7 +50,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   };
   let heroVisivel = true, conviteVisivel = false;
   const atualizar = () => mostrar(cta, !heroVisivel && !conviteVisivel);
-  if (hero) new IntersectionObserver(([e]) => { heroVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.15 }).observe(hero);
+  if (hero) new IntersectionObserver(([e]) => { heroVisivel = e.isIntersecting; atualizar(); }, { threshold: 0 }).observe(hero);
   if (convite) new IntersectionObserver(([e]) => { conviteVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.1 }).observe(convite);
   if (rodape) new IntersectionObserver(([e]) => mostrar(subir, e.isIntersecting), { threshold: 0.1 }).observe(rodape);
   subir?.addEventListener('click', () => {
@@ -76,6 +76,26 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   lista.addEventListener('scroll', atualizar, { passive: true });
   window.addEventListener('resize', atualizar);
   atualizar();
+  // Avanço automático: um perfil a cada 4,5 s (tempo para ler e ver o próximo); volta ao início no fim.
+  // Pausa enquanto a pessoa interage (mouse, toque ou foco) e não roda para quem prefere menos movimento.
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let interagindo = false;
+  const parar = () => { interagindo = true; };
+  const seguir = () => { interagindo = false; };
+  const area = lista.closest('.rp-carrossel-area') || lista;
+  area.addEventListener('pointerenter', parar); area.addEventListener('pointerleave', seguir);
+  area.addEventListener('focusin', parar); area.addEventListener('focusout', seguir);
+  lista.addEventListener('touchstart', parar, { passive: true });
+  lista.addEventListener('touchend', () => setTimeout(seguir, 4000), { passive: true });
+  let visivel = false;
+  new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }, { threshold: 0.3 }).observe(lista);
+  setInterval(() => {
+    if (interagindo || !visivel || document.hidden) return;
+    const item = lista.querySelector<HTMLElement>('li');
+    const passo = item ? item.offsetWidth + 20 : lista.clientWidth;
+    const fim = lista.scrollLeft >= lista.scrollWidth - lista.clientWidth - 2;
+    lista.scrollTo({ left: fim ? 0 : lista.scrollLeft + passo, behavior: 'smooth' });
+  }, 4500);
 })();
 
 /* ---------- Hero: Lista animada (componente do DS): animação de novos cadastros (sem nomes, data ou hora) ---------- */
@@ -83,15 +103,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
   const lista = document.querySelector<HTMLUListElement>('.rp-lista-itens');
   const pausa = document.querySelector<HTMLButtonElement>('.rp-lista-pausa');
   if (!lista) return;
-  // Avatares ilustrativos (dois estilos de silhueta) em tons do DS.
-  const avatar = (estilo: number, tom: number) => {
-    const fundos = ['#FDF2F2', '#EDF0F5', '#F9DADA', '#D6DCE6'];
-    const cores = ['#B82828', '#283043', '#8C1B1B', '#495669'];
-    const cabelo = estilo === 0
-      ? '<path d="M12 4.2c-2.6 0-4.4 1.9-4.4 4.5 0 .5.1 1 .2 1.4.4-2 2-3.3 4.2-3.3s3.8 1.3 4.2 3.3c.1-.4.2-.9.2-1.4 0-2.6-1.8-4.5-4.4-4.5z"/>'
-      : '<path d="M12 4c-3 0-5 2.2-5 5.2v5.3c0 .6.5 1 1 1h.6V9.6c0-1.9 1.5-3.4 3.4-3.4s3.4 1.5 3.4 3.4v5.9h.6c.5 0 1-.4 1-1V9.2C17 6.2 15 4 12 4z"/>';
-    return `<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="12" fill="${fundos[tom]}"/><g fill="${cores[tom]}">${cabelo}<circle cx="12" cy="10" r="3.4"/><path d="M5.5 21c.7-3.4 3.3-5.4 6.5-5.4s5.8 2 6.5 5.4z"/></g></svg>`;
-  };
+  // Avatares gerados por IA (pessoas fictícias), em public/rede-parceiros/avatares/.
   // Papéis variados conforme os perfis e setores que a rede procura.
   const papeis = [
     'UX/UI Designer', 'Service Designer', 'Pesquisa em UX', 'Consultoria de Negócios', 'Desenvolvimento Front-end',
@@ -104,24 +116,59 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tela?.cl
     const li = document.createElement('li');
     if (animar) li.className = 'entrando';
     const papel = papeis[n % papeis.length];
-    li.innerHTML = `<span class="rp-lista-avatar">${avatar(n % 2, n % 4)}</span><span class="rp-lista-corpo"><strong>${papel}</strong><span class="txt">Novo cadastro na Rede de Parceiros</span></span>`;
+    li.innerHTML = `<span class="rp-lista-avatar"><img src="/rede-parceiros/avatares/avatar-${(n % 5) + 1}.webp" alt="" width="40" height="40" loading="lazy"></span><span class="rp-lista-corpo"><strong>${papel}</strong><span class="txt">Novo cadastro na Rede de Parceiros</span></span>`;
     n++;
     return li;
   };
   for (let i = 4; i >= 0; i--) lista.insertBefore(criar(false), lista.firstChild);
+  const ICO_PAUSA = '<span class="rp-ico-pausa" aria-hidden="true"><i></i><i></i></span>';
+  const ICO_PLAY = '<svg class="rp-ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>';
   const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let pausado = reduzido;
   if (pausa) {
-    if (reduzido) { pausa.textContent = 'Retomar'; pausa.setAttribute('aria-pressed', 'true'); }
+    pausa.innerHTML = reduzido ? ICO_PLAY + 'Retomar' : ICO_PAUSA + 'Pausar';
+    if (reduzido) pausa.setAttribute('aria-pressed', 'true');
     pausa.addEventListener('click', () => {
       pausado = !pausado;
-      pausa.textContent = pausado ? 'Retomar' : 'Pausar';
+      pausa.innerHTML = pausado ? ICO_PLAY + 'Retomar' : ICO_PAUSA + 'Pausar';
       pausa.setAttribute('aria-pressed', String(pausado));
     });
   }
-  setInterval(() => {
-    if (pausado || document.hidden) return;
-    lista.insertBefore(criar(true), lista.firstChild);
-    while (lista.children.length > 5) lista.lastElementChild?.remove();
-  }, 2500);
+  // Mesma coreografia da Lista animada do DS: o novo item cai do topo (mola), os demais deslizam para baixo
+  // (animação de layout) e o último sai para a direita, esmaecendo.
+  const MOLA = 'cubic-bezier(0.34, 1.32, 0.64, 1)';
+  const avancar = () => {
+    const antes = new Map<Element, number>();
+    Array.from(lista.children).forEach((el) => antes.set(el, (el as HTMLElement).getBoundingClientRect().top));
+    const saindo = lista.children.length >= 5 ? (lista.lastElementChild as HTMLElement) : null;
+    if (saindo) {
+      const r = saindo.getBoundingClientRect(), base = lista.getBoundingClientRect();
+      saindo.style.position = 'absolute'; saindo.style.left = `${r.left - base.left}px`; saindo.style.top = `${r.top - base.top}px`; saindo.style.width = `${r.width}px`;
+      saindo.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(60px) scale(.9)' }], { duration: 200, easing: 'ease-in', fill: 'forwards' })
+        .finished.then(() => saindo.remove());
+    }
+    const novo = criar(false);
+    lista.insertBefore(novo, lista.firstChild);
+    novo.animate([{ opacity: 0, transform: 'translateY(-32px) scale(.93)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: MOLA });
+    antes.forEach((y, el) => {
+      if (el === saindo) return;
+      const dy = y - (el as HTMLElement).getBoundingClientRect().top;
+      if (dy) (el as HTMLElement).animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 520, easing: MOLA });
+    });
+  };
+  setInterval(() => { if (!pausado && !document.hidden) avancar(); }, 2000);
+})();
+
+/* ---------- Checklist: o check de cada item é desenhado quando ele entra na tela, um após o outro ---------- */
+(() => {
+  const itens = Array.from(document.querySelectorAll<HTMLElement>('.rp-checklist-caixas li'));
+  if (!itens.length) return;
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) { itens.forEach((li) => li.classList.add('marcado')); return; }
+  const obs = new IntersectionObserver((es) => {
+    es.filter((e) => e.isIntersecting).forEach((e, i) => {
+      setTimeout(() => e.target.classList.add('marcado'), i * 250);
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0.6, rootMargin: '0px 0px -10% 0px' });
+  itens.forEach((li) => obs.observe(li));
 })();
