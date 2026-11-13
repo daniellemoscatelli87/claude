@@ -67,3 +67,8 @@ html { overflow-x: clip; }
   body.pagina-inicio > footer { padding-top: 1rem; padding-bottom: 1rem; }
   body.pagina-inicio > main { padding-top: 1rem; padding-bottom: 1rem; }
 }
+/* Celular: conteúdo da coluna principal centralizado */
+@media (max-width: 767px) {
+  .coluna-inicio { align-items: center; text-align: center; }
+  .coluna-inicio #notify-msg { padding-left: 0; text-align: center; }
+}
