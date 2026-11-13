@@ -671,3 +671,9 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .rolar-seta svg { width: 1rem; height: 1rem; }
 /* celular: a foto começa no topo da tela, por trás do cabeçalho transparente */
 @media (max-width: 767px) { #hero-fundo img { top: 0 !important; height: 30svh !important; object-position: center 45%; } }
+/* celular: 25% foto + cabeçalho; 75% card + Saiba mais + botões */
+@media (max-width: 767px) {
+  #hero-fundo img { height: 25svh !important; }
+  .hero-piloto { padding-top: 25svh !important; }
+  .hero-card { min-height: calc(75svh - 8.75rem); }
+}
