@@ -913,3 +913,5 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 @media (min-width: 1024px) { .rx-modelo-aponta { width: 400px; margin: 0 -1rem 0 -6rem; top: 0; } }
 @media (min-width: 1024px) { .rx-modelo-aponta { margin-right: 1.5rem; } }
 @media (min-width: 1024px) and (max-width: 1279px) { .rx-modelo-aponta { width: 360px; margin-left: -4rem; } }
+@media (min-width: 1024px) { .rx-modelo-aponta { width: 460px; margin-left: -8rem; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .rx-modelo-aponta { width: 410px; margin-left: -6rem; } }
