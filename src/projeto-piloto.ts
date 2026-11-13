@@ -76,7 +76,7 @@ function estadoEnviando(sim: boolean) {
   enviando = sim;
   botao.disabled = sim;
   botao.setAttribute('aria-busy', String(sim));
-  botaoTexto.textContent = sim ? 'Enviando cadastro…' : 'Cadastrar minha empresa';
+  botaoTexto.textContent = sim ? 'Enviando cadastro…' : 'Enviar cadastro';
   iconeEnviando.classList.toggle('hidden', !sim);
   iconeParado.classList.toggle('hidden', sim);
 }
