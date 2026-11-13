@@ -379,3 +379,23 @@ html.cadastro-aberto { overflow: hidden; }
   .rp-carta-rodape { align-items: center !important; }
   .rp-carta-assinatura { align-items: center; }
 }
+
+/* ---------- Formatos de parceria como um espectro (da consultoria à execução): linha com marcos, sem aparência de botão ---------- */
+.rp-espectro { position: relative; display: grid; gap: 0; max-width: 64rem; margin: 0 auto; padding: 0; list-style: none; border: 0 !important; }
+.rp-espectro::before { content: ""; position: absolute; border-radius: 9999px; background: linear-gradient(to bottom, #F9DADA, #B82828); left: 1.25rem; top: 1.25rem; bottom: 1.25rem; width: 3px; transform: translateX(-50%); }
+.rp-espectro .rp-formato { position: relative; display: flex; flex-direction: row !important; align-items: flex-start; text-align: left !important; gap: 1.125rem; padding: 0 0 2rem !important; border: 0 !important; }
+.rp-espectro .rp-formato:last-child { padding-bottom: 0 !important; }
+.rp-espectro .rp-formato + .rp-formato { border-left: 0 !important; }
+.rp-espectro .rp-icone { position: relative; z-index: 1; width: 2.5rem !important; height: 2.5rem !important; border-radius: 9999px; border: 3px solid #FFFFFF !important; background: #FDF2F2 !important; color: #B82828; box-shadow: 0 0 0 1px #F9DADA; }
+.rp-espectro .rp-formato:last-child .rp-icone { background: #B82828 !important; color: #FFFFFF; box-shadow: 0 0 0 1px #B82828; }
+.rp-espectro .rp-icone svg { width: 1.125rem !important; height: 1.125rem !important; }
+.rp-espectro h3 { margin: 0; padding-top: .5rem; font-size: 1.0625rem !important; font-weight: 600; line-height: 1.4; color: #131A27; }
+.rp-espectro-legenda { display: flex; justify-content: space-between; max-width: 64rem; margin: 0 auto 1.5rem; font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #627288; }
+@media (max-width: 767px) { .rp-espectro-legenda { display: none; } }
+@media (min-width: 768px) {
+  .rp-espectro { grid-template-columns: repeat(4, 1fr); }
+  .rp-espectro::before { left: 12.5%; right: 12.5%; top: 1.5rem; bottom: auto; width: auto; height: 3px; transform: translateY(-50%); background: linear-gradient(to right, #F9DADA, #B82828); }
+  .rp-espectro .rp-formato { flex-direction: column !important; align-items: center; text-align: center !important; gap: 1rem; padding: 0 1rem !important; }
+  .rp-espectro .rp-icone { width: 3rem !important; height: 3rem !important; }
+  .rp-espectro h3 { padding-top: 0; max-width: 14rem; }
+}
