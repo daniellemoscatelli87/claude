@@ -736,3 +736,121 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #accordion-group .accordion-item, #accordion-group .accordion-item.active { background: #FFFFFF !important; box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.5), 0 8px 10px -6px rgba(226, 232, 240, 0.5) !important; }
 /* "E depois do projeto-piloto?" com a mesma largura da linha do tempo (alinhado aos cards das etapas) */
 .depois-convite { width: min(53rem, calc(100% - 3rem)); margin-inline: auto; }
+/* coluna "Para o Studio" com as mesmas cores da coluna "Para sua empresa": selo, checks e box de compromisso */
+#sobre-o-programa .lado-troca > div.selo-studio > p { background: #FFF5F5 !important; border-color: #FFE5E5 !important; color: #D44D4D !important; }
+#sobre-o-programa .selo-studio p > span { background: #D44D4D !important; }
+#sobre-o-programa .lado-troca + .lado-troca li > span:first-child { color: #D44D4D !important; }
+#sobre-o-programa .lado-troca + .lado-troca p:has(.compromisso-icone) { background: #FDF2F2 !important; border-color: #F9DADA !important; }
+#sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { color: #D44D4D !important; background: #F9DADA !important; border-color: #F9DADA !important; }
+
+/* Desktop: "Para sua empresa" x "Para o Studio" numa grade comparativa (um card branco, linhas alinhadas lado a lado) */
+@media (min-width: 1024px) {
+  #sobre-o-programa .troca-grade { column-gap: 0 !important; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); border-radius: 24px; overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.5), 0 8px 10px -6px rgba(226, 232, 240, 0.5); }
+  #sobre-o-programa .troca-grade::before { display: none; }
+  #sobre-o-programa .lado-troca + .lado-troca { border-left: 1px solid rgba(19, 26, 39, 0.09) !important; }
+  /* cabeçalho de cada coluna (selo, título e descrição) em rosa bem claro */
+  #sobre-o-programa .lado-troca > div.selo-lado { margin: 0 !important; padding: 2rem 2.5rem 1.25rem !important; background: #FDF8F8 !important; }
+  #sobre-o-programa .lado-troca > h3 { margin: 0 !important; padding: 0 2.5rem .75rem; background: #FDF8F8; }
+  #sobre-o-programa .lado-troca > h3 + p { margin: 0 !important; padding: 0 2.5rem 2rem; background: #FDF8F8; }
+  /* cada benefício numa linha da grade, com divisória alinhada entre as colunas */
+  #sobre-o-programa .lado-troca li { margin: 0 !important; padding: 1.25rem 2.5rem; border-top: 1px solid rgba(19, 26, 39, 0.09); align-items: center; }
+  /* compromisso no rodapé da grade */
+  #sobre-o-programa .lado-troca > p:has(.compromisso-icone) { margin: 0 !important; padding: 1.5rem 2.5rem !important; border: 0 !important; border-top: 1px solid rgba(19, 26, 39, 0.09) !important; border-radius: 0 !important; align-self: stretch; }
+}
+
+/* Grade comparativa (desktop), refinada: cabeçalho em degradê suave, divisórias recuadas, selo central de "parceria" e rodapé leve */
+@media (min-width: 1024px) {
+  #sobre-o-programa .troca-grade { border-radius: 28px; border-color: rgba(212, 77, 77, 0.12); box-shadow: 0 1px 2px rgba(13, 17, 25, 0.04), 0 24px 48px -16px rgba(212, 77, 77, 0.14); }
+  #sobre-o-programa .lado-troca + .lado-troca { border-left-color: rgba(212, 77, 77, 0.12) !important; }
+  /* cabeçalho: rosa no topo, clareando até o branco */
+  #sobre-o-programa .lado-troca > div.selo-lado { padding: 2.5rem 3rem 1.25rem !important; background: #FDF2F2 !important; }
+  #sobre-o-programa .lado-troca > h3 { padding: 0 3rem .75rem; background: linear-gradient(#FDF2F2, #FEF8F8); font-size: 1.625rem; letter-spacing: -0.02em; }
+  #sobre-o-programa .lado-troca > h3 + p { position: relative; padding: 0 3rem 2.5rem; background: linear-gradient(#FEF8F8, #FFFFFF); }
+  /* selo central de parceria, sobre a divisória vertical, na passagem do cabeçalho para os benefícios */
+  #sobre-o-programa .lado-troca + .lado-troca > h3 + p::after { content: ""; position: absolute; z-index: 2; left: -1.5rem; bottom: -1.5rem; width: 3rem; height: 3rem; border-radius: 9999px;
+    background: #D44D4D url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m11 17 2 2a1 1 0 1 0 3-3'/%3E%3Cpath d='m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4'/%3E%3Cpath d='m21 3 1 11h-2'/%3E%3Cpath d='M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3'/%3E%3Cpath d='M3 4h8'/%3E%3C/svg%3E") center / 1.375rem no-repeat;
+    box-shadow: 0 0 0 6px #FFFFFF, 0 8px 20px rgba(212, 77, 77, 0.3); }
+  #sobre-o-programa .lado-troca, #sobre-o-programa .troca-grade { overflow: visible; }
+  #sobre-o-programa .troca-grade { overflow: clip; }
+  /* benefícios: divisórias recuadas e sutis, texto com mais respiro */
+  #sobre-o-programa .lado-troca li { position: relative; padding: 1.375rem 3rem; border-top: 0 !important; transition: background-color .2s ease; }
+  #sobre-o-programa .lado-troca li::before { content: ""; position: absolute; top: 0; left: 3rem; right: 3rem; height: 1px; background: #EDF0F5; }
+  #sobre-o-programa .lado-troca li:first-child::before { display: none; }
+  #sobre-o-programa .lado-troca li > span:last-child { font-size: 1rem; color: #283043; }
+  /* rodapé: compromissos numa faixa leve */
+  #sobre-o-programa .lado-troca > p:has(.compromisso-icone) { padding: 1.75rem 3rem !important; background: #FDF8F8 !important; border-top: 1px solid rgba(212, 77, 77, 0.10) !important; }
+  #sobre-o-programa .lado-troca .compromisso-icone { background: #FFFFFF !important; border: 1px solid #F9DADA !important; }
+}
+@media (min-width: 1024px) {
+  #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { background: #FDF8F8 !important; border-color: rgba(212, 77, 77, 0.10) !important; }
+  #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { background: #FFFFFF !important; border: 1px solid #F9DADA !important; }
+}
+
+/* Grade comparativa (desktop), nova proposta: sem o selo central; cabeçalho escuro como uma tabela, linhas zebradas lado a lado e rodapé rosa */
+@media (min-width: 1024px) {
+  #sobre-o-programa .lado-troca + .lado-troca > h3 + p::after { display: none !important; }
+  #sobre-o-programa .troca-grade { border-radius: 24px; border: 1px solid rgba(19, 26, 39, 0.09); box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.6), 0 8px 10px -6px rgba(226, 232, 240, 0.6); }
+  #sobre-o-programa .lado-troca + .lado-troca { border-left: 1px solid rgba(255, 255, 255, 0.08) !important; }
+  /* cabeçalho escuro */
+  #sobre-o-programa .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca > h3, #sobre-o-programa .lado-troca > h3 + p { background: #131A27 !important; }
+  #sobre-o-programa .lado-troca > div.selo-lado { padding: 2.25rem 3rem 1.25rem !important; }
+  #sobre-o-programa .lado-troca > div.selo-lado > p, #sobre-o-programa .lado-troca > div.selo-studio > p { background: transparent !important; border-color: rgba(212, 77, 77, 0.6) !important; color: #D44D4D !important; }
+  #sobre-o-programa .lado-troca > h3 { color: #FFFFFF !important; }
+  #sobre-o-programa .lado-troca > h3 + p { color: #B3BDD0 !important; padding-bottom: 2.25rem; }
+  /* linhas de benefícios: zebradas, alinhadas entre as colunas */
+  #sobre-o-programa .lado-troca li::before { display: none !important; }
+  #sobre-o-programa .lado-troca li { padding: 1.375rem 3rem; background: #FFFFFF; }
+  #sobre-o-programa .lado-troca li:nth-child(even) { background: #F6F7FA; }
+  #sobre-o-programa .lado-troca + .lado-troca li { border-left: 0; }
+  /* rodapé */
+  #sobre-o-programa .lado-troca > p:has(.compromisso-icone), #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { background: #FDF2F2 !important; border-top: 1px solid #F9DADA !important; }
+  #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { border-left: 1px solid #F9DADA; }
+}
+@media (min-width: 1024px) { #sobre-o-programa .lado-troca + .lado-troca { border-left: 1px solid rgba(19, 26, 39, 0.09) !important; } }
+@media (min-width: 1024px) {
+  #sobre-o-programa .lado-troca + .lado-troca { border-left: 0 !important; }
+  #sobre-o-programa .lado-troca + .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca + .lado-troca > h3, #sobre-o-programa .lado-troca + .lado-troca > h3 + p { box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.08); }
+  #sobre-o-programa .lado-troca + .lado-troca li { box-shadow: inset 1px 0 0 rgba(19, 26, 39, 0.07); }
+  #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { border-left: 0 !important; box-shadow: inset 1px 0 0 #F9DADA; }
+}
+
+/* Grade comparativa (desktop), versão leve e moderna: tudo branco, linhas finas contínuas entre as colunas, muito respiro */
+@media (min-width: 1024px) {
+  #sobre-o-programa .troca-grade { background: #FFFFFF !important; border: 1px solid #EDF0F5 !important; border-radius: 24px !important;
+    box-shadow: 0 1px 2px rgba(13, 17, 25, 0.03), 0 12px 32px -12px rgba(13, 17, 25, 0.08) !important; }
+  /* cabeçalho branco */
+  #sobre-o-programa .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca > h3, #sobre-o-programa .lado-troca > h3 + p { background: #FFFFFF !important; box-shadow: none !important; }
+  #sobre-o-programa .lado-troca > div.selo-lado { padding: 2.5rem 3rem 1.25rem !important; }
+  #sobre-o-programa .lado-troca > div.selo-lado > p, #sobre-o-programa .lado-troca > div.selo-studio > p { background: #FDF2F2 !important; border-color: #F9DADA !important; color: #D44D4D !important; }
+  #sobre-o-programa .lado-troca > h3 { color: #131A27 !important; font-size: 1.5rem; padding: 0 3rem .625rem; }
+  #sobre-o-programa .lado-troca > h3 + p { color: #627288 !important; padding: 0 3rem 2rem; }
+  /* linhas: brancas, separadas por fios finos que atravessam as duas colunas */
+  #sobre-o-programa .lado-troca li, #sobre-o-programa .lado-troca li:nth-child(even) { background: #FFFFFF !important; border-top: 1px solid #EDF0F5 !important; padding: 1.25rem 3rem !important; }
+  #sobre-o-programa .lado-troca li > span:last-child { font-size: .9375rem; color: #283043; }
+  /* compromisso: última linha, leve, com o ícone em rosa claro */
+  #sobre-o-programa .lado-troca > p:has(.compromisso-icone), #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { background: #FFFFFF !important; border-top: 1px solid #EDF0F5 !important; padding: 1.5rem 3rem 2rem !important; }
+  #sobre-o-programa .lado-troca .compromisso-icone, #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { background: #FDF2F2 !important; border: 1px solid #F9DADA !important; }
+  /* divisória vertical fina */
+  #sobre-o-programa .lado-troca + .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca + .lado-troca > h3, #sobre-o-programa .lado-troca + .lado-troca > h3 + p,
+  #sobre-o-programa .lado-troca + .lado-troca li, #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { box-shadow: inset 1px 0 0 #EDF0F5 !important; }
+}
+
+/* Desktop: transição do hero no estilo do modelo de referência — hero como painel arredondado com respiro nas bordas
+   e uma aba recortada no centro da base (com cantos côncavos) onde fica o "Saiba mais", na cor da seção seguinte */
+@media (min-width: 1024px) {
+  body:has(#hero.hero-piloto) { background: #FFFFFF; }
+  .hero-piloto { margin-inline: 1rem; margin-top: calc(-1 * var(--altura-cabecalho, 80px) + 1rem) !important; border-radius: 32px; isolation: isolate; }
+  #hero-fundo { border-radius: 32px; }
+  .divisao-hero { background: #FFFFFF !important; padding: 0 !important; }
+  .divisao-hero-cartao { border-radius: 0 !important; max-width: none; }
+  /* aba "Saiba mais" */
+  .rolar-abaixo { bottom: 0 !important; padding: 1rem 2.25rem .875rem !important; border-radius: 28px 28px 0 0 !important; background: #FFFFFF; color: #131A27 !important; text-shadow: none !important; gap: .75rem; }
+  .rolar-abaixo::before, .rolar-abaixo::after { content: ""; position: absolute; bottom: 0; width: 28px; height: 28px; pointer-events: none;
+    background: radial-gradient(circle at 0 0, transparent 27.5px, #FFFFFF 28px); }
+  .rolar-abaixo::before { right: 100%; background: radial-gradient(circle at 0 0, transparent 27.5px, #FFFFFF 28px); }
+  .rolar-abaixo::after { left: 100%; background: radial-gradient(circle at 100% 0, transparent 27.5px, #FFFFFF 28px); }
+  .rolar-abaixo .rolar-seta { border-color: rgba(19, 26, 39, 0.15) !important; background: transparent !important; color: #D44D4D; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .rolar-abaixo:hover .rolar-seta { background: #FDF2F2 !important; }
+  .rolar-abaixo:focus-visible { box-shadow: inset 0 0 0 2px #D44D4D; }
+}
