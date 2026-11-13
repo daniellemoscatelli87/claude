@@ -360,6 +360,37 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-13 · Cards de preço no estilo do card com wobble (publicado: DM v40 e FindLook v63)
+
+- **Origem:** a dona do produto mandou o print do "Card com wobble" (seção Motion do DM) e pediu: "revise o card de preços para parecer mais com, mas misturando o melhor dos dois mundos".
+- **Do card com wobble:**
+  - cantos de 20 px;
+  - ícone do plano em círculo;
+  - selo "Recomendado" com estrela, em caixa alta, com fundo `--primary-muted` e borda primária leve, dentro do card no lugar da etiqueta flutuante;
+  - nome do plano em peso black com tracking negativo;
+  - descrição em cinza;
+  - checks dentro de círculo colorido; o traço dos não incluídos fica em círculo neutro;
+  - divisória e rodapé com o preço à esquerda e o botão à direita. O rodapé empilha quando o card tem menos de cerca de 19rem.
+- **Mantido do card atual:**
+  - seletor Mensal/Anual;
+  - bloco "Para quem" amarelo, neutro no escuro;
+  - 10 recursos, incluídos e não incluídos, com sr-only;
+  - "Selecionar Plano" com seta e estado "Plano selecionado" com `aria-pressed`;
+  - borda 2 px e anel no plano destacado ou selecionado.
+- **Sombra (D-044):**
+  - **DM:** mantém a sombra suave, porque o fundo é graphite-50.
+  - **FindLook:** sem sombra, porque a página é branca.
+- **Correções encontradas na verificação** (também presentes na versão publicada antes):
+  - **Protótipo do painel FindLook:** os 3 cards ficavam com 209 px, e o "Para quem" vazava da caixa. A grade passou a seguir a largura do contêiner (`@container/precos`, 3 colunas a partir de 56rem) em vez da largura da tela.
+  - **Celular (274 px):** o texto de Oportunidades precisava de 5 linhas. O bloco passou de `h-[5.5em]` para `min-h-[5.5em]`: continua com 4 linhas onde cabe e só cresce, em vez de vazar, quando é estreito demais.
+- **Verificação:** `pnpm build` nos dois DS. Playwright em 1440 claro e escuro e em 390 px, no DM (Templates) e no FindLook (protótipo, página "Planos e assinatura"):
+  - "Para quem" sem vazamento em todos os cards;
+  - mesma altura dos cards em 3 colunas;
+  - sem rolagem horizontal;
+  - sem erros de página;
+  - FindLook sem sombra.
+- **Changelog:** entrada nova nos dois DS. Commits DM `7bfa3e7` e FindLook `150176f`; no ar conferido com Playwright nos dois endereços públicos (mesmas medidas).
+
 ## 2026-11-12 · Site: regra de card sobre fundo branco aplicada a todos os cards (PR #81, no ar)
 
 - **Origem:** a dona do produto esclareceu: "a regra não é só pra card de formulário, mas para qualquer card que esteja direto sobre fundo branco". Sobre o fundo #FAFAFA, ela decidiu que não conta como branco: a regra vale só para branco puro.
