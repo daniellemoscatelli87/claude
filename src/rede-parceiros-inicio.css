@@ -952,3 +952,21 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-formatos-lista, .rx-formatos-lista .rx-kanban { min-width: 0; }
 @media (max-width: 1023px) { .rx-formatos-lista { display: block !important; } .rx-formatos-lista .rx-kanban { margin: 0 auto; } }
 .rx-kb-cards { height: 21.5rem; }
+/* Kanban no celular: colunas viram faixas (uma por status), com até 3 cards lado a lado, tudo dentro da tela */
+@media (max-width: 639px) {
+  .rx-kb-quadro { grid-template-columns: 1fr !important; overflow: visible !important; scroll-snap-type: none !important; gap: .5rem; padding: .625rem; }
+  .rx-kb-col { padding: .5rem; }
+  .rx-kb-tit { margin-bottom: .5rem; }
+  .rx-kb-cards { flex-direction: row; height: auto; min-height: 8.25rem; gap: .375rem; }
+  .rx-kb-card { flex: 0 0 calc((100% - .75rem) / 3); min-width: 0; flex-direction: column; gap: .375rem; padding: .5rem; }
+  .rx-kb-corpo strong { font-size: .75rem; }
+  .rx-kb-status { font-size: .625rem; padding: .125rem .375rem; gap: .25rem; max-width: 100%; }
+  .rx-kb-status::before { flex: none; }
+}
+/* Modelo com o ecossistema também no celular: acima do gráfico, com a mão apontando para ele */
+@media (max-width: 1023px) {
+  .rx-orbita-area { flex-direction: column; align-items: center; }
+  .rx-modelo-aponta { display: block; width: min(300px, 78%); height: auto; margin: 0 auto -1.5rem; position: relative; left: -8%; z-index: 0; }
+  .rx-orbita-area .rx-orbita { position: relative; z-index: 1; }
+}
+@media (max-width: 639px) { .rx-kb-status { white-space: normal; line-height: 1.2; padding: .1875rem .375rem; } .rx-kb-status::before { align-self: center; } }
