@@ -108,10 +108,11 @@ body.parceiros-inicio { font-family: "Plus Jakarta Sans", sans-serif; background
 @media (prefers-reduced-motion: reduce) { .rp-botao, .rp-botao svg, .rp-convite { transition: none; } }
 
 /* ---------- Passagens suaves entre as seções (sem divisória marcada) ---------- */
-.rp-hero { background: linear-gradient(to bottom, #FFFFFF 0%, #FDF2F2 70%, #EDF0F5 100%); }
-.rp-fundo-g50 { background: #EDF0F5; }
-.rp-de-g50 { background: linear-gradient(to bottom, #EDF0F5 0, #FFFFFF 160px); }
-#formatos.rp-fundo-g50 { background: linear-gradient(to bottom, #FFFFFF 0, #EDF0F5 160px); }
+@media (max-width: 767px) {
+  .rp-hero { background: linear-gradient(to bottom, #FFFFFF 0%, #FDF2F2 70%, #EDF0F5 100%); }
+  .rp-de-g50 { background: linear-gradient(to bottom, #EDF0F5 0, #FFFFFF 160px); }
+  #formatos.rp-fundo-g50 { background: linear-gradient(to bottom, #FFFFFF 0, #EDF0F5 160px); }
+}
 
 /* ---------- Botões flutuantes (mesmo padrão do Projeto Piloto) ---------- */
 .cta-flutuante { position: fixed; z-index: 44; right: 88px; bottom: 24px; display: inline-flex; align-items: center; justify-content: center; gap: .5rem; height: 3rem; padding: 0 1.25rem;
@@ -157,3 +158,8 @@ body.parceiros-inicio { font-family: "Plus Jakarta Sans", sans-serif; background
 .cadastro-tela iframe { flex: 1; width: 100%; border: 0; background: #FFFFFF; }
 html.cadastro-aberto { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .cadastro-tela, .cadastro-tela.aberta { transition: none; } }
+
+/* Botões flutuantes e cadastro em tela cheia: só no celular */
+@media (min-width: 768px) { .cta-flutuante, .botao-subir, .cadastro-tela { display: none !important; } }
+/* Rodapé escuro (mesmo do Projeto Piloto) */
+.parceiros-inicio footer.relative { position: relative; }
