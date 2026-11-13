@@ -666,3 +666,6 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .hero-piloto { padding-bottom: calc(5.5rem + 3.25rem) !important; }
   .hero-card { min-height: calc(70svh - 8.75rem); }
 }
+/* seta do "Saiba mais" menor */
+.rolar-seta { width: 2rem !important; height: 2rem !important; }
+.rolar-seta svg { width: 1rem; height: 1rem; }
