@@ -1356,3 +1356,9 @@ footer.relative { padding-top: 4rem; }
 #inscricao .convite-card { position: relative; z-index: 1; }
 main + footer.relative { margin-top: 0; padding-top: 4rem !important; }
 @media (max-width: 767px) { #inscricao { background: linear-gradient(to bottom, transparent calc(100% - 6rem), #131A27 calc(100% - 6rem)), #EDF0F5 !important; } }
+/* rodapé com o mesmo fundo da seção escura (Escopo): base #0D1119 com as manchas de luz vinho e grafite */
+.rodape-escuro { isolation: isolate; }
+.rodape-escuro > .fundo-gradiente { z-index: -1; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 140px); mask-image: linear-gradient(to bottom, transparent 0, #000 140px); }
+.rodape-escuro > :not(.fundo-gradiente) { position: relative; z-index: 1; }
+#inscricao { background: linear-gradient(to bottom, transparent calc(100% - 9rem), #0D1119 calc(100% - 9rem)), #EDF0F5 !important; }
+@media (max-width: 767px) { #inscricao { background: linear-gradient(to bottom, transparent calc(100% - 6rem), #0D1119 calc(100% - 6rem)), #EDF0F5 !important; } }
