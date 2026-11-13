@@ -758,3 +758,31 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   /* compromisso no rodapé da grade */
   #sobre-o-programa .lado-troca > p:has(.compromisso-icone) { margin: 0 !important; padding: 1.5rem 2.5rem !important; border: 0 !important; border-top: 1px solid rgba(19, 26, 39, 0.09) !important; border-radius: 0 !important; align-self: stretch; }
 }
+
+/* Grade comparativa (desktop), refinada: cabeçalho em degradê suave, divisórias recuadas, selo central de "parceria" e rodapé leve */
+@media (min-width: 1024px) {
+  #sobre-o-programa .troca-grade { border-radius: 28px; border-color: rgba(212, 77, 77, 0.12); box-shadow: 0 1px 2px rgba(13, 17, 25, 0.04), 0 24px 48px -16px rgba(212, 77, 77, 0.14); }
+  #sobre-o-programa .lado-troca + .lado-troca { border-left-color: rgba(212, 77, 77, 0.12) !important; }
+  /* cabeçalho: rosa no topo, clareando até o branco */
+  #sobre-o-programa .lado-troca > div.selo-lado { padding: 2.5rem 3rem 1.25rem !important; background: #FDF2F2 !important; }
+  #sobre-o-programa .lado-troca > h3 { padding: 0 3rem .75rem; background: linear-gradient(#FDF2F2, #FEF8F8); font-size: 1.625rem; letter-spacing: -0.02em; }
+  #sobre-o-programa .lado-troca > h3 + p { position: relative; padding: 0 3rem 2.5rem; background: linear-gradient(#FEF8F8, #FFFFFF); }
+  /* selo central de parceria, sobre a divisória vertical, na passagem do cabeçalho para os benefícios */
+  #sobre-o-programa .lado-troca + .lado-troca > h3 + p::after { content: ""; position: absolute; z-index: 2; left: -1.5rem; bottom: -1.5rem; width: 3rem; height: 3rem; border-radius: 9999px;
+    background: #D44D4D url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m11 17 2 2a1 1 0 1 0 3-3'/%3E%3Cpath d='m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4'/%3E%3Cpath d='m21 3 1 11h-2'/%3E%3Cpath d='M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3'/%3E%3Cpath d='M3 4h8'/%3E%3C/svg%3E") center / 1.375rem no-repeat;
+    box-shadow: 0 0 0 6px #FFFFFF, 0 8px 20px rgba(212, 77, 77, 0.3); }
+  #sobre-o-programa .lado-troca, #sobre-o-programa .troca-grade { overflow: visible; }
+  #sobre-o-programa .troca-grade { overflow: clip; }
+  /* benefícios: divisórias recuadas e sutis, texto com mais respiro */
+  #sobre-o-programa .lado-troca li { position: relative; padding: 1.375rem 3rem; border-top: 0 !important; transition: background-color .2s ease; }
+  #sobre-o-programa .lado-troca li::before { content: ""; position: absolute; top: 0; left: 3rem; right: 3rem; height: 1px; background: #EDF0F5; }
+  #sobre-o-programa .lado-troca li:first-child::before { display: none; }
+  #sobre-o-programa .lado-troca li > span:last-child { font-size: 1rem; color: #283043; }
+  /* rodapé: compromissos numa faixa leve */
+  #sobre-o-programa .lado-troca > p:has(.compromisso-icone) { padding: 1.75rem 3rem !important; background: #FDF8F8 !important; border-top: 1px solid rgba(212, 77, 77, 0.10) !important; }
+  #sobre-o-programa .lado-troca .compromisso-icone { background: #FFFFFF !important; border: 1px solid #F9DADA !important; }
+}
+@media (min-width: 1024px) {
+  #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { background: #FDF8F8 !important; border-color: rgba(212, 77, 77, 0.10) !important; }
+  #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { background: #FFFFFF !important; border: 1px solid #F9DADA !important; }
+}
