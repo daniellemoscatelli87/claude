@@ -54,6 +54,10 @@ html.embutido .modal-fechar:hover { background: rgba(255, 255, 255, 0.15); color
 html.embutido .modal-fechar:focus-visible { box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7); }
 html.embutido .modal-topo .progress { background: rgba(255, 255, 255, 0.3); }
 html.embutido .modal-topo .progress > div { background: #FFFFFF; }
+/* "Seção N" como selo (mesmo padrão da tag do hero) */
+h2 small { display: flex !important; align-items: center; gap: 8px; width: fit-content; margin-bottom: 12px !important; padding: 4px 12px; border-radius: 9999px;
+  background: #FDF2F2; border: 1px solid #F9DADA; color: #D44D4D; font-size: 12px; font-weight: 600; letter-spacing: .08em; line-height: 1.5; }
+h2 small::before { content: ""; width: 6px; height: 6px; border-radius: 9999px; background: #D44D4D; flex: none; }
 /* aviso dos campos obrigatórios no rodapé: à esquerda no desktop, centralizado acima do botão no celular */
 html.embutido .nav-bar .modal-obs { margin: 0 0 8px; color: #495669; text-align: center; }
 html.embutido .nav-bar .modal-obs span[aria-hidden] { color: #D44D4D; }
