@@ -1047,3 +1047,21 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-seg[data-cor="azul"]     { --cor: #448ABC; --fundo: #E3EDF5; --borda: #B4D0E4; }
 .rx-seg[data-cor="verde"]    { --cor: #4FB57B; --fundo: #E5F4EB; --borda: #B9E1CA; }
 .rx-orbita-area .rx-centro { background: #FAEAEA !important; color: #D44D4D !important; border: 1px solid #F2CACA !important; box-shadow: 0 0 30px 6px rgba(212, 77, 77, 0.15), 0 16px 48px rgba(13, 17, 25, 0.10) !important; }
+/* Citação abaixo da modelo (fonte de destaque do DS para citações: Fraunces itálico) */
+.rx-modelo-col { margin: 0; display: flex; flex-direction: column; align-items: center; }
+.rx-citacao { position: relative; margin: 0; padding: 0 0 0 1.25rem; border-left: 2px solid #D44D4D; text-align: left; }
+.rx-citacao p { margin: 0; font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.0625rem; line-height: 1.55; color: #283043; }
+.rx-citacao .rp-destaque { color: #D44D4D; }
+@media (min-width: 1024px) {
+  .rx-modelo-col { flex: none; width: 414px; margin: 0 1.5rem 0 -7rem; }
+  .rx-modelo-col .rx-modelo-aponta { width: 100% !important; margin: 0 !important; top: 0 !important; }
+  .rx-citacao { margin-top: 1.25rem; max-width: 22rem; }
+}
+@media (min-width: 1024px) and (max-width: 1279px) { .rx-modelo-col { width: 369px; margin-left: -5rem; } }
+@media (max-width: 1023px) {
+  .rx-modelo-col { width: 100%; max-width: 24rem; margin: 0 auto 1.75rem; }
+  .rx-citacao p { font-size: 1rem; }
+}
+.rx-orbita-area { margin-top: 0 !important; }
+.rx-orbita-area { margin-top: 3rem !important; }
+@media (max-width: 1023px) { .rx-orbita-area { margin-top: 2.5rem !important; } }
