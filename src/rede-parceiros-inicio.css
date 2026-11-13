@@ -715,3 +715,54 @@ body.parceiros-inicio { background: #EEF2F7 linear-gradient(#FFFFFF, #FFFFFF) to
 }
 @media (max-width: 1023px) { .rp-modelo-sobe { max-width: 520px; } }
 @media (min-width: 1024px) { .rp-hero-grade { grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr) !important; } .rp-h1-linha { white-space: nowrap; } }
+
+/* HERO com a diagramação da Experience Intelligence 3: grade de 12 colunas (texto 7, imagem 5) em 72rem,
+   selo branco com ponto pulsando, título 2.65rem, texto 17px, CTA + "Como funciona" com seta; a imagem
+   sobe 50px e o pé dela fica por trás da folha branca, que começa logo abaixo (cantos de 56px) */
+.rp-hero { min-height: 0 !important; display: block !important; padding: 2rem 0 3rem !important; overflow: visible !important; background: transparent !important; }
+@media (min-width: 768px) { .rp-hero { padding-top: 3.5rem !important; } }
+@media (min-width: 1024px) { .rp-hero { padding-bottom: 0 !important; } }
+.rp-hero > .rp-container { max-width: 72rem; }
+.rp-hero-grade { display: grid; grid-template-columns: 1fr !important; gap: 2rem !important; align-items: center !important; }
+@media (min-width: 1024px) { .rp-hero-grade { grid-template-columns: 7fr 5fr !important; } }
+.rp-hero-texto { align-self: center !important; padding-bottom: 0 !important; display: flex; flex-direction: column; align-items: flex-start; position: relative; z-index: 10; }
+.rp-hero .rp-selo { margin-bottom: 2rem; padding: .375rem 1rem; background: rgba(255, 255, 255, 0.95); border: 1px solid #B3BDD0; color: #283043; box-shadow: 0 1px 2px rgba(13, 17, 25, 0.05); }
+.rp-hero .rp-selo span { position: relative; }
+@media (prefers-reduced-motion: no-preference) { .rp-hero .rp-selo span::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: #D44D4D; opacity: .75; animation: rp-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; } }
+@keyframes rp-ping { 75%, 100% { transform: scale(2); opacity: 0; } }
+.rp-hero h1 { margin: 0 0 2rem !important; font-size: 1.875rem !important; font-weight: 700; line-height: 1.18 !important; letter-spacing: -0.025em; }
+@media (min-width: 640px) { .rp-hero h1 { font-size: 2.25rem !important; } }
+@media (min-width: 1024px) { .rp-hero h1 { font-size: 2.65rem !important; } }
+.rp-h1-linha { white-space: normal !important; }
+.rp-hero .rp-lead { margin: 0 0 2.5rem !important; max-width: 36rem; font-size: 1rem; line-height: 1.65; color: #495669; }
+@media (min-width: 640px) { .rp-hero .rp-lead { font-size: 17px; } }
+.rp-hero .rp-acoes { margin-top: 0 !important; gap: 1rem; }
+.rp-hero .rp-botao { padding: .75rem 1.5rem; font-size: .875rem; }
+.rp-link-seta { display: inline-flex; align-items: center; gap: .375rem; padding: .75rem 1.25rem; color: #495669 !important; text-decoration: none !important; }
+.rp-link-seta svg { width: 1rem; height: 1rem; color: #8898B0; }
+.rp-link-seta:hover { color: #D44D4D !important; }
+/* imagem: coluna da direita, sobe 50px e o pé fica por trás da folha */
+.rp-hero-modelo { align-self: end !important; display: flex; justify-content: center; overflow: visible !important; position: relative; pointer-events: none; }
+@media (min-width: 1024px) { .rp-hero-modelo { justify-content: flex-end; margin-bottom: -6rem; transform: translateY(-50px); } }
+.rp-modelo-sobe { width: 100%; max-width: 360px; }
+@media (min-width: 640px) { .rp-modelo-sobe { max-width: 400px; } }
+@media (min-width: 1024px) { .rp-modelo-sobe { max-width: 460px; } }
+.rp-modelo-sobe img { width: 100% !important; height: auto !important; max-height: none !important; filter: drop-shadow(0 20px 25px rgba(13, 17, 25, 0.10)); }
+/* folha branca logo abaixo, por cima do pé da imagem */
+.rx-folha { position: relative; z-index: 20; max-width: 1400px; margin: 43px auto 1.5rem !important; border-radius: 36px; border: 1px solid rgba(226, 232, 240, 0.7); }
+@media (min-width: 640px) { .rx-folha { border-radius: 48px; margin-left: 1rem !important; margin-right: 1rem !important; } }
+@media (min-width: 1024px) { .rx-folha { border-radius: 56px; margin-left: 1.5rem !important; margin-right: 1.5rem !important; } }
+@media (min-width: 1448px) { .rx-folha { margin-left: auto !important; margin-right: auto !important; } }
+@media (max-width: 1023px) { .rp-hero-texto { align-items: center; text-align: center; } .rp-hero .rp-acoes { justify-content: center; } .rp-hero-modelo { margin-bottom: -4.5rem; } }
+body.parceiros-inicio { background: #EEF2F7 !important; }
+.rp-hero { padding-top: 5.75rem !important; }
+@media (max-width: 1023px) { .rp-hero { padding-top: 2.5rem !important; } }
+.rp-hero .rp-selo { font-size: .75rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #283043; }
+.rp-hero h1 { margin-bottom: 2.25rem !important; }
+.rp-prova { display: flex; align-items: center; gap: .875rem; margin: 0 0 2.5rem; }
+.rp-prova-avs { display: flex; flex: none; }
+.rp-prova-avs img { width: 2rem; height: 2rem; border-radius: 9999px; object-fit: cover; box-shadow: 0 0 0 2px #FFFFFF; }
+.rp-prova-avs img + img { margin-left: -.5rem; }
+.rp-prova p { margin: 0; max-width: 24rem; font-size: .875rem; font-weight: 500; line-height: 1.35; color: #495669; }
+@media (min-width: 1024px) { .rp-modelo-sobe { max-width: 540px; } }
+@media (max-width: 1023px) { .rp-prova { justify-content: center; text-align: left; } }
