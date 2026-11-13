@@ -814,3 +814,24 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   #sobre-o-programa .lado-troca + .lado-troca li { box-shadow: inset 1px 0 0 rgba(19, 26, 39, 0.07); }
   #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { border-left: 0 !important; box-shadow: inset 1px 0 0 #F9DADA; }
 }
+
+/* Grade comparativa (desktop), versão leve e moderna: tudo branco, linhas finas contínuas entre as colunas, muito respiro */
+@media (min-width: 1024px) {
+  #sobre-o-programa .troca-grade { background: #FFFFFF !important; border: 1px solid #EDF0F5 !important; border-radius: 24px !important;
+    box-shadow: 0 1px 2px rgba(13, 17, 25, 0.03), 0 12px 32px -12px rgba(13, 17, 25, 0.08) !important; }
+  /* cabeçalho branco */
+  #sobre-o-programa .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca > h3, #sobre-o-programa .lado-troca > h3 + p { background: #FFFFFF !important; box-shadow: none !important; }
+  #sobre-o-programa .lado-troca > div.selo-lado { padding: 2.5rem 3rem 1.25rem !important; }
+  #sobre-o-programa .lado-troca > div.selo-lado > p, #sobre-o-programa .lado-troca > div.selo-studio > p { background: #FDF2F2 !important; border-color: #F9DADA !important; color: #D44D4D !important; }
+  #sobre-o-programa .lado-troca > h3 { color: #131A27 !important; font-size: 1.5rem; padding: 0 3rem .625rem; }
+  #sobre-o-programa .lado-troca > h3 + p { color: #627288 !important; padding: 0 3rem 2rem; }
+  /* linhas: brancas, separadas por fios finos que atravessam as duas colunas */
+  #sobre-o-programa .lado-troca li, #sobre-o-programa .lado-troca li:nth-child(even) { background: #FFFFFF !important; border-top: 1px solid #EDF0F5 !important; padding: 1.25rem 3rem !important; }
+  #sobre-o-programa .lado-troca li > span:last-child { font-size: .9375rem; color: #283043; }
+  /* compromisso: última linha, leve, com o ícone em rosa claro */
+  #sobre-o-programa .lado-troca > p:has(.compromisso-icone), #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { background: #FFFFFF !important; border-top: 1px solid #EDF0F5 !important; padding: 1.5rem 3rem 2rem !important; }
+  #sobre-o-programa .lado-troca .compromisso-icone, #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { background: #FDF2F2 !important; border: 1px solid #F9DADA !important; }
+  /* divisória vertical fina */
+  #sobre-o-programa .lado-troca + .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca + .lado-troca > h3, #sobre-o-programa .lado-troca + .lado-troca > h3 + p,
+  #sobre-o-programa .lado-troca + .lado-troca li, #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { box-shadow: inset 1px 0 0 #EDF0F5 !important; }
+}
