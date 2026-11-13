@@ -498,3 +498,14 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 #cadastro-gaveta .text-coral-600 { color: #B82828; }
 #cadastro-gaveta button.bg-coral-600 { background-color: #B82828; }
 #cadastro-gaveta button.bg-coral-600:hover { background-color: #8C1B1B; }
+
+/* Celular: faixa escura com desfoque no pé da tela, por trás dos botões flutuantes (só quando eles aparecem) */
+.faixa-flutuante { display: none; }
+@media (max-width: 767px) {
+  .faixa-flutuante { display: block; position: fixed; left: 0; right: 0; bottom: 0; height: 7.5rem; z-index: 43; pointer-events: none;
+    background: linear-gradient(to top, rgba(13, 17, 25, 0.6) 0%, rgba(13, 17, 25, 0.35) 45%, rgba(13, 17, 25, 0) 100%);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    -webkit-mask-image: linear-gradient(to top, #000 40%, transparent); mask-image: linear-gradient(to top, #000 40%, transparent);
+    opacity: 0; transition: opacity .3s ease; }
+  body:has(.cta-flutuante.visivel) .faixa-flutuante, body:has(.botao-subir.visivel) .faixa-flutuante { opacity: 1; }
+}
