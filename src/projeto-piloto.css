@@ -814,3 +814,34 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .hero-forma-circulo { animation: hero-forma-gira 18s ease-in-out infinite alternate !important; }
 }
 @keyframes hero-forma-gira { from { rotate: -4deg; } to { rotate: 5deg; } }
+
+/* =========================================================================
+   HERO, máscara "conversa": duas formas circulares sobrepostas (cliente à esquerda, Dani à direita),
+   como dois balões de diálogo que se encontram; a intersecção recebe o vermelho da marca em mistura (o encontro studio + cliente);
+   contornos finos deslocados ecoam as formas. Rosto da modelo inteiro.
+   ========================================================================= */
+#hero-fundo img {
+  aspect-ratio: 1 / 1; height: auto !important; object-fit: cover !important; object-position: 0% 50% !important;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='27' cy='56' r='27'/%3E%3Ccircle cx='63' cy='43' r='36'/%3E%3C/svg%3E") center / 100% 100% no-repeat !important;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='27' cy='56' r='27'/%3E%3Ccircle cx='63' cy='43' r='36'/%3E%3C/svg%3E") center / 100% 100% no-repeat !important;
+  filter: saturate(1.1) contrast(1.05) brightness(1.12); }
+/* contornos deslocados (eco das duas formas) */
+.hero-forma-circulo { aspect-ratio: 1 / 1; height: auto !important; opacity: 1 !important; -webkit-mask: none !important; mask: none !important; animation: none !important; rotate: none !important;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke-width='.35'%3E%3Ccircle cx='27' cy='56' r='27' stroke='%23D44D4D'/%3E%3Ccircle cx='63' cy='43' r='36' stroke='%23B3BDD0' stroke-opacity='.55'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat !important; }
+/* intersecção em vermelho com mistura de cor */
+.hero-forma-linhas { aspect-ratio: 1 / 1; height: auto !important; border-radius: 0 !important; opacity: .85 !important; mix-blend-mode: color !important;
+  background: linear-gradient(160deg, #D44D4D, #8C1B1B) !important;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3CclipPath id='a'%3E%3Ccircle cx='27' cy='56' r='27'/%3E%3C/clipPath%3E%3Ccircle cx='63' cy='43' r='36' clip-path='url(%23a)'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3CclipPath id='a'%3E%3Ccircle cx='27' cy='56' r='27'/%3E%3C/clipPath%3E%3Ccircle cx='63' cy='43' r='36' clip-path='url(%23a)'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+@media (min-width: 1024px) {
+  #hero-fundo img, .hero-forma-linhas { left: 5% !important; top: 13% !important; width: min(42vw, 72vh) !important; right: auto !important; }
+  .hero-forma-circulo { left: calc(5% + 1.25rem) !important; top: calc(13% + 1rem) !important; width: min(42vw, 72vh) !important; }
+  .hero-chips { left: 4% !important; bottom: 9% !important; }
+}
+@media (max-width: 1023px) {
+  #hero-fundo img, .hero-forma-linhas, .hero-forma-circulo { left: 50% !important; translate: -50% 0; top: 4.75rem !important; width: min(92vw, 23rem) !important; }
+  .hero-forma-circulo { left: calc(50% + .75rem) !important; top: calc(4.75rem + .6rem) !important; }
+  .hero-piloto { padding-top: calc(4.75rem + min(92vw, 23rem) + 1.5rem) !important; }
+}
+.hero-forma-linhas { opacity: .5 !important; }
+@media (min-width: 1024px) { .hero-chips { bottom: 15% !important; left: 3% !important; } }
