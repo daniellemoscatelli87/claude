@@ -100,65 +100,105 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   }, 4500);
 })();
 
-/* ---------- Hero: Lista animada (componente do DS): animação de novos cadastros (sem nomes, data ou hora) ---------- */
+/* ---------- Formatos de parceria: kanban animado de projetos (exemplos) ----------
+   Cada card é um projeto: avatar do profissional (pessoa fictícia gerada por IA), tipo de projeto e status.
+   A cada poucos segundos um card avança de coluna (A iniciar → Em andamento → Entregue → volta ao início). */
 (() => {
-  const lista = document.querySelector<HTMLUListElement>('.rp-lista-itens');
-  const pausa = document.querySelector<HTMLButtonElement>('.rp-lista-pausa');
-  if (!lista) return;
-  // Avatares gerados por IA (pessoas fictícias), em public/rede-parceiros/avatares/.
-  // Papéis variados conforme os perfis e setores que a rede procura.
-  const papeis = [
-    'UX/UI Designer', 'Service Designer', 'Pesquisa em UX', 'Consultoria de Negócios', 'Desenvolvimento Front-end',
-    'Arquitetura de Soluções', 'Ciência de Dados', 'Especialista em IA', 'Gestão de Inovação', 'Especialista em Saúde',
-    'Especialista em Hospitalidade', 'Especialista em Educação', 'Especialista em Varejo', 'Especialista em Serviços financeiros',
-    'Especialista em Indústria', 'Product Designer', 'Desenvolvimento Back-end', 'Análise de Dados',
+  const quadro = document.querySelector<HTMLElement>('.rx-kb-quadro');
+  const pausa = document.querySelector<HTMLButtonElement>('.rx-kanban .rp-lista-pausa');
+  if (!quadro) return;
+  const STATUS = ['A iniciar', 'Em andamento', 'Entregue'];
+  const projetos = [
+    { tipo: 'Pesquisa com pacientes', av: 3, s: 1 },
+    { tipo: 'Jornada de check-in de hotel', av: 2, s: 0 },
+    { tipo: 'App de matrícula escolar', av: 1, s: 1 },
+    { tipo: 'Painel de vendas do varejo', av: 4, s: 2 },
+    { tipo: 'Onboarding de conta digital', av: 5, s: 0 },
+    { tipo: 'Automação com IA na fábrica', av: 2, s: 2 },
+    { tipo: 'Treinamento da equipe de atendimento', av: 5, s: 1 },
   ];
-  let n = 0;
-  const criar = (animar: boolean) => {
+  const cols = Array.from(quadro.querySelectorAll<HTMLElement>('.rx-kb-col'));
+  const listas = cols.map((c) => c.querySelector<HTMLUListElement>('.rx-kb-cards')!);
+  const cards = projetos.map((p) => {
     const li = document.createElement('li');
-    if (animar) li.className = 'entrando';
-    const papel = papeis[n % papeis.length];
-    li.innerHTML = `<span class="rp-lista-avatar"><img src="/rede-parceiros/avatares/avatar-${(n % 5) + 1}.webp" alt="" width="40" height="40" loading="lazy"></span><span class="rp-lista-corpo"><strong>${papel}</strong><span class="txt">Novo cadastro na Rede de Parceiros</span></span>`;
-    n++;
+    li.className = 'rx-kb-card';
+    li.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="32" height="32" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-status"></span><span class="rx-kb-barra" aria-hidden="true"><i></i></span></span>`;
     return li;
+  });
+  // progresso de cada projeto: A iniciar = 0, Em andamento = avança aos poucos, Entregue = 100
+  const prog = projetos.map((p) => (p.s === 0 ? 0 : p.s === 2 ? 100 : 25 + Math.round(Math.random() * 35)));
+  const pintar = (i: number) => { cards[i].querySelector<HTMLElement>('.rx-kb-barra i')!.style.width = `${prog[i]}%`; };
+  const aplicarStatus = (i: number) => {
+    const st = cards[i].querySelector<HTMLElement>('.rx-kb-status')!;
+    st.textContent = STATUS[projetos[i].s];
+    st.dataset.s = String(projetos[i].s);
   };
-  for (let i = 4; i >= 0; i--) lista.insertBefore(criar(false), lista.firstChild);
-  const ICO_PAUSA = '<span class="rp-ico-pausa" aria-hidden="true"><i></i><i></i></span>';
-  const ICO_PLAY = '<svg class="rp-ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>';
+  const contar = () => cols.forEach((c, k) => { c.querySelector('.rx-kb-qtd')!.textContent = String(listas[k].children.length); });
+  cards.forEach((li, i) => { aplicarStatus(i); listas[projetos[i].s].appendChild(li); });
+  cards.forEach((_, i) => pintar(i));
+  contar();
+  // Celular: no lugar do quadro, um card de tarefa único (foto + tarefa + status) que mostra o projeto que acabou de mudar
+  const unico = document.createElement('div');
+  unico.className = 'rx-kb-unico';
+  unico.setAttribute('aria-live', 'off');
+  quadro.after(unico);
+  const mostrarUnico = (i: number, animar: boolean) => {
+    const p = projetos[i];
+    unico.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="48" height="48" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-status" data-s="${p.s}">${STATUS[p.s]}</span></span>`;
+    if (animar && unico.offsetParent) unico.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
+  };
+  let unicoVez = 0; // no celular o card percorre os projetos em sequência: a cada troca, outro projeto e outro profissional
+  mostrarUnico(0, false);
   const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let pausado = reduzido;
+  const ICO_PAUSA = '<span class="rp-ico-pausa" aria-hidden="true"><i></i><i></i></span>';
+  const ICO_PLAY = '<svg class="rp-ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>';
   if (pausa) {
     pausa.innerHTML = reduzido ? ICO_PLAY + 'Retomar' : ICO_PAUSA + 'Pausar';
-    if (reduzido) pausa.setAttribute('aria-pressed', 'true');
+    pausa.setAttribute('aria-pressed', String(reduzido));
     pausa.addEventListener('click', () => {
       pausado = !pausado;
       pausa.innerHTML = pausado ? ICO_PLAY + 'Retomar' : ICO_PAUSA + 'Pausar';
       pausa.setAttribute('aria-pressed', String(pausado));
     });
   }
-  // Mesma coreografia da Lista animada do DS: o novo item cai do topo (mola), os demais deslizam para baixo
-  // (animação de layout) e o último sai para a direita, esmaecendo.
   const MOLA = 'cubic-bezier(0.34, 1.32, 0.64, 1)';
+  let vez = 0;
   const avancar = () => {
-    const antes = new Map<Element, number>();
-    Array.from(lista.children).forEach((el) => antes.set(el, (el as HTMLElement).getBoundingClientRect().top));
-    const saindo = lista.children.length >= 5 ? (lista.lastElementChild as HTMLElement) : null;
-    if (saindo) {
-      const r = saindo.getBoundingClientRect(), base = lista.getBoundingClientRect();
-      saindo.style.position = 'absolute'; saindo.style.left = `${r.left - base.left}px`; saindo.style.top = `${r.top - base.top}px`; saindo.style.width = `${r.width}px`;
-      saindo.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(60px) scale(.9)' }], { duration: 200, easing: 'ease-in', fill: 'forwards' })
-        .finished.then(() => saindo.remove());
-    }
-    const novo = criar(false);
-    lista.insertBefore(novo, lista.firstChild);
-    novo.animate([{ opacity: 0, transform: 'translateY(-32px) scale(.93)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: MOLA });
-    antes.forEach((y, el) => {
-      if (el === saindo) return;
-      const dy = y - (el as HTMLElement).getBoundingClientRect().top;
-      if (dy) (el as HTMLElement).animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 520, easing: MOLA });
+    // rodízio em 3 passos (Entregue → A iniciar, Em andamento → Entregue, A iniciar → Em andamento):
+    // cada coluna fica sempre com 1 a 3 cards, então a altura do quadro não muda
+    const origem = [2, 1, 0][vez % 3]; vez++;
+    const primeiro = listas[origem].firstElementChild as HTMLLIElement | null;
+    if (!primeiro) return;
+    const i = cards.indexOf(primeiro);
+    const antes = new Map<HTMLElement, DOMRect>();
+    cards.forEach((c) => antes.set(c, c.getBoundingClientRect()));
+    projetos[i].s = (projetos[i].s + 1) % 3;
+    prog[i] = projetos[i].s === 0 ? 0 : projetos[i].s === 2 ? 100 : 6;
+    pintar(i);
+    aplicarStatus(i);
+    const destino = listas[projetos[i].s];
+    destino.appendChild(cards[i]);
+    contar();
+    // animação de layout (FLIP): o card viaja até a nova coluna; os demais se reacomodam
+    antes.forEach((r, c) => {
+      const n = c.getBoundingClientRect();
+      const dx = r.left - n.left, dy = r.top - n.top;
+      if (!dx && !dy) return;
+      c.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], { duration: c === cards[i] ? 650 : 450, easing: MOLA });
     });
+    unicoVez = (unicoVez + 1) % projetos.length;
+    mostrarUnico(unicoVez, true);
+    cards[i].animate([{ boxShadow: '0 0 0 2px rgba(212, 77, 77, 0.45)' }, { boxShadow: '0 0 0 2px rgba(212, 77, 77, 0)' }], { duration: 1400, easing: 'ease-out' });
   };
-  setInterval(() => { if (!pausado && !document.hidden) avancar(); }, 2000);
+  let visivel = false;
+  new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }, { threshold: 0.3 }).observe(quadro.closest('.rx-kanban') || quadro);
+  // ritmo moderado: um card muda de coluna a cada 3,2 s e, entre uma mudança e outra, as barras dos projetos em andamento avançam
+  setInterval(() => { if (!pausado && visivel && !document.hidden) avancar(); }, 3200);
+  setInterval(() => {
+    if (pausado || !visivel || document.hidden) return;
+    projetos.forEach((p, i) => { if (p.s === 1 && prog[i] < 94) { prog[i] = Math.min(94, prog[i] + 2 + Math.round(Math.random() * 4)); pintar(i); } });
+  }, 800);
 })();
 
 /* ---------- Checklist: o check de cada item é desenhado quando ele entra na tela, um após o outro ---------- */
@@ -181,9 +221,9 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
 (() => {
   const orbita = document.querySelector<HTMLElement>('.rx-orbita');
   if (!orbita) return;
-  const avs = Array.from(orbita.querySelectorAll<HTMLButtonElement>('.rx-av'));
-  const dica = orbita.querySelector<HTMLElement>('.rx-dica')!;
-  const DUR = [48, 72, 96]; // segundos por volta: movimento lento e legível
+  const avs = Array.from(orbita.querySelectorAll<HTMLElement>('.rx-av, .rx-seg'));
+  const dica = orbita.querySelector<HTMLElement>('.rx-dica');
+  const DUR = [22, 34, 46]; // segundos por volta: movimento lento e legível
   const ang = [0, 0, 0];
   let pausado = false, ultimo = 0, visivel = false, ativo: HTMLButtonElement | null = null;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)');
@@ -204,7 +244,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   new ResizeObserver(posicionar).observe(orbita);
   const descricao = (i: string) => document.querySelector<HTMLTemplateElement>(`.rx-quem-texto template[data-i="${i}"]`)?.content.querySelector('p')?.textContent || '';
   const mostrar = (b: HTMLButtonElement) => {
-    if (ativo === b) return;
+    if (ativo === b || !dica) return;
     ativo = b;
     avs.forEach((x) => x.classList.toggle('ativo', x === b));
     const ro = orbita.getBoundingClientRect(), rb = b.getBoundingClientRect();
@@ -215,13 +255,13 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     dica.classList.toggle('abaixo', rb.top - ro.top < 120);
     dica.hidden = false;
   };
-  const limpar = () => { ativo = null; dica.hidden = true; avs.forEach((x) => x.classList.remove('ativo')); };
+  const limpar = () => { ativo = null; if (dica) dica.hidden = true; avs.forEach((x) => x.classList.remove('ativo')); };
   // pausa enquanto o ponteiro estiver em qualquer parte do ecossistema; troca de avatar sem retomar o giro
   orbita.addEventListener('pointerenter', () => { pausado = true; });
   orbita.addEventListener('pointerleave', () => { pausado = false; limpar(); });
   orbita.addEventListener('pointerover', (e) => { const b = (e.target as Element).closest<HTMLButtonElement>('.rx-av'); if (b) mostrar(b); });
   orbita.addEventListener('pointerout', (e) => { const b = (e.target as Element).closest<HTMLButtonElement>('.rx-av'); const para = (e.relatedTarget as Element | null)?.closest('.rx-av'); if (b && !para) limpar(); });
-  avs.forEach((b) => {
+  avs.filter((b): b is HTMLButtonElement => b instanceof HTMLButtonElement).forEach((b) => {
     b.addEventListener('focus', () => { pausado = true; mostrar(b); });
     b.addEventListener('blur', () => { pausado = false; limpar(); });
     b.addEventListener('click', () => { pausado = true; mostrar(b); });

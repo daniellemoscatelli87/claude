@@ -803,3 +803,229 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 @media (min-width: 1024px) and (max-width: 1279px) { .rp-modelo-sobe { width: min(520px, 46vw) !important; right: -2rem; } .rp-hero .rp-lead { max-width: 28rem; } }
 @media (max-width: 1023px) { .rp-hero-modelo { margin-bottom: -70px !important; } }
 .rp-prova p strong { font-weight: 600; color: #131A27; }
+
+/* Quem buscamos: título centralizado em cima; abaixo, painel com todas as especialidades à esquerda e o ecossistema à direita */
+@media (min-width: 1024px) {
+  .rx-quem { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; grid-template-areas: "cab cab" "lista orbita"; gap: 3rem 4rem !important; align-items: center !important; }
+  .rx-quem-texto { grid-area: cab; text-align: center; max-width: 44rem; margin: 0 auto; }
+  .rx-quem-texto h2, .rx-quem-texto .rp-texto { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }
+  .rx-quem .rx-orbita { grid-area: orbita; margin: 0 auto !important; }
+  .rx-areas-lista { grid-area: lista; display: grid !important; grid-template-columns: 1fr 1fr; gap: .25rem 1.5rem; margin: 0; padding: 1.75rem; list-style: none; border-radius: 24px; background: #F6F7FA; border: 1px solid #EDF0F5; }
+  .rx-areas-lista li { display: grid; grid-template-columns: 2.25rem 1fr; gap: .75rem; align-items: start; padding: .875rem 0; border-bottom: 1px solid #E8EDF3; }
+  .rx-areas-lista li:nth-last-child(-n+1) { border-bottom: 0; }
+  .rx-areas-lista li:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
+  .rx-areas-lista .rx-ic { width: 2.25rem; height: 2.25rem; border-radius: 10px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(19, 26, 39, 0.09); }
+  .rx-areas-lista .rx-ic svg { width: 1.125rem; height: 1.125rem; }
+  .rx-areas-lista h3 { margin: .125rem 0 .1875rem; font-size: .9375rem; font-weight: 700; color: #131A27; }
+  .rx-areas-lista p { margin: 0; font-size: .8125rem; line-height: 1.5; color: #495669; }
+}
+@media (min-width: 1024px) {
+  /* painel compacto: ícone + nome, em 2 colunas (as descrições aparecem na dica do ecossistema) */
+  .rx-areas-lista { align-self: center; gap: .625rem .75rem !important; padding: 1.5rem !important; }
+  .rx-areas-lista li { grid-template-columns: 2.5rem 1fr !important; align-items: center !important; padding: .625rem .75rem !important; border: 0 !important; border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(19, 26, 39, 0.06); }
+  .rx-areas-lista li:last-child { grid-column: 1 / -1; }
+  .rx-areas-lista p { display: none; }
+  .rx-areas-lista h3 { margin: 0 !important; font-size: .9375rem; }
+  .rx-areas-lista .rx-ic { width: 2.5rem; height: 2.5rem; background: #FDF2F2; box-shadow: none; }
+  .rx-areas-lista::before { content: "Especialidades da rede"; grid-column: 1 / -1; margin: 0 0 .25rem; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #627288; }
+}
+/* Quem buscamos: painel de especialidades em largura total; setores; ecossistema centralizado abaixo */
+@media (min-width: 1024px) {
+  .rx-quem { grid-template-columns: 1fr !important; grid-template-areas: "cab" "lista" !important; }
+  .rx-areas-lista { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; max-width: 56rem; width: 100%; margin: 0 auto !important; }
+  .rx-areas-lista li:last-child { grid-column: auto !important; }
+}
+.rx-orbita-area { display: flex; justify-content: center; margin-top: 3rem; }
+.rx-orbita-area .rx-orbita { margin: 0 auto !important; }
+@media (max-width: 1023px) { .rx-orbita-area .rx-orbita { display: block !important; --r0: 64px; --r1: 104px; --r2: 146px; width: min(340px, 100%) !important; } .rx-orbita-area .rx-centro { width: 4rem !important; height: 4rem !important; } .rx-orbita-area .rx-av { width: 38px; height: 38px; } }
+/* Especialidades em bento grid: Design maior, depois Tecnologia, Dados e Pesquisa */
+.rx-quem .rx-bento { display: grid !important; grid-template-columns: repeat(20, minmax(0, 1fr)) !important; gap: .875rem !important; max-width: 72rem !important; width: 100%; margin: 0 auto !important; padding: 0 !important; list-style: none; background: none !important; border: 0 !important; border-radius: 0 !important; }
+.rx-quem .rx-bento::before { content: none !important; display: none !important; }
+.rx-quem .rx-bento li { grid-column: span 4 !important; display: flex !important; flex-direction: column; justify-content: space-between; gap: 1.25rem !important; padding: 1.25rem !important; border: 1px solid #EDF0F5 !important; border-radius: 20px !important; background: #F6F7FA !important; box-shadow: none !important; }
+.rx-quem .rx-bento .rx-ic { width: 2.5rem !important; height: 2.5rem !important; border-radius: 12px !important; background: rgba(212, 77, 77, 0.10) !important; box-shadow: none !important; }
+.rx-quem .rx-bento .rx-ic svg { width: 1.25rem; height: 1.25rem; }
+.rx-quem .rx-bento h3 { margin: 0 0 .375rem !important; font-size: 1rem !important; font-weight: 700; color: #131A27; }
+.rx-quem .rx-bento p { display: block !important; margin: 0; font-size: .875rem; line-height: 1.55; color: #495669; }
+.rx-quem .rx-bento .rx-b-design { grid-column: span 10 !important; grid-row: span 2; padding: 2rem !important; }
+.rx-quem .rx-bento .rx-b-design .rx-ic { width: 3.5rem !important; height: 3.5rem !important; border-radius: 16px !important; }
+.rx-quem .rx-bento .rx-b-design .rx-ic svg { width: 1.75rem; height: 1.75rem; }
+.rx-quem .rx-bento .rx-b-design h3 { font-size: 1.75rem !important; margin-bottom: .5rem !important; }
+.rx-quem .rx-bento .rx-b-design p { font-size: 1.0625rem; max-width: 26rem; }
+.rx-quem .rx-bento .rx-b-tec { grid-column: span 10 !important; }
+.rx-quem .rx-bento .rx-b-tec h3 { font-size: 1.25rem !important; }
+.rx-quem .rx-bento .rx-b-dados, .rx-quem .rx-bento .rx-b-pesq { grid-column: span 5 !important; }
+.rx-quem .rx-bento .rx-b-dados h3, .rx-quem .rx-bento .rx-b-pesq h3 { font-size: 1.125rem !important; }
+@media (max-width: 1023px) {
+  .rx-quem .rx-bento { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .rx-quem .rx-bento li { grid-column: span 1 !important; }
+  .rx-quem .rx-bento .rx-b-design, .rx-quem .rx-bento .rx-b-tec, .rx-quem .rx-bento li:last-child { grid-column: 1 / -1 !important; grid-row: auto; }
+  .rx-quem .rx-bento .rx-b-dados, .rx-quem .rx-bento .rx-b-pesq { grid-column: span 1 !important; }
+  .rx-quem .rx-bento .rx-b-design { padding: 1.5rem !important; }
+  .rx-quem .rx-bento .rx-b-design h3 { font-size: 1.5rem !important; }
+}
+@media (max-width: 639px) {
+  .rx-quem .rx-bento { grid-template-columns: 1fr !important; }
+  .rx-quem .rx-bento li, .rx-quem .rx-bento .rx-b-dados, .rx-quem .rx-bento .rx-b-pesq { grid-column: 1 / -1 !important; }
+  .rx-quem .rx-bento li:not(.rx-b-design) { flex-direction: row; align-items: flex-start; justify-content: flex-start; gap: .875rem !important; padding: 1rem !important; }
+  .rx-quem .rx-bento li:not(.rx-b-design) .rx-ic { flex: none; }
+}
+.rx-quem .rx-bento li { align-items: flex-start !important; text-align: left !important; }
+.rx-quem .rx-bento .rx-ic { margin: 0 !important; align-self: flex-start !important; flex: none; }
+.rx-quem .rx-bento li > div { margin: 0 !important; padding: 0 !important; width: 100%; }
+/* Especialidades em carrossel de cards (substitui o bento grid) */
+.rx-quem .rx-esp-area { width: 100%; max-width: 72rem; margin: 0 auto; min-width: 0; }
+.rx-esp .rp-perfil { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.25rem; border: 1px solid #EDF0F5; border-radius: 20px; background: #F6F7FA; }
+.rx-esp .rx-ic { flex: none; width: 2.5rem; height: 2.5rem; margin: 0; border-radius: 12px; background: rgba(212, 77, 77, 0.10); }
+.rx-esp .rx-ic svg { width: 1.25rem; height: 1.25rem; }
+.rx-esp h3 { margin: 0 0 .375rem; font-size: 1.0625rem !important; font-weight: 700; color: #131A27; }
+.rx-esp p { display: block; margin: 0 !important; font-size: .875rem !important; line-height: 1.55; color: #495669; }
+@media (min-width: 1024px) { .rx-quem .rx-esp-area { grid-area: lista; } }
+@media (max-width: 1023px) { .rx-quem { grid-template-columns: minmax(0, 1fr) !important; } }
+/* Ecossistema: ícones dos segmentos de interesse com rótulo sempre visível (tag do DS) */
+.rx-seg { position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; z-index: 1; }
+.rx-seg .rx-av-ic { box-shadow: 0 0 0 2px rgba(19, 26, 39, 0.09), 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+.rx-seg-nome { position: absolute; left: 50%; top: calc(100% + .375rem); transform: translateX(-50%); padding: .1875rem .625rem; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); font-size: .75rem; font-weight: 600; line-height: 1.3; color: #283043; white-space: nowrap; }
+@media (max-width: 1023px) {
+  .rx-orbita-area .rx-orbita { --r1: 78px !important; --r2: 128px !important; }
+  .rx-orbita-area .rx-seg { width: 38px; height: 38px; }
+  .rx-orbita-area .rx-seg-nome { font-size: .6875rem; padding: .125rem .5rem; white-space: normal; width: max-content; max-width: 6rem; text-align: center; }
+}
+.rx-orbita-area { padding-bottom: 2.25rem; }
+@media (max-width: 1023px) { .rx-orbita-area .rx-orbita { --r0: 50px !important; --r1: 88px !important; --r2: 132px !important; } }
+/* Subtítulo dos setores: mais presença e mais perto do ecossistema */
+.rx-setores { margin-top: 4.5rem !important; }
+.rx-setores h3 { max-width: 30rem; margin: 0 auto !important; font-size: 1.5rem !important; font-weight: 700 !important; line-height: 1.3; letter-spacing: -0.01em; color: #131A27 !important; text-wrap: balance; }
+.rx-orbita-area { margin-top: 1rem !important; }
+@media (max-width: 639px) { .rx-setores { margin-top: 3.5rem !important; } .rx-setores h3 { font-size: 1.25rem !important; max-width: 20rem; } }
+.rx-setores h3 { max-width: 42rem; font-size: 1.375rem !important; line-height: 1.4; }
+@media (max-width: 639px) { .rx-setores h3 { font-size: 1.125rem !important; max-width: 22rem; } }
+/* Modelo apontando para o ecossistema (só no computador) */
+.rx-modelo-aponta { display: none; }
+@media (min-width: 1024px) {
+  .rx-orbita-area { align-items: center; gap: 1rem; }
+  .rx-modelo-aponta { display: block; flex: none; width: 400px; height: auto; margin-left: -6rem; }
+}
+@media (min-width: 1024px) {
+  .rx-orbita-area { gap: 0; }
+  .rx-orbita-area .rx-orbita { margin: 0 !important; }
+  .rx-modelo-aponta { width: 440px; margin: 0 -1.5rem 0 -8rem; position: relative; top: 1.5rem; }
+}
+@media (min-width: 1024px) { .rx-modelo-aponta { width: 400px; margin: 0 -1rem 0 -6rem; top: 0; } }
+@media (min-width: 1024px) { .rx-modelo-aponta { margin-right: 1.5rem; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .rx-modelo-aponta { width: 360px; margin-left: -4rem; } }
+@media (min-width: 1024px) { .rx-modelo-aponta { width: 460px; margin-left: -8rem; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .rx-modelo-aponta { width: 410px; margin-left: -6rem; } }
+/* modelo 10% menor */
+@media (min-width: 1024px) { .rx-modelo-aponta { width: 414px; margin-left: -7rem; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .rx-modelo-aponta { width: 369px; margin-left: -5rem; } }
+/* Formatos de parceria: kanban de projetos (substitui a lista animada) */
+@media (min-width: 1024px) { .rx-formatos-grade { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) !important; max-width: 76rem !important; gap: 3rem !important; } }
+.rx-kanban { width: 100%; }
+.rx-kb-quadro { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .625rem; padding: .75rem; }
+.rx-kb-col { min-width: 0; padding: .625rem; border-radius: 14px; background: #F6F7FA; }
+.rx-kb-tit { display: flex; align-items: center; gap: .375rem; margin: 0 0 .625rem; padding: 0 .125rem; font-size: .75rem !important; font-weight: 700; color: #283043; }
+.rx-kb-ponto { width: .5rem; height: .5rem; border-radius: 9999px; background: #8898B0; flex: none; }
+.rx-kb-col[data-s="1"] .rx-kb-ponto { background: #448ABC; }
+.rx-kb-col[data-s="2"] .rx-kb-ponto { background: #4FB57B; }
+.rx-kb-qtd { margin-left: auto; min-width: 1.25rem; padding: 0 .375rem; border-radius: 9999px; background: #FFFFFF; border: 1px solid #EDF0F5; font-size: .6875rem; font-weight: 600; line-height: 1.25rem; text-align: center; color: #495669; }
+.rx-kb-cards { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; min-height: 15rem; }
+.rx-kb-card { position: relative; display: flex; flex-direction: column; gap: .5rem; padding: .625rem; border-radius: 12px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.07); box-shadow: 0 1px 2px rgba(13, 17, 25, 0.05); }
+.rx-kb-card img { width: 2rem; height: 2rem; border-radius: 9999px; object-fit: cover; display: block; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px rgba(19, 26, 39, 0.08); }
+.rx-kb-corpo { display: flex; flex-direction: column; gap: .375rem; min-width: 0; }
+.rx-kb-corpo strong { font-size: .8125rem; font-weight: 700; line-height: 1.3; color: #131A27; }
+.rx-kb-status { align-self: flex-start; display: inline-flex; align-items: center; gap: .3125rem; padding: .125rem .5rem; border-radius: 9999px; background: #EDF0F5; font-size: .6875rem; font-weight: 600; color: #283043; white-space: nowrap; }
+.rx-kb-status::before { content: ""; width: .375rem; height: .375rem; border-radius: 9999px; background: #8898B0; }
+.rx-kb-status[data-s="1"] { background: rgba(68, 138, 188, 0.1); }
+.rx-kb-status[data-s="1"]::before { background: #448ABC; }
+.rx-kb-status[data-s="2"] { background: rgba(79, 181, 123, 0.1); }
+.rx-kb-status[data-s="2"]::before { background: #4FB57B; }
+@media (max-width: 1023px) { .rx-formatos-lista .rx-kanban { max-width: 40rem !important; } }
+@media (max-width: 639px) {
+  .rx-kb-quadro { grid-template-columns: repeat(3, minmax(11rem, 1fr)); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .rx-kb-quadro::-webkit-scrollbar { display: none; }
+  .rx-kb-col { scroll-snap-align: start; }
+}
+/* kanban: card compacto (avatar ao lado), altura fixa para 4 cards (sem saltos de layout) e sem estourar no celular */
+.rx-kb-card { flex-direction: row; align-items: flex-start; gap: .5rem; }
+.rx-kb-card img { flex: none; width: 1.75rem; height: 1.75rem; }
+.rx-kb-cards { min-height: 0; height: 22.5rem; }
+.rx-formatos-lista, .rx-formatos-lista .rx-kanban { min-width: 0; }
+@media (max-width: 1023px) { .rx-formatos-lista { display: block !important; } .rx-formatos-lista .rx-kanban { margin: 0 auto; } }
+.rx-kb-cards { height: 21.5rem; }
+/* Kanban no celular: colunas viram faixas (uma por status), com até 3 cards lado a lado, tudo dentro da tela */
+@media (max-width: 639px) {
+  .rx-kb-quadro { grid-template-columns: 1fr !important; overflow: visible !important; scroll-snap-type: none !important; gap: .5rem; padding: .625rem; }
+  .rx-kb-col { padding: .5rem; }
+  .rx-kb-tit { margin-bottom: .5rem; }
+  .rx-kb-cards { flex-direction: row; height: auto; min-height: 8.25rem; gap: .375rem; }
+  .rx-kb-card { flex: 0 0 calc((100% - .75rem) / 3); min-width: 0; flex-direction: column; gap: .375rem; padding: .5rem; }
+  .rx-kb-corpo strong { font-size: .75rem; }
+  .rx-kb-status { font-size: .625rem; padding: .125rem .375rem; gap: .25rem; max-width: 100%; }
+  .rx-kb-status::before { flex: none; }
+}
+/* Modelo com o ecossistema também no celular: acima do gráfico, com a mão apontando para ele */
+@media (max-width: 1023px) {
+  .rx-orbita-area { flex-direction: column; align-items: center; }
+  .rx-modelo-aponta { display: block; width: min(300px, 78%); height: auto; margin: 0 auto -1.5rem; position: relative; left: -8%; z-index: 0; }
+  .rx-orbita-area .rx-orbita { position: relative; z-index: 1; }
+}
+@media (max-width: 639px) { .rx-kb-status { white-space: normal; line-height: 1.2; padding: .1875rem .375rem; } .rx-kb-status::before { align-self: center; } }
+/* Celular e tablet: sem a modelo ao lado do ecossistema */
+@media (max-width: 1023px) { .rx-modelo-aponta { display: none !important; } }
+/* Formatos de parceria: lista numerada sem ícones, com breve descrição */
+.rx-numerada li { grid-template-columns: 4.5rem 1fr !important; align-items: start !important; }
+.rx-numerada .rx-num { padding-top: .125rem; }
+.rx-num-txt { min-width: 0; }
+.rx-num-txt p { margin: .375rem 0 0; font-size: .9375rem; line-height: 1.55; color: #495669; }
+@media (max-width: 639px) { .rx-numerada li { grid-template-columns: 3rem 1fr !important; } .rx-num-txt p { font-size: .875rem; } }
+/* Celular: kanban substituído por um card de tarefa único */
+.rx-kb-unico { display: none; }
+@media (max-width: 639px) {
+  .rx-kanban .rx-kb-quadro { display: none !important; }
+  .rx-kb-unico { display: flex; align-items: center; gap: .875rem; margin: .875rem; padding: 1rem; border-radius: 16px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.07); box-shadow: 0 1px 2px rgba(13, 17, 25, 0.05), 0 4px 12px rgba(13, 17, 25, 0.05); }
+  .rx-kb-unico img { flex: none; width: 3rem; height: 3rem; border-radius: 9999px; object-fit: cover; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px rgba(19, 26, 39, 0.08); }
+  .rx-kb-unico .rx-kb-corpo strong { font-size: .9375rem; }
+  .rx-kb-unico .rx-kb-status { white-space: nowrap; font-size: .75rem; padding: .125rem .5rem; }
+}
+/* Celular: card "Projetos na rede" logo abaixo do título da seção */
+@media (max-width: 1023px) { .rx-formatos-grade { display: flex !important; flex-direction: column; } .rx-formatos-lista { order: -1; } }
+/* Menos espaço em branco entre as seções */
+#quem, #formatos, #cadastro { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+.rx-orbita-area { padding-bottom: 1rem !important; }
+.rx-formatos-grade { margin-top: 2.5rem !important; }
+@media (max-width: 1023px) {
+  #quem, #formatos, #cadastro { padding-top: 2.75rem !important; padding-bottom: 2.75rem !important; }
+  .rx-formatos-grade { margin-top: 2rem !important; gap: 2rem !important; }
+}
+/* Kanban um pouco mais largo e títulos dos projetos menores */
+@media (min-width: 1024px) { .rx-formatos-grade { grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr) !important; max-width: 80rem !important; } }
+.rx-kb-quadro .rx-kb-corpo strong { font-size: .75rem; }
+@media (min-width: 640px) { .rx-kb-cards { height: 17rem; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .rx-kb-cards { height: 19.25rem; } }
+/* Formatos de parceria: lista em 2 colunas (número acima do título) */
+@media (min-width: 640px) {
+  .rx-numerada { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem; }
+  .rx-numerada li { grid-template-columns: 1fr !important; gap: .625rem !important; padding: 1.25rem 0 !important; border-top: 1px solid #E8EDF3; border-bottom: 0 !important; }
+  .rx-numerada li:nth-last-child(-n+2) { border-bottom: 1px solid #E8EDF3 !important; }
+  .rx-numerada .rx-num { font-size: 1.75rem; padding-top: 0; }
+  .rx-numerada h3 { font-size: 1.125rem !important; }
+}
+@media (min-width: 640px) { .rx-numerada li { align-content: start; } }
+/* Formatos: itens 01–04 abaixo do mockup, em todas as telas */
+.rx-formatos-grade { display: flex !important; flex-direction: column; align-items: stretch; max-width: 48rem !important; gap: 2.5rem !important; }
+.rx-formatos-lista { order: -1; }
+.rx-formatos-lista .rx-kanban { max-width: none !important; margin: 0 auto; }
+@media (max-width: 1023px) { .rx-formatos-grade { gap: 2rem !important; } }
+@media (min-width: 640px) { .rx-kb-cards { height: 15rem !important; } }
+@media (min-width: 640px) and (max-width: 1023px) { .rx-kb-cards { height: 19.5rem !important; } }
+@media (min-width: 840px) and (max-width: 1023px) { .rx-kb-cards { height: 16.5rem !important; } }
+/* Kanban vivo: barra de progresso nos cards (avança nos projetos em andamento) */
+.rx-kb-barra { display: block; height: 4px; margin-top: .125rem; border-radius: 9999px; background: #EDF0F5; overflow: hidden; }
+.rx-kb-barra i { display: block; height: 100%; width: 0; border-radius: inherit; background: #8898B0; transition: width .8s cubic-bezier(0.16, 1, 0.3, 1), background-color .4s ease; }
+.rx-kb-card:has(.rx-kb-status[data-s="1"]) .rx-kb-barra i { background: #448ABC; }
+.rx-kb-card:has(.rx-kb-status[data-s="2"]) .rx-kb-barra i { background: #4FB57B; }
+.rx-kb-card:has(.rx-kb-status[data-s="0"]) .rx-kb-barra { display: none; }
+.rx-kb-unico .rx-kb-barra { display: none; }
+@media (prefers-reduced-motion: reduce) { .rx-kb-barra i { transition: none; } }
+@media (min-width: 840px) { .rx-kb-cards { height: 17.75rem !important; } }
+@media (min-width: 640px) and (max-width: 839px) { .rx-kb-cards { height: 21.5rem !important; } }
