@@ -1184,3 +1184,8 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .pv-ben-ic svg { width: 1.75rem; height: 1.75rem; }
 .pv-pilula-ic svg { width: 2.25rem; height: 2.25rem; }
 @media (max-width: 767px) { .pv-ben-ic svg { width: 1.5rem; height: 1.5rem; } .pv-pilula-ic svg { width: 1.875rem; height: 1.875rem; } }
+/* aba "Saiba mais" e margem em volta do hero na mesma cor do início da seção seguinte */
+@media (min-width: 1024px) {
+  .rolar-abaixo { background: #F6F7FA !important; }
+  body:has(#hero.hero-piloto), .divisao-hero { background: #F6F7FA !important; }
+}
