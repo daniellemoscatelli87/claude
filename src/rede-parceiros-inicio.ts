@@ -142,6 +142,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     unico.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="48" height="48" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-status" data-s="${p.s}">${STATUS[p.s]}</span></span>`;
     if (animar && unico.offsetParent) unico.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
   };
+  let unicoVez = 0; // no celular o card percorre os projetos em sequência: a cada troca, outro projeto e outro profissional
   mostrarUnico(0, false);
   const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let pausado = reduzido;
@@ -179,7 +180,8 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
       if (!dx && !dy) return;
       c.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], { duration: c === cards[i] ? 650 : 450, easing: MOLA });
     });
-    mostrarUnico(i, true);
+    unicoVez = (unicoVez + 1) % projetos.length;
+    mostrarUnico(unicoVez, true);
     cards[i].animate([{ boxShadow: '0 0 0 2px rgba(212, 77, 77, 0.45)' }, { boxShadow: '0 0 0 2px rgba(212, 77, 77, 0)' }], { duration: 1400, easing: 'ease-out' });
   };
   let visivel = false;

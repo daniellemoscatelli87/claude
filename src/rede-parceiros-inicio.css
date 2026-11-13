@@ -987,3 +987,13 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
   .rx-kb-unico .rx-kb-corpo strong { font-size: .9375rem; }
   .rx-kb-unico .rx-kb-status { white-space: nowrap; font-size: .75rem; padding: .125rem .5rem; }
 }
+/* Celular: card "Projetos na rede" logo abaixo do título da seção */
+@media (max-width: 1023px) { .rx-formatos-grade { display: flex !important; flex-direction: column; } .rx-formatos-lista { order: -1; } }
+/* Menos espaço em branco entre as seções */
+#quem, #formatos, #cadastro { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+.rx-orbita-area { padding-bottom: 1rem !important; }
+.rx-formatos-grade { margin-top: 2.5rem !important; }
+@media (max-width: 1023px) {
+  #quem, #formatos, #cadastro { padding-top: 2.75rem !important; padding-bottom: 2.75rem !important; }
+  .rx-formatos-grade { margin-top: 2rem !important; gap: 2rem !important; }
+}
