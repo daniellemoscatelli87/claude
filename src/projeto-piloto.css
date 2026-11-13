@@ -768,3 +768,49 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   #hero-fundo img { animation: hero-fatias-entra 1.2s cubic-bezier(0.16, 1, 0.3, 1) both !important; }
 }
 @keyframes hero-fatias-entra { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+/* =========================================================================
+   HERO, versão "orgânica": fundo vivo em malha de cores (grafite, vinho e crimson) em movimento lento;
+   a foto inteira dentro de uma forma orgânica (sem cortar o rosto); atrás dela, uma segunda forma em degradê crimson→vinho
+   deslocada, que gira devagar; um halo claro com mistura de cor dá profundidade.
+   ========================================================================= */
+/* fundo vivo */
+.hero-forma-bloco { display: block !important; z-index: 0 !important; inset: -10% !important; width: auto !important; height: auto !important; border-radius: 0 !important;
+  background:
+    radial-gradient(40% 50% at 18% 30%, rgba(212, 77, 77, 0.55), transparent 70%),
+    radial-gradient(35% 45% at 70% 80%, rgba(140, 27, 27, 0.65), transparent 70%),
+    radial-gradient(45% 55% at 85% 15%, rgba(73, 86, 105, 0.55), transparent 70%),
+    radial-gradient(50% 60% at 40% 95%, rgba(40, 48, 67, 0.9), transparent 70%),
+    #131A27 !important;
+  filter: blur(20px); }
+@media (prefers-reduced-motion: no-preference) { .hero-forma-bloco { animation: hero-malha 22s ease-in-out infinite alternate; } }
+@keyframes hero-malha { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-3%, 2%) scale(1.06); } 100% { transform: translate(2%, -2%) scale(1.02); } }
+/* forma orgânica com a foto (o rosto fica inteiro) */
+#hero-fundo img {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400' preserveAspectRatio='none'%3E%3Cpath d='M150 8 C232 0 300 72 291 170 C283 252 302 330 232 380 C172 420 78 402 38 340 C-2 280 8 210 18 138 C30 58 80 16 150 8Z'/%3E%3C/svg%3E") !important;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400' preserveAspectRatio='none'%3E%3Cpath d='M150 8 C232 0 300 72 291 170 C283 252 302 330 232 380 C172 420 78 402 38 340 C-2 280 8 210 18 138 C30 58 80 16 150 8Z'/%3E%3C/svg%3E") !important;
+  filter: saturate(1.08) contrast(1.04); }
+/* segunda forma em degradê, atrás e deslocada */
+.hero-forma-circulo { z-index: 1 !important; border-radius: 0 !important; box-shadow: none !important; opacity: .95 !important;
+  background: linear-gradient(135deg, #D44D4D 0%, #8C1B1B 100%) !important;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400' preserveAspectRatio='none'%3E%3Cpath d='M160 12 C250 18 296 96 284 188 C274 262 290 344 214 384 C150 418 66 392 32 330 C0 270 18 196 30 130 C44 52 92 6 160 12Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400' preserveAspectRatio='none'%3E%3Cpath d='M160 12 C250 18 296 96 284 188 C274 262 290 344 214 384 C150 418 66 392 32 330 C0 270 18 196 30 130 C44 52 92 6 160 12Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+/* halo claro misturado (soft-light) sobre a foto, dando luz de recorte */
+.hero-forma-linhas { display: block !important; z-index: 3 !important; border-radius: 9999px !important; opacity: 1 !important;
+  background: radial-gradient(closest-side, rgba(255, 220, 220, 0.55), transparent) !important; mix-blend-mode: soft-light; }
+.hero-forma-arco { display: none !important; }
+@media (min-width: 1024px) {
+  #hero-fundo img { left: 9% !important; top: 13% !important; width: 34% !important; height: 74% !important; object-position: 36% 30% !important; }
+  .hero-forma-circulo { left: calc(9% + 3rem) !important; top: calc(13% + 2.5rem) !important; width: 34% !important; height: 74% !important; }
+  .hero-forma-linhas { left: 12% !important; top: 10% !important; width: 22rem !important; height: 22rem !important; right: auto !important; }
+  .hero-chips { left: calc(9% - 1rem) !important; bottom: 12% !important; }
+}
+@media (max-width: 1023px) {
+  #hero-fundo img { top: 5.25rem !important; width: min(70vw, 20rem) !important; height: 42vh !important; object-position: 32% 25% !important; }
+  .hero-forma-circulo { left: calc(50% + 1.25rem) !important; translate: -50% 0; top: calc(5.25rem + 1.25rem) !important; width: min(70vw, 20rem) !important; height: 42vh !important; }
+  .hero-forma-linhas { left: 50% !important; translate: -50% 0; top: 4rem !important; width: 16rem !important; height: 16rem !important; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-forma-circulo { animation: hero-forma-gira 18s ease-in-out infinite alternate !important; }
+}
+@keyframes hero-forma-gira { from { rotate: -4deg; } to { rotate: 5deg; } }
