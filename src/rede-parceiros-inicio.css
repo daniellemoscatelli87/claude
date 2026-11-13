@@ -773,3 +773,18 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 /* bordas laterais da composição esmaecidas (as pessoas das pontas não terminam em corte reto) e altura próxima à da EI3 */
 .rp-modelo-sobe img { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 12%, #000 88%, transparent 100%); mask-image: linear-gradient(to right, transparent 0, #000 12%, #000 88%, transparent 100%); }
 @media (min-width: 1024px) { .rp-modelo-sobe { max-width: 500px !important; } }
+/* grupo de três pessoas separadas e levemente sobrepostas: imagem mais larga, sem esmaecer as laterais */
+.rp-modelo-sobe img { -webkit-mask-image: none !important; mask-image: none !important; }
+@media (min-width: 1024px) {
+  .rp-hero-grade { grid-template-columns: 6fr 6fr !important; }
+  .rp-modelo-sobe { max-width: 660px !important; margin-right: -3rem; }
+  .rp-hero-modelo { margin-bottom: -3rem !important; transform: translateY(-20px) !important; }
+}
+@media (max-width: 1023px) { .rp-modelo-sobe { max-width: 560px !important; } .rp-hero-modelo { margin-bottom: -2.5rem !important; } }
+/* desktop: texto mantém as 7 colunas da EI3; o grupo ocupa o espaço à direita até a margem da tela e o pé fica atrás da folha */
+@media (min-width: 1024px) {
+  .rp-hero-grade { grid-template-columns: 7fr 5fr !important; }
+  .rp-hero-modelo { position: relative; align-self: stretch !important; min-height: 100%; margin-bottom: 0 !important; transform: none !important; }
+  .rp-modelo-sobe { position: absolute; right: -6rem; bottom: -2.75rem; width: min(640px, 48vw) !important; max-width: none !important; margin: 0 !important; }
+}
+@media (max-width: 1023px) { .rp-hero { padding-bottom: 0 !important; } .rp-hero-modelo { margin-bottom: -95px !important; } }
