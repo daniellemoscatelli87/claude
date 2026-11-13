@@ -409,6 +409,32 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-045 · 13/11/2026 · Padrão de header e menus (DM e FindLook)
+
+- **Origem:** a dona do produto pediu um padrão de menus e header para os dois DS, a partir do que já existe no Dani Moscatelli, com variações para desktop e celular, comportamentos de rolagem e fundos por trás do header. Ela escolheu as variações abaixo.
+- **Decisão:**
+  - **Base:**
+    - header do site Experience Intelligence 3: links no centro e botão principal em pílula;
+    - header do DS: fundo translúcido com desfoque.
+  - **Rolagem:** transparente → sólido (24 px), some e volta (96 px, sensibilidade de 6 px) e compacto ao rolar (40 px; de 72 para 56 px).
+  - **Celular:** gaveta lateral (padrão), tela cheia e barra inferior com até 5 itens, só para áreas logadas.
+  - **Fundos:** fundo da página, foto escura com véu (preto de 70% a 45%), gradiente da marca (Gradient Animation da seção Backgrounds) e modo escuro.
+  - **Alturas:** 72 px no desktop, 64 px no celular e 56 px no compacto.
+  - **Links:** abaixo de 768 px saem do header e vão para o menu.
+  - **Sombra:** só depois de rolar, quando o conteúdo passa por baixo. O header sólido é sobreposição, por isso a regra D-044 não se aplica a ele.
+- **Fundamento:** reaproveita o que já está no ar, com regras de acessibilidade explícitas:
+  - foco no menu e Tab preso dentro dele;
+  - Esc fecha;
+  - `aria-expanded`/`aria-controls` no botão e `aria-current` na barra;
+  - contraste sobre foto;
+  - movimento reduzido.
+- **Trade-off:**
+  - As fotos de exemplo vêm do Unsplash (uso livre), como já acontece em Motion. Não são fotos do estúdio nem do FindLook.
+  - No FindLook, "Pedidos e reservas" virou "Pedidos" na barra inferior, para caber.
+  - O padrão está documentado nos DS. O site ainda não foi alterado.
+
+---
+
 ## D-044 · 12/11/2026 · Card sobre fundo branco: borda cinza clara, sem sombra
 
 - **Origem:** dona do produto: "no design system quando temos um card sobre um fundo branco ele não tem sombra, ele tem borda cinza clara". Vale para os dois design systems e para o site.

@@ -360,6 +360,27 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-13 · Header e menus: seção nova nos dois DS (D-045; publicado: DM v42 e FindLook v65)
+
+- **Origem:** padrão de header e menus para DM e FindLook. As variações foram escolhidas pela dona do produto (ver D-045).
+- **Arquivos (nos dois DS):**
+  - `src/app/components/showcase/HeaderShowcase.tsx`: novo. Tem um bloco `MARCA` com logo, links, textos, foto e itens de app; o resto do arquivo é igual nos dois.
+  - `BackgroundsShowcase.tsx`: exporta `FundoGradienteDaMarca`.
+  - `App.tsx`: menu "Header e menus", com Demonstração, Comportamentos de rolagem, Menus no celular, Fundos por trás do header, Checklist de acessibilidade, Uso e Tokens.
+  - Changelog.
+- **Conteúdo, sem texto inventado:**
+  - **DM:** links e textos do EI3, logos horizontais claro e escuro, itens de app do template Dashboard.
+  - **FindLook:** links, "Entrar", "Cadastrar minha loja" e textos da landing "Para lojas", logos SVG horizontais, itens do painel da loja.
+  - As seções da página de exemplo usam linhas neutras.
+- **Correção durante o trabalho:** os PNGs do DM têm nomes ao contrário do que parece: `Logo-Horizontal-LightMode.png` é o logo de texto claro, para fundo escuro. Conferido pela cor dos pixels.
+- **Verificação:** `pnpm build` e Playwright nos dois DS, em 1440 claro e escuro e em 390 px:
+  - **Rolagem:** transparente no topo e sólido aos 200 px; some ao descer (translate -100%) e volta ao subir; volta também com foco do teclado; compacto de 72 para 56 px.
+  - **Menus:** gaveta e tela cheia com `role=dialog`, foco no primeiro link, Tab preso, Esc fecha e devolve o foco ao botão; link do menu rola até a seção e fecha o menu.
+  - **Barra inferior:** 5 itens, com `aria-current` no atual.
+  - **Logos:** versão certa em cada fundo.
+  - **Geral:** sem rolagem horizontal e sem erros de página.
+- **Commits:** DM `443fd9e` e FindLook `61360c6`. Os mesmos testes passaram nos dois endereços públicos.
+
 ## 2026-11-13 · Cards de preço: recursos recolhíveis e "Para quem" opcional (publicado: DM v41 e FindLook v64)
 
 - **Origem:** a dona do produto pediu ocultar ou expandir os itens do plano e tornar o "Para quem" opcional.
