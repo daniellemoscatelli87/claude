@@ -539,11 +539,6 @@
 
     <div id="form-erro-geral" role="alert" class="hidden p-4 rounded-xl bg-coral-50 border border-coral-200 text-coral-700 text-sm font-medium"></div>
 
-    <button class="w-full py-4 px-6 bg-coral-600 hover:bg-coral-700 active:scale-[0.99] text-white font-bold text-base shadow-lg shadow-coral-600/25 transition-all flex items-center justify-center gap-2 rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-coral-200 disabled:opacity-70 disabled:cursor-wait cursor-pointer" id="form-enviar" type="submit">
-      <svg data-estado="enviando" aria-hidden="true" class="hidden animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
-      <span id="form-enviar-texto">Cadastrar minha empresa</span>
-      <svg data-estado="parado" aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-    </button>
 
     <p class="aviso-dados">
       <svg aria-hidden="true" class="aviso-dados-icone" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path></svg>
@@ -556,6 +551,13 @@
     <p class="text-xl font-extrabold text-slate-900 mb-2">Cadastro recebido</p>
     <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-md mx-auto">Obrigado pelo interesse no Programa Projeto Piloto. Se houver aderência entre o desafio da sua empresa e um projeto, o Studio entrará em contato. Não há prazo definido para esse contato.</p>
   </div>
+  </div>
+  <div id="cadastro-rodape" class="cadastro-rodape px-6 sm:px-8 py-4 border-t border-ds-border bg-white">
+    <button class="w-full py-3.5 px-6 bg-coral-600 hover:bg-coral-700 active:scale-[0.99] text-white font-bold text-base shadow-lg shadow-coral-600/25 transition-all flex items-center justify-center gap-2 rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-coral-200 disabled:opacity-70 disabled:cursor-wait cursor-pointer" id="form-enviar" type="submit" form="form-piloto">
+        <svg data-estado="enviando" aria-hidden="true" class="hidden animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+        <span id="form-enviar-texto">Cadastrar minha empresa</span>
+        <svg data-estado="parado" aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+      </button>
   </div>
 </aside>
 <!-- @gaveta -->

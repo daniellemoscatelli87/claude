@@ -554,3 +554,4 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   #como-funciona .max-w-4xl.mb-20 { margin-bottom: 0 !important; }
   footer.relative { padding-top: 4rem !important; }
 }
+#cadastro-rodape { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }

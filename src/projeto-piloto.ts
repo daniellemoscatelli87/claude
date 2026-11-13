@@ -137,6 +137,7 @@ form.addEventListener('submit', async (e) => {
     form.reset();
     envioId = crypto.randomUUID();
     form.classList.add('hidden');
+    document.getElementById('cadastro-rodape')?.classList.add('hidden');
     sucesso.classList.remove('hidden');
     sucesso.focus();
   } catch {
