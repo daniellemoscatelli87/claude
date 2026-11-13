@@ -454,3 +454,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .depois-piloto { align-items: center; text-align: center; }
   .depois-piloto > a[href="#inscricao"] { display: none; }
 }
+/* Celular: conteúdo do card do hero centralizado */
+@media (max-width: 767px) { .hero-card, .hero-card * { text-align: center !important; } .hero-card { align-items: center; } }
