@@ -1065,3 +1065,6 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-orbita-area { margin-top: 0 !important; }
 .rx-orbita-area { margin-top: 3rem !important; }
 @media (max-width: 1023px) { .rx-orbita-area { margin-top: 2.5rem !important; } }
+/* modelo com a foto nova, cerca de 5% menor */
+@media (min-width: 1280px) { .rx-modelo-col { width: 393px; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .rx-modelo-col { width: 351px; } }
