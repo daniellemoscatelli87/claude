@@ -399,3 +399,8 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 @media (prefers-reduced-motion: no-preference) { .hero-card:hover::after, .card-frente:hover::after { animation: ds-shine 12s linear infinite; } }
 /* Escopo: sem a barra vermelha do topo no hover (a Shine Border já marca o hover) */
 .card-frente .frente-barra { display: none; }
+/* Hero: Shine Border mais visível (2px, parâmetro borderWidth do componente do DS) */
+.hero-card::after { padding: 2px; }
+/* Hero: brilho mais concentrado e rápido, para aparecer no card grande sobre a foto */
+.hero-card::after { padding: 2px; background-image: radial-gradient(transparent, #D44D4D, #B82828, #D44D4D, transparent); background-size: 250% 250%; }
+@media (prefers-reduced-motion: no-preference) { .hero-card:hover::after { animation-duration: 6s; } }
