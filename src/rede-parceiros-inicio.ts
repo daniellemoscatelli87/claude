@@ -181,8 +181,8 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
 (() => {
   const orbita = document.querySelector<HTMLElement>('.rx-orbita');
   if (!orbita) return;
-  const avs = Array.from(orbita.querySelectorAll<HTMLButtonElement>('.rx-av'));
-  const dica = orbita.querySelector<HTMLElement>('.rx-dica')!;
+  const avs = Array.from(orbita.querySelectorAll<HTMLElement>('.rx-av, .rx-seg'));
+  const dica = orbita.querySelector<HTMLElement>('.rx-dica');
   const DUR = [22, 34, 46]; // segundos por volta: movimento lento e legível
   const ang = [0, 0, 0];
   let pausado = false, ultimo = 0, visivel = false, ativo: HTMLButtonElement | null = null;
@@ -204,7 +204,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   new ResizeObserver(posicionar).observe(orbita);
   const descricao = (i: string) => document.querySelector<HTMLTemplateElement>(`.rx-quem-texto template[data-i="${i}"]`)?.content.querySelector('p')?.textContent || '';
   const mostrar = (b: HTMLButtonElement) => {
-    if (ativo === b) return;
+    if (ativo === b || !dica) return;
     ativo = b;
     avs.forEach((x) => x.classList.toggle('ativo', x === b));
     const ro = orbita.getBoundingClientRect(), rb = b.getBoundingClientRect();
@@ -215,13 +215,13 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     dica.classList.toggle('abaixo', rb.top - ro.top < 120);
     dica.hidden = false;
   };
-  const limpar = () => { ativo = null; dica.hidden = true; avs.forEach((x) => x.classList.remove('ativo')); };
+  const limpar = () => { ativo = null; if (dica) dica.hidden = true; avs.forEach((x) => x.classList.remove('ativo')); };
   // pausa enquanto o ponteiro estiver em qualquer parte do ecossistema; troca de avatar sem retomar o giro
   orbita.addEventListener('pointerenter', () => { pausado = true; });
   orbita.addEventListener('pointerleave', () => { pausado = false; limpar(); });
   orbita.addEventListener('pointerover', (e) => { const b = (e.target as Element).closest<HTMLButtonElement>('.rx-av'); if (b) mostrar(b); });
   orbita.addEventListener('pointerout', (e) => { const b = (e.target as Element).closest<HTMLButtonElement>('.rx-av'); const para = (e.relatedTarget as Element | null)?.closest('.rx-av'); if (b && !para) limpar(); });
-  avs.forEach((b) => {
+  avs.filter((b): b is HTMLButtonElement => b instanceof HTMLButtonElement).forEach((b) => {
     b.addEventListener('focus', () => { pausado = true; mostrar(b); });
     b.addEventListener('blur', () => { pausado = false; limpar(); });
     b.addEventListener('click', () => { pausado = true; mostrar(b); });

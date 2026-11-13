@@ -881,3 +881,14 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-esp p { display: block; margin: 0 !important; font-size: .875rem !important; line-height: 1.55; color: #495669; }
 @media (min-width: 1024px) { .rx-quem .rx-esp-area { grid-area: lista; } }
 @media (max-width: 1023px) { .rx-quem { grid-template-columns: minmax(0, 1fr) !important; } }
+/* Ecossistema: ícones dos segmentos de interesse com rótulo sempre visível (tag do DS) */
+.rx-seg { position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; z-index: 1; }
+.rx-seg .rx-av-ic { box-shadow: 0 0 0 2px rgba(19, 26, 39, 0.09), 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+.rx-seg-nome { position: absolute; left: 50%; top: calc(100% + .375rem); transform: translateX(-50%); padding: .1875rem .625rem; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); font-size: .75rem; font-weight: 600; line-height: 1.3; color: #283043; white-space: nowrap; }
+@media (max-width: 1023px) {
+  .rx-orbita-area .rx-orbita { --r1: 78px !important; --r2: 128px !important; }
+  .rx-orbita-area .rx-seg { width: 38px; height: 38px; }
+  .rx-orbita-area .rx-seg-nome { font-size: .6875rem; padding: .125rem .5rem; white-space: normal; width: max-content; max-width: 6rem; text-align: center; }
+}
+.rx-orbita-area { padding-bottom: 2.25rem; }
+@media (max-width: 1023px) { .rx-orbita-area .rx-orbita { --r0: 50px !important; --r1: 88px !important; --r2: 132px !important; } }
