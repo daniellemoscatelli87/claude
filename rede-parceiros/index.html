@@ -1,1019 +1,134 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="overflow-x-clip">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Dani Moscatelli | Partners &amp; Connections</title>
-<meta name="description" content="Cadastre-se na rede de parceiros da Dani Moscatelli e conecte-se a projetos de Service Design, CX, UX, EX e inovação.">
+<meta name="description" content="Rede de parceiros da Dani Moscatelli | Experience Design Studio: profissionais independentes para colaborar em projetos de Design, Experiência Humana, Negócios, Tecnologia e Inovação.">
 <link rel="canonical" href="https://www.danimoscatelli.com.br/rede-parceiros/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Dani Moscatelli | Experience Design Studio">
 <meta property="og:title" content="Dani Moscatelli | Partners &amp; Connections">
-<meta property="og:description" content="Cadastre-se na rede de parceiros da Dani Moscatelli e conecte-se a projetos de Service Design, CX, UX, EX e inovação.">
+<meta property="og:description" content="Rede de parceiros da Dani Moscatelli | Experience Design Studio: profissionais independentes para colaborar em projetos de Design, Experiência Humana, Negócios, Tecnologia e Inovação.">
 <meta property="og:url" content="https://www.danimoscatelli.com.br/rede-parceiros/">
 <meta property="og:image" content="https://www.danimoscatelli.com.br/compartilhar.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Logo Dani Moscatelli | Experience Design Studio">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Dani Moscatelli | Partners &amp; Connections">
-<meta name="twitter:description" content="Cadastre-se na rede de parceiros da Dani Moscatelli e conecte-se a projetos de Service Design, CX, UX, EX e inovação.">
-<meta name="twitter:image" content="https://www.danimoscatelli.com.br/compartilhar.png">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script type="module" src="/src/rede-parceiros.ts"></script>
-<style>
-/* Ordem das camadas: o estilo próprio desta página fica abaixo do cabeçalho e da gaveta compartilhados. */
-@layer theme, base, pagina, compartilhado, utilities;
-@layer pagina {
-  :root {
-    --coral: #ff5656;
-    --coral-soft: #fe6a62;
-    --coral-tint: #fff1f0;
-    --slate: #5c6986;
-    --ink: #111111;
-    --muted: #5c6986;
-    --line: #e4e6ec;
-    --bg: #f7f8fa;
-    --card: #ffffff;
-    --error: #d93636;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; }
-  body {
-    font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    line-height: 1.6;
-    font-size: 16px;
-  }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
-  .topbar { max-width: 1280px; margin: 0 auto; padding: 24px 24px 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-  .topbar img { height: 48px; width: auto; display: block; }
-  @media (min-width: 768px) { .topbar { padding: 32px 40px 0; } .topbar img { height: 64px; } }
-  /* No celular, só o ícone da marca. */
-  .topbar .logo-full { display: none; }
-  .topbar .logo-icon { height: 40px; }
-  @media (min-width: 640px) { .topbar .logo-full { display: block; } .topbar .logo-icon { display: none; } }
-  .btn-back { display: inline-flex; align-items: center; padding: 10px 8px; border-radius: 999px; color: var(--coral); font-size: 15px; font-weight: 600; text-decoration: none; }
-  .btn-back:hover { text-decoration: underline; }
-  .progress { height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
-  .progress > div { height: 100%; width: 0; background: var(--coral); transition: width .3s ease; }
-  .step-label { font-size: 13px; color: var(--muted); margin-bottom: 16px; letter-spacing: .02em; }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-top: 4px solid #a8afbd;
-    border-radius: 12px;
-    padding: 32px 28px;
-  }
-  @media (max-width: 560px) { .card { padding: 24px 18px; } }
-  h1 { font-size: 26px; margin: 0 0 8px; letter-spacing: .02em; }
-  h2 { font-size: 20px; margin: 0 0 24px; color: var(--ink); }
-  h2 small { display: block; font-size: 12px; font-weight: 600; letter-spacing: .12em; color: var(--coral); text-transform: uppercase; margin-bottom: 4px; }
-  h3 { font-size: 16px; margin: 28px 0 8px; }
-  .subtitle { color: var(--slate); font-weight: 500; margin: 0 0 4px; }
-  .tagline { color: var(--coral); font-weight: 600; margin: 0 0 24px; }
-  .intro p { margin: 0 0 14px; }
-  .intro .lead { font-size: 17px; }
-  .intro .ih { display: flex; align-items: center; gap: 10px; margin: 28px 0 10px; }
-  .intro .ih svg { width: 22px; height: 22px; color: var(--coral); flex-shrink: 0; }
-  .intro .hl { display: flex; gap: 14px; align-items: flex-start; background: var(--bg); border-radius: 12px; padding: 16px; margin: 6px 0 14px; }
-  .intro .hl p { margin: 0; }
-  .intro .hl-ic { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: var(--coral); box-shadow: 0 1px 3px rgb(17 17 17 / .08); }
-  .intro .hl-ic svg { width: 20px; height: 20px; }
-  .intro .hl.ai { background: var(--coral-tint); }
-  .intro .hl-photo { flex-shrink: 0; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
-  .intro .mini { font-size: 14px; color: var(--muted); margin: 0 0 8px; }
-  .intro .tags { list-style: none; padding: 0; margin: 0 0 14px; display: flex; flex-wrap: wrap; gap: 8px; }
-  .intro .tags li { font-size: 14px; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: var(--coral-tint); color: #c43c3c; }
-  .intro .tags.alt li { background: var(--bg); color: var(--slate); border: 1px solid var(--line); }
-  .intro .icon-list { list-style: none; padding: 0; margin: 0 0 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-  @media (max-width: 560px) { .intro .icon-list { grid-template-columns: minmax(0, 1fr); } }
-  .intro .icon-list li { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 500; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
-  .intro .icon-list span { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--coral-tint); color: var(--coral); }
-  .intro .icon-list svg { width: 18px; height: 18px; }
-  .intro .note-box { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--slate); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 0 0 14px; }
-  .intro .note-box svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--slate); margin-top: 1px; }
-  .intro .note-box p { margin: 0 0 8px; }
-  .intro .note-box p:last-child { margin: 0; }
-  .contact { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 15px; }
-  .contact p { margin: 0 0 4px; }
-  .contact .sig-photo, .sign .sig-photo { display: block; width: 96px; height: 96px; border-radius: 50%; margin: 4px 0 12px; }
-  a { color: var(--coral); }
-  .q { margin-bottom: 28px; }
-  .q:last-child { margin-bottom: 0; }
-  .q-label { display: block; font-weight: 600; margin-bottom: 4px; }
-  .q-label .req { color: var(--coral); margin-left: 2px; }
-  .help { font-size: 14px; color: var(--muted); margin: 0 0 10px; }
-  .help ul { margin: 6px 0; padding-left: 20px; }
-  .info { font-size: 14px; color: var(--muted); background: var(--bg); border-radius: 8px; padding: 14px 16px; margin: 10px 0 12px; }
-  .info a { overflow-wrap: anywhere; word-break: break-all; }
-  .info p { margin: 0 0 8px; }
-  .info p:last-child { margin: 0; }
-  .info.wa-box { display: flex; gap: 12px; align-items: flex-start; background: #e9f8ef; border: 1px solid #b9e8cb; color: #2f5d43; }
-  .info.wa-box a { color: #128c4b; font-weight: 600; }
-  .wa-ic { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background: #25d366; color: #fff; display: grid; place-items: center; }
-  .wa-ic svg { width: 20px; height: 20px; }
-  input[type=text], input[type=email], input[type=tel], input[type=url], textarea, .uf-cidade select, .lang-row select {
-    width: 100%;
-    font: inherit;
-    font-size: 15px;
-    color: var(--ink);
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 11px 13px;
-    transition: border-color .15s, box-shadow .15s;
-  }
-  textarea { min-height: 120px; resize: vertical; }
-  .uf-cidade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 12px; }
-  @media (max-width: 560px) { .uf-cidade { grid-template-columns: 1fr; } }
-  .uf-cidade label span { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
-  .uf-cidade select, .lang-row select { appearance: none; -webkit-appearance: none; padding-right: 36px; cursor: pointer; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c6986' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center / 16px; }
-  .uf-cidade select:disabled { color: var(--muted); background-color: var(--bg); cursor: not-allowed; }
-  .q.invalid .uf-cidade select { border-color: var(--error); }
-  input:focus, textarea:focus, .uf-cidade select:focus, .lang-row select:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px var(--coral-tint); }
-  .options { display: grid; gap: 8px; }
-  .group-title { font-size: 13px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; margin: 18px 0 4px; }
-  .group-title:first-child { margin-top: 4px; }
-  .opt {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 10px 12px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    transition: border-color .15s, background .15s;
-  }
-  .opt:hover { border-color: var(--coral-soft); }
-  .opt input { margin: 4px 0 0; accent-color: var(--coral); flex-shrink: 0; width: 16px; height: 16px; }
-  .opt:has(input:checked) { border-color: var(--coral); background: var(--coral-tint); }
-  .q.invalid input[type=text], .q.invalid input[type=email], .q.invalid input[type=tel], .q.invalid textarea, .q.invalid .opt { border-color: var(--error); }
-  .err { display: none; color: var(--error); font-size: 13px; margin-top: 6px; }
-  .q.invalid .err { display: block; }
-  .nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; }
-  button {
-    font: inherit; font-weight: 600; font-size: 15px;
-    border-radius: 8px; padding: 12px 24px; cursor: pointer;
-    border: 1px solid var(--coral);
-  }
-  .btn-primary { background: var(--coral); color: #fff; margin-left: auto; border-radius: 999px; }
-  .btn-primary:hover { background: #f04848; }
-  .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-  .btn-arrow { width: 18px; height: 18px; flex-shrink: 0; }
-  .btn-primary:disabled { opacity: .6; cursor: wait; }
-  .btn-ghost { background: none; border-color: transparent; color: var(--coral); border-radius: 999px; }
-  .btn-ghost:hover { text-decoration: underline; }
-  .form-error { display: none; color: var(--error); font-size: 14px; margin-top: 12px; text-align: right; }
-  /* No celular, os botões ficam fixos no rodapé da tela */
-  @media (max-width: 560px) {
-    .nav-bar { position: sticky; bottom: 0; z-index: 10; margin: 24px -16px -64px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--card); border-top: 1px solid var(--line); box-shadow: 0 -6px 16px -8px rgb(17 17 17 / .12); }
-    .nav-bar .nav { margin-top: 0; }
-    .nav-bar .btn-primary { flex: 1; }
-    .nav-bar .form-error { text-align: center; margin-top: 8px; }
-    /* Com o teclado aberto, a barra volta para o fim da etapa para não ficar solta no meio da tela */
-    body.kb .nav-bar { position: static; box-shadow: none; }
-  }
-  .end p { margin: 0 0 14px; }
-  .end .sign { margin-top: 20px; }
-  .end .sign p { margin: 0; }
-  .end .sign .motto { color: var(--coral); font-weight: 600; }
-  /* Não vale para o cabeçalho, o menu e a gaveta compartilhados (eles usam o "hidden" do Tailwind) */
-  .hidden:not(.site-header, .site-header *, #menu-mobile, #menu-mobile *, #contact-drawer, #contact-drawer *, #drawer-backdrop) { display: none !important; }
-  .other { margin: -2px 0 8px 34px; }
-  /* Lista com um item por linha */
-  .list-rows { display: grid; gap: 8px; }
-  .list-row { display: flex; gap: 8px; align-items: center; }
-  .list-row input { flex: 1; min-width: 0; }
-  .list-rm { flex-shrink: 0; width: 40px; height: 40px; padding: 0; border-radius: 10px; border: 1px solid var(--line); background: #fff; color: var(--muted); font-size: 20px; line-height: 1; }
-  .list-rm:hover { border-color: var(--error); color: var(--error); }
-  .list-add { margin-top: 10px; background: none; border: 1px dashed var(--coral); color: var(--coral); padding: 9px 16px; font-size: 14px; }
-  .list-add:hover { background: var(--coral-tint); }
-  .q.invalid .list-row input { border-color: var(--error); }
-  .mail-sug { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  .mail-sug button { font: inherit; font-size: 13px; font-weight: 600; color: var(--slate); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
-  .mail-sug button:hover, .mail-sug button:focus { border-color: var(--coral); color: var(--coral); outline: none; }
-  .draft-note { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; font-size: 14px; color: var(--slate); background: var(--coral-tint); border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; }
-  .draft-note button { font: inherit; font-size: 14px; font-weight: 600; color: var(--coral); background: none; border: 0; text-decoration: underline; cursor: pointer; padding: 4px; }
-  .pol-dlg { width: min(720px, 94vw); max-height: 88vh; border: 0; border-radius: 16px; padding: 0; box-shadow: 0 20px 60px -10px rgb(17 17 17 / .35); }
-  .pol-dlg::backdrop { background: rgb(17 17 17 / .45); }
-  .pol-head { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #fff; border-bottom: 1px solid var(--line); padding: 14px 18px; }
-  .pol-head h2 { margin: 0; font-size: 18px; }
-  .pol-head button { width: 44px; height: 44px; border: 0; background: none; border-radius: 10px; color: var(--muted); font-size: 26px; line-height: 1; cursor: pointer; }
-  .pol-body { padding: 4px 22px 24px; font-size: 15px; line-height: 1.65; color: #334155; }
-  .pol-body h1, .pol-body .tag { display: none; }
-  .pol-body h2 { font-size: 16px; margin: 22px 0 8px; color: var(--ink); }
-  .pol-body ul { padding-left: 20px; }
-  .lang-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 22px; gap: 6px; align-items: center; }
-  .lang-row .list-rm { width: 22px; border: 0; background: none; }
-  .lang-row select { padding-left: 8px; padding-right: 24px; background-position: right 7px center; background-size: 13px; }
-  .q.invalid .lang-row.bad input, .q.invalid .lang-row.bad select { border-color: var(--error); }
-  /* Categorias em acordeão */
-  .acc-groups { display: grid; gap: 10px; }
-  .acc { border: 1px solid var(--line); border-radius: 12px; background: #fff; overflow: hidden; }
-  .acc.has { border-color: var(--coral); }
-  .acc-head { width: 100%; display: flex; align-items: center; gap: 10px; border: 0; border-radius: 0; background: none; padding: 14px 16px; text-align: left; color: var(--ink); }
-  .acc-title { flex: 1; font-weight: 700; font-size: 15px; }
-  .acc-count { font-size: 12px; font-weight: 700; color: #fff; background: var(--coral); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
-  .acc-count:empty { display: none; }
-  .acc-chev { width: 10px; height: 10px; border-right: 2px solid var(--slate); border-bottom: 2px solid var(--slate); transform: rotate(45deg); margin: -4px 4px 0; transition: transform .2s; flex-shrink: 0; }
-  .acc.open .acc-chev { transform: rotate(-135deg); margin-top: 4px; }
-  .acc-body { padding: 0 12px 12px; }
-  .q.invalid .acc { border-color: var(--error); }
-  .other input { width: 100%; font: inherit; font-size: 15px; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
-  .other input:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px var(--coral-tint); }
-  /* Celular: campos com 16px evitam o zoom automático do iPhone ao tocar no campo; sem rolagem lateral. */
-  html { overflow-x: clip; }
-  @media (max-width: 767px) { input, select, textarea { font-size: 16px !important; } }
-  .end-head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
-  .end-head h2 { margin: 0; }
-  .end-icon { flex-shrink: 0; width: 64px; height: 64px; margin: 0; border-radius: 16px; background: var(--coral-tint); color: var(--coral); display: grid; place-items: center; }
-  .end-icon svg { width: 32px; height: 32px; }
-}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script type="module" src="/src/rede-parceiros-inicio.ts"></script>
 <script src="/analytics.js" defer></script>
 </head>
-<body>
+<body class="parceiros-inicio">
 <!-- @cabecalho:parceiros -->
-<div class="wrap">
+<main id="conteudo">
 
-  <div id="progressBox" class="hidden">
-    <div class="progress"><div id="progressBar"></div></div>
-    <div class="step-label" id="stepLabel"></div>
-  </div>
-
-  <form id="form" novalidate>
-    <!-- Introdução -->
-    <section class="card intro step" data-step="0">
-      <h1>DM | Partners &amp; Connections</h1>
-      <p class="tagline">Conectando competências. Ampliando possibilidades. Transformando negócios.</p>
-
-      <p class="lead">O Dani Moscatelli | Experience Design Studio está ampliando sua atuação e construindo um <strong>ecossistema multidisciplinar de profissionais independentes (PJ)</strong> para colaborar em projetos de Design, Experiência Humana, Negócios, Tecnologia e Inovação.</p>
-
-      <div class="hl">
-        <img class="hl-photo" src="/dani-assinatura.webp" alt="Dani Moscatelli" width="56" height="56">
-        <p>Com <strong>mais de 20 anos de experiência em Design</strong> e especialização em Service Design, minha atuação conecta estratégia, pesquisa e tecnologia para transformar desafios de negócio em soluções e experiências de valor.</p>
-      </div>
-
-      <h3 class="ih"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Objetivo da rede</h3>
-      <p>Reunir profissionais com competências complementares para apoiar diferentes etapas dos projetos, desde pesquisas, diagnósticos e recomendações estratégicas até o desenvolvimento e a implementação de produtos, serviços e soluções digitais.</p>
-
-      <h3 class="ih"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17.5" cy="9" r="2.5"/><path d="M16 14.2A5 5 0 0 1 21.5 19"/></svg>Quem buscamos</h3>
-      <p class="mini">Profissionais de:</p>
-      <ul class="tags">
-        <li>Design</li><li>UX/UI</li><li>Pesquisa</li><li>Negócios</li><li>Tecnologia</li><li>Desenvolvimento</li><li>Dados</li><li>IA</li><li>Inovação</li>
-      </ul>
-      <p class="mini">Especialistas em setores como:</p>
-      <ul class="tags alt">
-        <li>Saúde</li><li>Hospitalidade</li><li>Educação</li><li>Varejo</li><li>Serviços financeiros</li><li>Indústria</li>
-      </ul>
-
-      <h3 class="ih"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>Formatos de parceria</h3>
-      <ul class="icon-list">
-        <li><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>Consultorias especializadas</li>
-        <li><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></span>Construção de estratégias, metodologias e frameworks</li>
-        <li><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span>Desenvolvimento de soluções</li>
-        <li><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>Execução de entregas específicas</li>
-      </ul>
-
-      <h3 class="ih"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>Sobre este cadastro</h3>
-      <p>Este cadastro tem como finalidade conhecer profissionais e mapear competências para futuras oportunidades de colaboração.</p>
-      <div class="hl ai">
-        <span class="hl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></span>
-        <p><strong>Quanto mais completo for o seu cadastro, melhor.</strong> A plataforma usa inteligência artificial para analisar os perfis e encontrar os profissionais certos para cada demanda, por isso cada resposta faz diferença.</p>
-      </div>
-      <div class="note-box" role="note">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-        <div>
-          <p>O cadastro não representa oferta de trabalho ou garantia de contratação. As parcerias serão estabelecidas conforme as demandas do estúdio e a aderência de cada perfil.</p>
-          <p>Além das oportunidades do estúdio, a rede também é um espaço para a troca de oportunidades entre os próprios profissionais.</p>
+  <!-- Hero -->
+  <section class="rp-hero" aria-labelledby="rp-titulo">
+    <div class="rp-container rp-hero-grade">
+      <div class="rp-hero-texto">
+        <p class="rp-selo"><span aria-hidden="true"></span>DM | Partners &amp; Connections</p>
+        <h1 id="rp-titulo">Conectando competências. Ampliando possibilidades. <span class="rp-destaque">Transformando negócios.</span></h1>
+        <p class="rp-lead">O Dani Moscatelli | Experience Design Studio está ampliando sua atuação e construindo um <strong>ecossistema multidisciplinar de profissionais independentes (PJ)</strong> para colaborar em projetos de Design, Experiência Humana, Negócios, Tecnologia e Inovação.</p>
+        <div class="rp-acoes">
+          <a class="rp-botao" href="/rede-parceiros/cadastro/" onclick="window.dmEvento &amp;&amp; window.dmEvento('clique_quero_ser_parceiro')">Quero ser parceiro<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <a class="rp-link" href="#formatos">Como funciona</a>
         </div>
       </div>
+      <figure class="rp-card rp-assinatura">
+        <img src="/dani-assinatura.webp" alt="Dani Moscatelli" width="96" height="96">
+        <blockquote><p>Com mais de 20 anos de experiência em Design e especialização em Service Design, minha atuação conecta estratégia, pesquisa e tecnologia para transformar desafios de negócio em soluções e experiências de valor.</p></blockquote>
+        <figcaption><strong>Dani Moscatelli</strong><span>Experience Design Studio</span></figcaption>
+      </figure>
+    </div>
+  </section>
 
-      <div class="contact">
-        <p><strong>Dani Moscatelli</strong><br>Experience Design Studio</p>
-        <p>E-mail: <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a></p>
-        <p>WhatsApp: (41) 99748-5414</p>
-        <p>LinkedIn: <a href="https://www.linkedin.com/in/danimoscatelli/" target="_blank" rel="noopener">linkedin.com/in/danimoscatelli/</a></p>
+  <!-- Objetivo -->
+  <section class="rp-secao rp-fundo-g50" id="objetivo" aria-labelledby="objetivo-titulo">
+    <div class="rp-container rp-estreito rp-centro">
+      <h2 id="objetivo-titulo">Objetivo da <span class="rp-destaque">rede</span></h2>
+      <p class="rp-texto">Reunir profissionais com competências complementares para apoiar diferentes etapas dos projetos, desde pesquisas, diagnósticos e recomendações estratégicas até o desenvolvimento e a implementação de produtos, serviços e soluções digitais.</p>
+    </div>
+  </section>
+
+  <!-- Quem buscamos -->
+  <section class="rp-secao" id="quem" aria-labelledby="quem-titulo">
+    <div class="rp-container">
+      <div class="rp-cabecalho">
+        <h2 id="quem-titulo">Quem <span class="rp-destaque">buscamos</span></h2>
       </div>
-    </section>
-  </form>
-  <dialog class="pol-dlg" id="polDlg" aria-labelledby="polTitle">
-    <div class="pol-head"><h2 id="polTitle">Política de Privacidade</h2><button type="button" id="polClose" aria-label="Fechar">×</button></div>
-    <div class="pol-body" id="polBody"><p>Carregando…</p></div>
-  </dialog>
-
-  <!-- Telas finais -->
-  <section class="card end hidden" id="endSuccess">
-    <div class="end-head">
-      <div class="end-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></svg></div>
-      <h2 id="welcome-title">Boas-vindas!</h2>
-    </div>
-    <p>É um prazer receber você no ecossistema profissional da <strong>Dani Moscatelli | Experience Design Studio</strong>!</p>
-    <p>Acreditamos que grandes oportunidades surgem do encontro entre diferentes talentos, conhecimentos e perspectivas.</p>
-    <p>Agora, você faz parte da nossa rede de parceiros e poderá ser convidado para colaborar em projetos do estúdio, conforme seu perfil e disponibilidade.</p>
-    <p>Nossa comunidade também é um espaço para trocar experiências, compartilhar conhecimentos, divulgar oportunidades e desenvolver parcerias que vão além do estúdio.</p>
-    <p>A participação não estabelece vínculo contratual, e eventuais colaborações serão definidas conforme as necessidades de cada projeto.</p>
-    <p>Que este seja o início de muitas conexões capazes de transformar ideias em experiências de alto valor!</p>
-    <div class="sign">
-      <img class="sig-photo" src="/dani-assinatura.webp" alt="Dani Moscatelli" width="96" height="96">
-      <p><strong>Dani Moscatelli</strong></p>
-      <p>Experience Design Studio</p>
-      <p class="motto">Meaningful Experiences.</p>
+      <div class="rp-grade-2">
+        <article class="rp-card">
+          <span class="rp-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <h3>Profissionais de:</h3>
+          <ul class="rp-tags" aria-label="Áreas profissionais">
+            <li>Design</li><li>UX/UI</li><li>Pesquisa</li><li>Negócios</li><li>Tecnologia</li><li>Desenvolvimento</li><li>Dados</li><li>IA</li><li>Inovação</li>
+          </ul>
+        </article>
+        <article class="rp-card">
+          <span class="rp-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg></span>
+          <h3>Especialistas em setores como:</h3>
+          <ul class="rp-tags" aria-label="Setores">
+            <li>Saúde</li><li>Hospitalidade</li><li>Educação</li><li>Varejo</li><li>Serviços financeiros</li><li>Indústria</li>
+          </ul>
+        </article>
+      </div>
     </div>
   </section>
 
-  <section class="card end hidden" id="endPJ">
-    <h2>Agradecemos pelo seu interesse!</h2>
-    <p>A Rede de Parceiros | Dani Moscatelli Experience Design Studio é uma iniciativa voltada à conexão com profissionais independentes que tenham interesse em colaborar em projetos futuros na modalidade de prestação de serviços (PJ).</p>
-    <p>Como esse modelo não corresponde ao seu interesse profissional neste momento, não será possível prosseguir com o cadastro.</p>
-    <p>Agradecemos seu tempo e esperamos que possamos nos conectar em outras oportunidades!</p>
-    <div class="sign">
-      <p><strong>Dani Moscatelli</strong></p>
-      <p>Experience Design Studio</p>
+  <!-- Formatos de parceria -->
+  <section class="rp-secao rp-fundo-g50" id="formatos" aria-labelledby="formatos-titulo">
+    <div class="rp-container">
+      <div class="rp-cabecalho">
+        <h2 id="formatos-titulo">Formatos de <span class="rp-destaque">parceria</span></h2>
+      </div>
+      <ul class="rp-grade-4">
+        <li class="rp-card rp-formato"><span class="rp-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><h3>Consultorias especializadas</h3></li>
+        <li class="rp-card rp-formato"><span class="rp-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></span><h3>Construção de estratégias, metodologias e frameworks</h3></li>
+        <li class="rp-card rp-formato"><span class="rp-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span><h3>Desenvolvimento de soluções</h3></li>
+        <li class="rp-card rp-formato"><span class="rp-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><h3>Execução de entregas específicas</h3></li>
+      </ul>
     </div>
   </section>
 
-  <section class="card end hidden" id="endConsent">
-    <h2>Sua privacidade é importante para nós!</h2>
-    <p>Para integrar a Rede de Parceiros | Dani Moscatelli Experience Design Studio, precisamos da sua autorização para armazenar e utilizar as informações profissionais fornecidas, exclusivamente para as finalidades apresentadas neste formulário.</p>
-    <p>Respeitamos sua decisão de não conceder essa autorização. Por esse motivo, não poderemos incluir seu perfil em nossa base de parceiros.</p>
-    <p>Agradecemos seu interesse e sua disponibilidade!</p>
-    <div class="sign">
-      <p><strong>Dani Moscatelli</strong></p>
-      <p>Experience Design Studio</p>
+  <!-- Sobre o cadastro + convite -->
+  <section class="rp-secao" id="cadastro" aria-labelledby="cadastro-titulo">
+    <div class="rp-container">
+      <div class="rp-cabecalho">
+        <h2 id="cadastro-titulo">Sobre este <span class="rp-destaque">cadastro</span></h2>
+      </div>
+      <ul class="rp-grade-3">
+        <li class="rp-card"><span class="rp-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.94 14.06 4 20"/><path d="m12 3 1.9 5.8L20 10l-5 3.6L16.6 20 12 16.4 7.4 20 9 13.6 4 10l6.1-1.2z"/></svg></span><p>Quanto mais completo for o seu cadastro, melhor. A plataforma usa inteligência artificial para analisar os perfis e encontrar os profissionais certos para cada demanda, por isso cada resposta faz diferença.</p></li>
+        <li class="rp-card"><span class="rp-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><p>O cadastro não representa oferta de trabalho ou garantia de contratação. As parcerias serão estabelecidas conforme as demandas do estúdio e a aderência de cada perfil.</p></li>
+        <li class="rp-card"><span class="rp-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span><p>Além das oportunidades do estúdio, a rede também é um espaço para a troca de oportunidades entre os próprios profissionais.</p></li>
+      </ul>
+
+      <div class="rp-convite">
+        <span aria-hidden="true" class="rp-convite-luz rp-convite-luz-1"></span><span aria-hidden="true" class="rp-convite-luz rp-convite-luz-2"></span>
+        <div class="rp-convite-visual" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div>
+        <div class="rp-convite-conteudo">
+          <p class="rp-selo"><span aria-hidden="true"></span>Rede de Parceiros</p>
+          <h2 class="rp-convite-titulo">Faça parte da <span class="rp-destaque">Rede de Parceiros</span></h2>
+          <p class="rp-convite-texto">Este cadastro tem como finalidade conhecer profissionais e mapear competências para futuras oportunidades de colaboração.</p>
+          <div class="rp-acoes">
+            <a class="rp-botao" href="/rede-parceiros/cadastro/" onclick="window.dmEvento &amp;&amp; window.dmEvento('clique_quero_ser_parceiro')">Quero ser parceiro<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
-</div>
+</main>
 
-<script>
-const SUPABASE_URL = "https://lipfvnerohkaajegqvwr.supabase.co";
-const SUPABASE_KEY = "sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej";
-const WHATSAPP_GROUP = "https://chat.whatsapp.com/ChB6TTutuNv8g5BFYdy7FK?mode=gi_t";
-const WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>';
-
-const PJ_NO = "Não tenho interesse em atuar como PJ.";
-const CONSENT_YES = "Sim, autorizo.";
-const CONSENT_NO = "Não autorizo.";
-
-const ESTADOS = [["AC","Acre"],["AL","Alagoas"],["AP","Amapá"],["AM","Amazonas"],["BA","Bahia"],["CE","Ceará"],["DF","Distrito Federal"],["ES","Espírito Santo"],["GO","Goiás"],["MA","Maranhão"],["MT","Mato Grosso"],["MS","Mato Grosso do Sul"],["MG","Minas Gerais"],["PA","Pará"],["PB","Paraíba"],["PR","Paraná"],["PE","Pernambuco"],["PI","Piauí"],["RJ","Rio de Janeiro"],["RN","Rio Grande do Norte"],["RS","Rio Grande do Sul"],["RO","Rondônia"],["RR","Roraima"],["SC","Santa Catarina"],["SP","São Paulo"],["SE","Sergipe"],["TO","Tocantins"]];
-
-const SECTIONS = [
-  { title: "Informações profissionais e contato", n: "Seção 1", questions: [
-    { id: "nome", n: 1, label: "Qual é o seu nome completo?", type: "text", required: true },
-    { id: "empresa", n: 2, label: "Qual é o nome da sua empresa?", type: "text", required: false, help: "Se você atua por meio de uma empresa, consultoria ou estúdio próprio." },
-    { id: "email", n: 3, label: "Qual é o seu e-mail profissional?", type: "email", required: true },
-    { id: "telefone", n: 4, label: "Qual é o seu telefone/WhatsApp para contato?", type: "tel", required: true, help: "Informe o número com DDD." },
-    { id: "cidade_estado", n: 5, label: "Em qual cidade e estado você reside atualmente?", type: "uf_cidade", required: true, help: "Escolha o estado para carregar as cidades." },
-    { id: "linkedin", n: 6, label: "Qual é o seu perfil no LinkedIn?", type: "url", urlHost: "linkedin.com", placeholder: "https://www.linkedin.com/in/seu-perfil", required: false, help: "Insira o link completo." },
-    { id: "apresentacao", n: 7, label: "Como você se apresenta profissionalmente?", type: "paragraph", required: true, help: "Descreva brevemente sua atuação, suas principais competências e o tipo de contribuição que costuma oferecer aos projetos." },
-  ]},
-  { title: "Modelo de atuação e contratação", n: "Seção 2", questions: [
-    { id: "atuacao_pj", n: 8, label: "Atualmente, você atua como prestador(a) de serviços PJ?", type: "radio", required: true, options: [
-      "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria).",
-      "Estou em processo de formalização.",
-      "Atualmente não tenho CNPJ, mas tenho interesse em atuar como PJ.",
-      PJ_NO,
-    ]},
-    { id: "modelo_atuacao", n: 9, label: "Qual é o seu modelo de atuação profissional?", type: "checkbox", required: true, options: [
-      "Consultor(a) independente.",
-      "Freelancer especializado(a).",
-      "Profissional autônomo com atuação por projetos.",
-      "Sócio(a) ou proprietário(a) de consultoria.",
-      "Sócio(a) ou proprietário(a) de estúdio/agência.",
-      "Especialista técnico(a) que presta serviços para outras empresas.",
-      "Profissional contratado(a) que também realiza projetos como PJ.",
-      "Outro.",
-    ]},
-    { id: "formas_colaboracao", n: 10, label: "Quais tipos de serviço você presta?", type: "checkbox", required: true, options: [
-      "Consultoria estratégica.",
-      "Consultoria técnica especializada.",
-      "Pesquisa, diagnóstico e análise.",
-      "Planejamento e desenho de soluções.",
-      "Desenvolvimento e implementação de soluções.",
-      "Facilitação de workshops e processos colaborativos.",
-      "Treinamentos e capacitação de equipes.",
-      "Acompanhamento e avaliação de resultados.",
-      "Apoio pontual em demandas específicas.",
-      "Participação em equipes multidisciplinares.",
-      "Liderança de frentes específicas de projetos.",
-      "Outro.",
-    ]},
-    { id: "disponibilidade_colaborar", n: 11, label: "Qual seria sua disponibilidade para colaborar em projetos futuros?", type: "radio", required: true, options: [
-      "Disponibilidade imediata.",
-      "Disponibilidade mediante agendamento.",
-      "Disponibilidade parcial, conciliando com outros projetos.",
-      "Disponibilidade apenas para projetos pontuais.",
-    ]},
-  ]},
-  { title: "Áreas de especialização", n: "Seção 3", questions: [
-    { id: "areas_experiencia", n: 12, label: "Em quais áreas você possui experiência profissional?", type: "checkbox", required: true, groups: [
-      { title: "Estratégia e Negócios", options: [
-        "Estratégia de negócios.", "Business Design.", "Inovação e transformação de negócios.", "Desenvolvimento de novos produtos e serviços.", "Modelagem de negócios.", "Planejamento estratégico.", "Estratégia comercial e crescimento.", "Branding e posicionamento de marca.",
-      ]},
-      { title: "Design e Experiência", options: [
-        "Service Design.", "Customer Experience (CX).", "Patient Experience (PX).", "User Experience (UX).", "UX Research.", "UX/UI Design.", "Product Design.", "Design de Interfaces.", "Design Systems.", "Design de Interação.", "Design Estratégico.", "Design Organizacional.", "Design de Experiência Física e Ambiental.", "Design de Informação.", "Acessibilidade e Design Inclusivo.",
-      ]},
-      { title: "Pesquisa e Comportamento", options: [
-        "Pesquisa qualitativa.", "Pesquisa quantitativa.", "Pesquisa etnográfica.", "Pesquisa de mercado.", "Pesquisa com usuários e clientes.", "Pesquisa comportamental.", "Antropologia aplicada.", "Psicologia aplicada à experiência.", "Análise e interpretação de dados.",
-      ]},
-      { title: "Tecnologia e Desenvolvimento", options: [
-        "Desenvolvimento Front-end.", "Desenvolvimento Back-end.", "Desenvolvimento Full Stack.", "Desenvolvimento Mobile.", "Desenvolvimento No-code/Low-code.", "Automação de processos e fluxos.", "Inteligência Artificial aplicada a negócios.", "Integração de sistemas e APIs.", "Arquitetura de soluções digitais.", "Análise e Engenharia de Dados.", "Business Intelligence (BI).",
-      ]},
-      { title: "Operações, Serviços e Implementação", options: [
-        "Gestão e desenho de operações de serviços.", "Implantação de produtos e serviços.", "Qualidade e excelência de serviços.", "Gestão de mudanças.", "Capacitação e desenvolvimento de equipes.", "Facilitação e cocriação.", "Operações omnichannel.", "Avaliação e mensuração de experiências.",
-      ]},
-      { title: "Saúde e Bem-estar", options: [
-        "Medicina.", "Enfermagem.", "Psicologia.", "Nutrição.", "Fisioterapia.", "Farmácia.", "Gestão hospitalar e de saúde.", "Qualidade e segurança do paciente.", "Saúde digital.",
-      ]},
-      { title: "Outras Especialidades", options: [
-        "Comunicação e Marketing.", "Comunicação Institucional.", "Educação e aprendizagem.", "Arquitetura e ambientes.", "Consultoria regulatória e compliance.", "Direito.", "Engenharia.", "Finanças e contabilidade.", "Recursos humanos.", "Hospitalidade e turismo.", "Outra especialidade.",
-      ]},
-    ]},
-    { id: "principal_especializacao", n: 13, label: "Qual é a sua principal área de especialização?", type: "text", required: true, help: "Indique a competência pela qual você gostaria de ser reconhecido(a) e eventualmente convidado(a) a participar de projetos." },
-    { id: "atividades_entregaveis", n: 14, label: "Quais são as principais atividades ou entregáveis que você consegue desenvolver?", type: "list", placeholder: "Ex.: Mapeamento de jornadas", required: true, help: "Exemplos: condução de pesquisas, mapeamento de jornadas, elaboração de service blueprints, prototipação, construção de interfaces, desenvolvimento de plataformas, automações, diagnóstico de serviços, facilitação de workshops, planejamento estratégico etc." },
-    { id: "etapas_projeto", n: 15, label: "Em quais etapas de um projeto você pode contribuir?", type: "checkbox", required: true, options: [
-      "Diagnóstico e entendimento do problema.",
-      "Pesquisa e levantamento de informações.",
-      "Análise de dados e identificação de oportunidades.",
-      "Planejamento e definição de estratégias.",
-      "Ideação e cocriação de soluções.",
-      "Prototipação, testes e validação.",
-      "Execução e desenvolvimento das entregas.",
-      "Implementação e acompanhamento.",
-      "Capacitação de equipes e gestão da mudança.",
-      "Consultoria técnica ou parecer especializado.",
-      "Mensuração de resultados e melhoria contínua.",
-      "Atuação transversal em todas as etapas.",
-    ]},
-
-  ]},
-  { title: "Segmentos e conhecimento setorial", n: "Seção 4", questions: [
-    { id: "segmentos", n: 16, label: "Em quais setores de mercado você já atuou ou atende clientes?", type: "checkbox", required: true, help: "Aqui não é a sua especialidade, e sim o setor dos clientes e projetos com que você trabalha. Ex.: uma pessoa de UX Research pode ter atuado em Saúde e em Varejo.", options: [
-      "Saúde e serviços hospitalares.", "Clínicas e consultórios.", "Operadoras de planos de saúde.", "Saúde digital e Healthtechs.", "Turismo e hospitalidade.", "Hotelaria e meios de hospedagem.", "Gastronomia e alimentação.", "Varejo e comércio.", "E-commerce e marketplaces.", "Serviços financeiros e Fintechs.", "Educação e Edtechs.", "Tecnologia e software.", "Indústria e manufatura.", "Mobilidade e transportes.", "Logística e distribuição.", "Telecomunicações.", "Mercado imobiliário.", "Construção civil e arquitetura.", "Entretenimento e eventos.", "Setor público e serviços governamentais.", "Terceiro setor e organizações sociais.", "Agronegócio.", "Energia e sustentabilidade.", "Outros segmentos.",
-    ]},
-    { id: "conhecimento_segmento", n: 17, label: "Dentro dos setores que você marcou, em quais assuntos você tem domínio aprofundado?", type: "list", placeholder: "Ex.: Jornada hospitalar", required: false, help: "Cite temas específicos que você conhece a fundo em cada segmento. Exemplos: jornada hospitalar, atendimento de urgência e emergência, operação hoteleira, comportamento do consumidor, serviços públicos, jornada de compra no varejo, experiência de pessoas idosas, acessibilidade etc." },
-    { id: "colaboracao_multidisciplinar", n: 18, label: "Você já participou de projetos que envolveram colaboração entre diferentes áreas ou especialidades?", type: "radio", required: true, options: [
-      "Sim, frequentemente.",
-      "Sim, em algumas ocasiões.",
-      "Ainda não, mas tenho interesse.",
-      "Não tenho experiência ou interesse nesse formato.",
-    ]},
-    { id: "experiencia_colaboracao", n: 19, showIf: { id: "colaboracao_multidisciplinar", test: (v) => /^Sim/.test(v) }, label: "Conte brevemente sobre essa experiência.", type: "paragraph", required: false, help: "Descreva o contexto, sua contribuição e como ocorreu a colaboração entre os profissionais." },
-  ]},
-  { title: "Formação e experiência", n: "Seção 5", questions: [
-    { id: "nivel_formacao", n: 20, label: "Qual é o seu nível de formação acadêmica?", type: "radio", required: true, options: [
-      "Ensino técnico.", "Graduação em andamento.", "Graduação completa.", "Especialização / MBA em andamento.", "Especialização / MBA completo.", "Mestrado.", "Doutorado.", "Formação predominantemente autodidata ou por cursos livres.", "Outro.",
-    ]},
-    { id: "formacao", n: 21, label: "Quais são a sua formação e as certificações, cursos ou especializações relevantes?", type: "list", placeholder: "Ex.: Design Gráfico, Universidade X", required: true, help: "Inclua um item por linha: formação acadêmica ou técnica (área e instituição), certificações, cursos e especializações relacionadas à sua atuação." },
-    { id: "idiomas", n: 22, label: "Você fala outros idiomas além do português? Qual o seu nível de fluência?", type: "idiomas", required: false, levels: ["Básico", "Intermediário", "Avançado", "Fluente", "Nativo"], help: "Inclua o idioma, escolha o nível e adicione quantos idiomas quiser. Se não fala outro idioma, deixe em branco." },
-    { id: "tempo_especialidade", n: 23, label: "Há quanto tempo você atua profissionalmente em sua principal especialidade?", type: "radio", required: true, options: [
-      "Menos de 1 ano.", "Entre 1 e 2 anos.", "Entre 3 e 5 anos.", "Entre 6 e 10 anos.", "Entre 11 e 15 anos.", "Entre 16 e 20 anos.", "Mais de 20 anos.",
-    ]},
-    { id: "tempo_independente", n: 24, label: "Há quanto tempo você presta serviços de forma independente ou atua como consultor(a)?", type: "radio", required: true, options: [
-      "Ainda não comecei, mas tenho interesse.", "Menos de 1 ano.", "Entre 1 e 2 anos.", "Entre 3 e 5 anos.", "Entre 6 e 10 anos.", "Mais de 10 anos.",
-    ]},
-    { id: "lideranca", n: 25, label: "Você possui experiência liderando projetos ou frentes de trabalho?", type: "radio", required: true, options: [
-      "Sim, lidero projetos completos.", "Sim, lidero frentes específicas de projetos.", "Já liderei projetos pontualmente.", "Ainda não, mas tenho interesse.", "Prefiro atuar como especialista ou executor(a).",
-    ]},
-  ]},
-  { title: "Portfólio, cases e experiência prática", n: "Seção 6", questions: [
-    { id: "possui_portfolio", n: 26, label: "Você possui portfólio, site profissional ou cases publicados?", type: "radio", required: true, options: [
-      "Sim, possuo portfólio online.", "Sim, possuo site profissional.", "Sim, possuo cases ou apresentações de projetos.", "Possuo trabalhos, mas não posso divulgá-los publicamente.", "Ainda não possuo portfólio estruturado.",
-    ]},
-    { id: "link_portfolio", n: 27, showIf: { id: "possui_portfolio", test: (v) => /^Sim/.test(v) }, label: "Compartilhe o link do seu portfólio, site ou cases profissionais.", type: "url", placeholder: "https://", required: false, help: "Behance, Dribbble, GitHub, Notion, site próprio ou outro endereço relevante." },
-    { id: "projeto_relevante", n: 28, label: "Conte brevemente sobre um projeto relevante do qual participou.", type: "paragraph", required: true,
-      helpHtml: "Se possível, descreva:<ul><li>Qual era o desafio ou problema?</li><li>Qual foi sua responsabilidade?</li><li>Que abordagem ou metodologia utilizou?</li><li>Qual solução foi desenvolvida?</li><li>Quais resultados foram alcançados?</li></ul>Não compartilhe informações confidenciais de clientes ou empresas." },
-    { id: "servicos_especialista_externo", n: 29, label: "Você já prestou serviços para consultorias, agências ou empresas que o contrataram como especialista externo?", type: "radio", required: true, options: [
-      "Sim, frequentemente.", "Sim, ocasionalmente.", "Ainda não, mas tenho interesse.", "Não tenho interesse nesse modelo de colaboração.",
-    ]},
-    { id: "ferramentas", n: 30, label: "Quais ferramentas, plataformas ou metodologias você domina?", type: "checkbox", store: "lines", required: false, help: "Abra cada categoria e marque o que você domina.", groups: [
-      { title: "Design e prototipação", options: ["Figma.", "Adobe (Photoshop, Illustrator, XD).", "Sketch.", "Framer.", "Canva."] },
-      { title: "Colaboração e facilitação", options: ["Miro.", "FigJam.", "Mural.", "Notion.", "Trello.", "Jira / Confluence."] },
-      { title: "Pesquisa e análise", options: ["Ferramentas de pesquisa e testes (Maze, Optimal Workshop etc.).", "Formulários e questionários (Typeform, Google Forms etc.).", "Análise de comportamento (Hotjar, Clarity etc.).", "Google Analytics.", "Dovetail ou repositórios de pesquisa."] },
-      { title: "Dados e inteligência artificial", options: ["Excel / Google Sheets.", "Power BI / Looker Studio.", "Python ou R para análise de dados.", "Ferramentas de IA generativa (ChatGPT, Claude, Gemini etc.).", "IA para imagem e vídeo (Midjourney, Runway etc.)."] },
-      { title: "Desenvolvimento e automação", options: ["HTML, CSS e JavaScript.", "Frameworks front-end (React, Vue, Angular etc.).", "Back-end e APIs.", "Plataformas no-code / low-code (Webflow, Bubble, WordPress etc.).", "Automação (Zapier, Make, n8n etc.).", "Versionamento (Git / GitHub).", "Criação de apps com IA / vibe coding (Lovable, Bolt, v0, Replit etc.).", "Assistentes de código com IA (Cursor, Claude Code, GitHub Copilot etc.)."] },
-      { title: "Gestão e produtividade", options: ["Pacote Office / Google Workspace.", "Gestão de projetos (Asana, Monday, ClickUp etc.).", "CRM (Salesforce, HubSpot etc.).", "ERP (SAP, TOTVS etc.)."] },
-      { title: "Ferramentas setoriais", options: ["Prontuário eletrônico e sistemas hospitalares.", "Softwares jurídicos.", "CAD / BIM (AutoCAD, Revit etc.).", "Softwares contábeis e financeiros.", "Sistemas de RH e gestão de pessoas."] },
-      { title: "Metodologias", options: ["Design Thinking.", "Frameworks de Service Design (blueprint, jornadas etc.).", "Métodos de pesquisa com usuários.", "Métodos ágeis (Scrum, Kanban).", "Lean / Lean UX.", "Jobs to be Done.", "OKRs e gestão por indicadores.", "Gestão de projetos (PMI / PMBOK).", "Lean Six Sigma.", "Gestão de processos (BPM)."] },
-      { title: "Outras", options: ["Outras ferramentas ou metodologias."] },
-    ]},
-  ]},
-  { title: "Disponibilidade e modelo de colaboração", n: "Seção 7", questions: [
-    { id: "formatos_atuacao", n: 31, label: "Em quais formatos você tem disponibilidade para atuar?", type: "checkbox", required: true, options: [
-      "100% remoto.", "Híbrido, com encontros presenciais pontuais.", "Presencial na minha cidade/região.", "Presencial em outras cidades, mediante planejamento.", "Presencial em qualquer região do Brasil, mediante negociação.",
-    ]},
-    { id: "viagens", n: 32, label: "Você possui disponibilidade para deslocamentos ou viagens profissionais?", type: "radio", required: true, options: [
-      "Sim, tenho disponibilidade para viagens nacionais.", "Sim, mas apenas para viagens de curta duração.", "Sim, dependendo da localização e das condições.", "Apenas para deslocamentos dentro da minha região.", "Não tenho disponibilidade para viagens.",
-    ]},
-    { id: "horas_semanais", n: 33, label: "Qual é sua disponibilidade média para dedicação a projetos?", type: "radio", required: true, options: [
-      "Até 5 horas semanais.", "De 6 a 10 horas semanais.", "De 11 a 20 horas semanais.", "De 21 a 30 horas semanais.", "Mais de 30 horas semanais.", "Disponibilidade variável conforme o projeto.",
-    ]},
-    { id: "formatos_contratacao", n: 34, label: "Quais formatos de contratação e cobrança você aceita?", type: "checkbox", required: true, help: "Marque todos que se aplicam.", options: [
-      "Projeto com escopo e valor fechado.", "Valor por hora.", "Valor por diária.", "Valor por entregável.", "Contrato recorrente (mensal ou por período determinado).", "Consultoria ou mentoria pontual.", "Negociável conforme escopo e complexidade."
-    ]},
-    { id: "equipe_propria", n: 35, label: "Você possui uma equipe ou rede própria de profissionais com quem costuma trabalhar?", type: "radio", required: true, options: [
-      "Sim, possuo equipe própria.", "Sim, possuo parceiros recorrentes.", "Não, atuo individualmente.", "Não, mas tenho interesse em formar parcerias.",
-    ]},
-    { id: "interesse_parceria", n: 36, label: "Você teria interesse em participar de projetos em parceria com outros consultores ou especialistas?", type: "radio", required: true, options: [
-      "Sim, tenho bastante interesse.", "Sim, dependendo do projeto e das responsabilidades.", "Prefiro atuar individualmente.", "Gostaria de entender melhor o formato de colaboração.",
-    ]},
-    { id: "condicoes", n: 37, label: "Existe alguma condição ou preferência importante para sua participação em projetos futuros?", type: "paragraph", required: false, help: "Compartilhe restrições de agenda, disponibilidade, preferências de atuação, condições comerciais ou outras informações que considere relevantes." },
-  ]},
-  { title: "Conexão e autorizações", n: "Seção 8", questions: [
-    { id: "como_conheceu", n: 38, label: "Como você conheceu esta iniciativa?", type: "radio", required: false, options: [
-      "LinkedIn.", "Instagram.", "Indicação de outro profissional.", "Comunidade ou grupo profissional.", "Indicação da Dani Moscatelli.", "Outro.",
-    ]},
-    { id: "autoriza_dados", n: 39, label: "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?", type: "radio", required: true,
-      infoHtml: "<p><strong>Informações sobre o tratamento de dados:</strong></p><p>Os dados fornecidos serão utilizados por Dani Moscatelli | Experience Design Studio para organização da rede de parceiros, análise de competências profissionais e contato relacionado a possíveis oportunidades de colaboração.</p><p>O preenchimento é voluntário. As informações não serão divulgadas publicamente nem compartilhadas com terceiros para finalidades incompatíveis com as descritas neste formulário.</p><p>Você poderá solicitar acesso, correção ou exclusão dos seus dados pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação.</p><p>Leia a <a href=\"/privacidade/\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a> completa.</p>",
-      options: [CONSENT_YES, CONSENT_NO] },
-  ]},
-  { title: "Comunidade de networking", n: "Seção final", questions: [
-    { id: "interesse_whatsapp", n: 40, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
-      infoHtml: "<p>Estamos construindo uma comunidade para conectar profissionais de diferentes especialidades, promover a troca de conhecimentos, compartilhar referências e fortalecer conexões profissionais.</p><p>O espaço será voltado a conversas sobre Design, Experiência Humana, Negócios, Tecnologia e Inovação, além da troca de experiências e oportunidades de colaboração.</p><p>A participação é opcional e independente deste cadastro.</p>",
-      afterIf: (v) => /^Sim/.test(v),
-      afterHtml: "<div class=\"info wa-box\"><span class=\"wa-ic\" aria-hidden=\"true\">" + WA_ICON + "</span><div><p><strong>Link de acesso ao grupo:</strong><br><a href=\"" + WHATSAPP_GROUP + "\" target=\"_blank\" rel=\"noopener\">" + WHATSAPP_GROUP + "</a></p><p>Se tiver interesse, basta acessar o link acima. A participação no grupo não é necessária para concluir seu cadastro.</p></div></div>",
-      options: ["Sim, tenho interesse em participar.", "Não, obrigado(a). Quero apenas fazer parte da rede de parceiros."] },
-  ]},
-];
-
-const form = document.getElementById("form");
-const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-
-// Opções "Outro", "Outra especialidade", "Outros segmentos": ao marcar, abre um campo para a pessoa escrever.
-const isOther = (o) => /^Outr[oa]s?\b/.test(o);
-function optionHtml(q, value) {
-  const type = q.type === "checkbox" ? "checkbox" : "radio";
-  const opt = `<label class="opt"><input type="${type}" name="${q.id}" value="${esc(value)}"><span>${esc(value)}</span></label>`;
-  if (!isOther(value)) return opt;
-  return opt + `<div class="other hidden" data-other="${q.id}"><input type="text" name="${q.id}__outro" maxlength="200" placeholder="Qual? Escreva aqui" aria-label="Descreva a opção ${esc(value.replace(/\.$/, ""))}"></div>`;
-}
-
-function questionHtml(q) {
-  const req = q.required ? '<span class="req" aria-hidden="true">*</span>' : "";
-  let help = "";
-  if (q.help) help = `<p class="help">${esc(q.help)}</p>`;
-  if (q.helpHtml) help = `<div class="help">${q.helpHtml}</div>`;
-  const info = q.infoHtml ? `<div class="info">${q.infoHtml}</div>` : "";
-  let field = "";
-  if (q.type === "paragraph") field = `<textarea id="${q.id}" name="${q.id}"></textarea>`;
-  else if (q.type === "url")
-    field = `<input type="url" inputmode="url" autocapitalize="off" spellcheck="false" id="${q.id}" name="${q.id}" placeholder="${esc(q.placeholder || "https://")}" autocomplete="url">`;
-  else if (q.type === "text" || q.type === "email" || q.type === "tel")
-    field = `<input type="${q.type}" id="${q.id}" name="${q.id}" autocomplete="${{ nome: "name", email: "email", telefone: "tel" }[q.id] || "off"}">`;
-  else if (q.type === "list")
-    field = `<div class="list-field" data-list="${q.id}" data-placeholder="${esc(q.placeholder || "")}"><div class="list-rows"></div>
-      <button type="button" class="list-add"><span aria-hidden="true">+</span> Adicionar item</button></div>`;
-  else if (q.type === "idiomas")
-    field = `<div class="lang-field" data-lang="${q.id}"><div class="list-rows"></div>
-      <button type="button" class="list-add"><span aria-hidden="true">+</span> Adicionar idioma</button></div>`;
-  else if (q.type === "uf_cidade")
-    field = `<div class="uf-cidade">
-      <label><span>Estado</span><select id="${q.id}_uf" name="${q.id}_uf"><option value="">Selecione</option>${ESTADOS.map(([uf, nome]) => `<option value="${uf}">${esc(nome)}</option>`).join("")}</select></label>
-      <label><span>Cidade</span><select id="${q.id}_cidade" name="${q.id}_cidade" disabled><option value="">Escolha o estado primeiro</option></select></label>
-    </div>`;
-  else if (q.groups)
-    field = `<div class="acc-groups">${q.groups.map((g, gi) => `<div class="acc">
-        <button type="button" class="acc-head" aria-expanded="false" aria-controls="${q.id}-g${gi}"><span class="acc-title">${esc(g.title)}</span><span class="acc-count" data-count></span><span class="acc-chev" aria-hidden="true"></span></button>
-        <div class="acc-body options hidden" id="${q.id}-g${gi}">${g.options.map(o => optionHtml(q, o)).join("")}</div>
-      </div>`).join("")}</div>`;
-  else field = `<div class="options">${q.options.map(o => optionHtml(q, o)).join("")}</div>`;
-  const errMsg = q.type === "idiomas" ? "Informe o idioma e o nível de fluência em cada linha." : q.type === "list" ? "Inclua ao menos um item." : q.type === "url" ? (q.urlHost === "linkedin.com" ? "Informe o link do seu perfil no LinkedIn (ex.: https://www.linkedin.com/in/seu-perfil)." : "Informe um link válido (ex.: https://seusite.com.br).") : q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
-  return `<div class="q" data-q="${q.id}">
-    <label class="q-label" ${["text", "email", "tel", "url", "paragraph"].includes(q.type) ? `for="${q.id}"` : ""}>${q.n}. ${esc(q.label)}${req}</label>
-    ${help}${info}${field}${q.afterHtml ? (q.afterIf ? `<div class="hidden" data-after="${q.id}">${q.afterHtml}</div>` : q.afterHtml) : ""}
-    <div class="err">${errMsg}</div>
-  </div>`;
-}
-
-SECTIONS.forEach((s, i) => {
-  const sec = document.createElement("section");
-  sec.className = "card step hidden";
-  sec.dataset.step = i + 1;
-  sec.innerHTML = `<h2><small>${esc(s.n)}</small>${esc(s.title)}</h2>${s.questions.map(questionHtml).join("")}`;
-  form.appendChild(sec);
-});
-
-const nav = document.createElement("div");
-nav.className = "nav-bar";
-nav.innerHTML = `<div class="nav">
-    <button type="button" class="btn-ghost hidden" id="back">Voltar</button>
-    <button type="button" class="btn-primary" id="next">Quero fazer parte da rede</button>
-  </div>
-  <div class="form-error" id="formError"></div>`;
-form.appendChild(nav);
-
-const steps = [...form.querySelectorAll(".step")];
-const total = SECTIONS.length;
-let current = 0;
-
-function value(q) {
-  if (q.type === "checkbox") return [...form.querySelectorAll(`input[name="${q.id}"]:checked`)].map(i => i.value);
-  if (q.type === "radio") return form.querySelector(`input[name="${q.id}"]:checked`)?.value || "";
-  if (q.type === "list") return [...form.querySelectorAll(`[data-list="${q.id}"] input`)].map((i) => i.value.trim()).filter(Boolean).join("\n");
-  if (q.type === "idiomas") return langRows(q).filter((r) => r.idioma && r.nivel).map((r) => r.idioma + ": " + r.nivel).join("\n");
-  if (q.type === "url") { const v = form.elements[q.id].value.trim(); return v === "https://" || v === "http://" ? "" : withScheme(v); }
-  if (q.type === "uf_cidade") {
-    const uf = form.elements[q.id + "_uf"].value, cidade = form.elements[q.id + "_cidade"].value.trim();
-    return uf && cidade ? `${cidade} - ${uf}` : "";
-  }
-  return form.elements[q.id].value.trim();
-}
-
-// Estado e cidade: a lista de cidades (IBGE) do estado escolhido é carregada de /data/municipios/<UF>.json.
-form.querySelectorAll(".uf-cidade").forEach((box) => {
-  const [ufSel, cidSel] = box.querySelectorAll("select");
-  const cache = {};
-  ufSel.addEventListener("change", async () => {
-    const uf = ufSel.value;
-    cidSel.disabled = true;
-    cidSel.innerHTML = `<option value="">${uf ? "Carregando cidades…" : "Escolha o estado primeiro"}</option>`;
-    if (!uf) return;
-    try {
-      cache[uf] = cache[uf] || await fetch(`/data/municipios/${uf}.json`).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
-      if (ufSel.value !== uf) return;
-      cidSel.innerHTML = `<option value="">Selecione a cidade</option>` + cache[uf].map((c) => `<option>${esc(c)}</option>`).join("");
-      cidSel.disabled = false;
-    } catch {
-      cidSel.innerHTML = `<option value="">Não foi possível carregar as cidades. Tente de novo.</option>`;
-    }
-  });
-});
-
-// Máscara de telefone: (41) 99999-9999 ou (41) 3333-4444
-function maskPhone(value) {
-  const d = value.replace(/\D/g, "").slice(0, 11);
-  if (d.length <= 2) return d ? `(${d}` : "";
-  const rest = d.slice(2);
-  if (rest.length <= 4) return `(${d.slice(0, 2)}) ${rest}`;
-  const split = d.length === 11 ? 5 : 4;
-  return `(${d.slice(0, 2)}) ${rest.slice(0, split)}-${rest.slice(split)}`;
-}
-// Lista: um item por linha, com botão para remover cada linha.
-form.querySelectorAll(".list-field").forEach((box) => {
-  const rows = box.querySelector(".list-rows");
-  const addRow = (focus) => {
-    const row = document.createElement("div"); row.className = "list-row";
-    const input = document.createElement("input"); input.type = "text"; input.maxLength = 200; input.placeholder = box.dataset.placeholder;
-    input.setAttribute("aria-label", "Item " + (rows.children.length + 1));
-    const rm = document.createElement("button"); rm.type = "button"; rm.className = "list-rm"; rm.setAttribute("aria-label", "Remover item"); rm.textContent = "×";
-    rm.addEventListener("click", () => {
-      if (rows.children.length > 1) row.remove(); else input.value = "";
-      (rows.lastElementChild?.querySelector("input"))?.focus();
-      box.dispatchEvent(new Event("input", { bubbles: true }));
-    });
-    input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); if (input.value.trim()) addRow(true); } });
-    row.append(input, rm); rows.appendChild(row);
-    if (focus) input.focus();
-  };
-  addRow(false);
-  box.querySelector(".list-add").addEventListener("click", () => {
-    const empty = [...rows.querySelectorAll("input")].find((i) => !i.value.trim());
-    if (empty) empty.focus(); else addRow(true);
-  });
-});
-
-// Idiomas: cada linha tem o idioma e o nível de fluência; dá para incluir vários.
-const langRows = (q) => [...form.querySelectorAll(`[data-lang="${q.id}"] .lang-row`)].map((row) => ({ row, idioma: row.querySelector("input").value.trim(), nivel: row.querySelector("select").value }));
-form.querySelectorAll(".lang-field").forEach((box) => {
-  const q = SECTIONS.flatMap((s) => s.questions).find((x) => x.id === box.dataset.lang);
-  const rows = box.querySelector(".list-rows");
-  const addRow = (focus) => {
-    const n = rows.children.length + 1;
-    const row = document.createElement("div"); row.className = "lang-row";
-    const input = document.createElement("input"); input.type = "text"; input.maxLength = 60; input.placeholder = "Ex.: Inglês"; input.setAttribute("aria-label", "Idioma " + n);
-    const sel = document.createElement("select"); sel.setAttribute("aria-label", "Nível de fluência do idioma " + n);
-    sel.innerHTML = `<option value="">Nível</option>` + q.levels.map((l) => `<option>${esc(l)}</option>`).join("");
-    const rm = document.createElement("button"); rm.type = "button"; rm.className = "list-rm"; rm.setAttribute("aria-label", "Remover idioma"); rm.textContent = "×";
-    rm.addEventListener("click", () => {
-      if (rows.children.length > 1) row.remove(); else { input.value = ""; sel.value = ""; }
-      (rows.lastElementChild?.querySelector("input"))?.focus();
-      box.dispatchEvent(new Event("input", { bubbles: true }));
-    });
-    input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); sel.focus(); } });
-    sel.addEventListener("change", () => box.dispatchEvent(new Event("input", { bubbles: true })));
-    row.append(input, sel, rm); rows.appendChild(row);
-    if (focus) input.focus();
-  };
-  addRow(false);
-  box.querySelector(".list-add").addEventListener("click", () => {
-    const empty = [...rows.querySelectorAll(".lang-row")].find((r) => !r.querySelector("input").value.trim());
-    if (empty) empty.querySelector("input").focus(); else addRow(true);
-  });
-});
-
-// Áreas em acordeão: cada categoria abre/fecha e mostra quantos itens foram marcados.
-form.querySelectorAll(".acc").forEach((acc) => {
-  const head = acc.querySelector(".acc-head"), body = acc.querySelector(".acc-body"), count = acc.querySelector("[data-count]");
-  head.addEventListener("click", () => { const open = body.classList.toggle("hidden") === false; head.setAttribute("aria-expanded", String(open)); acc.classList.toggle("open", open); });
-  const update = () => { const n = body.querySelectorAll('input[type="checkbox"]:checked').length; count.textContent = n ? String(n) : ""; acc.classList.toggle("has", n > 0); };
-  body.addEventListener("change", update);
-  update();
-});
-
-// Conteúdo que só aparece depois de certa resposta (ex.: link do grupo do WhatsApp quando a pessoa responde "Sim").
-form.addEventListener("change", (e) => {
-  const box = e.target.name && form.querySelector(`[data-after="${e.target.name}"]`);
-  if (!box) return;
-  const q = SECTIONS.flatMap((x) => x.questions).find((x) => x.id === e.target.name);
-  box.classList.toggle("hidden", !q.afterIf(value(q)));
-});
-form.addEventListener("change", (e) => {
-  const name = e.target.name;
-  if (!name || !e.target.matches('input[type="radio"], input[type="checkbox"]')) return;
-  form.querySelectorAll(`[data-other="${name}"]`).forEach((box) => {
-    const checked = !!form.querySelector(`input[name="${name}"][value="${CSS.escape(box.previousElementSibling.querySelector("input").value)}"]:checked`);
-    box.classList.toggle("hidden", !checked);
-    if (checked && e.target === box.previousElementSibling.querySelector("input")) box.querySelector("input").focus();
-  });
-});
-const otherText = (q) => (form.elements[q.id + "__outro"]?.value || "").trim();
-const otherChecked = (q) => [...form.querySelectorAll(`input[name="${q.id}"]:checked`)].some((i) => isOther(i.value));
-
-// Máscara de link: começa com https://, sem espaços; completa o https:// se a pessoa colar só o endereço.
-const withScheme = (v) => (v && !/^[a-z][a-z0-9+.-]*:\/\//i.test(v) ? "https://" + v.replace(/^\/+/, "") : v);
-function validUrl(v, host) {
-  try { const u = new URL(v); return /^https?:$/.test(u.protocol) && u.hostname.includes(".") && (!host || u.hostname === host || u.hostname.endsWith("." + host)); } catch { return false; }
-}
-form.querySelectorAll('input[type="url"]').forEach((i) => {
-  i.addEventListener("focus", () => { if (!i.value) i.value = "https://"; });
-  i.addEventListener("input", () => { i.value = i.value.replace(/\s+/g, ""); });
-  i.addEventListener("blur", () => { i.value = i.value === "https://" || i.value === "http://" ? "" : withScheme(i.value); });
-});
-form.querySelectorAll('input[type="tel"]').forEach((i) => i.addEventListener("input", () => { i.value = maskPhone(i.value); }));
-
-// Perguntas que dependem de outra (showIf): só aparecem e só contam quando a condição vale.
-const QUESTIONS = SECTIONS.flatMap(s => s.questions);
-const visible = (q) => !q.showIf || q.showIf.test(value(QUESTIONS.find((x) => x.id === q.showIf.id)));
-function applyShowIf() {
-  QUESTIONS.filter((q) => q.showIf).forEach((q) => form.querySelector(`[data-q="${q.id}"]`).classList.toggle("hidden", !visible(q)));
-}
-form.addEventListener("change", applyShowIf);
-applyShowIf();
-
-function validateQuestion(q) {
-  if (!visible(q)) return true;
-  const v = value(q);
-  let ok = true;
-  if (q.required) ok = Array.isArray(v) ? v.length > 0 : v !== "";
-  if (ok && q.type === "email" && v) ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  if (ok && q.type === "idiomas") {
-    const rs = langRows(q);
-    rs.forEach((r) => r.row.classList.toggle("bad", !r.idioma !== !r.nivel));
-    ok = !rs.some((r) => !r.idioma !== !r.nivel);
-  }
-  if (ok && q.type === "tel" && v) ok = v.replace(/\D/g, "").length >= 10;
-  const otherBad = ok && (q.type === "checkbox" || q.type === "radio") && otherChecked(q) && !otherText(q);
-  if (otherBad) ok = false;
-  const err = form.querySelector(`[data-q="${q.id}"] .err`);
-  if (err) { err.dataset.base ??= err.textContent; err.textContent = otherBad ? "Escreva qual é a opção “Outro”." : err.dataset.base; }
-  if (ok && q.type === "url" && v && v !== "https://") ok = validUrl(withScheme(v), q.urlHost);
-  form.querySelector(`[data-q="${q.id}"]`).classList.toggle("invalid", !ok);
-  return ok;
-}
-
-function validateStep(i) {
-  if (i === 0) return true;
-  const results = SECTIONS[i - 1].questions.map(validateQuestion);
-  const firstBad = form.querySelector(`.step[data-step="${i}"] .q.invalid`);
-  if (firstBad) firstBad.scrollIntoView({ behavior: "smooth", block: "center" });
-  return results.every(Boolean);
-}
-
-form.addEventListener("input", e => {
-  const box = e.target.closest(".q.invalid");
-  if (!box) return;
-  const q = SECTIONS.flatMap(s => s.questions).find(q => q.id === box.dataset.q);
-  validateQuestion(q);
-});
-
-// Botão de entrada com ícone de rede (pontos conectados).
-const JOIN_LABEL = '<svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M10.8 7.2 6.2 15.8M13.2 7.2l4.6 8.6M7.5 18h9"/></svg>Quero fazer parte da rede';
-// Botão de envio com seta.
-const SEND_LABEL = 'Enviar cadastro<svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-function show(i) {
-  steps.forEach((s, n) => s.classList.toggle("hidden", n !== i));
-  current = i;
-  document.getElementById("back").classList.toggle("hidden", i === 0);
-  const next = document.getElementById("next");
-  if (i === total) next.innerHTML = SEND_LABEL; else if (i === 0) next.innerHTML = JOIN_LABEL; else next.textContent = "Próxima";
-  document.getElementById("progressBox").classList.toggle("hidden", i === 0);
-  document.getElementById("progressBar").style.width = `${(i / total) * 100}%`;
-  document.getElementById("stepLabel").textContent = `Etapa ${i} de ${total}`;
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-// Confete no topo da tela ao concluir o cadastro (respeita quem prefere menos movimento).
-function confetti() {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const cv = document.createElement("canvas");
-  cv.style.cssText = "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50";
-  document.body.appendChild(cv);
-  const ctx = cv.getContext("2d"), dpr = window.devicePixelRatio || 1;
-  const W = innerWidth, H = innerHeight;
-  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
-  const colors = ["#ff5656", "#fe6a62", "#ffb3ae", "#5c6986", "#a8afbd", "#ffd166"];
-  const ps = Array.from({ length: 160 }, () => ({
-    x: Math.random() * W, y: -20 - Math.random() * H * 0.4,
-    vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3,
-    w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
-    r: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3,
-    c: colors[Math.floor(Math.random() * colors.length)],
-  }));
-  const t0 = performance.now();
-  (function frame(t) {
-    const el = t - t0;
-    ctx.clearRect(0, 0, W, H);
-    ctx.globalAlpha = el > 3000 ? Math.max(0, 1 - (el - 3000) / 1000) : 1;
-    ps.forEach((p) => {
-      p.x += p.vx + Math.sin((el / 300) + p.r) * 0.6; p.y += p.vy; p.r += p.vr;
-      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
-      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r))); ctx.restore();
-    });
-    if (el < 4000) requestAnimationFrame(frame); else cv.remove();
-  })(t0);
-}
-
-function end(id) {
-  limparRascunho();
-  form.classList.add("hidden");
-  document.getElementById("progressBox").classList.add("hidden");
-  document.getElementById(id).classList.remove("hidden");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function payload() {
-  const data = {};
-  SECTIONS.flatMap(s => s.questions).forEach(q => {
-    const v = visible(q) ? value(q) : "";
-    // store "lines": a coluna é texto; os itens marcados vão um por linha.
-    if (q.store === "lines" && Array.isArray(v)) data[q.id] = v.length ? v.join("\n") : null;
-    else data[q.id] = Array.isArray(v) ? v : (v === "" ? null : v);
-  });
-  data.autoriza_dados = data.autoriza_dados === CONSENT_YES;
-  // LGPD: guarda junto do cadastro o texto exato que a pessoa aceitou (a data do aceite é registrada pelo servidor).
-  if (data.autoriza_dados) {
-    const q = SECTIONS.flatMap(s => s.questions).find(q => q.id === "autoriza_dados");
-    const tmp = document.createElement("div"); tmp.innerHTML = q.infoHtml.replace(/<\/p>/g, "</p>\n\n");
-    data.consentimento_texto = q.label + "\n\n" + tmp.textContent.trim() + "\n\nResposta: " + CONSENT_YES;
-  }
-  data.outros = {};
-  SECTIONS.flatMap(s => s.questions).forEach(q => { if (otherChecked(q) && otherText(q)) data.outros[q.id] = otherText(q); });
-  return data;
-}
-
-async function submit() {
-  const btn = document.getElementById("next");
-  const errBox = document.getElementById("formError");
-  btn.disabled = true;
-  btn.textContent = "Enviando…";
-  errBox.style.display = "none";
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/cadastros`, {
-      method: "POST",
-      headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" },
-      body: JSON.stringify(payload()),
-    });
-    if (!res.ok) throw new Error(await res.text());
-    // Título com o primeiro nome da pessoa.
-    const primeiro = (value({ id: "nome", type: "text" }) || "").trim().split(/\s+/)[0];
-    if (primeiro) document.getElementById("welcome-title").textContent = "Boas-vindas, " + primeiro.charAt(0).toUpperCase() + primeiro.slice(1) + "!";
-    end("endSuccess");
-    window.dmEvento && window.dmEvento("cadastro_parceiro");
-    confetti();
-  } catch (err) {
-    console.error(err);
-    errBox.textContent = "Não foi possível enviar seu cadastro. Verifique sua conexão e tente novamente.";
-    errBox.style.display = "block";
-    btn.disabled = false;
-    btn.innerHTML = SEND_LABEL;
-  }
-}
-
-document.getElementById("next").addEventListener("click", () => {
-  if (!validateStep(current)) return;
-  if (current === 2 && value({ id: "atuacao_pj", type: "radio" }) === PJ_NO) return end("endPJ");
-  if (current === 8 && value({ id: "autoriza_dados", type: "radio" }) === CONSENT_NO) return end("endConsent");
-  if (current === total) return submit();
-  show(current + 1);
-});
-document.getElementById("back").addEventListener("click", () => show(current - 1));
-
-// Rascunho: as respostas ficam salvas neste navegador e voltam se a pessoa sair e voltar ao formulário.
-const RASCUNHO = "dm-parceiros-rascunho";
-const QUESTOES = SECTIONS.flatMap((s) => s.questions);
-let restaurando = false;
-function limparRascunho() { try { localStorage.removeItem(RASCUNHO); } catch {} }
-function salvarRascunho() {
-  if (restaurando || current === 0) return;
-  const r = {};
-  QUESTOES.forEach((q) => {
-    if (q.type === "checkbox") r[q.id] = value(q);
-    else if (q.type === "radio") r[q.id] = value(q);
-    else if (q.type === "list") r[q.id] = [...form.querySelectorAll(`[data-list="${q.id}"] input`)].map((i) => i.value);
-    else if (q.type === "idiomas") r[q.id] = langRows(q).map(({ idioma, nivel }) => ({ idioma, nivel }));
-    else if (q.type === "uf_cidade") r[q.id] = { uf: form.elements[q.id + "_uf"].value, cidade: form.elements[q.id + "_cidade"].value };
-    else if (form.elements[q.id]) r[q.id] = form.elements[q.id].value;
-    if (form.elements[q.id + "__outro"]) r[q.id + "__outro"] = form.elements[q.id + "__outro"].value;
-  });
-  try { localStorage.setItem(RASCUNHO, JSON.stringify({ etapa: current, r, em: Date.now() })); } catch {}
-}
-async function restaurarRascunho() {
-  let d; try { d = JSON.parse(localStorage.getItem(RASCUNHO) || "null"); } catch {}
-  if (!d || !d.r || !d.etapa) return false;
-  restaurando = true;
-  const disparar = (el, ev) => el.dispatchEvent(new Event(ev, { bubbles: true }));
-  for (const q of QUESTOES) {
-    const v = d.r[q.id];
-    if (v == null) continue;
-    if (q.type === "checkbox" || q.type === "radio") {
-      const marcados = Array.isArray(v) ? v : [v];
-      form.querySelectorAll(`input[name="${q.id}"]`).forEach((i) => { if (marcados.includes(i.value)) { i.checked = true; disparar(i, "change"); } });
-    } else if (q.type === "list" || q.type === "idiomas") {
-      const box = form.querySelector(q.type === "list" ? `[data-list="${q.id}"]` : `[data-lang="${q.id}"]`);
-      const itens = (v || []).filter((x) => (q.type === "list" ? String(x).trim() : x.idioma || x.nivel));
-      itens.forEach((x, n) => {
-        if (n > 0) box.querySelector(".list-add").click();
-        const row = box.querySelectorAll(q.type === "list" ? ".list-row" : ".lang-row")[n];
-        if (q.type === "list") row.querySelector("input").value = x;
-        else { row.querySelector("input").value = x.idioma || ""; row.querySelector("select").value = x.nivel || ""; }
-      });
-    } else if (q.type === "uf_cidade") {
-      const uf = form.elements[q.id + "_uf"], cid = form.elements[q.id + "_cidade"];
-      if (v.uf) { uf.value = v.uf; disparar(uf, "change"); await new Promise((ok) => { const t0 = Date.now(); (function espera() { if (!cid.disabled || Date.now() - t0 > 4000) return ok(); setTimeout(espera, 100); })(); }); cid.value = v.cidade || ""; }
-    } else if (form.elements[q.id]) { form.elements[q.id].value = v; disparar(form.elements[q.id], "input"); }
-    if (d.r[q.id + "__outro"] && form.elements[q.id + "__outro"]) form.elements[q.id + "__outro"].value = d.r[q.id + "__outro"];
-  }
-  restaurando = false;
-  show(Math.min(d.etapa, total));
-  const nota = document.createElement("div"); nota.className = "draft-note";
-  nota.innerHTML = '<span>Recuperamos o seu preenchimento. Continue de onde parou.</span><button type="button">Começar do zero</button>';
-  nota.querySelector("button").addEventListener("click", () => { limparRascunho(); location.reload(); });
-  form.prepend(nota);
-  return true;
-}
-form.addEventListener("input", salvarRascunho);
-form.addEventListener("change", salvarRascunho);
-document.getElementById("next").addEventListener("click", () => setTimeout(salvarRascunho, 0));
-document.getElementById("back").addEventListener("click", () => setTimeout(salvarRascunho, 0));
-
-// E-mail: sugere completar com os domínios mais comuns logo abaixo do campo.
-const DOMINIOS = ["gmail.com", "outlook.com", "hotmail.com", "icloud.com", "yahoo.com.br", "live.com", "uol.com.br", "terra.com.br"];
-form.querySelectorAll('input[type="email"]').forEach((inp) => {
-  const box = document.createElement("div"); box.className = "mail-sug hidden"; box.setAttribute("aria-label", "Sugestões de e-mail");
-  inp.after(box);
-  const atualizar = () => {
-    const v = inp.value.trim(), at = v.indexOf("@");
-    const usuario = at < 0 ? v : v.slice(0, at), dom = at < 0 ? "" : v.slice(at + 1).toLowerCase();
-    const opcoes = usuario && !/\s/.test(usuario) ? DOMINIOS.filter((d) => d.startsWith(dom) && d !== dom).slice(0, 4) : [];
-    box.replaceChildren(...opcoes.map((d) => {
-      const b = document.createElement("button"); b.type = "button"; b.textContent = usuario + "@" + d;
-      b.addEventListener("mousedown", (e) => e.preventDefault());
-      b.addEventListener("click", () => { inp.value = usuario + "@" + d; box.classList.add("hidden"); inp.dispatchEvent(new Event("input", { bubbles: true })); inp.blur(); });
-      return b;
-    }));
-    box.classList.toggle("hidden", !opcoes.length || document.activeElement !== inp);
-  };
-  inp.addEventListener("input", atualizar);
-  inp.addEventListener("focus", atualizar);
-  inp.addEventListener("blur", () => setTimeout(() => box.classList.add("hidden"), 150));
-});
-
-// Política de privacidade aberta numa janela, sem tirar a pessoa do formulário.
-const polDlg = document.getElementById("polDlg");
-document.getElementById("polClose").addEventListener("click", () => polDlg.close());
-polDlg.addEventListener("click", (e) => { if (e.target === polDlg) polDlg.close(); });
-document.addEventListener("click", async (e) => {
-  const a = e.target.closest && e.target.closest('a[href^="/privacidade"]');
-  if (!a || polDlg.contains(a)) return;
-  e.preventDefault();
-  polDlg.showModal();
-  const body = document.getElementById("polBody");
-  if (body.dataset.ok) return;
-  try {
-    const html = await fetch("/privacidade/").then((r) => { if (!r.ok) throw new Error(r.status); return r.text(); });
-    const art = new DOMParser().parseFromString(html, "text/html").querySelector("article");
-    if (!art) throw new Error("sem conteúdo");
-    body.replaceChildren(...[...art.childNodes].map((n) => document.importNode(n, true)));
-    body.dataset.ok = "1";
-  } catch { body.innerHTML = '<p>Não foi possível carregar a política agora. <a href="/privacidade/" target="_blank" rel="noopener">Abrir em outra aba</a>.</p>'; }
-});
-
-show(0);
-restaurarRascunho();
-// Teclado aberto no celular: marca o body enquanto um campo de texto está em foco.
-const isText = (t) => t.matches && t.matches('textarea, input:not([type="checkbox"]):not([type="radio"]), select');
-document.addEventListener("focusin", (e) => { if (isText(e.target)) document.body.classList.add("kb"); });
-document.addEventListener("focusout", (e) => { if (isText(e.target)) document.body.classList.remove("kb"); });
-</script>
 <footer class="rodape-pagina rodape-pagina-parceiros">
 <!-- @rodape:claro -->
 </footer>
 <!-- @gaveta -->
 <script src="/whatsapp.js" defer></script>
+<script src="/privacidade-modal.js" defer></script>
 </body>
 </html>
