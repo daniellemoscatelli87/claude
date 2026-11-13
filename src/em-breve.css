@@ -64,5 +64,6 @@ html { overflow-x: clip; }
    Em telas menores (celular, notebooks baixos) a rolagem continua, para nenhum conteúdo ficar inacessível. */
 @media (min-width: 1024px) and (min-height: 860px) {
   html:has(body.pagina-inicio), body.pagina-inicio { height: 100dvh; overflow: hidden; }
-  body.pagina-inicio > footer { padding-bottom: 1.5rem; }
+  body.pagina-inicio > footer { padding-top: 1rem; padding-bottom: 1rem; }
+  body.pagina-inicio > main { padding-top: 1rem; padding-bottom: 1rem; }
 }
