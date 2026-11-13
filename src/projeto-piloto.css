@@ -931,3 +931,126 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .fundo-gradiente-escuro span:nth-child(3) { --mancha: rgba(212, 77, 77, 0.18); }
 /* Desktop: o hero termina 16px acima da dobra (mesmo respiro das laterais), então a aba "Saiba mais" aparece inteira, com margem */
 @media (min-width: 1024px) { .hero-piloto { min-height: calc(100svh - 2rem) !important; } }
+
+/* =========================================================================
+   SEÇÃO "PROGRAMA PROJETO PILOTO" (redesenho editorial): introdução, diagrama de colaboração,
+   resultados para os dois lados ligados ao núcleo, faixa de transparência e CTA.
+   ========================================================================= */
+/* fundo claro em todos os tamanhos (no celular a seção deixa de ficar sobre o azul escuro) */
+.divisao-hero .divisao-hero-cartao, .pp.transicao-sobre { background: #FFFFFF !important; }
+@media (max-width: 1023px) { .divisao-hero .divisao-hero-cartao { border-radius: 28px 28px 0 0 !important; overflow: hidden !important; } }
+.pp { color: #131A27; }
+/* introdução */
+.pp-intro { max-width: 46rem; margin: 0 auto; text-align: center; }
+.pp-intro h2 { margin: 0 0 1rem; font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.625rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: #131A27; }
+.pp-sub { margin: 0 0 .75rem; font-size: 1.125rem; font-weight: 600; line-height: 1.45; color: #283043; }
+.pp-desc { margin: 0 auto; max-width: 40rem; font-size: 1rem; line-height: 1.7; color: #495669; }
+.pp-desc strong { color: #131A27; font-weight: 600; }
+@media (min-width: 640px) { .pp-desc { font-size: 1.0625rem; } }
+
+/* diagrama de colaboração */
+.pp-diagrama { --nucleo: 184px; --anel: 76px; display: grid; grid-template-columns: 1fr minmax(48px, 1.1fr) var(--nucleo) minmax(48px, 1.1fr) 1fr; align-items: start; margin: 4.5rem auto 0; max-width: 62rem; }
+.pp-no { text-align: center; }
+.pp-no h3 { margin: 1.25rem 0 .375rem; font-size: 1.0625rem; font-weight: 700; color: #131A27; letter-spacing: -0.01em; }
+.pp-no p { margin: 0 auto; max-width: 15rem; font-size: .9375rem; line-height: 1.55; color: #495669; }
+.pp-no-lado { padding-top: calc((var(--nucleo) - var(--anel)) / 2); }
+.pp-anel { width: var(--anel); height: var(--anel); margin: 0 auto; border-radius: 9999px; border: 1px solid #D6DCE6; background: #FFFFFF; color: #283043; display: flex; align-items: center; justify-content: center; position: relative; }
+.pp-anel::after { content: ""; position: absolute; inset: -9px; border-radius: inherit; border: 1px dashed #D6DCE6; }
+.pp-anel img { width: 30px; height: auto; }
+/* núcleo central */
+.pp-nucleo { position: relative; width: var(--nucleo); height: var(--nucleo); margin: 0 auto; border-radius: 9999px; background: #D44D4D; color: #FFFFFF; display: flex; align-items: center; justify-content: center; text-align: center;
+  box-shadow: 0 14px 32px -14px rgba(212, 77, 77, 0.55); }
+.pp-nucleo span { font-size: 1.5rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+.pp-nucleo::before, .pp-nucleo::after { content: ""; position: absolute; border-radius: 9999px; pointer-events: none; }
+.pp-nucleo::before { inset: -14px; border: 1px solid rgba(212, 77, 77, 0.28); }
+.pp-nucleo::after { inset: -30px; border: 1px solid rgba(212, 77, 77, 0.12); }
+.pp-no-centro p { margin-top: 2.75rem; max-width: 14rem; color: #283043; font-weight: 500; }
+/* conectores: fio fino com nós nas pontas e um pulso que leva a troca até o núcleo */
+.pp-con { position: relative; height: 2px; margin-top: calc(var(--nucleo) / 2 - 1px); margin-inline: -4px; }
+.pp-con-a { margin-left: calc(-1 * ((100% - 0px) * 0)); }
+.pp-con-linha { position: absolute; inset: 0 22px; background: repeating-linear-gradient(to right, rgba(212, 77, 77, 0.55) 0 6px, transparent 6px 11px); }
+.pp-con-linha::before, .pp-con-linha::after { content: ""; position: absolute; top: 50%; width: 9px; height: 9px; border-radius: 9999px; background: #FFFFFF; border: 2px solid #D44D4D; translate: 0 -50%; }
+.pp-con-linha::before { left: -4px; }
+.pp-con-linha::after { right: -4px; }
+.pp-con-pulso { position: absolute; top: 50%; left: 22px; width: 7px; height: 7px; border-radius: 9999px; background: #D44D4D; translate: 0 -50%; box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.15); }
+@media (prefers-reduced-motion: no-preference) {
+  .pp-con-a .pp-con-pulso { animation: pp-pulso-ida 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+  .pp-con-b .pp-con-pulso { animation: pp-pulso-volta 3.2s cubic-bezier(0.45, 0, 0.55, 1) 1.6s infinite; left: auto; right: 22px; }
+}
+@keyframes pp-pulso-ida { 0% { left: 22px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { left: calc(100% - 29px); opacity: 0; } }
+@keyframes pp-pulso-volta { 0% { right: 22px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { right: calc(100% - 29px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .pp-con-pulso { display: none; } }
+
+/* legenda e ramificação do núcleo para os resultados */
+.pp-legenda { margin: 3rem auto 0; max-width: 34rem; text-align: center; font-size: 1.0625rem; font-weight: 600; line-height: 1.5; color: #283043; }
+.pp-ramo { position: relative; height: 4.5rem; margin: 1.5rem auto 0; max-width: 62rem; }
+.pp-ramo::before { content: ""; position: absolute; left: 50%; top: 0; height: 50%; border-left: 1px solid rgba(212, 77, 77, 0.45); }
+.pp-ramo span { position: absolute; left: 25%; right: 25%; top: 50%; bottom: 0; border: 1px solid rgba(212, 77, 77, 0.45); border-bottom: 0; border-radius: 18px 18px 0 0; }
+.pp-ramo span::before { content: ""; position: absolute; left: 50%; top: -5px; width: 9px; height: 9px; border-radius: 9999px; background: #D44D4D; translate: -50% 0; box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.15); }
+
+/* resultados para os dois lados: áreas abertas, sem cards */
+.pp-resultados { display: grid; grid-template-columns: 1fr 1fr; max-width: 62rem; margin: 0 auto; }
+.pp-lado { padding: 0 2.5rem; }
+.pp-lado + .pp-lado { border-left: 1px solid #E8EDF3; }
+.pp-eyebrow { display: flex; align-items: center; justify-content: center; gap: .5rem; margin: 0 0 .875rem; font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #D44D4D; }
+.pp-eyebrow span { width: 6px; height: 6px; border-radius: 9999px; background: #D44D4D; }
+.pp-lado h3 { margin: 0 0 .625rem; text-align: center; font-size: 1.375rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; color: #131A27; }
+.pp-lado-desc { margin: 0 auto 1.75rem; max-width: 26rem; text-align: center; font-size: .9375rem; line-height: 1.65; color: #495669; }
+.pp-bens { margin: 0; padding: 0; list-style: none; }
+.pp-ben { display: grid; grid-template-columns: 2.25rem 1fr; gap: .875rem; padding: 1.125rem 0; border-top: 1px solid #EDF0F5; }
+.pp-ben-ic { width: 2.25rem; height: 2.25rem; display: flex; align-items: center; justify-content: center; color: #D44D4D; }
+.pp-ben-ic svg { width: 1.25rem; height: 1.25rem; stroke-width: 1.75; }
+.pp-ben strong { display: block; margin-bottom: .2rem; font-size: 1rem; font-weight: 600; color: #131A27; }
+.pp-ben > span:last-child > span { display: block; font-size: .9375rem; line-height: 1.6; color: #495669; }
+.pp-compromisso { display: grid; grid-template-columns: 2.25rem 1fr; gap: .875rem; margin: 0; padding: 1.125rem 0 0; border-top: 1px solid #EDF0F5; font-size: .875rem; line-height: 1.6; color: #495669; }
+.pp-compromisso > span:first-child { width: 2.25rem; display: flex; justify-content: center; padding-top: .125rem; color: #8898B0; }
+.pp-compromisso strong { color: #131A27; font-weight: 600; }
+
+/* citação */
+#sobre-o-programa .pp-citacao { margin-top: 4.5rem !important; }
+#sobre-o-programa .pp-citacao blockquote p { color: #131A27 !important; }
+#sobre-o-programa .pp-citacao blockquote p .text-coral-600 { color: #D44D4D !important; }
+
+/* faixa de transparência: editorial, nem alerta nem letra miúda */
+.pp-faixa { display: grid; grid-template-columns: minmax(0, 15rem) 1fr; gap: 2rem; align-items: center; max-width: 52rem; margin: 4rem auto 0; padding: 1.75rem 0; border-top: 1px solid #E8EDF3; border-bottom: 1px solid #E8EDF3; }
+.pp-faixa-titulo { margin: 0; font-size: 1.25rem; font-weight: 700; line-height: 1.3; color: #131A27; }
+.pp-faixa-texto { margin: 0; font-size: 1rem; line-height: 1.65; color: #495669; }
+.pp-cta { display: flex; justify-content: center; margin-top: 2.5rem; }
+
+/* tablet: diagrama mais compacto */
+@media (max-width: 1023px) {
+  .pp-diagrama { --nucleo: 148px; --anel: 64px; margin-top: 3.5rem; grid-template-columns: 1fr minmax(28px, .6fr) var(--nucleo) minmax(28px, .6fr) 1fr; }
+  .pp-nucleo span { font-size: 1.25rem; }
+  .pp-nucleo::after { inset: -24px; }
+  .pp-no p { max-width: 12rem; font-size: .875rem; }
+  .pp-lado { padding: 0 1.5rem; }
+  .pp-con-linha { inset: 0 12px; }
+}
+/* celular: sequência vertical conectada */
+@media (max-width: 767px) {
+  .pp-diagrama { --nucleo: 136px; --anel: 64px; grid-template-columns: 1fr; justify-items: center; margin-top: 2.75rem; }
+  .pp-no-lado { padding-top: 0; }
+  .pp-no h3 { margin-top: 1rem; }
+  .pp-no p { max-width: 18rem; }
+  .pp-no-centro p { margin-top: 2.25rem; }
+  .pp-con { width: 2px; height: 4.5rem; margin: 1.25rem 0; }
+  .pp-con-linha { inset: 10px 0; background: repeating-linear-gradient(to bottom, rgba(212, 77, 77, 0.55) 0 6px, transparent 6px 11px); }
+  .pp-con-linha::before, .pp-con-linha::after { left: 50% !important; right: auto !important; translate: -50% 0; }
+  .pp-con-linha::before { top: -4px; }
+  .pp-con-linha::after { top: auto; bottom: -4px; }
+  .pp-con-pulso { left: 50% !important; right: auto !important; translate: -50% 0; top: 10px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .pp-con-a .pp-con-pulso { animation: pp-pulso-desce 2.6s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+    .pp-con-b .pp-con-pulso { animation: pp-pulso-sobe 2.6s cubic-bezier(0.45, 0, 0.55, 1) 1.3s infinite; }
+  }
+  .pp-ramo { height: 3rem; margin-top: 1.25rem; }
+  .pp-ramo::before { height: 100%; }
+  .pp-ramo span { display: none; }
+  .pp-resultados { grid-template-columns: 1fr; gap: 3rem; }
+  .pp-lado { padding: 0; }
+  .pp-lado + .pp-lado { border-left: 0; border-top: 1px solid #E8EDF3; padding-top: 3rem; }
+  .pp-faixa { grid-template-columns: 1fr; gap: .5rem; text-align: center; margin-top: 3rem; }
+  .pp-cta a { width: 100%; }
+}
+@keyframes pp-pulso-desce { 0% { top: 10px; opacity: 0; } 15%, 85% { opacity: 1; } 100% { top: calc(100% - 17px); opacity: 0; } }
+@keyframes pp-pulso-sobe { 0% { top: calc(100% - 17px); opacity: 0; } 15%, 85% { opacity: 1; } 100% { top: 10px; opacity: 0; } }
