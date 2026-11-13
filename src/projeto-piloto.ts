@@ -437,24 +437,26 @@ form.addEventListener('change', (e) => {
 })();
 
 /* ---------- Diagrama do programa: "Animated Beam" (Magic UI), recriado sem React ----------
-   Mesma lógica do componente: um SVG do tamanho do diagrama; para cada ligação, um caminho cinza de centro a centro
-   (por trás dos nós) e um segundo caminho com um degradê curto cujas coordenadas x1/x2 atravessam o SVG de 10% a 110%,
-   com easing easeOutExpo e repetição infinita. O lado direito usa "reverse", então os dois feixes correm até o núcleo.
-   No celular as ligações são verticais e o degradê corre no eixo y. Pausa fora da tela; parado com "reduzir movimento". */
+   Mesma lógica do componente: um SVG cobrindo a área; para cada ligação, um caminho cinza (por trás dos nós e textos)
+   e um segundo caminho com um degradê curto que atravessa a ligação com easing easeOutExpo, em repetição infinita.
+   Ligações: os dois participantes até o núcleo e, no desktop/tablet, o núcleo até os dois blocos de resultados abaixo.
+   Pausa fora da tela; parado com "reduzir movimento". */
 (() => {
   const diag = document.querySelector<HTMLElement>('.pp-diagrama');
+  const area = diag?.parentElement as HTMLElement | null;
   const nucleo = diag?.querySelector<HTMLElement>('.pp-nucleo');
   const lados = diag ? Array.from(diag.querySelectorAll<HTMLElement>('.pp-no-lado .pp-anel')) : [];
-  if (!diag || !nucleo || lados.length !== 2) return;
+  const resultados = Array.from(document.querySelectorAll<HTMLElement>('#sobre-o-programa .pp-lado .pp-eyebrow'));
+  if (!diag || !area || !nucleo || lados.length !== 2) return;
   const NS = 'http://www.w3.org/2000/svg';
   const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const COR_INICIO = '#D44D4D', COR_FIM = '#F2B8B8', DUR = 3, ATRASOS = [0, 0];
+  const COR_INICIO = '#D44D4D', COR_FIM = '#F2B8B8', DUR = 3;
   const svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('class', 'pp-feixes'); svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('fill', 'none');
   const defs = document.createElementNS(NS, 'defs');
   svg.appendChild(defs);
-  type Feixe = { luz: SVGPathElement; base: SVGPathElement; grad: SVGLinearGradientElement; reverso: boolean; ini: number; fim: number };
-  const feixes: Feixe[] = lados.map((_, i) => {
+  type Feixe = { luz: SVGPathElement; base: SVGPathElement; grad: SVGLinearGradientElement; reverso: boolean; eixoY: boolean; ini: number; fim: number; atraso: number; ativo: boolean };
+  const criar = (i: number, atraso: number): Feixe => {
     const grad = document.createElementNS(NS, 'linearGradient');
     grad.id = `pp-beam-${i}`; grad.setAttribute('gradientUnits', 'userSpaceOnUse');
     ([[null, COR_INICIO, '0'], [null, COR_INICIO, null], ['32.5%', COR_FIM, null], ['100%', COR_FIM, '0']] as const).forEach(([o, c, op]) => {
@@ -464,56 +466,61 @@ form.addEventListener('change', (e) => {
       grad.appendChild(st);
     });
     defs.appendChild(grad);
-    const base = document.createElementNS(NS, 'path');
-    base.setAttribute('class', 'pp-beam-base');
-    const luz = document.createElementNS(NS, 'path');
-    luz.setAttribute('class', 'pp-beam-luz'); luz.setAttribute('stroke', `url(#pp-beam-${i})`);
+    const base = document.createElementNS(NS, 'path'); base.setAttribute('class', 'pp-beam-base');
+    const luz = document.createElementNS(NS, 'path'); luz.setAttribute('class', 'pp-beam-luz'); luz.setAttribute('stroke', `url(#pp-beam-${i})`);
     svg.append(base, luz);
-    return { luz, base, grad, reverso: i === 1, ini: 0, fim: 0 };
-  });
-  diag.prepend(svg);
+    return { luz, base, grad, reverso: false, eixoY: false, ini: 0, fim: 0, atraso, ativo: true };
+  };
+  // 0 e 1: participantes -> núcleo; 2 e 3: núcleo -> resultados (saem logo depois que os feixes chegam ao núcleo)
+  const feixes = [criar(0, 0), criar(1, 0), criar(2, 0.55), criar(3, 0.55)];
+  area.classList.add('pp-area-feixes');
+  area.prepend(svg);
 
-  let vertical = false;
-  const meio = (el: Element, ref: DOMRect) => { const r = el.getBoundingClientRect(); return { x: r.left - ref.left + r.width / 2, y: r.top - ref.top + r.height / 2, r }; };
   const desenhar = () => {
-    const ref = diag.getBoundingClientRect();
+    const ref = area.getBoundingClientRect();
     svg.setAttribute('width', String(ref.width)); svg.setAttribute('height', String(ref.height));
     svg.setAttribute('viewBox', `0 0 ${ref.width} ${ref.height}`);
-    const n = meio(nucleo, ref);
-    vertical = getComputedStyle(diag).gridTemplateColumns.split(' ').length < 3;
-    feixes.forEach((f, i) => {
-      const a = meio(lados[i], ref);
-      let d: string;
-      if (!vertical) {
-        d = `M ${a.x},${a.y} Q ${(a.x + n.x) / 2},${a.y} ${n.x},${n.y}`;
-      } else {
-        // celular: a ligação passa no vão entre os blocos de texto, sem atravessá-los
-        const blocoLado = lados[i].closest('.pp-no')!.getBoundingClientRect();
-        const blocoCentro = nucleo.closest('.pp-no')!.getBoundingClientRect();
-        const y1 = i === 0 ? blocoLado.bottom - ref.top + 8 : blocoCentro.bottom - ref.top + 8;
-        const y2 = i === 0 ? n.y : a.y;
-        d = `M ${n.x},${y1} L ${n.x},${y2}`;
-        f.reverso = i === 0 ? false : true;
-      }
+    const rn = nucleo.getBoundingClientRect();
+    const nx = rn.left - ref.left + rn.width / 2, ny = rn.top - ref.top + rn.height / 2;
+    const vertical = getComputedStyle(diag).gridTemplateColumns.split(' ').length < 3;
+    const def = (f: Feixe, d: string, eixoY: boolean, reverso: boolean, ini: number, fim: number) => {
       f.base.setAttribute('d', d); f.luz.setAttribute('d', d);
-      // o feixe percorre a extensão da própria ligação (no componente, a do contêiner, que ali tem o tamanho da ligação)
-      // trecho visível: da borda do participante até a borda do núcleo (o caminho segue por trás dos círculos)
+      f.eixoY = eixoY; f.reverso = reverso; f.ini = ini; f.fim = fim; f.ativo = true;
+      f.base.style.display = f.luz.style.display = '';
+    };
+    lados.forEach((anel, i) => {
+      const ra = anel.getBoundingClientRect();
+      const ax = ra.left - ref.left + ra.width / 2, ay = ra.top - ref.top + ra.height / 2;
       if (!vertical) {
-        const ra = lados[i].getBoundingClientRect(), rn = nucleo.getBoundingClientRect();
-        f.ini = (i === 0 ? ra.right : rn.right) - ref.left; f.fim = (i === 0 ? rn.left : ra.left) - ref.left;
+        def(feixes[i], `M ${ax},${ay} L ${nx},${ny}`, false, i === 1, (i === 0 ? ra.right : rn.right) - ref.left, (i === 0 ? rn.left : ra.left) - ref.left);
       } else {
-        const bb = f.base.getBBox(); f.ini = bb.y; f.fim = bb.y + bb.height;
+        // celular: a ligação passa no vão entre os blocos de texto
+        const bl = anel.closest('.pp-no')!.getBoundingClientRect(), bc = nucleo.closest('.pp-no')!.getBoundingClientRect();
+        const y1 = (i === 0 ? bl.bottom : bc.bottom) - ref.top + 8, y2 = i === 0 ? rn.top - ref.top : ra.top - ref.top;
+        def(feixes[i], `M ${nx},${y1} L ${nx},${y2}`, true, i === 1, y1, y2);
       }
     });
+    // núcleo -> blocos de resultados (só com os dois blocos lado a lado)
+    const ladoALado = resultados.length === 2 && Math.abs(resultados[0].getBoundingClientRect().top - resultados[1].getBoundingClientRect().top) < 4;
+    [2, 3].forEach((k, j) => {
+      const f = feixes[k];
+      if (vertical || !ladoALado) { f.ativo = false; f.base.style.display = f.luz.style.display = 'none'; return; }
+      const re = resultados[j].getBoundingClientRect();
+      const tx = re.left - ref.left + re.width / 2, ty = re.top - ref.top - 14;
+      // a curva abre no vão entre a legenda e os blocos
+      const leg = document.querySelector('#sobre-o-programa .pp-legenda')?.getBoundingClientRect();
+      const y0 = leg ? leg.bottom - ref.top + 6 : ny;
+      const r = Math.min(56, (ty - y0) / 2);
+      def(f, `M ${nx},${ny} L ${nx},${y0} C ${nx},${y0 + r} ${tx},${ty - r} ${tx},${ty}`, true, false, rn.bottom - ref.top, ty);
+    });
   };
-  // easeOutExpo, como no componente original (cubic-bezier .16,1,.3,1)
-  const ease = (t: number) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
+  const ease = (t: number) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t)); // easeOutExpo
   const posicionar = (f: Feixe, t: number) => {
     const k = ease(t);
     const de = f.reverso ? [70, 100] : [30, 0], ate = f.reverso ? [-30, 0] : [130, 100];
     const p1 = de[0] + (ate[0] - de[0]) * k, p2 = de[1] + (ate[1] - de[1]) * k;
     const len = f.fim - f.ini, px = (v: number) => String(f.ini + len * v / 100);
-    const eixo = vertical ? ['y1', 'y2', 'x1', 'x2'] : ['x1', 'x2', 'y1', 'y2'];
+    const eixo = f.eixoY ? ['y1', 'y2', 'x1', 'x2'] : ['x1', 'x2', 'y1', 'y2'];
     f.grad.setAttribute(eixo[0], px(p1)); f.grad.setAttribute(eixo[1], px(p2));
     f.grad.setAttribute(eixo[2], '0'); f.grad.setAttribute(eixo[3], '0');
   };
@@ -521,7 +528,7 @@ form.addEventListener('change', (e) => {
   const quadro = (t: number) => {
     if (!t0) t0 = t;
     const seg = (t - t0) / 1000;
-    feixes.forEach((f, i) => { const s = seg - ATRASOS[i]; posicionar(f, s < 0 ? 0 : (s % DUR) / DUR); });
+    feixes.forEach((f) => { if (!f.ativo) return; const s = seg - f.atraso; posicionar(f, s < 0 ? 0 : (s % DUR) / DUR); });
     raf = visivel ? requestAnimationFrame(quadro) : 0;
   };
   const iniciar = () => {
@@ -529,8 +536,8 @@ form.addEventListener('change', (e) => {
     if (reduzir.matches) { feixes.forEach((f) => posicionar(f, 0.12)); return; }
     if (visivel && !raf) { t0 = 0; raf = requestAnimationFrame(quadro); }
   };
-  new ResizeObserver(() => desenhar()).observe(diag);
-  new IntersectionObserver(([en]) => { visivel = en.isIntersecting; iniciar(); }).observe(diag);
+  new ResizeObserver(() => desenhar()).observe(area);
+  new IntersectionObserver(([en]) => { visivel = en.isIntersecting; iniciar(); }).observe(area);
   reduzir.addEventListener('change', iniciar);
   iniciar();
 })();
