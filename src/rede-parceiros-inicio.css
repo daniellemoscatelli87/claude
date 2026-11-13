@@ -766,3 +766,10 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rp-prova p { margin: 0; max-width: 24rem; font-size: .875rem; font-weight: 500; line-height: 1.35; color: #495669; }
 @media (min-width: 1024px) { .rp-modelo-sobe { max-width: 540px; } }
 @media (max-width: 1023px) { .rp-prova { justify-content: center; text-align: left; } }
+/* composição dos três profissionais no quadro da EI3 (460px de largura, ~587px até a folha branca) */
+@media (min-width: 1024px) { .rp-modelo-sobe { max-width: 460px !important; } }
+@media (min-width: 640px) and (max-width: 1023px) { .rp-modelo-sobe { max-width: 400px !important; } }
+@media (max-width: 639px) { .rp-modelo-sobe { max-width: 360px !important; } }
+/* bordas laterais da composição esmaecidas (as pessoas das pontas não terminam em corte reto) e altura próxima à da EI3 */
+.rp-modelo-sobe img { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 12%, #000 88%, transparent 100%); mask-image: linear-gradient(to right, transparent 0, #000 12%, #000 88%, transparent 100%); }
+@media (min-width: 1024px) { .rp-modelo-sobe { max-width: 500px !important; } }
