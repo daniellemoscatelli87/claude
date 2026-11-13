@@ -786,3 +786,31 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { background: #FDF8F8 !important; border-color: rgba(212, 77, 77, 0.10) !important; }
   #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { background: #FFFFFF !important; border: 1px solid #F9DADA !important; }
 }
+
+/* Grade comparativa (desktop), nova proposta: sem o selo central; cabeçalho escuro como uma tabela, linhas zebradas lado a lado e rodapé rosa */
+@media (min-width: 1024px) {
+  #sobre-o-programa .lado-troca + .lado-troca > h3 + p::after { display: none !important; }
+  #sobre-o-programa .troca-grade { border-radius: 24px; border: 1px solid rgba(19, 26, 39, 0.09); box-shadow: 0 20px 25px -5px rgba(226, 232, 240, 0.6), 0 8px 10px -6px rgba(226, 232, 240, 0.6); }
+  #sobre-o-programa .lado-troca + .lado-troca { border-left: 1px solid rgba(255, 255, 255, 0.08) !important; }
+  /* cabeçalho escuro */
+  #sobre-o-programa .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca > h3, #sobre-o-programa .lado-troca > h3 + p { background: #131A27 !important; }
+  #sobre-o-programa .lado-troca > div.selo-lado { padding: 2.25rem 3rem 1.25rem !important; }
+  #sobre-o-programa .lado-troca > div.selo-lado > p, #sobre-o-programa .lado-troca > div.selo-studio > p { background: transparent !important; border-color: rgba(212, 77, 77, 0.6) !important; color: #D44D4D !important; }
+  #sobre-o-programa .lado-troca > h3 { color: #FFFFFF !important; }
+  #sobre-o-programa .lado-troca > h3 + p { color: #B3BDD0 !important; padding-bottom: 2.25rem; }
+  /* linhas de benefícios: zebradas, alinhadas entre as colunas */
+  #sobre-o-programa .lado-troca li::before { display: none !important; }
+  #sobre-o-programa .lado-troca li { padding: 1.375rem 3rem; background: #FFFFFF; }
+  #sobre-o-programa .lado-troca li:nth-child(even) { background: #F6F7FA; }
+  #sobre-o-programa .lado-troca + .lado-troca li { border-left: 0; }
+  /* rodapé */
+  #sobre-o-programa .lado-troca > p:has(.compromisso-icone), #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { background: #FDF2F2 !important; border-top: 1px solid #F9DADA !important; }
+  #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { border-left: 1px solid #F9DADA; }
+}
+@media (min-width: 1024px) { #sobre-o-programa .lado-troca + .lado-troca { border-left: 1px solid rgba(19, 26, 39, 0.09) !important; } }
+@media (min-width: 1024px) {
+  #sobre-o-programa .lado-troca + .lado-troca { border-left: 0 !important; }
+  #sobre-o-programa .lado-troca + .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca + .lado-troca > h3, #sobre-o-programa .lado-troca + .lado-troca > h3 + p { box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.08); }
+  #sobre-o-programa .lado-troca + .lado-troca li { box-shadow: inset 1px 0 0 rgba(19, 26, 39, 0.07); }
+  #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { border-left: 0 !important; box-shadow: inset 1px 0 0 #F9DADA; }
+}
