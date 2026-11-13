@@ -215,12 +215,12 @@ export function rodapeCompactoHtml(): string {
     <div class="rodape-base">
       <div>
         <p>© 2026 Dani Moscatelli Experience Design Studio. Todos os direitos reservados. <span aria-hidden="true">•</span> Curitiba - PR</p>
-        <p>Desenvolvido a partir de <a class="rodape-ds" href="/designsystem/" target="_blank" rel="noopener">Dani Moscatelli - Design System<span class="sr-only"> (abre em nova aba)</span></a></p>
       </div>
       <nav aria-label="Rodapé" class="rodape-links">
         <a href="/privacidade/">Política de privacidade</a>
         <button type="button" data-preferencias-cookies>Preferências de cookies</button>
         <a href="/admin/">Área restrita</a>
+        <a href="/designsystem/" target="_blank" rel="noopener">Design System<span class="sr-only"> (abre em nova aba)</span></a>
       </nav>
     </div>
   </div>`;
