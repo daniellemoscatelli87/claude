@@ -892,3 +892,17 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .rolar-abaixo .rolar-seta { width: 20px !important; height: 32px !important; border-radius: 9999px !important; border: 1px solid #D6DCE6 !important; animation: none !important; }
   .rolar-abaixo .rolar-seta svg { width: 14px !important; height: 14px !important; }
 }
+
+/* Desktop: sem o card no hero (só a foto e o "Saiba mais"); o texto do card passa para o início de "Sobre o Programa",
+   seguido da grade com as vantagens dos dois lados. No celular segue como antes. */
+.sobre-intro { display: none; }
+@media (min-width: 1024px) {
+  .hero-card { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap; border: 0 !important; }
+  .hero-card > :not(h1) { display: none !important; }
+  #sobre-o-programa .rv-cabecalho:not(.sobre-intro) { display: none; }
+  .sobre-intro { display: block; }
+  .sobre-intro-sub { margin: 0 0 1.25rem; font-size: 1.25rem; font-weight: 600; line-height: 1.4; color: #283043; }
+  .sobre-intro-txt { max-width: 42rem; margin: 0 auto .75rem; font-size: 1.0625rem; line-height: 1.65; color: #495669; }
+  .sobre-intro-txt strong { color: #131A27; font-weight: 600; }
+  .sobre-intro-acao { margin-top: 2rem; display: flex; justify-content: center; }
+}
