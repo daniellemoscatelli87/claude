@@ -183,7 +183,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   if (!orbita) return;
   const avs = Array.from(orbita.querySelectorAll<HTMLButtonElement>('.rx-av'));
   const dica = orbita.querySelector<HTMLElement>('.rx-dica')!;
-  const DUR = [48, 72, 96]; // segundos por volta: movimento lento e legível
+  const DUR = [22, 34, 46]; // segundos por volta: movimento lento e legível
   const ang = [0, 0, 0];
   let pausado = false, ultimo = 0, visivel = false, ativo: HTMLButtonElement | null = null;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)');
