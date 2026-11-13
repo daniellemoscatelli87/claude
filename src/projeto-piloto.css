@@ -854,3 +854,8 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
   .rolar-abaixo:hover .rolar-seta { background: #FDF2F2 !important; }
   .rolar-abaixo:focus-visible { box-shadow: inset 0 0 0 2px #D44D4D; }
 }
+/* Desktop: a foto do hero fica parada enquanto o painel arredondado sobe na rolagem (efeito janela, como no modelo) */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  #hero-fundo { background-image: image-set(url("/projeto-piloto-hero-v6.webp") 1x); background-size: cover; background-position: 28% center; background-repeat: no-repeat; background-attachment: fixed; }
+  #hero-fundo img { opacity: 0; }
+}
