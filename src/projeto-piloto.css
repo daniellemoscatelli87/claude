@@ -929,3 +929,5 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 .fundo-gradiente-escuro span:nth-child(1) { --mancha: rgba(139, 27, 27, 0.45); }
 .fundo-gradiente-escuro span:nth-child(2) { --mancha: rgba(55, 65, 85, 0.60); }
 .fundo-gradiente-escuro span:nth-child(3) { --mancha: rgba(212, 77, 77, 0.18); }
+/* Desktop: o hero termina 16px acima da dobra (mesmo respiro das laterais), então a aba "Saiba mais" aparece inteira, com margem */
+@media (min-width: 1024px) { .hero-piloto { min-height: calc(100svh - 2rem) !important; } }

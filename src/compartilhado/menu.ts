@@ -63,6 +63,26 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
   if (fechado) c.classList.add('is-oculto');
   document.getElementById('cta-contato-fechar')?.addEventListener('click', esconder);
   document.querySelectorAll('[data-open-contact]').forEach((b) => b.addEventListener('click', esconder));
+  // Desktop: o aviso aponta para o botão do WhatsApp e o clique abre a conversa por lá
+  const whats = document.querySelector<HTMLAnchorElement>('a[href^="https://wa.me/"]');
+  if (whats && window.matchMedia('(min-width: 1024px)').matches) {
+    document.querySelector('[aria-describedby="cta-contato-texto"]')?.removeAttribute('aria-describedby');
+    document.body.appendChild(c);
+    c.classList.add('cta-whats');
+    const acao = c.querySelector<HTMLElement>('[data-open-contact]');
+    if (acao) {
+      const novo = acao.cloneNode(true) as HTMLElement;
+      novo.removeAttribute('data-open-contact');
+      novo.setAttribute('aria-label', 'Tem um desafio ou uma ideia? Conversar com a Dani no WhatsApp');
+      acao.replaceWith(novo);
+      novo.addEventListener('click', () => {
+        (window as any).dmEvento?.('clique_aviso_whatsapp');
+        window.open(whats.href, '_blank', 'noopener');
+        esconder();
+      });
+    }
+    whats.addEventListener('click', esconder);
+  }
 })();
 
 /* ---------- Gaveta de contato ---------- */
