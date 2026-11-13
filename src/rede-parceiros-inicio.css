@@ -163,3 +163,17 @@ html.cadastro-aberto { overflow: hidden; }
 @media (min-width: 768px) { .cta-flutuante, .botao-subir, .cadastro-tela { display: none !important; } }
 /* Rodapé escuro (mesmo do Projeto Piloto) */
 .parceiros-inicio footer.relative { position: relative; }
+
+/* ---------- Formatos de parceria: lista informativa (sem cards, para não parecer clicável) ---------- */
+.rp-formatos { display: grid; margin: 0 auto; padding: 0; list-style: none; max-width: 64rem; border-top: 1px solid rgba(19, 26, 39, 0.12); }
+.rp-formato { display: flex; align-items: center; gap: 1rem; padding: 1.125rem 0; border-bottom: 1px solid rgba(19, 26, 39, 0.12); }
+.rp-formato .rp-icone { flex-shrink: 0; margin: 0; width: 2.5rem; height: 2.5rem; border-radius: 9999px; border: 0; background: rgba(212, 77, 77, 0.1); }
+.rp-formato .rp-icone svg { width: 1.25rem; height: 1.25rem; }
+.rp-formato h3 { margin: 0; font-size: 1rem !important; font-weight: 600; line-height: 1.4; color: #131A27; }
+@media (min-width: 768px) {
+  .rp-formatos { grid-template-columns: repeat(4, 1fr); border-top: 0; }
+  .rp-formato { flex-direction: column; align-items: center; text-align: center; gap: .875rem; padding: .5rem 1.5rem; border-bottom: 0; }
+  .rp-formato + .rp-formato { border-left: 1px solid rgba(19, 26, 39, 0.12); }
+  .rp-formato .rp-icone { width: 3rem; height: 3rem; }
+  .rp-formato .rp-icone svg { width: 1.375rem; height: 1.375rem; }
+}
