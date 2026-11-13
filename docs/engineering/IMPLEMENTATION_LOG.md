@@ -360,6 +360,26 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-13 · Cards de preço: recursos recolhíveis e "Para quem" opcional (publicado: DM v41 e FindLook v64)
+
+- **Origem:** a dona do produto pediu ocultar ou expandir os itens do plano e tornar o "Para quem" opcional.
+- **Respostas dela:**
+  - lista recolhida ao carregar;
+  - abrir ou fechar vale para todos os cards juntos;
+  - "Para quem" opcional com um controle na demonstração.
+- **Feito:**
+  - botão "Ver recursos do plano" / "Ocultar recursos do plano" com a contagem ("5 de 10") e chevron, `aria-expanded` e `aria-controls`;
+  - um estado compartilhado entre os cards; um espaçador mantém o rodapé alinhado;
+  - tipo `Plano` com `forWhom?` e prop `mostrarParaQuem`;
+  - interruptor "Mostrar 'Para quem'": no DM fica acima do template; no FindLook fica acima do protótipo do painel, com o rótulo "Página Planos e assinatura: mostrar 'Para quem'".
+- **Verificação:** `pnpm build` e Playwright nos dois DS, em 1440 claro e escuro e em 390 px:
+  - inicia recolhido, com `aria-expanded=false` e nenhum item;
+  - um clique abre os 3 cards (10 itens cada), e o Enter pelo teclado fecha;
+  - alturas iguais em 3 colunas;
+  - o interruptor remove o bloco nos 3 cards;
+  - sem rolagem horizontal e sem erros de página.
+- **No ar:** os pacotes públicos dos dois DS contêm a mudança. Commits DM `e63194e` e FindLook `04edc29`.
+
 ## 2026-11-13 · Cards de preço no estilo do card com wobble (publicado: DM v40 e FindLook v63)
 
 - **Origem:** a dona do produto mandou o print do "Card com wobble" (seção Motion do DM) e pediu: "revise o card de preços para parecer mais com, mas misturando o melhor dos dois mundos".
