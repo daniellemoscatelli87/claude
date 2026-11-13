@@ -322,3 +322,49 @@ form.addEventListener('change', (e) => {
   aplicar();
   mq.addEventListener('change', aplicar);
 })();
+
+/* ---------- Gaveta do cadastro: abre pelo card de convite e por qualquer link para #inscricao ---------- */
+(() => {
+  const gaveta = document.getElementById('cadastro-gaveta');
+  const fundo = document.getElementById('cadastro-fundo');
+  if (!gaveta || !fundo) return;
+  let origem: HTMLElement | null = null;
+  const aberta = () => !gaveta.classList.contains('translate-x-full');
+  const abrir = (de?: HTMLElement | null) => {
+    origem = de ?? (document.activeElement as HTMLElement | null);
+    (window as any).dmEvento?.('cadastro_piloto_aberto');
+    gaveta.classList.remove('invisible');
+    requestAnimationFrame(() => { fundo.classList.remove('pointer-events-none', 'opacity-0'); gaveta.classList.remove('translate-x-full'); });
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => { if (!document.getElementById('form-piloto')?.classList.contains('hidden')) gaveta.querySelector<HTMLElement>('input, select, textarea')?.focus(); }, 300);
+  };
+  const fechar = () => {
+    gaveta.classList.add('translate-x-full');
+    fundo.classList.add('opacity-0');
+    setTimeout(() => {
+      fundo.classList.add('pointer-events-none');
+      gaveta.classList.add('invisible');
+      document.body.style.overflow = '';
+      if (origem && origem.offsetParent) origem.focus();
+    }, 300);
+  };
+  document.addEventListener('click', (e) => {
+    const alvo = (e.target as HTMLElement).closest<HTMLElement>('[data-abrir-cadastro], a[href="#inscricao"]');
+    if (!alvo || gaveta.contains(alvo)) return;
+    e.preventDefault();
+    abrir(alvo);
+  });
+  document.getElementById('cadastro-fechar')?.addEventListener('click', fechar);
+  fundo.addEventListener('click', fechar);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && aberta() && !document.querySelector('dialog[open]')) fechar();
+    if (e.key === 'Tab' && aberta()) {
+      const focaveis = Array.from(gaveta.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]), select, textarea')).filter((el) => el.offsetParent);
+      if (!focaveis.length) return;
+      const primeiro = focaveis[0], ultimo = focaveis[focaveis.length - 1];
+      if (e.shiftKey && document.activeElement === primeiro) { e.preventDefault(); ultimo.focus(); }
+      else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primeiro.focus(); }
+    }
+  });
+  if (location.hash === '#inscricao' || location.hash === '#cadastro') setTimeout(() => abrir(null), 400);
+})();
