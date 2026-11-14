@@ -43,14 +43,13 @@ const RODAPE = "Você recebeu este e-mail porque faz parte da Rede de Parceiros 
 
 // confirmado: o parceiro já autorizou no formulário de cadastro; o e-mail confirma e pede a foto.
 const ASSUNTO_CONFIRMADO = "Seu perfil na Galeria de profissionais: envie sua foto";
-// Novo cadastro (envio automático): foco na galeria, abrindo com "Agora que você faz parte da nossa rede".
-//   bv-sim: autorizou a galeria no cadastro (pede a foto). bv-nao: não autorizou (convida, sem obrigação).
-const ASSUNTO_BV_SIM = "Agora que você faz parte da rede, complete seu perfil na galeria";
-const ASSUNTO_BV_NAO = "Agora que você faz parte da rede, apareça na nossa galeria";
-type Modo = "convite" | "confirmado" | "bv-sim" | "bv-nao";
-const assuntoDe = (m: Modo) => m === "confirmado" ? ASSUNTO_CONFIRMADO : m === "bv-sim" ? ASSUNTO_BV_SIM : m === "bv-nao" ? ASSUNTO_BV_NAO : ASSUNTO;
+// Novo cadastro (envio automático): um único e-mail, com foco na galeria, que vale tanto para quem autorizou
+// no formulário quanto para quem não autorizou (a página de autorização trata os dois casos).
+type Modo = "convite" | "confirmado" | "bv";
+const assuntoBV = (nome: string) => (primeiroNome(nome) ? primeiroNome(nome) + ", seu" : "Seu") + " perfil está a um passo da nossa galeria";
+const assuntoDe = (m: Modo, nome = "") => m === "confirmado" ? ASSUNTO_CONFIRMADO : m === "bv" ? assuntoBV(nome) : ASSUNTO;
 function montar(nome: string, token: string, modo: Modo = "convite") {
-  const confirmado = modo === "confirmado", bv = modo.startsWith("bv"), bvSim = modo === "bv-sim";
+  const confirmado = modo === "confirmado", bv = modo === "bv";
   const link = PAGINA + encodeURIComponent(token);
   const ola = primeiroNome(nome) ? `Olá, ${primeiroNome(nome)}!` : "Olá!";
   const P = "margin:0 0 16px;font-size:16px;line-height:1.65;color:#334155";
@@ -63,17 +62,17 @@ function montar(nome: string, token: string, modo: Modo = "convite") {
     p("No mesmo link você pode revisar como o seu perfil vai aparecer e ajustar o cargo e o LinkedIn."),
     p(b("A decisão é sua, e você pode alterá-la a qualquer momento pelo mesmo link.")),
   ].join("");
-  const REDE = "Rede de Parceiros da Dani Moscatelli | Experience Design Studio";
-  const corpoBV = (bvSim ? [
+  // passos numerados, em destaque
+  const passo = (n: string, t: string) => `<tr><td valign="top" style="padding:0 14px 14px 0;width:36px"><span style="display:inline-block;width:32px;height:32px;line-height:32px;border-radius:50%;background:#d44d4d;color:#ffffff;font-weight:bold;font-size:15px;text-align:center">${n}</span></td><td valign="middle" style="padding:0 0 14px;font-size:16px;line-height:1.5;color:#0f172a">${t}</td></tr>`;
+  const corpoBV = [
     p(esc(ola)),
-    p(`Agora que você faz parte da nossa rede, o seu perfil também vai fazer parte da ${b("Galeria de Profissionais")} do nosso site, como você autorizou no cadastro.`),
-    p(`Para completar, ${b("revise como o seu perfil vai aparecer e envie a sua foto")}. Se não enviar, usaremos a foto do seu perfil do LinkedIn.`),
-  ] : [
-    p(esc(ola)),
-    p(`Agora que você faz parte da nossa rede, queremos apresentar você também na ${b("Galeria de Profissionais")} do nosso site.`),
-    p("A galeria apresenta os especialistas da " + esc(REDE) + " e facilita conexões com empresas em busca de novos talentos."),
-    p(`Se quiser participar, ${b("revise como o seu perfil vai aparecer e autorize a exibição")}. A participação é opcional, e seus dados de contato e sua cidade não são exibidos.`),
-  ]).join("");
+    p(`Agora que você faz parte da nossa rede, queremos apresentar você na ${b("Galeria de Profissionais")} do nosso site: a vitrine dos especialistas da rede para empresas em busca de novos talentos.`),
+    `<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin:8px 0 12px;padding:20px 20px 6px;background:#fdf2f2;border-radius:16px"><tr><td>
+      <p style="margin:0 0 14px;font-size:13px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;color:#d44d4d">Falta pouco</p>
+      <table role="presentation" cellpadding="0" cellspacing="0">${passo("1", "Confira como o seu perfil vai aparecer.")}${passo("2", "Envie a sua foto. Se preferir, usamos a do seu LinkedIn.")}${passo("3", "Confirme e pronto: você faz parte da galeria.")}</table>
+    </td></tr></table>`,
+    p("Seus dados de contato e sua cidade não são exibidos, e o seu perfil só aparece com a sua autorização."),
+  ].join("");
   const corpo = bv ? corpoBV : confirmado ? corpoConfirmado : [
     p(esc(ola)),
     p("É um prazer contar com você na Rede de Parceiros da Dani Moscatelli | Experience Design Studio."),
@@ -88,7 +87,7 @@ function montar(nome: string, token: string, modo: Modo = "convite") {
   ].join("");
   const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light only">
-<title>${esc(assuntoDe(modo))}</title>
+<title>${esc(assuntoDe(modo, nome))}</title>
 <style>:root { color-scheme: light only; supported-color-schemes: light only; }
 @media (max-width: 600px) { .px { padding-left: 20px !important; padding-right: 20px !important; } }</style></head>
 <body style="margin:0;padding:0;background:#f4f5f8">
@@ -97,11 +96,11 @@ function montar(nome: string, token: string, modo: Modo = "convite") {
     <tr><td style="padding:0;font-size:0;line-height:0"><a href="${SITE}"><img src="${CABECALHO}" width="600" alt="Dani Moscatelli | Experience Design Studio" style="display:block;width:100%;max-width:600px;height:auto;border:0"></a></td></tr>
     <tr><td class="px" style="padding:16px 32px 0">
       <p style="margin:0 0 8px;font-size:12px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:#d44d4d">Galeria de profissionais</p>
-      <h1 style="margin:0 0 20px;font-size:26px;line-height:1.25;color:#0f172a">${modo === "bv-sim" ? "Seu perfil vai fazer parte da nossa galeria." : modo === "bv-nao" ? "Podemos apresentar você na nossa galeria?" : confirmado ? "Seu perfil vai fazer parte da nossa galeria." : "Seu trabalho merece ser visto. Podemos apresentar você na nossa galeria?"}</h1>
+      <h1 style="margin:0 0 20px;font-size:26px;line-height:1.25;color:#0f172a">${bv ? "Seu perfil está a um passo da nossa galeria." : confirmado ? "Seu perfil vai fazer parte da nossa galeria." : "Seu trabalho merece ser visto. Podemos apresentar você na nossa galeria?"}</h1>
       ${corpo}
     </td></tr>
     <tr><td class="px" style="padding:4px 32px 28px">
-      <a href="${link}" style="display:inline-block;background:#d44d4d;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:14px 28px;border-radius:999px">${bv ? (bvSim ? "Completar meu perfil na galeria" : "Ver meu perfil na galeria") : confirmado ? "Revisar meu perfil e enviar foto" : "Revisar meu perfil e autorizar"}</a>
+      <a href="${link}" style="display:inline-block;background:#d44d4d;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:14px 28px;border-radius:999px">${bv ? "Completar meu perfil" : confirmado ? "Revisar meu perfil e enviar foto" : "Revisar meu perfil e autorizar"}</a>
     </td></tr>
     <tr><td class="px" style="padding:0 32px 8px">${p("Obrigada por fazer parte dessa rede. Seguimos conectando competências, perspectivas e oportunidades para criar experiências de valor.")}</td></tr>
     <tr><td class="px" style="padding:8px 32px 32px">${ASSINATURA_CONVITE_HTML}</td></tr>
@@ -110,17 +109,11 @@ function montar(nome: string, token: string, modo: Modo = "convite") {
 </td></tr></table>
 </body></html>`;
   const textoBV = [
-    "GALERIA DE PROFISSIONAIS", bvSim ? "Seu perfil vai fazer parte da nossa galeria." : "Podemos apresentar você na nossa galeria?", ola,
-    ...(bvSim ? [
-      "Agora que você faz parte da nossa rede, o seu perfil também vai fazer parte da Galeria de Profissionais do nosso site, como você autorizou no cadastro.",
-      "Para completar, revise como o seu perfil vai aparecer e envie a sua foto. Se não enviar, usaremos a foto do seu perfil do LinkedIn.",
-      "Completar meu perfil na galeria: " + link,
-    ] : [
-      "Agora que você faz parte da nossa rede, queremos apresentar você também na Galeria de Profissionais do nosso site.",
-      "A galeria apresenta os especialistas da " + REDE + " e facilita conexões com empresas em busca de novos talentos.",
-      "Se quiser participar, revise como o seu perfil vai aparecer e autorize a exibição. A participação é opcional, e seus dados de contato e sua cidade não são exibidos.",
-      "Ver meu perfil na galeria: " + link,
-    ]),
+    "GALERIA DE PROFISSIONAIS", "Seu perfil está a um passo da nossa galeria.", ola,
+    "Agora que você faz parte da nossa rede, queremos apresentar você na Galeria de Profissionais do nosso site: a vitrine dos especialistas da rede para empresas em busca de novos talentos.",
+    "FALTA POUCO\n1. Confira como o seu perfil vai aparecer.\n2. Envie a sua foto. Se preferir, usamos a do seu LinkedIn.\n3. Confirme e pronto: você faz parte da galeria.",
+    "Seus dados de contato e sua cidade não são exibidos, e o seu perfil só aparece com a sua autorização.",
+    "Completar meu perfil: " + link,
     "Obrigada por fazer parte dessa rede. Seguimos conectando competências, perspectivas e oportunidades para criar experiências de valor.",
     "Dani Moscatelli\nCEO | Experience Design Studio\nwww.danimoscatelli.com.br",
     "---\n" + RODAPE_BV,
@@ -166,7 +159,7 @@ async function enviar(lista: Linha[], modo: Modo = "convite") {
     const res = await fetch("https://api.resend.com/emails/batch", {
       method: "POST",
       headers: { Authorization: `Bearer ${Deno.env.get("RESEND_API_KEY")}`, "Content-Type": "application/json" },
-      body: JSON.stringify(lote.map((r) => ({ from: REMETENTE, to: [r.email], reply_to: RESPONDER_PARA, subject: assuntoDe(modo), ...montar(r.nome, r.galeria_token, modo) }))),
+      body: JSON.stringify(lote.map((r) => ({ from: REMETENTE, to: [r.email], reply_to: RESPONDER_PARA, subject: assuntoDe(modo, r.nome), ...montar(r.nome, r.galeria_token, modo) }))),
     });
     const out = await res.json().catch(() => ({}));
     if (!res.ok) { console.error("Resend", res.status, JSON.stringify(out).slice(0, 300)); falhas += lote.length; continue; }
@@ -187,12 +180,11 @@ Deno.serve(async (req) => {
     const id = String(p.id ?? "");
     if (!UUID.test(id)) return json({ error: "Dados inválidos" }, 400);
     const { data: r } = await admin.from("cadastros").select("id, nome, email, galeria_token, galeria_status, galeria_convite_em").eq("id", id).maybeSingle();
-    // Já recebeu: nada. Cada novo cadastro recebe o e-mail de boas-vindas com a galeria
-    // (bv-sim para quem autorizou no formulário, pedindo a foto; bv-nao para quem não autorizou).
+    // Já recebeu: nada. Cada novo cadastro recebe o e-mail da galeria (o mesmo para quem autorizou ou não no formulário).
     if (!r || !r.email || r.galeria_convite_em) return json({ ok: true });
     const { data: exc } = await admin.from("galeria_convite_excecoes").select("email").eq("email", String(r.email).trim().toLowerCase()).maybeSingle();
     if (exc) return json({ ok: true });
-    await enviar([r], r.galeria_status === "autorizado" ? "bv-sim" : "bv-nao");
+    await enviar([r], "bv");
     return json({ ok: true });
   }
 
@@ -200,7 +192,7 @@ Deno.serve(async (req) => {
   const { data: auth } = await admin.auth.getUser(token);
   if (auth.user?.app_metadata?.role !== "admin") return json({ error: "Sem permissão" }, 403);
 
-  if (p.acao === "preview") { const m: Modo = ["confirmado", "bv-sim", "bv-nao"].includes(p.modo) ? p.modo : p.confirmado ? "confirmado" : "convite"; return json({ assunto: assuntoDe(m), html: montar("Nome", "exemplo", m).html }); }
+  if (p.acao === "preview") { const m: Modo = ["confirmado", "bv"].includes(p.modo) ? p.modo : p.confirmado ? "confirmado" : "convite"; return json({ assunto: assuntoDe(m, "Nome"), html: montar("Nome", "exemplo", m).html }); }
   if (p.acao === "um") {
     const id = String(p.id ?? "");
     if (!UUID.test(id)) return json({ error: "Dados inválidos" }, 400);
