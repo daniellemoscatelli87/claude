@@ -53,10 +53,12 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   let heroVisivel = true, conviteVisivel = false;
   // no celular e tablet o "Quero ser parceiro" fica sempre no rodapé, ao lado do WhatsApp (o hero não tem mais o botão)
   const pequeno = window.matchMedia('(max-width: 1023px)');
-  const atualizar = () => mostrar(cta, pequeno.matches || (!heroVisivel && !conviteVisivel));
+  const atualizar = () => mostrar(cta, !conviteVisivel && (pequeno.matches || !heroVisivel));
   pequeno.addEventListener('change', atualizar);
   if (hero) new IntersectionObserver(([e]) => { heroVisivel = e.isIntersecting; atualizar(); }, { threshold: 0 }).observe(hero);
-  if (convite) new IntersectionObserver(([e]) => { conviteVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.1 }).observe(convite);
+  // o flutuante sai quando o botão do convite aparece na tela (os dois nunca aparecem juntos)
+  const conviteBotao = convite?.querySelector<HTMLElement>('a[href*="cadastro"], .rp-botao') ?? convite;
+  if (conviteBotao) new IntersectionObserver(([e]) => { conviteVisivel = e.isIntersecting; atualizar(); }, { threshold: 0 }).observe(conviteBotao);
   if (rodape) new IntersectionObserver(([e]) => mostrar(subir, e.isIntersecting), { threshold: 0.1 }).observe(rodape);
   subir?.addEventListener('click', () => {
     const suave = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
