@@ -11,6 +11,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
+  .ini-foto { overflow: hidden; padding: 0 !important; }
+  .ini-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .rowlink.com-gal { grid-template-columns: 38px minmax(0, 1fr) 120px 90px; }
+  .rowlink.com-gal .d { justify-self: end; }
+  .rowlink.com-gal .t { grid-column: 2; grid-row: 1; }
+  .rowlink.com-gal .s { grid-column: 2; grid-row: 2; }
+  .rowlink.com-gal .gal { grid-column: 3; grid-row: 1 / span 2; justify-self: start; }
+  .rowlink.com-gal .d { grid-column: 4; grid-row: 1; }
+  .gal { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .gal::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .gal.sim { background: #e6f4ea; color: #1e7b45; }
+  .gal.nao { background: var(--track); color: var(--muted); }
+  .rowlink-cab { display: grid; grid-template-columns: 38px minmax(0, 1fr) 120px 90px; gap: 2px 12px; padding: 0 10px 8px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  @media (max-width: 640px) { .rowlink.com-gal { grid-template-columns: auto minmax(0, 1fr) auto; } .rowlink.com-gal .gal { grid-column: 2; grid-row: 3; } .rowlink.com-gal .d { grid-column: 3; } .rowlink-cab { display: none; } }
   .gal-card { display: grid; gap: 14px; }
   .gal-dl { display: grid; grid-template-columns: max-content 1fr; align-items: center; gap: 10px 20px; margin: 0; font-size: 14px; }
   .gal-dl dt { color: var(--muted); }
@@ -563,7 +577,7 @@ function profileDetail(r) {
   const head = el("div", "pc-head");
   const who = el("div", "pc-who");
   who.append(el("h3", null, r.nome || "Sem nome"), el("div", "pc-sub", [r.empresa, cidade(r.cidade_estado) + (UF_NOME[uf(r.cidade_estado)] ? " - " + uf(r.cidade_estado) : "")].filter(Boolean).join(" · ")));
-  head.append(el("span", "ini", Admin.initials(r.nome)), who);
+  head.append(avatar(r), who);
   c.appendChild(head);
   const m = matchOf(r);
   if (m) {
@@ -613,7 +627,7 @@ function summaryCard(r) {
   const senior = [NIVEL[r.tempo_especialidade], r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase() + " de carreira"].filter(Boolean).join(" · ");
   if (senior) who.appendChild(el("div", "pc-sub", senior));
   const m = matchOf(r);
-  head.append(el("span", "ini", Admin.initials(r.nome)), who);
+  head.append(avatar(r), who);
   const dl = el("dl", "pcs-dl");
   const row = (k, v, cls) => { if (!v) return; const d = el("div", cls); d.append(el("dt", null, k), el("dd", null, v)); dl.appendChild(d); };
   row("Especialidade", r.principal_especializacao || "Não informada");
@@ -671,11 +685,29 @@ function dashboard(rows) {
   profiles(rows);
 }
 
+// Avatar: a foto da galeria, quando o parceiro já enviou; senão as iniciais.
+function avatar(r, cls = "ini") {
+  const foto = r.galeria_foto_url && /^https:\/\//.test(r.galeria_foto_url) ? r.galeria_foto_url : "";
+  if (!foto) return el("span", cls, Admin.initials(r.nome));
+  const s = el("span", cls + " ini-foto"); const img = el("img"); img.src = foto; img.alt = ""; img.loading = "lazy"; s.appendChild(img); return s;
+}
+const publicado = (r) => r.galeria_status === "autorizado" && !r.galeria_oculto;
+
 /* ---------- Candidaturas ---------- */
 function candidaturas(rows) {
   const list = document.getElementById("list"); list.replaceChildren();
   if (!rows.length) return list.appendChild(el("div", "empty", ALL.length ? "Nenhuma candidatura para os filtros atuais." : "Nenhuma candidatura ainda."));
-  rows.forEach((r) => list.appendChild(Admin.rowLink("/admin/parceiros/?id=" + r.id, r.nome, [r.principal_especializacao, r.cidade_estado, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em)));
+  // coluna "Perfil publicado": sim quando autorizou a galeria e não está oculto
+  const cab = el("div", "rowlink-cab"); cab.append(el("span", null, ""), el("span", null, "Parceiro"), el("span", null, "Perfil publicado"), el("span", null, "")); list.appendChild(cab);
+  rows.forEach((r) => {
+    const a = Admin.rowLink("/admin/parceiros/?id=" + r.id, r.nome, [r.principal_especializacao, r.cidade_estado, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em);
+    a.classList.add("com-gal");
+    a.querySelector(".ini").replaceWith(avatar(r));
+    const pub = publicado(r);
+    const g = el("span", "gal " + (pub ? "sim" : "nao"), pub ? "Sim" : "Não"); g.setAttribute("aria-label", "Perfil publicado na galeria: " + (pub ? "sim" : "não"));
+    a.insertBefore(g, a.querySelector(".d"));
+    list.appendChild(a);
+  });
 }
 
 /* ---------- Análise por IA ---------- */
