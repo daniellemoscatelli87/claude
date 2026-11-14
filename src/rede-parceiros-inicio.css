@@ -1170,3 +1170,6 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 @media (prefers-reduced-motion: reduce) { .rx-gal-card { transition: none; } .rx-gal-card:hover { transform: none; } }
 @media (max-width: 1023px) { .rx-gal-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 639px) { .rx-gal-grade { grid-template-columns: 1fr; gap: .75rem; } .rx-gal-card { padding: 1.25rem; border-radius: 20px; } }
+/* Tags das áreas: no máximo 2 linhas (o que passar disso fica oculto) */
+.rx-gal-areas { max-height: calc(2 * 1.6875rem + .375rem); overflow: hidden; }
+.rx-gal-areas li { line-height: 1.125rem; }
