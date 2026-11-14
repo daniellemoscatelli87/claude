@@ -1390,3 +1390,96 @@ main + footer.relative { padding-top: 6rem !important; }
 /* Títulos dos lados do painel um pouco menores */
 .pz-painel .pz-lado h3 { font-size: 1.3125rem !important; }
 @media (max-width: 639px) { .pz-painel .pz-lado h3 { font-size: 1.125rem !important; } }
+
+/* =========================================================================
+   Celular e tablet: hero no mesmo estilo do computador — painel arredondado com a foto, 8 px de respiro nas bordas
+   e a alça "Saiba mais" na base. O texto do card passa para o início de "Sobre o Programa", como no computador.
+   ========================================================================= */
+@media (max-width: 1023px) {
+  body:has(#hero.hero-piloto) { background: #FFFFFF !important; }
+  .hero-piloto { position: relative; isolation: isolate; display: block !important; margin: calc(-1 * var(--altura-cabecalho, 68px) + .5rem) .5rem 0 !important;
+    padding: 0 !important; min-height: calc(100svh - 1rem) !important; border-radius: 24px; overflow: hidden !important; }
+  #hero-fundo { border-radius: 24px; }
+  #hero-fundo img { position: absolute !important; inset: 0 !important; top: 0 !important; width: 100% !important; height: 100% !important; aspect-ratio: auto !important;
+    object-fit: cover; object-position: 30% center !important; opacity: 1 !important; }
+  .hero-piloto > div:has(.hero-card) { position: static; padding: 0 !important; }
+  .hero-card { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap; border: 0 !important; min-height: 0 !important; }
+  .hero-card > :not(h1) { display: none !important; }
+  /* alça "Saiba mais" */
+  .rolar-abaixo { display: flex !important; position: absolute !important; left: 0 !important; right: 0 !important; bottom: 0 !important; margin: 0 auto; transform: none !important; translate: none !important;
+    width: 220px; height: 48px; padding: 8px !important; gap: 12px !important; align-items: center; justify-content: center; border-radius: 28px 28px 0 0 !important;
+    background: #FFFFFF !important; color: #131A27 !important; text-shadow: none !important; font-size: .9375rem !important; }
+  .rolar-abaixo .rolar-seta { width: 18px !important; height: 28px !important; border-radius: 9999px !important; border: 1px solid #D6DCE6 !important; background: transparent !important; color: #D44D4D;
+    -webkit-backdrop-filter: none !important; backdrop-filter: none !important; animation: none !important; }
+  .rolar-abaixo .rolar-seta svg { width: 13px !important; height: 13px !important; }
+  /* a seção seguinte começa logo abaixo, em branco */
+  .divisao-hero { background: #FFFFFF !important; padding: 0 !important; }
+  .divisao-hero .divisao-hero-cartao { border-radius: 0 !important; background: #FFFFFF !important; }
+  /* texto do card no início de "Sobre o Programa" (igual ao computador) */
+  #sobre-o-programa .rv-cabecalho:not(.sobre-intro) { display: none; }
+  .sobre-intro { display: block; }
+  .sobre-intro-sub { margin: 0 0 1rem; font-size: 1.0625rem; font-weight: 600; line-height: 1.45; color: #283043; }
+  .sobre-intro-txt { margin: 0 auto .75rem; font-size: 1rem; line-height: 1.65; color: #495669; }
+  .sobre-intro-txt strong { color: #131A27; font-weight: 600; }
+  .sobre-intro-acao { margin-top: 1.5rem; display: flex; justify-content: center; }
+}
+@media (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
+  .rolar-abaixo { animation: pp-alca-entra .7s cubic-bezier(0.16, 1, 0.3, 1) .5s both !important; }
+}
+@keyframes pp-alca-entra { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: none; } }
+/* celular: o painel termina acima da barra fixa "Cadastrar empresa", para a alça aparecer inteira */
+@media (max-width: 767px) { .hero-piloto { min-height: calc(100svh - 1rem - 5.5rem) !important; } }
+@media (max-width: 1023px) { .rolar-abaixo { margin-left: auto !important; margin-right: auto !important; --tw-translate-x: 0 !important; } }
+/* celular e tablet: o hero é só um filete da foto (sob o cabeçalho) e a seção 2 já começa logo abaixo */
+@media (max-width: 1023px) {
+  .hero-piloto { min-height: 0 !important; height: calc(var(--altura-cabecalho, 68px) + 7.5rem) !important; }
+  #hero-fundo img { object-position: 30% 22% !important; }
+  .rolar-abaixo { display: none !important; }
+}
+/* celular e tablet: foto de ponta a ponta (sem arredondar) e o card branco do conteúdo sobe por cima da base da foto */
+@media (max-width: 1023px) {
+  .hero-piloto { margin: calc(-1 * var(--altura-cabecalho, 68px)) 0 0 !important; border-radius: 0 !important; height: calc(var(--altura-cabecalho, 68px) + 9rem) !important; }
+  #hero-fundo { border-radius: 0 !important; }
+  .divisao-hero { position: relative; z-index: 1; background: transparent !important; margin-top: -1.75rem; }
+  .divisao-hero .divisao-hero-cartao { border-radius: 28px 28px 0 0 !important; background: #FFFFFF !important; overflow: hidden !important; }
+}
+/* celular e tablet: sem o logo no cabeçalho desta página (só o botão do menu) */
+@media (max-width: 1023px) { .cabecalho-sobre-hero .site-header header > a:first-child { visibility: hidden !important; } }
+/* celular e tablet: foto um pouco mais alta */
+@media (max-width: 1023px) { .hero-piloto { height: calc(var(--altura-cabecalho, 68px) + 15rem) !important; } #hero-fundo img { object-position: 30% 25% !important; } }
+/* celular e tablet: ao rolar, a foto fica parada e o card do conteúdo sobe por cima dela até perto do menu;
+   enquanto houver foto atrás, o cabeçalho continua visível e transparente (menu branco), sem ser coberto */
+@media (max-width: 1023px) {
+  #hero-fundo { clip-path: inset(0); }
+  #hero-fundo img { position: fixed !important; inset: 0 auto auto 0 !important; width: 100% !important; height: calc(var(--altura-cabecalho, 68px) + 15rem) !important; }
+  .cabecalho-sobre-hero .site-header.sobre-foto { transform: none !important; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .cabecalho-sobre-hero .site-header.sobre-foto #menu-botao { color: #FFFFFF !important; }
+}
+/* celular e tablet: nesta página o menu não some ao rolar; o card do conteúdo passa por baixo dele */
+@media (max-width: 1023px) { .cabecalho-sobre-hero .site-header.is-hidden { transform: none !important; } }
+/* celular: títulos menores */
+@media (max-width: 767px) {
+  main h2 { font-size: 1.5rem !important; line-height: 1.2 !important; }
+  main h3 { font-size: min(1.0625rem, 1em) !important; line-height: 1.3 !important; }
+  main .sobre-intro-sub { font-size: 1rem !important; }
+}
+@media (max-width: 767px) { html body main h3 { font-size: 1rem !important; } html body main h2 { font-size: 1.5rem !important; } }
+@media (max-width: 767px) { html body .pz-painel .pz-lado h3 { font-size: 1rem !important; } }
+/* celular e tablet: menu sempre transparente sobre a foto fixa; card com a tampa arredondada presa abaixo do menu */
+.pp-tampa { display: none; }
+@media (max-width: 1023px) {
+  html:has(body.cabecalho-sobre-hero) { scroll-padding-top: calc(var(--altura-cabecalho, 68px) + 2.5rem); }
+  .cabecalho-sobre-hero .site-header, .cabecalho-sobre-hero .site-header.is-scrolled { transform: none !important; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .cabecalho-sobre-hero .site-header #menu-botao { color: #FFFFFF !important; }
+  .hero-piloto { isolation: auto !important; overflow: visible !important; }
+  #hero-fundo { position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: auto !important; height: calc(var(--altura-cabecalho, 68px) + 15rem) !important; z-index: 20 !important;
+    clip-path: inset(0 0 calc(100% - var(--pp-tampa, 100vh) - 28px) 0) !important; }
+  #hero-fundo img { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
+  .pp-tampa { display: block; position: fixed; z-index: 21; left: 0; right: 0; top: var(--pp-tampa, 100vh); height: 28px; background: #F6F7FA; border-radius: 28px 28px 0 0; pointer-events: none; }
+  .divisao-hero .divisao-hero-cartao { border-radius: 0 !important; }
+}
+@media (max-width: 1023px) {
+  html body.cabecalho-sobre-hero .site-header.is-hidden { transform: none !important; translate: none !important; }
+  .divisao-hero .divisao-hero-cartao { padding-top: 1.25rem; }
+}
+@media (max-width: 1023px) { html body.cabecalho-sobre-hero .site-header.is-scrolled #menu-botao, html body.cabecalho-sobre-hero .site-header #menu-botao { color: #FFFFFF !important; } }
