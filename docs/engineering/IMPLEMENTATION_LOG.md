@@ -360,6 +360,37 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-14 · Página Cards reorganizada nos dois DS (D-048; publicado: DM v46 e FindLook v70)
+
+- **Origem:** pedido da dona do produto para centralizar tudo sobre cards e separar o recomendado do que evitar (ver D-048, com as quatro decisões dela).
+- **Inventário prévio** (feito por um agente de leitura): cards espalhados em vários lugares.
+  - **Nos dois DS:** Motion (Wobble Card, Shine Border, Hover, Marquee), Backgrounds (Canvas Reveal), Exibição de dados (KPI, gráficos) e Feedback (skeleton).
+  - **Só no FindLook:** o indicador do painel e outros componentes do painel.
+  - Os "não faça" estavam misturados aos exemplos.
+- **Arquivos (nos dois DS):**
+  - **`CardShowcase.tsx`:** nova página.
+    - **Seções novas:** `card-escolher`, `card-fundos`, `card-orientacao`, `card-ia`, `card-animacao`, `card-glass-fundos`, `card-glass-conteudo` e `card-glass-teste`, mais os cabeçalhos das partes `card-solido`, `card-vidro`, `card-testar` e `card-evitar`.
+    - **Ids mantidos:** todos os antigos, então nada sai do menu.
+    - **Funções novas:** `contrasteDoVidro`, `primeiraAprovada`, `candidatasDe` e `propsDoVidro`. O vidro recomendado é escolhido pelo cálculo de contraste no tema atual; a cena aceita foto, com pior caso entre preto e branco.
+  - **`shared/VejaEm.tsx` (novo) e `App.tsx`:** o link "Ver em Cards" dispara o evento `ds:navegar`, que o App escuta e usa para abrir a seção na âncora certa.
+  - **`MotionShowcase.tsx`:** `WobbleCardConteudo` e `ShineBorderConteudo` exportados, mais a lista `evitarWobble`. As seções de origem viram aviso com link, e Hover ganha o link.
+  - **`BackgroundsShowcase.tsx`:** `CanvasRevealCard` exportado, sem a lista "Evitar quando", mais `evitarCanvasReveal`; a seção vira aviso.
+  - **`DataShowcase.tsx`:** `CardsDeKpi` exportado (e `IndicadoresDoPainel` no FindLook); as seções viram aviso.
+  - **Menu de Cards** reordenado e changelog atualizado.
+  - **Só no FindLook:** os componentes prontos (peça, plano, dica e faixa de benefícios) e o vidro no tema escuro foram mantidos. Os "faça / não faça" do card de peça e do vidro do tema escuro foram para "O que evitar".
+- **Verificação:** `pnpm build` e Playwright nos dois DS, em 1440 claro e escuro e em 390 px:
+  - as 24 seções na ordem planejada, mais as 4 de componentes prontos no FindLook;
+  - nenhum alerta de contraste fora da bancada;
+  - acabamentos aprovados por tema: no claro, só vidros de tom escuro (e o fosco claro no FindLook); no escuro, todos;
+  - os três fundos de vidro com card aprovado;
+  - fotos e KPIs renderizados;
+  - os três cards "por fundo" com borda e sombra corretas;
+  - os links "Ver em Cards" de Wobble, Canvas Reveal, Shine Border, Hover, KPI e Indicador do painel (FindLook) chegam à âncora;
+  - sem rolagem horizontal e sem erros.
+
+  Os mesmos testes passaram nos endereços públicos.
+- **Commits:** DM `f95dd27` e FindLook `7700b48`.
+
 ## 2026-11-14 · Cards de vidro: fundo de teste no seletor de acabamentos (publicado: DM v45 e FindLook v69)
 
 - **Origem:** a dona do produto pediu, nos dois DS, trocar o fundo atrás dos cards de vidro para testá-los: textura mais fechada, mais aberta, mais escura, mais clara e discreta, e cores sólidas. Ela também perguntou se o card de vidro estava na composição.

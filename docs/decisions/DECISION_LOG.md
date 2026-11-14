@@ -409,6 +409,34 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-048 · 14/11/2026 · Página Cards: tudo sobre cards num só lugar, recomendado separado do que evitar
+
+- **Origem:** a dona do produto achou a página de cards confusa. Ela quer saber, ao entrar:
+  - as variações do card sólido;
+  - qual card usar sobre fundo claro e qual sobre fundo escuro (no modo claro);
+  - borda, sombra, raio, vertical e horizontal;
+  - com e sem foto e botão, animação e onde aplicar, arquitetura de informação e gráfico.
+
+  Depois disso, os cards de vidro nas mesmas condições. O que não é boa prática deve ficar em outra seção, e o que está espalhado deve ser centralizado.
+- **Decisões dela:**
+  - **Conteúdo de card de outras seções** (Wobble Card, Shine Border, Canvas Reveal e cards de KPI; no FindLook, também o indicador do painel): vai para Cards, e a origem fica com o link "Ver em Cards".
+  - **Card claro sobre fundo escuro (modo claro):** branco, sem borda, com sombra forte (`--shadow-lg`).
+  - **Bancada de teste do vidro:** seção separada ("Testar o vidro").
+  - **Nome:** o acabamento "Padrão" passa a se chamar "Vidro" (o valor no código continua `padrao`).
+- **Estrutura:**
+  - **Como escolher:** tabela que relaciona o fundo ao card, à borda, à sombra e ao raio.
+  - **Parte 1, Card sólido:** anatomia; por fundo; borda, sombra e raio (12, 16 e 20 px); vertical e horizontal; com e sem foto e botão; botões; arquitetura de informação; estados (com carregando); animação e onde aplicar; Shine Border; aninhados; componentes prontos.
+  - **Parte 2, Card de vidro:** só combinações aprovadas no contraste (calculadas no tema atual); por fundo (claro, escuro e foto, com a foto no pior caso entre preto e branco); com conteúdo; no FindLook, também o vidro no tema escuro.
+  - **Parte 3, Testar o vidro.**
+  - **Parte 4, O que evitar:** todos os "não faça".
+  - **Fim:** acessibilidade e tokens.
+- **Fundamento:** o fundo é o critério de escolha, como na regra D-044. O recomendado e o que evitar ficam separados.
+- **Trade-off:**
+  - No modo claro, só os vidros de tom escuro (e o fosco claro, no FindLook) passam na conferência sobre a textura. Translúcido, Cristal (no DM) e Painel (no FindLook) não aparecem como recomendados no claro, só na bancada.
+  - As microinterações genéricas de Hover e os gráficos continuam em Motion e em Exibição de dados.
+
+---
+
 ## D-047 · 13/11/2026 · Design system do DM no subdomínio designsystem.danimoscatelli.com.br
 
 - **Origem:** pedido da dona do produto ("quero que o ds do dani moscatelli tb fique em um designsystem.danimoscatelli.com.br"). É o mesmo caminho já feito com o FindLook (designsystem.findlook.com.br).
