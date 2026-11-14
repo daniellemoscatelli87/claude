@@ -182,3 +182,17 @@ input[type=search] { padding-left: 40px; background: #f8fafc url("data:image/svg
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 .btn-danger-solid { background: #c0392b; color: #fff; border: 0; border-radius: 999px; padding: 10px 18px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
 .btn-danger-solid:hover { background: #a93226; }
+
+/* Detalhe em acordeão (seções do formulário do parceiro) */
+.det-tudo { display: block; margin: 0 0 8px auto; font-size: 12px; padding: 6px 12px; }
+.det-sec { border-top: 1px solid var(--track); }
+.det-sec:last-child { border-bottom: 1px solid var(--track); }
+.det-sec > summary { display: flex; align-items: center; gap: 12px; padding: 16px 0; cursor: pointer; list-style: none; }
+.det-sec > summary::-webkit-details-marker { display: none; }
+.det-sec > summary .sec { margin: 0; flex: 1; }
+.det-sec > summary .det-n { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.det-sec > summary::after { content: ""; flex: none; width: 10px; height: 10px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); margin: -4px 4px 0 0; transition: transform .2s ease; }
+.det-sec[open] > summary::after { transform: rotate(-135deg); margin-top: 4px; }
+.det-sec > summary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.35); border-radius: 8px; }
+.det-sec > dl { margin: 0 0 16px; }
+@media (prefers-reduced-motion: reduce) { .det-sec > summary::after { transition: none; } }
