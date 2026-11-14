@@ -98,7 +98,7 @@
   .status.no { background: #EDF0F5; color: #283043; }
   .erro { margin: 1rem 0 0; color: #B82828; font-size: .9375rem; }
   a { color: #D44D4D; font-weight: 600; text-underline-offset: 4px; }
-  .enviado { display: grid; justify-items: center; gap: .25rem; margin-top: 1.5rem; padding: 2rem 1.5rem; border: 1px solid #E4E6EC; border-radius: 20px; background: #FFFFFF; text-align: center; }
+  .enviado { display: grid; justify-items: center; gap: .25rem; margin-top: .5rem; padding: 0; border: 0; background: transparent; text-align: center; }
   .enviado:focus { outline: none; }
   .enviado-foto { display: block; width: min(300px, 85%); height: auto; margin: -.5rem auto .75rem; border-bottom: 1px solid #E4E6EC; }
   .enviado-ic { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; margin-bottom: .75rem; border-radius: 9999px; background: #FDF2F2; color: #D44D4D; }
@@ -172,7 +172,7 @@
     <p class="aceite-nota">Ao enviar, você concorda com a exibição do seu perfil na Galeria de Profissionais do site.</p>
     <p class="erro" id="erro" role="alert" hidden></p>
   </div>
-  <section class="enviado" id="enviado" hidden aria-label="Perfil enviado com sucesso" tabindex="-1">
+  <section class="enviado" id="enviado" hidden aria-label="Perfil enviado com sucesso!" tabindex="-1">
     <img class="enviado-foto" src="/rede-parceiros/galeria/dani-positivo-v2.webp" alt="Dani Moscatelli fazendo sinal de positivo com as duas mãos, ao lado de um selo de confirmado" width="1254" height="1254" loading="lazy">
     <p>Obrigada por fazer parte da Galeria de Profissionais da Rede de Parceiros. Seu perfil vai compor a galeria do site.</p>
     <p>Se quiser remover o seu perfil, é só enviar um e-mail para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
@@ -289,7 +289,7 @@
         .then(function (r) {
           // tela final: some com o formulário e mostra a confirmação com o link para o site
           fotoNova = ""; removerFoto = false;
-          $("conteudo").hidden = true; document.querySelector("main .lead").hidden = true; document.querySelector("main h1").textContent = "Perfil enviado com sucesso"; $("enviado").hidden = false;
+          $("conteudo").hidden = true; document.querySelector("main .lead").hidden = true; document.querySelector("main h1").textContent = "Perfil enviado com sucesso!"; $("enviado").hidden = false;
           window.scrollTo({ top: 0, behavior: "smooth" }); $("enviado").focus({ preventScroll: true });
         })
         .catch(function (e) { erro.textContent = e.message; erro.hidden = false; })
