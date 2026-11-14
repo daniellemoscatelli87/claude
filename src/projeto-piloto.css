@@ -1384,3 +1384,6 @@ main + footer.relative { padding-top: 6rem !important; }
 }
 /* Convite com o mesmo arredondamento dos blocos grandes da página (hero e painel do programa: 32px a partir de 768px) */
 @media (min-width: 768px) { .convite-card { border-radius: 32px; } }
+/* Convite com a mesma largura do painel "Programa Projeto Piloto" */
+@media (max-width: 639px) { #inscricao .convite-card { margin-inline: .5rem; } }
+@media (min-width: 640px) and (max-width: 1023px) { #inscricao .convite-card { margin-inline: 1rem; } }
