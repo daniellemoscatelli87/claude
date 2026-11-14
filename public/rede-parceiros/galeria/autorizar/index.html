@@ -51,6 +51,21 @@
   .beneficios li { position: relative; padding: .875rem 1rem .875rem 2.75rem; border-radius: 14px; background: #FDF2F2; font-size: .9375rem; line-height: 1.55; color: #283043; }
   .beneficios li::before { content: ""; position: absolute; left: 1rem; top: 1.1rem; width: 1.125rem; height: 1.125rem; border-radius: 9999px; background: #D44D4D url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / .75rem no-repeat; }
   .beneficios strong { color: #131A27; }
+  .foto-img { object-fit: cover; padding: 0; }
+  .foto-campo { display: grid; gap: .5rem; margin-bottom: 1rem; }
+  .foto-rot { display: grid; gap: .375rem; font-size: .875rem; font-weight: 600; }
+  .foto-rot small { font-weight: 400; color: #627288; }
+  .foto-acoes { display: flex; flex-wrap: wrap; gap: .625rem; align-items: center; }
+  .botao-arquivo { display: inline-flex; align-items: center; min-height: 44px; margin: 0; padding: 0 1.25rem; border-radius: 9999px; border: 1px solid #D44D4D; color: #D44D4D; font-size: .9375rem; font-weight: 600; cursor: pointer; }
+  .botao-arquivo:hover { background: #FDF2F2; }
+  #foto-arquivo:focus-visible + * , .botao-arquivo:focus-within { box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.35); }
+  .pequeno { min-height: 44px; font-size: .9375rem; padding: 0 1.25rem; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+  .li-campo { display: grid; gap: .5rem; margin-bottom: 1rem; }
+  .li-ver { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem .75rem; padding: .625rem .625rem .625rem 1rem; border: 1px solid #D6DCE6; border-radius: 12px; }
+  .li-ver a { min-width: 0; overflow-wrap: anywhere; font-size: .9375rem; }
+  .li-ver a { flex: 1 1 10rem; }
+  .li-ver .nao { min-height: 36px; padding: 0 .875rem; font-size: .875rem; }
   .status { margin: 0 0 1.25rem; padding: .875rem 1rem; border-radius: 14px; font-size: .9375rem; line-height: 1.5; }
   .status.ok { background: rgba(79, 181, 123, 0.12); color: #1F6B3A; }
   .status.no { background: #EDF0F5; color: #283043; }
@@ -78,17 +93,29 @@
     </ul>
     <h2>Prévia do seu perfil</h2>
     <div class="card" aria-label="Prévia do perfil">
-      <div class="topo"><span class="foto" id="p-ini" aria-hidden="true"></span><span class="in" id="p-in" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span></div>
+      <div class="topo"><span class="foto" id="p-ini" aria-hidden="true"></span><img class="foto foto-img" id="p-img" alt="" hidden><span class="in" id="p-in" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span></div>
       <h3 id="p-nome"></h3>
       <p class="esp" id="p-cargo"></p>
       <ul class="tags" id="p-areas" aria-label="Áreas de atuação"></ul>
       <p class="seg"><span>Segmentos</span><span id="p-seg" style="display:inline;font-size:inherit;font-weight:400;letter-spacing:0;text-transform:none;color:inherit"></span></p>
     </div>
-    <p class="nota">A foto será a do seu perfil do LinkedIn. Para trocar ou excluir a foto, escreva para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
+    <p class="nota">Envie abaixo a foto que vai aparecer no seu perfil. Se não enviar, usaremos a foto do seu perfil do LinkedIn. Para trocar ou excluir a foto depois, use este mesmo link ou escreva para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
 
     <h2>Ajuste o que vai aparecer</h2>
+    <div class="foto-campo">
+      <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP. A imagem é recortada em quadrado.</small></span>
+      <div class="foto-acoes">
+        <label class="botao-arquivo" for="foto-arquivo"><span id="foto-btn-txt">Enviar foto</span></label>
+        <input type="file" id="foto-arquivo" accept="image/jpeg,image/png,image/webp" class="sr-only">
+        <button type="button" class="nao pequeno" id="foto-remover" hidden>Remover foto</button>
+      </div>
+    </div>
     <label>Cargo exibido<small>Como você quer ser apresentado(a). Até 60 caracteres.</small><input type="text" id="cargo" maxlength="60" autocomplete="organization-title"></label>
-    <label>Link do seu LinkedIn<small>Opcional. Usamos a foto deste perfil.</small><input type="url" id="linkedin" maxlength="300" placeholder="https://www.linkedin.com/in/seu-perfil" autocomplete="url"></label>
+    <div class="li-campo">
+      <span class="foto-rot">Link do seu LinkedIn<small>Informado no seu cadastro. Se precisar, altere.</small></span>
+      <div class="li-ver" id="li-ver" hidden><a id="li-link" href="#" target="_blank" rel="noopener noreferrer"></a><button type="button" class="nao pequeno" id="li-alterar">Alterar</button></div>
+      <label id="li-editar" style="margin:0" hidden><span class="sr-only">Link do seu LinkedIn</span><input type="url" id="linkedin" maxlength="300" placeholder="https://www.linkedin.com/in/seu-perfil" autocomplete="url"></label>
+    </div>
 
     <h2>Autorização</h2>
     <p class="termo" id="termo"></p>
@@ -116,6 +143,28 @@
       el.className = "status " + (s === "autorizado" ? "ok" : "no");
       el.textContent = s === "autorizado" ? "Você autorizou a exibição do seu perfil. Para retirar a autorização, use o botão “Não autorizo”." : "Você não autorizou a exibição. Seu perfil não aparece na galeria. Se mudar de ideia, use o botão “Autorizo a exibição”.";
     }
+    var fotoNova = "", removerFoto = false, fotoAtual = "";
+    function mostrarFoto(src) {
+      var img = $("p-img"), ini = $("p-ini");
+      if (src) { img.src = src; img.hidden = false; ini.hidden = true; } else { img.hidden = true; img.removeAttribute("src"); ini.hidden = false; }
+      $("foto-remover").hidden = !src; $("foto-btn-txt").textContent = src ? "Trocar foto" : "Enviar foto";
+    }
+    // Recorta em quadrado e reduz para 600 px no próprio aparelho (também descarta dados da foto, como localização).
+    $("foto-arquivo").addEventListener("change", function (e) {
+      var f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
+      var erro = $("erro"); erro.hidden = true;
+      if (!/^image\/(jpeg|png|webp)$/.test(f.type) || f.size > 15 * 1024 * 1024) { erro.textContent = "Envie uma foto em JPG, PNG ou WEBP de até 15 MB."; erro.hidden = false; return; }
+      var url = URL.createObjectURL(f), img = new Image();
+      img.onload = function () {
+        var lado = Math.min(img.naturalWidth, img.naturalHeight), c = document.createElement("canvas"); c.width = c.height = 600;
+        c.getContext("2d").drawImage(img, (img.naturalWidth - lado) / 2, (img.naturalHeight - lado) / 2, lado, lado, 0, 0, 600, 600);
+        URL.revokeObjectURL(url); fotoNova = c.toDataURL("image/jpeg", 0.88); removerFoto = false; mostrarFoto(fotoNova);
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); erro.textContent = "Não foi possível abrir esta imagem."; erro.hidden = false; };
+      img.src = url;
+    });
+    $("li-alterar").addEventListener("click", function () { $("li-ver").hidden = true; $("li-editar").hidden = false; $("linkedin").focus(); $("linkedin").select(); });
+    $("foto-remover").addEventListener("click", function () { fotoNova = ""; removerFoto = !!fotoAtual; mostrarFoto(""); });
     function atualizarPrevia() { $("p-cargo").textContent = $("cargo").value.trim() || "Seu cargo"; $("p-in").style.visibility = $("linkedin").value.trim() ? "visible" : "hidden"; }
     post({ acao: "ver" }).then(function (d) {
       $("carregando").hidden = true; $("conteudo").hidden = false;
@@ -124,6 +173,10 @@
       $("p-seg").textContent = d.segmentos.join(" · ");
       $("cargo").value = d.cargo || ""; $("linkedin").value = d.linkedin || "";
       $("termo").textContent = d.texto;
+      fotoAtual = d.foto_url || ""; mostrarFoto(fotoAtual);
+      // LinkedIn do cadastro: aparece como link, com a opção de alterar; sem link no cadastro, já abre o campo.
+      if (d.linkedin) { $("li-link").href = d.linkedin; $("li-link").textContent = d.linkedin.replace(/^https:\/\/(www\.)?/, ""); $("li-ver").hidden = false; }
+      else { $("li-editar").hidden = false; }
       status(d.status); atualizarPrevia();
       ["cargo", "linkedin"].forEach(function (id) { $(id).addEventListener("input", atualizarPrevia); });
     }).catch(function (e) { $("carregando").hidden = true; $("erro-geral").textContent = e.message; $("erro-geral").hidden = false; });
@@ -131,8 +184,8 @@
       var erro = $("erro"); erro.hidden = true;
       if (decisao === "autorizado" && !$("cargo").value.trim()) { erro.textContent = "Informe o cargo que vai aparecer no seu perfil."; erro.hidden = false; $("cargo").focus(); return; }
       ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = true; });
-      post({ acao: "decidir", decisao: decisao, cargo: $("cargo").value, linkedin: $("linkedin").value })
-        .then(function (r) { status(r.status); $("status").scrollIntoView({ behavior: "smooth", block: "center" }); })
+      post({ acao: "decidir", decisao: decisao, cargo: $("cargo").value, linkedin: $("linkedin").value, foto: decisao === "autorizado" ? fotoNova : "", remover_foto: removerFoto })
+        .then(function (r) { fotoNova = ""; removerFoto = false; fotoAtual = r.foto_url || ""; mostrarFoto(fotoAtual); status(r.status); $("status").scrollIntoView({ behavior: "smooth", block: "center" }); })
         .catch(function (e) { erro.textContent = e.message; erro.hidden = false; })
         .finally(function () { ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = false; }); });
     }
