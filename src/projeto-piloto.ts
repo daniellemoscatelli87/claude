@@ -545,17 +545,24 @@ form.addEventListener('change', (e) => {
   iniciar();
 })();
 
-/* ---------- Celular e tablet: cabeçalho fica visível e transparente enquanto o card do conteúdo ainda não chegou nele ---------- */
+/* ---------- Celular e tablet: a foto do topo fica fixa atrás do menu; o card branco do conteúdo sobe, prende logo abaixo
+   do menu (a "tampa" arredondada fica parada) e o conteúdo rola por baixo dela ---------- */
 (() => {
   const h = document.getElementById('site-header');
   const card = document.querySelector<HTMLElement>('.divisao-hero');
   if (!h || !card) return;
   const pequeno = window.matchMedia('(max-width: 1023px)');
+  const tampa = document.createElement('div');
+  tampa.className = 'pp-tampa';
+  tampa.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(tampa);
+  const raiz = document.documentElement;
   let agendado = false;
   const f = () => {
     agendado = false;
-    const sobreFoto = pequeno.matches && card.getBoundingClientRect().top > h.offsetHeight - 2;
-    h.classList.toggle('sobre-foto', sobreFoto);
+    if (!pequeno.matches) { raiz.style.removeProperty('--pp-tampa'); return; }
+    const topo = Math.max(card.getBoundingClientRect().top, h.offsetHeight);
+    raiz.style.setProperty('--pp-tampa', `${Math.round(topo)}px`);
   };
   f();
   window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(f); } }, { passive: true });
