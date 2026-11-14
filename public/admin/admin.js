@@ -47,8 +47,10 @@
     { id: "inicio", href: "/admin/", label: "Início", icon: "home" },
     { id: "contatos", href: "/admin/contatos/", label: "Contato", icon: "mail" },
     { id: "reunioes", href: "/admin/reunioes/", label: "Reuniões", icon: "meeting" },
-    { id: "parceiros", href: "/admin/parceiros/", label: "Parceiros", icon: "users" },
-    { id: "comunicados", href: "/admin/comunicados/", label: "Comunicados", icon: "send" },
+    { id: "parceiros", href: "/admin/parceiros/", label: "Parceiros", icon: "users", sub: [
+      { id: "parceiros", href: "/admin/parceiros/", label: "Perfis e candidaturas" },
+      { id: "comunicados", href: "/admin/comunicados/", label: "Comunicados" },
+    ] },
     { id: "lancamento", href: "/admin/lancamento/", label: "Lançamento", icon: "rocket" },
     { id: "store", href: "/admin/store/", label: "Store", icon: "bag" },
     { id: "configuracoes", href: "/admin/configuracoes/", label: "Configurações", icon: "settings" },
@@ -176,8 +178,15 @@
     const drawer = el("aside", "drawer"); drawer.id = "drawer";
     drawer.setAttribute("aria-label", "Menu");
     drawer.innerHTML = `<button type="button" class="close" id="drawer-close" aria-label="Fechar menu">${icon("close")}</button>
+      <a class="side-logo" href="/admin/"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
       <div class="who"><img class="avatar" id="who-avatar" src="${ADMIN_AVATAR}" alt="${ADMIN_NAME}" width="44" height="44"><div><div class="n" id="who-name">${ADMIN_NAME}</div><div class="e" id="who-email"></div></div></div>
-      <nav>${PAGES.map((p) => `<a href="${p.href}"${p.id === page ? ' aria-current="page"' : ""}>${icon(p.icon)}${p.label}<span class="nav-count hidden" data-count="${p.id}"></span></a>`).join("")}</nav>
+      <nav>${PAGES.map((p) => {
+        const ativo = p.id === page || (p.sub || []).some((x) => x.id === page);
+        const item = `<a href="${p.href}"${ativo ? (p.sub ? ' class="pai-ativo"' : ' aria-current="page"') : ""}>${icon(p.icon)}${p.label}<span class="nav-count hidden" data-count="${p.id}"></span></a>`;
+        if (!p.sub) return item;
+        // subitens (Parceiros: perfis e candidaturas, comunicados)
+        return item + `<div class="nav-sub">${p.sub.map((x) => `<a href="${x.href}"${x.id === page ? ' aria-current="page"' : ""}>${x.label}</a>`).join("")}</div>`;
+      }).join("")}</nav>
       <div class="foot"><button type="button" class="logout" id="logout">${icon("logout")}Sair</button></div>`;
 
     const wrap = el("div", "wrap"); wrap.id = "gate";
