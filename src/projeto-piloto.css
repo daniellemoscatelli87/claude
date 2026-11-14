@@ -1430,3 +1430,9 @@ main + footer.relative { padding-top: 6rem !important; }
 /* celular: o painel termina acima da barra fixa "Cadastrar empresa", para a alça aparecer inteira */
 @media (max-width: 767px) { .hero-piloto { min-height: calc(100svh - 1rem - 5.5rem) !important; } }
 @media (max-width: 1023px) { .rolar-abaixo { margin-left: auto !important; margin-right: auto !important; --tw-translate-x: 0 !important; } }
+/* celular e tablet: o hero é só um filete da foto (sob o cabeçalho) e a seção 2 já começa logo abaixo */
+@media (max-width: 1023px) {
+  .hero-piloto { min-height: 0 !important; height: calc(var(--altura-cabecalho, 68px) + 7.5rem) !important; }
+  #hero-fundo img { object-position: 30% 22% !important; }
+  .rolar-abaixo { display: none !important; }
+}
