@@ -445,7 +445,8 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   const f = () => {
     agendado = false;
     if (!pequeno.matches) { raiz.style.removeProperty('--rp-tampa'); espaco.style.height = ''; return; }
-    espaco.style.height = `${hero.offsetHeight}px`;
+    // o hero é fixo a partir do topo da tela; o espaço começa abaixo do cabeçalho, então desconta essa diferença
+    espaco.style.height = `${Math.max(0, hero.offsetHeight - (espaco.getBoundingClientRect().top + window.scrollY))}px`;
     const topo = Math.max(folha.getBoundingClientRect().top, h.offsetHeight);
     raiz.style.setProperty('--rp-tampa', `${Math.round(topo)}px`);
   };

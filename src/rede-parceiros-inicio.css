@@ -1361,3 +1361,7 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
   html body .rx-fechamento > .rp-container { padding-left: 0 !important; padding-right: 0 !important; }
   html body .rx-fechamento .rp-carta { border-left: 0 !important; border-right: 0 !important; }
 }
+/* celular e tablet: o hero termina um pouco antes da dobra, para um pedacinho da folha branca aparecer acima do botão,
+   emendando na foto dos personagens */
+@media (max-width: 1023px) { .rp-hero { min-height: calc(100svh - 84px) !important; } }
+@media (max-width: 1023px) { .rp-hero-modelo { min-height: 200px !important; } }
