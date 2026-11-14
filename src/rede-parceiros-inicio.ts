@@ -326,3 +326,26 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     body: '{}',
   }).then((r) => (r.ok ? r.json() : [])).then((d: Perfil[]) => mostrar(Array.isArray(d) ? d : [], false)).catch(() => {});
 })();
+
+/* ---------- Hero (desktop): o topo da etiqueta acompanha o topo da cabeça do grupo da foto ---------- */
+{
+  const texto = document.querySelector('.rp-hero-texto') as HTMLElement | null;
+  const etiqueta = texto?.firstElementChild as HTMLElement | null;
+  const sobe = document.querySelector('.rp-modelo-sobe') as HTMLElement | null;
+  const foto = sobe?.querySelector('img') as HTMLImageElement | null;
+  // A imagem tem 1111 px de largura; a cabeça mais alta começa a 141 px do topo do arquivo.
+  const LARGURA = 1111, TOPO_CABECA = 141;
+  const alinhar = () => {
+    if (!texto || !etiqueta || !foto || !sobe) return;
+    if (!matchMedia('(min-width: 1024px)').matches) { texto.style.removeProperty('--rp-hero-subida'); return; }
+    texto.style.removeProperty('--rp-hero-subida');
+    const desloc = new DOMMatrixReadOnly(getComputedStyle(sobe).transform === 'none' ? undefined : getComputedStyle(sobe).transform).m42;
+    const cabeca = foto.getBoundingClientRect().top - desloc + TOPO_CABECA * (foto.clientWidth / LARGURA);
+    // Só sobe o bloco de texto (deslocamento visual, sem mudar a altura do hero).
+    const subida = etiqueta.getBoundingClientRect().top - cabeca;
+    if (subida > 0) texto.style.setProperty('--rp-hero-subida', Math.round(subida) + 'px');
+  };
+  if (foto) { if (foto.complete) alinhar(); else foto.addEventListener('load', alinhar, { once: true }); }
+  let espera = 0;
+  addEventListener('resize', () => { cancelAnimationFrame(espera); espera = requestAnimationFrame(alinhar); });
+}

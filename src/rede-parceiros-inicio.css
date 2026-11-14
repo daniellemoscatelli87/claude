@@ -1178,7 +1178,7 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
    seguinte aparece só o filete de 15px. */
 @media (min-width: 1024px) {
   .rp-hero-grade { align-items: end !important; }
-  .rp-hero-texto { align-self: end !important; padding-bottom: var(--rp-hero-ajuste, 1.5rem); }
+  .rp-hero-texto { align-self: end !important; padding-bottom: var(--rp-hero-ajuste, 1.5rem); transform: translateY(calc(-1 * var(--rp-hero-subida, 0px))); }
 }
 
 /* Hero: foto do grupo com corte adaptável. Em telas baixas (notebooks) a foto mantém a largura
