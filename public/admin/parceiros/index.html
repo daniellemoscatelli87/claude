@@ -11,6 +11,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
+  .cm-gal { margin-bottom: 16px; }
+  .cm-gal h2 { margin: 0 0 6px; font-size: 18px; }
+  .cm-gal-n { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+  .cm-gal-n div { padding: 12px; border-radius: 12px; background: #F6F7FA; border: 1px solid var(--line); }
+  .cm-gal-n strong { display: block; font-size: 22px; }
+  .cm-gal-n span { font-size: 12px; color: var(--muted); }
+  @media (max-width: 760px) { .cm-gal-n { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .cm-gal-acts { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+  .cm-gal-acts .btn-ok:disabled, .cm-gal-acts .btn-ghost:disabled { opacity: .5; cursor: not-allowed; }
+  .cm-prev { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #f4f5f8; }
+  .cm-prev iframe { display: block; width: 100%; height: 520px; border: 0; }
   .tab-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: -4px; padding: 4px; }
   .tab-parceiros { width: 100%; min-width: 960px; border-collapse: collapse; font-size: 13px; }
   .tab-parceiros th { text-align: left; padding: 0 10px 10px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); white-space: nowrap; border-bottom: 1px solid var(--track); }
@@ -381,6 +392,18 @@
     </section>
 
     <section id="panel-candidaturas" role="tabpanel" aria-labelledby="tab-candidaturas" class="hidden">
+      <div class="card cm-gal">
+        <div class="cm-gal-topo"><h2>Autorização da galeria</h2></div>
+        <p class="muted" style="margin:0 0 14px;font-size:14px">Pedido para o parceiro autorizar a exibição do perfil na Galeria de profissionais. Novos parceiros recebem o pedido automaticamente após o cadastro. A galeria aparece no site quando houver pelo menos 3 autorizações.</p>
+        <div class="cm-gal-n" id="gal-n"></div>
+        <div class="cm-gal-acts">
+          <button type="button" class="btn-ghost" id="gal-prev">Ver o e-mail</button>
+          <button type="button" class="btn-ghost" id="gal-reenviar">Reenviar a quem não respondeu</button>
+          <button type="button" class="btn-ok" id="gal-enviar">Enviar aos não convidados</button>
+        </div>
+        <div class="cm-prev hidden" id="gal-prev-box" style="margin-top:14px"><iframe title="E-mail de autorização da galeria" id="gal-prev-frame"></iframe></div>
+        <p class="msg err hidden" id="gal-err"></p>
+      </div>
       <div class="card"><div class="rows" id="list"></div></div>
     </section>
   </div>
@@ -715,6 +738,49 @@ function avatar(r, cls = "ini") {
 }
 const publicado = (r) => r.galeria_status === "autorizado" && !r.galeria_oculto;
 
+
+/* ---------- Autorização da galeria (pedido por e-mail, em massa) ---------- */
+function resumoGaleria() {
+  const n = (f) => ALL.filter(f).length;
+  const itens = [["autorizaram", n((r) => r.galeria_status === "autorizado")], ["não autorizaram", n((r) => r.galeria_status === "recusado")],
+    ["aguardando resposta", n((r) => !r.galeria_status && r.galeria_convite_em)], ["não convidados", n((r) => !r.galeria_status && !r.galeria_convite_em)]];
+  const box = document.getElementById("gal-n"); box.replaceChildren();
+  itens.forEach(([t, v]) => { const d = el("div"); d.append(el("strong", null, String(v)), el("span", null, t)); box.appendChild(d); });
+  document.getElementById("gal-enviar").disabled = !itens[3][1];
+  document.getElementById("gal-reenviar").disabled = !itens[2][1];
+}
+async function chamarGaleria(body) {
+  const { data, error } = await Admin.sb.functions.invoke("galeria-convite", { body });
+  if (!error) return data || {};
+  let m = "Não foi possível falar com o servidor. Tente novamente."; try { m = (await error.context.json()).error || m; } catch {}
+  return { error: m };
+}
+function initGaleria(recarregar) {
+  const err = document.getElementById("gal-err");
+  const erro = (x) => { err.textContent = x; err.classList.toggle("hidden", !x); };
+  document.getElementById("gal-prev").addEventListener("click", async (e) => {
+    const box = document.getElementById("gal-prev-box");
+    if (!box.classList.contains("hidden")) { box.classList.add("hidden"); e.target.textContent = "Ver o e-mail"; return; }
+    const res = await chamarGaleria({ acao: "preview" }); if (res.error) return erro(res.error);
+    document.getElementById("gal-prev-frame").srcdoc = res.html; box.classList.remove("hidden"); e.target.textContent = "Fechar o e-mail"; erro("");
+  });
+  const plural = (n, um, varios) => n + " " + (n === 1 ? um : varios);
+  const disparar = async (reenviar, botao) => {
+    const qtd = ALL.filter((r) => !r.galeria_status && !r.comunicados_descadastro_em && r.email && (reenviar ? r.galeria_convite_em : !r.galeria_convite_em)).length;
+    const txt = reenviar ? "Reenviar o pedido de autorização para quem ainda não respondeu (" + qtd + ")?" : "Enviar o pedido de autorização para quem ainda não foi convidado (" + qtd + ")?";
+    if (!(await Admin.confirmDialog({ title: "Pedido de autorização da galeria", message: txt + " Quem se descadastrou dos comunicados não recebe.", ok: "Enviar", danger: false }))) return;
+    botao.disabled = true;
+    const res = await chamarGaleria({ acao: "pendentes", reenviar });
+    botao.disabled = false;
+    if (res.error) return erro(res.error);
+    erro(""); Admin.log("Enviou pedido de autorização da galeria", res.enviados + " enviados" + (res.falhas ? ", " + res.falhas + " não enviados" : ""));
+    await recarregar();
+    Admin.toast(res.falhas ? res.enviados + " enviados e " + res.falhas + " não enviados." : "Pedido enviado para " + plural(res.enviados, "parceiro.", "parceiros."));
+  };
+  document.getElementById("gal-enviar").addEventListener("click", (e) => disparar(false, e.currentTarget));
+  document.getElementById("gal-reenviar").addEventListener("click", (e) => disparar(true, e.currentTarget));
+}
+
 /* ---------- Candidaturas ---------- */
 function candidaturas(rows) {
   const list = document.getElementById("list"); list.replaceChildren();
@@ -1021,7 +1087,15 @@ Admin.init({ page: "parceiros", onReady: async () => {
   };
   for (const r of data) for (const [k, map] of Object.entries(LEGADO)) if (map[r[k]]) r[k] = map[r[k]];
   ALL = data;
-  if (!document.getElementById("f-areas_experiencia")) { buildFilters(); buildAreaChips(); initDesafio(); initProfiles(); }
+  if (!document.getElementById("f-areas_experiencia")) {
+    buildFilters(); buildAreaChips(); initDesafio(); initProfiles();
+    initGaleria(async () => {
+      const { data: d } = await Admin.sb.from("cadastros").select("id, galeria_status, galeria_convite_em");
+      (d || []).forEach((x) => { const r = ALL.find((y) => y.id === x.id); if (r) Object.assign(r, x); });
+      resumoGaleria(); update();
+    });
+  }
+  resumoGaleria();
   if (window.matchMedia("(min-width: 800px)").matches) document.getElementById("filters-box").open = true;
   setTab(params.get("aba"));
   update();
