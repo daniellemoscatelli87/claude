@@ -360,6 +360,25 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-14 · Cards de vidro: fundo de teste no seletor de acabamentos (publicado: DM v45 e FindLook v69)
+
+- **Origem:** a dona do produto pediu, nos dois DS, trocar o fundo atrás dos cards de vidro para testá-los: textura mais fechada, mais aberta, mais escura, mais clara e discreta, e cores sólidas. Ela também perguntou se o card de vidro estava na composição.
+- **Feito (`CardShowcase.tsx`, nos dois DS):**
+  - **Controle "Fundo de teste":** padrão (o de antes), textura fechada (ladrilho de 200 px), textura aberta (640 px), textura escura (graphite-950 com traço graphite-700), clara e discreta (graphite-50 com traço graphite-100) e cor sólida.
+  - **Cor sólida:** cinza claro (graphite-100), cinza médio (graphite-500), grafite (graphite-950) ou primária.
+  - **Alcance:** vale para as duas cenas do seletor (contexto `CenaDeTesteCtx` e componente `CenaDoVidro`). As outras cenas da seção continuam com o `GlassScene` padrão.
+  - **Contraste:** o `GlassTestCard` calcula sobre o fundo escolhido e usa o pior caso entre o fundo e o traço; no fundo sólido, só o fundo. Na cena padrão o resultado é o mesmo de antes.
+  - **Galeria:** passa a incluir o acabamento "Padrão" (o vidro equilibrado), que antes ficava de fora; a grade agora tem 3 colunas.
+  - **Só no DM:** levadas do FindLook as correções de rolagem horizontal no celular (seletor de acabamento com `overflow-x-auto` e grade da tabela de regras com `minmax(0,1fr)`).
+- **Verificação:** `pnpm build` e Playwright nos dois DS, em 1440 claro e escuro e em 390 px:
+  - os 6 fundos e as 4 cores sólidas aplicados, com a cor de fundo, o tamanho do ladrilho e a ausência de textura no sólido conferidos;
+  - os alertas de contraste mudam conforme o fundo;
+  - a galeria tem o `padrao`;
+  - sem rolagem horizontal e sem erros.
+
+  Os mesmos testes passaram nos endereços públicos.
+- **Commits:** DM `551adb3` e FindLook `40a2a55`.
+
 ## 2026-11-13 · DS do DM no subdomínio designsystem.danimoscatelli.com.br (D-047; publicado: v44; site e HTTPS concluídos em 14/11)
 
 - **DNS:** a dona do produto criou o CNAME no Cloudflare. Conferido no dns.google e no cloudflare-dns.com: `daniellemoscatelli87.github.io`.
