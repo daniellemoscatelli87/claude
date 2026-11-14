@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/admin/admin.css">
+<link rel="stylesheet" href="/admin/admin.css?v=20261115">
 <style>
   .cm-gal { margin-bottom: 16px; }
   .cm-gal h2 { margin: 0 0 6px; font-size: 18px; }
@@ -414,7 +414,7 @@
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="/admin/admin.js"></script>
+<script src="/admin/admin.js?v=20261115"></script>
 <dialog class="desafio-dlg" id="desafio-dlg" aria-labelledby="desafio-h">
   <h2 id="desafio-h">Qual é o desafio do projeto?</h2>
   <p class="muted">Descreva o projeto, o cliente ou segmento, o que precisa ser entregue e as condições (prazo, presencial ou remoto). A IA analisa todos os perfis e mostra os mais aderentes primeiro.</p>
@@ -427,7 +427,7 @@
   <button type="button" class="close" id="pd-close" aria-label="Fechar perfil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   <div class="pd-body" id="pd-body"></div>
 </aside>
-<script src="/admin/form-parceiros.js"></script>
+<script src="/admin/form-parceiros.js?v=20261115"></script>
 <script>
 const { el } = Admin;
 const Q = Object.fromEntries(FORM_PARCEIROS.flatMap((s) => s.questions).map((q) => [q.id, q]));
