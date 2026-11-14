@@ -1187,3 +1187,31 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
   .rp-modelo-sobe img { height: auto !important; aspect-ratio: 1111 / 1416; max-height: calc(100svh - var(--rp-hero-foto-folga, 56px)) !important; object-fit: cover !important; object-position: 50% 0 !important; }
 }
 @media (min-width: 1024px) and (max-height: 820px) { .rp-modelo-sobe img { margin-bottom: -28px; } }
+
+/* =========================================================================
+   Hero no estilo do Projeto Piloto (só no computador): painel arredondado com 16 px de respiro nas bordas,
+   alça "Saiba mais" recortada no centro da base, foto parada enquanto o painel sobe (efeito janela).
+   ========================================================================= */
+.rp-alca { display: none; }
+@media (min-width: 1024px) {
+  body.parceiros-inicio { background: #FFFFFF !important; }
+  .rp-hero { position: relative; isolation: isolate; overflow: hidden !important; margin: calc(-1 * var(--altura-cabecalho, 99px) + 1rem) 1rem 0 !important;
+    padding-top: calc(var(--altura-cabecalho, 99px) - 1rem + 92px) !important; padding-bottom: 0 !important; min-height: calc(100svh - 2rem) !important; border-radius: 32px; background: #EEF2F7 !important; }
+  .rp-hero-modelo { transform: translate3d(0, var(--rp-janela, 0px), 0) !important; }
+  .rp-modelo-sobe { bottom: 0 !important; }
+  .rp-modelo-sobe img { margin-bottom: 0 !important; max-height: calc(100svh - var(--rp-hero-foto-folga, 64px)) !important; }
+  /* alça */
+  .rp-alca { position: absolute; z-index: 30; left: 0; right: 0; bottom: 0; margin: 0 auto; width: 320px; height: 56px; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 16px;
+    border-radius: 40px 40px 0 0; background: #FFFFFF; color: #131A27; font-size: 1rem; font-weight: 600; text-decoration: none; }
+  .rp-alca-seta { width: 20px; height: 32px; border-radius: 9999px; border: 1px solid #D6DCE6; color: #D44D4D; display: flex; align-items: center; justify-content: center; transition: background-color .2s ease; }
+  .rp-alca-seta svg { width: 14px; height: 14px; }
+  .rp-alca:hover .rp-alca-seta { background: #FDF2F2; }
+  .rp-alca:focus-visible { outline: none; box-shadow: inset 0 0 0 2px #D44D4D; }
+  /* a folha branca continua logo abaixo do painel */
+  .rx-folha { margin-top: 1rem !important; }
+}
+@media (min-width: 1024px) and (max-height: 820px) { .rp-hero { padding-top: calc(var(--altura-cabecalho, 99px) - 1rem + .75rem) !important; } }
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .rp-alca { animation: rp-alca-entra .7s cubic-bezier(0.16, 1, 0.3, 1) .6s both; }
+}
+@keyframes rp-alca-entra { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: none; } }
