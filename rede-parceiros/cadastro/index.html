@@ -901,6 +901,23 @@ function applyShowIf() {
 form.addEventListener("change", applyShowIf);
 applyShowIf();
 
+// E-mail já cadastrado: ao sair do campo, o formulário pergunta ao banco (só sim ou não) e avisa na hora.
+const EMAIL_DUP_MSG = "Este e-mail já está cadastrado na Rede de Parceiros. Para atualizar seus dados, escreva para contato@danimoscatelli.com.br.";
+const emailCadastrado = { email: "", existe: false };
+async function verificarEmail() {
+  const campo = form.elements.email; if (!campo) return;
+  const v = campo.value.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return;
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/email_ja_cadastrado`, { method: "POST", headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" }, body: JSON.stringify({ p_email: v }) });
+    if (!r.ok) return;
+    emailCadastrado.email = v; emailCadastrado.existe = (await r.json()) === true;
+    if (campo.value.trim().toLowerCase() === v) validateQuestion(QUESTIONS.find((x) => x.id === "email"));
+  } catch {}
+}
+form.addEventListener("focusout", (e) => { if (e.target && e.target.name === "email") verificarEmail(); });
+form.addEventListener("change", (e) => { if (e.target && e.target.name === "email") verificarEmail(); });
+
 function validateQuestion(q) {
   if (!visible(q)) return true;
   const v = value(q);
@@ -908,6 +925,8 @@ function validateQuestion(q) {
   if (q.required) ok = Array.isArray(v) ? v.length > 0 : v !== "";
   if (ok && q.mustInclude) ok = Array.isArray(v) && v.includes(q.mustInclude);
   if (ok && q.type === "email" && v) ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const emailDup = ok && q.id === "email" && v && emailCadastrado.email === v.toLowerCase() && emailCadastrado.existe;
+  if (emailDup) ok = false;
   if (ok && q.type === "idiomas") {
     const rs = langRows(q);
     rs.forEach((r) => r.row.classList.toggle("bad", !r.idioma !== !r.nivel));
@@ -917,7 +936,7 @@ function validateQuestion(q) {
   const otherBad = ok && (q.type === "checkbox" || q.type === "radio") && otherChecked(q) && !otherText(q);
   if (otherBad) ok = false;
   const err = form.querySelector(`[data-q="${q.id}"] .err`);
-  if (err) { err.dataset.base ??= err.textContent; err.textContent = otherBad ? "Escreva qual é a opção “Outro”." : err.dataset.base; }
+  if (err) { err.dataset.base ??= err.textContent; err.textContent = otherBad ? "Escreva qual é a opção “Outro”." : emailDup ? EMAIL_DUP_MSG : err.dataset.base; }
   if (ok && q.type === "url" && v && v !== "https://") ok = validUrl(withScheme(v), q.urlHost);
   form.querySelector(`[data-q="${q.id}"]`).classList.toggle("invalid", !ok);
   return ok;
@@ -1033,6 +1052,11 @@ async function submit() {
       headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" },
       body: JSON.stringify(payload()),
     });
+    if (res.status === 409) {
+      emailCadastrado.email = (value({ id: "email", type: "email" }) || "").toLowerCase(); emailCadastrado.existe = true;
+      errBox.textContent = EMAIL_DUP_MSG; errBox.style.display = "block";
+      btn.disabled = false; btn.innerHTML = SEND_LABEL; return;
+    }
     if (!res.ok) throw new Error(await res.text());
     // Título com o primeiro nome da pessoa.
     const primeiro = (value({ id: "nome", type: "text" }) || "").trim().split(/\s+/)[0];
