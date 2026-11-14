@@ -76,6 +76,9 @@
   .ic-btn:hover { background: #FDF2F2; color: #D44D4D; }
   .ic-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.35); }
   .ic-btn svg { width: 1.125rem; height: 1.125rem; }
+  .esp-campo { display: grid; gap: .375rem; margin-bottom: 1rem; }
+  .esp-campo small { font-weight: 400; }
+  .li-campo { margin-bottom: 1rem; }
   .foto-acoes { display: flex; flex-wrap: wrap; gap: .625rem; align-items: center; }
   .botao-arquivo { display: inline-flex; align-items: center; min-height: 44px; margin: 0; padding: 0 1.25rem; border-radius: 9999px; border: 1px solid #D44D4D; color: #D44D4D; font-size: .9375rem; font-weight: 600; cursor: pointer; }
   .botao-arquivo:hover { background: #FDF2F2; }
@@ -112,7 +115,22 @@
       <li><strong>Novas oportunidades.</strong> O perfil pode gerar convites para desafios do Studio e de empresas parceiras.</li>
       <li><strong>Ecossistema mais forte.</strong> A galeria mostra a diversidade de competências da rede e aproxima os profissionais, ampliando as colaborações para todos.</li>
     </ul>
-    <h2>Ajuste o que vai aparecer</h2>
+    <h2>Prévia do seu perfil</h2>
+    <div class="card" id="previa" aria-label="Prévia do perfil">
+      <div class="topo"><span class="foto" id="p-ini" aria-hidden="true"></span><img class="foto foto-img" id="p-img" alt="" hidden><span class="in" id="p-in" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span></div>
+      <h3 id="p-nome"></h3>
+      <p class="esp" id="p-cargo"></p>
+      <ul class="tags" id="p-areas" aria-label="Áreas de atuação e segmentos"></ul>
+    </div>
+    <p class="nota">É assim que o seu perfil vai aparecer na galeria. Ajuste os dados logo abaixo e a prévia acompanha. Se não enviar uma foto, usaremos a do seu perfil do LinkedIn. Para trocar ou excluir a foto depois, use este mesmo link ou escreva para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
+
+    <h2>Dados do seu perfil</h2>
+    <label class="esp-campo">Especialidade<small>Sugerida a partir do seu cadastro. Se preferir, altere. Até 80 caracteres.</small><input type="text" id="especialidade" maxlength="80"></label>
+    <div class="li-campo">
+      <span class="foto-rot">Link do seu LinkedIn<small>Informado no seu cadastro. Se precisar, altere.</small></span>
+      <div class="li-ver" id="li-ver" hidden><a id="li-link" href="#" target="_blank" rel="noopener noreferrer"></a><button type="button" class="nao pequeno" id="li-alterar">Alterar</button></div>
+      <label id="li-editar" style="margin:0" hidden><span class="sr-only">Link do seu LinkedIn</span><input type="url" id="linkedin" maxlength="300" placeholder="https://www.linkedin.com/in/seu-perfil" autocomplete="url"></label>
+    </div>
     <div class="foto-campo">
       <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP. Depois de escolher, ajuste o enquadramento.</small></span>
       <div class="foto-acoes">
@@ -133,20 +151,6 @@
         <div class="recorte-acoes"><button type="button" class="sim pequeno" id="rec-usar">Usar esta foto</button><button type="button" class="nao pequeno" id="rec-cancelar">Cancelar</button></div>
       </div>
     </div>
-    <div class="li-campo">
-      <span class="foto-rot">Link do seu LinkedIn<small>Informado no seu cadastro. Se precisar, altere.</small></span>
-      <div class="li-ver" id="li-ver" hidden><a id="li-link" href="#" target="_blank" rel="noopener noreferrer"></a><button type="button" class="nao pequeno" id="li-alterar">Alterar</button></div>
-      <label id="li-editar" style="margin:0" hidden><span class="sr-only">Link do seu LinkedIn</span><input type="url" id="linkedin" maxlength="300" placeholder="https://www.linkedin.com/in/seu-perfil" autocomplete="url"></label>
-    </div>
-
-    <h2>Prévia do seu perfil</h2>
-    <div class="card" id="previa" aria-label="Prévia do perfil">
-      <div class="topo"><span class="foto" id="p-ini" aria-hidden="true"></span><img class="foto foto-img" id="p-img" alt="" hidden><span class="in" id="p-in" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span></div>
-      <h3 id="p-nome"></h3>
-      <p class="esp" id="p-cargo"></p>
-      <ul class="tags" id="p-areas" aria-label="Áreas de atuação e segmentos"></ul>
-    </div>
-    <p class="nota">É assim que o seu perfil vai aparecer na galeria. Se não enviar uma foto, usaremos a do seu perfil do LinkedIn. Para trocar ou excluir a foto depois, use este mesmo link ou escreva para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
 
     <h2>Autorização</h2>
     <p class="termo" id="termo"></p>
@@ -234,7 +238,7 @@
     })();
     $("rec-usar").addEventListener("click", function () {
       fotoNova = recCortar(600); removerFoto = false; nomeArquivo = nomePendente; mostrarFoto(fotoNova); $("recorte").hidden = true;
-      $("foto-ok").textContent = "Foto anexada. Confira abaixo a prévia do seu perfil; ela é enviada quando você confirmar a autorização.";
+      $("foto-ok").textContent = "Foto anexada. Confira a prévia do seu perfil acima; a foto é enviada quando você confirmar a autorização.";
       $("foto-ok").hidden = false;
       $("previa").scrollIntoView({ behavior: "smooth", block: "center" });
     });
@@ -246,7 +250,8 @@
       $("carregando").hidden = true; $("conteudo").hidden = false;
       $("p-nome").textContent = d.nome || ""; $("p-ini").textContent = iniciais(d.nome);
       // especialidade: campo 13 do cadastro (ou o texto definido pelo Studio); tags: áreas e segmentos
-      $("p-cargo").textContent = d.cargo || "";
+      $("especialidade").value = d.cargo || ""; $("p-cargo").textContent = d.cargo || "";
+      $("especialidade").addEventListener("input", function () { $("p-cargo").textContent = $("especialidade").value.trim() || d.cargo || ""; });
       d.areas.concat(d.segmentos).filter(function (a, i, l) { return a && l.indexOf(a) === i; }).forEach(function (a) { var li = document.createElement("li"); li.textContent = a; $("p-areas").appendChild(li); });
       $("linkedin").value = d.linkedin || "";
       $("termo").textContent = d.texto;
@@ -260,7 +265,7 @@
     function decidir(decisao) {
       var erro = $("erro"); erro.hidden = true;
       ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = true; });
-      post({ acao: "decidir", decisao: decisao, linkedin: $("linkedin").value, foto: decisao === "autorizado" ? fotoNova : "", remover_foto: removerFoto })
+      post({ acao: "decidir", decisao: decisao, especialidade: $("especialidade").value, linkedin: $("linkedin").value, foto: decisao === "autorizado" ? fotoNova : "", remover_foto: removerFoto })
         .then(function (r) { if (fotoNova && r.foto_url) { $("foto-ok").textContent = "Foto enviada."; } fotoNova = ""; removerFoto = false; fotoAtual = r.foto_url || ""; mostrarFoto(fotoAtual); status(r.status); $("status").scrollIntoView({ behavior: "smooth", block: "center" }); })
         .catch(function (e) { erro.textContent = e.message; erro.hidden = false; })
         .finally(function () { ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = false; }); });
