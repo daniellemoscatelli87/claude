@@ -1328,3 +1328,36 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 }
 @media (max-width: 767px) { html body main h3 { font-size: 1rem !important; } html body main h2 { font-size: 1.5rem !important; } }
 @media (max-width: 767px) { html body .rx-esp-card h3 { font-size: 1rem !important; } }
+
+/* =========================================================================
+   Celular e tablet: mesma navegação do Projeto Piloto. O hero (sem alça e sem o botão; o "Quero ser parceiro" fica
+   flutuante ao lado do WhatsApp) fica fixo atrás do menu transparente, sem logo; a folha branca sobe por cima e
+   prende logo abaixo do menu com a tampa arredondada; o conteúdo rola por baixo dela.
+   ========================================================================= */
+.rp-tampa, .rp-hero-espaco { display: none; }
+@media (max-width: 1023px) {
+  .parceiros-inicio .site-header, .parceiros-inicio .site-header.is-scrolled, html body.parceiros-inicio .site-header.is-scrolled { transform: none !important; translate: none !important; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  html body.parceiros-inicio .site-header.is-hidden { transform: none !important; }
+  html body.parceiros-inicio .site-header #menu-botao { color: #131A27 !important; }
+  html:has(body.parceiros-inicio) { scroll-padding-top: calc(var(--altura-cabecalho, 68px) + 2.5rem); }
+  .rp-alca, .rp-hero .rp-acoes { display: none !important; }
+  .rp-hero { position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 20 !important; margin: 0 !important; border-radius: 0 !important;
+    min-height: 100svh !important; padding-top: calc(var(--altura-cabecalho, 68px) + .25rem) !important;
+    clip-path: inset(0 0 calc(100% - var(--rp-tampa, 100vh) - 28px) 0); }
+  .rp-hero-espaco { display: block; }
+  .rp-hero-modelo { min-height: 260px; }
+  .rx-folha { position: relative; margin: -28px 0 0 !important; border-radius: 0 !important; border-left: 0 !important; border-right: 0 !important; }
+  .rp-tampa { display: block; position: fixed; z-index: 21; left: 0; right: 0; top: var(--rp-tampa, 100vh); height: 28px; background: #FFFFFF; border-radius: 28px 28px 0 0; pointer-events: none; }
+}
+@media (max-width: 1023px) { .rx-folha { z-index: 1 !important; } }
+/* celular: card "Vamos construir juntos?" sem cantos arredondados no topo, sem sombra e sem borda no topo */
+@media (max-width: 767px) {
+  html body .rx-fechamento .rp-carta, html body .rx-fechamento .rp-carta:hover { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; box-shadow: none !important; border-top: 0 !important; }
+}
+/* celular: o card do convite emenda direto na folha branca de cima (sem a faixa de sombra entre eles) */
+@media (max-width: 767px) {
+  html body .rx-folha { box-shadow: none !important; border-bottom: 0 !important; margin-bottom: 0 !important; }
+  html body .rx-fechamento { padding-top: 0 !important; }
+  html body .rx-fechamento > .rp-container { padding-left: 0 !important; padding-right: 0 !important; }
+  html body .rx-fechamento .rp-carta { border-left: 0 !important; border-right: 0 !important; }
+}
