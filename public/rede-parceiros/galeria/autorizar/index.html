@@ -40,6 +40,11 @@
   input:focus-visible { outline: none; border-color: #D44D4D; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.2); }
   .termo { margin: 0 0 1.25rem; padding: 1rem 1.125rem; border-radius: 16px; background: #F6F7FA; border: 1px solid #EDF0F5; font-size: .875rem; line-height: 1.6; color: #283043; }
   .acoes { display: flex; flex-wrap: wrap; gap: .75rem; }
+  .aceite { display: flex; align-items: flex-start; gap: .625rem; margin: 0 0 1rem; padding: .875rem 1rem; border: 1px solid #E4E6EC; border-radius: 12px; background: #FFFFFF; font-size: .9375rem; font-weight: 500; line-height: 1.5; color: #131A27; cursor: pointer; }
+  .aceite[hidden] { display: none; }
+  .aceite input { flex: none; width: 1.125rem; height: 1.125rem; margin: .1875rem 0 0; accent-color: #D44D4D; }
+  .aceite.invalido { border-color: #D44D4D; background: #FDF2F2; }
+  .aceite-nota { margin: .75rem 0 0; font-size: .8125rem; color: #627288; }
   button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.5rem; border-radius: 9999px; font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; }
   .sim { border: 0; background: #D44D4D; color: #FFFFFF; }
   .sim:hover { background: #B82828; }
@@ -48,13 +53,35 @@
   button:focus-visible, a:focus-visible { outline: none; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px rgba(212, 77, 77, 0.6); }
   button:disabled { opacity: .6; cursor: default; }
   .beneficios { list-style: none; margin: 0 0 .5rem; padding: 0; display: grid; gap: .625rem; }
-  .beneficios li { position: relative; padding: .875rem 1rem .875rem 2.75rem; border-radius: 14px; background: #FDF2F2; font-size: .9375rem; line-height: 1.55; color: #283043; }
+  .beneficios li { position: relative; padding: .875rem 1rem .875rem 2.75rem; border-radius: 14px; background: #F6F7FA; border: 1px solid #E4E6EC; font-size: .9375rem; line-height: 1.55; color: #283043; }
   .beneficios li::before { content: ""; position: absolute; left: 1rem; top: 1.1rem; width: 1.125rem; height: 1.125rem; border-radius: 9999px; background: #D44D4D url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / .75rem no-repeat; }
   .beneficios strong { color: #131A27; }
   .foto-img { object-fit: cover; padding: 0; }
   .foto-campo { display: grid; gap: .5rem; margin-bottom: 1rem; }
   .foto-rot { display: grid; gap: .375rem; font-size: .875rem; font-weight: 600; }
   .foto-rot small { font-weight: 400; color: #627288; }
+  .recorte { display: grid; gap: .75rem; justify-items: center; padding: 1rem; border: 1px solid #E4E6EC; border-radius: 16px; background: #FFFFFF; }
+  .recorte-dica { margin: 0; font-size: .875rem; color: #495669; text-align: center; }
+  .recorte-area { position: relative; width: min(280px, 100%); aspect-ratio: 1; overflow: hidden; border-radius: 12px; background: #EDF0F5; cursor: grab; touch-action: none; user-select: none; }
+  .recorte-area:active { cursor: grabbing; }
+  .recorte-area:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.35); }
+  .recorte-area img { position: absolute; left: 0; top: 0; max-width: none; transform-origin: 0 0; pointer-events: none; }
+  .recorte-area::after { content: ""; position: absolute; inset: 0; border-radius: 9999px; box-shadow: 0 0 0 999px rgba(19, 26, 39, 0.45); pointer-events: none; }
+  .recorte-zoom { display: flex; align-items: center; gap: .75rem; width: min(280px, 100%); margin: 0; font-size: .875rem; font-weight: 600; }
+  .recorte-zoom input { flex: 1; accent-color: #D44D4D; border: 0 !important; padding: 0 !important; margin: 0; background: transparent !important; box-shadow: none !important; min-height: 0; height: 24px; }
+  .recorte-acoes { display: flex; flex-wrap: wrap; gap: .625rem; justify-content: center; }
+  .arquivo { display: flex; align-items: center; gap: .5rem; width: 100%; max-width: 420px; padding: .375rem .375rem .375rem .75rem; border: 1px solid #E4E6EC; border-radius: 12px; background: #FFFFFF; }
+  .arquivo[hidden] { display: none; }
+  .arq-ic { flex: none; display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 8px; background: #FDF2F2; color: #D44D4D; }
+  .arq-ic svg { width: 1rem; height: 1rem; }
+  .arq-nome { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .875rem; font-weight: 600; color: #131A27; }
+  .ic-btn { flex: none; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; margin: 0; padding: 0; border: 0; border-radius: 9999px; background: transparent; color: #495669; cursor: pointer; }
+  .ic-btn:hover { background: #FDF2F2; color: #D44D4D; }
+  .ic-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.35); }
+  .ic-btn svg { width: 1.125rem; height: 1.125rem; }
+  .esp-campo { display: grid; gap: .375rem; margin-bottom: 1rem; }
+  .esp-campo small { font-weight: 400; }
+  .li-campo { margin-bottom: 1rem; }
   .foto-acoes { display: flex; flex-wrap: wrap; gap: .625rem; align-items: center; }
   .botao-arquivo { display: inline-flex; align-items: center; min-height: 44px; margin: 0; padding: 0 1.25rem; border-radius: 9999px; border: 1px solid #D44D4D; color: #D44D4D; font-size: .9375rem; font-weight: 600; cursor: pointer; }
   .botao-arquivo:hover { background: #FDF2F2; }
@@ -71,6 +98,15 @@
   .status.no { background: #EDF0F5; color: #283043; }
   .erro { margin: 1rem 0 0; color: #B82828; font-size: .9375rem; }
   a { color: #D44D4D; font-weight: 600; text-underline-offset: 4px; }
+  .enviado { display: grid; justify-items: center; gap: .25rem; margin-top: .5rem; padding: 0; border: 0; background: transparent; text-align: center; }
+  .enviado:focus { outline: none; }
+  .enviado-foto { display: block; width: min(300px, 85%); height: auto; margin: -.5rem auto .75rem; border-bottom: 1px solid #E4E6EC; }
+  .enviado-ic { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; margin-bottom: .75rem; border-radius: 9999px; background: #FDF2F2; color: #D44D4D; }
+  .enviado-ic svg { width: 1.75rem; height: 1.75rem; }
+  .enviado h2 { margin: 0 0 .5rem; }
+  .enviado p { margin: 0 0 .75rem; max-width: 30rem; font-size: .9375rem; line-height: 1.6; color: #495669; }
+  .enviado-botao { display: inline-flex; align-items: center; min-height: 48px; margin-top: .5rem; padding: 0 1.75rem; border-radius: 9999px; background: #D44D4D; color: #FFFFFF !important; font-weight: 600; text-decoration: none; }
+  .enviado-botao:hover { background: #B82828; }
   [hidden] { display: none !important; }
 </style>
 </head>
@@ -87,42 +123,61 @@
     <p class="status" id="status" role="status" hidden></p>
     <h2>Por que exibir o seu perfil?</h2>
     <ul class="beneficios">
-      <li><strong>Vitrine profissional.</strong> Seu trabalho fica visível para empresas que procuram especialistas.</li>
+      <li><strong>Vitrine profissional.</strong> Seu perfil e suas especialidades ficam visíveis para empresas que procuram especialistas.</li>
       <li><strong>Novas oportunidades.</strong> O perfil pode gerar convites para desafios do Studio e de empresas parceiras.</li>
       <li><strong>Ecossistema mais forte.</strong> A galeria mostra a diversidade de competências da rede e aproxima os profissionais, ampliando as colaborações para todos.</li>
     </ul>
-    <h2>Prévia do seu perfil</h2>
-    <div class="card" aria-label="Prévia do perfil">
-      <div class="topo"><span class="foto" id="p-ini" aria-hidden="true"></span><img class="foto foto-img" id="p-img" alt="" hidden><span class="in" id="p-in" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span></div>
-      <h3 id="p-nome"></h3>
-      <p class="esp" id="p-cargo"></p>
-      <ul class="tags" id="p-areas" aria-label="Áreas de atuação e segmentos"></ul>
-    </div>
-    <p class="nota">Envie abaixo a foto que vai aparecer no seu perfil. Se não enviar, usaremos a foto do seu perfil do LinkedIn. Para trocar ou excluir a foto depois, use este mesmo link ou escreva para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
-
-    <h2>Ajuste o que vai aparecer</h2>
-    <div class="foto-campo">
-      <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP. A imagem é recortada em quadrado.</small></span>
-      <div class="foto-acoes">
-        <label class="botao-arquivo" for="foto-arquivo"><span id="foto-btn-txt">Enviar foto</span></label>
-        <input type="file" id="foto-arquivo" accept="image/jpeg,image/png,image/webp" class="sr-only">
-        <button type="button" class="nao pequeno" id="foto-remover" hidden>Remover foto</button>
-      </div>
-    </div>
+    <h2>Dados do seu perfil</h2>
+    <label class="esp-campo">Especialidade<small>Sugerida a partir do seu cadastro. Se preferir, altere. Até 80 caracteres.</small><input type="text" id="especialidade" maxlength="80"></label>
     <div class="li-campo">
       <span class="foto-rot">Link do seu LinkedIn<small>Informado no seu cadastro. Se precisar, altere.</small></span>
       <div class="li-ver" id="li-ver" hidden><a id="li-link" href="#" target="_blank" rel="noopener noreferrer"></a><button type="button" class="nao pequeno" id="li-alterar">Alterar</button></div>
       <label id="li-editar" style="margin:0" hidden><span class="sr-only">Link do seu LinkedIn</span><input type="url" id="linkedin" maxlength="300" placeholder="https://www.linkedin.com/in/seu-perfil" autocomplete="url"></label>
     </div>
+    <div class="foto-campo">
+      <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP. Depois de escolher, ajuste o enquadramento.</small></span>
+      <div class="foto-acoes">
+        <label class="botao-arquivo" id="foto-enviar" for="foto-arquivo"><span>Enviar foto</span></label>
+        <input type="file" id="foto-arquivo" accept="image/jpeg,image/png,image/webp" class="sr-only">
+        <div class="arquivo" id="arquivo" hidden>
+          <span class="arq-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg></span>
+          <span class="arq-nome" id="arq-nome"></span>
+          <label class="ic-btn" for="foto-arquivo" title="Alterar foto"><span class="sr-only">Alterar foto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></label>
+          <button type="button" class="ic-btn" id="foto-remover" title="Excluir foto"><span class="sr-only">Excluir foto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
+        </div>
+      </div>
+      <div class="recorte" id="recorte" hidden>
+        <p class="recorte-dica">Arraste a foto para enquadrar o rosto no círculo e use o zoom se precisar.</p>
+        <div class="recorte-area" id="rec-area" tabindex="0" aria-label="Área de recorte da foto. Use as setas do teclado para mover."><img id="rec-img" alt="" draggable="false"></div>
+        <label class="recorte-zoom">Zoom<input type="range" id="rec-zoom" min="1" max="3" step="0.01" value="1"></label>
+        <div class="recorte-acoes"><button type="button" class="sim pequeno" id="rec-usar">Usar esta foto</button><button type="button" class="nao pequeno" id="rec-cancelar">Cancelar</button></div>
+      </div>
+    </div>
+
+    <h2>Prévia do seu perfil</h2>
+    <div class="card" id="previa" aria-label="Prévia do perfil">
+      <div class="topo"><span class="foto" id="p-ini" aria-hidden="true"></span><img class="foto foto-img" id="p-img" alt="" hidden><span class="in" id="p-in" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span></div>
+      <h3 id="p-nome"></h3>
+      <p class="esp" id="p-cargo"></p>
+      <ul class="tags" id="p-areas" aria-label="Áreas de atuação e segmentos"></ul>
+    </div>
+    <p class="nota">É assim que o seu perfil vai aparecer no site <a href="https://www.danimoscatelli.com.br/rede-parceiros/" target="_blank" rel="noopener">www.danimoscatelli.com.br/rede-parceiros</a></p>
 
     <h2>Autorização</h2>
     <p class="termo" id="termo"></p>
+    <label class="aceite" id="aceite-box" hidden><input type="checkbox" id="aceite"><span>Autorizo a exibição do meu perfil na Galeria de Profissionais, conforme o termo acima.</span></label>
     <div class="acoes">
-      <button type="button" class="sim" id="autorizo">Autorizo a exibição</button>
-      <button type="button" class="nao" id="naoautorizo">Não autorizo</button>
+      <button type="button" class="sim" id="enviar">Enviar perfil</button>
     </div>
+    <p class="aceite-nota">Ao enviar, você concorda com a exibição do seu perfil na Galeria de Profissionais do site.</p>
     <p class="erro" id="erro" role="alert" hidden></p>
   </div>
+  <section class="enviado" id="enviado" hidden aria-label="Perfil enviado com sucesso!" tabindex="-1">
+    <img class="enviado-foto" src="/rede-parceiros/galeria/dani-positivo-v3.webp" alt="Dani Moscatelli fazendo sinal de positivo com as duas mãos, ao lado de um selo de confirmado" width="1254" height="1254" loading="lazy">
+    <p>Obrigada por fazer parte da Galeria de Profissionais da Rede de Parceiros. Seu perfil vai compor a galeria do site.</p>
+    <p>Se quiser remover o seu perfil, é só enviar um e-mail para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
+    <a class="enviado-botao" href="https://www.danimoscatelli.com.br/rede-parceiros/">Ir para o site</a>
+  </section>
 </main>
 <script>
   (function () {
@@ -139,36 +194,81 @@
       if (!s) { el.hidden = true; return; }
       el.hidden = false;
       el.className = "status " + (s === "autorizado" ? "ok" : "no");
-      el.textContent = s === "autorizado" ? "Você autorizou a exibição do seu perfil. Para retirar a autorização, use o botão “Não autorizo”." : "Você não autorizou a exibição. Seu perfil não aparece na galeria. Se mudar de ideia, use o botão “Autorizo a exibição”.";
+      el.textContent = s === "autorizado" ? "A exibição do seu perfil está autorizada. Para retirar a autorização, escreva para contato@danimoscatelli.com.br." : "Você não autorizou a exibição. Seu perfil não aparece na galeria. Se mudar de ideia, marque a autorização abaixo e envie o perfil.";
     }
-    var fotoNova = "", removerFoto = false, fotoAtual = "";
+    var fotoNova = "", removerFoto = false, fotoAtual = "", nomeArquivo = "", nomePendente = "";
     function mostrarFoto(src) {
       var img = $("p-img"), ini = $("p-ini");
       if (src) { img.src = src; img.hidden = false; ini.hidden = true; } else { img.hidden = true; img.removeAttribute("src"); ini.hidden = false; }
-      $("foto-remover").hidden = !src; $("foto-btn-txt").textContent = src ? "Trocar foto" : "Enviar foto";
+      $("foto-enviar").hidden = !!src; $("arquivo").hidden = !src; $("arq-nome").textContent = src ? (nomeArquivo || "Foto atual") : "";
     }
-    // Recorta em quadrado e reduz para 600 px no próprio aparelho (também descarta dados da foto, como localização).
+    // Foto: a pessoa escolhe a imagem, ajusta o recorte (arrastar + zoom) e a prévia do card mostra o resultado.
+    // O recorte é feito no próprio aparelho, em 600 x 600 px (também descarta dados da foto, como localização).
+    var V = 0, rec = { img: null, url: "", base: 1, zoom: 1, x: 0, y: 0 };
+    function recLimites() {
+      var esc = rec.base * rec.zoom, w = rec.img.naturalWidth * esc, h = rec.img.naturalHeight * esc;
+      rec.x = Math.min(0, Math.max(V - w, rec.x)); rec.y = Math.min(0, Math.max(V - h, rec.y));
+    }
+    function recDesenhar() { recLimites(); $("rec-img").style.transform = "translate(" + rec.x + "px," + rec.y + "px) scale(" + rec.base * rec.zoom + ")"; }
+    function recCortar(tam) {
+      var esc = rec.base * rec.zoom, c = document.createElement("canvas"); c.width = c.height = tam;
+      c.getContext("2d").drawImage(rec.img, -rec.x / esc, -rec.y / esc, V / esc, V / esc, 0, 0, tam, tam);
+      return c.toDataURL("image/jpeg", 0.88);
+    }
+    function recAbrir() {
+      $("recorte").hidden = false; V = $("rec-area").clientWidth;
+      rec.base = V / Math.min(rec.img.naturalWidth, rec.img.naturalHeight);
+      $("rec-img").src = rec.url; $("rec-zoom").value = String(rec.zoom); recDesenhar(); $("rec-area").focus();
+    }
     $("foto-arquivo").addEventListener("change", function (e) {
       var f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
       var erro = $("erro"); erro.hidden = true;
       if (!/^image\/(jpeg|png|webp)$/.test(f.type) || f.size > 15 * 1024 * 1024) { erro.textContent = "Envie uma foto em JPG, PNG ou WEBP de até 15 MB."; erro.hidden = false; return; }
+      nomePendente = f.name;
       var url = URL.createObjectURL(f), img = new Image();
       img.onload = function () {
-        var lado = Math.min(img.naturalWidth, img.naturalHeight), c = document.createElement("canvas"); c.width = c.height = 600;
-        c.getContext("2d").drawImage(img, (img.naturalWidth - lado) / 2, (img.naturalHeight - lado) / 2, lado, lado, 0, 0, 600, 600);
-        URL.revokeObjectURL(url); fotoNova = c.toDataURL("image/jpeg", 0.88); removerFoto = false; mostrarFoto(fotoNova);
+        if (rec.url) URL.revokeObjectURL(rec.url);
+        rec = { img: img, url: url, base: 1, zoom: 1, x: 0, y: 0 };
+        $("recorte").hidden = false; V = $("rec-area").clientWidth; rec.base = V / Math.min(img.naturalWidth, img.naturalHeight);
+        // começa centralizado
+        rec.x = (V - img.naturalWidth * rec.base) / 2; rec.y = (V - img.naturalHeight * rec.base) / 2;
+        recAbrir();
       };
       img.onerror = function () { URL.revokeObjectURL(url); erro.textContent = "Não foi possível abrir esta imagem."; erro.hidden = false; };
       img.src = url;
     });
+    (function () {
+      var area = $("rec-area"), ini = null;
+      area.addEventListener("pointerdown", function (e) { if (!rec.img) return; ini = { px: e.clientX, py: e.clientY, x: rec.x, y: rec.y }; area.setPointerCapture(e.pointerId); });
+      area.addEventListener("pointermove", function (e) { if (!ini) return; rec.x = ini.x + e.clientX - ini.px; rec.y = ini.y + e.clientY - ini.py; recDesenhar(); });
+      area.addEventListener("pointerup", function () { ini = null; });
+      area.addEventListener("pointercancel", function () { ini = null; });
+      area.addEventListener("keydown", function (e) {
+        var d = { ArrowLeft: [8, 0], ArrowRight: [-8, 0], ArrowUp: [0, 8], ArrowDown: [0, -8] }[e.key]; if (!d || !rec.img) return;
+        e.preventDefault(); rec.x += d[0]; rec.y += d[1]; recDesenhar();
+      });
+      $("rec-zoom").addEventListener("input", function () {
+        if (!rec.img) return;
+        var antes = rec.base * rec.zoom, cx = (V / 2 - rec.x) / antes, cy = (V / 2 - rec.y) / antes;
+        rec.zoom = parseFloat($("rec-zoom").value); var depois = rec.base * rec.zoom;
+        rec.x = V / 2 - cx * depois; rec.y = V / 2 - cy * depois; recDesenhar();
+      });
+    })();
+    $("rec-usar").addEventListener("click", function () {
+      fotoNova = recCortar(600); removerFoto = false; nomeArquivo = nomePendente; mostrarFoto(fotoNova); $("recorte").hidden = true;
+
+      $("previa").scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+    $("rec-cancelar").addEventListener("click", function () { $("recorte").hidden = true; });
     $("li-alterar").addEventListener("click", function () { $("li-ver").hidden = true; $("li-editar").hidden = false; $("linkedin").focus(); $("linkedin").select(); });
-    $("foto-remover").addEventListener("click", function () { fotoNova = ""; removerFoto = !!fotoAtual; mostrarFoto(""); });
+    $("foto-remover").addEventListener("click", function () { fotoNova = ""; nomeArquivo = ""; removerFoto = !!fotoAtual; mostrarFoto(""); $("recorte").hidden = true; });
     function atualizarIn() { $("p-in").style.visibility = $("linkedin").value.trim() ? "visible" : "hidden"; }
     post({ acao: "ver" }).then(function (d) {
       $("carregando").hidden = true; $("conteudo").hidden = false;
       $("p-nome").textContent = d.nome || ""; $("p-ini").textContent = iniciais(d.nome);
       // especialidade: campo 13 do cadastro (ou o texto definido pelo Studio); tags: áreas e segmentos
-      $("p-cargo").textContent = d.cargo || "";
+      $("especialidade").value = d.cargo || ""; $("p-cargo").textContent = d.cargo || "";
+      $("especialidade").addEventListener("input", function () { $("p-cargo").textContent = $("especialidade").value.trim() || d.cargo || ""; });
       d.areas.concat(d.segmentos).filter(function (a, i, l) { return a && l.indexOf(a) === i; }).forEach(function (a) { var li = document.createElement("li"); li.textContent = a; $("p-areas").appendChild(li); });
       $("linkedin").value = d.linkedin || "";
       $("termo").textContent = d.texto;
@@ -177,18 +277,56 @@
       if (d.linkedin) { $("li-link").href = d.linkedin; $("li-link").textContent = d.linkedin.replace(/^https:\/\/(www\.)?/, ""); $("li-ver").hidden = false; }
       else { $("li-editar").hidden = false; }
       status(d.status); atualizarIn();
+      // quem já autorizou (no formulário de cadastro ou antes) não precisa marcar de novo; quem está na base sem autorizar marca a caixa
+      $("aceite-box").hidden = d.status === "autorizado";
       $("linkedin").addEventListener("input", atualizarIn);
     }).catch(function (e) { $("carregando").hidden = true; $("erro-geral").textContent = e.message; $("erro-geral").hidden = false; });
-    function decidir(decisao) {
+    // Confete no topo da tela ao enviar o perfil, o mesmo do fim do cadastro de parceiros (respeita quem prefere menos movimento).
+function confetti() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var cv = document.createElement("canvas");
+  cv.style.cssText = "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50";
+  document.body.appendChild(cv);
+  var ctx = cv.getContext("2d"), dpr = window.devicePixelRatio || 1;
+  var W = innerWidth, H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+  var colors = ["#D44D4D", "#D44D4D", "#ffb3ae", "#5c6986", "#a8afbd", "#ffd166"];
+  var ps = Array.from({ length: 160 }, function () { return {
+    x: Math.random() * W, y: -20 - Math.random() * H * 0.4,
+    vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3,
+    w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
+    r: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3,
+    c: colors[Math.floor(Math.random() * colors.length)],
+  }; });
+  var t0 = performance.now();
+  (function frame(t) {
+    var el = t - t0;
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalAlpha = el > 3000 ? Math.max(0, 1 - (el - 3000) / 1000) : 1;
+    ps.forEach(function (p) {
+      p.x += p.vx + Math.sin((el / 300) + p.r) * 0.6; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r))); ctx.restore();
+    });
+    if (el < 4000) requestAnimationFrame(frame); else cv.remove();
+  })(t0);
+}
+    function enviar() {
       var erro = $("erro"); erro.hidden = true;
-      ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = true; });
-      post({ acao: "decidir", decisao: decisao, linkedin: $("linkedin").value, foto: decisao === "autorizado" ? fotoNova : "", remover_foto: removerFoto })
-        .then(function (r) { fotoNova = ""; removerFoto = false; fotoAtual = r.foto_url || ""; mostrarFoto(fotoAtual); status(r.status); $("status").scrollIntoView({ behavior: "smooth", block: "center" }); })
+      if (!$("aceite-box").hidden && !$("aceite").checked) { $("aceite-box").classList.add("invalido"); erro.textContent = "Marque a autorização para enviar o seu perfil."; erro.hidden = false; $("aceite").focus(); return; }
+      $("enviar").disabled = true; $("enviar").textContent = "Enviando…";
+      post({ acao: "decidir", decisao: "autorizado", especialidade: $("especialidade").value, linkedin: $("linkedin").value, foto: fotoNova, remover_foto: removerFoto })
+        .then(function (r) {
+          // tela final: some com o formulário e mostra a confirmação com o link para o site
+          fotoNova = ""; removerFoto = false;
+          $("conteudo").hidden = true; document.querySelector("main .lead").hidden = true; document.querySelector("main h1").textContent = "Perfil enviado com sucesso!"; $("enviado").hidden = false; confetti();
+          window.scrollTo({ top: 0, behavior: "smooth" }); $("enviado").focus({ preventScroll: true });
+        })
         .catch(function (e) { erro.textContent = e.message; erro.hidden = false; })
-        .finally(function () { ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = false; }); });
+        .finally(function () { $("enviar").disabled = false; $("enviar").textContent = "Enviar perfil"; });
     }
-    $("autorizo").addEventListener("click", function () { decidir("autorizado"); });
-    $("naoautorizo").addEventListener("click", function () { decidir("recusado"); });
+    $("aceite").addEventListener("change", function () { $("aceite-box").classList.remove("invalido"); $("erro").hidden = true; });
+    $("enviar").addEventListener("click", enviar);
   })();
 </script>
 </body>
