@@ -98,6 +98,14 @@
   .status.no { background: #EDF0F5; color: #283043; }
   .erro { margin: 1rem 0 0; color: #B82828; font-size: .9375rem; }
   a { color: #D44D4D; font-weight: 600; text-underline-offset: 4px; }
+  .enviado { display: grid; justify-items: center; gap: .25rem; margin-top: 1.5rem; padding: 2rem 1.5rem; border: 1px solid #E4E6EC; border-radius: 20px; background: #FFFFFF; text-align: center; }
+  .enviado:focus { outline: none; }
+  .enviado-ic { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; margin-bottom: .75rem; border-radius: 9999px; background: #FDF2F2; color: #D44D4D; }
+  .enviado-ic svg { width: 1.75rem; height: 1.75rem; }
+  .enviado h2 { margin: 0 0 .5rem; }
+  .enviado p { margin: 0 0 .75rem; max-width: 30rem; font-size: .9375rem; line-height: 1.6; color: #495669; }
+  .enviado-botao { display: inline-flex; align-items: center; min-height: 48px; margin-top: .5rem; padding: 0 1.75rem; border-radius: 9999px; background: #D44D4D; color: #FFFFFF !important; font-weight: 600; text-decoration: none; }
+  .enviado-botao:hover { background: #B82828; }
   [hidden] { display: none !important; }
 </style>
 </head>
@@ -163,6 +171,13 @@
     <p class="aceite-nota">Ao enviar, você concorda com a exibição do seu perfil na Galeria de Profissionais do site.</p>
     <p class="erro" id="erro" role="alert" hidden></p>
   </div>
+  <section class="enviado" id="enviado" hidden aria-labelledby="enviado-titulo" tabindex="-1">
+    <span class="enviado-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+    <h2 id="enviado-titulo">Perfil enviado!</h2>
+    <p>Obrigada por fazer parte da Galeria de Profissionais da Rede de Parceiros. Seu perfil vai compor a galeria do site.</p>
+    <p>Se quiser remover o seu perfil, é só enviar um e-mail para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
+    <a class="enviado-botao" href="https://www.danimoscatelli.com.br/rede-parceiros/">Ir para o site</a>
+  </section>
 </main>
 <script>
   (function () {
@@ -272,9 +287,10 @@
       $("enviar").disabled = true; $("enviar").textContent = "Enviando…";
       post({ acao: "decidir", decisao: "autorizado", especialidade: $("especialidade").value, linkedin: $("linkedin").value, foto: fotoNova, remover_foto: removerFoto })
         .then(function (r) {
-          fotoNova = ""; removerFoto = false; fotoAtual = r.foto_url || ""; mostrarFoto(fotoAtual); status(r.status); $("aceite-box").hidden = true;
-          $("status").textContent = "Perfil enviado! A exibição está autorizada. Se precisar, ajuste os dados e envie de novo. Para retirar a autorização, escreva para contato@danimoscatelli.com.br.";
-          $("status").scrollIntoView({ behavior: "smooth", block: "center" });
+          // tela final: some com o formulário e mostra a confirmação com o link para o site
+          fotoNova = ""; removerFoto = false;
+          $("conteudo").hidden = true; document.querySelector("main .lead").hidden = true; $("enviado").hidden = false;
+          window.scrollTo({ top: 0, behavior: "smooth" }); $("enviado").focus({ preventScroll: true });
         })
         .catch(function (e) { erro.textContent = e.message; erro.hidden = false; })
         .finally(function () { $("enviar").disabled = false; $("enviar").textContent = "Enviar perfil"; });
