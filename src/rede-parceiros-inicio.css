@@ -1285,3 +1285,39 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 }
 /* bolinhas de status no vermelho padrão do site */
 .rp-flu-txt i { --cor: #D44D4D; }
+
+/* =========================================================================
+   Celular e tablet: hero no mesmo estilo do computador — painel arredondado com 8 px de respiro, texto no topo,
+   o grupo da foto na base (recortado da cintura para cima) e a alça "Saiba mais".
+   ========================================================================= */
+@media (max-width: 1023px) {
+  body.parceiros-inicio { background: #FFFFFF !important; }
+  .rp-hero { position: relative; isolation: isolate; display: flex !important; flex-direction: column; margin: calc(-1 * var(--altura-cabecalho, 68px) + .5rem) .5rem 0 !important;
+    padding: calc(var(--altura-cabecalho, 68px) + .75rem) 0 0 !important; min-height: calc(100svh - 1rem) !important; border-radius: 24px; background: #EEF2F7 !important; overflow: hidden !important; }
+  .rp-hero > .rp-hero-grade { flex: 1 0 auto; display: flex !important; flex-direction: column; gap: 0 !important; }
+  .rp-hero-texto { flex: none; }
+  .rp-hero .rp-selo { font-size: .625rem; padding: .375rem .75rem; margin-bottom: .875rem; }
+  .rp-hero h1 { font-size: clamp(1.75rem, 7.4vw, 2.5rem) !important; line-height: 1.12 !important; margin-bottom: .75rem !important; }
+  .rp-hero .rp-lead { font-size: .9375rem !important; line-height: 1.55 !important; margin-bottom: 1rem !important; }
+  .rp-hero .rp-prova, .rp-hero .rp-link-seta { display: none !important; }
+  .rp-hero .rp-acoes { margin-top: 0 !important; }
+  /* foto: ocupa o espaço que sobra até a base do painel */
+  .rp-hero-modelo { position: relative !important; flex: 1 1 0; min-height: 230px; margin: 1rem 0 0 !important; transform: none !important; align-self: stretch !important; }
+  .rp-modelo-sobe { position: absolute !important; inset: 0 !important; width: auto !important; max-width: none !important; }
+  .rp-modelo-sobe img { width: 100% !important; height: 100% !important; max-height: none !important; margin: 0 !important; object-fit: cover !important; object-position: 50% 6% !important;
+    -webkit-mask-image: none !important; mask-image: none !important; }
+  /* alça */
+  .rp-alca { position: absolute; z-index: 30; left: 0; right: 0; bottom: 0; margin: 0 auto; width: 220px; height: 48px; padding: 8px; display: flex; align-items: center; justify-content: center; gap: 12px;
+    border-radius: 28px 28px 0 0; background: #FFFFFF; color: #131A27; font-size: .9375rem; font-weight: 600; text-decoration: none; }
+  .rp-alca-seta { width: 18px; height: 28px; border-radius: 9999px; border: 1px solid #D6DCE6; color: #D44D4D; display: flex; align-items: center; justify-content: center; }
+  .rp-alca-seta svg { width: 13px; height: 13px; }
+  .rx-folha { margin-top: .5rem !important; }
+}
+@media (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
+  .rp-alca { animation: rp-alca-entra .7s cubic-bezier(0.16, 1, 0.3, 1) .5s both; }
+}
+@media (max-width: 1023px) {
+  .rp-hero h1 { font-size: clamp(1.375rem, 6.2vw, 2.25rem) !important; margin-bottom: .625rem !important; }
+  .rp-hero .rp-lead { font-size: .875rem !important; line-height: 1.5 !important; max-width: 34rem; }
+  .rp-hero { padding-top: calc(var(--altura-cabecalho, 68px) + .25rem) !important; }
+}
