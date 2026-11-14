@@ -1147,3 +1147,26 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-saber-cab h2, .rx-saber-cab .rp-texto { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }
 .rx-saber-grade .rx-acc { width: 100%; max-width: 48rem; margin: 0 auto; }
 @media (max-width: 1023px) { .rx-saber-grade { gap: 2rem !important; } }
+/* Galeria de profissionais (perfis com autorização registrada; por ora, exemplos fictícios) */
+.rx-gal-aviso { margin: -1rem auto 2rem; text-align: center; font-size: .8125rem; color: #627288; }
+.rx-gal-grade { list-style: none; margin: 0 auto; padding: 0; max-width: 72rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.rx-gal-card { position: relative; display: flex; flex-direction: column; padding: 1.5rem; border-radius: 24px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.08); box-shadow: 0 1px 2px rgba(13, 17, 25, 0.04);
+  transition: transform .35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .35s ease, border-color .35s ease; }
+.rx-gal-topo { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
+.rx-gal-foto { width: 4.5rem; height: 4.5rem; border-radius: 9999px; overflow: hidden; flex: none; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 4px rgba(212, 77, 77, 0.25); }
+.rx-gal-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rx-gal-ini { width: 100%; height: 100%; display: grid; place-items: center; background: rgba(212, 77, 77, 0.10); color: #D44D4D; font-size: 1.375rem; font-weight: 700; }
+.rx-gal-in { width: 2.25rem; height: 2.25rem; border-radius: 9999px; display: grid; place-items: center; color: #627288; background: #F6F7FA; border: 1px solid #EDF0F5; transition: color .2s ease, background-color .2s ease, border-color .2s ease; }
+.rx-gal-in svg { width: 1rem; height: 1rem; }
+.rx-gal-in:hover { color: #FFFFFF; background: #D44D4D; border-color: #D44D4D; }
+.rx-gal-in:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+.rx-gal-card h3 { margin: 0; font-size: 1.125rem !important; font-weight: 700; color: #131A27; }
+.rx-gal-esp { margin: .25rem 0 1rem; font-size: .875rem; font-weight: 600; color: #D44D4D; }
+.rx-gal-areas { list-style: none; margin: 0 0 1rem; padding: 0; display: flex; flex-wrap: wrap; gap: .375rem; }
+.rx-gal-areas li { padding: .25rem .625rem; border-radius: 9999px; background: #F6F7FA; border: 1px solid #EDF0F5; font-size: .75rem; font-weight: 500; color: #283043; }
+.rx-gal-seg { margin: auto 0 0; padding-top: .875rem; border-top: 1px solid #EDF0F5; font-size: .8125rem; color: #495669; }
+.rx-gal-seg span { display: block; margin-bottom: .125rem; font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8898B0; }
+@media (hover: hover) { .rx-gal-card:hover { transform: translateY(-4px); border-color: rgba(212, 77, 77, 0.22); box-shadow: 0 8px 24px rgba(13, 17, 25, 0.08), 0 20px 48px rgba(13, 17, 25, 0.06); } }
+@media (prefers-reduced-motion: reduce) { .rx-gal-card { transition: none; } .rx-gal-card:hover { transform: none; } }
+@media (max-width: 1023px) { .rx-gal-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639px) { .rx-gal-grade { grid-template-columns: 1fr; gap: .75rem; } .rx-gal-card { padding: 1.25rem; border-radius: 20px; } }
