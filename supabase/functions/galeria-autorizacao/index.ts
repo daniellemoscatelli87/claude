@@ -1,0 +1,100 @@
+// Autorização de exibição do perfil na Galeria de profissionais (pública; o token pessoal do e-mail identifica o parceiro).
+// { acao: "ver", t }  devolve só o que aparece na galeria (nome, cargo, áreas, segmentos, LinkedIn) e a decisão atual.
+// { acao: "decidir", t, decisao: "autorizado" | "recusado", cargo, linkedin, foto?, remover_foto? }
+//     grava a decisão no cadastro e no histórico imutável (texto exibido + versão + dados + navegador).
+//     foto: imagem JPEG em base64 (a página já recorta em quadrado e reduz; aqui só JPEG de até 1,5 MB).
+//     Ao não autorizar, a foto enviada é apagada.
+import { createClient } from "npm:@supabase/supabase-js@2.45.4";
+
+// Versão e texto exatos apresentados na página de autorização. Ao mudar o texto, mude a versão.
+const TEXTO_VERSAO = "galeria-v2-2026-11-14";
+const TEXTO = "Autorizo a Dani Moscatelli | Experience Design Studio a exibir, na Galeria de profissionais do site danimoscatelli.com.br, " +
+  "o meu nome, cargo, áreas de atuação, segmentos, link do LinkedIn e foto, conforme a prévia apresentada. " +
+  "E-mail, telefone e cidade não serão exibidos. Posso retirar esta autorização a qualquer momento pelo mesmo link ou pelo e-mail " +
+  "contato@danimoscatelli.com.br, e também solicitar a troca ou a exclusão da foto por esse e-mail.";
+
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), { status, headers: { ...CORS, "Content-Type": "application/json" } });
+const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const limpa = (s: unknown) => String(s ?? "").replace(/\.\s*$/, "").trim();
+const linkedinOk = (u: string) => !u || /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\//i.test(u);
+// Link do LinkedIn informado no cadastro: aceita "linkedin.com/in/..." ou "www.linkedin.com/..." e completa com https://.
+const normalizaLinkedin = (u: unknown) => { const v = String(u ?? "").trim(); return /^(www\.)?([a-z]{2,3}\.)?linkedin\.com\//i.test(v) ? "https://" + v.replace(/^https?:\/\//i, "") : v.replace(/^http:\/\//i, "https://"); };
+const BUCKET = "galeria";
+const caminhoDaUrl = (u: string | null) => { const m = (u ?? "").match(/\/object\/public\/galeria\/(.+)$/); return m ? decodeURIComponent(m[1]) : null; };
+async function apagarFoto(url: string | null) { const c = caminhoDaUrl(url); if (c) await admin.storage.from(BUCKET).remove([c]); }
+function lerFoto(b64: unknown): Uint8Array | null {
+  const s = String(b64 ?? "").replace(/^data:image\/jpeg;base64,/, "");
+  if (!s || s.length > 2_100_000) return null;
+  let bytes: Uint8Array;
+  try { bytes = Uint8Array.from(atob(s), (c) => c.charCodeAt(0)); } catch { return null; }
+  return bytes.length > 100 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff ? bytes : null;
+}
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
+  if (req.method !== "POST") return json({ error: "Método não permitido" }, 405);
+  const p = await req.json().catch(() => ({}));
+  const t = String(p.t ?? "");
+  if (!UUID.test(t)) return json({ error: "Link inválido. Use o link que está no e-mail recebido." }, 400);
+  const { data: r, error } = await admin.from("cadastros")
+    .select("id, nome, principal_especializacao, areas_experiencia, segmentos, linkedin, galeria_status, galeria_cargo, galeria_linkedin, galeria_foto_url")
+    .eq("galeria_token", t).maybeSingle();
+  if (error) { console.error(error.message); return json({ error: "Não foi possível carregar agora. Tente novamente." }, 500); }
+  if (!r) return json({ error: "Link inválido. Use o link que está no e-mail recebido." }, 404);
+
+  const esp = limpa(r.principal_especializacao);
+  const dados = {
+    nome: r.nome,
+    cargo: r.galeria_cargo ?? (esp.length <= 60 ? esp : ""),
+    areas: (r.areas_experiencia ?? []).map(limpa),
+    segmentos: (r.segmentos ?? []).map(limpa),
+    linkedin: r.galeria_linkedin ?? (linkedinOk(normalizaLinkedin(r.linkedin)) ? normalizaLinkedin(r.linkedin) : ""),
+    foto_url: r.galeria_foto_url ?? "",
+  };
+  if (p.acao === "ver") return json({ ...dados, status: r.galeria_status, texto: TEXTO, texto_versao: TEXTO_VERSAO });
+  if (p.acao !== "decidir") return json({ error: "Ação inválida" }, 400);
+
+  const decisao = p.decisao === "autorizado" ? "autorizado" : p.decisao === "recusado" ? "recusado" : "";
+  if (!decisao) return json({ error: "Escolha uma opção." }, 400);
+  const cargo = String(p.cargo ?? "").trim().slice(0, 60);
+  const linkedin = normalizaLinkedin(p.linkedin).slice(0, 300);
+  if (decisao === "autorizado" && !cargo) return json({ error: "Informe o cargo que vai aparecer no seu perfil." }, 400);
+  if (!linkedinOk(linkedin)) return json({ error: "Informe um link do LinkedIn começando com https://www.linkedin.com/" }, 400);
+
+  // Foto: nova (substitui e apaga a anterior), removida a pedido, ou apagada quando não autoriza.
+  let fotoUrl: string | null = r.galeria_foto_url;
+  if (decisao === "recusado" || p.remover_foto) { await apagarFoto(fotoUrl); fotoUrl = null; }
+  if (decisao === "autorizado" && p.foto) {
+    const bytes = lerFoto(p.foto);
+    if (!bytes) return json({ error: "Não foi possível usar esta imagem. Envie uma foto em JPG, PNG ou WEBP." }, 400);
+    const caminho = `${r.id}/${crypto.randomUUID()}.jpg`;
+    const { error: eUp } = await admin.storage.from(BUCKET).upload(caminho, bytes, { contentType: "image/jpeg", upsert: false, cacheControl: "300" });
+    if (eUp) { console.error(eUp.message); return json({ error: "Não foi possível enviar a foto agora. Tente novamente." }, 500); }
+    await apagarFoto(fotoUrl);
+    fotoUrl = admin.storage.from(BUCKET).getPublicUrl(caminho).data.publicUrl;
+  }
+
+  const agora = new Date().toISOString();
+  const exibidos = { ...dados, cargo, linkedin, foto_url: fotoUrl ?? "" };
+  const { error: e1 } = await admin.from("galeria_autorizacoes").insert({
+    cadastro_id: r.id, decisao, texto_versao: TEXTO_VERSAO, texto: TEXTO,
+    dados_exibidos: decisao === "autorizado" ? exibidos : {},
+    user_agent: (req.headers.get("user-agent") ?? "").slice(0, 300),
+  });
+  if (e1) { console.error(e1.message); return json({ error: "Não foi possível registrar agora. Tente novamente." }, 500); }
+  const { error: e2 } = await admin.from("cadastros").update({
+    galeria_status: decisao, galeria_decidido_em: agora,
+    galeria_cargo: decisao === "autorizado" ? cargo : r.galeria_cargo,
+    galeria_linkedin: decisao === "autorizado" ? (linkedin || null) : r.galeria_linkedin,
+    galeria_foto_url: fotoUrl,
+  }).eq("id", r.id);
+  if (e2) { console.error(e2.message); return json({ error: "Não foi possível registrar agora. Tente novamente." }, 500); }
+  return json({ ok: true, status: decisao, foto_url: fotoUrl ?? "" });
+});

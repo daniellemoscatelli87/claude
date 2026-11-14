@@ -1387,3 +1387,6 @@ main + footer.relative { padding-top: 6rem !important; }
 /* Convite com a mesma largura do painel "Programa Projeto Piloto" */
 @media (max-width: 639px) { #inscricao .convite-card { margin-inline: .5rem; } }
 @media (min-width: 640px) and (max-width: 1023px) { #inscricao .convite-card { margin-inline: 1rem; } }
+/* Títulos dos lados do painel um pouco menores */
+.pz-painel .pz-lado h3 { font-size: 1.3125rem !important; }
+@media (max-width: 639px) { .pz-painel .pz-lado h3 { font-size: 1.125rem !important; } }
