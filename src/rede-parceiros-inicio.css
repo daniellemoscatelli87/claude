@@ -1266,3 +1266,7 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
   .rp-flu-txt strong { color: #131A27; }
   .rp-flu-txt span { color: #283043 !important; font-weight: 500; }
 }
+/* bolinhas de status: tamanho fixo (não encolhem) e mais visíveis sobre o vidro */
+@media (min-width: 1024px) {
+  .rp-flu-txt i { display: block; flex: none; width: 7px; height: 7px; min-width: 7px; border-radius: 50%; background: var(--cor); box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85); }
+}
