@@ -109,20 +109,20 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   if (!quadro) return;
   const STATUS = ['A iniciar', 'Em andamento', 'Entregue'];
   const projetos = [
-    { tipo: 'Pesquisa com pacientes', av: 3, s: 1 },
-    { tipo: 'Jornada de check-in de hotel', av: 2, s: 0 },
-    { tipo: 'App de matrícula escolar', av: 1, s: 1 },
-    { tipo: 'Painel de vendas do varejo', av: 4, s: 2 },
-    { tipo: 'Onboarding de conta digital', av: 5, s: 0 },
-    { tipo: 'Automação com IA na fábrica', av: 2, s: 2 },
-    { tipo: 'Treinamento da equipe de atendimento', av: 5, s: 1 },
+    { tipo: 'Pesquisa com pacientes', av: 3, cargo: 'UX Researcher', s: 1 },
+    { tipo: 'Jornada de check-in de hotel', av: 2, cargo: 'Service Designer', s: 0 },
+    { tipo: 'App de matrícula escolar', av: 1, cargo: 'UX/UI Designer', s: 1 },
+    { tipo: 'Painel de vendas do varejo', av: 4, cargo: 'Analista de Dados', s: 2 },
+    { tipo: 'Onboarding de conta digital', av: 5, cargo: 'Product Designer', s: 0 },
+    { tipo: 'Automação com IA na fábrica', av: 2, cargo: 'Especialista em IA', s: 2 },
+    { tipo: 'Treinamento da equipe de atendimento', av: 5, cargo: 'Especialista em CX', s: 1 },
   ];
   const cols = Array.from(quadro.querySelectorAll<HTMLElement>('.rx-kb-col'));
   const listas = cols.map((c) => c.querySelector<HTMLUListElement>('.rx-kb-cards')!);
   const cards = projetos.map((p) => {
     const li = document.createElement('li');
     li.className = 'rx-kb-card';
-    li.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="32" height="32" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-status"></span><span class="rx-kb-barra" aria-hidden="true"><i></i></span></span>`;
+    li.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="32" height="32" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-cargo">${p.cargo}</span><span class="rx-kb-status"></span><span class="rx-kb-barra" aria-hidden="true"><i></i></span></span>`;
     return li;
   });
   // progresso de cada projeto: A iniciar = 0, Em andamento = avança aos poucos, Entregue = 100
@@ -144,7 +144,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   quadro.after(unico);
   const mostrarUnico = (i: number, animar: boolean) => {
     const p = projetos[i];
-    unico.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="48" height="48" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-status" data-s="${p.s}">${STATUS[p.s]}</span></span>`;
+    unico.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="48" height="48" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-cargo">${p.cargo}</span><span class="rx-kb-status" data-s="${p.s}">${STATUS[p.s]}</span></span>`;
     if (animar && unico.offsetParent) unico.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
   };
   let unicoVez = 0; // no celular o card percorre os projetos em sequência: a cada troca, outro projeto e outro profissional

@@ -1136,3 +1136,14 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 /* Citação: texto em Plus Jakarta Sans; só as palavras em vermelho na fonte manuscrita (Fraunces itálico) */
 .rx-citacao p { font-family: "Plus Jakarta Sans", sans-serif !important; font-style: normal !important; font-weight: 500 !important; font-size: 1rem !important; line-height: 1.6 !important; color: #495669 !important; }
 .rx-citacao .rp-destaque { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.125em; }
+/* Cargo do profissional nos cards de projeto */
+.rx-kb-cargo { display: block; margin-top: -.125rem; font-size: .6875rem; font-weight: 500; line-height: 1.3; color: #627288; }
+.rx-kb-unico .rx-kb-cargo { font-size: .75rem; }
+@media (min-width: 840px) { .rx-kb-cards { height: 21.25rem !important; } }
+@media (min-width: 640px) and (max-width: 839px) { .rx-kb-cards { height: 26rem !important; } }
+/* FAQ "Antes de se cadastrar": selo, título e descrição centralizados acima dos accordions */
+.rx-saber-grade { display: flex !important; flex-direction: column; align-items: center; gap: 2.5rem !important; }
+.rx-saber-cab { text-align: center !important; max-width: 40rem; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+.rx-saber-cab h2, .rx-saber-cab .rp-texto { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }
+.rx-saber-grade .rx-acc { width: 100%; max-width: 48rem; margin: 0 auto; }
+@media (max-width: 1023px) { .rx-saber-grade { gap: 2rem !important; } }
