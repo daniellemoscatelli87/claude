@@ -241,6 +241,15 @@ html.embutido .nav-bar .modal-obs span[aria-hidden] { color: #D44D4D; }
   .options { display: grid; gap: 8px; }
   .group-title { font-size: 13px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; margin: 18px 0 4px; }
   .group-title:first-child { margin-top: 4px; }
+  .opt-com-info { border: 1px solid var(--line); border-radius: 10px; background: var(--card); margin-bottom: 8px; }
+  .opt-com-info .opt { border: 0; margin: 0; }
+  .opt-info { padding: 0 14px 10px 44px; }
+  .opt-info summary { cursor: pointer; width: fit-content; font-size: 13px; font-weight: 600; color: #D44D4D; list-style: none; }
+  .opt-info summary::-webkit-details-marker { display: none; }
+  .opt-info summary::after { content: " ▾"; }
+  .opt-info[open] summary::after { content: " ▴"; }
+  .opt-info .info { margin: 8px 0 0; }
+  .aut-direitos { margin: 4px 0 0; font-size: 13px; line-height: 1.55; color: var(--muted); }
   .opt {
     display: flex; align-items: flex-start; gap: 10px;
     padding: 10px 12px;
@@ -649,18 +658,19 @@ const SECTIONS = [
     ]},
     { id: "autorizacoes", n: 39, label: "Autorizações", type: "checkbox", required: true, mustInclude: AUT_DADOS,
       errMsg: "Para fazer parte da rede, marque a autorização de uso dos seus dados.",
-      help: "Leia o que cada autorização permite e marque as que você concede.",
-      infoHtml: "<p><strong>Uso dos dados (obrigatório para fazer parte da rede)</strong></p><ul>" +
-        "<li>Armazenar e usar os dados profissionais deste formulário para organizar a rede de parceiros e analisar competências.</li>" +
-        "<li>Entrar em contato sobre possíveis oportunidades de colaboração.</li>" +
-        "<li>Os dados não serão divulgados publicamente nem compartilhados com terceiros para finalidades incompatíveis com as descritas aqui.</li></ul>" +
-        "<p><strong>Exibição na Galeria de Profissionais (opcional)</strong></p><ul>" +
-        "<li>Exibir na galeria do site danimoscatelli.com.br: nome, cargo, áreas de atuação, segmentos, link do LinkedIn e foto.</li>" +
-        "<li>E-mail, telefone e cidade não são exibidos.</li>" +
-        "<li>Você recebe por e-mail um link para enviar sua foto e revisar como o perfil vai aparecer. Sem foto enviada, usamos a do seu LinkedIn.</li></ul>" +
-        "<p><strong>Seus direitos</strong></p><ul>" +
-        "<li>Pedir acesso, correção ou exclusão dos dados e retirar qualquer autorização a qualquer momento pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação.</li>" +
-        "<li>Leia a <a href=\"/privacidade/\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a> completa.</li></ul>",
+      help: "Marque as autorizações que você concede. Toque em “O que estou autorizando” para ver os detalhes.",
+      // o que cada autorização permite fica recolhido junto da sua caixa; a pessoa expande se quiser ler
+      optionInfo: {
+        [AUT_DADOS]: "<ul>" +
+          "<li>Armazenar e usar os dados profissionais deste formulário para organizar a rede de parceiros e analisar competências.</li>" +
+          "<li>Entrar em contato sobre possíveis oportunidades de colaboração.</li>" +
+          "<li>Os dados não serão divulgados publicamente nem compartilhados com terceiros para finalidades incompatíveis com as descritas aqui.</li></ul>",
+        [AUT_GALERIA]: "<ul>" +
+          "<li>Exibir na galeria do site danimoscatelli.com.br: nome, especialidade, áreas de atuação, segmentos, link do LinkedIn e foto.</li>" +
+          "<li>E-mail, telefone e cidade não são exibidos.</li>" +
+          "<li>Você recebe por e-mail um link para enviar sua foto e revisar como o perfil vai aparecer. Sem foto enviada, usamos a do seu LinkedIn.</li></ul>",
+      },
+      afterHtml: "<p class=\"aut-direitos\">Você pode pedir acesso, correção ou exclusão dos dados e retirar qualquer autorização a qualquer momento pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação. Leia a <a href=\"/privacidade/\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a> completa.</p>",
       options: [AUT_DADOS, AUT_GALERIA] },
   ]},
   { title: "Comunidade de networking", n: "Seção final", questions: [
@@ -679,7 +689,8 @@ const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&
 const isOther = (o) => /^Outr[oa]s?\b/.test(o);
 function optionHtml(q, value) {
   const type = q.type === "checkbox" ? "checkbox" : "radio";
-  const opt = `<label class="opt"><input type="${type}" name="${q.id}" value="${esc(value)}"><span>${esc(value)}</span></label>`;
+  let opt = `<label class="opt"><input type="${type}" name="${q.id}" value="${esc(value)}"><span>${esc(value)}</span></label>`;
+  if (q.optionInfo && q.optionInfo[value]) opt = `<div class="opt-com-info">${opt}<details class="opt-info"><summary>O que estou autorizando</summary><div class="info">${q.optionInfo[value]}</div></details></div>`;
   if (!isOther(value)) return opt;
   return opt + `<div class="other hidden" data-other="${q.id}"><input type="text" name="${q.id}__outro" maxlength="200" placeholder="Qual? Escreva aqui" aria-label="Descreva a opção ${esc(value.replace(/\.$/, ""))}"></div>`;
 }
@@ -1001,7 +1012,9 @@ function payload() {
   // LGPD: guarda junto do cadastro o texto exato que a pessoa viu e o que marcou (a data do aceite é registrada pelo servidor).
   if (data.autoriza_dados) {
     const q = SECTIONS.flatMap(s => s.questions).find(q => q.id === "autorizacoes");
-    const tmp = document.createElement("div"); tmp.innerHTML = q.infoHtml.replace(/<\/(p|li)>/g, "</$1>\n");
+    // texto exato que a pessoa viu: cada autorização com os seus detalhes e a nota de direitos
+    const tmp = document.createElement("div");
+    tmp.innerHTML = (Object.entries(q.optionInfo).map(([k, v]) => "<p>" + esc(k) + "</p>" + v).join("") + q.afterHtml).replace(/<\/(p|li)>/g, "</$1>\n");
     data.consentimento_texto = q.label + "\n\n" + tmp.textContent.trim() + "\n\nMarcado:\n- " + aut.join("\n- ");
   }
   data.outros = {};
