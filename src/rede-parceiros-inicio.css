@@ -1065,3 +1065,39 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-orbita-area { margin-top: 0 !important; }
 .rx-orbita-area { margin-top: 3rem !important; }
 @media (max-width: 1023px) { .rx-orbita-area { margin-top: 2.5rem !important; } }
+/* modelo com a foto nova, cerca de 5% menor */
+@media (min-width: 1280px) { .rx-modelo-col { width: 393px; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .rx-modelo-col { width: 351px; } }
+/* Convite + rodapé no padrão do Projeto Piloto: card centralizado que avança sobre o rodapé;
+   aqui o rodapé é sólido em cinza (Graphite 500 #495669), sem gradiente */
+.rx-fechamento { position: relative; z-index: 2; padding: 1.5rem 0 0 !important; background: linear-gradient(to bottom, transparent calc(100% - 9rem), #495669 calc(100% - 9rem)) !important; }
+.rx-fechamento > .rp-container { max-width: 64rem !important; }
+.rx-fechamento .rp-carta { border-radius: 24px !important; border: 1px solid rgba(19, 26, 39, 0.09) !important; background: #FFFFFF !important; padding: 3rem !important; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05) !important; transition: box-shadow .2s ease; }
+.rx-fechamento .rp-carta:hover { box-shadow: 0 8px 24px rgba(13, 17, 25, 0.09), 0 20px 48px rgba(13, 17, 25, 0.07) !important; }
+@media (max-width: 767px) {
+  .rx-fechamento { background: linear-gradient(to bottom, transparent calc(100% - 6rem), #495669 calc(100% - 6rem)) !important; }
+  .rx-fechamento .rp-carta { padding: 2rem 1.5rem !important; }
+}
+.rx-rodape { background: #495669 !important; }
+.rx-rodape .fundo-gradiente { display: none !important; }
+.rx-rodape .rodape-base { color: #D6DCE6 !important; }
+.rx-rodape .rodape-base span[aria-hidden] { color: rgba(255, 255, 255, .4) !important; }
+.rx-rodape .rodape-topo { border-bottom-color: rgba(255, 255, 255, 0.16) !important; }
+.rx-rodape .rodape-ds { color: #FFFFFF !important; text-decoration-color: rgba(255, 255, 255, .5) !important; }
+/* Convite com a mesma largura da folha branca de cima (.rx-folha) */
+.rx-fechamento > .rp-container { max-width: 1400px !important; padding-left: 0 !important; padding-right: 0 !important; margin: 0 auto !important; }
+@media (min-width: 640px) { .rx-fechamento > .rp-container { margin-left: 1rem !important; margin-right: 1rem !important; } }
+@media (min-width: 1024px) { .rx-fechamento > .rp-container { margin-left: 1.5rem !important; margin-right: 1.5rem !important; } }
+@media (min-width: 1448px) { .rx-fechamento > .rp-container { margin-left: auto !important; margin-right: auto !important; } }
+/* Rodapé sólido em cinza claro (Graphite 100 #D6DCE6), versão clara do rodapé (logo e textos escuros) */
+.rx-fechamento { background: linear-gradient(to bottom, transparent calc(100% - 9rem), #D6DCE6 calc(100% - 9rem)) !important; }
+@media (max-width: 767px) { .rx-fechamento { background: linear-gradient(to bottom, transparent calc(100% - 6rem), #D6DCE6 calc(100% - 6rem)) !important; } }
+.rx-rodape { background: #D6DCE6 !important; }
+.rx-rodape .rodape-base { color: #495669 !important; }
+.rx-rodape .rodape-base span[aria-hidden] { color: #8898B0 !important; }
+.rx-rodape .rodape-topo { border-bottom-color: rgba(19, 26, 39, 0.12) !important; }
+.rx-rodape .rodape-ds { color: #283043 !important; text-decoration-color: rgba(40, 48, 67, .4) !important; }
+/* Convite com o mesmo arredondamento da folha branca de cima */
+.rx-fechamento .rp-carta { border-radius: 36px !important; }
+@media (min-width: 640px) { .rx-fechamento .rp-carta { border-radius: 48px !important; } }
+@media (min-width: 1024px) { .rx-fechamento .rp-carta { border-radius: 56px !important; } }
