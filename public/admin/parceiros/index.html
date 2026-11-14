@@ -738,13 +738,13 @@ function candidaturas(rows) {
     const td = (child, cls) => { const c = el("td", cls); typeof child === "string" ? (c.textContent = child || "–") : c.appendChild(child); tr.appendChild(c); return c; };
     const quem = el("div", "tp-quem"); const tx = el("div", "tp-txt");
     const a = el("a", "tp-nome", r.nome || "Sem nome"); a.href = href; a.addEventListener("click", (e) => e.stopPropagation());
-    tx.append(a, el("div", "tp-sub", r.principal_especializacao ? clean(r.principal_especializacao) : ""), el("div", "tp-sub", r.email || ""));
+    tx.append(a, el("div", "tp-sub", r.principal_especializacao ? clean(r.principal_especializacao) : ""));
     quem.append(avatar(r), tx); td(quem, "tp-col-quem");
     const nv = el("div"); nv.append(el("div", "tp-forte", NIVEL[r.tempo_especialidade] || "–"), el("div", "tp-sub", r.tempo_especialidade ? clean(r.tempo_especialidade) : "")); td(nv);
     td(areasAtuacao(r).join(" · ") || "–");
     td(PJ[r.atuacao_pj] || (r.atuacao_pj ? clean(r.atuacao_pj) : "–"));
     const dp = el("div"); dp.append(el("div", null, DISP[r.disponibilidade_colaborar] || (r.disponibilidade_colaborar ? clean(r.disponibilidade_colaborar) : "–")), el("div", "tp-sub", horas(r.horas_semanais))); td(dp);
-    const [gt, gc] = galStatus(r); const gl = el("div"); gl.append(el("span", "tp-gal " + gc, gt), el("div", "tp-sub", r.galeria_convite_em ? "Convite em " + Admin.fmtDay(r.galeria_convite_em) : "")); td(gl);
+    const [gt, gc] = galStatus(r); td(el("span", "tp-gal " + gc, gt));
     const pub = publicado(r); td(el("span", "gal " + (pub ? "sim" : "nao"), pub ? "Sim" : "Não"));
     td(Admin.fmtDay(r.created_at), "tp-data");
     tb.appendChild(tr);
