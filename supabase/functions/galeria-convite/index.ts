@@ -43,8 +43,9 @@ function montar(nome: string, token: string) {
   const paragrafos = [
     ola,
     "Obrigada por fazer parte da Rede de Parceiros da Dani Moscatelli | Experience Design Studio.",
-    "Vamos abrir no site uma Galeria de profissionais, para apresentar especialistas independentes que colaboram com desafios do Studio e de empresas parceiras. Gostaríamos de incluir o seu perfil profissional.",
-    "Seu perfil só será exibido com a sua autorização. No link abaixo você vê exatamente como ele vai aparecer (nome, cargo, áreas de atuação, segmentos, LinkedIn e foto do perfil do LinkedIn) e decide se autoriza ou não. E-mail, telefone e cidade nunca são exibidos.",
+    "Vamos abrir no site uma Galeria de profissionais, para apresentar os especialistas independentes que colaboram com desafios do Studio e de empresas parceiras. Gostaríamos de incluir o seu perfil profissional.",
+    "A ideia é dar visibilidade ao seu trabalho. O perfil funciona como uma vitrine profissional para empresas que procuram especialistas e pode gerar convites para novos desafios. Ao mesmo tempo, fortalece o ecossistema: mostra a diversidade de competências que reunimos e aproxima os profissionais da rede, ampliando as oportunidades de colaboração para todos.",
+    "Seu perfil só será exibido com a sua autorização. No link abaixo você vê exatamente como ele vai aparecer (nome, cargo, áreas de atuação, segmentos, LinkedIn e foto) e decide se autoriza ou não. E-mail, telefone e cidade nunca são exibidos.",
     "Você pode mudar de ideia quando quiser pelo mesmo link.",
   ];
   const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
