@@ -77,6 +77,25 @@ html.embutido .modal-fechar:hover { background: rgba(255, 255, 255, 0.15); color
 html.embutido .modal-fechar:focus-visible { box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7); }
 html.embutido .modal-topo .progress { background: rgba(255, 255, 255, 0.3); }
 html.embutido .modal-topo .progress > div { background: #FFFFFF; }
+/* cabeçalho da janela em cinza claro (Graphite 50), "Rede de Parceiros" em vermelho; a base esvai em degradê para o branco
+   (sem linha divisória). No celular, some ao rolar para baixo e volta ao rolar para cima. */
+html.embutido .modal-topo { background: linear-gradient(to bottom, #EDF0F5 0%, #EDF0F5 72%, rgba(255, 255, 255, 0) 100%) !important; border-bottom: 0 !important; padding-bottom: 1.5rem !important; }
+html.embutido .modal-topo h1 { color: #131A27 !important; }
+html.embutido .modal-destaque { color: #D44D4D !important; }
+html.embutido .modal-obs, html.embutido .modal-topo .step-label { color: #495669 !important; }
+html.embutido .modal-obs span[aria-hidden] { color: #D44D4D !important; }
+html.embutido .modal-fechar { color: #495669 !important; }
+html.embutido .modal-fechar:hover { background: rgba(19, 26, 39, 0.06) !important; color: #131A27 !important; }
+html.embutido .modal-fechar:focus-visible { box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45) !important; }
+html.embutido .modal-topo .progress { background: rgba(19, 26, 39, 0.10) !important; }
+html.embutido .modal-topo .progress > div { background: #D44D4D !important; }
+@media (max-width: 767px) {
+  html.embutido:not(.modal-direto) .modal-topo { position: absolute !important; top: 0; left: 0; right: 0; }
+  html.embutido:not(.modal-direto) .wrap { padding-top: calc(var(--topo-h, 120px) + 4px) !important; }
+  html.embutido .modal-topo { transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1); }
+  html.embutido .modal-topo.escondido { transform: translateY(-100%); }
+}
+@media (prefers-reduced-motion: reduce) { html.embutido .modal-topo { transition: none; } }
 /* "Seção N" como selo (mesmo padrão da tag do hero) */
 h2 small { display: flex !important; align-items: center; gap: 8px; width: fit-content; margin-bottom: 12px !important; padding: 4px 12px; border-radius: 9999px;
   background: #FDF2F2; border: 1px solid #F9DADA; color: #D44D4D; font-size: 12px; font-weight: 600; letter-spacing: .08em; line-height: 1.5; }
@@ -319,6 +338,14 @@ html.embutido .nav-bar .modal-obs span[aria-hidden] { color: #D44D4D; }
 <!-- @cabecalho:parceiros -->
 <div class="modal-topo"><div class="modal-topo-linha"><div><h1>Cadastro na <span class="modal-destaque">Rede de Parceiros</span></h1><p class="modal-obs">Campos marcados com <span aria-hidden="true">*</span><span class="sr-only">asterisco</span> são obrigatórios.</p></div><button type="button" class="modal-fechar" aria-label="Fechar cadastro"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div></div>
 <script>(function(){var b=document.querySelector('.modal-fechar');if(!b)return;function fechar(){if(window.self!==window.top){try{window.parent.postMessage('dm-fechar-cadastro','*')}catch(e){}return;}try{if(document.referrer&&new URL(document.referrer).origin===location.origin&&history.length>1){history.back();return}}catch(e){}location.href='/rede-parceiros/';}b.addEventListener('click',fechar);document.addEventListener('DOMContentLoaded',function(){var pb=document.getElementById('progressBox'),topo=document.querySelector('.modal-topo');if(pb&&topo)topo.appendChild(pb);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!document.querySelector('dialog[open]'))fechar();});})();</script>
+<script>document.addEventListener('DOMContentLoaded',function(){var h=document.documentElement;if(!h.classList.contains('embutido'))return;var topo=document.querySelector('.modal-topo');if(!topo)return;
+var celular=window.matchMedia('(max-width: 767px)');var noQuadro=!h.classList.contains('modal-direto');var rolador=noQuadro?document.querySelector('.wrap'):window;if(!rolador)return;
+function medir(){h.style.setProperty('--topo-h',topo.offsetHeight+'px');}medir();window.addEventListener('resize',medir);if('ResizeObserver' in window)new ResizeObserver(medir).observe(topo);
+var y0=0,ag=false;function pos(){return noQuadro?rolador.scrollTop:window.scrollY;}
+function f(){ag=false;var y=pos();if(!celular.matches||y<topo.offsetHeight){topo.classList.remove('escondido');y0=y;return;}var d=y-y0;if(d>6)topo.classList.add('escondido');else if(d<-6)topo.classList.remove('escondido');if(Math.abs(d)>6)y0=y;}
+rolador.addEventListener('scroll',function(){if(!ag){ag=true;requestAnimationFrame(f);}},{passive:true});
+topo.addEventListener('focusin',function(){topo.classList.remove('escondido');});});</script>
+
 <div class="wrap">
 
   <div id="progressBox" class="hidden">
