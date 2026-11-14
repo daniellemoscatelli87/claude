@@ -22,7 +22,7 @@
   .gal-mini-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
   .gal-mini-tags li { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: #F6F7FA; border: 1px solid var(--line); }
   .gal-perfil-info { margin: 10px 0 0; font-size: 13px; }
-  .gal-excluir-box { display: flex; justify-content: flex-end; }
+  .gal-acoes { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
   .gal-excluir { color: #b82828; border-color: #f3c9c9; }
   .gal-excluir:hover { background: #fdf2f2; }
   .cm-gal { margin-bottom: 16px; }
@@ -922,6 +922,8 @@ function galeriaCard(data) {
   const c = el("div", "card lgpd gal-card");
   // título à esquerda e, no canto superior direito, o botão principal "Enviar convite" (quando cabe enviar)
   const topo = el("div", "gal-topo"); topo.appendChild(el("div", "sec", "Galeria de Profissionais")); c.appendChild(topo);
+  // ações no canto superior direito: "Excluir perfil da galeria" à esquerda do "Reenviar convite"
+  const acoes = el("div", "gal-acoes"); topo.appendChild(acoes);
   const st = data.galeria_status;
   const dl = el("dl", "gal-dl");
   const linha = (rotulo, valor) => { dl.append(el("dt", null, rotulo)); const dd = el("dd"); typeof valor === "string" ? (dd.textContent = valor) : dd.appendChild(valor); dl.append(dd); return dd; };
@@ -943,7 +945,7 @@ function galeriaCard(data) {
       Admin.log("Enviou o convite da galeria para " + (data.nome || "parceiro"));
       Admin.toast("Convite enviado para " + data.email + ".");
     });
-    topo.appendChild(bConv);
+    acoes.appendChild(bConv);
   }
   linha("Convite enviado", conv);
   const statusDd = linha("Status", st === "autorizado" ? "Exibição autorizada" : st === "recusado" ? "Exibição não autorizada" : data.galeria_convite_em ? "Aguardando resposta" : "Ainda não convidado");
@@ -1006,7 +1008,7 @@ function galeriaCard(data) {
       Admin.toast("Perfil excluído da galeria. Você já pode reenviar o convite.");
       c.replaceWith(galeriaCard(data));
     });
-    const rod = el("div", "gal-excluir-box"); rod.appendChild(bExc); c.appendChild(rod);
+    acoes.prepend(bExc);
   }
   const hist = el("details", "gal-hist"); hist.appendChild(el("summary", null, "Histórico de decisões"));
   const lista = el("div"); lista.appendChild(el("p", "muted", "Carregando…")); hist.appendChild(lista); c.appendChild(hist);
