@@ -1443,3 +1443,5 @@ main + footer.relative { padding-top: 6rem !important; }
   .divisao-hero { position: relative; z-index: 1; background: transparent !important; margin-top: -1.75rem; }
   .divisao-hero .divisao-hero-cartao { border-radius: 28px 28px 0 0 !important; background: #FFFFFF !important; overflow: hidden !important; }
 }
+/* celular e tablet: sem o logo no cabeçalho desta página (só o botão do menu) */
+@media (max-width: 1023px) { .cabecalho-sobre-hero .site-header header > a:first-child { visibility: hidden !important; } }
