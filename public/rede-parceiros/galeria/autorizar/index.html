@@ -55,8 +55,6 @@
   .foto-campo { display: grid; gap: .5rem; margin-bottom: 1rem; }
   .foto-rot { display: grid; gap: .375rem; font-size: .875rem; font-weight: 600; }
   .foto-rot small { font-weight: 400; color: #627288; }
-  .foto-ok { margin: 0; padding: .625rem .875rem; border-radius: 12px; background: #F6F7FA; border: 1px solid #E4E6EC; font-size: .875rem; color: #283043; }
-  .foto-ok::before { content: "✓"; display: inline-grid; place-items: center; width: 1.125rem; height: 1.125rem; margin-right: .5rem; border-radius: 9999px; background: #D44D4D; color: #FFFFFF; font-size: .6875rem; font-weight: 700; }
   .recorte { display: grid; gap: .75rem; justify-items: center; padding: 1rem; border: 1px solid #E4E6EC; border-radius: 16px; background: #FFFFFF; }
   .recorte-dica { margin: 0; font-size: .875rem; color: #495669; text-align: center; }
   .recorte-area { position: relative; width: min(280px, 100%); aspect-ratio: 1; overflow: hidden; border-radius: 12px; background: #EDF0F5; cursor: grab; touch-action: none; user-select: none; }
@@ -134,7 +132,6 @@
           <button type="button" class="ic-btn" id="foto-remover" title="Excluir foto"><span class="sr-only">Excluir foto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
         </div>
       </div>
-      <p class="foto-ok" id="foto-ok" role="status" hidden></p>
       <div class="recorte" id="recorte" hidden>
         <p class="recorte-dica">Arraste a foto para enquadrar o rosto no círculo e use o zoom se precisar.</p>
         <div class="recorte-area" id="rec-area" tabindex="0" aria-label="Área de recorte da foto. Use as setas do teclado para mover."><img id="rec-img" alt="" draggable="false"></div>
@@ -238,13 +235,12 @@
     })();
     $("rec-usar").addEventListener("click", function () {
       fotoNova = recCortar(600); removerFoto = false; nomeArquivo = nomePendente; mostrarFoto(fotoNova); $("recorte").hidden = true;
-      $("foto-ok").textContent = "Foto anexada. Confira a prévia do seu perfil abaixo; a foto é enviada quando você confirmar a autorização.";
-      $("foto-ok").hidden = false;
+
       $("previa").scrollIntoView({ behavior: "smooth", block: "center" });
     });
     $("rec-cancelar").addEventListener("click", function () { $("recorte").hidden = true; });
     $("li-alterar").addEventListener("click", function () { $("li-ver").hidden = true; $("li-editar").hidden = false; $("linkedin").focus(); $("linkedin").select(); });
-    $("foto-remover").addEventListener("click", function () { fotoNova = ""; nomeArquivo = ""; removerFoto = !!fotoAtual; mostrarFoto(""); $("foto-ok").hidden = true; $("recorte").hidden = true; });
+    $("foto-remover").addEventListener("click", function () { fotoNova = ""; nomeArquivo = ""; removerFoto = !!fotoAtual; mostrarFoto(""); $("recorte").hidden = true; });
     function atualizarIn() { $("p-in").style.visibility = $("linkedin").value.trim() ? "visible" : "hidden"; }
     post({ acao: "ver" }).then(function (d) {
       $("carregando").hidden = true; $("conteudo").hidden = false;
@@ -266,7 +262,7 @@
       var erro = $("erro"); erro.hidden = true;
       ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = true; });
       post({ acao: "decidir", decisao: decisao, especialidade: $("especialidade").value, linkedin: $("linkedin").value, foto: decisao === "autorizado" ? fotoNova : "", remover_foto: removerFoto })
-        .then(function (r) { if (fotoNova && r.foto_url) { $("foto-ok").textContent = "Foto enviada."; } fotoNova = ""; removerFoto = false; fotoAtual = r.foto_url || ""; mostrarFoto(fotoAtual); status(r.status); $("status").scrollIntoView({ behavior: "smooth", block: "center" }); })
+        .then(function (r) { fotoNova = ""; removerFoto = false; fotoAtual = r.foto_url || ""; mostrarFoto(fotoAtual); status(r.status); $("status").scrollIntoView({ behavior: "smooth", block: "center" }); })
         .catch(function (e) { erro.textContent = e.message; erro.hidden = false; })
         .finally(function () { ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = false; }); });
     }
