@@ -1447,3 +1447,13 @@ main + footer.relative { padding-top: 6rem !important; }
 @media (max-width: 1023px) { .cabecalho-sobre-hero .site-header header > a:first-child { visibility: hidden !important; } }
 /* celular e tablet: foto um pouco mais alta */
 @media (max-width: 1023px) { .hero-piloto { height: calc(var(--altura-cabecalho, 68px) + 15rem) !important; } #hero-fundo img { object-position: 30% 25% !important; } }
+/* celular e tablet: ao rolar, a foto fica parada e o card do conteúdo sobe por cima dela até perto do menu;
+   enquanto houver foto atrás, o cabeçalho continua visível e transparente (menu branco), sem ser coberto */
+@media (max-width: 1023px) {
+  #hero-fundo { clip-path: inset(0); }
+  #hero-fundo img { position: fixed !important; inset: 0 auto auto 0 !important; width: 100% !important; height: calc(var(--altura-cabecalho, 68px) + 15rem) !important; }
+  .cabecalho-sobre-hero .site-header.sobre-foto { transform: none !important; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .cabecalho-sobre-hero .site-header.sobre-foto #menu-botao { color: #FFFFFF !important; }
+}
+/* celular e tablet: nesta página o menu não some ao rolar; o card do conteúdo passa por baixo dele */
+@media (max-width: 1023px) { .cabecalho-sobre-hero .site-header.is-hidden { transform: none !important; } }

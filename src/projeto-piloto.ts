@@ -544,3 +544,20 @@ form.addEventListener('change', (e) => {
   reduzir.addEventListener('change', iniciar);
   iniciar();
 })();
+
+/* ---------- Celular e tablet: cabeçalho fica visível e transparente enquanto o card do conteúdo ainda não chegou nele ---------- */
+(() => {
+  const h = document.getElementById('site-header');
+  const card = document.querySelector<HTMLElement>('.divisao-hero');
+  if (!h || !card) return;
+  const pequeno = window.matchMedia('(max-width: 1023px)');
+  let agendado = false;
+  const f = () => {
+    agendado = false;
+    const sobreFoto = pequeno.matches && card.getBoundingClientRect().top > h.offsetHeight - 2;
+    h.classList.toggle('sobre-foto', sobreFoto);
+  };
+  f();
+  window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(f); } }, { passive: true });
+  window.addEventListener('resize', f);
+})();
