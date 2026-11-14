@@ -19,6 +19,11 @@
   .gal-topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
   .gal-topo .sec { margin: 0; }
   .gal-conv-btn { font-size: 13px; padding: 9px 18px; }
+  .gal-esp { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  .gal-esp input { flex: 1 1 260px; max-width: 420px; padding: 8px 12px; border: 1px solid #E4E6EC; border-radius: 10px; font: inherit; font-size: 14px; }
+  .gal-esp input:focus { outline: none; border-color: #D44D4D; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.15); }
+  .gal-esp-btn { font-size: 12px; padding: 6px 14px; }
+  .gal-esp small { flex-basis: 100%; font-size: 12px; }
   .gal-sw { display: inline-flex; align-items: center; gap: 10px; }
   .gal-switch { position: relative; width: 44px; height: 24px; padding: 0; border: 0; border-radius: 999px; background: #B3BDD0; cursor: pointer; transition: background-color .2s ease; }
   .gal-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(13, 17, 25, .2); transition: transform .2s ease; }
@@ -792,6 +797,26 @@ function galeriaCard(data) {
     topo.appendChild(bConv);
   }
   linha("Convite enviado", conv);
+  // Especialidade exibida no card da galeria: por padrão o campo 13 do cadastro; aqui dá para escrever outro texto.
+  const padraoEsp = String(data.principal_especializacao || "").replace(/\.\s*$/, "").trim();
+  const espBox = el("span", "gal-esp");
+  const espIn = el("input"); espIn.type = "text"; espIn.maxLength = 80; espIn.value = data.galeria_cargo || padraoEsp; espIn.setAttribute("aria-label", "Especialidade exibida na galeria");
+  const espBtn = el("button", "btn-ghost gal-esp-btn", "Salvar"); espBtn.type = "button";
+  const espNota = el("small", "muted", data.galeria_cargo ? "Texto definido por você." : "Texto do campo 13 do cadastro.");
+  espBtn.addEventListener("click", async () => {
+    const v = espIn.value.trim();
+    const novo = !v || v === padraoEsp ? null : v;
+    espBtn.disabled = true;
+    const { error } = await Admin.sb.from("cadastros").update({ galeria_cargo: novo }).eq("id", data.id);
+    espBtn.disabled = false;
+    if (error) return Admin.toast("Não foi possível salvar agora: " + error.message);
+    data.galeria_cargo = novo; if (!novo) espIn.value = padraoEsp;
+    espNota.textContent = novo ? "Texto definido por você." : "Texto do campo 13 do cadastro.";
+    Admin.log("Alterou a especialidade da galeria de " + (data.nome || "parceiro"));
+    Admin.toast("Especialidade salva.");
+  });
+  espBox.append(espIn, espBtn, espNota);
+  linha("Especialidade", espBox);
   const statusDd = linha("Status", st === "autorizado" ? "Exibição autorizada" : st === "recusado" ? "Exibição não autorizada" : data.galeria_convite_em ? "Aguardando resposta" : "Ainda não convidado");
   // Exibir: switch (sim/não). Só é possível exibir quem autorizou; ocultar não altera a autorização do parceiro.
   const sw = el("button", "gal-switch"); sw.type = "button"; sw.setAttribute("role", "switch"); sw.setAttribute("aria-label", "Exibir na galeria");
