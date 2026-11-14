@@ -1215,3 +1215,38 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
   .rp-alca { animation: rp-alca-entra .7s cubic-bezier(0.16, 1, 0.3, 1) .6s both; }
 }
 @keyframes rp-alca-entra { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: none; } }
+
+/* Hero (computador): 3 cardzinhos flutuantes perto dos personagens (área, ícone pequeno e status) */
+.rp-flu { display: none; }
+@media (min-width: 1024px) {
+  .rp-modelo-sobe { container-type: inline-size; }
+  .rp-flu { position: absolute; z-index: 2; display: flex; align-items: center; gap: 8px; padding: 7px 12px 7px 7px; border-radius: 14px; background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(226, 232, 240, 0.9); box-shadow: 0 10px 24px -12px rgba(13, 17, 25, 0.28); white-space: nowrap; }
+  .rp-flu-ic { flex: none; width: 26px; height: 26px; border-radius: 8px; background: #FDF2F2; color: #D44D4D; display: flex; align-items: center; justify-content: center; }
+  .rp-flu-ic svg { width: 14px; height: 14px; }
+  .rp-flu-txt { display: flex; flex-direction: column; line-height: 1.2; }
+  .rp-flu-txt strong { font-size: 12px; font-weight: 700; color: #131A27; }
+  .rp-flu-txt span { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #627288; }
+  .rp-flu-txt i { width: 6px; height: 6px; border-radius: 50%; background: var(--cor); }
+  /* posições medidas na imagem (1111 px de largura): cqw acompanha a largura da foto */
+  .rp-flu-1 { left: -6%; top: 68cqw; }
+  .rp-flu-2 { left: 34%; top: 92cqw; }
+  .rp-flu-3 { right: -5%; top: 26cqw; }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .rp-flu { opacity: 0; animation: rp-flu-entra .6s cubic-bezier(0.16, 1, 0.3, 1) both, rp-flu-boia 6s ease-in-out infinite; }
+  .rp-flu-1 { animation-delay: 1.2s, 1.8s; animation-duration: .6s, 6s; }
+  .rp-flu-2 { animation-delay: 1.45s, 2.05s; animation-duration: .6s, 7s; }
+  .rp-flu-3 { animation-delay: 1.7s, 2.3s; animation-duration: .6s, 5.5s; }
+}
+@keyframes rp-flu-entra { from { opacity: 0; scale: .9; } to { opacity: 1; scale: 1; } }
+@keyframes rp-flu-boia { 0%, 100% { translate: 0 0; } 50% { translate: 0 -6px; } }
+@media (min-width: 1024px) and (max-width: 1439px) { .rp-flu-3 { right: 2%; } }
+/* cards flutuantes em vidro (glassmorphism) e longe dos rostos */
+@media (min-width: 1024px) {
+  .rp-flu { background: rgba(255, 255, 255, 0.72); -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.75); box-shadow: 0 12px 28px -14px rgba(13, 17, 25, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6); }
+  .rp-flu-ic { background: rgba(253, 242, 242, 0.9); }
+  .rp-flu-txt span { color: #495669; }
+  .rp-flu-3 { top: 9cqw; }
+}
