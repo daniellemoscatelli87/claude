@@ -96,6 +96,8 @@ html.embutido .modal-topo .progress > div { background: #D44D4D !important; }
   html.embutido .modal-topo.escondido { transform: translateY(-100%); }
 }
 @media (prefers-reduced-motion: reduce) { html.embutido .modal-topo { transition: none; } }
+/* divisória do rodapé na mesma cor da borda dos campos (#E4E6EC), esvaindo nas pontas */
+html.embutido .nav-bar::after { background: linear-gradient(90deg, rgba(228, 230, 236, 0) 0%, #E4E6EC 22%, #E4E6EC 78%, rgba(228, 230, 236, 0) 100%) !important; }
 /* "Seção N" como selo (mesmo padrão da tag do hero) */
 h2 small { display: flex !important; align-items: center; gap: 8px; width: fit-content; margin-bottom: 12px !important; padding: 4px 12px; border-radius: 9999px;
   background: #FDF2F2; border: 1px solid #F9DADA; color: #D44D4D; font-size: 12px; font-weight: 600; letter-spacing: .08em; line-height: 1.5; }
