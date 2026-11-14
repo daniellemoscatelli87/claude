@@ -895,6 +895,12 @@ Admin.init({ page: "parceiros", onReady: async () => {
     Admin.markSeen("cadastros", data);
     // Junta à opção "Outro" o texto que a pessoa escreveu.
     const shown = { ...data, formatos_contratacao: contratacaoAtual(data), etapas_projeto: etapasAtuais(data) };
+    // Autorizações (item único do formulário): o que a pessoa autorizou, em tópicos.
+    const galSt = data.galeria_status === "autorizado" ? "Autorizada" : data.galeria_status === "recusado" ? "Não autorizada" : "Não autorizada no cadastro";
+    shown.autorizacoes = [
+      "Uso dos dados profissionais pela rede de parceiros e contatos sobre oportunidades: " + (data.autoriza_dados ? "Autorizado" : "Não autorizado"),
+      "Exibição do perfil na Galeria de Profissionais (nome, cargo, áreas, segmentos, LinkedIn e foto): " + galSt,
+    ];
     // Candidaturas antigas tinham certificações em pergunta separada; agora fica junto da formação.
     if (data.certificacoes) shown.formacao = [data.formacao, data.certificacoes].filter(Boolean).join("\n");
     for (const [k, txt] of Object.entries(data.outros || {})) {

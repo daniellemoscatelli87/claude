@@ -212,6 +212,9 @@ html.embutido .nav-bar .modal-obs span[aria-hidden] { color: #D44D4D; }
   .info a { overflow-wrap: anywhere; word-break: break-all; }
   .info p { margin: 0 0 8px; }
   .info p:last-child { margin: 0; }
+  .info ul { margin: 0 0 10px; padding-left: 18px; }
+  .info ul:last-child { margin-bottom: 0; }
+  .info li { margin: 0 0 4px; }
   .info.wa-box { display: flex; gap: 12px; align-items: flex-start; background: #e9f8ef; border: 1px solid #b9e8cb; color: #2f5d43; }
   .info.wa-box a { color: #128c4b; font-weight: 600; }
   .wa-ic { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background: #25d366; color: #fff; display: grid; place-items: center; }
@@ -472,11 +475,9 @@ const WHATSAPP_GROUP = "https://chat.whatsapp.com/ChB6TTutuNv8g5BFYdy7FK?mode=gi
 const WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>';
 
 const PJ_NO = "Não tenho interesse em atuar como PJ.";
-const CONSENT_YES = "Sim, autorizo.";
-const CONSENT_NO = "Não autorizo.";
-// Galeria de Profissionais: mesmo termo (e versão) da página de autorização; o banco registra o aceite com o texto oficial.
-const GALERIA_SIM = "Sim, autorizo a exibição do meu perfil.";
-const GALERIA_NAO = "Não autorizo por enquanto.";
+// Autorizações (item único): uso dos dados (obrigatório) e exibição na galeria (opcional), cada um com sua caixa.
+const AUT_DADOS = "Autorizo o armazenamento e o uso dos meus dados profissionais pela rede de parceiros (obrigatório).";
+const AUT_GALERIA = "Autorizo a exibição do meu perfil na Galeria de Profissionais do site (opcional).";
 
 const ESTADOS = [["AC","Acre"],["AL","Alagoas"],["AP","Amapá"],["AM","Amazonas"],["BA","Bahia"],["CE","Ceará"],["DF","Distrito Federal"],["ES","Espírito Santo"],["GO","Goiás"],["MA","Maranhão"],["MT","Mato Grosso"],["MS","Mato Grosso do Sul"],["MG","Minas Gerais"],["PA","Pará"],["PB","Paraíba"],["PR","Paraná"],["PE","Pernambuco"],["PI","Piauí"],["RJ","Rio de Janeiro"],["RN","Rio Grande do Norte"],["RS","Rio Grande do Sul"],["RO","Rondônia"],["RR","Roraima"],["SC","Santa Catarina"],["SP","São Paulo"],["SE","Sergipe"],["TO","Tocantins"]];
 
@@ -646,16 +647,25 @@ const SECTIONS = [
     { id: "como_conheceu", n: 38, label: "Como você conheceu esta iniciativa?", type: "radio", required: false, options: [
       "LinkedIn.", "Instagram.", "Indicação de outro profissional.", "Comunidade ou grupo profissional.", "Indicação da Dani Moscatelli.", "Outro.",
     ]},
-    { id: "autoriza_dados", n: 39, label: "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?", type: "radio", required: true,
-      infoHtml: "<p><strong>Informações sobre o tratamento de dados:</strong></p><p>Os dados fornecidos serão utilizados por Dani Moscatelli | Experience Design Studio para organização da rede de parceiros, análise de competências profissionais e contato relacionado a possíveis oportunidades de colaboração.</p><p>O preenchimento é voluntário. As informações não serão divulgadas publicamente nem compartilhadas com terceiros para finalidades incompatíveis com as descritas neste formulário.</p><p>Você poderá solicitar acesso, correção ou exclusão dos seus dados pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação.</p><p>Leia a <a href=\"/privacidade/\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a> completa.</p>",
-      options: [CONSENT_YES, CONSENT_NO] },
-    { id: "galeria_aceite", n: 40, label: "Você autoriza a exibição do seu perfil profissional na Galeria de Profissionais do nosso site?", type: "radio", required: false,
-      infoHtml: "<p>A galeria apresenta os especialistas independentes da rede, para ampliar a visibilidade dos profissionais e facilitar conexões com empresas em busca de especialistas.</p><p><strong>Termo de autorização:</strong> Autorizo a Dani Moscatelli | Experience Design Studio a exibir, na Galeria de profissionais do site danimoscatelli.com.br, o meu nome, cargo, áreas de atuação, segmentos, link do LinkedIn e foto, conforme a prévia apresentada. E-mail, telefone e cidade não serão exibidos. Posso retirar esta autorização a qualquer momento pelo mesmo link ou pelo e-mail contato@danimoscatelli.com.br, e também solicitar a troca ou a exclusão da foto por esse e-mail.</p><p>Se autorizar, você recebe por e-mail um link para enviar sua foto e revisar como o perfil vai aparecer. Se não enviar foto, usaremos a do seu perfil do LinkedIn. A resposta é opcional e pode ser alterada depois.</p>",
-      options: [GALERIA_SIM, GALERIA_NAO] },
-    { id: "galeria_cargo", n: 41, showIf: { id: "galeria_aceite", test: (v) => v === GALERIA_SIM }, label: "Como você quer ser apresentado(a) na galeria?", type: "text", required: true, maxlength: 60, placeholder: "Ex.: Product Designer", help: "O cargo que vai aparecer no seu perfil. Até 60 caracteres." },
+    { id: "autorizacoes", n: 39, label: "Autorizações", type: "checkbox", required: true, mustInclude: AUT_DADOS,
+      errMsg: "Para fazer parte da rede, marque a autorização de uso dos seus dados.",
+      help: "Leia o que cada autorização permite e marque as que você concede.",
+      infoHtml: "<p><strong>Uso dos dados (obrigatório para fazer parte da rede)</strong></p><ul>" +
+        "<li>Armazenar e usar os dados profissionais deste formulário para organizar a rede de parceiros e analisar competências.</li>" +
+        "<li>Entrar em contato sobre possíveis oportunidades de colaboração.</li>" +
+        "<li>Os dados não serão divulgados publicamente nem compartilhados com terceiros para finalidades incompatíveis com as descritas aqui.</li></ul>" +
+        "<p><strong>Exibição na Galeria de Profissionais (opcional)</strong></p><ul>" +
+        "<li>Exibir na galeria do site danimoscatelli.com.br: nome, cargo, áreas de atuação, segmentos, link do LinkedIn e foto.</li>" +
+        "<li>E-mail, telefone e cidade não são exibidos.</li>" +
+        "<li>Você recebe por e-mail um link para enviar sua foto e revisar como o perfil vai aparecer. Sem foto enviada, usamos a do seu LinkedIn.</li></ul>" +
+        "<p><strong>Seus direitos</strong></p><ul>" +
+        "<li>Pedir acesso, correção ou exclusão dos dados e retirar qualquer autorização a qualquer momento pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação.</li>" +
+        "<li>Leia a <a href=\"/privacidade/\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a> completa.</li></ul>",
+      options: [AUT_DADOS, AUT_GALERIA] },
+    { id: "galeria_cargo", n: 40, showIf: { id: "autorizacoes", test: (v) => Array.isArray(v) && v.includes(AUT_GALERIA) }, label: "Como você quer ser apresentado(a) na galeria?", type: "text", required: true, maxlength: 60, placeholder: "Ex.: Product Designer", help: "O cargo que vai aparecer no seu perfil. Até 60 caracteres." },
   ]},
   { title: "Comunidade de networking", n: "Seção final", questions: [
-    { id: "interesse_whatsapp", n: 42, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
+    { id: "interesse_whatsapp", n: 41, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
       infoHtml: "<p>Estamos construindo uma comunidade para conectar profissionais de diferentes especialidades, promover a troca de conhecimentos, compartilhar referências e fortalecer conexões profissionais.</p><p>O espaço será voltado a conversas sobre Design, Experiência Humana, Negócios, Tecnologia e Inovação, além da troca de experiências e oportunidades de colaboração.</p><p>A participação é opcional e independente deste cadastro.</p>",
       afterIf: (v) => /^Sim/.test(v),
       afterHtml: "<div class=\"info wa-box\"><span class=\"wa-ic\" aria-hidden=\"true\">" + WA_ICON + "</span><div><p><strong>Link de acesso ao grupo:</strong><br><a href=\"" + WHATSAPP_GROUP + "\" target=\"_blank\" rel=\"noopener\">" + WHATSAPP_GROUP + "</a></p><p>Se tiver interesse, basta acessar o link acima. A participação no grupo não é necessária para concluir seu cadastro.</p></div></div>",
@@ -704,7 +714,7 @@ function questionHtml(q) {
         <div class="acc-body options hidden" id="${q.id}-g${gi}">${g.options.map(o => optionHtml(q, o)).join("")}</div>
       </div>`).join("")}</div>`;
   else field = `<div class="options">${q.options.map(o => optionHtml(q, o)).join("")}</div>`;
-  const errMsg = q.type === "idiomas" ? "Informe o idioma e o nível de fluência em cada linha." : q.type === "list" ? "Inclua ao menos um item." : q.type === "url" ? (q.urlHost === "linkedin.com" ? "Informe o link do seu perfil no LinkedIn (ex.: https://www.linkedin.com/in/seu-perfil)." : "Informe um link válido (ex.: https://seusite.com.br).") : q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
+  const errMsg = q.errMsg ? q.errMsg : q.type === "idiomas" ? "Informe o idioma e o nível de fluência em cada linha." : q.type === "list" ? "Inclua ao menos um item." : q.type === "url" ? (q.urlHost === "linkedin.com" ? "Informe o link do seu perfil no LinkedIn (ex.: https://www.linkedin.com/in/seu-perfil)." : "Informe um link válido (ex.: https://seusite.com.br).") : q.type === "uf_cidade" ? "Selecione o estado e a cidade." : q.type === "email" ? "Informe um endereço de e-mail válido." : q.type === "tel" ? "Informe o telefone com DDD." : q.type === "checkbox" ? "Selecione ao menos uma opção." : q.type === "radio" ? "Selecione uma opção." : "Esta pergunta é obrigatória.";
   return `<div class="q" data-q="${q.id}">
     <label class="q-label" ${["text", "email", "tel", "url", "paragraph"].includes(q.type) ? `for="${q.id}"` : ""}>${q.n}. ${esc(q.label)}${req}</label>
     ${help}${info}${field}${q.afterHtml ? (q.afterIf ? `<div class="hidden" data-after="${q.id}">${q.afterHtml}</div>` : q.afterHtml) : ""}
@@ -887,6 +897,7 @@ function validateQuestion(q) {
   const v = value(q);
   let ok = true;
   if (q.required) ok = Array.isArray(v) ? v.length > 0 : v !== "";
+  if (ok && q.mustInclude) ok = Array.isArray(v) && v.includes(q.mustInclude);
   if (ok && q.type === "email" && v) ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   if (ok && q.type === "idiomas") {
     const rs = langRows(q);
@@ -982,16 +993,17 @@ function payload() {
     if (q.store === "lines" && Array.isArray(v)) data[q.id] = v.length ? v.join("\n") : null;
     else data[q.id] = Array.isArray(v) ? v : (v === "" ? null : v);
   });
-  data.autoriza_dados = data.autoriza_dados === CONSENT_YES;
+  const aut = Array.isArray(data.autorizacoes) ? data.autorizacoes : [];
+  data.autoriza_dados = aut.includes(AUT_DADOS);
   // Galeria: o banco só marca a autorização quando galeria_aceite_cadastro = true e há cargo (e registra o termo oficial).
-  data.galeria_aceite_cadastro = data.galeria_aceite === GALERIA_SIM && !!data.galeria_cargo;
+  data.galeria_aceite_cadastro = aut.includes(AUT_GALERIA) && !!data.galeria_cargo;
   if (!data.galeria_aceite_cadastro) data.galeria_cargo = null;
-  delete data.galeria_aceite;
-  // LGPD: guarda junto do cadastro o texto exato que a pessoa aceitou (a data do aceite é registrada pelo servidor).
+  delete data.autorizacoes;
+  // LGPD: guarda junto do cadastro o texto exato que a pessoa viu e o que marcou (a data do aceite é registrada pelo servidor).
   if (data.autoriza_dados) {
-    const q = SECTIONS.flatMap(s => s.questions).find(q => q.id === "autoriza_dados");
-    const tmp = document.createElement("div"); tmp.innerHTML = q.infoHtml.replace(/<\/p>/g, "</p>\n\n");
-    data.consentimento_texto = q.label + "\n\n" + tmp.textContent.trim() + "\n\nResposta: " + CONSENT_YES;
+    const q = SECTIONS.flatMap(s => s.questions).find(q => q.id === "autorizacoes");
+    const tmp = document.createElement("div"); tmp.innerHTML = q.infoHtml.replace(/<\/(p|li)>/g, "</$1>\n");
+    data.consentimento_texto = q.label + "\n\n" + tmp.textContent.trim() + "\n\nMarcado:\n- " + aut.join("\n- ");
   }
   data.outros = {};
   SECTIONS.flatMap(s => s.questions).forEach(q => { if (otherChecked(q) && otherText(q)) data.outros[q.id] = otherText(q); });
@@ -1029,7 +1041,6 @@ async function submit() {
 document.getElementById("next").addEventListener("click", () => {
   if (!validateStep(current)) return;
   if (current === 2 && value({ id: "atuacao_pj", type: "radio" }) === PJ_NO) return end("endPJ");
-  if (current === 8 && value({ id: "autoriza_dados", type: "radio" }) === CONSENT_NO) return end("endConsent");
   if (current === total) return submit();
   show(current + 1);
 });
