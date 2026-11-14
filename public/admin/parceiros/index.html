@@ -440,8 +440,10 @@ const KPI_ICONS = {
   grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
   star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
+  send: '<path d="M14.54 21.69a.5.5 0 0 0 .94-.02l6.5-19a.5.5 0 0 0-.64-.64l-19 6.5a.5.5 0 0 0-.02.94l7.93 3.18a2 2 0 0 1 1.11 1.11z"/><path d="m21.85 2.15-10.94 10.94"/>',
 };
-const TINTS = [["#fdf3dc", "#a06d00"], ["var(--slate-tint)", "var(--slate)"], ["#fdece4", "#c2501f"]];
+const TINTS = [["#fdf3dc", "#a06d00"], ["var(--slate-tint)", "var(--slate)"], ["#fdece4", "#c2501f"], ["#E3EDF5", "#2b5f86"]];
 // Resposta mais frequente entre os parceiros (para os números do topo).
 function maisComum(rows, get) {
   const m = new Map();
@@ -460,6 +462,9 @@ function kpis(rows) {
     [String(segs.size), segs.size === 1 ? "Segmento atendido" : "Segmentos atendidos", "de " + totalSegs + " setores do formulário", "grid"],
     [area ? pct(area[1], t) + "%" : "-", area ? "de especialistas em " + area[0] : "Especialistas por área", area ? plural(area[1], "parceiro", "parceiros") : "Sem dados", "star"],
     [tempo ? pct(tempo[1], t) + "%" : "-", tempo ? "dos parceiros têm " + clean(tempo[0]).replace(/^Mais de/, "mais de").replace(/^Entre/, "entre").replace(/^Menos de/, "menos de") + " de carreira" : "Tempo de carreira", tempo ? "na principal especialidade" : "Sem dados", "clock"],
+    // Perfis que aparecem hoje na Galeria de Profissionais do site (autorizados e com Exibir = Sim).
+    (() => { const vis = rows.filter((r) => r.galeria_status === "autorizado" && !r.galeria_oculto).length;
+      return [String(vis), vis === 1 ? "Perfil visível na galeria" : "Perfis visíveis na galeria", vis >= 3 ? "Galeria no ar no site" : "A galeria aparece no site a partir de 3", "eye"]; })(),
   ];
   items.forEach(([v, k, sub, ic], i) => {
     const c = el("div", "card kpi" + (i === 0 ? " hero" : ""));
