@@ -1283,3 +1283,5 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
   0%, 100% { opacity: 1; box-shadow: 0 0 4px 1px color-mix(in srgb, var(--cor) 70%, transparent), 0 0 0 0 color-mix(in srgb, var(--cor) 55%, transparent); }
   50% { opacity: .55; box-shadow: 0 0 10px 3px color-mix(in srgb, var(--cor) 80%, transparent), 0 0 0 5px color-mix(in srgb, var(--cor) 0%, transparent); }
 }
+/* bolinhas de status no vermelho padrão do site */
+.rp-flu-txt i { --cor: #D44D4D; }
