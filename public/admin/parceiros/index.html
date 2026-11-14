@@ -21,6 +21,8 @@
   .gal-prev img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(212, 77, 77, .25); }
   .gal-prev a { color: var(--red); font-weight: 600; overflow-wrap: anywhere; }
   .gal-sem { font-size: 13px; color: var(--muted); }
+  .gal-ctrl { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; padding: 12px 14px; border-radius: 12px; background: #F6F7FA; border: 1px solid var(--line); }
+  .gal-ctrl p { margin: 0; font-size: 14px; }
   .gal-hist summary { cursor: pointer; font-weight: 600; font-size: 14px; }
   .gal-reg { display: grid; gap: 2px; padding: 10px 0; border-top: 1px solid var(--track); font-size: 14px; }
   .tabs { display: flex; width: 100%; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 999px; margin: 20px 0 16px; }
@@ -771,6 +773,25 @@ function galeriaCard(data) {
     else prev.appendChild(el("span", "gal-sem", "Sem foto enviada (usar a do LinkedIn)"));
     if (data.galeria_linkedin) { const a = el("a", null, data.galeria_linkedin.replace(/^https:\/\/(www\.)?/, "")); a.href = data.galeria_linkedin; a.target = "_blank"; a.rel = "noopener noreferrer"; prev.appendChild(a); }
     c.appendChild(prev);
+    // Controle manual: exibir ou ocultar o perfil na galeria do site (a autorização do parceiro não muda).
+    const ctrl = el("div", "gal-ctrl");
+    const info = el("p", "muted"), btn = el("button", "btn-ghost"); btn.type = "button";
+    const pintar = () => {
+      info.textContent = data.galeria_oculto ? "Oculto por você: não aparece na galeria do site." : "Visível na galeria do site.";
+      btn.textContent = data.galeria_oculto ? "Exibir na galeria" : "Ocultar da galeria";
+      pill.textContent = data.galeria_oculto ? "Autorizou · oculto por você" : "Autorizou a exibição";
+    };
+    btn.addEventListener("click", async () => {
+      const novo = !data.galeria_oculto;
+      btn.disabled = true;
+      const { error } = await Admin.sb.from("cadastros").update({ galeria_oculto: novo }).eq("id", data.id);
+      btn.disabled = false;
+      if (error) return Admin.toast("Não foi possível alterar agora: " + error.message);
+      data.galeria_oculto = novo; pintar();
+      Admin.log((novo ? "Ocultou da galeria" : "Exibiu na galeria") + " o perfil de " + (data.nome || "parceiro"));
+      Admin.toast(novo ? "Perfil ocultado da galeria." : "Perfil exibido na galeria.");
+    });
+    pintar(); ctrl.append(info, btn); c.appendChild(ctrl);
   }
   const hist = el("details", "gal-hist"); hist.appendChild(el("summary", null, "Histórico de decisões"));
   const lista = el("div"); lista.appendChild(el("p", "muted", "Carregando…")); hist.appendChild(lista); c.appendChild(hist);

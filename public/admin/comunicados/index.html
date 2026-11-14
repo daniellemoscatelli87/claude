@@ -137,7 +137,7 @@ function linha(r) {
   const tx = el("span", "tx");
   tx.append(el("span", "n", r.nome || r.email), el("span", "d", [limpa(r.principal_especializacao), r.email].filter(Boolean).join(" · ")));
   if (!ok) tx.append(el("span", "sem", r.email ? "Não recebe comunicados" : "Sem e-mail"));
-  tx.append(el("span", "gal" + (r.galeria_status === "autorizado" ? " ok" : ""), "Galeria: " + (r.galeria_status === "autorizado" ? "autorizou" : r.galeria_status === "recusado" ? "não autorizou" : r.galeria_convite_em ? "aguardando resposta" : "não convidado")));
+  tx.append(el("span", "gal" + (r.galeria_status === "autorizado" ? " ok" : ""), "Galeria: " + (r.galeria_status === "autorizado" ? (r.galeria_oculto ? "autorizou (oculto)" : "autorizou") : r.galeria_status === "recusado" ? "não autorizou" : r.galeria_convite_em ? "aguardando resposta" : "não convidado")));
   row.append(cb, ini, tx);
   return row;
 }
@@ -166,7 +166,7 @@ function opcoes(sel, valores) {
 }
 async function carregar() {
   const { data, error } = await Admin.sb.from("cadastros")
-    .select("id, nome, email, principal_especializacao, areas_experiencia, segmentos, comunicados_descadastro_em, galeria_status, galeria_convite_em")
+    .select("id, nome, email, principal_especializacao, areas_experiencia, segmentos, comunicados_descadastro_em, galeria_status, galeria_convite_em, galeria_oculto")
     .order("nome", { ascending: true });
   const err = document.getElementById("load-err");
   err.classList.toggle("hidden", !error);
