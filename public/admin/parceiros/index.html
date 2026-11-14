@@ -11,6 +11,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css?v=20261115b">
 <style>
+  .gal-perfil { border-top: 1px solid var(--track); padding-top: 14px; }
+  .gal-perfil-tit { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .gal-mini { max-width: 340px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: #fff; }
+  .gal-mini-topo { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+  .gal-mini-foto { width: 64px !important; height: 64px !important; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 20px; background: var(--red-tint); color: var(--red); box-shadow: 0 0 0 3px #fff, 0 0 0 4px #F9DADA; }
+  .gal-mini-in { font-size: 12px; font-weight: 600; color: var(--red); }
+  .gal-mini-nome { font-weight: 700; font-size: 16px; }
+  .gal-mini-esp { font-size: 14px; font-weight: 600; color: var(--red); margin: 2px 0 10px; }
+  .gal-mini-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .gal-mini-tags li { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: #F6F7FA; border: 1px solid var(--line); }
+  .gal-perfil-info { margin: 10px 0 0; font-size: 13px; }
+  .gal-excluir-box { display: flex; justify-content: flex-end; }
+  .gal-excluir { color: #b82828; border-color: #f3c9c9; }
+  .gal-excluir:hover { background: #fdf2f2; }
   .cm-gal { margin-bottom: 16px; }
   .cm-gal h2 { margin: 0 0 6px; font-size: 18px; }
   .cm-gal-n { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
@@ -66,11 +80,6 @@
   .gal-topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
   .gal-topo .sec { margin: 0; }
   .gal-conv-btn { font-size: 13px; padding: 9px 18px; }
-  .gal-esp { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
-  .gal-esp input { flex: 1 1 260px; max-width: 420px; padding: 8px 12px; border: 1px solid #E4E6EC; border-radius: 10px; font: inherit; font-size: 14px; }
-  .gal-esp input:focus { outline: none; border-color: #D44D4D; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.15); }
-  .gal-esp-btn { font-size: 12px; padding: 6px 14px; }
-  .gal-esp small { flex-basis: 100%; font-size: 12px; }
   .gal-sw { display: inline-flex; align-items: center; gap: 10px; }
   .gal-switch { position: relative; width: 44px; height: 24px; padding: 0; border: 0; border-radius: 999px; background: #B3BDD0; cursor: pointer; transition: background-color .2s ease; }
   .gal-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(13, 17, 25, .2); transition: transform .2s ease; }
@@ -937,26 +946,6 @@ function galeriaCard(data) {
     topo.appendChild(bConv);
   }
   linha("Convite enviado", conv);
-  // Especialidade exibida no card da galeria: por padrão o campo 13 do cadastro; aqui dá para escrever outro texto.
-  const padraoEsp = String(data.principal_especializacao || "").replace(/\.\s*$/, "").trim();
-  const espBox = el("span", "gal-esp");
-  const espIn = el("input"); espIn.type = "text"; espIn.maxLength = 80; espIn.value = data.galeria_cargo || padraoEsp; espIn.setAttribute("aria-label", "Especialidade exibida na galeria");
-  const espBtn = el("button", "btn-ghost gal-esp-btn", "Salvar"); espBtn.type = "button";
-  const espNota = el("small", "muted", data.galeria_cargo ? "Texto definido por você." : "Texto do campo 13 do cadastro.");
-  espBtn.addEventListener("click", async () => {
-    const v = espIn.value.trim();
-    const novo = !v || v === padraoEsp ? null : v;
-    espBtn.disabled = true;
-    const { error } = await Admin.sb.from("cadastros").update({ galeria_cargo: novo }).eq("id", data.id);
-    espBtn.disabled = false;
-    if (error) return Admin.toast("Não foi possível salvar agora: " + error.message);
-    data.galeria_cargo = novo; if (!novo) espIn.value = padraoEsp;
-    espNota.textContent = novo ? "Texto definido por você." : "Texto do campo 13 do cadastro.";
-    Admin.log("Alterou a especialidade da galeria de " + (data.nome || "parceiro"));
-    Admin.toast("Especialidade salva.");
-  });
-  espBox.append(espIn, espBtn, espNota);
-  linha("Especialidade", espBox);
   const statusDd = linha("Status", st === "autorizado" ? "Exibição autorizada" : st === "recusado" ? "Exibição não autorizada" : data.galeria_convite_em ? "Aguardando resposta" : "Ainda não convidado");
   // Exibir: switch (sim/não). Só é possível exibir quem autorizou; ocultar não altera a autorização do parceiro.
   const sw = el("button", "gal-switch"); sw.type = "button"; sw.setAttribute("role", "switch"); sw.setAttribute("aria-label", "Exibir na galeria");
@@ -977,6 +966,48 @@ function galeriaCard(data) {
   pintar();
   linha("Exibir", caixa);
   c.appendChild(dl);
+  // Perfil enviado: o que a própria pessoa preencheu (somente leitura), igual ao card da galeria.
+  if (st === "autorizado") {
+    const box = el("div", "gal-perfil");
+    box.appendChild(el("div", "gal-perfil-tit", "Perfil enviado (somente leitura)"));
+    const card = el("div", "gal-mini");
+    const topoC = el("div", "gal-mini-topo"); topoC.appendChild(avatar(data, "ini gal-mini-foto"));
+    if (data.galeria_linkedin) { const li = el("a", "gal-mini-in", "LinkedIn"); li.href = data.galeria_linkedin; li.target = "_blank"; li.rel = "noopener noreferrer"; topoC.appendChild(li); }
+    card.appendChild(topoC);
+    card.appendChild(el("div", "gal-mini-nome", data.nome || "Sem nome"));
+    const esp = data.galeria_cargo || String(data.principal_especializacao || "").replace(/\.\s*$/, "").trim();
+    card.appendChild(el("div", "gal-mini-esp", esp || "Sem especialidade"));
+    const tags = el("ul", "gal-mini-tags");
+    [...new Set([...(data.areas_experiencia || []), ...(data.segmentos || [])].map((x) => String(x).replace(/\.\s*$/, "").trim()).filter(Boolean))].forEach((x) => tags.appendChild(el("li", null, x)));
+    card.appendChild(tags);
+    box.appendChild(card);
+    const info = [];
+    info.push(data.galeria_foto_url ? "Foto enviada pela pessoa." : "Sem foto enviada: o card mostra as iniciais.");
+    info.push(data.galeria_cargo ? "Especialidade escrita pela pessoa." : "Especialidade do campo 13 do cadastro.");
+    info.push(data.galeria_linkedin ? "LinkedIn informado." : "Sem LinkedIn.");
+    box.appendChild(el("p", "muted gal-perfil-info", info.join(" ")));
+    c.appendChild(box);
+  }
+  // Excluir o perfil da galeria: apaga o que a pessoa enviou (foto, especialidade, LinkedIn) e a autorização,
+  // e libera o reenvio do convite para ela mesma preencher de novo. O histórico de decisões fica guardado.
+  if (st) {
+    const bExc = el("button", "btn-ghost gal-excluir", "Excluir perfil da galeria"); bExc.type = "button";
+    bExc.addEventListener("click", async () => {
+      if (!(await Admin.confirmDialog({ title: "Excluir o perfil da galeria?", message: "A foto, a especialidade e o LinkedIn enviados por " + (data.nome || "este parceiro") + " serão apagados e o perfil sai da galeria. Depois você pode reenviar o convite para a pessoa preencher de novo. O histórico de decisões continua guardado.", ok: "Excluir", danger: true }))) return;
+      bExc.disabled = true;
+      const caminho = (String(data.galeria_foto_url || "").match(/\/object\/public\/galeria\/(.+)$/) || [])[1];
+      if (caminho) await Admin.sb.storage.from("galeria").remove([decodeURIComponent(caminho)]);
+      const limpo = { galeria_status: null, galeria_decidido_em: null, galeria_cargo: null, galeria_linkedin: null, galeria_foto_url: null, galeria_oculto: false, galeria_aceite_cadastro: false };
+      const { error } = await Admin.sb.from("cadastros").update(limpo).eq("id", data.id);
+      bExc.disabled = false;
+      if (error) return Admin.toast("Não foi possível excluir agora: " + error.message);
+      Object.assign(data, limpo);
+      Admin.log("Excluiu o perfil da galeria de " + (data.nome || "parceiro"));
+      Admin.toast("Perfil excluído da galeria. Você já pode reenviar o convite.");
+      c.replaceWith(galeriaCard(data));
+    });
+    const rod = el("div", "gal-excluir-box"); rod.appendChild(bExc); c.appendChild(rod);
+  }
   const hist = el("details", "gal-hist"); hist.appendChild(el("summary", null, "Histórico de decisões"));
   const lista = el("div"); lista.appendChild(el("p", "muted", "Carregando…")); hist.appendChild(lista); c.appendChild(hist);
   hist.addEventListener("toggle", async () => {
