@@ -11,18 +11,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
-  .gal-card { display: grid; gap: 12px; }
-  .gal-pill { justify-self: start; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: #EDF0F5; color: #495669; }
+  .gal-card { display: grid; gap: 14px; }
+  .gal-topo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+  .gal-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gal-pill { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: #EDF0F5; color: #495669; }
   .gal-pill.ok { background: rgba(79, 181, 123, 0.14); color: #1f6b3a; }
   .gal-pill.no { background: var(--red-tint); color: var(--red); }
-  .gal-dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 0; font-size: 14px; }
-  .gal-dl dt { color: var(--muted); } .gal-dl dd { margin: 0; font-weight: 600; }
-  .gal-prev { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .gal-prev img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(212, 77, 77, .25); }
-  .gal-prev a { color: var(--red); font-weight: 600; overflow-wrap: anywhere; }
-  .gal-sem { font-size: 13px; color: var(--muted); }
-  .gal-ctrl { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; padding: 12px 14px; border-radius: 12px; background: #F6F7FA; border: 1px solid var(--line); }
-  .gal-ctrl p { margin: 0; font-size: 14px; }
+  .gal-pill.on { background: #E3EDF5; color: #2b5f86; }
+  .gal-pill.off { background: #EDF0F5; color: #495669; }
+  .gal-acao { flex: none; }
+  .gal-perfil { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 14px; background: #F6F7FA; border: 1px solid var(--line); }
+  .gal-perfil img, .gal-ini { flex: none; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(212, 77, 77, .25); }
+  .gal-ini { display: grid; place-items: center; background: var(--red-tint); color: var(--red); font-weight: 700; }
+  .gal-txt { min-width: 0; display: grid; gap: 2px; }
+  .gal-txt strong { font-size: 15px; }
+  .gal-txt a { color: var(--red); font-weight: 600; font-size: 14px; overflow-wrap: anywhere; }
+  .gal-sem { font-size: 12px; color: var(--muted); }
+  .gal-datas { margin: 0; font-size: 13px; color: var(--muted); }
   .gal-hist summary { cursor: pointer; font-weight: 600; font-size: 14px; }
   .gal-reg { display: grid; gap: 2px; padding: 10px 0; border-top: 1px solid var(--track); font-size: 14px; }
   .tabs { display: flex; width: 100%; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 999px; margin: 20px 0 16px; }
@@ -759,27 +764,21 @@ function galeriaCard(data) {
   const c = el("div", "card lgpd gal-card");
   c.appendChild(el("div", "sec", "Galeria de profissionais"));
   const st = data.galeria_status;
+  // Topo: situação da autorização + visibilidade no site, e a ação de exibir/ocultar ao lado.
+  const topo = el("div", "gal-topo");
+  const tags = el("div", "gal-tags");
   const pill = el("span", "gal-pill " + (st === "autorizado" ? "ok" : st === "recusado" ? "no" : ""),
-    st === "autorizado" ? "Autorizou a exibição" : st === "recusado" ? "Não autorizou" : data.galeria_convite_em ? "Aguardando resposta" : "Ainda não convidado");
-  c.appendChild(pill);
-  const linhas = [];
-  if (data.galeria_convite_em) linhas.push(["Convite enviado em", Admin.fmtDate(data.galeria_convite_em)]);
-  if (data.galeria_decidido_em) linhas.push(["Última decisão em", Admin.fmtDate(data.galeria_decidido_em)]);
-  if (st === "autorizado") { linhas.push(["Cargo exibido", data.galeria_cargo || "-"]); }
-  if (linhas.length) { const dl = el("dl", "gal-dl"); linhas.forEach(([k, v]) => dl.append(el("dt", null, k), el("dd", null, v))); c.appendChild(dl); }
+    st === "autorizado" ? "Autorizou" : st === "recusado" ? "Não autorizou" : data.galeria_convite_em ? "Aguardando resposta" : "Ainda não convidado");
+  tags.appendChild(pill);
+  topo.appendChild(tags);
+  c.appendChild(topo);
   if (st === "autorizado") {
-    const prev = el("div", "gal-prev");
-    if (data.galeria_foto_url) { const img = el("img"); img.src = data.galeria_foto_url; img.alt = "Foto enviada por " + (data.nome || "parceiro"); prev.appendChild(img); }
-    else prev.appendChild(el("span", "gal-sem", "Sem foto enviada (usar a do LinkedIn)"));
-    if (data.galeria_linkedin) { const a = el("a", null, data.galeria_linkedin.replace(/^https:\/\/(www\.)?/, "")); a.href = data.galeria_linkedin; a.target = "_blank"; a.rel = "noopener noreferrer"; prev.appendChild(a); }
-    c.appendChild(prev);
-    // Controle manual: exibir ou ocultar o perfil na galeria do site (a autorização do parceiro não muda).
-    const ctrl = el("div", "gal-ctrl");
-    const info = el("p", "muted"), btn = el("button", "btn-ghost"); btn.type = "button";
+    const vis = el("span", "gal-pill"); tags.appendChild(vis);
+    const btn = el("button", "btn-ghost gal-acao"); btn.type = "button"; topo.appendChild(btn);
     const pintar = () => {
-      info.textContent = data.galeria_oculto ? "Oculto por você: não aparece na galeria do site." : "Visível na galeria do site.";
+      vis.className = "gal-pill " + (data.galeria_oculto ? "off" : "on");
+      vis.textContent = data.galeria_oculto ? "Oculto por você" : "Visível no site";
       btn.textContent = data.galeria_oculto ? "Exibir na galeria" : "Ocultar da galeria";
-      pill.textContent = data.galeria_oculto ? "Autorizou · oculto por você" : "Autorizou a exibição";
     };
     btn.addEventListener("click", async () => {
       const novo = !data.galeria_oculto;
@@ -791,8 +790,23 @@ function galeriaCard(data) {
       Admin.log((novo ? "Ocultou da galeria" : "Exibiu na galeria") + " o perfil de " + (data.nome || "parceiro"));
       Admin.toast(novo ? "Perfil ocultado da galeria." : "Perfil exibido na galeria.");
     });
-    pintar(); ctrl.append(info, btn); c.appendChild(ctrl);
+    pintar();
+    // Perfil como aparece: foto, cargo e LinkedIn juntos.
+    const perfil = el("div", "gal-perfil");
+    if (data.galeria_foto_url) { const img = el("img"); img.src = data.galeria_foto_url; img.alt = "Foto enviada por " + (data.nome || "parceiro"); perfil.appendChild(img); }
+    else perfil.appendChild(el("span", "gal-ini", Admin.initials(data.nome || "")));
+    const txt = el("div", "gal-txt");
+    txt.appendChild(el("strong", null, data.galeria_cargo || "Sem cargo informado"));
+    if (data.galeria_linkedin) { const a = el("a", null, data.galeria_linkedin.replace(/^https:\/\/(www\.)?/, "")); a.href = data.galeria_linkedin; a.target = "_blank"; a.rel = "noopener noreferrer"; txt.appendChild(a); }
+    if (!data.galeria_foto_url) txt.appendChild(el("span", "gal-sem", "Sem foto enviada (usar a do LinkedIn)"));
+    perfil.appendChild(txt);
+    c.appendChild(perfil);
   }
+  // Datas em uma linha discreta.
+  const datas = [];
+  if (data.galeria_convite_em) datas.push("Convite enviado em " + Admin.fmtDate(data.galeria_convite_em));
+  if (data.galeria_decidido_em) datas.push("Última decisão em " + Admin.fmtDate(data.galeria_decidido_em));
+  if (datas.length) c.appendChild(el("p", "gal-datas", datas.join(" · ")));
   const hist = el("details", "gal-hist"); hist.appendChild(el("summary", null, "Histórico de decisões"));
   const lista = el("div"); lista.appendChild(el("p", "muted", "Carregando…")); hist.appendChild(lista); c.appendChild(hist);
   hist.addEventListener("toggle", async () => {
