@@ -360,6 +360,18 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-14 · Shine Border mais ligeiro (publicado: DM v48 e FindLook v72)
+
+- **Origem:** a dona do produto achou a animação lenta e pediu que fosse "um pouco mais ligeira".
+- **Feito (nos dois DS), cerca de 40% mais rápido em todas as durações, mantendo a proporção entre elas:**
+  - **Padrão do componente** (`duration` em `ui/shine-border.tsx`): de 14 s para 8 s.
+  - **Card do Plano Studio (Cards) e combinações de cor:** de 12 s para 7 s.
+  - **Exemplos lento, padrão e rápido:** de 18, 14 e 8 s para 11, 8 e 5 s.
+  - **Token:** "8s default".
+  - **Changelog** atualizado.
+- **Verificação:** `pnpm build`. O Playwright leu a `animation-duration` de cada Shine Border na seção: 7s, 11s, 8s, 5s, 7s, 7s, 7s, 7s, 7s, igual nos dois DS e nos endereços públicos, sem erros.
+- **Commits:** DM `53ae90f` e FindLook `3022b9e`.
+
 ## 2026-11-14 · Shine Border: a luz dá a volta pela borda (publicado: DM v47 e FindLook v71)
 
 - **Origem:** a dona do produto: "verificar por que o shine border não passa pelos cantos".
