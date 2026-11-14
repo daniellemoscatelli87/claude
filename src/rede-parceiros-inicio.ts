@@ -51,7 +51,10 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     el.tabIndex = sim ? 0 : -1;
   };
   let heroVisivel = true, conviteVisivel = false;
-  const atualizar = () => mostrar(cta, !heroVisivel && !conviteVisivel);
+  // no celular e tablet o "Quero ser parceiro" fica sempre no rodapé, ao lado do WhatsApp (o hero não tem mais o botão)
+  const pequeno = window.matchMedia('(max-width: 1023px)');
+  const atualizar = () => mostrar(cta, pequeno.matches || (!heroVisivel && !conviteVisivel));
+  pequeno.addEventListener('change', atualizar);
   if (hero) new IntersectionObserver(([e]) => { heroVisivel = e.isIntersecting; atualizar(); }, { threshold: 0 }).observe(hero);
   if (convite) new IntersectionObserver(([e]) => { conviteVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.1 }).observe(convite);
   if (rodape) new IntersectionObserver(([e]) => mostrar(subir, e.isIntersecting), { threshold: 0.1 }).observe(rodape);
@@ -419,4 +422,35 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     if (!animando) { animando = true; document.documentElement.style.scrollBehavior = 'auto'; requestAnimationFrame(passo); }
   }, { passive: false });
   window.addEventListener('scroll', () => { if (!animando) { atual = alvo = window.scrollY; } }, { passive: true });
+})();
+
+/* ---------- Celular e tablet: mesma navegação do Projeto Piloto — o topo (hero) fica fixo atrás do menu; a folha branca
+   do conteúdo sobe por cima, prende logo abaixo do menu (tampa arredondada parada) e o conteúdo rola por baixo dela ---------- */
+(() => {
+  const h = document.getElementById('site-header');
+  const hero = document.querySelector<HTMLElement>('.rp-hero');
+  const folha = document.querySelector<HTMLElement>('.rx-folha');
+  if (!h || !hero || !folha) return;
+  const pequeno = window.matchMedia('(max-width: 1023px)');
+  const espaco = document.createElement('div');
+  espaco.className = 'rp-hero-espaco';
+  espaco.setAttribute('aria-hidden', 'true');
+  hero.after(espaco);
+  const tampa = document.createElement('div');
+  tampa.className = 'rp-tampa';
+  tampa.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(tampa);
+  const raiz = document.documentElement;
+  let agendado = false;
+  const f = () => {
+    agendado = false;
+    if (!pequeno.matches) { raiz.style.removeProperty('--rp-tampa'); espaco.style.height = ''; return; }
+    espaco.style.height = `${hero.offsetHeight}px`;
+    const topo = Math.max(folha.getBoundingClientRect().top, h.offsetHeight);
+    raiz.style.setProperty('--rp-tampa', `${Math.round(topo)}px`);
+  };
+  f();
+  window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(f); } }, { passive: true });
+  window.addEventListener('resize', f);
+  if ('ResizeObserver' in window) new ResizeObserver(f).observe(hero);
 })();
