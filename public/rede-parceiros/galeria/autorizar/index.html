@@ -109,7 +109,6 @@
       <div class="foto-acoes">
         <label class="botao-arquivo" for="foto-arquivo"><span id="foto-btn-txt">Enviar foto</span></label>
         <input type="file" id="foto-arquivo" accept="image/jpeg,image/png,image/webp" class="sr-only">
-        <button type="button" class="nao pequeno" id="foto-ajustar" hidden>Ajustar recorte</button>
         <button type="button" class="nao pequeno" id="foto-remover" hidden>Remover foto</button>
       </div>
       <p class="foto-ok" id="foto-ok" role="status" hidden></p>
@@ -221,13 +220,12 @@
     $("rec-usar").addEventListener("click", function () {
       fotoNova = recCortar(600); removerFoto = false; mostrarFoto(fotoNova); $("recorte").hidden = true;
       $("foto-ok").textContent = "Foto anexada. Confira abaixo a prévia do seu perfil; ela é enviada quando você confirmar a autorização.";
-      $("foto-ok").hidden = false; $("foto-ajustar").hidden = false;
+      $("foto-ok").hidden = false;
       $("previa").scrollIntoView({ behavior: "smooth", block: "center" });
     });
     $("rec-cancelar").addEventListener("click", function () { $("recorte").hidden = true; });
-    $("foto-ajustar").addEventListener("click", function () { if (rec.img) recAbrir(); });
     $("li-alterar").addEventListener("click", function () { $("li-ver").hidden = true; $("li-editar").hidden = false; $("linkedin").focus(); $("linkedin").select(); });
-    $("foto-remover").addEventListener("click", function () { fotoNova = ""; removerFoto = !!fotoAtual; mostrarFoto(""); $("foto-ok").hidden = true; $("foto-ajustar").hidden = true; $("recorte").hidden = true; });
+    $("foto-remover").addEventListener("click", function () { fotoNova = ""; removerFoto = !!fotoAtual; mostrarFoto(""); $("foto-ok").hidden = true; $("recorte").hidden = true; });
     function atualizarIn() { $("p-in").style.visibility = $("linkedin").value.trim() ? "visible" : "hidden"; }
     post({ acao: "ver" }).then(function (d) {
       $("carregando").hidden = true; $("conteudo").hidden = false;
@@ -248,7 +246,7 @@
       var erro = $("erro"); erro.hidden = true;
       ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = true; });
       post({ acao: "decidir", decisao: decisao, linkedin: $("linkedin").value, foto: decisao === "autorizado" ? fotoNova : "", remover_foto: removerFoto })
-        .then(function (r) { if (fotoNova && r.foto_url) { $("foto-ok").textContent = "Foto enviada."; $("foto-ajustar").hidden = true; } fotoNova = ""; removerFoto = false; fotoAtual = r.foto_url || ""; mostrarFoto(fotoAtual); status(r.status); $("status").scrollIntoView({ behavior: "smooth", block: "center" }); })
+        .then(function (r) { if (fotoNova && r.foto_url) { $("foto-ok").textContent = "Foto enviada."; } fotoNova = ""; removerFoto = false; fotoAtual = r.foto_url || ""; mostrarFoto(fotoAtual); status(r.status); $("status").scrollIntoView({ behavior: "smooth", block: "center" }); })
         .catch(function (e) { erro.textContent = e.message; erro.hidden = false; })
         .finally(function () { ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = false; }); });
     }
