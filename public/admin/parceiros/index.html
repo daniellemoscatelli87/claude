@@ -12,22 +12,17 @@
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
   .gal-card { display: grid; gap: 14px; }
-  .gal-topo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
-  .gal-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .gal-pill { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: #EDF0F5; color: #495669; }
-  .gal-pill.ok { background: rgba(79, 181, 123, 0.14); color: #1f6b3a; }
-  .gal-pill.no { background: var(--red-tint); color: var(--red); }
-  .gal-pill.on { background: #E3EDF5; color: #2b5f86; }
-  .gal-pill.off { background: #EDF0F5; color: #495669; }
-  .gal-acao { flex: none; }
-  .gal-perfil { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 14px; background: #F6F7FA; border: 1px solid var(--line); }
-  .gal-perfil img, .gal-ini { flex: none; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(212, 77, 77, .25); }
-  .gal-ini { display: grid; place-items: center; background: var(--red-tint); color: var(--red); font-weight: 700; }
-  .gal-txt { min-width: 0; display: grid; gap: 2px; }
-  .gal-txt strong { font-size: 15px; }
-  .gal-txt a { color: var(--red); font-weight: 600; font-size: 14px; overflow-wrap: anywhere; }
-  .gal-sem { font-size: 12px; color: var(--muted); }
-  .gal-datas { margin: 0; font-size: 13px; color: var(--muted); }
+  .gal-dl { display: grid; grid-template-columns: max-content 1fr; align-items: center; gap: 10px 20px; margin: 0; font-size: 14px; }
+  .gal-dl dt { color: var(--muted); }
+  .gal-dl dd { margin: 0; font-weight: 600; }
+  .gal-sw { display: inline-flex; align-items: center; gap: 10px; }
+  .gal-switch { position: relative; width: 44px; height: 24px; padding: 0; border: 0; border-radius: 999px; background: #B3BDD0; cursor: pointer; transition: background-color .2s ease; }
+  .gal-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(13, 17, 25, .2); transition: transform .2s ease; }
+  .gal-switch[aria-checked="true"] { background: var(--red); }
+  .gal-switch[aria-checked="true"]::after { transform: translateX(20px); }
+  .gal-switch:disabled { opacity: .45; cursor: not-allowed; }
+  .gal-switch:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+  @media (prefers-reduced-motion: reduce) { .gal-switch, .gal-switch::after { transition: none; } }
   .gal-hist summary { cursor: pointer; font-weight: 600; font-size: 14px; }
   .gal-reg { display: grid; gap: 2px; padding: 10px 0; border-top: 1px solid var(--track); font-size: 14px; }
   .tabs { display: flex; width: 100%; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 999px; margin: 20px 0 16px; }
@@ -762,51 +757,31 @@ document.getElementById("tab-candidaturas").addEventListener("click", () => setT
 // Galeria de profissionais: situação da autorização de exibição do perfil e o histórico de decisões (prova do consentimento).
 function galeriaCard(data) {
   const c = el("div", "card lgpd gal-card");
-  c.appendChild(el("div", "sec", "Galeria de profissionais"));
+  c.appendChild(el("div", "sec", "Galeria de Profissionais"));
   const st = data.galeria_status;
-  // Topo: situação da autorização + visibilidade no site, e a ação de exibir/ocultar ao lado.
-  const topo = el("div", "gal-topo");
-  const tags = el("div", "gal-tags");
-  const pill = el("span", "gal-pill " + (st === "autorizado" ? "ok" : st === "recusado" ? "no" : ""),
-    st === "autorizado" ? "Autorizou" : st === "recusado" ? "Não autorizou" : data.galeria_convite_em ? "Aguardando resposta" : "Ainda não convidado");
-  tags.appendChild(pill);
-  topo.appendChild(tags);
-  c.appendChild(topo);
-  if (st === "autorizado") {
-    const vis = el("span", "gal-pill"); tags.appendChild(vis);
-    const btn = el("button", "btn-ghost gal-acao"); btn.type = "button"; topo.appendChild(btn);
-    const pintar = () => {
-      vis.className = "gal-pill " + (data.galeria_oculto ? "off" : "on");
-      vis.textContent = data.galeria_oculto ? "Oculto por você" : "Visível no site";
-      btn.textContent = data.galeria_oculto ? "Exibir na galeria" : "Ocultar da galeria";
-    };
-    btn.addEventListener("click", async () => {
-      const novo = !data.galeria_oculto;
-      btn.disabled = true;
-      const { error } = await Admin.sb.from("cadastros").update({ galeria_oculto: novo }).eq("id", data.id);
-      btn.disabled = false;
-      if (error) return Admin.toast("Não foi possível alterar agora: " + error.message);
-      data.galeria_oculto = novo; pintar();
-      Admin.log((novo ? "Ocultou da galeria" : "Exibiu na galeria") + " o perfil de " + (data.nome || "parceiro"));
-      Admin.toast(novo ? "Perfil ocultado da galeria." : "Perfil exibido na galeria.");
-    });
-    pintar();
-    // Perfil como aparece: foto, cargo e LinkedIn juntos.
-    const perfil = el("div", "gal-perfil");
-    if (data.galeria_foto_url) { const img = el("img"); img.src = data.galeria_foto_url; img.alt = "Foto enviada por " + (data.nome || "parceiro"); perfil.appendChild(img); }
-    else perfil.appendChild(el("span", "gal-ini", Admin.initials(data.nome || "")));
-    const txt = el("div", "gal-txt");
-    txt.appendChild(el("strong", null, data.galeria_cargo || "Sem cargo informado"));
-    if (data.galeria_linkedin) { const a = el("a", null, data.galeria_linkedin.replace(/^https:\/\/(www\.)?/, "")); a.href = data.galeria_linkedin; a.target = "_blank"; a.rel = "noopener noreferrer"; txt.appendChild(a); }
-    if (!data.galeria_foto_url) txt.appendChild(el("span", "gal-sem", "Sem foto enviada (usar a do LinkedIn)"));
-    perfil.appendChild(txt);
-    c.appendChild(perfil);
-  }
-  // Datas em uma linha discreta.
-  const datas = [];
-  if (data.galeria_convite_em) datas.push("Convite enviado em " + Admin.fmtDate(data.galeria_convite_em));
-  if (data.galeria_decidido_em) datas.push("Última decisão em " + Admin.fmtDate(data.galeria_decidido_em));
-  if (datas.length) c.appendChild(el("p", "gal-datas", datas.join(" · ")));
+  const dl = el("dl", "gal-dl");
+  const linha = (rotulo, valor) => { dl.append(el("dt", null, rotulo)); const dd = el("dd"); typeof valor === "string" ? (dd.textContent = valor) : dd.appendChild(valor); dl.append(dd); };
+  linha("Convite enviado", data.galeria_convite_em ? Admin.fmtDate(data.galeria_convite_em) : "Não enviado");
+  linha("Status", st === "autorizado" ? "Exibição autorizada" : st === "recusado" ? "Exibição não autorizada" : data.galeria_convite_em ? "Aguardando resposta" : "Ainda não convidado");
+  // Exibir: switch (sim/não). Só é possível exibir quem autorizou; ocultar não altera a autorização do parceiro.
+  const sw = el("button", "gal-switch"); sw.type = "button"; sw.setAttribute("role", "switch"); sw.setAttribute("aria-label", "Exibir na galeria");
+  const rot = el("span", "gal-sw-txt");
+  const caixa = el("span", "gal-sw"); caixa.append(sw, rot);
+  const pintar = () => { const on = st === "autorizado" && !data.galeria_oculto; sw.setAttribute("aria-checked", String(on)); rot.textContent = on ? "Sim" : "Não"; };
+  if (st !== "autorizado") { sw.disabled = true; sw.title = "Disponível só para quem autorizou a exibição"; }
+  sw.addEventListener("click", async () => {
+    const novo = !data.galeria_oculto;
+    sw.disabled = true;
+    const { error } = await Admin.sb.from("cadastros").update({ galeria_oculto: novo }).eq("id", data.id);
+    sw.disabled = false;
+    if (error) return Admin.toast("Não foi possível alterar agora: " + error.message);
+    data.galeria_oculto = novo; pintar();
+    Admin.log((novo ? "Ocultou da galeria" : "Exibiu na galeria") + " o perfil de " + (data.nome || "parceiro"));
+    Admin.toast(novo ? "Perfil ocultado da galeria." : "Perfil exibido na galeria.");
+  });
+  pintar();
+  linha("Exibir", caixa);
+  c.appendChild(dl);
   const hist = el("details", "gal-hist"); hist.appendChild(el("summary", null, "Histórico de decisões"));
   const lista = el("div"); lista.appendChild(el("p", "muted", "Carregando…")); hist.appendChild(lista); c.appendChild(hist);
   hist.addEventListener("toggle", async () => {
