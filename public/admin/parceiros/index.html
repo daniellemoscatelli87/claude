@@ -893,7 +893,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
       const addTxt = (v) => (/^Outr[oa]s?\b/.test(v) ? v.replace(/\.$/, "") + ": " + txt : v);
       shown[k] = Array.isArray(shown[k]) ? shown[k].map(addTxt) : addTxt(shown[k] || "");
     }
-    box.replaceChildren(Admin.detail(shown, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)), galeriaCard(data), lgpdCard(data));
+    box.replaceChildren(Admin.detail(shown, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at), { acordeao: true }), galeriaCard(data), lgpdCard(data));
     return;
   }
   const { data, error } = await Admin.sb.from("cadastros").select("*").order("created_at", { ascending: false });
