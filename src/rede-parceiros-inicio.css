@@ -1270,3 +1270,16 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 @media (min-width: 1024px) {
   .rp-flu-txt i { display: block; flex: none; width: 7px; height: 7px; min-width: 7px; border-radius: 50%; background: var(--cor); box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85); }
 }
+/* bolinhas de status: sem contorno; piscam e emitem luz na própria cor */
+@media (min-width: 1024px) {
+  .rp-flu-txt i { box-shadow: 0 0 6px 1px color-mix(in srgb, var(--cor) 70%, transparent); }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .rp-flu-txt i { animation: rp-flu-luz 1.8s ease-in-out infinite; }
+  .rp-flu-2 .rp-flu-txt i { animation-delay: .6s; }
+  .rp-flu-3 .rp-flu-txt i { animation-delay: 1.2s; }
+}
+@keyframes rp-flu-luz {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px 1px color-mix(in srgb, var(--cor) 70%, transparent), 0 0 0 0 color-mix(in srgb, var(--cor) 55%, transparent); }
+  50% { opacity: .55; box-shadow: 0 0 10px 3px color-mix(in srgb, var(--cor) 80%, transparent), 0 0 0 5px color-mix(in srgb, var(--cor) 0%, transparent); }
+}
