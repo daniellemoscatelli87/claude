@@ -662,10 +662,9 @@ const SECTIONS = [
         "<li>Pedir acesso, correção ou exclusão dos dados e retirar qualquer autorização a qualquer momento pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação.</li>" +
         "<li>Leia a <a href=\"/privacidade/\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a> completa.</li></ul>",
       options: [AUT_DADOS, AUT_GALERIA] },
-    { id: "galeria_cargo", n: 40, showIf: { id: "autorizacoes", test: (v) => Array.isArray(v) && v.includes(AUT_GALERIA) }, label: "Como você quer ser apresentado(a) na galeria?", type: "text", required: true, maxlength: 60, placeholder: "Ex.: Product Designer", help: "O cargo que vai aparecer no seu perfil. Até 60 caracteres." },
   ]},
   { title: "Comunidade de networking", n: "Seção final", questions: [
-    { id: "interesse_whatsapp", n: 41, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
+    { id: "interesse_whatsapp", n: 40, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
       infoHtml: "<p>Estamos construindo uma comunidade para conectar profissionais de diferentes especialidades, promover a troca de conhecimentos, compartilhar referências e fortalecer conexões profissionais.</p><p>O espaço será voltado a conversas sobre Design, Experiência Humana, Negócios, Tecnologia e Inovação, além da troca de experiências e oportunidades de colaboração.</p><p>A participação é opcional e independente deste cadastro.</p>",
       afterIf: (v) => /^Sim/.test(v),
       afterHtml: "<div class=\"info wa-box\"><span class=\"wa-ic\" aria-hidden=\"true\">" + WA_ICON + "</span><div><p><strong>Link de acesso ao grupo:</strong><br><a href=\"" + WHATSAPP_GROUP + "\" target=\"_blank\" rel=\"noopener\">" + WHATSAPP_GROUP + "</a></p><p>Se tiver interesse, basta acessar o link acima. A participação no grupo não é necessária para concluir seu cadastro.</p></div></div>",
@@ -995,9 +994,9 @@ function payload() {
   });
   const aut = Array.isArray(data.autorizacoes) ? data.autorizacoes : [];
   data.autoriza_dados = aut.includes(AUT_DADOS);
-  // Galeria: o banco só marca a autorização quando galeria_aceite_cadastro = true e há cargo (e registra o termo oficial).
-  data.galeria_aceite_cadastro = aut.includes(AUT_GALERIA) && !!data.galeria_cargo;
-  if (!data.galeria_aceite_cadastro) data.galeria_cargo = null;
+  // Galeria: o banco marca a autorização quando galeria_aceite_cadastro = true (e registra o termo oficial).
+  // O cargo exibido na galeria não é perguntado: é definido pelo Studio a partir das informações do cadastro.
+  data.galeria_aceite_cadastro = aut.includes(AUT_GALERIA);
   delete data.autorizacoes;
   // LGPD: guarda junto do cadastro o texto exato que a pessoa viu e o que marcou (a data do aceite é registrada pelo servidor).
   if (data.autoriza_dados) {

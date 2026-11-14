@@ -568,7 +568,7 @@ window.FORM_PARCEIROS = [
   "questions": [
    {
     "id": "interesse_whatsapp",
-    "n": 41,
+    "n": 40,
     "label": "Você gostaria de participar do nosso grupo de networking no WhatsApp?",
     "type": "radio",
     "options": [
