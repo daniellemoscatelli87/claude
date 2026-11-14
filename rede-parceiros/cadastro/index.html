@@ -241,6 +241,15 @@ html.embutido .nav-bar .modal-obs span[aria-hidden] { color: #D44D4D; }
   .options { display: grid; gap: 8px; }
   .group-title { font-size: 13px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; margin: 18px 0 4px; }
   .group-title:first-child { margin-top: 4px; }
+  .opt-com-info { border: 1px solid var(--line); border-radius: 10px; background: var(--card); margin-bottom: 8px; }
+  .opt-com-info .opt { border: 0; margin: 0; }
+  .opt-info { padding: 0 14px 10px 44px; }
+  .opt-info summary { cursor: pointer; width: fit-content; font-size: 13px; font-weight: 600; color: #D44D4D; list-style: none; }
+  .opt-info summary::-webkit-details-marker { display: none; }
+  .opt-info summary::after { content: " ▾"; }
+  .opt-info[open] summary::after { content: " ▴"; }
+  .opt-info .info { margin: 8px 0 0; }
+  .aut-direitos { margin: 4px 0 0; font-size: 13px; line-height: 1.55; color: var(--muted); }
   .opt {
     display: flex; align-items: flex-start; gap: 10px;
     padding: 10px 12px;
@@ -431,12 +440,11 @@ topo.addEventListener('focusin',function(){topo.classList.remove('escondido');})
       <div class="end-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></svg></div>
       <h2 id="welcome-title">Boas-vindas!</h2>
     </div>
-    <p>É um prazer receber você no ecossistema profissional da <strong>Dani Moscatelli | Experience Design Studio</strong>!</p>
-    <p>Acreditamos que grandes oportunidades surgem do encontro entre diferentes talentos, conhecimentos e perspectivas.</p>
-    <p>Agora, você faz parte da nossa rede de parceiros e poderá ser convidado para colaborar em projetos do estúdio, conforme seu perfil e disponibilidade.</p>
-    <p>Nossa comunidade também é um espaço para trocar experiências, compartilhar conhecimentos, divulgar oportunidades e desenvolver parcerias que vão além do estúdio.</p>
-    <p>A participação não estabelece vínculo contratual, e eventuais colaborações serão definidas conforme as necessidades de cada projeto.</p>
-    <p>Que este seja o início de muitas conexões capazes de transformar ideias em experiências de alto valor!</p>
+    <p>É um prazer receber você na rede de parceiros da <strong>Dani Moscatelli | Experience Design Studio</strong>!</p>
+    <p>Acreditamos no valor de conectar talentos, conhecimentos e diferentes perspectivas para criar novas oportunidades.</p>
+    <p>Agora, você faz parte do nosso ecossistema e poderá colaborar em projetos do Studio, além de trocar experiências, compartilhar conhecimentos e desenvolver novas parcerias.</p>
+    <p>A participação não estabelece vínculo contratual. Eventuais colaborações serão acordadas conforme cada projeto.</p>
+    <p><strong>Que esta seja a primeira de muitas conexões de valor!</strong></p>
     <div class="sign">
       <img class="sig-photo" src="/dani-assinatura.webp" alt="Dani Moscatelli" width="96" height="96">
       <p><strong>Dani Moscatelli</strong></p>
@@ -575,7 +583,7 @@ const SECTIONS = [
     { id: "segmentos", n: 16, label: "Em quais setores de mercado você já atuou ou atende clientes?", type: "checkbox", required: true, help: "Aqui não é a sua especialidade, e sim o setor dos clientes e projetos com que você trabalha. Ex.: uma pessoa de UX Research pode ter atuado em Saúde e em Varejo.", options: [
       "Saúde e serviços hospitalares.", "Clínicas e consultórios.", "Operadoras de planos de saúde.", "Saúde digital e Healthtechs.", "Turismo e hospitalidade.", "Hotelaria e meios de hospedagem.", "Gastronomia e alimentação.", "Varejo e comércio.", "E-commerce e marketplaces.", "Serviços financeiros e Fintechs.", "Educação e Edtechs.", "Tecnologia e software.", "Indústria e manufatura.", "Mobilidade e transportes.", "Logística e distribuição.", "Telecomunicações.", "Mercado imobiliário.", "Construção civil e arquitetura.", "Entretenimento e eventos.", "Setor público e serviços governamentais.", "Terceiro setor e organizações sociais.", "Agronegócio.", "Energia e sustentabilidade.", "Outros segmentos.",
     ]},
-    { id: "conhecimento_segmento", n: 17, label: "Dentro dos setores que você marcou, em quais assuntos você tem domínio aprofundado?", type: "list", placeholder: "Ex.: Jornada hospitalar", required: false, help: "Cite temas específicos que você conhece a fundo em cada segmento. Exemplos: jornada hospitalar, atendimento de urgência e emergência, operação hoteleira, comportamento do consumidor, serviços públicos, jornada de compra no varejo, experiência de pessoas idosas, acessibilidade etc." },
+    { id: "conhecimento_segmento", n: 17, label: "Dentro dos setores que você marcou, em quais assuntos você tem domínio aprofundado?", type: "list", placeholder: "Ex.: Operação hoteleira", required: false, help: "Cite temas específicos que você conhece a fundo em cada segmento. Exemplos: jornada hospitalar, atendimento de urgência e emergência, operação hoteleira, comportamento do consumidor, serviços públicos, jornada de compra no varejo, experiência de pessoas idosas, acessibilidade etc." },
     { id: "colaboracao_multidisciplinar", n: 18, label: "Você já participou de projetos que envolveram colaboração entre diferentes áreas ou especialidades?", type: "radio", required: true, options: [
       "Sim, frequentemente.",
       "Sim, em algumas ocasiões.",
@@ -649,18 +657,19 @@ const SECTIONS = [
     ]},
     { id: "autorizacoes", n: 39, label: "Autorizações", type: "checkbox", required: true, mustInclude: AUT_DADOS,
       errMsg: "Para fazer parte da rede, marque a autorização de uso dos seus dados.",
-      help: "Leia o que cada autorização permite e marque as que você concede.",
-      infoHtml: "<p><strong>Uso dos dados (obrigatório para fazer parte da rede)</strong></p><ul>" +
-        "<li>Armazenar e usar os dados profissionais deste formulário para organizar a rede de parceiros e analisar competências.</li>" +
-        "<li>Entrar em contato sobre possíveis oportunidades de colaboração.</li>" +
-        "<li>Os dados não serão divulgados publicamente nem compartilhados com terceiros para finalidades incompatíveis com as descritas aqui.</li></ul>" +
-        "<p><strong>Exibição na Galeria de Profissionais (opcional)</strong></p><ul>" +
-        "<li>Exibir na galeria do site danimoscatelli.com.br: nome, cargo, áreas de atuação, segmentos, link do LinkedIn e foto.</li>" +
-        "<li>E-mail, telefone e cidade não são exibidos.</li>" +
-        "<li>Você recebe por e-mail um link para enviar sua foto e revisar como o perfil vai aparecer. Sem foto enviada, usamos a do seu LinkedIn.</li></ul>" +
-        "<p><strong>Seus direitos</strong></p><ul>" +
-        "<li>Pedir acesso, correção ou exclusão dos dados e retirar qualquer autorização a qualquer momento pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação.</li>" +
-        "<li>Leia a <a href=\"/privacidade/\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a> completa.</li></ul>",
+      help: "Marque as autorizações que você concede. Toque em “O que estou autorizando” para ver os detalhes.",
+      // o que cada autorização permite fica recolhido junto da sua caixa; a pessoa expande se quiser ler
+      optionInfo: {
+        [AUT_DADOS]: "<ul>" +
+          "<li>Armazenar e usar os dados profissionais deste formulário para organizar a rede de parceiros e analisar competências.</li>" +
+          "<li>Entrar em contato sobre possíveis oportunidades de colaboração.</li>" +
+          "<li>Os dados não serão divulgados publicamente nem compartilhados com terceiros para finalidades incompatíveis com as descritas aqui.</li></ul>",
+        [AUT_GALERIA]: "<ul>" +
+          "<li>Exibir na galeria do site danimoscatelli.com.br: nome, especialidade, áreas de atuação, segmentos, link do LinkedIn e foto.</li>" +
+          "<li>E-mail, telefone e cidade não são exibidos.</li>" +
+          "<li>Você recebe por e-mail um link para enviar sua foto e revisar como o perfil vai aparecer. Sem foto enviada, usamos a do seu LinkedIn.</li></ul>",
+      },
+      afterHtml: "<p class=\"aut-direitos\">Você pode pedir acesso, correção ou exclusão dos dados e retirar qualquer autorização a qualquer momento pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação. Leia a <a href=\"/privacidade/\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a> completa.</p>",
       options: [AUT_DADOS, AUT_GALERIA] },
   ]},
   { title: "Comunidade de networking", n: "Seção final", questions: [
@@ -679,7 +688,8 @@ const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&
 const isOther = (o) => /^Outr[oa]s?\b/.test(o);
 function optionHtml(q, value) {
   const type = q.type === "checkbox" ? "checkbox" : "radio";
-  const opt = `<label class="opt"><input type="${type}" name="${q.id}" value="${esc(value)}"><span>${esc(value)}</span></label>`;
+  let opt = `<label class="opt"><input type="${type}" name="${q.id}" value="${esc(value)}"><span>${esc(value)}</span></label>`;
+  if (q.optionInfo && q.optionInfo[value]) opt = `<div class="opt-com-info">${opt}<details class="opt-info"><summary>O que estou autorizando</summary><div class="info">${q.optionInfo[value]}</div></details></div>`;
   if (!isOther(value)) return opt;
   return opt + `<div class="other hidden" data-other="${q.id}"><input type="text" name="${q.id}__outro" maxlength="200" placeholder="Qual? Escreva aqui" aria-label="Descreva a opção ${esc(value.replace(/\.$/, ""))}"></div>`;
 }
@@ -891,6 +901,23 @@ function applyShowIf() {
 form.addEventListener("change", applyShowIf);
 applyShowIf();
 
+// E-mail já cadastrado: ao sair do campo, o formulário pergunta ao banco (só sim ou não) e avisa na hora.
+const EMAIL_DUP_MSG = "Este e-mail já está cadastrado na Rede de Parceiros. Para atualizar seus dados, escreva para contato@danimoscatelli.com.br.";
+const emailCadastrado = { email: "", existe: false };
+async function verificarEmail() {
+  const campo = form.elements.email; if (!campo) return;
+  const v = campo.value.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return;
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/email_ja_cadastrado`, { method: "POST", headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" }, body: JSON.stringify({ p_email: v }) });
+    if (!r.ok) return;
+    emailCadastrado.email = v; emailCadastrado.existe = (await r.json()) === true;
+    if (campo.value.trim().toLowerCase() === v) validateQuestion(QUESTIONS.find((x) => x.id === "email"));
+  } catch {}
+}
+form.addEventListener("focusout", (e) => { if (e.target && e.target.name === "email") verificarEmail(); });
+form.addEventListener("change", (e) => { if (e.target && e.target.name === "email") verificarEmail(); });
+
 function validateQuestion(q) {
   if (!visible(q)) return true;
   const v = value(q);
@@ -898,6 +925,8 @@ function validateQuestion(q) {
   if (q.required) ok = Array.isArray(v) ? v.length > 0 : v !== "";
   if (ok && q.mustInclude) ok = Array.isArray(v) && v.includes(q.mustInclude);
   if (ok && q.type === "email" && v) ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const emailDup = ok && q.id === "email" && v && emailCadastrado.email === v.toLowerCase() && emailCadastrado.existe;
+  if (emailDup) ok = false;
   if (ok && q.type === "idiomas") {
     const rs = langRows(q);
     rs.forEach((r) => r.row.classList.toggle("bad", !r.idioma !== !r.nivel));
@@ -907,7 +936,7 @@ function validateQuestion(q) {
   const otherBad = ok && (q.type === "checkbox" || q.type === "radio") && otherChecked(q) && !otherText(q);
   if (otherBad) ok = false;
   const err = form.querySelector(`[data-q="${q.id}"] .err`);
-  if (err) { err.dataset.base ??= err.textContent; err.textContent = otherBad ? "Escreva qual é a opção “Outro”." : err.dataset.base; }
+  if (err) { err.dataset.base ??= err.textContent; err.textContent = otherBad ? "Escreva qual é a opção “Outro”." : emailDup ? EMAIL_DUP_MSG : err.dataset.base; }
   if (ok && q.type === "url" && v && v !== "https://") ok = validUrl(withScheme(v), q.urlHost);
   form.querySelector(`[data-q="${q.id}"]`).classList.toggle("invalid", !ok);
   return ok;
@@ -1001,7 +1030,9 @@ function payload() {
   // LGPD: guarda junto do cadastro o texto exato que a pessoa viu e o que marcou (a data do aceite é registrada pelo servidor).
   if (data.autoriza_dados) {
     const q = SECTIONS.flatMap(s => s.questions).find(q => q.id === "autorizacoes");
-    const tmp = document.createElement("div"); tmp.innerHTML = q.infoHtml.replace(/<\/(p|li)>/g, "</$1>\n");
+    // texto exato que a pessoa viu: cada autorização com os seus detalhes e a nota de direitos
+    const tmp = document.createElement("div");
+    tmp.innerHTML = (Object.entries(q.optionInfo).map(([k, v]) => "<p>" + esc(k) + "</p>" + v).join("") + q.afterHtml).replace(/<\/(p|li)>/g, "</$1>\n");
     data.consentimento_texto = q.label + "\n\n" + tmp.textContent.trim() + "\n\nMarcado:\n- " + aut.join("\n- ");
   }
   data.outros = {};
@@ -1021,6 +1052,11 @@ async function submit() {
       headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" },
       body: JSON.stringify(payload()),
     });
+    if (res.status === 409) {
+      emailCadastrado.email = (value({ id: "email", type: "email" }) || "").toLowerCase(); emailCadastrado.existe = true;
+      errBox.textContent = EMAIL_DUP_MSG; errBox.style.display = "block";
+      btn.disabled = false; btn.innerHTML = SEND_LABEL; return;
+    }
     if (!res.ok) throw new Error(await res.text());
     // Título com o primeiro nome da pessoa.
     const primeiro = (value({ id: "nome", type: "text" }) || "").trim().split(/\s+/)[0];

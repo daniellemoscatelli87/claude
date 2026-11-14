@@ -11,6 +11,53 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
+  .cm-gal { margin-bottom: 16px; }
+  .cm-gal h2 { margin: 0 0 6px; font-size: 18px; }
+  .cm-gal-n { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+  .cm-gal-n div { padding: 12px; border-radius: 12px; background: #F6F7FA; border: 1px solid var(--line); }
+  .cm-gal-n strong { display: block; font-size: 22px; }
+  .cm-gal-n span { font-size: 12px; color: var(--muted); }
+  @media (max-width: 760px) { .cm-gal-n { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .cm-gal-acts { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+  .cm-gal-acts .btn-ok:disabled, .cm-gal-acts .btn-ghost:disabled { opacity: .5; cursor: not-allowed; }
+  .cm-prev { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #f4f5f8; }
+  .cm-prev iframe { display: block; width: 100%; height: 520px; border: 0; }
+  .tab-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: -4px; padding: 4px; }
+  .tab-parceiros { width: 100%; min-width: 960px; border-collapse: collapse; font-size: 13px; }
+  .tab-parceiros th { text-align: left; padding: 0 10px 10px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); white-space: nowrap; border-bottom: 1px solid var(--track); }
+  .tab-parceiros td { padding: 12px 10px; vertical-align: middle; border-bottom: 1px solid var(--track); color: var(--ink, #131A27); }
+  .tab-parceiros tbody tr { cursor: pointer; }
+  .tab-parceiros tbody tr:hover, .tab-parceiros tbody tr:focus-visible { background: var(--track); outline: none; }
+  .tab-parceiros tbody tr:last-child td { border-bottom: 0; }
+  .tp-col-quem { min-width: 230px; max-width: 280px; }
+  .tp-quem { display: flex; align-items: center; gap: 12px; }
+  .tp-quem .ini { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; font-weight: 700; font-size: 14px; background: var(--red-tint); color: var(--red); }
+  .tp-txt { min-width: 0; }
+  .tp-nome { display: block; font-weight: 700; font-size: 14px; color: inherit; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tr-seen .tp-nome, .tab-parceiros tr.seen .tp-nome { font-weight: 600; }
+  .tp-sub { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px; }
+  .tp-forte { font-weight: 600; }
+  .tp-data { white-space: nowrap; color: var(--muted); }
+  .tp-gal { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .tp-gal.ok { background: #e6f4ea; color: #1e7b45; }
+  .tp-gal.wait { background: #fdf3e2; color: #8a5a12; }
+  .tp-gal.no { background: #fdf2f2; color: #b82828; }
+  .tp-gal.none { background: var(--track); color: var(--muted); }
+  .tab-parceiros tr.novo .tp-nome::after { content: ""; display: inline-block; width: 7px; height: 7px; margin-left: 8px; border-radius: 50%; background: var(--red); vertical-align: middle; }
+  .ini-foto { overflow: hidden; padding: 0 !important; }
+  .ini-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .rowlink.com-gal { grid-template-columns: 38px minmax(0, 1fr) 120px 90px; }
+  .rowlink.com-gal .d { justify-self: end; }
+  .rowlink.com-gal .t { grid-column: 2; grid-row: 1; }
+  .rowlink.com-gal .s { grid-column: 2; grid-row: 2; }
+  .rowlink.com-gal .gal { grid-column: 3; grid-row: 1 / span 2; justify-self: start; }
+  .rowlink.com-gal .d { grid-column: 4; grid-row: 1; }
+  .gal { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .gal::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .gal.sim { background: #e6f4ea; color: #1e7b45; }
+  .gal.nao { background: var(--track); color: var(--muted); }
+  .rowlink-cab { display: grid; grid-template-columns: 38px minmax(0, 1fr) 120px 90px; gap: 2px 12px; padding: 0 10px 8px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  @media (max-width: 640px) { .rowlink.com-gal { grid-template-columns: auto minmax(0, 1fr) auto; } .rowlink.com-gal .gal { grid-column: 2; grid-row: 3; } .rowlink.com-gal .d { grid-column: 3; } .rowlink-cab { display: none; } }
   .gal-card { display: grid; gap: 14px; }
   .gal-dl { display: grid; grid-template-columns: max-content 1fr; align-items: center; gap: 10px 20px; margin: 0; font-size: 14px; }
   .gal-dl dt { color: var(--muted); }
@@ -345,6 +392,18 @@
     </section>
 
     <section id="panel-candidaturas" role="tabpanel" aria-labelledby="tab-candidaturas" class="hidden">
+      <div class="card cm-gal">
+        <div class="cm-gal-topo"><h2>Autorização da galeria</h2></div>
+        <p class="muted" style="margin:0 0 14px;font-size:14px">Pedido para o parceiro autorizar a exibição do perfil na Galeria de profissionais. Novos parceiros recebem o pedido automaticamente após o cadastro. A galeria aparece no site quando houver pelo menos 3 autorizações.</p>
+        <div class="cm-gal-n" id="gal-n"></div>
+        <div class="cm-gal-acts">
+          <button type="button" class="btn-ghost" id="gal-prev">Ver o e-mail</button>
+          <button type="button" class="btn-ghost" id="gal-reenviar">Reenviar a quem não respondeu</button>
+          <button type="button" class="btn-ok" id="gal-enviar">Enviar aos não convidados</button>
+        </div>
+        <div class="cm-prev hidden" id="gal-prev-box" style="margin-top:14px"><iframe title="E-mail de autorização da galeria" id="gal-prev-frame"></iframe></div>
+        <p class="msg err hidden" id="gal-err"></p>
+      </div>
       <div class="card"><div class="rows" id="list"></div></div>
     </section>
   </div>
@@ -563,7 +622,7 @@ function profileDetail(r) {
   const head = el("div", "pc-head");
   const who = el("div", "pc-who");
   who.append(el("h3", null, r.nome || "Sem nome"), el("div", "pc-sub", [r.empresa, cidade(r.cidade_estado) + (UF_NOME[uf(r.cidade_estado)] ? " - " + uf(r.cidade_estado) : "")].filter(Boolean).join(" · ")));
-  head.append(el("span", "ini", Admin.initials(r.nome)), who);
+  head.append(avatar(r), who);
   c.appendChild(head);
   const m = matchOf(r);
   if (m) {
@@ -613,7 +672,7 @@ function summaryCard(r) {
   const senior = [NIVEL[r.tempo_especialidade], r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase() + " de carreira"].filter(Boolean).join(" · ");
   if (senior) who.appendChild(el("div", "pc-sub", senior));
   const m = matchOf(r);
-  head.append(el("span", "ini", Admin.initials(r.nome)), who);
+  head.append(avatar(r), who);
   const dl = el("dl", "pcs-dl");
   const row = (k, v, cls) => { if (!v) return; const d = el("div", cls); d.append(el("dt", null, k), el("dd", null, v)); dl.appendChild(d); };
   row("Especialidade", r.principal_especializacao || "Não informada");
@@ -671,11 +730,92 @@ function dashboard(rows) {
   profiles(rows);
 }
 
+// Avatar: a foto da galeria, quando o parceiro já enviou; senão as iniciais.
+function avatar(r, cls = "ini") {
+  const foto = r.galeria_foto_url && /^https:\/\//.test(r.galeria_foto_url) ? r.galeria_foto_url : "";
+  if (!foto) return el("span", cls, Admin.initials(r.nome));
+  const s = el("span", cls + " ini-foto"); const img = el("img"); img.src = foto; img.alt = ""; img.loading = "lazy"; s.appendChild(img); return s;
+}
+const publicado = (r) => r.galeria_status === "autorizado" && !r.galeria_oculto;
+
+
+/* ---------- Autorização da galeria (pedido por e-mail, em massa) ---------- */
+function resumoGaleria() {
+  const n = (f) => ALL.filter(f).length;
+  const itens = [["autorizaram", n((r) => r.galeria_status === "autorizado")], ["não autorizaram", n((r) => r.galeria_status === "recusado")],
+    ["aguardando resposta", n((r) => !r.galeria_status && r.galeria_convite_em)], ["não convidados", n((r) => !r.galeria_status && !r.galeria_convite_em)]];
+  const box = document.getElementById("gal-n"); box.replaceChildren();
+  itens.forEach(([t, v]) => { const d = el("div"); d.append(el("strong", null, String(v)), el("span", null, t)); box.appendChild(d); });
+  document.getElementById("gal-enviar").disabled = !itens[3][1];
+  document.getElementById("gal-reenviar").disabled = !itens[2][1];
+}
+async function chamarGaleria(body) {
+  const { data, error } = await Admin.sb.functions.invoke("galeria-convite", { body });
+  if (!error) return data || {};
+  let m = "Não foi possível falar com o servidor. Tente novamente."; try { m = (await error.context.json()).error || m; } catch {}
+  return { error: m };
+}
+function initGaleria(recarregar) {
+  const err = document.getElementById("gal-err");
+  const erro = (x) => { err.textContent = x; err.classList.toggle("hidden", !x); };
+  document.getElementById("gal-prev").addEventListener("click", async (e) => {
+    const box = document.getElementById("gal-prev-box");
+    if (!box.classList.contains("hidden")) { box.classList.add("hidden"); e.target.textContent = "Ver o e-mail"; return; }
+    const res = await chamarGaleria({ acao: "preview" }); if (res.error) return erro(res.error);
+    document.getElementById("gal-prev-frame").srcdoc = res.html; box.classList.remove("hidden"); e.target.textContent = "Fechar o e-mail"; erro("");
+  });
+  const plural = (n, um, varios) => n + " " + (n === 1 ? um : varios);
+  const disparar = async (reenviar, botao) => {
+    const qtd = ALL.filter((r) => !r.galeria_status && !r.comunicados_descadastro_em && r.email && (reenviar ? r.galeria_convite_em : !r.galeria_convite_em)).length;
+    const txt = reenviar ? "Reenviar o pedido de autorização para quem ainda não respondeu (" + qtd + ")?" : "Enviar o pedido de autorização para quem ainda não foi convidado (" + qtd + ")?";
+    if (!(await Admin.confirmDialog({ title: "Pedido de autorização da galeria", message: txt + " Quem se descadastrou dos comunicados não recebe.", ok: "Enviar", danger: false }))) return;
+    botao.disabled = true;
+    const res = await chamarGaleria({ acao: "pendentes", reenviar });
+    botao.disabled = false;
+    if (res.error) return erro(res.error);
+    erro(""); Admin.log("Enviou pedido de autorização da galeria", res.enviados + " enviados" + (res.falhas ? ", " + res.falhas + " não enviados" : ""));
+    await recarregar();
+    Admin.toast(res.falhas ? res.enviados + " enviados e " + res.falhas + " não enviados." : "Pedido enviado para " + plural(res.enviados, "parceiro.", "parceiros."));
+  };
+  document.getElementById("gal-enviar").addEventListener("click", (e) => disparar(false, e.currentTarget));
+  document.getElementById("gal-reenviar").addEventListener("click", (e) => disparar(true, e.currentTarget));
+}
+
 /* ---------- Candidaturas ---------- */
 function candidaturas(rows) {
   const list = document.getElementById("list"); list.replaceChildren();
   if (!rows.length) return list.appendChild(el("div", "empty", ALL.length ? "Nenhuma candidatura para os filtros atuais." : "Nenhuma candidatura ainda."));
-  rows.forEach((r) => list.appendChild(Admin.rowLink("/admin/parceiros/?id=" + r.id, r.nome, [r.principal_especializacao, r.cidade_estado, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em)));
+  // Tabela: uma linha por parceiro; a linha inteira abre a candidatura.
+  const PJ = { "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria).": "CNPJ ativo", "Estou em processo de formalização.": "Em formalização", "Atualmente não tenho CNPJ, mas tenho interesse em atuar como PJ.": "Sem CNPJ, com interesse", "Não tenho interesse em atuar como PJ.": "Sem interesse" };
+  const DISP = { "Disponibilidade imediata.": "Imediata", "Disponibilidade mediante agendamento.": "Mediante agendamento", "Disponibilidade parcial, conciliando com outros projetos.": "Parcial", "Disponibilidade apenas para projetos pontuais.": "Projetos pontuais" };
+  const horas = (h) => !h ? "" : /variável/i.test(h) ? "horas variáveis" : clean(h).replace(/^Até /, "até ").replace(/^De /, "").replace(/^Mais de /, "+").replace(/ horas semanais$/, " h/semana");
+  const galStatus = (r) => r.galeria_status === "autorizado" ? ["Autorizado", "ok"] : r.galeria_status === "recusado" ? ["Recusado", "no"] : r.galeria_convite_em ? ["Aguardando resposta", "wait"] : ["Não convidado", "none"];
+  const wrap = el("div", "tab-wrap");
+  const t = el("table", "tab-parceiros");
+  const thead = el("thead"); const hr = el("tr");
+  ["Parceiro", "Senioridade", "Área de atuação", "Situação PJ", "Disponibilidade", "Galeria", "Publicado", "Cadastro"].forEach((h) => hr.appendChild(el("th", null, h)));
+  thead.appendChild(hr); t.appendChild(thead);
+  const tb = el("tbody");
+  rows.forEach((r) => {
+    const href = "/admin/parceiros/?id=" + r.id;
+    const tr = el("tr", r.visualizado_em ? "seen" : "novo"); tr.tabIndex = 0; tr.setAttribute("role", "link"); tr.setAttribute("aria-label", "Abrir candidatura de " + (r.nome || "parceiro"));
+    tr.addEventListener("click", (e) => { if (e.metaKey || e.ctrlKey) window.open(href, "_blank"); else location.href = href; });
+    tr.addEventListener("keydown", (e) => { if (e.key === "Enter") location.href = href; });
+    const td = (child, cls) => { const c = el("td", cls); typeof child === "string" ? (c.textContent = child || "–") : c.appendChild(child); tr.appendChild(c); return c; };
+    const quem = el("div", "tp-quem"); const tx = el("div", "tp-txt");
+    const a = el("a", "tp-nome", r.nome || "Sem nome"); a.href = href; a.addEventListener("click", (e) => e.stopPropagation());
+    tx.append(a, el("div", "tp-sub", r.principal_especializacao ? clean(r.principal_especializacao) : ""));
+    quem.append(avatar(r), tx); td(quem, "tp-col-quem");
+    const nv = el("div"); nv.append(el("div", "tp-forte", NIVEL[r.tempo_especialidade] || "–"), el("div", "tp-sub", r.tempo_especialidade ? clean(r.tempo_especialidade) : "")); td(nv);
+    td(areasAtuacao(r).join(" · ") || "–");
+    td(PJ[r.atuacao_pj] || (r.atuacao_pj ? clean(r.atuacao_pj) : "–"));
+    const dp = el("div"); dp.append(el("div", null, DISP[r.disponibilidade_colaborar] || (r.disponibilidade_colaborar ? clean(r.disponibilidade_colaborar) : "–")), el("div", "tp-sub", horas(r.horas_semanais))); td(dp);
+    const [gt, gc] = galStatus(r); td(el("span", "tp-gal " + gc, gt));
+    const pub = publicado(r); td(el("span", "gal " + (pub ? "sim" : "nao"), pub ? "Sim" : "Não"));
+    td(Admin.fmtDay(r.created_at), "tp-data");
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb); wrap.appendChild(t); list.appendChild(wrap);
 }
 
 /* ---------- Análise por IA ---------- */
@@ -947,7 +1087,15 @@ Admin.init({ page: "parceiros", onReady: async () => {
   };
   for (const r of data) for (const [k, map] of Object.entries(LEGADO)) if (map[r[k]]) r[k] = map[r[k]];
   ALL = data;
-  if (!document.getElementById("f-areas_experiencia")) { buildFilters(); buildAreaChips(); initDesafio(); initProfiles(); }
+  if (!document.getElementById("f-areas_experiencia")) {
+    buildFilters(); buildAreaChips(); initDesafio(); initProfiles();
+    initGaleria(async () => {
+      const { data: d } = await Admin.sb.from("cadastros").select("id, galeria_status, galeria_convite_em");
+      (d || []).forEach((x) => { const r = ALL.find((y) => y.id === x.id); if (r) Object.assign(r, x); });
+      resumoGaleria(); update();
+    });
+  }
+  resumoGaleria();
   if (window.matchMedia("(min-width: 800px)").matches) document.getElementById("filters-box").open = true;
   setTab(params.get("aba"));
   update();

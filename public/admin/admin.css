@@ -196,3 +196,38 @@ input[type=search] { padding-left: 40px; background: #f8fafc url("data:image/svg
 .det-sec > summary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.35); border-radius: 8px; }
 .det-sec > dl { margin: 0 0 16px; }
 @media (prefers-reduced-motion: reduce) { .det-sec > summary::after { transition: none; } }
+
+/* =========================================================================
+   Menu lateral à esquerda (template Dashboard do Design System): logo no topo, itens com ícone,
+   item ativo em vermelho sobre fundo rosa claro, usuária e "Sair" na base.
+   Computador: fixo e sempre visível; celular e tablet: abre pela esquerda com o botão do menu.
+   ========================================================================= */
+.drawer { left: 0; right: auto; transform: translateX(-100%); box-shadow: 10px 0 40px -10px rgb(15 23 42 / .2); }
+.drawer.notif-drawer { left: auto; right: 0; transform: translateX(100%); box-shadow: -10px 0 40px -10px rgb(15 23 42 / .2); }
+.drawer.open, .drawer.notif-drawer.open { transform: none; }
+.side-logo { display: none; }
+.drawer nav a.pai-ativo { color: var(--red); }
+.nav-sub { display: grid; gap: 2px; margin: 0 0 4px 30px; padding-left: 14px; border-left: 1px solid var(--line); }
+.nav-sub a { padding: 8px 12px !important; font-size: 14px; font-weight: 500 !important; color: var(--muted) !important; }
+.nav-sub a:hover { color: var(--dark) !important; }
+.nav-sub a[aria-current=page] { background: var(--red-tint); color: var(--red) !important; font-weight: 600 !important; }
+@media (min-width: 1024px) {
+  body:has(#app:not(.hidden)) { padding-left: 248px; }
+  #drawer { transform: none !important; visibility: visible !important; width: 248px; box-shadow: none; border-right: 1px solid var(--line); z-index: 30; }
+  body:has(#app.hidden) #drawer { display: none; }
+  #drawer .close { display: none; }
+  #drawer .side-logo { display: block; padding: 20px 20px 8px; }
+  #drawer .side-logo img { height: 40px; width: auto; display: block; }
+  #drawer nav { padding: 12px; }
+  #drawer nav a { padding: 10px 12px; font-size: 14px; }
+  #drawer .who { order: 3; border-bottom: 0; border-top: 1px solid var(--line); padding: 14px 20px; }
+  #drawer .who .avatar { width: 36px; height: 36px; }
+  #drawer .who .n { font-size: 14px; }
+  #drawer .who .e { font-size: 12px; }
+  #drawer nav { order: 2; }
+  #drawer .side-logo { order: 1; }
+  #drawer .foot { order: 4; border-top: 0; padding: 0 12px 12px; }
+  #burger { display: none !important; }
+  .topbar .in > a { visibility: hidden; }
+  body.scroll-lock:has(#drawer) .backdrop { display: none; }
+}
