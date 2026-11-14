@@ -62,11 +62,15 @@ function montar(nome: string, token: string, modo: Modo = "convite") {
     p("No mesmo link você pode revisar como o seu perfil vai aparecer e ajustar o cargo e o LinkedIn."),
     p(b("A decisão é sua, e você pode alterá-la a qualquer momento pelo mesmo link.")),
   ].join("");
+  // benefícios com check vermelho
+  const beneficio = (t: string, d: string) => `<tr><td valign="top" style="padding:2px 12px 12px 0;width:22px"><span style="display:inline-block;width:20px;height:20px;line-height:20px;border-radius:50%;background:#d44d4d;color:#ffffff;font-size:12px;font-weight:bold;text-align:center">&#10003;</span></td><td style="padding:0 0 12px;font-size:15px;line-height:1.55;color:#334155"><strong style="color:#0f172a">${t}</strong> ${d}</td></tr>`;
   // passos numerados, em destaque
   const passo = (n: string, t: string) => `<tr><td valign="top" style="padding:0 14px 14px 0;width:36px"><span style="display:inline-block;width:32px;height:32px;line-height:32px;border-radius:50%;background:#d44d4d;color:#ffffff;font-weight:bold;font-size:15px;text-align:center">${n}</span></td><td valign="middle" style="padding:0 0 14px;font-size:16px;line-height:1.5;color:#0f172a">${t}</td></tr>`;
   const corpoBV = [
     p(esc(ola)),
     p(`Agora que você faz parte da nossa rede, queremos apresentar você na ${b("Galeria de Profissionais")} do nosso site: a vitrine dos especialistas da rede para empresas em busca de novos talentos.`),
+    `<h2 style="margin:24px 0 12px;font-size:18px;line-height:1.3;color:#0f172a">Por que exibir o seu perfil?</h2>`,
+    `<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 8px">${beneficio("Vitrine profissional.", "Seu perfil e suas especialidades ficam visíveis para empresas que procuram especialistas.")}${beneficio("Novas oportunidades.", "O perfil pode gerar convites para desafios do Studio e de empresas parceiras.")}${beneficio("Ecossistema mais forte.", "A galeria mostra a diversidade de competências da rede e aproxima os profissionais, ampliando as colaborações para todos.")}</table>`,
     `<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin:8px 0 12px;padding:20px 20px 6px;background:#fdf2f2;border-radius:16px"><tr><td>
       <p style="margin:0 0 14px;font-size:13px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;color:#d44d4d">Falta pouco</p>
       <table role="presentation" cellpadding="0" cellspacing="0">${passo("1", "Confira como o seu perfil vai aparecer.")}${passo("2", "Envie a sua foto. Se preferir, usamos a do seu LinkedIn.")}${passo("3", "Confirme e pronto: você faz parte da galeria.")}</table>
@@ -111,6 +115,7 @@ function montar(nome: string, token: string, modo: Modo = "convite") {
   const textoBV = [
     "GALERIA DE PROFISSIONAIS", "Seu perfil está a um passo da nossa galeria.", ola,
     "Agora que você faz parte da nossa rede, queremos apresentar você na Galeria de Profissionais do nosso site: a vitrine dos especialistas da rede para empresas em busca de novos talentos.",
+    "POR QUE EXIBIR O SEU PERFIL?\n- Vitrine profissional. Seu perfil e suas especialidades ficam visíveis para empresas que procuram especialistas.\n- Novas oportunidades. O perfil pode gerar convites para desafios do Studio e de empresas parceiras.\n- Ecossistema mais forte. A galeria mostra a diversidade de competências da rede e aproxima os profissionais, ampliando as colaborações para todos.",
     "FALTA POUCO\n1. Confira como o seu perfil vai aparecer.\n2. Envie a sua foto. Se preferir, usamos a do seu LinkedIn.\n3. Confirme e pronto: você faz parte da galeria.",
     "Seus dados de contato e sua cidade não são exibidos, e o seu perfil só aparece com a sua autorização.",
     "Completar meu perfil: " + link,
