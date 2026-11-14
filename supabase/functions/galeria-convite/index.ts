@@ -3,7 +3,7 @@
 //                               e-mail de boas-vindas com a galeria. Não exige login: o pior que alguém consegue
 //                               é disparar o e-mail que já seria enviado.
 //                               E-mails em galeria_convite_excecoes não recebem o convite automático.
-// { acao: "preview" }           (administradora) devolve { assunto, html } do e-mail.
+// { acao: "preview" }           (administradora) devolve { assunto, html } do e-mail (o mesmo dos novos cadastros).
 // { acao: "um", id }            (administradora) envia ou reenvia o convite para um parceiro que ainda não decidiu.
 // { acao: "pendentes", reenviar } (administradora) envia para quem ainda não decidiu e ainda não foi
 //                               convidado; com reenviar: true, também para quem foi convidado e não respondeu.
@@ -199,14 +199,15 @@ Deno.serve(async (req) => {
   const { data: auth } = await admin.auth.getUser(token);
   if (auth.user?.app_metadata?.role !== "admin") return json({ error: "Sem permissão" }, 403);
 
-  if (p.acao === "preview") { const m: Modo = ["confirmado", "bv"].includes(p.modo) ? p.modo : p.confirmado ? "confirmado" : "convite"; return json({ assunto: assuntoDe(m, "Nome"), html: montar("Nome", "exemplo", m).html }); }
+  // O painel ("Ver o e-mail", "Enviar convite", envios em massa) usa o mesmo e-mail dos novos cadastros.
+  if (p.acao === "preview") { const m: Modo = ["confirmado", "convite"].includes(p.modo) ? p.modo : "bv"; return json({ assunto: assuntoDe(m, "Nome"), html: montar("Nome", "exemplo", m).html }); }
   if (p.acao === "um") {
     const id = String(p.id ?? "");
     if (!UUID.test(id)) return json({ error: "Dados inválidos" }, 400);
     const { data: r } = await admin.from("cadastros").select("id, nome, email, galeria_token, galeria_status").eq("id", id).maybeSingle();
     if (!r || !r.email) return json({ error: "Parceiro sem e-mail." }, 400);
     if (r.galeria_status) return json({ error: "Este parceiro já decidiu. O link de decisão continua o mesmo." }, 400);
-    return json(await enviar([r]));
+    return json(await enviar([r], "bv"));
   }
   if (p.acao !== "pendentes") return json({ error: "Ação inválida" }, 400);
   let q = admin.from("cadastros").select("id, nome, email, galeria_token")
@@ -215,5 +216,5 @@ Deno.serve(async (req) => {
   const { data: lista, error } = await q;
   if (error) return json({ error: error.message }, 500);
   if (!lista?.length) return json({ enviados: 0, falhas: 0 });
-  return json(await enviar(lista));
+  return json(await enviar(lista, "bv"));
 });
