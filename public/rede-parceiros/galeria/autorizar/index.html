@@ -96,8 +96,7 @@
       <div class="topo"><span class="foto" id="p-ini" aria-hidden="true"></span><img class="foto foto-img" id="p-img" alt="" hidden><span class="in" id="p-in" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span></div>
       <h3 id="p-nome"></h3>
       <p class="esp" id="p-cargo"></p>
-      <ul class="tags" id="p-areas" aria-label="Áreas de atuação"></ul>
-      <p class="seg"><span>Segmentos</span><span id="p-seg" style="display:inline;font-size:inherit;font-weight:400;letter-spacing:0;text-transform:none;color:inherit"></span></p>
+      <ul class="tags" id="p-areas" aria-label="Áreas de atuação e segmentos"></ul>
     </div>
     <p class="nota">Envie abaixo a foto que vai aparecer no seu perfil. Se não enviar, usaremos a foto do seu perfil do LinkedIn. Para trocar ou excluir a foto depois, use este mesmo link ou escreva para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
 
@@ -110,7 +109,6 @@
         <button type="button" class="nao pequeno" id="foto-remover" hidden>Remover foto</button>
       </div>
     </div>
-    <label>Cargo exibido<small>Como você quer ser apresentado(a). Até 60 caracteres.</small><input type="text" id="cargo" maxlength="60" autocomplete="organization-title"></label>
     <div class="li-campo">
       <span class="foto-rot">Link do seu LinkedIn<small>Informado no seu cadastro. Se precisar, altere.</small></span>
       <div class="li-ver" id="li-ver" hidden><a id="li-link" href="#" target="_blank" rel="noopener noreferrer"></a><button type="button" class="nao pequeno" id="li-alterar">Alterar</button></div>
@@ -165,26 +163,26 @@
     });
     $("li-alterar").addEventListener("click", function () { $("li-ver").hidden = true; $("li-editar").hidden = false; $("linkedin").focus(); $("linkedin").select(); });
     $("foto-remover").addEventListener("click", function () { fotoNova = ""; removerFoto = !!fotoAtual; mostrarFoto(""); });
-    function atualizarPrevia() { $("p-cargo").textContent = $("cargo").value.trim() || "Seu cargo"; $("p-in").style.visibility = $("linkedin").value.trim() ? "visible" : "hidden"; }
+    function atualizarIn() { $("p-in").style.visibility = $("linkedin").value.trim() ? "visible" : "hidden"; }
     post({ acao: "ver" }).then(function (d) {
       $("carregando").hidden = true; $("conteudo").hidden = false;
       $("p-nome").textContent = d.nome || ""; $("p-ini").textContent = iniciais(d.nome);
-      d.areas.forEach(function (a) { var li = document.createElement("li"); li.textContent = a; $("p-areas").appendChild(li); });
-      $("p-seg").textContent = d.segmentos.join(" · ");
-      $("cargo").value = d.cargo || ""; $("linkedin").value = d.linkedin || "";
+      // especialidade: campo 13 do cadastro (ou o texto definido pelo Studio); tags: áreas e segmentos
+      $("p-cargo").textContent = d.cargo || "";
+      d.areas.concat(d.segmentos).filter(function (a, i, l) { return a && l.indexOf(a) === i; }).forEach(function (a) { var li = document.createElement("li"); li.textContent = a; $("p-areas").appendChild(li); });
+      $("linkedin").value = d.linkedin || "";
       $("termo").textContent = d.texto;
       fotoAtual = d.foto_url || ""; mostrarFoto(fotoAtual);
       // LinkedIn do cadastro: aparece como link, com a opção de alterar; sem link no cadastro, já abre o campo.
       if (d.linkedin) { $("li-link").href = d.linkedin; $("li-link").textContent = d.linkedin.replace(/^https:\/\/(www\.)?/, ""); $("li-ver").hidden = false; }
       else { $("li-editar").hidden = false; }
-      status(d.status); atualizarPrevia();
-      ["cargo", "linkedin"].forEach(function (id) { $(id).addEventListener("input", atualizarPrevia); });
+      status(d.status); atualizarIn();
+      $("linkedin").addEventListener("input", atualizarIn);
     }).catch(function (e) { $("carregando").hidden = true; $("erro-geral").textContent = e.message; $("erro-geral").hidden = false; });
     function decidir(decisao) {
       var erro = $("erro"); erro.hidden = true;
-      if (decisao === "autorizado" && !$("cargo").value.trim()) { erro.textContent = "Informe o cargo que vai aparecer no seu perfil."; erro.hidden = false; $("cargo").focus(); return; }
       ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = true; });
-      post({ acao: "decidir", decisao: decisao, cargo: $("cargo").value, linkedin: $("linkedin").value, foto: decisao === "autorizado" ? fotoNova : "", remover_foto: removerFoto })
+      post({ acao: "decidir", decisao: decisao, linkedin: $("linkedin").value, foto: decisao === "autorizado" ? fotoNova : "", remover_foto: removerFoto })
         .then(function (r) { fotoNova = ""; removerFoto = false; fotoAtual = r.foto_url || ""; mostrarFoto(fotoAtual); status(r.status); $("status").scrollIntoView({ behavior: "smooth", block: "center" }); })
         .catch(function (e) { erro.textContent = e.message; erro.hidden = false; })
         .finally(function () { ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = false; }); });

@@ -1,6 +1,7 @@
 // Autorização de exibição do perfil na Galeria de profissionais (pública; o token pessoal do e-mail identifica o parceiro).
 // { acao: "ver", t }  devolve só o que aparece na galeria (nome, cargo, áreas, segmentos, LinkedIn) e a decisão atual.
-// { acao: "decidir", t, decisao: "autorizado" | "recusado", cargo, linkedin, foto?, remover_foto? }
+// { acao: "decidir", t, decisao: "autorizado" | "recusado", linkedin, foto?, remover_foto? }
+//     A especialidade exibida não é pedida ao parceiro: vem do campo 13 do cadastro ou do texto definido pelo Studio.
 //     grava a decisão no cadastro e no histórico imutável (texto exibido + versão + dados + navegador).
 //     foto: imagem JPEG em base64 (a página já recorta em quadrado e reduz; aqui só JPEG de até 1,5 MB).
 //     Ao não autorizar, a foto enviada é apagada.
@@ -52,7 +53,7 @@ Deno.serve(async (req) => {
   const esp = limpa(r.principal_especializacao);
   const dados = {
     nome: r.nome,
-    cargo: r.galeria_cargo ?? (esp.length <= 60 ? esp : ""),
+    cargo: r.galeria_cargo || esp,
     areas: (r.areas_experiencia ?? []).map(limpa),
     segmentos: (r.segmentos ?? []).map(limpa),
     linkedin: r.galeria_linkedin ?? (linkedinOk(normalizaLinkedin(r.linkedin)) ? normalizaLinkedin(r.linkedin) : ""),
@@ -63,9 +64,7 @@ Deno.serve(async (req) => {
 
   const decisao = p.decisao === "autorizado" ? "autorizado" : p.decisao === "recusado" ? "recusado" : "";
   if (!decisao) return json({ error: "Escolha uma opção." }, 400);
-  const cargo = String(p.cargo ?? "").trim().slice(0, 60);
   const linkedin = normalizaLinkedin(p.linkedin).slice(0, 300);
-  if (decisao === "autorizado" && !cargo) return json({ error: "Informe o cargo que vai aparecer no seu perfil." }, 400);
   if (!linkedinOk(linkedin)) return json({ error: "Informe um link do LinkedIn começando com https://www.linkedin.com/" }, 400);
 
   // Foto: nova (substitui e apaga a anterior), removida a pedido, ou apagada quando não autoriza.
@@ -82,7 +81,7 @@ Deno.serve(async (req) => {
   }
 
   const agora = new Date().toISOString();
-  const exibidos = { ...dados, cargo, linkedin, foto_url: fotoUrl ?? "" };
+  const exibidos = { ...dados, linkedin, foto_url: fotoUrl ?? "" };
   const { error: e1 } = await admin.from("galeria_autorizacoes").insert({
     cadastro_id: r.id, decisao, texto_versao: TEXTO_VERSAO, texto: TEXTO,
     dados_exibidos: decisao === "autorizado" ? exibidos : {},
@@ -91,7 +90,6 @@ Deno.serve(async (req) => {
   if (e1) { console.error(e1.message); return json({ error: "Não foi possível registrar agora. Tente novamente." }, 500); }
   const { error: e2 } = await admin.from("cadastros").update({
     galeria_status: decisao, galeria_decidido_em: agora,
-    galeria_cargo: decisao === "autorizado" ? cargo : r.galeria_cargo,
     galeria_linkedin: decisao === "autorizado" ? (linkedin || null) : r.galeria_linkedin,
     galeria_foto_url: fotoUrl,
   }).eq("id", r.id);
