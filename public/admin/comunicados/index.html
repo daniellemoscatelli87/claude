@@ -137,7 +137,6 @@ function linha(r) {
   const tx = el("span", "tx");
   tx.append(el("span", "n", r.nome || r.email), el("span", "d", [limpa(r.principal_especializacao), r.email].filter(Boolean).join(" · ")));
   if (!ok) tx.append(el("span", "sem", r.email ? "Não recebe comunicados" : "Sem e-mail"));
-  tx.append(el("span", "gal" + (r.galeria_status === "autorizado" ? " ok" : ""), "Galeria: " + (r.galeria_status === "autorizado" ? (r.galeria_oculto ? "autorizou (oculto)" : "autorizou") : r.galeria_status === "recusado" ? "não autorizou" : r.galeria_convite_em ? "aguardando resposta" : "não convidado")));
   row.append(cb, ini, tx);
   return row;
 }
