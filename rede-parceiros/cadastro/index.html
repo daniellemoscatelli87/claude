@@ -42,6 +42,10 @@ html.embutido:not(.modal-direto) .wrap::-webkit-scrollbar { width: 8px; }
 /* a barra do botão gruda no fim da área que rola (o espaço inferior do formulário saiu, pois a margem da barra o compensava) */
 html.embutido:not(.modal-direto) .wrap { padding-bottom: 0; }
 html.embutido:not(.modal-direto) .nav-bar { margin-bottom: 0 !important; }
+/* etapas curtas: a barra do botão fica no fim da janela (o formulário ocupa toda a altura e a barra vai para baixo) */
+html.embutido:not(.modal-direto) .wrap { display: flex; flex-direction: column; }
+html.embutido:not(.modal-direto) #form:not(.hidden) { flex: 1 0 auto; display: flex; flex-direction: column; }
+html.embutido:not(.modal-direto) #form > .nav-bar { margin-top: auto !important; }
 html.embutido:not(.modal-direto) .wrap::-webkit-scrollbar-thumb { background: #B3BDD0; border-radius: 9999px; border: 2px solid #FFFFFF; }
 html.embutido:not(.modal-direto) .wrap::-webkit-scrollbar-track { background: transparent; }
 /* Cabeçalho do cadastro (janela/modal): título, aviso de obrigatórios, X e barra de progresso */
@@ -430,6 +434,9 @@ const WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 1
 const PJ_NO = "Não tenho interesse em atuar como PJ.";
 const CONSENT_YES = "Sim, autorizo.";
 const CONSENT_NO = "Não autorizo.";
+// Galeria de Profissionais: mesmo termo (e versão) da página de autorização; o banco registra o aceite com o texto oficial.
+const GALERIA_SIM = "Sim, autorizo a exibição do meu perfil.";
+const GALERIA_NAO = "Não autorizo por enquanto.";
 
 const ESTADOS = [["AC","Acre"],["AL","Alagoas"],["AP","Amapá"],["AM","Amazonas"],["BA","Bahia"],["CE","Ceará"],["DF","Distrito Federal"],["ES","Espírito Santo"],["GO","Goiás"],["MA","Maranhão"],["MT","Mato Grosso"],["MS","Mato Grosso do Sul"],["MG","Minas Gerais"],["PA","Pará"],["PB","Paraíba"],["PR","Paraná"],["PE","Pernambuco"],["PI","Piauí"],["RJ","Rio de Janeiro"],["RN","Rio Grande do Norte"],["RS","Rio Grande do Sul"],["RO","Rondônia"],["RR","Roraima"],["SC","Santa Catarina"],["SP","São Paulo"],["SE","Sergipe"],["TO","Tocantins"]];
 
@@ -602,9 +609,13 @@ const SECTIONS = [
     { id: "autoriza_dados", n: 39, label: "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?", type: "radio", required: true,
       infoHtml: "<p><strong>Informações sobre o tratamento de dados:</strong></p><p>Os dados fornecidos serão utilizados por Dani Moscatelli | Experience Design Studio para organização da rede de parceiros, análise de competências profissionais e contato relacionado a possíveis oportunidades de colaboração.</p><p>O preenchimento é voluntário. As informações não serão divulgadas publicamente nem compartilhadas com terceiros para finalidades incompatíveis com as descritas neste formulário.</p><p>Você poderá solicitar acesso, correção ou exclusão dos seus dados pelo e-mail <a href=\"mailto:contato@danimoscatelli.com.br\">contato@danimoscatelli.com.br</a>, observadas as hipóteses legais de conservação.</p><p>Leia a <a href=\"/privacidade/\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a> completa.</p>",
       options: [CONSENT_YES, CONSENT_NO] },
+    { id: "galeria_aceite", n: 40, label: "Você autoriza a exibição do seu perfil profissional na Galeria de Profissionais do nosso site?", type: "radio", required: false,
+      infoHtml: "<p>A galeria apresenta os especialistas independentes da rede, para ampliar a visibilidade dos profissionais e facilitar conexões com empresas em busca de especialistas.</p><p><strong>Termo de autorização:</strong> Autorizo a Dani Moscatelli | Experience Design Studio a exibir, na Galeria de profissionais do site danimoscatelli.com.br, o meu nome, cargo, áreas de atuação, segmentos, link do LinkedIn e foto, conforme a prévia apresentada. E-mail, telefone e cidade não serão exibidos. Posso retirar esta autorização a qualquer momento pelo mesmo link ou pelo e-mail contato@danimoscatelli.com.br, e também solicitar a troca ou a exclusão da foto por esse e-mail.</p><p>Se autorizar, você recebe por e-mail um link para enviar sua foto e revisar como o perfil vai aparecer. Se não enviar foto, usaremos a do seu perfil do LinkedIn. A resposta é opcional e pode ser alterada depois.</p>",
+      options: [GALERIA_SIM, GALERIA_NAO] },
+    { id: "galeria_cargo", n: 41, showIf: { id: "galeria_aceite", test: (v) => v === GALERIA_SIM }, label: "Como você quer ser apresentado(a) na galeria?", type: "text", required: true, maxlength: 60, placeholder: "Ex.: Product Designer", help: "O cargo que vai aparecer no seu perfil. Até 60 caracteres." },
   ]},
   { title: "Comunidade de networking", n: "Seção final", questions: [
-    { id: "interesse_whatsapp", n: 40, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
+    { id: "interesse_whatsapp", n: 42, label: "Você gostaria de participar do nosso grupo de networking no WhatsApp?", type: "radio", required: false,
       infoHtml: "<p>Estamos construindo uma comunidade para conectar profissionais de diferentes especialidades, promover a troca de conhecimentos, compartilhar referências e fortalecer conexões profissionais.</p><p>O espaço será voltado a conversas sobre Design, Experiência Humana, Negócios, Tecnologia e Inovação, além da troca de experiências e oportunidades de colaboração.</p><p>A participação é opcional e independente deste cadastro.</p>",
       afterIf: (v) => /^Sim/.test(v),
       afterHtml: "<div class=\"info wa-box\"><span class=\"wa-ic\" aria-hidden=\"true\">" + WA_ICON + "</span><div><p><strong>Link de acesso ao grupo:</strong><br><a href=\"" + WHATSAPP_GROUP + "\" target=\"_blank\" rel=\"noopener\">" + WHATSAPP_GROUP + "</a></p><p>Se tiver interesse, basta acessar o link acima. A participação no grupo não é necessária para concluir seu cadastro.</p></div></div>",
@@ -635,7 +646,7 @@ function questionHtml(q) {
   else if (q.type === "url")
     field = `<input type="url" inputmode="url" autocapitalize="off" spellcheck="false" id="${q.id}" name="${q.id}" placeholder="${esc(q.placeholder || "https://")}" autocomplete="url">`;
   else if (q.type === "text" || q.type === "email" || q.type === "tel")
-    field = `<input type="${q.type}" id="${q.id}" name="${q.id}" autocomplete="${{ nome: "name", email: "email", telefone: "tel" }[q.id] || "off"}">`;
+    field = `<input type="${q.type}" id="${q.id}" name="${q.id}" autocomplete="${{ nome: "name", email: "email", telefone: "tel" }[q.id] || "off"}"${q.maxlength ? ` maxlength="${q.maxlength}"` : ""}${q.placeholder ? ` placeholder="${esc(q.placeholder)}"` : ""}>`;
   else if (q.type === "list")
     field = `<div class="list-field" data-list="${q.id}" data-placeholder="${esc(q.placeholder || "")}"><div class="list-rows"></div>
       <button type="button" class="list-add"><span aria-hidden="true">+</span> Adicionar item</button></div>`;
@@ -932,6 +943,10 @@ function payload() {
     else data[q.id] = Array.isArray(v) ? v : (v === "" ? null : v);
   });
   data.autoriza_dados = data.autoriza_dados === CONSENT_YES;
+  // Galeria: o banco só marca a autorização quando galeria_aceite_cadastro = true e há cargo (e registra o termo oficial).
+  data.galeria_aceite_cadastro = data.galeria_aceite === GALERIA_SIM && !!data.galeria_cargo;
+  if (!data.galeria_aceite_cadastro) data.galeria_cargo = null;
+  delete data.galeria_aceite;
   // LGPD: guarda junto do cadastro o texto exato que a pessoa aceitou (a data do aceite é registrada pelo servidor).
   if (data.autoriza_dados) {
     const q = SECTIONS.flatMap(s => s.questions).find(q => q.id === "autoriza_dados");
