@@ -360,6 +360,22 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-14 · Shine Border: a luz dá a volta pela borda (publicado: DM v47 e FindLook v71)
+
+- **Origem:** a dona do produto: "verificar por que o shine border não passa pelos cantos".
+- **Causa:** o efeito era um `radial-gradient` de 300% que ia e voltava na diagonal (`background-position` de 0% a 100% e de volta). A borda inteira ficava levemente tingida e só mudava de tom; não havia uma luz percorrendo a borda.
+  - O formato da faixa estava certo: com cor sólida, a faixa segue a curva do canto (raio de 24 px).
+  - Uma primeira hipótese minha (a luz não alcançaria os cantos fora da diagonal) não se confirmou na medição.
+- **Correção** (`ui/shine-border.tsx` e `styles/theme.css`, nos dois DS):
+  - **Gradiente:** `conic-gradient(from var(--shine-angle))`, com as cores num arco de cerca de 30% da volta.
+  - **Animação:** `--shine-angle` registrado com `@property` (`<angle>`); a keyframe `shine` gira de 0 a 360° a cada `--duration`.
+  - **Sem mudança:** API (shineColor, preset, duration, borderWidth) e `motion-safe`.
+- **Verificação:**
+  - **Build:** CSS gerado com `@property --shine-angle` e a keyframe nova.
+  - **Playwright:** 24 quadros do card do Plano Studio durante uma volta de 12 s. Com o canto superior direito e o inferior esquerdo ampliados, o feixe passa pelos arcos dos cantos em quadros consecutivos; na versão antiga, os cantos só mudavam de tom.
+  - **No ar:** o CSS publicado nos dois endereços contém `shine-angle`.
+- **Commits:** DM `6dcf185` e FindLook `9bf1980`.
+
 ## 2026-11-14 · Página Cards reorganizada nos dois DS (D-048; publicado: DM v46 e FindLook v70)
 
 - **Origem:** pedido da dona do produto para centralizar tudo sobre cards e separar o recomendado do que evitar (ver D-048, com as quatro decisões dela).
