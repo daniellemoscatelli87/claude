@@ -1457,3 +1457,11 @@ main + footer.relative { padding-top: 6rem !important; }
 }
 /* celular e tablet: nesta página o menu não some ao rolar; o card do conteúdo passa por baixo dele */
 @media (max-width: 1023px) { .cabecalho-sobre-hero .site-header.is-hidden { transform: none !important; } }
+/* celular: títulos menores */
+@media (max-width: 767px) {
+  main h2 { font-size: 1.5rem !important; line-height: 1.2 !important; }
+  main h3 { font-size: min(1.0625rem, 1em) !important; line-height: 1.3 !important; }
+  main .sobre-intro-sub { font-size: 1rem !important; }
+}
+@media (max-width: 767px) { html body main h3 { font-size: 1rem !important; } html body main h2 { font-size: 1.5rem !important; } }
+@media (max-width: 767px) { html body .pz-painel .pz-lado h3 { font-size: 1rem !important; } }
