@@ -556,14 +556,10 @@ window.FORM_PARCEIROS = [
     ]
    },
    {
-    "id": "autoriza_dados",
+    "id": "autorizacoes",
     "n": 39,
-    "label": "Você autoriza o armazenamento e a utilização dos dados profissionais fornecidos para composição desta rede de parceiros e eventuais contatos sobre oportunidades futuras?",
-    "type": "radio",
-    "options": [
-     "Sim, autorizo.",
-     "Não autorizo."
-    ]
+    "label": "Autorizações",
+    "type": "checkbox"
    }
   ]
  },

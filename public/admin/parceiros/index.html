@@ -16,7 +16,14 @@
   .gal-dl dt { color: var(--muted); }
   .gal-dl dd { margin: 0; font-weight: 600; }
   .gal-conv { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
-  .gal-conv-btn { font-size: 12px; padding: 5px 12px; }
+  .gal-topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .gal-topo .sec { margin: 0; }
+  .gal-conv-btn { font-size: 13px; padding: 9px 18px; }
+  .gal-esp { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  .gal-esp input { flex: 1 1 260px; max-width: 420px; padding: 8px 12px; border: 1px solid #E4E6EC; border-radius: 10px; font: inherit; font-size: 14px; }
+  .gal-esp input:focus { outline: none; border-color: #D44D4D; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.15); }
+  .gal-esp-btn { font-size: 12px; padding: 6px 14px; }
+  .gal-esp small { flex-basis: 100%; font-size: 12px; }
   .gal-sw { display: inline-flex; align-items: center; gap: 10px; }
   .gal-switch { position: relative; width: 44px; height: 24px; padding: 0; border: 0; border-radius: 999px; background: #B3BDD0; cursor: pointer; transition: background-color .2s ease; }
   .gal-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(13, 17, 25, .2); transition: transform .2s ease; }
@@ -764,7 +771,8 @@ document.getElementById("tab-candidaturas").addEventListener("click", () => setT
 // Galeria de profissionais: situação da autorização de exibição do perfil e o histórico de decisões (prova do consentimento).
 function galeriaCard(data) {
   const c = el("div", "card lgpd gal-card");
-  c.appendChild(el("div", "sec", "Galeria de Profissionais"));
+  // título à esquerda e, no canto superior direito, o botão principal "Enviar convite" (quando cabe enviar)
+  const topo = el("div", "gal-topo"); topo.appendChild(el("div", "sec", "Galeria de Profissionais")); c.appendChild(topo);
   const st = data.galeria_status;
   const dl = el("dl", "gal-dl");
   const linha = (rotulo, valor) => { dl.append(el("dt", null, rotulo)); const dd = el("dd"); typeof valor === "string" ? (dd.textContent = valor) : dd.appendChild(valor); dl.append(dd); return dd; };
@@ -773,7 +781,7 @@ function galeriaCard(data) {
   const convTxt = el("span", null, data.galeria_convite_em ? Admin.fmtDate(data.galeria_convite_em) : "Não enviado");
   conv.appendChild(convTxt);
   if (!data.galeria_status && data.email) {
-    const bConv = el("button", "btn-ghost gal-conv-btn", data.galeria_convite_em ? "Reenviar convite" : "Enviar convite"); bConv.type = "button";
+    const bConv = el("button", "btn-ok gal-conv-btn", data.galeria_convite_em ? "Reenviar convite" : "Enviar convite"); bConv.type = "button";
     bConv.addEventListener("click", async () => {
       if (!(await Admin.confirmDialog({ title: "Enviar convite da galeria?", message: "O e-mail com o pedido de autorização será enviado para " + (data.nome || "este parceiro") + " (" + data.email + ").", ok: "Enviar", danger: false }))) return;
       bConv.disabled = true; bConv.textContent = "Enviando…";
@@ -786,9 +794,29 @@ function galeriaCard(data) {
       Admin.log("Enviou o convite da galeria para " + (data.nome || "parceiro"));
       Admin.toast("Convite enviado para " + data.email + ".");
     });
-    conv.appendChild(bConv);
+    topo.appendChild(bConv);
   }
   linha("Convite enviado", conv);
+  // Especialidade exibida no card da galeria: por padrão o campo 13 do cadastro; aqui dá para escrever outro texto.
+  const padraoEsp = String(data.principal_especializacao || "").replace(/\.\s*$/, "").trim();
+  const espBox = el("span", "gal-esp");
+  const espIn = el("input"); espIn.type = "text"; espIn.maxLength = 80; espIn.value = data.galeria_cargo || padraoEsp; espIn.setAttribute("aria-label", "Especialidade exibida na galeria");
+  const espBtn = el("button", "btn-ghost gal-esp-btn", "Salvar"); espBtn.type = "button";
+  const espNota = el("small", "muted", data.galeria_cargo ? "Texto definido por você." : "Texto do campo 13 do cadastro.");
+  espBtn.addEventListener("click", async () => {
+    const v = espIn.value.trim();
+    const novo = !v || v === padraoEsp ? null : v;
+    espBtn.disabled = true;
+    const { error } = await Admin.sb.from("cadastros").update({ galeria_cargo: novo }).eq("id", data.id);
+    espBtn.disabled = false;
+    if (error) return Admin.toast("Não foi possível salvar agora: " + error.message);
+    data.galeria_cargo = novo; if (!novo) espIn.value = padraoEsp;
+    espNota.textContent = novo ? "Texto definido por você." : "Texto do campo 13 do cadastro.";
+    Admin.log("Alterou a especialidade da galeria de " + (data.nome || "parceiro"));
+    Admin.toast("Especialidade salva.");
+  });
+  espBox.append(espIn, espBtn, espNota);
+  linha("Especialidade", espBox);
   const statusDd = linha("Status", st === "autorizado" ? "Exibição autorizada" : st === "recusado" ? "Exibição não autorizada" : data.galeria_convite_em ? "Aguardando resposta" : "Ainda não convidado");
   // Exibir: switch (sim/não). Só é possível exibir quem autorizou; ocultar não altera a autorização do parceiro.
   const sw = el("button", "gal-switch"); sw.type = "button"; sw.setAttribute("role", "switch"); sw.setAttribute("aria-label", "Exibir na galeria");
@@ -892,6 +920,12 @@ Admin.init({ page: "parceiros", onReady: async () => {
     Admin.markSeen("cadastros", data);
     // Junta à opção "Outro" o texto que a pessoa escreveu.
     const shown = { ...data, formatos_contratacao: contratacaoAtual(data), etapas_projeto: etapasAtuais(data) };
+    // Autorizações (item único do formulário): o que a pessoa autorizou, em tópicos.
+    const galSt = data.galeria_status === "autorizado" ? "Autorizada" : data.galeria_status === "recusado" ? "Não autorizada" : "Não autorizada no cadastro";
+    shown.autorizacoes = [
+      "Uso dos dados profissionais pela rede de parceiros e contatos sobre oportunidades: " + (data.autoriza_dados ? "Autorizado" : "Não autorizado"),
+      "Exibição do perfil na Galeria de Profissionais (nome, cargo, áreas, segmentos, LinkedIn e foto): " + galSt,
+    ];
     // Candidaturas antigas tinham certificações em pergunta separada; agora fica junto da formação.
     if (data.certificacoes) shown.formacao = [data.formacao, data.certificacoes].filter(Boolean).join("\n");
     for (const [k, txt] of Object.entries(data.outros || {})) {
