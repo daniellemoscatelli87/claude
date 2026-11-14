@@ -1338,7 +1338,6 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 @media (max-width: 1023px) {
   .parceiros-inicio .site-header, .parceiros-inicio .site-header.is-scrolled, html body.parceiros-inicio .site-header.is-scrolled { transform: none !important; translate: none !important; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
   html body.parceiros-inicio .site-header.is-hidden { transform: none !important; }
-  html body.parceiros-inicio .site-header header > a:first-child { visibility: hidden !important; }
   html body.parceiros-inicio .site-header #menu-botao { color: #131A27 !important; }
   html:has(body.parceiros-inicio) { scroll-padding-top: calc(var(--altura-cabecalho, 68px) + 2.5rem); }
   .rp-alca, .rp-hero .rp-acoes { display: none !important; }
