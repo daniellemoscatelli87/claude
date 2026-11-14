@@ -112,7 +112,7 @@ select.field option { color: var(--color-ds-fg); }
 .rodape-topo { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(19, 26, 39, 0.09); }
 @media (min-width: 768px) { .rodape-topo { flex-direction: row; justify-content: space-between; } }
 .rodape-logo { display: inline-flex; border-radius: 6px; }
-.rodape-logo img { height: 2.75rem; width: auto; display: block; }
+.rodape-logo img { height: 3.25rem; width: auto; display: block; }
 .rodape-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 1.5rem; font-size: .875rem; font-weight: 500; }
 .rodape-links a, .rodape-links button { color: #283043; text-decoration: none; background: none; border: 0; padding: 0; font: inherit; cursor: pointer; transition: color .2s ease; }
 .rodape-links a:hover, .rodape-links button:hover { color: #D44D4D; }
