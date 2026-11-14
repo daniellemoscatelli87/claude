@@ -2,7 +2,9 @@
 // { acao: "novo", id }          Chamada pelo gatilho do banco a cada novo cadastro. Envia uma única vez
 //                               (só se o parceiro ainda não foi convidado nem decidiu). Não exige login:
 //                               o pior que alguém consegue é disparar o convite que já seria enviado.
+//                               E-mails em galeria_convite_excecoes não recebem o convite automático.
 // { acao: "preview" }           (administradora) devolve { assunto, html } do e-mail.
+// { acao: "um", id }            (administradora) envia ou reenvia o convite para um parceiro que ainda não decidiu.
 // { acao: "pendentes", reenviar } (administradora) envia para quem ainda não decidiu e ainda não foi
 //                               convidado; com reenviar: true, também para quem foi convidado e não respondeu.
 //                               Quem se descadastrou dos comunicados fica de fora do envio em massa.
@@ -130,6 +132,8 @@ Deno.serve(async (req) => {
     if (!UUID.test(id)) return json({ error: "Dados inválidos" }, 400);
     const { data: r } = await admin.from("cadastros").select("id, nome, email, galeria_token, galeria_status, galeria_convite_em").eq("id", id).maybeSingle();
     if (!r || !r.email || r.galeria_status || r.galeria_convite_em) return json({ ok: true });
+    const { data: exc } = await admin.from("galeria_convite_excecoes").select("email").eq("email", String(r.email).trim().toLowerCase()).maybeSingle();
+    if (exc) return json({ ok: true });
     await enviar([r]);
     return json({ ok: true });
   }
@@ -139,6 +143,14 @@ Deno.serve(async (req) => {
   if (auth.user?.app_metadata?.role !== "admin") return json({ error: "Sem permissão" }, 403);
 
   if (p.acao === "preview") return json({ assunto: ASSUNTO, html: montar("Nome", "exemplo").html });
+  if (p.acao === "um") {
+    const id = String(p.id ?? "");
+    if (!UUID.test(id)) return json({ error: "Dados inválidos" }, 400);
+    const { data: r } = await admin.from("cadastros").select("id, nome, email, galeria_token, galeria_status").eq("id", id).maybeSingle();
+    if (!r || !r.email) return json({ error: "Parceiro sem e-mail." }, 400);
+    if (r.galeria_status) return json({ error: "Este parceiro já decidiu. O link de decisão continua o mesmo." }, 400);
+    return json(await enviar([r]));
+  }
   if (p.acao !== "pendentes") return json({ error: "Ação inválida" }, 400);
   let q = admin.from("cadastros").select("id, nome, email, galeria_token")
     .is("galeria_status", null).is("comunicados_descadastro_em", null).not("email", "is", null);
