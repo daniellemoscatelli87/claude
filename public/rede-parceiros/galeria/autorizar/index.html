@@ -115,15 +115,6 @@
       <li><strong>Novas oportunidades.</strong> O perfil pode gerar convites para desafios do Studio e de empresas parceiras.</li>
       <li><strong>Ecossistema mais forte.</strong> A galeria mostra a diversidade de competências da rede e aproxima os profissionais, ampliando as colaborações para todos.</li>
     </ul>
-    <h2>Prévia do seu perfil</h2>
-    <div class="card" id="previa" aria-label="Prévia do perfil">
-      <div class="topo"><span class="foto" id="p-ini" aria-hidden="true"></span><img class="foto foto-img" id="p-img" alt="" hidden><span class="in" id="p-in" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span></div>
-      <h3 id="p-nome"></h3>
-      <p class="esp" id="p-cargo"></p>
-      <ul class="tags" id="p-areas" aria-label="Áreas de atuação e segmentos"></ul>
-    </div>
-    <p class="nota">É assim que o seu perfil vai aparecer na galeria. Ajuste os dados logo abaixo e a prévia acompanha. Se não enviar uma foto, usaremos a do seu perfil do LinkedIn. Para trocar ou excluir a foto depois, use este mesmo link ou escreva para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
-
     <h2>Dados do seu perfil</h2>
     <label class="esp-campo">Especialidade<small>Sugerida a partir do seu cadastro. Se preferir, altere. Até 80 caracteres.</small><input type="text" id="especialidade" maxlength="80"></label>
     <div class="li-campo">
@@ -151,6 +142,15 @@
         <div class="recorte-acoes"><button type="button" class="sim pequeno" id="rec-usar">Usar esta foto</button><button type="button" class="nao pequeno" id="rec-cancelar">Cancelar</button></div>
       </div>
     </div>
+
+    <h2>Prévia do seu perfil</h2>
+    <div class="card" id="previa" aria-label="Prévia do perfil">
+      <div class="topo"><span class="foto" id="p-ini" aria-hidden="true"></span><img class="foto foto-img" id="p-img" alt="" hidden><span class="in" id="p-in" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span></div>
+      <h3 id="p-nome"></h3>
+      <p class="esp" id="p-cargo"></p>
+      <ul class="tags" id="p-areas" aria-label="Áreas de atuação e segmentos"></ul>
+    </div>
+    <p class="nota">É assim que o seu perfil vai aparecer na galeria. Se não enviar uma foto, usaremos a do seu perfil do LinkedIn. Para trocar ou excluir a foto depois, use este mesmo link ou escreva para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
 
     <h2>Autorização</h2>
     <p class="termo" id="termo"></p>
@@ -238,7 +238,7 @@
     })();
     $("rec-usar").addEventListener("click", function () {
       fotoNova = recCortar(600); removerFoto = false; nomeArquivo = nomePendente; mostrarFoto(fotoNova); $("recorte").hidden = true;
-      $("foto-ok").textContent = "Foto anexada. Confira a prévia do seu perfil acima; a foto é enviada quando você confirmar a autorização.";
+      $("foto-ok").textContent = "Foto anexada. Confira a prévia do seu perfil abaixo; a foto é enviada quando você confirmar a autorização.";
       $("foto-ok").hidden = false;
       $("previa").scrollIntoView({ behavior: "smooth", block: "center" });
     });
