@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Deixar de receber comunicados | Dani Moscatelli</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; background: #EDF0F5; color: #131A27; font-family: "Plus Jakarta Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+  main { width: 100%; max-width: 30rem; padding: 2.5rem 2rem; border-radius: 24px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); text-align: center; }
+  .logo { display: block; height: 56px; margin: 0 auto 1.75rem; }
+  h1 { margin: 0 0 .75rem; font-size: 1.5rem; line-height: 1.25; letter-spacing: -0.02em; }
+  p { margin: 0 0 1.5rem; font-size: 1rem; line-height: 1.6; color: #495669; }
+  button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.5rem; border: 0; border-radius: 9999px; background: #D44D4D; color: #FFFFFF; font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; }
+  button:hover { background: #B82828; }
+  button:focus-visible, a:focus-visible { outline: none; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px rgba(212, 77, 77, 0.6); }
+  button:disabled { opacity: .6; cursor: default; }
+  a { color: #D44D4D; font-weight: 600; text-underline-offset: 4px; }
+  .msg { margin: 1rem 0 0; font-size: .9375rem; }
+  .erro { color: #B82828; }
+  .ok { color: #283043; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <a href="/" aria-label="Ir para a página inicial"><img class="logo" src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
+  <section id="pedir">
+    <h1>Deixar de receber comunicados</h1>
+    <p>Confirme para não receber mais os e-mails enviados para toda a Rede de Parceiros. Seu cadastro continua na rede e o Studio ainda pode falar com você sobre oportunidades de colaboração.</p>
+    <button type="button" id="confirmar">Confirmar</button>
+    <p class="msg erro" id="erro" role="alert" hidden></p>
+  </section>
+  <section id="feito" hidden>
+    <h1>Pronto!</h1>
+    <p class="ok" role="status">Você não vai mais receber os comunicados em massa da Rede de Parceiros. Mudou de ideia? Escreva para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
+    <a href="/">Ir para o site</a>
+  </section>
+</main>
+<script>
+  // O token do link do e-mail identifica o cadastro; nenhuma informação pessoal aparece nesta página.
+  (function () {
+    var t = new URLSearchParams(location.search).get("t") || "";
+    var valido = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(t);
+    var botao = document.getElementById("confirmar"), erro = document.getElementById("erro");
+    var mostrarErro = function (m) { erro.textContent = m; erro.hidden = false; };
+    if (!valido) { botao.disabled = true; mostrarErro("Este link não é válido. Use o link que está no final do e-mail recebido."); return; }
+    botao.addEventListener("click", function () {
+      botao.disabled = true; botao.textContent = "Confirmando…"; erro.hidden = true;
+      fetch("https://lipfvnerohkaajegqvwr.supabase.co/functions/v1/descadastro-comunicados", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ t: t })
+      }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.j && res.j.error);
+          document.getElementById("pedir").hidden = true; document.getElementById("feito").hidden = false;
+        })
+        .catch(function (e) { botao.disabled = false; botao.textContent = "Confirmar"; mostrarErro((e && e.message) || "Não foi possível concluir agora. Tente novamente."); });
+    });
+  })();
+</script>
+</body>
+</html>

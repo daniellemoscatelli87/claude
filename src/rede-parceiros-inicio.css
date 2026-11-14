@@ -1101,3 +1101,75 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-fechamento .rp-carta { border-radius: 36px !important; }
 @media (min-width: 640px) { .rx-fechamento .rp-carta { border-radius: 48px !important; } }
 @media (min-width: 1024px) { .rx-fechamento .rp-carta { border-radius: 56px !important; } }
+/* Computador: o hero ocupa a tela toda e da folha branca de baixo aparece só um filete de 15px na dobra
+   (altura = tela − cabeçalho − margem de 43px acima da folha − 15px). O texto fica centralizado e a foto continua apoiada na folha. */
+@media (min-width: 1024px) {
+  .rp-hero { display: flex !important; flex-direction: column; min-height: calc(100svh - var(--altura-cabecalho, 99px) - 43px - 15px) !important; }
+  .rp-hero > .rp-hero-grade { flex: 1 0 auto; width: 100%; }
+}
+@media (min-width: 1024px) and (max-height: 820px) { .rp-hero { padding-top: .75rem !important; padding-bottom: 1.5rem !important; } }
+@media (min-width: 1024px) { .rp-hero-texto { align-self: center !important; justify-content: flex-start !important; height: auto !important; } }
+/* Especialidades: painel de cards estilizado (substitui o carrossel), com animação no hover */
+.rx-painel { width: 100%; max-width: 72rem; margin: 0 auto; padding: 1.25rem; border-radius: 32px; background: #F6F7FA; border: 1px solid #EDF0F5; }
+.rx-esp-grade { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .875rem; }
+.rx-esp-card { position: relative; overflow: hidden; isolation: isolate; display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem; border-radius: 20px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.07); box-shadow: 0 1px 2px rgba(13, 17, 25, 0.04);
+  transition: transform .35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .35s ease, border-color .35s ease; }
+.rx-esp-card::before { content: ""; position: absolute; z-index: -1; inset: auto -30% -60% auto; width: 70%; aspect-ratio: 1; border-radius: 9999px; background: radial-gradient(circle, rgba(212, 77, 77, 0.10), transparent 70%); opacity: 0; transform: scale(.6); transition: opacity .4s ease, transform .5s cubic-bezier(0.16, 1, 0.3, 1); }
+.rx-esp-card .rx-ic { flex: none; width: 2.75rem; height: 2.75rem; margin: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(212, 77, 77, 0.10); color: #D44D4D; transition: background-color .3s ease, color .3s ease, transform .35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.rx-esp-card .rx-ic svg { width: 1.375rem; height: 1.375rem; }
+.rx-esp-card h3 { margin: 0 0 .375rem; font-size: 1.0625rem !important; font-weight: 700; color: #131A27; transition: color .3s ease; }
+.rx-esp-card p { display: block !important; margin: 0; font-size: .875rem; line-height: 1.55; color: #495669; }
+@media (hover: hover) {
+  .rx-esp-card:hover { transform: translateY(-4px); border-color: rgba(212, 77, 77, 0.25); box-shadow: 0 8px 24px rgba(13, 17, 25, 0.08), 0 20px 48px rgba(13, 17, 25, 0.06); }
+  .rx-esp-card:hover::before { opacity: 1; transform: scale(1); }
+  .rx-esp-card:hover .rx-ic { background: #D44D4D; color: #FFFFFF; transform: rotate(-6deg) scale(1.06); }
+  .rx-esp-card:hover h3 { color: #D44D4D; }
+}
+@media (prefers-reduced-motion: reduce) { .rx-esp-card, .rx-esp-card::before, .rx-esp-card .rx-ic { transition: none; } .rx-esp-card:hover { transform: none; } .rx-esp-card:hover .rx-ic { transform: none; } }
+@media (max-width: 1023px) { .rx-esp-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639px) {
+  .rx-painel { padding: .75rem; border-radius: 24px; }
+  .rx-esp-grade { grid-template-columns: 1fr; gap: .625rem; }
+  .rx-esp-card { flex-direction: row; align-items: flex-start; gap: .875rem; padding: 1rem; border-radius: 16px; }
+  .rx-esp-card .rx-ic { width: 2.5rem; height: 2.5rem; }
+}
+/* Citação: texto em Plus Jakarta Sans; só as palavras em vermelho na fonte manuscrita (Fraunces itálico) */
+.rx-citacao p { font-family: "Plus Jakarta Sans", sans-serif !important; font-style: normal !important; font-weight: 500 !important; font-size: 1rem !important; line-height: 1.6 !important; color: #495669 !important; }
+.rx-citacao .rp-destaque { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.125em; }
+/* Cargo do profissional nos cards de projeto */
+.rx-kb-cargo { display: block; margin-top: -.125rem; font-size: .6875rem; font-weight: 500; line-height: 1.3; color: #627288; }
+.rx-kb-unico .rx-kb-cargo { font-size: .75rem; }
+@media (min-width: 840px) { .rx-kb-cards { height: 21.25rem !important; } }
+@media (min-width: 640px) and (max-width: 839px) { .rx-kb-cards { height: 26rem !important; } }
+/* FAQ "Antes de se cadastrar": selo, título e descrição centralizados acima dos accordions */
+.rx-saber-grade { display: flex !important; flex-direction: column; align-items: center; gap: 2.5rem !important; }
+.rx-saber-cab { text-align: center !important; max-width: 40rem; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+.rx-saber-cab h2, .rx-saber-cab .rp-texto { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }
+.rx-saber-grade .rx-acc { width: 100%; max-width: 48rem; margin: 0 auto; }
+@media (max-width: 1023px) { .rx-saber-grade { gap: 2rem !important; } }
+/* Galeria de profissionais (perfis com autorização registrada; por ora, exemplos fictícios) */
+.rx-gal-aviso { margin: -1rem auto 2rem; text-align: center; font-size: .8125rem; color: #627288; }
+.rx-gal-grade { list-style: none; margin: 0 auto; padding: 0; max-width: 72rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.rx-gal-card { position: relative; display: flex; flex-direction: column; padding: 1.5rem; border-radius: 24px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.08); box-shadow: 0 1px 2px rgba(13, 17, 25, 0.04);
+  transition: transform .35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .35s ease, border-color .35s ease; }
+.rx-gal-topo { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
+.rx-gal-foto { width: 4.5rem; height: 4.5rem; border-radius: 9999px; overflow: hidden; flex: none; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 4px rgba(212, 77, 77, 0.25); }
+.rx-gal-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rx-gal-ini { width: 100%; height: 100%; display: grid; place-items: center; background: rgba(212, 77, 77, 0.10); color: #D44D4D; font-size: 1.375rem; font-weight: 700; }
+.rx-gal-in { width: 2.25rem; height: 2.25rem; border-radius: 9999px; display: grid; place-items: center; color: #627288; background: #F6F7FA; border: 1px solid #EDF0F5; transition: color .2s ease, background-color .2s ease, border-color .2s ease; }
+.rx-gal-in svg { width: 1rem; height: 1rem; }
+.rx-gal-in:hover { color: #FFFFFF; background: #D44D4D; border-color: #D44D4D; }
+.rx-gal-in:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+.rx-gal-card h3 { margin: 0; font-size: 1.125rem !important; font-weight: 700; color: #131A27; }
+.rx-gal-esp { margin: .25rem 0 1rem; font-size: .875rem; font-weight: 600; color: #D44D4D; }
+.rx-gal-areas { list-style: none; margin: 0 0 1rem; padding: 0; display: flex; flex-wrap: wrap; gap: .375rem; }
+.rx-gal-areas li { padding: .25rem .625rem; border-radius: 9999px; background: #F6F7FA; border: 1px solid #EDF0F5; font-size: .75rem; font-weight: 500; color: #283043; }
+.rx-gal-seg { margin: auto 0 0; padding-top: .875rem; border-top: 1px solid #EDF0F5; font-size: .8125rem; color: #495669; }
+.rx-gal-seg span { display: block; margin-bottom: .125rem; font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8898B0; }
+@media (hover: hover) { .rx-gal-card:hover { transform: translateY(-4px); border-color: rgba(212, 77, 77, 0.22); box-shadow: 0 8px 24px rgba(13, 17, 25, 0.08), 0 20px 48px rgba(13, 17, 25, 0.06); } }
+@media (prefers-reduced-motion: reduce) { .rx-gal-card { transition: none; } .rx-gal-card:hover { transform: none; } }
+@media (max-width: 1023px) { .rx-gal-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639px) { .rx-gal-grade { grid-template-columns: 1fr; gap: .75rem; } .rx-gal-card { padding: 1.25rem; border-radius: 20px; } }
+/* Tags das áreas: no máximo 2 linhas (o que passar disso fica oculto) */
+.rx-gal-areas { max-height: calc(2 * 1.6875rem + .375rem); overflow: hidden; }
+.rx-gal-areas li { line-height: 1.125rem; }

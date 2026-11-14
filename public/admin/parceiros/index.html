@@ -11,6 +11,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
+  .gal-card { display: grid; gap: 14px; }
+  .gal-dl { display: grid; grid-template-columns: max-content 1fr; align-items: center; gap: 10px 20px; margin: 0; font-size: 14px; }
+  .gal-dl dt { color: var(--muted); }
+  .gal-dl dd { margin: 0; font-weight: 600; }
+  .gal-conv { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+  .gal-conv-btn { font-size: 12px; padding: 5px 12px; }
+  .gal-sw { display: inline-flex; align-items: center; gap: 10px; }
+  .gal-switch { position: relative; width: 44px; height: 24px; padding: 0; border: 0; border-radius: 999px; background: #B3BDD0; cursor: pointer; transition: background-color .2s ease; }
+  .gal-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(13, 17, 25, .2); transition: transform .2s ease; }
+  .gal-switch[aria-checked="true"] { background: var(--red); }
+  .gal-switch[aria-checked="true"]::after { transform: translateX(20px); }
+  .gal-switch:disabled { opacity: .45; cursor: not-allowed; }
+  .gal-switch:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+  @media (prefers-reduced-motion: reduce) { .gal-switch, .gal-switch::after { transition: none; } }
+  .gal-hist summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+  .gal-reg { display: grid; gap: 2px; padding: 10px 0; border-top: 1px solid var(--track); font-size: 14px; }
   .tabs { display: flex; width: 100%; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 999px; margin: 20px 0 16px; }
   .tab { flex: 1; background: none; border: 0; border-radius: 999px; padding: 9px 18px; color: var(--muted); font-size: 14px; }
   .tab[aria-selected=true] { background: var(--red); color: #fff; }
@@ -740,6 +756,77 @@ document.getElementById("tab-dashboard").addEventListener("click", () => setTab(
 document.getElementById("tab-candidaturas").addEventListener("click", () => setTab("candidaturas"));
 
 // LGPD: comprovante do consentimento e exclusão do cadastro a pedido da pessoa.
+// Galeria de profissionais: situação da autorização de exibição do perfil e o histórico de decisões (prova do consentimento).
+function galeriaCard(data) {
+  const c = el("div", "card lgpd gal-card");
+  c.appendChild(el("div", "sec", "Galeria de Profissionais"));
+  const st = data.galeria_status;
+  const dl = el("dl", "gal-dl");
+  const linha = (rotulo, valor) => { dl.append(el("dt", null, rotulo)); const dd = el("dd"); typeof valor === "string" ? (dd.textContent = valor) : dd.appendChild(valor); dl.append(dd); return dd; };
+  // Convite: data do envio e botão para enviar (ou reenviar) só para este parceiro, enquanto ele não decidiu.
+  const conv = el("span", "gal-conv");
+  const convTxt = el("span", null, data.galeria_convite_em ? Admin.fmtDate(data.galeria_convite_em) : "Não enviado");
+  conv.appendChild(convTxt);
+  if (!data.galeria_status && data.email) {
+    const bConv = el("button", "btn-ghost gal-conv-btn", data.galeria_convite_em ? "Reenviar convite" : "Enviar convite"); bConv.type = "button";
+    bConv.addEventListener("click", async () => {
+      if (!(await Admin.confirmDialog({ title: "Enviar convite da galeria?", message: "O e-mail com o pedido de autorização será enviado para " + (data.nome || "este parceiro") + " (" + data.email + ").", ok: "Enviar", danger: false }))) return;
+      bConv.disabled = true; bConv.textContent = "Enviando…";
+      const { data: res, error } = await Admin.sb.functions.invoke("galeria-convite", { body: { acao: "um", id: data.id } });
+      let erro = error ? "Não foi possível enviar agora." : (res && res.falhas ? "O e-mail não foi enviado. Tente novamente." : "");
+      if (error) { try { erro = (await error.context.json()).error || erro; } catch {} }
+      bConv.disabled = false;
+      if (erro) { bConv.textContent = data.galeria_convite_em ? "Reenviar convite" : "Enviar convite"; return Admin.toast(erro); }
+      data.galeria_convite_em = new Date().toISOString(); convTxt.textContent = Admin.fmtDate(data.galeria_convite_em); bConv.textContent = "Reenviar convite"; statusDd.textContent = "Aguardando resposta";
+      Admin.log("Enviou o convite da galeria para " + (data.nome || "parceiro"));
+      Admin.toast("Convite enviado para " + data.email + ".");
+    });
+    conv.appendChild(bConv);
+  }
+  linha("Convite enviado", conv);
+  const statusDd = linha("Status", st === "autorizado" ? "Exibição autorizada" : st === "recusado" ? "Exibição não autorizada" : data.galeria_convite_em ? "Aguardando resposta" : "Ainda não convidado");
+  // Exibir: switch (sim/não). Só é possível exibir quem autorizou; ocultar não altera a autorização do parceiro.
+  const sw = el("button", "gal-switch"); sw.type = "button"; sw.setAttribute("role", "switch"); sw.setAttribute("aria-label", "Exibir na galeria");
+  const rot = el("span", "gal-sw-txt");
+  const caixa = el("span", "gal-sw"); caixa.append(sw, rot);
+  const pintar = () => { const on = st === "autorizado" && !data.galeria_oculto; sw.setAttribute("aria-checked", String(on)); rot.textContent = on ? "Sim" : "Não"; };
+  if (st !== "autorizado") { sw.disabled = true; sw.title = "Disponível só para quem autorizou a exibição"; }
+  sw.addEventListener("click", async () => {
+    const novo = !data.galeria_oculto;
+    sw.disabled = true;
+    const { error } = await Admin.sb.from("cadastros").update({ galeria_oculto: novo }).eq("id", data.id);
+    sw.disabled = false;
+    if (error) return Admin.toast("Não foi possível alterar agora: " + error.message);
+    data.galeria_oculto = novo; pintar();
+    Admin.log((novo ? "Ocultou da galeria" : "Exibiu na galeria") + " o perfil de " + (data.nome || "parceiro"));
+    Admin.toast(novo ? "Perfil ocultado da galeria." : "Perfil exibido na galeria.");
+  });
+  pintar();
+  linha("Exibir", caixa);
+  c.appendChild(dl);
+  const hist = el("details", "gal-hist"); hist.appendChild(el("summary", null, "Histórico de decisões"));
+  const lista = el("div"); lista.appendChild(el("p", "muted", "Carregando…")); hist.appendChild(lista); c.appendChild(hist);
+  hist.addEventListener("toggle", async () => {
+    if (!hist.open || hist.dataset.ok) return; hist.dataset.ok = "1";
+    const { data: regs, error } = await Admin.sb.from("galeria_autorizacoes").select("created_at, decisao, texto_versao, texto, dados_exibidos, user_agent").eq("cadastro_id", data.id).order("created_at", { ascending: false });
+    lista.replaceChildren();
+    if (error) return lista.appendChild(el("p", "muted", "Não foi possível carregar o histórico."));
+    if (!regs.length) return lista.appendChild(el("p", "muted", "Nenhuma decisão registrada ainda."));
+    regs.forEach((r) => {
+      const item = el("div", "gal-reg");
+      item.appendChild(el("strong", null, (r.decisao === "autorizado" ? "Autorizou" : "Não autorizou") + " em " + Admin.fmtDate(r.created_at)));
+      item.appendChild(el("span", "muted", "Versão do termo: " + r.texto_versao));
+      const d = el("details"); d.appendChild(el("summary", null, "Ver texto aceito e dados"));
+      d.appendChild(el("p", "lgpd-txt", r.texto));
+      const ex = r.dados_exibidos || {};
+      if (ex.nome) d.appendChild(el("p", "lgpd-txt", "Exibido: " + [ex.nome, ex.cargo, (ex.areas || []).join(", "), (ex.segmentos || []).join(", "), ex.linkedin, ex.foto_url ? "foto enviada" : "sem foto"].filter(Boolean).join(" · ")));
+      if (r.user_agent) d.appendChild(el("p", "lgpd-txt", "Navegador: " + r.user_agent));
+      item.appendChild(d); lista.appendChild(item);
+    });
+  });
+  return c;
+}
+
 function lgpdCard(data) {
   const c = el("div", "card lgpd");
   c.appendChild(el("div", "sec", "Consentimento LGPD"));
@@ -753,6 +840,9 @@ function lgpdCard(data) {
   btn.addEventListener("click", async () => {
     if (!(await Admin.confirmDialog({ title: "Excluir cadastro?", message: "O cadastro de " + (data.nome || "esta pessoa") + " e todas as respostas serão apagados definitivamente. Essa ação não pode ser desfeita.", ok: "Excluir cadastro" }))) return;
     btn.disabled = true; btn.textContent = "Excluindo…";
+    // Apaga também as fotos enviadas para a galeria (pasta com o id do cadastro).
+    const { data: fotos } = await Admin.sb.storage.from("galeria").list(data.id);
+    if (fotos && fotos.length) await Admin.sb.storage.from("galeria").remove(fotos.map((f) => data.id + "/" + f.name));
     const { data: del, error } = await Admin.sb.from("cadastros").delete().eq("id", data.id).select("id");
     if (error || !del || !del.length) { btn.disabled = false; btn.textContent = "Excluir cadastro"; msg.textContent = "Não foi possível excluir o cadastro" + (error ? ": " + error.message : "."); return; }
     await Admin.log("Excluiu o cadastro de parceiro de " + (data.nome || data.email || "parceiro"));
@@ -803,7 +893,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
       const addTxt = (v) => (/^Outr[oa]s?\b/.test(v) ? v.replace(/\.$/, "") + ": " + txt : v);
       shown[k] = Array.isArray(shown[k]) ? shown[k].map(addTxt) : addTxt(shown[k] || "");
     }
-    box.replaceChildren(Admin.detail(shown, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)), lgpdCard(data));
+    box.replaceChildren(Admin.detail(shown, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)), galeriaCard(data), lgpdCard(data));
     return;
   }
   const { data, error } = await Admin.sb.from("cadastros").select("*").order("created_at", { ascending: false });
