@@ -43,11 +43,12 @@ const RODAPE = "Você recebeu este e-mail porque faz parte da Rede de Parceiros 
 
 // confirmado: o parceiro já autorizou no formulário de cadastro; o e-mail confirma e pede a foto.
 const ASSUNTO_CONFIRMADO = "Seu perfil na Galeria de profissionais: envie sua foto";
-// Boas-vindas (envio automático a cada novo cadastro): recebe o parceiro na rede e traz a galeria.
+// Novo cadastro (envio automático): foco na galeria, abrindo com "Agora que você faz parte da nossa rede".
 //   bv-sim: autorizou a galeria no cadastro (pede a foto). bv-nao: não autorizou (convida, sem obrigação).
-const ASSUNTO_BV = "Boas-vindas à Rede de Parceiros";
+const ASSUNTO_BV_SIM = "Agora que você faz parte da rede, complete seu perfil na galeria";
+const ASSUNTO_BV_NAO = "Agora que você faz parte da rede, apareça na nossa galeria";
 type Modo = "convite" | "confirmado" | "bv-sim" | "bv-nao";
-const assuntoDe = (m: Modo) => m === "confirmado" ? ASSUNTO_CONFIRMADO : m.startsWith("bv") ? ASSUNTO_BV : ASSUNTO;
+const assuntoDe = (m: Modo) => m === "confirmado" ? ASSUNTO_CONFIRMADO : m === "bv-sim" ? ASSUNTO_BV_SIM : m === "bv-nao" ? ASSUNTO_BV_NAO : ASSUNTO;
 function montar(nome: string, token: string, modo: Modo = "convite") {
   const confirmado = modo === "confirmado", bv = modo.startsWith("bv"), bvSim = modo === "bv-sim";
   const link = PAGINA + encodeURIComponent(token);
@@ -62,19 +63,17 @@ function montar(nome: string, token: string, modo: Modo = "convite") {
     p("No mesmo link você pode revisar como o seu perfil vai aparecer e ajustar o cargo e o LinkedIn."),
     p(b("A decisão é sua, e você pode alterá-la a qualquer momento pelo mesmo link.")),
   ].join("");
-  const corpoBV = [
+  const REDE = "Rede de Parceiros da Dani Moscatelli | Experience Design Studio";
+  const corpoBV = (bvSim ? [
     p(esc(ola)),
-    p("Recebemos o seu cadastro e é um prazer ter você na Rede de Parceiros da Dani Moscatelli | Experience Design Studio."),
-    p("A partir de agora, o seu perfil faz parte da nossa base de especialistas. Quando surgir um desafio alinhado às suas competências, entraremos em contato."),
-    `<h2 style="margin:28px 0 12px;font-size:19px;line-height:1.3;color:#0f172a">Galeria de Profissionais</h2>`,
-    ...(bvSim ? [
-      p("Obrigada por autorizar a exibição do seu perfil na Galeria de Profissionais do nosso site."),
-      p(`Para completar, ${b("revise como o seu perfil vai aparecer e envie a sua foto")}. Se não enviar, usaremos a foto do seu perfil do LinkedIn.`),
-    ] : [
-      p("Estamos preparando uma Galeria de Profissionais no site, para apresentar os especialistas da rede e facilitar conexões com empresas em busca de novos talentos."),
-      p(`Se quiser participar, ${b("revise como o seu perfil vai aparecer e autorize a exibição")}. A participação é opcional, e seus dados de contato e sua cidade não são exibidos.`),
-    ]),
-  ].join("");
+    p(`Agora que você faz parte da nossa rede, o seu perfil também vai fazer parte da ${b("Galeria de Profissionais")} do nosso site, como você autorizou no cadastro.`),
+    p(`Para completar, ${b("revise como o seu perfil vai aparecer e envie a sua foto")}. Se não enviar, usaremos a foto do seu perfil do LinkedIn.`),
+  ] : [
+    p(esc(ola)),
+    p(`Agora que você faz parte da nossa rede, queremos apresentar você também na ${b("Galeria de Profissionais")} do nosso site.`),
+    p("A galeria apresenta os especialistas da " + esc(REDE) + " e facilita conexões com empresas em busca de novos talentos."),
+    p(`Se quiser participar, ${b("revise como o seu perfil vai aparecer e autorize a exibição")}. A participação é opcional, e seus dados de contato e sua cidade não são exibidos.`),
+  ]).join("");
   const corpo = bv ? corpoBV : confirmado ? corpoConfirmado : [
     p(esc(ola)),
     p("É um prazer contar com você na Rede de Parceiros da Dani Moscatelli | Experience Design Studio."),
@@ -97,8 +96,8 @@ function montar(nome: string, token: string, modo: Modo = "convite") {
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;font-family:Arial,Helvetica,sans-serif">
     <tr><td style="padding:0;font-size:0;line-height:0"><a href="${SITE}"><img src="${CABECALHO}" width="600" alt="Dani Moscatelli | Experience Design Studio" style="display:block;width:100%;max-width:600px;height:auto;border:0"></a></td></tr>
     <tr><td class="px" style="padding:16px 32px 0">
-      <p style="margin:0 0 8px;font-size:12px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:#d44d4d">${bv ? "Rede de Parceiros" : "Galeria de profissionais"}</p>
-      <h1 style="margin:0 0 20px;font-size:26px;line-height:1.25;color:#0f172a">${bv ? "Boas-vindas à Rede de Parceiros!" : confirmado ? "Seu perfil vai fazer parte da nossa galeria." : "Seu trabalho merece ser visto. Podemos apresentar você na nossa galeria?"}</h1>
+      <p style="margin:0 0 8px;font-size:12px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:#d44d4d">Galeria de profissionais</p>
+      <h1 style="margin:0 0 20px;font-size:26px;line-height:1.25;color:#0f172a">${modo === "bv-sim" ? "Seu perfil vai fazer parte da nossa galeria." : modo === "bv-nao" ? "Podemos apresentar você na nossa galeria?" : confirmado ? "Seu perfil vai fazer parte da nossa galeria." : "Seu trabalho merece ser visto. Podemos apresentar você na nossa galeria?"}</h1>
       ${corpo}
     </td></tr>
     <tr><td class="px" style="padding:4px 32px 28px">
@@ -111,16 +110,14 @@ function montar(nome: string, token: string, modo: Modo = "convite") {
 </td></tr></table>
 </body></html>`;
   const textoBV = [
-    "REDE DE PARCEIROS", "Boas-vindas à Rede de Parceiros!", ola,
-    "Recebemos o seu cadastro e é um prazer ter você na Rede de Parceiros da Dani Moscatelli | Experience Design Studio.",
-    "A partir de agora, o seu perfil faz parte da nossa base de especialistas. Quando surgir um desafio alinhado às suas competências, entraremos em contato.",
-    "Galeria de Profissionais",
+    "GALERIA DE PROFISSIONAIS", bvSim ? "Seu perfil vai fazer parte da nossa galeria." : "Podemos apresentar você na nossa galeria?", ola,
     ...(bvSim ? [
-      "Obrigada por autorizar a exibição do seu perfil na Galeria de Profissionais do nosso site.",
+      "Agora que você faz parte da nossa rede, o seu perfil também vai fazer parte da Galeria de Profissionais do nosso site, como você autorizou no cadastro.",
       "Para completar, revise como o seu perfil vai aparecer e envie a sua foto. Se não enviar, usaremos a foto do seu perfil do LinkedIn.",
       "Completar meu perfil na galeria: " + link,
     ] : [
-      "Estamos preparando uma Galeria de Profissionais no site, para apresentar os especialistas da rede e facilitar conexões com empresas em busca de novos talentos.",
+      "Agora que você faz parte da nossa rede, queremos apresentar você também na Galeria de Profissionais do nosso site.",
+      "A galeria apresenta os especialistas da " + REDE + " e facilita conexões com empresas em busca de novos talentos.",
       "Se quiser participar, revise como o seu perfil vai aparecer e autorize a exibição. A participação é opcional, e seus dados de contato e sua cidade não são exibidos.",
       "Ver meu perfil na galeria: " + link,
     ]),
