@@ -265,7 +265,9 @@ form.addEventListener('change', (e) => {
     btn.tabIndex = mostrar ? 0 : -1;
   };
   new IntersectionObserver(([e]) => { heroVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.15 }).observe(hero);
-  new IntersectionObserver(([e]) => { formVisivel = e.isIntersecting; atualizar(); }, { threshold: 0.1 }).observe(form);
+  // o flutuante só sai quando o próprio botão "Cadastrar empresa" do convite aparece na tela (não basta a seção começar a aparecer)
+  const formBotao = form.querySelector<HTMLElement>('.convite-cta') ?? form;
+  new IntersectionObserver(([e]) => { formVisivel = e.isIntersecting; atualizar(); }, { threshold: 0 }).observe(formBotao);
   if (ctaSecao) new IntersectionObserver(([e]) => { ctaSecaoVisivel = e.isIntersecting; atualizar(); }, { threshold: 0 }).observe(ctaSecao);
   celular.addEventListener('change', atualizar);
   atualizar();
