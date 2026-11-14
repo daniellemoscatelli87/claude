@@ -1097,3 +1097,7 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-rodape .rodape-base span[aria-hidden] { color: #8898B0 !important; }
 .rx-rodape .rodape-topo { border-bottom-color: rgba(19, 26, 39, 0.12) !important; }
 .rx-rodape .rodape-ds { color: #283043 !important; text-decoration-color: rgba(40, 48, 67, .4) !important; }
+/* Convite com o mesmo arredondamento da folha branca de cima */
+.rx-fechamento .rp-carta { border-radius: 36px !important; }
+@media (min-width: 640px) { .rx-fechamento .rp-carta { border-radius: 48px !important; } }
+@media (min-width: 1024px) { .rx-fechamento .rp-carta { border-radius: 56px !important; } }
