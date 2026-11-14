@@ -100,6 +100,7 @@
   a { color: #D44D4D; font-weight: 600; text-underline-offset: 4px; }
   .enviado { display: grid; justify-items: center; gap: .25rem; margin-top: 1.5rem; padding: 2rem 1.5rem; border: 1px solid #E4E6EC; border-radius: 20px; background: #FFFFFF; text-align: center; }
   .enviado:focus { outline: none; }
+  .enviado-foto { display: block; width: min(220px, 70%); height: auto; margin: -.5rem auto .75rem; border-bottom: 1px solid #E4E6EC; }
   .enviado-ic { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; margin-bottom: .75rem; border-radius: 9999px; background: #FDF2F2; color: #D44D4D; }
   .enviado-ic svg { width: 1.75rem; height: 1.75rem; }
   .enviado h2 { margin: 0 0 .5rem; }
@@ -172,7 +173,7 @@
     <p class="erro" id="erro" role="alert" hidden></p>
   </div>
   <section class="enviado" id="enviado" hidden aria-labelledby="enviado-titulo" tabindex="-1">
-    <span class="enviado-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+    <img class="enviado-foto" src="/rede-parceiros/galeria/dani-positivo.webp" alt="Dani Moscatelli fazendo sinal de positivo com as duas mãos" width="1254" height="1254" loading="lazy">
     <h2 id="enviado-titulo">Perfil enviado!</h2>
     <p>Obrigada por fazer parte da Galeria de Profissionais da Rede de Parceiros. Seu perfil vai compor a galeria do site.</p>
     <p>Se quiser remover o seu perfil, é só enviar um e-mail para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
