@@ -1369,3 +1369,5 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 @media (min-width: 1024px) {
   html body .rx-folha { border: 0 !important; border-radius: 0 !important; box-shadow: none !important; background: transparent !important; margin-top: 1rem !important; }
 }
+/* celular e tablet: título e descrição do hero 10 px mais abaixo */
+@media (max-width: 1023px) { .rp-hero h1, .rp-hero .rp-lead { position: relative; top: 10px; } }
