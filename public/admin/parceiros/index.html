@@ -11,6 +11,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
+  .gal-card { display: grid; gap: 12px; }
+  .gal-pill { justify-self: start; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: #EDF0F5; color: #495669; }
+  .gal-pill.ok { background: rgba(79, 181, 123, 0.14); color: #1f6b3a; }
+  .gal-pill.no { background: var(--red-tint); color: var(--red); }
+  .gal-dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 0; font-size: 14px; }
+  .gal-dl dt { color: var(--muted); } .gal-dl dd { margin: 0; font-weight: 600; }
+  .gal-prev { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .gal-prev img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(212, 77, 77, .25); }
+  .gal-prev a { color: var(--red); font-weight: 600; overflow-wrap: anywhere; }
+  .gal-sem { font-size: 13px; color: var(--muted); }
+  .gal-hist summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+  .gal-reg { display: grid; gap: 2px; padding: 10px 0; border-top: 1px solid var(--track); font-size: 14px; }
   .tabs { display: flex; width: 100%; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 999px; margin: 20px 0 16px; }
   .tab { flex: 1; background: none; border: 0; border-radius: 999px; padding: 9px 18px; color: var(--muted); font-size: 14px; }
   .tab[aria-selected=true] { background: var(--red); color: #fff; }
@@ -740,6 +752,49 @@ document.getElementById("tab-dashboard").addEventListener("click", () => setTab(
 document.getElementById("tab-candidaturas").addEventListener("click", () => setTab("candidaturas"));
 
 // LGPD: comprovante do consentimento e exclusão do cadastro a pedido da pessoa.
+// Galeria de profissionais: situação da autorização de exibição do perfil e o histórico de decisões (prova do consentimento).
+function galeriaCard(data) {
+  const c = el("div", "card lgpd gal-card");
+  c.appendChild(el("div", "sec", "Galeria de profissionais"));
+  const st = data.galeria_status;
+  const pill = el("span", "gal-pill " + (st === "autorizado" ? "ok" : st === "recusado" ? "no" : ""),
+    st === "autorizado" ? "Autorizou a exibição" : st === "recusado" ? "Não autorizou" : data.galeria_convite_em ? "Aguardando resposta" : "Ainda não convidado");
+  c.appendChild(pill);
+  const linhas = [];
+  if (data.galeria_convite_em) linhas.push(["Convite enviado em", Admin.fmtDate(data.galeria_convite_em)]);
+  if (data.galeria_decidido_em) linhas.push(["Última decisão em", Admin.fmtDate(data.galeria_decidido_em)]);
+  if (st === "autorizado") { linhas.push(["Cargo exibido", data.galeria_cargo || "-"]); }
+  if (linhas.length) { const dl = el("dl", "gal-dl"); linhas.forEach(([k, v]) => dl.append(el("dt", null, k), el("dd", null, v))); c.appendChild(dl); }
+  if (st === "autorizado") {
+    const prev = el("div", "gal-prev");
+    if (data.galeria_foto_url) { const img = el("img"); img.src = data.galeria_foto_url; img.alt = "Foto enviada por " + (data.nome || "parceiro"); prev.appendChild(img); }
+    else prev.appendChild(el("span", "gal-sem", "Sem foto enviada (usar a do LinkedIn)"));
+    if (data.galeria_linkedin) { const a = el("a", null, data.galeria_linkedin.replace(/^https:\/\/(www\.)?/, "")); a.href = data.galeria_linkedin; a.target = "_blank"; a.rel = "noopener noreferrer"; prev.appendChild(a); }
+    c.appendChild(prev);
+  }
+  const hist = el("details", "gal-hist"); hist.appendChild(el("summary", null, "Histórico de decisões"));
+  const lista = el("div"); lista.appendChild(el("p", "muted", "Carregando…")); hist.appendChild(lista); c.appendChild(hist);
+  hist.addEventListener("toggle", async () => {
+    if (!hist.open || hist.dataset.ok) return; hist.dataset.ok = "1";
+    const { data: regs, error } = await Admin.sb.from("galeria_autorizacoes").select("created_at, decisao, texto_versao, texto, dados_exibidos, user_agent").eq("cadastro_id", data.id).order("created_at", { ascending: false });
+    lista.replaceChildren();
+    if (error) return lista.appendChild(el("p", "muted", "Não foi possível carregar o histórico."));
+    if (!regs.length) return lista.appendChild(el("p", "muted", "Nenhuma decisão registrada ainda."));
+    regs.forEach((r) => {
+      const item = el("div", "gal-reg");
+      item.appendChild(el("strong", null, (r.decisao === "autorizado" ? "Autorizou" : "Não autorizou") + " em " + Admin.fmtDate(r.created_at)));
+      item.appendChild(el("span", "muted", "Versão do termo: " + r.texto_versao));
+      const d = el("details"); d.appendChild(el("summary", null, "Ver texto aceito e dados"));
+      d.appendChild(el("p", "lgpd-txt", r.texto));
+      const ex = r.dados_exibidos || {};
+      if (ex.nome) d.appendChild(el("p", "lgpd-txt", "Exibido: " + [ex.nome, ex.cargo, (ex.areas || []).join(", "), (ex.segmentos || []).join(", "), ex.linkedin, ex.foto_url ? "foto enviada" : "sem foto"].filter(Boolean).join(" · ")));
+      if (r.user_agent) d.appendChild(el("p", "lgpd-txt", "Navegador: " + r.user_agent));
+      item.appendChild(d); lista.appendChild(item);
+    });
+  });
+  return c;
+}
+
 function lgpdCard(data) {
   const c = el("div", "card lgpd");
   c.appendChild(el("div", "sec", "Consentimento LGPD"));
@@ -753,6 +808,9 @@ function lgpdCard(data) {
   btn.addEventListener("click", async () => {
     if (!(await Admin.confirmDialog({ title: "Excluir cadastro?", message: "O cadastro de " + (data.nome || "esta pessoa") + " e todas as respostas serão apagados definitivamente. Essa ação não pode ser desfeita.", ok: "Excluir cadastro" }))) return;
     btn.disabled = true; btn.textContent = "Excluindo…";
+    // Apaga também as fotos enviadas para a galeria (pasta com o id do cadastro).
+    const { data: fotos } = await Admin.sb.storage.from("galeria").list(data.id);
+    if (fotos && fotos.length) await Admin.sb.storage.from("galeria").remove(fotos.map((f) => data.id + "/" + f.name));
     const { data: del, error } = await Admin.sb.from("cadastros").delete().eq("id", data.id).select("id");
     if (error || !del || !del.length) { btn.disabled = false; btn.textContent = "Excluir cadastro"; msg.textContent = "Não foi possível excluir o cadastro" + (error ? ": " + error.message : "."); return; }
     await Admin.log("Excluiu o cadastro de parceiro de " + (data.nome || data.email || "parceiro"));
@@ -803,7 +861,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
       const addTxt = (v) => (/^Outr[oa]s?\b/.test(v) ? v.replace(/\.$/, "") + ": " + txt : v);
       shown[k] = Array.isArray(shown[k]) ? shown[k].map(addTxt) : addTxt(shown[k] || "");
     }
-    box.replaceChildren(Admin.detail(shown, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)), lgpdCard(data));
+    box.replaceChildren(Admin.detail(shown, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at)), galeriaCard(data), lgpdCard(data));
     return;
   }
   const { data, error } = await Admin.sb.from("cadastros").select("*").order("created_at", { ascending: false });
