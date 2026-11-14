@@ -1180,3 +1180,10 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
   .rp-hero-grade { align-items: end !important; }
   .rp-hero-texto { align-self: end !important; padding-bottom: var(--rp-hero-ajuste, 1.5rem); }
 }
+
+/* Hero: foto do grupo com corte adaptável. Em telas baixas (notebooks) a foto mantém a largura
+   e esconde só a parte de baixo das pernas, para a cabeça não passar por trás do menu. */
+@media (min-width: 1024px) {
+  .rp-modelo-sobe img { height: auto !important; aspect-ratio: 1111 / 1416; max-height: calc(100svh - var(--rp-hero-foto-folga, 56px)) !important; object-fit: cover !important; object-position: 50% 0 !important; }
+}
+@media (min-width: 1024px) and (max-height: 820px) { .rp-modelo-sobe img { margin-bottom: -28px; } }
