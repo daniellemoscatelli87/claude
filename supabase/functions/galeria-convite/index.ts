@@ -26,28 +26,36 @@ const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE
 const esc = (v: unknown) =>
   String(v ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const ASSINATURA_HTML = `<table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse"><tr>
-<td valign="top" style="padding:0 16px 0 0"><img src="${FOTO}" width="80" height="80" alt="Dani Moscatelli" style="display:block;width:80px;height:80px;border-radius:50%;border:0"></td>
-<td valign="top" style="font-family:Arial,Helvetica,sans-serif">
-<p style="margin:0;font-size:18px;line-height:1.3;font-weight:bold;color:#0f172a">Dani Moscatelli</p>
-<p style="margin:2px 0 10px;font-size:14px;line-height:1.4;color:#64748b">CEO | Experience Design <span style="color:#d44d4d;font-weight:bold">Studio</span></p>
-<p style="margin:0;font-size:15px;line-height:1.8"><a href="https://www.danimoscatelli.com.br" style="color:#0f172a;text-decoration:none">www.danimoscatelli.com.br</a><br><a href="tel:+5541997485414" style="color:#0f172a;text-decoration:none">+55 (41) 99748-5414</a><br><a href="https://www.instagram.com/danimoscatellistudio/" style="color:#0f172a;text-decoration:none">@danimoscatellistudio</a></p>
-</td></tr></table>`;
-const ASSINATURA_TXT = "Dani Moscatelli\nCEO | Experience Design Studio\nwww.danimoscatelli.com.br\n+55 (41) 99748-5414\nInstagram: @danimoscatellistudio";
-
 function primeiroNome(nome: string) { return (nome || "").trim().split(/\s+/)[0] || ""; }
+
+// Assinatura deste e-mail: foto, nome, cargo e site (sem telefone e Instagram), como no texto aprovado.
+const ASSINATURA_CONVITE_HTML = `<table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse"><tr>
+<td valign="top" style="padding:0 16px 0 0"><img src="${FOTO}" width="72" height="72" alt="Dani Moscatelli" style="display:block;width:72px;height:72px;border-radius:50%;border:0"></td>
+<td valign="middle" style="font-family:Arial,Helvetica,sans-serif">
+<p style="margin:0;font-size:17px;line-height:1.3;font-weight:bold;color:#0f172a">Dani Moscatelli</p>
+<p style="margin:2px 0 6px;font-size:14px;line-height:1.4;color:#64748b">CEO | Experience Design <span style="color:#d44d4d;font-weight:bold">Studio</span></p>
+<p style="margin:0;font-size:14px;line-height:1.5"><a href="${SITE}" style="color:#0f172a;text-decoration:none">www.danimoscatelli.com.br</a></p>
+</td></tr></table>`;
+const RODAPE = "Você recebeu este e-mail porque faz parte da Rede de Parceiros da Dani Moscatelli | Experience Design Studio. Seu perfil só será publicado mediante sua autorização.";
 
 function montar(nome: string, token: string) {
   const link = PAGINA + encodeURIComponent(token);
   const ola = primeiroNome(nome) ? `Olá, ${primeiroNome(nome)}!` : "Olá!";
-  const paragrafos = [
-    ola,
-    "Obrigada por fazer parte da Rede de Parceiros da Dani Moscatelli | Experience Design Studio.",
-    "Vamos abrir no site uma Galeria de profissionais, para apresentar os especialistas independentes que colaboram com desafios do Studio e de empresas parceiras. Gostaríamos de incluir o seu perfil profissional.",
-    "A ideia é dar visibilidade ao seu trabalho. O perfil funciona como uma vitrine profissional para empresas que procuram especialistas e pode gerar convites para novos desafios. Ao mesmo tempo, fortalece o ecossistema: mostra a diversidade de competências que reunimos e aproxima os profissionais da rede, ampliando as oportunidades de colaboração para todos.",
-    "Seu perfil só será exibido com a sua autorização. No link abaixo você vê exatamente como ele vai aparecer (nome, cargo, áreas de atuação, segmentos, LinkedIn e foto) e decide se autoriza ou não. E-mail, telefone e cidade nunca são exibidos.",
-    "Você pode mudar de ideia quando quiser pelo mesmo link.",
-  ];
+  const P = "margin:0 0 16px;font-size:16px;line-height:1.65;color:#334155";
+  const p = (t: string) => `<p style="${P}">${t}</p>`;
+  const b = (t: string) => `<strong style="color:#0f172a">${t}</strong>`;
+  const corpo = [
+    p(esc(ola)),
+    p("É um prazer contar com você na Rede de Parceiros da Dani Moscatelli | Experience Design Studio."),
+    p(`Estamos preparando uma ${b("Galeria de Profissionais")} em nosso site, um espaço dedicado a apresentar os especialistas independentes que fazem parte da nossa rede.`),
+    p(b("Queremos que seu talento também esteja lá.")),
+    p("A galeria foi pensada para ampliar a visibilidade dos profissionais, valorizar suas competências e facilitar conexões com empresas em busca de especialistas para novos desafios."),
+    `<h2 style="margin:28px 0 12px;font-size:19px;line-height:1.3;color:#0f172a">Você decide como quer aparecer.</h2>`,
+    p("Antes de publicar qualquer informação, queremos sua autorização."),
+    p("No link abaixo, você poderá revisar os dados que serão apresentados — nome, cargo, áreas de atuação, segmentos, LinkedIn e foto — e decidir se deseja participar."),
+    p("Seus dados de contato, como e-mail e telefone, e sua cidade não serão exibidos."),
+    p(b("A decisão é sua, e você pode alterá-la a qualquer momento pelo mesmo link.")),
+  ].join("");
   const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light only">
 <title>${esc(ASSUNTO)}</title>
@@ -59,18 +67,36 @@ function montar(nome: string, token: string) {
     <tr><td style="padding:0;font-size:0;line-height:0"><a href="${SITE}"><img src="${CABECALHO}" width="600" alt="Dani Moscatelli | Experience Design Studio" style="display:block;width:100%;max-width:600px;height:auto;border:0"></a></td></tr>
     <tr><td class="px" style="padding:16px 32px 0">
       <p style="margin:0 0 8px;font-size:12px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:#d44d4d">Galeria de profissionais</p>
-      <h1 style="margin:0 0 20px;font-size:26px;line-height:1.25;color:#0f172a">Podemos exibir o seu perfil na galeria da rede?</h1>
-      ${paragrafos.map((p) => `<p style="margin:0 0 16px;font-size:16px;line-height:1.65;color:#334155">${esc(p)}</p>`).join("")}
+      <h1 style="margin:0 0 20px;font-size:26px;line-height:1.25;color:#0f172a">Seu trabalho merece ser visto. Podemos apresentar você na nossa galeria?</h1>
+      ${corpo}
     </td></tr>
-    <tr><td class="px" style="padding:8px 32px 32px">
-      <a href="${link}" style="display:inline-block;background:#d44d4d;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:14px 28px;border-radius:999px">Revisar e decidir</a>
+    <tr><td class="px" style="padding:4px 32px 28px">
+      <a href="${link}" style="display:inline-block;background:#d44d4d;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:14px 28px;border-radius:999px">Revisar meu perfil e autorizar</a>
     </td></tr>
-    <tr><td class="px" style="padding:8px 32px 32px">${ASSINATURA_HTML}</td></tr>
+    <tr><td class="px" style="padding:0 32px 8px">${p("Obrigada por fazer parte dessa rede. Seguimos conectando competências, perspectivas e oportunidades para criar experiências de valor.")}</td></tr>
+    <tr><td class="px" style="padding:8px 32px 32px">${ASSINATURA_CONVITE_HTML}</td></tr>
   </table>
-  <p style="max-width:600px;margin:16px auto 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#94a3b8">Você recebeu este e-mail porque se cadastrou na Rede de Parceiros da Dani Moscatelli | Experience Design Studio. Se não responder, seu perfil não será exibido.</p>
+  <p style="max-width:600px;margin:16px auto 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#94a3b8">${esc(RODAPE)}</p>
 </td></tr></table>
 </body></html>`;
-  const text = `${paragrafos.join("\n\n")}\n\nRevisar e decidir: ${link}\n\n${ASSINATURA_TXT}\n\nVocê recebeu este e-mail porque se cadastrou na Rede de Parceiros da Dani Moscatelli | Experience Design Studio. Se não responder, seu perfil não será exibido.`;
+  const text = [
+    "GALERIA DE PROFISSIONAIS",
+    "Seu trabalho merece ser visto. Podemos apresentar você na nossa galeria?",
+    ola,
+    "É um prazer contar com você na Rede de Parceiros da Dani Moscatelli | Experience Design Studio.",
+    "Estamos preparando uma Galeria de Profissionais em nosso site, um espaço dedicado a apresentar os especialistas independentes que fazem parte da nossa rede.",
+    "Queremos que seu talento também esteja lá.",
+    "A galeria foi pensada para ampliar a visibilidade dos profissionais, valorizar suas competências e facilitar conexões com empresas em busca de especialistas para novos desafios.",
+    "Você decide como quer aparecer.",
+    "Antes de publicar qualquer informação, queremos sua autorização.",
+    "No link abaixo, você poderá revisar os dados que serão apresentados — nome, cargo, áreas de atuação, segmentos, LinkedIn e foto — e decidir se deseja participar.",
+    "Seus dados de contato, como e-mail e telefone, e sua cidade não serão exibidos.",
+    "A decisão é sua, e você pode alterá-la a qualquer momento pelo mesmo link.",
+    "Revisar meu perfil e autorizar: " + link,
+    "Obrigada por fazer parte dessa rede. Seguimos conectando competências, perspectivas e oportunidades para criar experiências de valor.",
+    "Dani Moscatelli\nCEO | Experience Design Studio\nwww.danimoscatelli.com.br",
+    "---\n" + RODAPE,
+  ].join("\n\n");
   return { html, text };
 }
 
