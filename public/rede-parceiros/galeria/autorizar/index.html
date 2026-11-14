@@ -40,6 +40,11 @@
   input:focus-visible { outline: none; border-color: #D44D4D; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.2); }
   .termo { margin: 0 0 1.25rem; padding: 1rem 1.125rem; border-radius: 16px; background: #F6F7FA; border: 1px solid #EDF0F5; font-size: .875rem; line-height: 1.6; color: #283043; }
   .acoes { display: flex; flex-wrap: wrap; gap: .75rem; }
+  .aceite { display: flex; align-items: flex-start; gap: .625rem; margin: 0 0 1rem; padding: .875rem 1rem; border: 1px solid #E4E6EC; border-radius: 12px; background: #FFFFFF; font-size: .9375rem; font-weight: 500; line-height: 1.5; color: #131A27; cursor: pointer; }
+  .aceite[hidden] { display: none; }
+  .aceite input { flex: none; width: 1.125rem; height: 1.125rem; margin: .1875rem 0 0; accent-color: #D44D4D; }
+  .aceite.invalido { border-color: #D44D4D; background: #FDF2F2; }
+  .aceite-nota { margin: .75rem 0 0; font-size: .8125rem; color: #627288; }
   button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.5rem; border-radius: 9999px; font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; }
   .sim { border: 0; background: #D44D4D; color: #FFFFFF; }
   .sim:hover { background: #B82828; }
@@ -151,10 +156,11 @@
 
     <h2>Autorização</h2>
     <p class="termo" id="termo"></p>
+    <label class="aceite" id="aceite-box" hidden><input type="checkbox" id="aceite"><span>Autorizo a exibição do meu perfil na Galeria de Profissionais, conforme o termo acima.</span></label>
     <div class="acoes">
-      <button type="button" class="sim" id="autorizo">Autorizo a exibição</button>
-      <button type="button" class="nao" id="naoautorizo">Não autorizo</button>
+      <button type="button" class="sim" id="enviar">Enviar perfil</button>
     </div>
+    <p class="aceite-nota">Ao enviar, você concorda com a exibição do seu perfil na Galeria de Profissionais do site.</p>
     <p class="erro" id="erro" role="alert" hidden></p>
   </div>
 </main>
@@ -173,7 +179,7 @@
       if (!s) { el.hidden = true; return; }
       el.hidden = false;
       el.className = "status " + (s === "autorizado" ? "ok" : "no");
-      el.textContent = s === "autorizado" ? "Você autorizou a exibição do seu perfil. Para retirar a autorização, use o botão “Não autorizo”." : "Você não autorizou a exibição. Seu perfil não aparece na galeria. Se mudar de ideia, use o botão “Autorizo a exibição”.";
+      el.textContent = s === "autorizado" ? "A exibição do seu perfil está autorizada. Para retirar a autorização, escreva para contato@danimoscatelli.com.br." : "Você não autorizou a exibição. Seu perfil não aparece na galeria. Se mudar de ideia, marque a autorização abaixo e envie o perfil.";
     }
     var fotoNova = "", removerFoto = false, fotoAtual = "", nomeArquivo = "", nomePendente = "";
     function mostrarFoto(src) {
@@ -256,18 +262,25 @@
       if (d.linkedin) { $("li-link").href = d.linkedin; $("li-link").textContent = d.linkedin.replace(/^https:\/\/(www\.)?/, ""); $("li-ver").hidden = false; }
       else { $("li-editar").hidden = false; }
       status(d.status); atualizarIn();
+      // quem já autorizou (no formulário de cadastro ou antes) não precisa marcar de novo; quem está na base sem autorizar marca a caixa
+      $("aceite-box").hidden = d.status === "autorizado";
       $("linkedin").addEventListener("input", atualizarIn);
     }).catch(function (e) { $("carregando").hidden = true; $("erro-geral").textContent = e.message; $("erro-geral").hidden = false; });
-    function decidir(decisao) {
+    function enviar() {
       var erro = $("erro"); erro.hidden = true;
-      ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = true; });
-      post({ acao: "decidir", decisao: decisao, especialidade: $("especialidade").value, linkedin: $("linkedin").value, foto: decisao === "autorizado" ? fotoNova : "", remover_foto: removerFoto })
-        .then(function (r) { fotoNova = ""; removerFoto = false; fotoAtual = r.foto_url || ""; mostrarFoto(fotoAtual); status(r.status); $("status").scrollIntoView({ behavior: "smooth", block: "center" }); })
+      if (!$("aceite-box").hidden && !$("aceite").checked) { $("aceite-box").classList.add("invalido"); erro.textContent = "Marque a autorização para enviar o seu perfil."; erro.hidden = false; $("aceite").focus(); return; }
+      $("enviar").disabled = true; $("enviar").textContent = "Enviando…";
+      post({ acao: "decidir", decisao: "autorizado", especialidade: $("especialidade").value, linkedin: $("linkedin").value, foto: fotoNova, remover_foto: removerFoto })
+        .then(function (r) {
+          fotoNova = ""; removerFoto = false; fotoAtual = r.foto_url || ""; mostrarFoto(fotoAtual); status(r.status); $("aceite-box").hidden = true;
+          $("status").textContent = "Perfil enviado! A exibição está autorizada. Se precisar, ajuste os dados e envie de novo. Para retirar a autorização, escreva para contato@danimoscatelli.com.br.";
+          $("status").scrollIntoView({ behavior: "smooth", block: "center" });
+        })
         .catch(function (e) { erro.textContent = e.message; erro.hidden = false; })
-        .finally(function () { ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = false; }); });
+        .finally(function () { $("enviar").disabled = false; $("enviar").textContent = "Enviar perfil"; });
     }
-    $("autorizo").addEventListener("click", function () { decidir("autorizado"); });
-    $("naoautorizo").addEventListener("click", function () { decidir("recusado"); });
+    $("aceite").addEventListener("change", function () { $("aceite-box").classList.remove("invalido"); $("erro").hidden = true; });
+    $("enviar").addEventListener("click", enviar);
   })();
 </script>
 </body>
