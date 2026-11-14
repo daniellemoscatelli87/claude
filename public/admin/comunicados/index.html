@@ -31,7 +31,15 @@
   .btn-send { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 9px 16px; cursor: pointer; }
   .btn-send svg { width: 16px; height: 16px; }
   .btn-send:disabled { opacity: .5; cursor: not-allowed; }
-  .cm-hist h2 { margin: 28px 0 10px; font-size: 18px; }
+  .cm-hist h2, .cm-gal h2 { margin: 28px 0 10px; font-size: 18px; }
+  .cm-gal-n { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+  .cm-gal-n div { padding: 12px; border-radius: 12px; background: #F6F7FA; border: 1px solid var(--line); }
+  .cm-gal-n strong { display: block; font-size: 22px; }
+  .cm-gal-n span { font-size: 12px; color: var(--muted); }
+  @media (max-width: 760px) { .cm-gal-n { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .cm-gal-acts { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+  .cm-row .gal { justify-self: start; margin-top: 2px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #EDF0F5; color: #495669; }
+  .cm-row .gal.ok { background: rgba(79, 181, 123, 0.14); color: #1f6b3a; }
   .cm-h { padding: 12px 4px; display: grid; gap: 2px; }
   .cm-h + .cm-h { border-top: 1px solid var(--track); }
   .cm-h strong { font-size: 14px; }
@@ -68,6 +76,20 @@
       <button type="button" class="btn-send" id="abrir" disabled><span id="ic-abrir"></span>Escrever comunicado</button>
     </div>
     <div id="list"></div>
+  </section>
+  <section class="cm-gal">
+    <h2>Autorização da galeria</h2>
+    <div class="card">
+      <p class="muted" style="margin:0 0 14px;font-size:14px">Pedido para o parceiro autorizar a exibição do perfil na Galeria de profissionais. Novos parceiros recebem o pedido automaticamente após o cadastro. A galeria aparece no site quando houver pelo menos 3 autorizações.</p>
+      <div class="cm-gal-n" id="gal-n"></div>
+      <div class="cm-gal-acts">
+        <button type="button" class="btn-ghost" id="gal-prev">Ver o e-mail</button>
+        <button type="button" class="btn-ghost" id="gal-reenviar">Reenviar a quem não respondeu</button>
+        <button type="button" class="btn-send" id="gal-enviar">Enviar aos não convidados</button>
+      </div>
+      <div class="cm-prev hidden" id="gal-prev-box" style="margin-top:14px"><iframe title="E-mail de autorização da galeria" id="gal-prev-frame"></iframe></div>
+      <p class="msg err hidden" id="gal-err"></p>
+    </div>
   </section>
   <section class="cm-hist"><h2>Enviados</h2><div class="card" id="hist"></div></section>
 </main>
@@ -115,6 +137,7 @@ function linha(r) {
   const tx = el("span", "tx");
   tx.append(el("span", "n", r.nome || r.email), el("span", "d", [limpa(r.principal_especializacao), r.email].filter(Boolean).join(" · ")));
   if (!ok) tx.append(el("span", "sem", r.email ? "Não recebe comunicados" : "Sem e-mail"));
+  tx.append(el("span", "gal" + (r.galeria_status === "autorizado" ? " ok" : ""), "Galeria: " + (r.galeria_status === "autorizado" ? "autorizou" : r.galeria_status === "recusado" ? "não autorizou" : r.galeria_convite_em ? "aguardando resposta" : "não convidado")));
   row.append(cb, ini, tx);
   return row;
 }
@@ -136,17 +159,20 @@ function render() {
   resumo();
 }
 function opcoes(sel, valores) {
+  const atual = sel.value; while (sel.options.length > 1) sel.remove(1);
   [...new Set(valores.map(limpa).filter(Boolean))].sort((a, b) => a.localeCompare(b, "pt-BR"))
     .forEach((v) => { const o = el("option", null, v); o.value = v; sel.appendChild(o); });
+  sel.value = atual;
 }
 async function carregar() {
   const { data, error } = await Admin.sb.from("cadastros")
-    .select("id, nome, email, principal_especializacao, areas_experiencia, segmentos, comunicados_descadastro_em")
+    .select("id, nome, email, principal_especializacao, areas_experiencia, segmentos, comunicados_descadastro_em, galeria_status, galeria_convite_em")
     .order("nome", { ascending: true });
   const err = document.getElementById("load-err");
   err.classList.toggle("hidden", !error);
   if (error) { err.textContent = "Não foi possível carregar os parceiros: " + error.message; return; }
   ALL = data;
+  resumoGaleria();
   opcoes(document.getElementById("f-area"), data.flatMap((r) => r.areas_experiencia || []));
   opcoes(document.getElementById("f-seg"), data.flatMap((r) => r.segmentos || []));
   render();
@@ -203,8 +229,48 @@ function initEnvio() {
     Admin.toast(res.falhas ? res.enviados + " enviados e " + res.falhas + " não enviados." : "Comunicado enviado para " + plural(res.enviados, "parceiro.", "parceiros."));
   });
 }
+function resumoGaleria() {
+  const n = (f) => ALL.filter(f).length;
+  const itens = [["autorizaram", n((r) => r.galeria_status === "autorizado")], ["não autorizaram", n((r) => r.galeria_status === "recusado")],
+    ["aguardando resposta", n((r) => !r.galeria_status && r.galeria_convite_em)], ["não convidados", n((r) => !r.galeria_status && !r.galeria_convite_em)]];
+  const box = document.getElementById("gal-n"); box.replaceChildren();
+  itens.forEach(([t, v]) => { const d = el("div"); d.append(el("strong", null, String(v)), el("span", null, t)); box.appendChild(d); });
+  document.getElementById("gal-enviar").disabled = !itens[3][1];
+  document.getElementById("gal-reenviar").disabled = !itens[2][1];
+}
+async function chamarGaleria(body) {
+  const { data, error } = await Admin.sb.functions.invoke("galeria-convite", { body });
+  if (!error) return data || {};
+  let m = "Não foi possível falar com o servidor. Tente novamente."; try { m = (await error.context.json()).error || m; } catch {}
+  return { error: m };
+}
+function initGaleria() {
+  const err = document.getElementById("gal-err");
+  const erro = (x) => { err.textContent = x; err.classList.toggle("hidden", !x); };
+  document.getElementById("gal-prev").addEventListener("click", async (e) => {
+    const box = document.getElementById("gal-prev-box");
+    if (!box.classList.contains("hidden")) { box.classList.add("hidden"); e.target.textContent = "Ver o e-mail"; return; }
+    const res = await chamarGaleria({ acao: "preview" }); if (res.error) return erro(res.error);
+    document.getElementById("gal-prev-frame").srcdoc = res.html; box.classList.remove("hidden"); e.target.textContent = "Fechar o e-mail"; erro("");
+  });
+  const disparar = async (reenviar, botao) => {
+    const qtd = ALL.filter((r) => !r.galeria_status && !r.comunicados_descadastro_em && r.email && (reenviar ? r.galeria_convite_em : !r.galeria_convite_em)).length;
+    const txt = reenviar ? "Reenviar o pedido de autorização para quem ainda não respondeu (" + qtd + ")?" : "Enviar o pedido de autorização para quem ainda não foi convidado (" + qtd + ")?";
+    if (!(await Admin.confirmDialog({ title: "Pedido de autorização da galeria", message: txt + " Quem se descadastrou dos comunicados não recebe.", ok: "Enviar", danger: false }))) return;
+    botao.disabled = true;
+    const res = await chamarGaleria({ acao: "pendentes", reenviar });
+    botao.disabled = false;
+    if (res.error) return erro(res.error);
+    erro(""); Admin.log("Enviou pedido de autorização da galeria", res.enviados + " enviados" + (res.falhas ? ", " + res.falhas + " não enviados" : ""));
+    await carregar();
+    Admin.toast(res.falhas ? res.enviados + " enviados e " + res.falhas + " não enviados." : "Pedido enviado para " + plural(res.enviados, "parceiro.", "parceiros."));
+  };
+  document.getElementById("gal-enviar").addEventListener("click", (e) => disparar(false, e.currentTarget));
+  document.getElementById("gal-reenviar").addEventListener("click", (e) => disparar(true, e.currentTarget));
+}
 Admin.init({ page: "comunicados", onReady: async () => {
   initEnvio();
+  initGaleria();
   ["busca", "f-area", "f-seg"].forEach((id) => document.getElementById(id).addEventListener("input", render));
   document.getElementById("todos").addEventListener("change", (e) => {
     filtrados().filter(recebe).forEach((r) => (e.target.checked ? SEL.add(r.id) : SEL.delete(r.id)));

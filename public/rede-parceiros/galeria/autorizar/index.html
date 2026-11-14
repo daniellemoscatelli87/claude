@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Galeria de profissionais | Dani Moscatelli</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; padding: 32px 16px 48px; background: #EDF0F5; color: #131A27; font-family: "Plus Jakarta Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+  main { width: 100%; max-width: 40rem; margin: 0 auto; padding: 2.25rem 2rem; border-radius: 28px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.09); box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+  @media (max-width: 639px) { main { padding: 1.75rem 1.25rem; border-radius: 24px; } }
+  .logo { display: block; height: 52px; margin: 0 auto 1.75rem; }
+  .selo { display: flex; width: fit-content; margin: 0 auto .75rem; align-items: center; gap: .5rem; padding: .375rem .875rem; border-radius: 9999px; background: #FDF2F2; border: 1px solid #F9DADA; color: #D44D4D; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .selo::before { content: ""; width: .5rem; height: .5rem; border-radius: 9999px; background: #D44D4D; }
+  h1 { margin: 0 0 .75rem; text-align: center; font-size: 1.625rem; line-height: 1.2; letter-spacing: -0.02em; }
+  .lead { margin: 0 auto 1.75rem; max-width: 32rem; text-align: center; font-size: 1rem; line-height: 1.6; color: #495669; }
+  h2 { margin: 1.75rem 0 .75rem; font-size: 1rem; }
+  /* prévia: mesmo card da galeria */
+  .card { display: flex; flex-direction: column; max-width: 22rem; margin: 0 auto; padding: 1.5rem; border-radius: 24px; background: #FFFFFF; border: 1px solid rgba(19, 26, 39, 0.08); box-shadow: 0 8px 24px rgba(13, 17, 25, 0.08); }
+  .topo { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
+  .foto { width: 4.5rem; height: 4.5rem; border-radius: 9999px; display: grid; place-items: center; background: rgba(212, 77, 77, 0.10); color: #D44D4D; font-size: 1.375rem; font-weight: 700; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 4px rgba(212, 77, 77, 0.25); }
+  .in { width: 2.25rem; height: 2.25rem; border-radius: 9999px; display: grid; place-items: center; color: #627288; background: #F6F7FA; border: 1px solid #EDF0F5; }
+  .in svg { width: 1rem; height: 1rem; }
+  .card h3 { margin: 0; font-size: 1.125rem; }
+  .esp { margin: .25rem 0 1rem; font-size: .875rem; font-weight: 600; color: #D44D4D; min-height: 1.25rem; }
+  .tags { list-style: none; margin: 0 0 1rem; padding: 0; display: flex; flex-wrap: wrap; gap: .375rem; max-height: 3.75rem; overflow: hidden; }
+  .tags li { padding: .25rem .625rem; border-radius: 9999px; background: #F6F7FA; border: 1px solid #EDF0F5; font-size: .75rem; line-height: 1.125rem; font-weight: 500; color: #283043; }
+  .seg { margin: 0; padding-top: .875rem; border-top: 1px solid #EDF0F5; font-size: .8125rem; color: #495669; }
+  .seg span { display: block; margin-bottom: .125rem; font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8898B0; }
+  .nota { margin: .875rem auto 0; max-width: 22rem; font-size: .8125rem; line-height: 1.5; color: #627288; text-align: center; }
+  label { display: grid; gap: .375rem; margin-bottom: 1rem; font-size: .875rem; font-weight: 600; }
+  label small { font-weight: 400; color: #627288; }
+  input { width: 100%; font: inherit; font-size: 1rem; padding: .75rem .875rem; border: 1px solid #D6DCE6; border-radius: 12px; color: #131A27; background: #FFFFFF; }
+  input:focus-visible { outline: none; border-color: #D44D4D; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.2); }
+  .termo { margin: 0 0 1.25rem; padding: 1rem 1.125rem; border-radius: 16px; background: #F6F7FA; border: 1px solid #EDF0F5; font-size: .875rem; line-height: 1.6; color: #283043; }
+  .acoes { display: flex; flex-wrap: wrap; gap: .75rem; }
+  button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.5rem; border-radius: 9999px; font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; }
+  .sim { border: 0; background: #D44D4D; color: #FFFFFF; }
+  .sim:hover { background: #B82828; }
+  .nao { border: 1px solid #D6DCE6; background: #FFFFFF; color: #283043; }
+  .nao:hover { border-color: #D44D4D; color: #D44D4D; }
+  button:focus-visible, a:focus-visible { outline: none; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px rgba(212, 77, 77, 0.6); }
+  button:disabled { opacity: .6; cursor: default; }
+  .status { margin: 0 0 1.25rem; padding: .875rem 1rem; border-radius: 14px; font-size: .9375rem; line-height: 1.5; }
+  .status.ok { background: rgba(79, 181, 123, 0.12); color: #1F6B3A; }
+  .status.no { background: #EDF0F5; color: #283043; }
+  .erro { margin: 1rem 0 0; color: #B82828; font-size: .9375rem; }
+  a { color: #D44D4D; font-weight: 600; text-underline-offset: 4px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <a href="/" aria-label="Ir para a página inicial"><img class="logo" src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
+  <p class="selo">Galeria de profissionais</p>
+  <h1>Seu perfil na galeria da rede</h1>
+  <p class="lead">Veja como o seu perfil profissional vai aparecer no site e decida se autoriza a exibição. Você pode mudar de ideia quando quiser por este mesmo link.</p>
+  <p id="carregando" class="lead" role="status">Carregando…</p>
+  <p class="erro" id="erro-geral" role="alert" hidden></p>
+
+  <div id="conteudo" hidden>
+    <p class="status" id="status" role="status" hidden></p>
+    <h2>Prévia do seu perfil</h2>
+    <div class="card" aria-label="Prévia do perfil">
+      <div class="topo"><span class="foto" id="p-ini" aria-hidden="true"></span><span class="in" id="p-in" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span></div>
+      <h3 id="p-nome"></h3>
+      <p class="esp" id="p-cargo"></p>
+      <ul class="tags" id="p-areas" aria-label="Áreas de atuação"></ul>
+      <p class="seg"><span>Segmentos</span><span id="p-seg" style="display:inline;font-size:inherit;font-weight:400;letter-spacing:0;text-transform:none;color:inherit"></span></p>
+    </div>
+    <p class="nota">A foto será a do seu perfil do LinkedIn. Para trocar ou excluir a foto, escreva para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
+
+    <h2>Ajuste o que vai aparecer</h2>
+    <label>Cargo exibido<small>Como você quer ser apresentado(a). Até 60 caracteres.</small><input type="text" id="cargo" maxlength="60" autocomplete="organization-title"></label>
+    <label>Link do seu LinkedIn<small>Opcional. Usamos a foto deste perfil.</small><input type="url" id="linkedin" maxlength="300" placeholder="https://www.linkedin.com/in/seu-perfil" autocomplete="url"></label>
+
+    <h2>Autorização</h2>
+    <p class="termo" id="termo"></p>
+    <div class="acoes">
+      <button type="button" class="sim" id="autorizo">Autorizo a exibição</button>
+      <button type="button" class="nao" id="naoautorizo">Não autorizo</button>
+    </div>
+    <p class="erro" id="erro" role="alert" hidden></p>
+  </div>
+</main>
+<script>
+  (function () {
+    var API = "https://lipfvnerohkaajegqvwr.supabase.co/functions/v1/galeria-autorizacao";
+    var t = new URLSearchParams(location.search).get("t") || "";
+    var $ = function (id) { return document.getElementById(id); };
+    var post = function (body) {
+      return fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ t: t }, body)) })
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || "Não foi possível concluir agora."); return j; }); });
+    };
+    var iniciais = function (n) { return (n || "?").trim().split(/\s+/).slice(0, 2).map(function (p) { return p[0]; }).join("").toUpperCase(); };
+    function status(s) {
+      var el = $("status");
+      if (!s) { el.hidden = true; return; }
+      el.hidden = false;
+      el.className = "status " + (s === "autorizado" ? "ok" : "no");
+      el.textContent = s === "autorizado" ? "Você autorizou a exibição do seu perfil. Para retirar a autorização, use o botão “Não autorizo”." : "Você não autorizou a exibição. Seu perfil não aparece na galeria. Se mudar de ideia, use o botão “Autorizo a exibição”.";
+    }
+    function atualizarPrevia() { $("p-cargo").textContent = $("cargo").value.trim() || "Seu cargo"; $("p-in").style.visibility = $("linkedin").value.trim() ? "visible" : "hidden"; }
+    post({ acao: "ver" }).then(function (d) {
+      $("carregando").hidden = true; $("conteudo").hidden = false;
+      $("p-nome").textContent = d.nome || ""; $("p-ini").textContent = iniciais(d.nome);
+      d.areas.forEach(function (a) { var li = document.createElement("li"); li.textContent = a; $("p-areas").appendChild(li); });
+      $("p-seg").textContent = d.segmentos.join(" · ");
+      $("cargo").value = d.cargo || ""; $("linkedin").value = d.linkedin || "";
+      $("termo").textContent = d.texto;
+      status(d.status); atualizarPrevia();
+      ["cargo", "linkedin"].forEach(function (id) { $(id).addEventListener("input", atualizarPrevia); });
+    }).catch(function (e) { $("carregando").hidden = true; $("erro-geral").textContent = e.message; $("erro-geral").hidden = false; });
+    function decidir(decisao) {
+      var erro = $("erro"); erro.hidden = true;
+      if (decisao === "autorizado" && !$("cargo").value.trim()) { erro.textContent = "Informe o cargo que vai aparecer no seu perfil."; erro.hidden = false; $("cargo").focus(); return; }
+      ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = true; });
+      post({ acao: "decidir", decisao: decisao, cargo: $("cargo").value, linkedin: $("linkedin").value })
+        .then(function (r) { status(r.status); $("status").scrollIntoView({ behavior: "smooth", block: "center" }); })
+        .catch(function (e) { erro.textContent = e.message; erro.hidden = false; })
+        .finally(function () { ["autorizo", "naoautorizo"].forEach(function (id) { $(id).disabled = false; }); });
+    }
+    $("autorizo").addEventListener("click", function () { decidir("autorizado"); });
+    $("naoautorizo").addEventListener("click", function () { decidir("recusado"); });
+  })();
+</script>
+</body>
+</html>
