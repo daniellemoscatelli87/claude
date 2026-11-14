@@ -1382,3 +1382,5 @@ main + footer.relative { padding-top: 6rem !important; }
   #inscricao { padding-top: 1rem !important; background: linear-gradient(to bottom, transparent calc(100% - 9rem), #0D1119 calc(100% - 9rem)), #EDF0F5 !important; }
   main + footer.relative { padding-top: 4.5rem !important; }
 }
+/* Convite com o mesmo arredondamento dos blocos grandes da página (hero e painel do programa: 32px a partir de 768px) */
+@media (min-width: 768px) { .convite-card { border-radius: 32px; } }
