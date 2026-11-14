@@ -1371,3 +1371,5 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 }
 /* celular e tablet: título e descrição do hero 10 px mais abaixo */
 @media (max-width: 1023px) { .rp-hero h1, .rp-hero .rp-lead { position: relative; top: 10px; } }
+/* celular: mesmo respiro visual antes e depois do gráfico de segmentos */
+@media (max-width: 1023px) { .rx-orbita-area { margin-bottom: -48px !important; } }
