@@ -1173,3 +1173,10 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 /* Tags das áreas: no máximo 2 linhas (o que passar disso fica oculto) */
 .rx-gal-areas { max-height: calc(2 * 1.6875rem + .375rem); overflow: hidden; }
 .rx-gal-areas li { line-height: 1.125rem; }
+/* Hero (computador): texto e foto alinhados como um bloco, apoiados na folha branca: o topo do selo fica na
+   altura do topo do grupo de pessoas. O espaço que sobrar em telas altas fica acima do conjunto; da seção
+   seguinte aparece só o filete de 15px. */
+@media (min-width: 1024px) {
+  .rp-hero-grade { align-items: end !important; }
+  .rp-hero-texto { align-self: end !important; padding-bottom: var(--rp-hero-ajuste, 1.5rem); }
+}
