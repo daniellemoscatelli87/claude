@@ -11,6 +11,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css">
 <style>
+  .tab-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: -4px; padding: 4px; }
+  .tab-parceiros { width: 100%; min-width: 960px; border-collapse: collapse; font-size: 13px; }
+  .tab-parceiros th { text-align: left; padding: 0 10px 10px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); white-space: nowrap; border-bottom: 1px solid var(--track); }
+  .tab-parceiros td { padding: 12px 10px; vertical-align: middle; border-bottom: 1px solid var(--track); color: var(--ink, #131A27); }
+  .tab-parceiros tbody tr { cursor: pointer; }
+  .tab-parceiros tbody tr:hover, .tab-parceiros tbody tr:focus-visible { background: var(--track); outline: none; }
+  .tab-parceiros tbody tr:last-child td { border-bottom: 0; }
+  .tp-col-quem { min-width: 230px; max-width: 280px; }
+  .tp-quem { display: flex; align-items: center; gap: 12px; }
+  .tp-quem .ini { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; font-weight: 700; font-size: 14px; background: var(--red-tint); color: var(--red); }
+  .tp-txt { min-width: 0; }
+  .tp-nome { display: block; font-weight: 700; font-size: 14px; color: inherit; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tr-seen .tp-nome, .tab-parceiros tr.seen .tp-nome { font-weight: 600; }
+  .tp-sub { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px; }
+  .tp-forte { font-weight: 600; }
+  .tp-data { white-space: nowrap; color: var(--muted); }
+  .tp-gal { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .tp-gal.ok { background: #e6f4ea; color: #1e7b45; }
+  .tp-gal.wait { background: #fdf3e2; color: #8a5a12; }
+  .tp-gal.no { background: #fdf2f2; color: #b82828; }
+  .tp-gal.none { background: var(--track); color: var(--muted); }
+  .tab-parceiros tr.novo .tp-nome::after { content: ""; display: inline-block; width: 7px; height: 7px; margin-left: 8px; border-radius: 50%; background: var(--red); vertical-align: middle; }
   .ini-foto { overflow: hidden; padding: 0 !important; }
   .ini-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .rowlink.com-gal { grid-template-columns: 38px minmax(0, 1fr) 120px 90px; }
@@ -697,17 +719,37 @@ const publicado = (r) => r.galeria_status === "autorizado" && !r.galeria_oculto;
 function candidaturas(rows) {
   const list = document.getElementById("list"); list.replaceChildren();
   if (!rows.length) return list.appendChild(el("div", "empty", ALL.length ? "Nenhuma candidatura para os filtros atuais." : "Nenhuma candidatura ainda."));
-  // coluna "Perfil publicado": sim quando autorizou a galeria e não está oculto
-  const cab = el("div", "rowlink-cab"); cab.append(el("span", null, ""), el("span", null, "Parceiro"), el("span", null, "Perfil publicado"), el("span", null, "")); list.appendChild(cab);
+  // Tabela: uma linha por parceiro; a linha inteira abre a candidatura.
+  const PJ = { "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria).": "CNPJ ativo", "Estou em processo de formalização.": "Em formalização", "Atualmente não tenho CNPJ, mas tenho interesse em atuar como PJ.": "Sem CNPJ, com interesse", "Não tenho interesse em atuar como PJ.": "Sem interesse" };
+  const DISP = { "Disponibilidade imediata.": "Imediata", "Disponibilidade mediante agendamento.": "Mediante agendamento", "Disponibilidade parcial, conciliando com outros projetos.": "Parcial", "Disponibilidade apenas para projetos pontuais.": "Projetos pontuais" };
+  const horas = (h) => !h ? "" : /variável/i.test(h) ? "horas variáveis" : clean(h).replace(/^Até /, "até ").replace(/^De /, "").replace(/^Mais de /, "+").replace(/ horas semanais$/, " h/semana");
+  const galStatus = (r) => r.galeria_status === "autorizado" ? ["Autorizado", "ok"] : r.galeria_status === "recusado" ? ["Recusado", "no"] : r.galeria_convite_em ? ["Aguardando resposta", "wait"] : ["Não convidado", "none"];
+  const wrap = el("div", "tab-wrap");
+  const t = el("table", "tab-parceiros");
+  const thead = el("thead"); const hr = el("tr");
+  ["Parceiro", "Senioridade", "Área de atuação", "Situação PJ", "Disponibilidade", "Galeria", "Publicado", "Cadastro"].forEach((h) => hr.appendChild(el("th", null, h)));
+  thead.appendChild(hr); t.appendChild(thead);
+  const tb = el("tbody");
   rows.forEach((r) => {
-    const a = Admin.rowLink("/admin/parceiros/?id=" + r.id, r.nome, [r.principal_especializacao, r.cidade_estado, r.email].filter(Boolean).join(" · "), r.created_at, !!r.visualizado_em);
-    a.classList.add("com-gal");
-    a.querySelector(".ini").replaceWith(avatar(r));
-    const pub = publicado(r);
-    const g = el("span", "gal " + (pub ? "sim" : "nao"), pub ? "Sim" : "Não"); g.setAttribute("aria-label", "Perfil publicado na galeria: " + (pub ? "sim" : "não"));
-    a.insertBefore(g, a.querySelector(".d"));
-    list.appendChild(a);
+    const href = "/admin/parceiros/?id=" + r.id;
+    const tr = el("tr", r.visualizado_em ? "seen" : "novo"); tr.tabIndex = 0; tr.setAttribute("role", "link"); tr.setAttribute("aria-label", "Abrir candidatura de " + (r.nome || "parceiro"));
+    tr.addEventListener("click", (e) => { if (e.metaKey || e.ctrlKey) window.open(href, "_blank"); else location.href = href; });
+    tr.addEventListener("keydown", (e) => { if (e.key === "Enter") location.href = href; });
+    const td = (child, cls) => { const c = el("td", cls); typeof child === "string" ? (c.textContent = child || "–") : c.appendChild(child); tr.appendChild(c); return c; };
+    const quem = el("div", "tp-quem"); const tx = el("div", "tp-txt");
+    const a = el("a", "tp-nome", r.nome || "Sem nome"); a.href = href; a.addEventListener("click", (e) => e.stopPropagation());
+    tx.append(a, el("div", "tp-sub", r.principal_especializacao ? clean(r.principal_especializacao) : ""), el("div", "tp-sub", r.email || ""));
+    quem.append(avatar(r), tx); td(quem, "tp-col-quem");
+    const nv = el("div"); nv.append(el("div", "tp-forte", NIVEL[r.tempo_especialidade] || "–"), el("div", "tp-sub", r.tempo_especialidade ? clean(r.tempo_especialidade) : "")); td(nv);
+    td(areasAtuacao(r).join(" · ") || "–");
+    td(PJ[r.atuacao_pj] || (r.atuacao_pj ? clean(r.atuacao_pj) : "–"));
+    const dp = el("div"); dp.append(el("div", null, DISP[r.disponibilidade_colaborar] || (r.disponibilidade_colaborar ? clean(r.disponibilidade_colaborar) : "–")), el("div", "tp-sub", horas(r.horas_semanais))); td(dp);
+    const [gt, gc] = galStatus(r); const gl = el("div"); gl.append(el("span", "tp-gal " + gc, gt), el("div", "tp-sub", r.galeria_convite_em ? "Convite em " + Admin.fmtDay(r.galeria_convite_em) : "")); td(gl);
+    const pub = publicado(r); td(el("span", "gal " + (pub ? "sim" : "nao"), pub ? "Sim" : "Não"));
+    td(Admin.fmtDay(r.created_at), "tp-data");
+    tb.appendChild(tr);
   });
+  t.appendChild(tb); wrap.appendChild(t); list.appendChild(wrap);
 }
 
 /* ---------- Análise por IA ---------- */
