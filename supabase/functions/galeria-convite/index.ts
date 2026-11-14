@@ -76,6 +76,7 @@ function montar(nome: string, token: string, modo: Modo = "convite") {
       <table role="presentation" cellpadding="0" cellspacing="0">${passo("1", "Confira como o seu perfil vai aparecer.")}${passo("2", "Envie a sua foto. Se preferir, usamos a do seu LinkedIn.")}${passo("3", "Confirme e pronto: você faz parte da galeria.")}</table>
     </td></tr></table>`,
     p("Seus dados de contato e sua cidade não são exibidos, e o seu perfil só aparece com a sua autorização."),
+    p(`Se depois quiser remover o seu perfil da galeria, é só solicitar a exclusão pelo e-mail <a href="mailto:contato@danimoscatelli.com.br" style="color:#d44d4d;font-weight:bold">contato@danimoscatelli.com.br</a>.`),
   ].join("");
   const corpo = bv ? corpoBV : confirmado ? corpoConfirmado : [
     p(esc(ola)),
@@ -118,6 +119,7 @@ function montar(nome: string, token: string, modo: Modo = "convite") {
     "POR QUE EXIBIR O SEU PERFIL?\n- Vitrine profissional. Seu perfil e suas especialidades ficam visíveis para empresas que procuram especialistas.\n- Novas oportunidades. O perfil pode gerar convites para desafios do Studio e de empresas parceiras.\n- Ecossistema mais forte. A galeria mostra a diversidade de competências da rede e aproxima os profissionais, ampliando as colaborações para todos.",
     "FALTA POUCO\n1. Confira como o seu perfil vai aparecer.\n2. Envie a sua foto. Se preferir, usamos a do seu LinkedIn.\n3. Confirme e pronto: você faz parte da galeria.",
     "Seus dados de contato e sua cidade não são exibidos, e o seu perfil só aparece com a sua autorização.",
+    "Se depois quiser remover o seu perfil da galeria, é só solicitar a exclusão pelo e-mail contato@danimoscatelli.com.br.",
     "Completar meu perfil: " + link,
     "Obrigada por fazer parte dessa rede. Seguimos conectando competências, perspectivas e oportunidades para criar experiências de valor.",
     "Dani Moscatelli\nCEO | Experience Design Studio\nwww.danimoscatelli.com.br",
