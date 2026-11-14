@@ -1084,3 +1084,8 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-rodape .rodape-base span[aria-hidden] { color: rgba(255, 255, 255, .4) !important; }
 .rx-rodape .rodape-topo { border-bottom-color: rgba(255, 255, 255, 0.16) !important; }
 .rx-rodape .rodape-ds { color: #FFFFFF !important; text-decoration-color: rgba(255, 255, 255, .5) !important; }
+/* Convite com a mesma largura da folha branca de cima (.rx-folha) */
+.rx-fechamento > .rp-container { max-width: 1400px !important; padding-left: 0 !important; padding-right: 0 !important; margin: 0 auto !important; }
+@media (min-width: 640px) { .rx-fechamento > .rp-container { margin-left: 1rem !important; margin-right: 1rem !important; } }
+@media (min-width: 1024px) { .rx-fechamento > .rp-container { margin-left: 1.5rem !important; margin-right: 1.5rem !important; } }
+@media (min-width: 1448px) { .rx-fechamento > .rp-container { margin-left: auto !important; margin-right: auto !important; } }
