@@ -1,8 +1,7 @@
 // Convite para o parceiro autorizar (ou não) a exibição do perfil na Galeria de profissionais do site.
-// { acao: "novo", id }          Chamada pelo gatilho do banco a cada novo cadastro. Envia uma única vez
-//                               (só se o parceiro ainda não foi convidado nem decidiu). Não exige login:
-//                               o pior que alguém consegue é disparar o convite que já seria enviado.
-//                               Se o parceiro já autorizou no cadastro, vai o e-mail de confirmação (pedindo a foto).
+// { acao: "novo", id }          Chamada pelo gatilho do banco a cada novo cadastro. Envia uma única vez o
+//                               e-mail de boas-vindas com a galeria. Não exige login: o pior que alguém consegue
+//                               é disparar o e-mail que já seria enviado.
 //                               E-mails em galeria_convite_excecoes não recebem o convite automático.
 // { acao: "preview" }           (administradora) devolve { assunto, html } do e-mail.
 // { acao: "um", id }            (administradora) envia ou reenvia o convite para um parceiro que ainda não decidiu.
@@ -39,11 +38,18 @@ const ASSINATURA_CONVITE_HTML = `<table role="presentation" cellpadding="0" cell
 <p style="margin:2px 0 6px;font-size:14px;line-height:1.4;color:#64748b">CEO | Experience Design <span style="color:#d44d4d;font-weight:bold">Studio</span></p>
 <p style="margin:0;font-size:14px;line-height:1.5"><a href="${SITE}" style="color:#0f172a;text-decoration:none">www.danimoscatelli.com.br</a></p>
 </td></tr></table>`;
+const RODAPE_BV = "Você recebeu este e-mail porque se cadastrou na Rede de Parceiros da Dani Moscatelli | Experience Design Studio. Seu perfil só aparece na galeria do site mediante sua autorização.";
 const RODAPE = "Você recebeu este e-mail porque faz parte da Rede de Parceiros da Dani Moscatelli | Experience Design Studio. Seu perfil só será publicado mediante sua autorização.";
 
 // confirmado: o parceiro já autorizou no formulário de cadastro; o e-mail confirma e pede a foto.
 const ASSUNTO_CONFIRMADO = "Seu perfil na Galeria de profissionais: envie sua foto";
-function montar(nome: string, token: string, confirmado = false) {
+// Novo cadastro (envio automático): um único e-mail, com foco na galeria, que vale tanto para quem autorizou
+// no formulário quanto para quem não autorizou (a página de autorização trata os dois casos).
+type Modo = "convite" | "confirmado" | "bv";
+const assuntoBV = (nome: string) => (primeiroNome(nome) ? primeiroNome(nome) + ", seu" : "Seu") + " perfil está a um passo da nossa galeria";
+const assuntoDe = (m: Modo, nome = "") => m === "confirmado" ? ASSUNTO_CONFIRMADO : m === "bv" ? assuntoBV(nome) : ASSUNTO;
+function montar(nome: string, token: string, modo: Modo = "convite") {
+  const confirmado = modo === "confirmado", bv = modo === "bv";
   const link = PAGINA + encodeURIComponent(token);
   const ola = primeiroNome(nome) ? `Olá, ${primeiroNome(nome)}!` : "Olá!";
   const P = "margin:0 0 16px;font-size:16px;line-height:1.65;color:#334155";
@@ -56,7 +62,18 @@ function montar(nome: string, token: string, confirmado = false) {
     p("No mesmo link você pode revisar como o seu perfil vai aparecer e ajustar o cargo e o LinkedIn."),
     p(b("A decisão é sua, e você pode alterá-la a qualquer momento pelo mesmo link.")),
   ].join("");
-  const corpo = confirmado ? corpoConfirmado : [
+  // passos numerados, em destaque
+  const passo = (n: string, t: string) => `<tr><td valign="top" style="padding:0 14px 14px 0;width:36px"><span style="display:inline-block;width:32px;height:32px;line-height:32px;border-radius:50%;background:#d44d4d;color:#ffffff;font-weight:bold;font-size:15px;text-align:center">${n}</span></td><td valign="middle" style="padding:0 0 14px;font-size:16px;line-height:1.5;color:#0f172a">${t}</td></tr>`;
+  const corpoBV = [
+    p(esc(ola)),
+    p(`Agora que você faz parte da nossa rede, queremos apresentar você na ${b("Galeria de Profissionais")} do nosso site: a vitrine dos especialistas da rede para empresas em busca de novos talentos.`),
+    `<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin:8px 0 12px;padding:20px 20px 6px;background:#fdf2f2;border-radius:16px"><tr><td>
+      <p style="margin:0 0 14px;font-size:13px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;color:#d44d4d">Falta pouco</p>
+      <table role="presentation" cellpadding="0" cellspacing="0">${passo("1", "Confira como o seu perfil vai aparecer.")}${passo("2", "Envie a sua foto. Se preferir, usamos a do seu LinkedIn.")}${passo("3", "Confirme e pronto: você faz parte da galeria.")}</table>
+    </td></tr></table>`,
+    p("Seus dados de contato e sua cidade não são exibidos, e o seu perfil só aparece com a sua autorização."),
+  ].join("");
+  const corpo = bv ? corpoBV : confirmado ? corpoConfirmado : [
     p(esc(ola)),
     p("É um prazer contar com você na Rede de Parceiros da Dani Moscatelli | Experience Design Studio."),
     p(`Estamos preparando uma ${b("Galeria de Profissionais")} em nosso site, um espaço dedicado a apresentar os especialistas independentes que fazem parte da nossa rede.`),
@@ -70,7 +87,7 @@ function montar(nome: string, token: string, confirmado = false) {
   ].join("");
   const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light only">
-<title>${esc(confirmado ? ASSUNTO_CONFIRMADO : ASSUNTO)}</title>
+<title>${esc(assuntoDe(modo, nome))}</title>
 <style>:root { color-scheme: light only; supported-color-schemes: light only; }
 @media (max-width: 600px) { .px { padding-left: 20px !important; padding-right: 20px !important; } }</style></head>
 <body style="margin:0;padding:0;background:#f4f5f8">
@@ -79,19 +96,29 @@ function montar(nome: string, token: string, confirmado = false) {
     <tr><td style="padding:0;font-size:0;line-height:0"><a href="${SITE}"><img src="${CABECALHO}" width="600" alt="Dani Moscatelli | Experience Design Studio" style="display:block;width:100%;max-width:600px;height:auto;border:0"></a></td></tr>
     <tr><td class="px" style="padding:16px 32px 0">
       <p style="margin:0 0 8px;font-size:12px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:#d44d4d">Galeria de profissionais</p>
-      <h1 style="margin:0 0 20px;font-size:26px;line-height:1.25;color:#0f172a">${confirmado ? "Seu perfil vai fazer parte da nossa galeria." : "Seu trabalho merece ser visto. Podemos apresentar você na nossa galeria?"}</h1>
+      <h1 style="margin:0 0 20px;font-size:26px;line-height:1.25;color:#0f172a">${bv ? "Seu perfil está a um passo da nossa galeria." : confirmado ? "Seu perfil vai fazer parte da nossa galeria." : "Seu trabalho merece ser visto. Podemos apresentar você na nossa galeria?"}</h1>
       ${corpo}
     </td></tr>
     <tr><td class="px" style="padding:4px 32px 28px">
-      <a href="${link}" style="display:inline-block;background:#d44d4d;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:14px 28px;border-radius:999px">${confirmado ? "Revisar meu perfil e enviar foto" : "Revisar meu perfil e autorizar"}</a>
+      <a href="${link}" style="display:inline-block;background:#d44d4d;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:14px 28px;border-radius:999px">${bv ? "Completar meu perfil" : confirmado ? "Revisar meu perfil e enviar foto" : "Revisar meu perfil e autorizar"}</a>
     </td></tr>
     <tr><td class="px" style="padding:0 32px 8px">${p("Obrigada por fazer parte dessa rede. Seguimos conectando competências, perspectivas e oportunidades para criar experiências de valor.")}</td></tr>
     <tr><td class="px" style="padding:8px 32px 32px">${ASSINATURA_CONVITE_HTML}</td></tr>
   </table>
-  <p style="max-width:600px;margin:16px auto 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#94a3b8">${esc(RODAPE)}</p>
+  <p style="max-width:600px;margin:16px auto 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#94a3b8">${esc(bv ? RODAPE_BV : RODAPE)}</p>
 </td></tr></table>
 </body></html>`;
-  const text = confirmado ? [
+  const textoBV = [
+    "GALERIA DE PROFISSIONAIS", "Seu perfil está a um passo da nossa galeria.", ola,
+    "Agora que você faz parte da nossa rede, queremos apresentar você na Galeria de Profissionais do nosso site: a vitrine dos especialistas da rede para empresas em busca de novos talentos.",
+    "FALTA POUCO\n1. Confira como o seu perfil vai aparecer.\n2. Envie a sua foto. Se preferir, usamos a do seu LinkedIn.\n3. Confirme e pronto: você faz parte da galeria.",
+    "Seus dados de contato e sua cidade não são exibidos, e o seu perfil só aparece com a sua autorização.",
+    "Completar meu perfil: " + link,
+    "Obrigada por fazer parte dessa rede. Seguimos conectando competências, perspectivas e oportunidades para criar experiências de valor.",
+    "Dani Moscatelli\nCEO | Experience Design Studio\nwww.danimoscatelli.com.br",
+    "---\n" + RODAPE_BV,
+  ].join("\n\n");
+  const text = bv ? textoBV : confirmado ? [
     "GALERIA DE PROFISSIONAIS",
     "Seu perfil vai fazer parte da nossa galeria.",
     ola,
@@ -125,14 +152,14 @@ function montar(nome: string, token: string, confirmado = false) {
 }
 
 type Linha = { id: string; nome: string; email: string; galeria_token: string };
-async function enviar(lista: Linha[], confirmado = false) {
+async function enviar(lista: Linha[], modo: Modo = "convite") {
   let enviados = 0, falhas = 0;
   for (let i = 0; i < lista.length; i += 100) {
     const lote = lista.slice(i, i + 100);
     const res = await fetch("https://api.resend.com/emails/batch", {
       method: "POST",
       headers: { Authorization: `Bearer ${Deno.env.get("RESEND_API_KEY")}`, "Content-Type": "application/json" },
-      body: JSON.stringify(lote.map((r) => ({ from: REMETENTE, to: [r.email], reply_to: RESPONDER_PARA, subject: confirmado ? ASSUNTO_CONFIRMADO : ASSUNTO, ...montar(r.nome, r.galeria_token, confirmado) }))),
+      body: JSON.stringify(lote.map((r) => ({ from: REMETENTE, to: [r.email], reply_to: RESPONDER_PARA, subject: assuntoDe(modo, r.nome), ...montar(r.nome, r.galeria_token, modo) }))),
     });
     const out = await res.json().catch(() => ({}));
     if (!res.ok) { console.error("Resend", res.status, JSON.stringify(out).slice(0, 300)); falhas += lote.length; continue; }
@@ -153,11 +180,11 @@ Deno.serve(async (req) => {
     const id = String(p.id ?? "");
     if (!UUID.test(id)) return json({ error: "Dados inválidos" }, 400);
     const { data: r } = await admin.from("cadastros").select("id, nome, email, galeria_token, galeria_status, galeria_convite_em").eq("id", id).maybeSingle();
-    // Recusado ou já convidado: nada. Autorizado no próprio cadastro: e-mail de confirmação pedindo a foto.
-    if (!r || !r.email || r.galeria_status === "recusado" || r.galeria_convite_em) return json({ ok: true });
+    // Já recebeu: nada. Cada novo cadastro recebe o e-mail da galeria (o mesmo para quem autorizou ou não no formulário).
+    if (!r || !r.email || r.galeria_convite_em) return json({ ok: true });
     const { data: exc } = await admin.from("galeria_convite_excecoes").select("email").eq("email", String(r.email).trim().toLowerCase()).maybeSingle();
     if (exc) return json({ ok: true });
-    await enviar([r], r.galeria_status === "autorizado");
+    await enviar([r], "bv");
     return json({ ok: true });
   }
 
@@ -165,7 +192,7 @@ Deno.serve(async (req) => {
   const { data: auth } = await admin.auth.getUser(token);
   if (auth.user?.app_metadata?.role !== "admin") return json({ error: "Sem permissão" }, 403);
 
-  if (p.acao === "preview") return json({ assunto: p.confirmado ? ASSUNTO_CONFIRMADO : ASSUNTO, html: montar("Nome", "exemplo", !!p.confirmado).html });
+  if (p.acao === "preview") { const m: Modo = ["confirmado", "bv"].includes(p.modo) ? p.modo : p.confirmado ? "confirmado" : "convite"; return json({ assunto: assuntoDe(m, "Nome"), html: montar("Nome", "exemplo", m).html }); }
   if (p.acao === "um") {
     const id = String(p.id ?? "");
     if (!UUID.test(id)) return json({ error: "Dados inválidos" }, 400);
