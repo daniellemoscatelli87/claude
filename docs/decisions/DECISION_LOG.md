@@ -419,7 +419,7 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - **Endereços antigos:** `github.io/DaniMoscatelli-DesignSystem/` redireciona pelo GitHub; `danimoscatelli.com.br/designsystem` e `/DaniMoscatelli-DesignSystem` redirecionam (301) pelo site (PR #124).
 - **Trade-off:**
   - Voltar a uma versão anterior a v44 pelo fluxo fica bloqueado pela conferência da base, porque as versões antigas usam a base antiga.
-  - Até o PR #124 ser mesclado, `danimoscatelli.com.br/designsystem` abre sem estilos.
+  - Entre a publicação da v44 e a mesclagem do PR #124 (14/11/2026), `danimoscatelli.com.br/designsystem` abriu sem estilos. Já está resolvido.
 
 ---
 
