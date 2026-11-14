@@ -67,6 +67,15 @@
   .recorte-zoom { display: flex; align-items: center; gap: .75rem; width: min(280px, 100%); margin: 0; font-size: .875rem; font-weight: 600; }
   .recorte-zoom input { flex: 1; accent-color: #D44D4D; border: 0 !important; padding: 0 !important; margin: 0; background: transparent !important; box-shadow: none !important; min-height: 0; height: 24px; }
   .recorte-acoes { display: flex; flex-wrap: wrap; gap: .625rem; justify-content: center; }
+  .arquivo { display: flex; align-items: center; gap: .5rem; width: 100%; max-width: 420px; padding: .375rem .375rem .375rem .75rem; border: 1px solid #E4E6EC; border-radius: 12px; background: #FFFFFF; }
+  .arquivo[hidden] { display: none; }
+  .arq-ic { flex: none; display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 8px; background: #FDF2F2; color: #D44D4D; }
+  .arq-ic svg { width: 1rem; height: 1rem; }
+  .arq-nome { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .875rem; font-weight: 600; color: #131A27; }
+  .ic-btn { flex: none; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; margin: 0; padding: 0; border: 0; border-radius: 9999px; background: transparent; color: #495669; cursor: pointer; }
+  .ic-btn:hover { background: #FDF2F2; color: #D44D4D; }
+  .ic-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.35); }
+  .ic-btn svg { width: 1.125rem; height: 1.125rem; }
   .foto-acoes { display: flex; flex-wrap: wrap; gap: .625rem; align-items: center; }
   .botao-arquivo { display: inline-flex; align-items: center; min-height: 44px; margin: 0; padding: 0 1.25rem; border-radius: 9999px; border: 1px solid #D44D4D; color: #D44D4D; font-size: .9375rem; font-weight: 600; cursor: pointer; }
   .botao-arquivo:hover { background: #FDF2F2; }
@@ -107,9 +116,14 @@
     <div class="foto-campo">
       <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP. Depois de escolher, ajuste o enquadramento.</small></span>
       <div class="foto-acoes">
-        <label class="botao-arquivo" for="foto-arquivo"><span id="foto-btn-txt">Enviar foto</span></label>
+        <label class="botao-arquivo" id="foto-enviar" for="foto-arquivo"><span>Enviar foto</span></label>
         <input type="file" id="foto-arquivo" accept="image/jpeg,image/png,image/webp" class="sr-only">
-        <button type="button" class="nao pequeno" id="foto-remover" hidden>Remover foto</button>
+        <div class="arquivo" id="arquivo" hidden>
+          <span class="arq-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg></span>
+          <span class="arq-nome" id="arq-nome"></span>
+          <label class="ic-btn" for="foto-arquivo" title="Alterar foto"><span class="sr-only">Alterar foto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></label>
+          <button type="button" class="ic-btn" id="foto-remover" title="Excluir foto"><span class="sr-only">Excluir foto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
+        </div>
       </div>
       <p class="foto-ok" id="foto-ok" role="status" hidden></p>
       <div class="recorte" id="recorte" hidden>
@@ -160,11 +174,11 @@
       el.className = "status " + (s === "autorizado" ? "ok" : "no");
       el.textContent = s === "autorizado" ? "Você autorizou a exibição do seu perfil. Para retirar a autorização, use o botão “Não autorizo”." : "Você não autorizou a exibição. Seu perfil não aparece na galeria. Se mudar de ideia, use o botão “Autorizo a exibição”.";
     }
-    var fotoNova = "", removerFoto = false, fotoAtual = "";
+    var fotoNova = "", removerFoto = false, fotoAtual = "", nomeArquivo = "", nomePendente = "";
     function mostrarFoto(src) {
       var img = $("p-img"), ini = $("p-ini");
       if (src) { img.src = src; img.hidden = false; ini.hidden = true; } else { img.hidden = true; img.removeAttribute("src"); ini.hidden = false; }
-      $("foto-remover").hidden = !src; $("foto-btn-txt").textContent = src ? "Trocar foto" : "Enviar foto";
+      $("foto-enviar").hidden = !!src; $("arquivo").hidden = !src; $("arq-nome").textContent = src ? (nomeArquivo || "Foto atual") : "";
     }
     // Foto: a pessoa escolhe a imagem, ajusta o recorte (arrastar + zoom) e a prévia do card mostra o resultado.
     // O recorte é feito no próprio aparelho, em 600 x 600 px (também descarta dados da foto, como localização).
@@ -188,6 +202,7 @@
       var f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
       var erro = $("erro"); erro.hidden = true;
       if (!/^image\/(jpeg|png|webp)$/.test(f.type) || f.size > 15 * 1024 * 1024) { erro.textContent = "Envie uma foto em JPG, PNG ou WEBP de até 15 MB."; erro.hidden = false; return; }
+      nomePendente = f.name;
       var url = URL.createObjectURL(f), img = new Image();
       img.onload = function () {
         if (rec.url) URL.revokeObjectURL(rec.url);
@@ -218,14 +233,14 @@
       });
     })();
     $("rec-usar").addEventListener("click", function () {
-      fotoNova = recCortar(600); removerFoto = false; mostrarFoto(fotoNova); $("recorte").hidden = true;
+      fotoNova = recCortar(600); removerFoto = false; nomeArquivo = nomePendente; mostrarFoto(fotoNova); $("recorte").hidden = true;
       $("foto-ok").textContent = "Foto anexada. Confira abaixo a prévia do seu perfil; ela é enviada quando você confirmar a autorização.";
       $("foto-ok").hidden = false;
       $("previa").scrollIntoView({ behavior: "smooth", block: "center" });
     });
     $("rec-cancelar").addEventListener("click", function () { $("recorte").hidden = true; });
     $("li-alterar").addEventListener("click", function () { $("li-ver").hidden = true; $("li-editar").hidden = false; $("linkedin").focus(); $("linkedin").select(); });
-    $("foto-remover").addEventListener("click", function () { fotoNova = ""; removerFoto = !!fotoAtual; mostrarFoto(""); $("foto-ok").hidden = true; $("recorte").hidden = true; });
+    $("foto-remover").addEventListener("click", function () { fotoNova = ""; nomeArquivo = ""; removerFoto = !!fotoAtual; mostrarFoto(""); $("foto-ok").hidden = true; $("recorte").hidden = true; });
     function atualizarIn() { $("p-in").style.visibility = $("linkedin").value.trim() ? "visible" : "hidden"; }
     post({ acao: "ver" }).then(function (d) {
       $("carregando").hidden = true; $("conteudo").hidden = false;
