@@ -342,7 +342,9 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     const desloc = new DOMMatrixReadOnly(getComputedStyle(sobe).transform === 'none' ? undefined : getComputedStyle(sobe).transform).m42;
     const cabeca = foto.getBoundingClientRect().top - desloc + TOPO_CABECA * (foto.clientWidth / LARGURA);
     // Só sobe o bloco de texto (deslocamento visual, sem mudar a altura do hero).
-    const subida = etiqueta.getBoundingClientRect().top - cabeca;
+    // Em telas mais baixas (cabeça perto do menu) o texto fica 30 px abaixo da cabeça, para respirar.
+    const folga = cabeca < 180 ? 30 : 0;
+    const subida = etiqueta.getBoundingClientRect().top - cabeca - folga;
     if (subida > 0) texto.style.setProperty('--rp-hero-subida', Math.round(subida) + 'px');
   };
   if (foto) { if (foto.complete) alinhar(); else foto.addEventListener('load', alinhar, { once: true }); }
