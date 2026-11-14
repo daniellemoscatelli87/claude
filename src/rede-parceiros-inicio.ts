@@ -326,3 +326,97 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     body: '{}',
   }).then((r) => (r.ok ? r.json() : [])).then((d: Perfil[]) => mostrar(Array.isArray(d) ? d : [], false)).catch(() => {});
 })();
+
+/* ---------- Hero (desktop): o topo da etiqueta acompanha o topo da cabeça do grupo da foto ---------- */
+{
+  const texto = document.querySelector('.rp-hero-texto') as HTMLElement | null;
+  const etiqueta = texto?.firstElementChild as HTMLElement | null;
+  const sobe = document.querySelector('.rp-modelo-sobe') as HTMLElement | null;
+  const foto = sobe?.querySelector('img') as HTMLImageElement | null;
+  // A imagem tem 1111 px de largura; a cabeça mais alta começa a 141 px do topo do arquivo.
+  const LARGURA = 1111, TOPO_CABECA = 141;
+  const alinhar = () => {
+    if (!texto || !etiqueta || !foto || !sobe) return;
+    if (!matchMedia('(min-width: 1024px)').matches) { texto.style.removeProperty('--rp-hero-subida'); return; }
+    texto.style.removeProperty('--rp-hero-subida');
+    const ty = (el: Element | null) => { const t = el ? getComputedStyle(el).transform : 'none'; return t === 'none' ? 0 : new DOMMatrixReadOnly(t).m42; };
+    const desloc = ty(sobe) + ty(sobe.parentElement);
+    const cabeca = foto.getBoundingClientRect().top - desloc + TOPO_CABECA * (foto.clientWidth / LARGURA);
+    // Só sobe o bloco de texto (deslocamento visual, sem mudar a altura do hero).
+    // Em telas mais baixas (cabeça perto do menu) o texto fica 30 px abaixo da cabeça, para respirar.
+    const folga = cabeca < 180 ? 30 : 0;
+    const subida = etiqueta.getBoundingClientRect().top - cabeca - folga;
+    if (subida > 0) texto.style.setProperty('--rp-hero-subida', Math.round(subida) + 'px');
+  };
+  if (foto) { if (foto.complete) alinhar(); else foto.addEventListener('load', alinhar, { once: true }); }
+  let espera = 0;
+  addEventListener('resize', () => { cancelAnimationFrame(espera); espera = requestAnimationFrame(alinhar); });
+}
+
+/* ---------- Hero (desktop): efeito janela — a foto do grupo fica parada enquanto o painel arredondado sobe na rolagem ---------- */
+{
+  const hero = document.querySelector('.rp-hero') as HTMLElement | null;
+  const modelo = document.querySelector('.rp-hero-modelo') as HTMLElement | null;
+  const desktop = matchMedia('(min-width: 1024px)');
+  const reduzir = matchMedia('(prefers-reduced-motion: reduce)');
+  let agendado = false;
+  const mover = () => {
+    agendado = false;
+    if (!hero || !modelo) return;
+    if (!desktop.matches || reduzir.matches) { modelo.style.removeProperty('--rp-janela'); return; }
+    const y = Math.max(0, Math.min(window.scrollY, hero.offsetHeight));
+    modelo.style.setProperty('--rp-janela', y + 'px');
+  };
+  const pedir = () => { if (!agendado) { agendado = true; requestAnimationFrame(mover); } };
+  addEventListener('scroll', pedir, { passive: true });
+  addEventListener('resize', pedir);
+  mover();
+}
+
+/* ---------- Rolagem suave com o mouse (desktop), igual à do Projeto Piloto: a roda desliza com leve inércia ----------
+   Só com mouse/trackpad em telas grandes; respeita "reduzir movimento"; não interfere em janelas, listas com rolagem
+   própria, zoom (Ctrl + roda) nem quando a página está travada (janela de cadastro aberta). */
+(() => {
+  const desktop = window.matchMedia('(min-width: 1024px) and (pointer: fine)');
+  const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let alvo = window.scrollY;
+  let atual = window.scrollY;
+  let animando = false;
+  const max = () => document.documentElement.scrollHeight - window.innerHeight;
+  const travada = () => {
+    const h = getComputedStyle(document.documentElement).overflowY;
+    const b = getComputedStyle(document.body).overflowY;
+    return h === 'hidden' || b === 'hidden';
+  };
+  const rolaveis = (el: Element | null, dy: number) => {
+    for (let n = el; n && n !== document.body && n !== document.documentElement; n = n.parentElement) {
+      const s = getComputedStyle(n);
+      if (/(auto|scroll)/.test(s.overflowY) && n.scrollHeight > n.clientHeight) {
+        if ((dy > 0 && n.scrollTop + n.clientHeight < n.scrollHeight - 1) || (dy < 0 && n.scrollTop > 0)) return true;
+      }
+      if (n.tagName === 'IFRAME' || n.tagName === 'TEXTAREA' || n.tagName === 'SELECT' || n.matches('dialog[open]')) return true;
+    }
+    return false;
+  };
+  let ultimo = 0;
+  const passo = (t: number) => {
+    const dt = ultimo ? Math.min(64, t - ultimo) : 16.7;
+    ultimo = t;
+    atual += (alvo - atual) * (1 - Math.pow(1 - 0.1, dt / 16.7));
+    if (Math.abs(alvo - atual) < 0.5) atual = alvo;
+    window.scrollTo(0, atual);
+    if (atual !== alvo) requestAnimationFrame(passo);
+    else { animando = false; ultimo = 0; document.documentElement.style.scrollBehavior = ''; }
+  };
+  window.addEventListener('wheel', (e) => {
+    if (!desktop.matches || reduzir.matches || e.ctrlKey || e.defaultPrevented || travada()) return;
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    if (e.target instanceof Element && rolaveis(e.target, e.deltaY)) return;
+    e.preventDefault();
+    const fator = e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? window.innerHeight : 1;
+    if (!animando) { atual = window.scrollY; alvo = atual; }
+    alvo = Math.max(0, Math.min(max(), alvo + e.deltaY * fator));
+    if (!animando) { animando = true; document.documentElement.style.scrollBehavior = 'auto'; requestAnimationFrame(passo); }
+  }, { passive: false });
+  window.addEventListener('scroll', () => { if (!animando) { atual = alvo = window.scrollY; } }, { passive: true });
+})();

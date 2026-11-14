@@ -127,23 +127,40 @@
   }
 
   // Todas as respostas de um registro, agrupadas por seção.
-  function detail(r, secoes, metaText) {
+  // opts.acordeao: cada seção vira um acordeão (a primeira começa aberta), com "Abrir todas / Fechar todas".
+  function detail(r, secoes, metaText, opts = {}) {
     const card = el("div", "card");
     const head = el("div", "detail-head");
     const info = el("div");
     info.append(el("h2", null, r.nome || "Sem nome"), el("div", "meta", metaText));
     head.append(el("span", "ini", initials(r.nome)), info);
     card.appendChild(head);
+    const acordeao = opts.acordeao && secoes.length > 1;
+    const blocos = [];
+    if (acordeao) {
+      const tudo = el("button", "btn-ghost det-tudo", "Abrir todas"); tudo.type = "button";
+      tudo.addEventListener("click", () => { const abrir = blocos.some((b) => !b.open); blocos.forEach((b) => (b.open = abrir)); });
+      const sync = () => { tudo.textContent = blocos.every((b) => b.open) ? "Fechar todas" : "Abrir todas"; };
+      card.appendChild(tudo);
+      card._sync = sync;
+    }
     for (const sec of secoes) {
-      if (secoes.length > 1) card.appendChild(el("div", "sec", sec.title));
       const dl = el("dl");
       for (const [k, label] of sec.fields) {
         const row = el("div", "row");
         row.append(el("dt", null, label), valueNode(r[k]));
         dl.appendChild(row);
       }
-      card.appendChild(dl);
+      if (acordeao) {
+        const d = el("details", "det-sec"); if (!blocos.length) d.open = true;
+        const sum = el("summary"); sum.append(el("span", "sec", sec.title), el("span", "det-n", sec.fields.length + (sec.fields.length === 1 ? " pergunta" : " perguntas")));
+        d.append(sum, dl); d.addEventListener("toggle", () => card._sync()); blocos.push(d); card.appendChild(d);
+      } else {
+        if (secoes.length > 1) card.appendChild(el("div", "sec", sec.title));
+        card.appendChild(dl);
+      }
     }
+    if (acordeao) card._sync();
     return card;
   }
 
