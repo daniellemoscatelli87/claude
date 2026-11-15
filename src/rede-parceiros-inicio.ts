@@ -603,3 +603,12 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     desenhar();
   }
 }
+
+/* ---------- "O que é a rede": borda animada nos cards, em sequência (1º, depois 2º, depois 3º) ---------- */
+document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i) => {
+  const b = document.createElement('span');
+  b.className = 'rx-pilar-borda';
+  b.setAttribute('aria-hidden', 'true');
+  b.style.setProperty('--i', String(i));
+  li.appendChild(b);
+});

@@ -101,7 +101,7 @@ html body #ie3-home #depoimentos { border-top: 0 !important; }
   .ih-folha { margin-top: 1rem; }
   /* o painel cabe na primeira tela, com a alça visível */
   .ih-hero .contents > div:first-child { margin-top: 0; }
-  .ih-hero .contents > div:first-child > img { max-height: min(540px, calc(100svh - 360px)); }
+  .ih-hero .contents > div:first-child img { max-height: min(540px, calc(100svh - 360px)); }
   .ih-hero .ih-redes { padding-bottom: 0; }
 }
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) { .ih-alca { animation: ih-alca-entra .7s cubic-bezier(0.16, 1, 0.3, 1) .6s both; } }
@@ -113,18 +113,18 @@ html body #ie3-home #depoimentos { border-top: 0 !important; }
   .pagina-inicio .site-header, .pagina-inicio .site-header.is-scrolled, html body.pagina-inicio .site-header.is-scrolled { transform: none !important; translate: none !important; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
   html body.pagina-inicio .site-header.is-hidden { transform: none !important; }
   html:has(body.pagina-inicio) { scroll-padding-top: calc(var(--altura-cabecalho, 68px) + 2.5rem); }
-  .ih-hero { position: fixed; top: 0; left: 0; right: 0; z-index: 20; display: flex; flex-direction: column; min-height: calc(100svh - 79px);
+  .ih-hero { position: fixed; top: 0; left: 0; right: 0; z-index: 20; display: flex; flex-direction: column; min-height: calc(100svh - 59px);
     padding-top: calc(var(--altura-cabecalho, 68px) + .25rem); clip-path: inset(0 0 calc(100% - var(--ih-tampa, 100vh) - 28px) 0); }
   .ih-hero-grade { flex: 1 0 auto; display: flex; flex-direction: column; }
   .ih-hero-grade > .grid { flex: 1 0 auto; display: flex; flex-direction: column; gap: 0; }
   .ih-hero .coluna-inicio { flex: none; gap: 0; }
   .ih-hero .coluna-inicio > * + * { margin-top: .75rem !important; }
   .ih-hero .coluna-inicio h1 { font-size: clamp(1.375rem, 6.2vw, 2.25rem); line-height: 1.12; }
-  .ih-hero .coluna-inicio > div:nth-child(2) { font-size: .875rem; line-height: 1.5; max-width: 34rem; }
-  .ih-hero .coluna-inicio > div:nth-child(2) > * + * { margin-top: .5rem; }
+  .ih-hero .coluna-inicio > h1 + div { font-size: .875rem; line-height: 1.5; max-width: 34rem; }
+  .ih-hero .coluna-inicio > h1 + div > * + * { margin-top: .5rem; }
   /* foto: ocupa o espaço que sobra até a base */
   .ih-hero .contents > div:first-child { order: 0; position: relative; flex: 1 1 0; min-height: 200px; margin: 1rem 0 0; max-width: none; }
-  .ih-hero .contents > div:first-child > img { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; object-fit: contain; object-position: 50% 100%; filter: none; }
+  .ih-hero .contents > div:first-child img { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; object-fit: contain; object-position: 50% 100%; filter: none; }
   .ih-hero-espaco { display: block; }
   .ih-folha { position: relative; z-index: 1; margin-top: -28px; background: #FFFFFF; }
   .ih-tampa { display: block; position: fixed; z-index: 21; left: 0; right: 0; top: var(--ih-tampa, 100vh); height: 28px; background: #FFFFFF; border-radius: 28px 28px 0 0; pointer-events: none; }
@@ -211,7 +211,7 @@ html body #ie3-home #depoimentos .max-w-5xl.bg-white,
 /* Celular e tablet: o topo termina sempre na mesma altura do Projeto Piloto e do Seja Parceiro (filete do card branco
    na mesma posição); em telas baixas a foto encolhe para caber */
 @media (max-width: 1023px) {
-  html body .ih-hero { height: calc(100svh - 79px); min-height: 0; }
+  html body .ih-hero { height: calc(100svh - 59px); min-height: 0; }
   html body .ih-hero .contents > div:first-child { min-height: 0; }
 }
 
@@ -227,4 +227,40 @@ html body #ie3-home .ih-clientes .ih-clientes-card { border-radius: 56px !import
 /* sombra mais difusa (a mesma do card "Vamos construir juntos?" do Seja Parceiro) */
 @media (min-width: 768px) {
   html body #ie3-home .ih-clientes .ih-clientes-card { box-shadow: 0 2px 8px rgba(13, 17, 25, 0.03), 0 24px 64px -16px rgba(13, 17, 25, 0.14) !important; }
+}
+
+/* Celular e tablet: tag "Meaningful Experiences" acima do título, igual à tag "DM | Partners & Connections" do Seja Parceiro */
+.ih-selo-movel { display: none; }
+@media (max-width: 1023px) {
+  .ih-selo-movel { display: inline-flex; align-self: center; align-items: center; gap: 8px; margin: 0 0 12px !important; padding: 6px 12px; border-radius: 9999px;
+    border: 1px solid #B3BDD0; background: rgba(255, 255, 255, 0.95); box-shadow: 0 1px 2px rgba(13, 17, 25, 0.05); color: #283043;
+    font-size: 10px; font-weight: 700; letter-spacing: .2em; line-height: 15px; text-transform: uppercase; }
+  .ih-selo-movel span { position: relative; width: 8px; height: 8px; border-radius: 9999px; background: #D44D4D; }
+  .ih-hero .coluna-inicio > .ih-selo-movel + h1 { margin-top: 0 !important; }
+}
+@media (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
+  .ih-selo-movel span::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: #D44D4D; opacity: .75; animation: ih-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; }
+}
+@keyframes ih-ping { 75%, 100% { transform: scale(2); opacity: 0; } }
+
+/* Celular e tablet: foto vertical própria (post-its), inteira (do alto dos post-its até a base), no espaço que sobra
+   até a base do topo, alinhada embaixo */
+@media (max-width: 1023px) {
+  html body .ih-hero .contents > div:first-child > div { display: none; }
+  html body .ih-hero .contents > div:first-child img { object-fit: contain !important; object-position: 50% 100% !important; filter: none !important; }
+}
+/* celular e tablet: menos espaço entre o título e os parágrafos (como no Seja Parceiro), para a foto ganhar altura */
+@media (max-width: 1023px) { html body .ih-hero #ih-titulo { margin-bottom: 0 !important; } }
+/* Textos do hero: versão mais curta no celular e tablet */
+.ih-so-movel { display: none; }
+@media (max-width: 1023px) { html body .ih-so-pc { display: none !important; } html body .ih-so-movel { display: block; } }
+/* celular e tablet: título e parágrafo do hero no mesmo padrão do Seja Parceiro (peso, cores, espaços e posição) */
+@media (max-width: 1023px) {
+  html body .ih-hero #ih-titulo { font-weight: 700 !important; color: #131A27 !important; margin-bottom: 10px !important; position: relative; top: 10px; }
+  html body .ih-hero .ih-so-movel { color: #495669 !important; position: relative; top: 10px; }
+  html body .ih-hero #ih-titulo + div { margin-top: 0 !important; }
+}
+@media (max-width: 1023px) {
+  html body .ih-hero .ih-so-movel { margin-top: 0 !important; }
+  html body .ih-hero .ih-selo-movel { margin-bottom: 14px !important; }
 }

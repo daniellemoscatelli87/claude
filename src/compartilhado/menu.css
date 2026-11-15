@@ -243,3 +243,15 @@ html.menu-aberto { overflow: hidden; }
   .folha-cola { scroll-snap-align: start; scroll-snap-stop: always; scroll-margin-top: -2.5rem; }
   .folha-cola-topo { display: block; position: absolute; top: 0; left: 0; width: 1px; height: 1px; pointer-events: none; scroll-snap-align: start; scroll-snap-stop: always; }
 }
+
+/* Celular e tablet: alça "Saiba mais" (tipografia pequena) recortada no centro da borda de cima da folha branca */
+.alca-movel { display: none; }
+@media (max-width: 1023px) {
+  .alca-movel { position: fixed; z-index: 44; left: 50%; top: calc(var(--alca-topo, 100vh) - 27px); transform: translateX(-50%); width: 132px; height: 28px;
+    display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 20px 20px 0 0; background: #FFFFFF;
+    font-family: "Plus Jakarta Sans", sans-serif; font-size: 12px; font-weight: 600; color: #131A27; text-decoration: none; transition: opacity .25s ease; }
+  .alca-movel.oculta { opacity: 0; pointer-events: none; }
+  .alca-movel-seta { width: 14px; height: 20px; border-radius: 9999px; border: 1px solid #D6DCE6; color: #D44D4D; display: flex; align-items: center; justify-content: center; }
+  .alca-movel-seta svg { width: 10px; height: 10px; }
+  .alca-movel:focus-visible { outline: none; box-shadow: inset 0 0 0 2px #D44D4D; }
+}
