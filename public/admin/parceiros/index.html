@@ -308,6 +308,8 @@
   .gs-in svg { width: 16px; height: 16px; }
   .gal-site h3 { margin: 0; font-size: 18px; font-weight: 700; color: #131A27; }
   .gs-esp { margin: 4px 0 14px; font-size: 14px; font-weight: 600; color: #D44D4D; }
+  .gs-tempo { margin: -10px 0 14px; font-size: 13px; color: #627288; }
+  .gal-mini-tempo { margin: -6px 0 10px; font-size: 12px; color: var(--muted); }
   .gs-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; max-height: 58px; overflow: hidden; }
   .gs-tags li { padding: 4px 10px; border-radius: 999px; background: #F6F7FA; border: 1px solid #EDF0F5; font-size: 12px; font-weight: 500; color: #283043; }
   .gs-why { margin: 14px 0 0; padding: 10px 12px; border-radius: 12px; background: #e7f5ec; font-size: 13px; line-height: 1.4; }
@@ -700,6 +702,7 @@ function areasAtuacao(r) {
 // O card inteiro abre a ficha do parceiro.
 const limpaTxt = (x) => String(x || "").replace(/\.\s*$/, "").trim();
 const espGaleria = (r) => limpaTxt(r.galeria_cargo) || limpaTxt(r.principal_especializacao);
+const tempoGaleria = (r) => r.tempo_especialidade ? limpaTxt(r.tempo_especialidade).replace(/^Entre (\d+) e (\d+)/, "$1 a $2") + " de carreira" : "";
 function summaryCard(r) {
   const c = el("a", "card pcs gal-site"); c.href = "/admin/parceiros/?id=" + r.id;
   c.setAttribute("aria-label", "Abrir o perfil de " + (r.nome || "parceiro"));
@@ -708,6 +711,7 @@ function summaryCard(r) {
   c.appendChild(topo);
   c.appendChild(el("h3", null, r.nome || "Sem nome"));
   c.appendChild(el("p", "gs-esp", espGaleria(r) || "Especialidade não informada"));
+  if (r.tempo_especialidade) c.appendChild(el("p", "gs-tempo", tempoGaleria(r)));
   const tags = el("ul", "gs-tags");
   [...new Set([...(r.areas_experiencia || []), ...(r.segmentos || [])].map(limpaTxt).filter(Boolean))].forEach((t) => tags.appendChild(el("li", null, t)));
   c.appendChild(tags);
@@ -1017,6 +1021,7 @@ function galeriaCard(data) {
     card.appendChild(el("div", "gal-mini-nome", data.nome || "Sem nome"));
     const esp = data.galeria_cargo || String(data.principal_especializacao || "").replace(/\.\s*$/, "").trim();
     card.appendChild(el("div", "gal-mini-esp", esp || "Sem especialidade"));
+    if (data.tempo_especialidade) card.appendChild(el("div", "gal-mini-tempo", tempoGaleria(data)));
     const tags = el("ul", "gal-mini-tags");
     [...new Set([...(data.areas_experiencia || []), ...(data.segmentos || [])].map((x) => String(x).replace(/\.\s*$/, "").trim()).filter(Boolean))].forEach((x) => tags.appendChild(el("li", null, x)));
     card.appendChild(tags);
