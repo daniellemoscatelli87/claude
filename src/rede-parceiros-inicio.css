@@ -1876,3 +1876,60 @@ html body .rx-pilar h3 { padding-right: 1.5rem !important; }
   33.2% { opacity: 1; background-position: 0 0%; }
   33.33%, 100% { opacity: 0; background-position: 0 0%; }
 }
+
+/* =========================================================================
+   Animação dos cards de "O que é a rede", versão mais elegante (substitui a anterior):
+   ritmo mais lento (3,2 s por card; ciclo de 9,6 s), movimentos com aceleração suave,
+   um traço fino de luz com cauda longa na borda, o card ganha um brilho rosado sutil,
+   o ícone acende em vermelho suavemente (sem piscar) e o feixe desliza pela linha, acendendo o ponto do meio.
+   ========================================================================= */
+html body .rx-pilar-borda { padding: 1.5px;
+  background: conic-gradient(from var(--rx-ang), transparent 0deg, transparent 200deg, rgba(212, 77, 77, 0.08) 260deg, rgba(212, 77, 77, 0.45) 330deg, #D44D4D 356deg, transparent 360deg); }
+html body .rx-pilar-feixe { height: 2px; background: linear-gradient(90deg, transparent 0, rgba(240, 163, 163, 0.6) 30%, #D44D4D 50%, transparent 60%) no-repeat; background-size: 220% 100%;
+  filter: drop-shadow(0 0 4px rgba(212, 77, 77, 0.45)); }
+html body .rx-pilar-feixe::after { content: ""; position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 9999px;
+  background: rgba(212, 77, 77, 0.35); opacity: 0; }
+@media (max-width: 767px) {
+  html body .rx-pilar-feixe { width: 2px; height: 2rem; background: linear-gradient(180deg, transparent 0, rgba(240, 163, 163, 0.6) 30%, #D44D4D 50%, transparent 60%) no-repeat; background-size: 100% 220%; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html body .rx-pilar { animation: rx-card 9.6s ease-in-out infinite; animation-delay: calc(var(--i, 0) * 3.2s); }
+  html body .rx-pilar-borda { animation: rx-borda2 9.6s cubic-bezier(.45, 0, .25, 1) infinite; animation-delay: calc(var(--i, 0) * 3.2s); }
+  html body .rx-pilar-ic svg { animation: rx-acende 9.6s ease-in-out infinite; animation-delay: calc(var(--i, 0) * 3.2s); }
+  html body .rx-pilar-feixe { animation: rx-feixe2-h 9.6s cubic-bezier(.45, 0, .25, 1) infinite; animation-delay: calc(var(--i, 0) * 3.2s); }
+  html body .rx-pilar-feixe::after { animation: rx-ponto 9.6s ease-out infinite; animation-delay: calc(var(--i, 0) * 3.2s); }
+}
+@media (prefers-reduced-motion: no-preference) and (max-width: 767px) { html body .rx-pilar-feixe { animation-name: rx-feixe2-v; } }
+@keyframes rx-card {
+  0%, 25%, 100% { box-shadow: 0 1px 2px rgba(13, 17, 25, 0.03), 0 12px 32px -18px rgba(13, 17, 25, 0.14); }
+  9%, 17% { box-shadow: 0 1px 2px rgba(13, 17, 25, 0.03), 0 18px 40px -20px rgba(212, 77, 77, 0.28); }
+}
+@keyframes rx-borda2 {
+  0% { --rx-ang: 0deg; opacity: 0; }
+  3% { opacity: 1; }
+  16% { opacity: 1; }
+  18.75% { --rx-ang: 360deg; opacity: 0; }
+  100% { --rx-ang: 360deg; opacity: 0; }
+}
+@keyframes rx-acende {
+  0%, 16% { color: #B3BDD0; transform: none; }
+  20% { color: #D44D4D; transform: scale(1.12); }
+  25%, 100% { color: #B3BDD0; transform: none; }
+}
+@keyframes rx-feixe2-h {
+  0%, 22.8% { opacity: 0; background-position: 100% 0; }
+  23% { opacity: 1; background-position: 100% 0; }
+  32.8% { opacity: 1; background-position: 0% 0; }
+  33.33%, 100% { opacity: 0; background-position: 0% 0; }
+}
+@keyframes rx-feixe2-v {
+  0%, 22.8% { opacity: 0; background-position: 0 100%; }
+  23% { opacity: 1; background-position: 0 100%; }
+  32.8% { opacity: 1; background-position: 0 0%; }
+  33.33%, 100% { opacity: 0; background-position: 0 0%; }
+}
+@keyframes rx-ponto {
+  0%, 26.5% { opacity: 0; transform: scale(.6); }
+  28% { opacity: 1; transform: scale(1); }
+  32%, 100% { opacity: 0; transform: scale(2.2); }
+}
