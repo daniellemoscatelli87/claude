@@ -214,3 +214,17 @@ html body #ie3-home #depoimentos .max-w-5xl.bg-white,
   html body .ih-hero { height: calc(100svh - 79px); min-height: 0; }
   html body .ih-hero .contents > div:first-child { min-height: 0; }
 }
+
+/* ---------- Clientes atendidos: o mesmo card de "Vamos construir juntos?" (Seja Parceiro) ---------- */
+html body #ie3-home .ih-clientes .ih-clientes-card { border-radius: 56px !important; padding: 48px; }
+.ih-clientes .ih-luz-1 { display: none; }
+.ih-clientes .ih-luz-2 { opacity: .6; }
+@media (max-width: 767px) {
+  html body #ie3-home .ih-clientes { padding-top: 0 !important; }
+  html body #ie3-home .ih-clientes > div { padding-left: 0 !important; padding-right: 0 !important; }
+  html body #ie3-home .ih-clientes .ih-clientes-card { border-radius: 0 0 36px 36px !important; border: 0; box-shadow: none; padding: 32px 24px; }
+}
+/* sombra mais difusa (a mesma do card "Vamos construir juntos?" do Seja Parceiro) */
+@media (min-width: 768px) {
+  html body #ie3-home .ih-clientes .ih-clientes-card { box-shadow: 0 2px 8px rgba(13, 17, 25, 0.03), 0 24px 64px -16px rgba(13, 17, 25, 0.14) !important; }
+}
