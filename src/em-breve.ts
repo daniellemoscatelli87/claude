@@ -61,8 +61,8 @@ sugerirEmail(notifyEmail, true);
   const hero = document.querySelector<HTMLElement>('.ih-hero');
   const folha = document.querySelector<HTMLElement>('.ih-folha');
   const movel = document.getElementById('ih-movel');
-  // descem para a folha no celular: o 3º parágrafo (que convida a deixar o e-mail), o campo de e-mail e as redes sociais
-  const itens = ['.ih-p3', '.ih-form', '.ih-redes'].map((s) => document.querySelector<HTMLElement>(s));
+  // descem para a folha no celular: a tag "Em breve", o 3º parágrafo (que convida a deixar o e-mail), o campo de e-mail e as redes sociais
+  const itens = ['.ih-tag', '.ih-p3', '.ih-form', '.ih-redes'].map((s) => document.querySelector<HTMLElement>(s));
   if (!h || !hero || !folha || !movel || itens.some((i) => !i)) return;
   const pequeno = window.matchMedia('(max-width: 1023px)');
   // lugares originais no hero, para devolver no computador

@@ -1483,3 +1483,9 @@ main + footer.relative { padding-top: 6rem !important; }
   .divisao-hero .divisao-hero-cartao { padding-top: 1.25rem; }
 }
 @media (max-width: 1023px) { html body.cabecalho-sobre-hero .site-header.is-scrolled #menu-botao, html body.cabecalho-sobre-hero .site-header #menu-botao { color: #FFFFFF !important; } }
+
+/* Celular: tags das seções um pouco menores */
+@media (max-width: 767px) {
+  main p.rounded-full.bg-coral-50, .convite-selo, .depois-convite-selo { padding: .25rem .75rem !important; font-size: 11px !important; line-height: 15px !important; }
+  main p.rounded-full.bg-coral-50 > span, .convite-selo span, .depois-convite-selo span { width: .375rem !important; height: .375rem !important; }
+}

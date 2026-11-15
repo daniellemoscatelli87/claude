@@ -54,9 +54,7 @@ html { overflow-x: clip; }
 /* "Meu negócio é..." com o mesmo tamanho de texto dos outros campos. */
 .biz-label { font-size: 13px; }
 
-/* Botão "Notificar lançamento": padrão vermelho (crimson-500) com texto branco */
-.notify-btn { background-color: #D44D4D; color: #fff; box-shadow: 0 10px 25px -3px rgba(212, 77, 77, 0.3); }
-.notify-btn[data-state="idle"]:hover { background-color: #B82828; box-shadow: 0 12px 28px -3px rgba(212, 77, 77, 0.4); }
+/* Botão "Notificar lançamento": rosa claro com texto vermelho (regras no topo do arquivo) */
 .notify-btn:focus-visible { box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.4); }
 
 /* Home: botão Contato do cabeçalho em vermelho outline */
@@ -141,9 +139,16 @@ html body #ie3-home #depoimentos { border-top: 0 !important; }
   html body #ie3-home .ih-tags > span { padding: .375rem .625rem; font-size: 11px; white-space: nowrap; }
 }
 
-/* Tag "Em breve": igual à tag "Prova social & reconhecimento"; fica acima do parágrafo "Enquanto o novo site…" */
-.ih-p3 .ih-tag { display: inline-flex; align-items: center; margin-bottom: .75rem; padding: 6px 16px; border-radius: 9999px; background: #FFF5F5; border: 1px solid rgba(251, 213, 213, 0.8);
+/* Tag "Em breve": igual à tag "Prova social & reconhecimento". No computador fica acima do título; no celular desce
+   para a folha, acima do parágrafo "Enquanto o novo site…" */
+.ih-tag { align-self: flex-start; display: inline-flex; align-items: center; margin-bottom: .75rem; padding: 6px 16px; border-radius: 9999px; background: #FFF5F5; border: 1px solid rgba(251, 213, 213, 0.8);
   font-size: 12px; font-weight: 700; line-height: 16px; letter-spacing: .2em; text-transform: uppercase; color: #C83232; user-select: none; }
 .ih-p3 p { margin: 0; }
 /* aviso abaixo do campo de e-mail: só aparece quando há mensagem (erro ou confirmação) */
 #notify-msg:empty { display: none; }
+@media (max-width: 1023px) { .ih-movel .ih-tag { align-self: center; margin-bottom: -.75rem; } }
+/* Celular: tags das seções um pouco menores */
+@media (max-width: 767px) {
+  .ih-tag, html body #ie3-home .ih-secao-tag { padding: 4px 12px !important; }
+  .ih-tag, html body #ie3-home .ih-secao-tag > span { font-size: 11px !important; letter-spacing: .18em !important; line-height: 15px !important; }
+}
