@@ -231,3 +231,7 @@ input[type=search] { padding-left: 40px; background: #f8fafc url("data:image/svg
   .topbar .in > a { visibility: hidden; }
   body.scroll-lock:has(#drawer) .backdrop { display: none; }
 }
+/* abaixo do nome da usuária: link para Configurações (no lugar do e-mail) */
+.who .who-config { display: inline-flex; align-items: center; gap: 6px; margin-top: 2px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; word-break: normal; }
+.who .who-config svg { width: 15px; height: 15px; }
+.who .who-config:hover, .who .who-config[aria-current=page] { color: var(--red); }
