@@ -1692,3 +1692,6 @@ html body .rx-onde.eco .rx-onde-cab h2, html body .rx-onde.eco .rx-onde-cab .rp-
 .rx-divisor { display: flex; align-items: center; gap: 1rem; margin: 0 0 -1.5rem; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A96AB; white-space: nowrap; }
 .rx-divisor::before, .rx-divisor::after { content: ""; flex: 1; height: 1px; background: #E4E6EC; }
 @media (max-width: 1023px) { .rx-divisor { margin-bottom: -1rem; } }
+/* sem a linha de cima da primeira fileira de blocos (o divisor com rótulo já separa) */
+.rx-divisor + .rx-numerada > li:first-child { border-top: 0 !important; }
+@media (min-width: 640px) { .rx-divisor + .rx-numerada > li:nth-child(-n+2) { border-top: 0 !important; } }
