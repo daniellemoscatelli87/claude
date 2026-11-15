@@ -2,6 +2,9 @@
 @import "./compartilhado/menu.css";
 @source "../index.html";
 @source "./em-breve.ts";
+/* As seções levadas da IE-3 (#ie3-home) têm o CSS próprio, gerado com o Tailwind v3 da IE-3: lá "shadow-2xs" não existe,
+   então a home não deve gerar a versão do Tailwind v4 dessa classe. */
+@source not inline("shadow-2xs");
 
 
 .bg-ambient-gradient {
