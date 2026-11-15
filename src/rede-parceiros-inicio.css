@@ -1702,3 +1702,17 @@ html body .rx-rede .rx-rede-cab h2, html body .rx-rede .rx-rede-cab .rp-texto { 
 html body .rx-rede .rx-rede-cab .rp-texto + .rp-texto { margin-top: .875rem !important; }
 .rx-rede { padding-bottom: 1rem; }
 .rx-rede + .rx-secao { padding-top: 3.5rem; }
+
+/* "O que é a rede": Contato → Relacionamento → Indicação, ligados por uma linha */
+.rx-pilares { position: relative; list-style: none; margin: 3rem auto 0; padding: 0; max-width: 58rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; counter-reset: pilar; }
+.rx-pilares::before { content: ""; position: absolute; top: 2rem; left: 16.66%; right: 16.66%; height: 2px; background: repeating-linear-gradient(90deg, rgba(212, 77, 77, 0.35) 0 6px, transparent 6px 12px); }
+.rx-pilar { position: relative; display: grid; justify-items: center; align-content: start; gap: .5rem; padding: 0 .5rem; text-align: center; }
+.rx-pilar-ic { display: grid; place-items: center; width: 4rem; height: 4rem; border-radius: 9999px; background: #FFFFFF; color: #D44D4D; border: 1px solid rgba(212, 77, 77, 0.2); box-shadow: 0 0 0 8px #FFFFFF, 0 10px 28px rgba(212, 77, 77, 0.14); margin-bottom: .5rem; }
+.rx-pilar-ic svg { width: 1.625rem; height: 1.625rem; }
+html body .rx-pilar h3 { margin: 0; font-size: 1.125rem !important; font-weight: 700; color: #131A27; }
+.rx-pilar p { margin: 0; max-width: 16rem; font-size: .9375rem; line-height: 1.55; color: #495669; }
+@media (max-width: 767px) {
+  .rx-pilares { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; max-width: 22rem; margin-top: 2.25rem; }
+  .rx-pilares::before { top: 2rem; bottom: 2rem; left: 50%; right: auto; width: 2px; height: auto; background: repeating-linear-gradient(180deg, rgba(212, 77, 77, 0.35) 0 6px, transparent 6px 12px); }
+  html body .rx-pilar h3, .rx-pilar p { position: relative; background: #FFFFFF; padding: 0 .25rem; }
+}
