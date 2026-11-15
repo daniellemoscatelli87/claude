@@ -1438,3 +1438,12 @@ html body .rx-setor-col.desafios h4 { color: #5C6986; }
 
 /* Kanban "Colaborações em projetos": aviso de que os cards são exemplos ilustrativos */
 .rx-kb-nota { margin-left: auto; font-size: .6875rem; font-style: normal; font-weight: 600; letter-spacing: .04em; color: #8A96AB; white-space: nowrap; }
+
+/* Carrossel de setores: cabeçalho com foto no topo do card (computador 280px, tablet 220px, celular 180px de altura).
+   A foto ocupa toda a largura do card; nas telas mais estreitas aparece a parte central. Sem foto: faixa neutra com o ícone. */
+.rx-setor-foto { position: relative; margin: -2.25rem -2.5rem 1.75rem; height: 280px; overflow: hidden; border-radius: 27px 27px 0 0; background: #EDF0F5; }
+.rx-setor-foto img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--rx-foco, center); }
+.rx-setor-foto.sem-foto { display: grid; place-items: center; color: rgba(212, 77, 77, 0.35); background: linear-gradient(135deg, #F6F7FA 0%, #FDF2F2 100%); }
+.rx-setor-foto.sem-foto svg { width: 4.5rem; height: 4.5rem; stroke-width: 1.25; }
+@media (max-width: 1023px) { .rx-setor-foto { height: 220px; margin: -1.75rem -1.75rem 1.5rem; } }
+@media (max-width: 639px) { .rx-setor-foto { height: 180px; margin: -1.25rem -1.25rem 1.25rem; border-radius: 21px 21px 0 0; } }
