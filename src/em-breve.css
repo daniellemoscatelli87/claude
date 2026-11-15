@@ -207,3 +207,10 @@ html body #ie3-home #artigos article,
 html body #ie3-home #artigos .rounded-2xl,
 html body #ie3-home #depoimentos .max-w-5xl.bg-white,
 .ih-clientes-card { border-radius: 24px !important; }
+
+/* Celular e tablet: o topo termina sempre na mesma altura do Projeto Piloto e do Seja Parceiro (filete do card branco
+   na mesma posição); em telas baixas a foto encolhe para caber */
+@media (max-width: 1023px) {
+  html body .ih-hero { height: calc(100svh - 84px); min-height: 0; }
+  html body .ih-hero .contents > div:first-child { min-height: 0; }
+}
