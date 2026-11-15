@@ -1433,3 +1433,6 @@ html body .rx-setor-col.desafios h4 { color: #5C6986; }
   .rx-setor-col li { font-size: .9375rem; }
 }
 @media (prefers-reduced-motion: reduce) { .rx-setores-trilha { scroll-behavior: auto; } .rx-setores-pontos button { transition: none; } }
+
+/* Kanban "Colaborações em projetos": aviso de que os cards são exemplos ilustrativos */
+.rx-kb-nota { margin-left: auto; font-size: .6875rem; font-style: normal; font-weight: 600; letter-spacing: .04em; color: #8A96AB; white-space: nowrap; }
