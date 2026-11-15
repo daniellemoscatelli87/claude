@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/admin/admin.css?v=20261115b">
+<link rel="stylesheet" href="/admin/admin.css?v=20261115c">
 <style>
   .gal-perfil { border-top: 1px solid var(--track); padding-top: 14px; }
   .gal-perfil-tit { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
@@ -298,6 +298,28 @@
   .chip.more { color: var(--muted); }
   /* Perfis: cards resumidos + painel lateral */
   .pc-bar { justify-content: space-between; align-items: center; }
+  .gal-site { display: flex; flex-direction: column; gap: 0; padding: 22px; border-radius: 24px; text-decoration: none; color: inherit; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  .gal-site:hover { transform: translateY(-3px); border-color: rgba(212, 77, 77, 0.22); box-shadow: 0 8px 24px rgba(13, 17, 25, 0.08); }
+  .gal-site:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.35); }
+  .gs-topo { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+  .gs-foto { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; overflow: hidden; flex: none; background: rgba(212, 77, 77, 0.10); color: #D44D4D; font-size: 22px; font-weight: 700; box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(212, 77, 77, 0.25); }
+  .gs-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gs-in { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; color: #627288; background: #F6F7FA; border: 1px solid #EDF0F5; }
+  .gs-in svg { width: 16px; height: 16px; }
+  .gal-site h3 { margin: 0; font-size: 18px; font-weight: 700; color: #131A27; }
+  .gs-esp { margin: 4px 0 14px; font-size: 14px; font-weight: 600; color: #D44D4D; }
+  .gs-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; max-height: 58px; overflow: hidden; }
+  .gs-tags li { padding: 4px 10px; border-radius: 999px; background: #F6F7FA; border: 1px solid #EDF0F5; font-size: 12px; font-weight: 500; color: #283043; }
+  .gs-why { margin: 14px 0 0; padding: 10px 12px; border-radius: 12px; background: #e7f5ec; font-size: 13px; line-height: 1.4; }
+  .pf-resumo { display: grid; gap: 14px; margin-bottom: 16px; }
+  /* o resumo já mostra foto e nome: no card das respostas fica só a data da candidatura */
+  .pf-resumo + .card .detail-head .ini, .pf-resumo + .card .detail-head h2 { display: none; }
+  .pf-resumo h2 { margin: 0; font-size: 22px; }
+  .pf-foto { width: 64px !important; height: 64px !important; font-size: 20px !important; overflow: hidden; }
+  .pf-dl { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .pf-dl dt { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .pf-dl dd { margin: 4px 0 0; font-size: 14px; line-height: 1.45; color: var(--dark); }
+  @media (max-width: 800px) { .pf-dl { grid-template-columns: 1fr; } }
   .pcs-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   @media (max-width: 1000px) { .pcs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .pcs-grid { grid-template-columns: 1fr; } }
@@ -363,7 +385,7 @@
 
     <div class="tabs" role="tablist" aria-label="Seções de parceiros">
       <button type="button" class="tab" role="tab" id="tab-dashboard" aria-controls="panel-dashboard" aria-selected="true">Dashboard</button>
-      <button type="button" class="tab" role="tab" id="tab-candidaturas" aria-controls="panel-candidaturas" aria-selected="false">Candidaturas <span class="n" id="n-cand">0</span></button>
+      <button type="button" class="tab" role="tab" id="tab-candidaturas" aria-controls="panel-candidaturas" aria-selected="false">Parceiros <span class="n" id="n-cand">0</span></button>
     </div>
 
     <div class="filter-row hidden" id="filter-row">
@@ -418,7 +440,7 @@
   </div>
 
   <div id="view-detail" class="hidden">
-    <a class="back" id="back" href="/admin/parceiros/?aba=candidaturas">← Todas as candidaturas</a>
+    <a class="back" id="back" href="/admin/parceiros/?aba=candidaturas">← Todos os parceiros</a>
     <div id="detail"></div>
   </div>
 </main>
@@ -674,23 +696,39 @@ function areasAtuacao(r) {
   return Q.areas_experiencia.groups.map((g) => [g.title, (r.areas_experiencia || []).filter((x) => g.options.includes(x)).length])
     .filter(([, n]) => n).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([t]) => t);
 }
+// Card igual ao da Galeria de Profissionais do site (foto, LinkedIn, nome, especialidade e tags).
+// O card inteiro abre a ficha do parceiro.
+const limpaTxt = (x) => String(x || "").replace(/\.\s*$/, "").trim();
+const espGaleria = (r) => limpaTxt(r.galeria_cargo) || limpaTxt(r.principal_especializacao);
 function summaryCard(r) {
-  const c = el("article", "card pcs");
+  const c = el("a", "card pcs gal-site"); c.href = "/admin/parceiros/?id=" + r.id;
+  c.setAttribute("aria-label", "Abrir o perfil de " + (r.nome || "parceiro"));
+  const topo = el("div", "gs-topo"); topo.appendChild(avatar(r, "gs-foto"));
+  if (r.galeria_linkedin || r.linkedin) { const li = el("span", "gs-in"); li.setAttribute("aria-hidden", "true"); li.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>'; topo.appendChild(li); }
+  c.appendChild(topo);
+  c.appendChild(el("h3", null, r.nome || "Sem nome"));
+  c.appendChild(el("p", "gs-esp", espGaleria(r) || "Especialidade não informada"));
+  const tags = el("ul", "gs-tags");
+  [...new Set([...(r.areas_experiencia || []), ...(r.segmentos || [])].map(limpaTxt).filter(Boolean))].forEach((t) => tags.appendChild(el("li", null, t)));
+  c.appendChild(tags);
+  const m = matchOf(r);
+  if (m && m.motivo) { const w = el("p", "gs-why"); w.append(el("strong", null, "Por que atende: "), m.motivo); c.appendChild(w); }
+  return c;
+}
+// Cabeçalho da ficha: resumo de quem é o parceiro (senioridade, especialidade, área de atuação e entrega de valor).
+function resumoPerfil(r) {
+  const c = el("div", "card pf-resumo");
   const head = el("div", "pc-head");
-  const who = el("div", "pc-who"); who.append(el("h3", null, r.nome || "Sem nome"));
+  const who = el("div", "pc-who"); who.append(el("h2", null, r.nome || "Sem nome"));
   const senior = [NIVEL[r.tempo_especialidade], r.tempo_especialidade && clean(r.tempo_especialidade).toLowerCase() + " de carreira"].filter(Boolean).join(" · ");
   if (senior) who.appendChild(el("div", "pc-sub", senior));
-  const m = matchOf(r);
-  head.append(avatar(r), who);
-  const dl = el("dl", "pcs-dl");
-  const row = (k, v, cls) => { if (!v) return; const d = el("div", cls); d.append(el("dt", null, k), el("dd", null, v)); dl.appendChild(d); };
-  row("Especialidade", r.principal_especializacao || "Não informada");
+  head.append(avatar(r, "ini pf-foto"), who); c.appendChild(head);
+  const dl = el("dl", "pf-dl");
+  const row = (k, v) => { const d = el("div"); d.append(el("dt", null, k), el("dd", null, v)); dl.appendChild(d); };
+  row("Especialidade", limpaTxt(r.principal_especializacao) || "Não informada");
   row("Área de atuação", areasAtuacao(r).join(" · ") || "Não informada");
   row("Entrega de valor", PERFIS_IA.get(r.id) || contribFallback(r));
-  if (m && m.motivo) row("Por que atende", m.motivo, "pcs-why");
-  // Leva direto para a ficha completa do parceiro.
-  const btn = el("a", "pcs-more", "Ver mais"); btn.href = "/admin/parceiros/?id=" + r.id;
-  c.append(head, dl, btn);
+  c.appendChild(dl);
   return c;
 }
 let lastTrigger = null;
@@ -1105,7 +1143,13 @@ Admin.init({ page: "parceiros", onReady: async () => {
       const addTxt = (v) => (/^Outr[oa]s?\b/.test(v) ? v.replace(/\.$/, "") + ": " + txt : v);
       shown[k] = Array.isArray(shown[k]) ? shown[k].map(addTxt) : addTxt(shown[k] || "");
     }
-    box.replaceChildren(Admin.detail(shown, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at), { acordeao: true }), galeriaCard(data), lgpdCard(data));
+    const resumo = resumoPerfil(data);
+    box.replaceChildren(resumo, Admin.detail(shown, SECOES, "Candidatura enviada em " + Admin.fmtDate(data.created_at), { acordeao: true }), galeriaCard(data), lgpdCard(data));
+    // a entrega de valor vem da análise por IA (já gerada); quando chega, o resumo é atualizado
+    Admin.sb.functions.invoke("insights-parceiros", { body: { somente_cache: true } }).then(({ data: ia }) => {
+      if (!ia || !ia.perfis || !ia.perfis[data.id]) return;
+      PERFIS_IA.set(data.id, ia.perfis[data.id]); resumo.replaceWith(resumoPerfil(data));
+    }).catch(() => {});
     return;
   }
   const { data, error } = await Admin.sb.from("cadastros").select("*").order("created_at", { ascending: false });
