@@ -2737,3 +2737,26 @@ html body .rx-mv4 .rx-mv-crit b { font-size: .8125rem; font-weight: 500; color: 
 html body .rx-mv4 .rx-mv-crit small { font-size: .6875rem; color: #A6B1C2; }
 @media (max-width: 767px) { html body .rx-mv4 .rx-mv-dpess { width: auto; } }
 @media (max-width: 767px) { html body .rx-mv4 .rx-mv-crit { grid-template-columns: 1fr; } html body .rx-mv4 .rx-mv-crit li { min-height: 2rem; padding: .3125rem .625rem; } html body .rx-mv4 .rx-mv-crit small { display: inline; margin-left: auto; } html body .rx-mv4 .rx-mv-crit li > span:last-child { display: flex; flex: 1; align-items: baseline; gap: .5rem; } }
+/* mockup sempre com a mesma largura e altura, em todas as etapas (o conteúdo de cada cena se ajusta dentro) */
+html body .rx-mt-tela { width: 100%; }
+html body .rx-mt-cenas { height: 35.5rem; min-height: 0; overflow: hidden; }
+html body .rx-mt-cena { min-height: 0; height: 100%; overflow: hidden; }
+@media (max-width: 767px) { html body .rx-mt-cenas { height: 48rem; } }
+/* barra do topo sempre em uma linha (nomes longos de etapa não aumentam a altura do mockup) */
+html body .rx-mt-tela-topo { flex-wrap: nowrap; white-space: nowrap; min-width: 0; }
+html body .rx-mt-tela-topo .rx-mt-agora-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+html body .rx-mt-tela-topo .rx-mt-agora-n, html body .rx-mt-tela-topo img { flex: none; }
+@media (max-width: 767px) {
+  html body .rx-mv4 { gap: .625rem; }
+  html body .rx-mv4 .rx-mv-desafio { padding: .75rem .875rem; }
+  html body .rx-mv4 .rx-mv-desafio strong { font-size: .875rem; margin: .125rem 0 .375rem; }
+  html body .rx-mv4 .rx-mv-desafio .rx-mv-chips i { font-size: .6875rem; padding: .1875rem .5rem; }
+  html body .rx-mv4 .rx-mv-destaque { padding: .75rem .875rem; row-gap: .5rem; }
+  html body .rx-mv4 .rx-mv-dpess .rx-mv-gauge { width: 5.5rem; height: 5.5rem; margin-bottom: .25rem; }
+  html body .rx-mv4 .rx-mv-crit li { min-height: 1.875rem; padding: .25rem .625rem; }
+  html body .rx-mv4 .rx-mv-barras { padding: .625rem .875rem; gap: .375rem; }
+}
+/* véu da modal e confetes podem ocupar a tela toda do mockup (o recorte fica na borda do mockup) */
+html body .rx-mv2, html body .rx-mv25 { overflow: visible; }
+/* celular: todos os tópicos sempre com a descrição (a troca de etapa não muda a altura da página) */
+@media (max-width: 1023px) { html body .rx-mt-topico:not(.ativa) .rx-mt-tcorpo > span { display: block !important; } }
