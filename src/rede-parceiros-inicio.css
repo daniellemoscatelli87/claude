@@ -503,8 +503,6 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-no:focus-visible { outline: none; }
 .rx-no:focus-visible .rx-no-ic { box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.4); }
 .rx-areas-lista { display: none; }
-.rx-setores { margin-top: 3.5rem; text-align: center; }
-.rx-setores h3 { margin: 0 0 1rem; font-size: 1rem; font-weight: 600; color: #283043; }
 @media (max-width: 1279px) { .rx-anel1 { --raio: calc(440px * 0.32); } .rx-anel2 { --raio: calc(440px * 0.47); } .rx-orbita { max-width: 440px; } }
 /* tablet e celular: sem órbita, áreas em lista de cards */
 @media (max-width: 1023px) {
@@ -562,7 +560,6 @@ body.parceiros-inicio { background: #EEF2F7 linear-gradient(#FFFFFF, #FFFFFF) to
 .rx-grade-saber { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .rx-grade-saber > li { border-bottom: 1px solid rgba(19, 26, 39, 0.09) !important; }
 @media (max-width: 1023px) { .rx-grade-saber { grid-template-columns: 1fr; } }
-.rx-setores .rp-tags { justify-content: center; }
 
 /* Quem buscamos: "Avatares com tooltip" do DS — trilhos tracejados, avatares girando, centro pulsando */
 .rx-orbita { --r0: 92px; --r1: 152px; --r2: 214px; position: relative; width: 480px !important; max-width: 100%; aspect-ratio: 1; margin-left: auto; }
@@ -592,8 +589,6 @@ body.parceiros-inicio { background: #EEF2F7 linear-gradient(#FFFFFF, #FFFFFF) to
 @media (max-width: 1279px) { .rx-orbita { --r0: 80px; --r1: 132px; --r2: 186px; width: 420px !important; } }
 
 /* setores centralizados */
-.rx-setores { display: flex; flex-direction: column; align-items: center; }
-.rx-setores .rp-tags { display: flex; flex-wrap: wrap; justify-content: center; margin: 0 auto; padding: 0; }
 
 /* divisórias difusas: as seções da folha alternam branco e cinza clarinho, mesclando em degradê */
 .rx-secao + .rx-secao { border-top: 0 !important; }
@@ -893,12 +888,7 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-orbita-area { padding-bottom: 2.25rem; }
 @media (max-width: 1023px) { .rx-orbita-area .rx-orbita { --r0: 50px !important; --r1: 88px !important; --r2: 132px !important; } }
 /* Subtítulo dos setores: mais presença e mais perto do ecossistema */
-.rx-setores { margin-top: 4.5rem !important; }
-.rx-setores h3 { max-width: 30rem; margin: 0 auto !important; font-size: 1.5rem !important; font-weight: 700 !important; line-height: 1.3; letter-spacing: -0.01em; color: #131A27 !important; text-wrap: balance; }
 .rx-orbita-area { margin-top: 1rem !important; }
-@media (max-width: 639px) { .rx-setores { margin-top: 3.5rem !important; } .rx-setores h3 { font-size: 1.25rem !important; max-width: 20rem; } }
-.rx-setores h3 { max-width: 42rem; font-size: 1.375rem !important; line-height: 1.4; }
-@media (max-width: 639px) { .rx-setores h3 { font-size: 1.125rem !important; max-width: 22rem; } }
 /* Modelo apontando para o ecossistema (só no computador) */
 .rx-modelo-aponta { display: none; }
 @media (min-width: 1024px) {
@@ -1392,10 +1382,12 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
    no computador, um pedaço do próximo card aparece para indicar que há mais. */
 .rx-setores { margin-top: 2.5rem; text-align: left; width: 100%; min-width: 0; box-sizing: border-box; }
 .rx-setores-trilha { width: 100%; box-sizing: border-box; }
-.rx-setores-trilha { list-style: none; margin: 0; padding: .25rem .25rem 1.5rem; display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-x: contain; }
+.rx-setores-trilha { --rx-lado: 9%; list-style: none; margin: 0; padding: .25rem 0 1.5rem; display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-x: contain; }
 .rx-setores-trilha::-webkit-scrollbar { display: none; }
+/* espaçadores: o primeiro e o último card também param no centro */
+.rx-setores-trilha::before, .rx-setores-trilha::after { content: ""; flex: 0 0 calc(var(--rx-lado) - var(--rx-vao, 1.25rem)); }
 .rx-setores-trilha:focus-visible { outline: 2px solid #D44D4D; outline-offset: 4px; border-radius: 28px; }
-.rx-setor-slide { flex: 0 0 82%; scroll-snap-align: start; display: flex; flex-direction: column; padding: 2.25rem 2.5rem; border-radius: 28px; background: #FFFFFF; border: 1px solid #EDF0F5; box-shadow: 0 10px 30px -5px rgba(13, 17, 25, 0.06), 0 4px 14px -2px rgba(13, 17, 25, 0.04); }
+.rx-setor-slide { flex: 0 0 82%; scroll-snap-align: center; display: flex; flex-direction: column; padding: 2.25rem 2.5rem; border-radius: 28px; background: #FFFFFF; border: 1px solid #EDF0F5; box-shadow: 0 10px 30px -5px rgba(13, 17, 25, 0.06), 0 4px 14px -2px rgba(13, 17, 25, 0.04); }
 .rx-setor-cab { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.5rem; margin-bottom: 1.75rem; border-bottom: 1px solid #EDF0F5; }
 .rx-setor-ic { display: grid; place-items: center; flex: none; width: 3.5rem; height: 3.5rem; border-radius: 16px; background: #FDF2F2; color: #D44D4D; }
 .rx-setor-ic svg { width: 1.75rem; height: 1.75rem; }
@@ -1421,9 +1413,9 @@ html body .rx-setor-col.desafios h4 { color: #5C6986; }
 .rx-setores-pos { margin: 0; min-width: 5.5rem; text-align: center; font-size: .875rem; font-weight: 600; color: #627288; font-variant-numeric: tabular-nums; }
 @media (min-width: 640px) { .rx-setores-pos { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
 @media (max-width: 639px) { .rx-setores-pontos { display: none; } }
-@media (max-width: 1023px) { .rx-setor-slide { flex-basis: 88%; padding: 1.75rem; } }
+@media (max-width: 1023px) { .rx-setores-trilha { --rx-lado: 6%; } .rx-setor-slide { flex-basis: 88%; padding: 1.75rem; } }
 @media (max-width: 639px) {
-  .rx-setores-trilha { gap: .75rem; padding-bottom: 1.25rem; }
+  .rx-setores-trilha { --rx-lado: 5%; --rx-vao: .75rem; gap: .75rem; padding-bottom: 1.25rem; }
   .rx-setor-slide { flex-basis: 90%; padding: 1.25rem; border-radius: 22px; }
   .rx-setor-ic { width: 2.75rem; height: 2.75rem; border-radius: 12px; }
   .rx-setor-ic svg { width: 1.375rem; height: 1.375rem; }
@@ -1436,3 +1428,254 @@ html body .rx-setor-col.desafios h4 { color: #5C6986; }
 
 /* Kanban "Colaborações em projetos": aviso de que os cards são exemplos ilustrativos */
 .rx-kb-nota { margin-left: auto; font-size: .6875rem; font-style: normal; font-weight: 600; letter-spacing: .04em; color: #8A96AB; white-space: nowrap; }
+
+/* Carrossel de setores: cabeçalho com foto no topo do card (computador 280px, tablet 220px, celular 180px de altura).
+   A foto ocupa toda a largura do card; nas telas mais estreitas aparece a parte central. Sem foto: faixa neutra com o ícone. */
+.rx-setor-foto { position: relative; margin: -2.25rem -2.5rem 1.75rem; height: 280px; overflow: hidden; border-radius: 27px 27px 0 0; background: #EDF0F5; }
+.rx-setor-foto img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--rx-foco, center); }
+.rx-setor-foto.sem-foto { display: grid; place-items: center; color: rgba(212, 77, 77, 0.35); background: linear-gradient(135deg, #F6F7FA 0%, #FDF2F2 100%); }
+@media (max-width: 1023px) { .rx-setor-foto { height: 220px; margin: -1.75rem -1.75rem 1.5rem; } }
+@media (max-width: 639px) { .rx-setor-foto { height: 180px; margin: -1.25rem -1.25rem 1.25rem; border-radius: 21px 21px 0 0; } }
+
+/* Ícone, título e descrição sobre a foto: faixa escura suave de baixo para cima garante a leitura em qualquer foto */
+.rx-setor-foto .rx-setor-cab { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; margin: 0; padding: 3.5rem 2.5rem 1.5rem; border: 0; background: linear-gradient(to top, rgba(13, 17, 25, 0.94) 0%, rgba(13, 17, 25, 0.76) 50%, rgba(13, 17, 25, 0) 100%); text-shadow: 0 1px 2px rgba(13, 17, 25, 0.35); }
+html body .rx-setor-foto .rx-setor-cab h3 { color: #FFFFFF; }
+.rx-setor-foto .rx-setor-cab p { color: rgba(255, 255, 255, 0.88); }
+.rx-setor-foto .rx-setor-ic { background: rgba(255, 255, 255, 0.16); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+/* sem foto (provisório): fundo escuro do design system, no mesmo formato */
+.rx-setor-foto.sem-foto { display: block; background: linear-gradient(135deg, #5C6986 0%, #283043 100%); color: inherit; }
+.rx-setor-foto.sem-foto .rx-setor-cab { background: none; }
+.rx-setor-marca { position: absolute; top: 1.5rem; right: 2rem; color: rgba(255, 255, 255, 0.14); }
+.rx-setor-marca svg { width: 7rem; height: 7rem; stroke-width: 1.25; }
+.rx-setor-foto + .rx-setor-cols, .rx-setor-foto ~ .rx-setor-cols { margin-top: 0; }
+@media (max-width: 1023px) { .rx-setor-foto .rx-setor-cab { padding: 3rem 1.75rem 1.25rem; } }
+@media (max-width: 639px) {
+  .rx-setor-foto .rx-setor-cab { padding: 2.5rem 1.25rem 1rem; gap: .75rem; }
+  .rx-setor-foto .rx-setor-cab p { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* uma linha */
+  .rx-setor-foto .rx-setor-cab > div { min-width: 0; }
+  .rx-setor-marca svg { width: 4.5rem; height: 4.5rem; }
+  .rx-setor-marca { top: 1rem; right: 1.25rem; }
+}
+
+/* Foco de cada foto nas telas estreitas (onde só uma parte da largura aparece): enquadra o rosto das pessoas */
+@media (max-width: 1023px) {
+  #setor-saude .rx-setor-foto img { --rx-foco: 30% center; }
+  #setor-hospitalidade .rx-setor-foto img { --rx-foco: 67% center; }
+  #setor-varejo .rx-setor-foto img { --rx-foco: 18% center; }
+  #setor-financeiro .rx-setor-foto img { --rx-foco: 30% center; }
+  #setor-educacao .rx-setor-foto img { --rx-foco: 60% center; }
+  #setor-mobilidade .rx-setor-foto img { --rx-foco: 30% center; }
+  #setor-imobiliario .rx-setor-foto img { --rx-foco: 20% center; }
+  #setor-industria .rx-setor-foto img { --rx-foco: 22% center; }
+  #setor-eventos .rx-setor-foto img { --rx-foco: 55% center; }
+  #setor-tecnologia .rx-setor-foto img { --rx-foco: 100% center; }
+  #setor-terceiro .rx-setor-foto img { --rx-foco: 85% center; }
+  #setor-publico .rx-setor-foto img { --rx-foco: 45% center; }
+}
+
+/* "Onde buscamos": os setores (esquerda) se ligam ao Studio (centro), que leva à experiência entregue (direita).
+   As linhas são desenhadas pelo script a partir da posição real de cada círculo; um feixe vermelho percorre cada uma. */
+.rx-beam { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 0 clamp(2.5rem, 9vw, 8rem); max-width: 56rem; margin: 3rem auto 0; padding: .5rem 0; text-align: left; }
+.rx-beam-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
+.rx-beam-col { position: relative; z-index: 1; list-style: none; margin: 0; padding: 0; display: grid; gap: .625rem; }
+.rx-beam-item { display: flex; flex-direction: row-reverse; align-items: center; gap: .75rem; text-align: right; }
+.rx-beam-no { display: grid; place-items: center; flex: none; width: 2.75rem; height: 2.75rem; border-radius: 9999px; background: #FFFFFF; color: #D44D4D; border: 1px solid #EDF0F5; box-shadow: 0 4px 14px rgba(13, 17, 25, 0.08); }
+.rx-beam-no svg { width: 1.25rem; height: 1.25rem; }
+.rx-beam-nome { font-size: .9375rem; font-weight: 600; line-height: 1.3; color: #283043; }
+.rx-beam-centro, .rx-beam-fim { position: relative; z-index: 1; display: grid; justify-items: center; gap: .75rem; }
+.rx-beam-fim { justify-self: start; }
+.rx-beam-logo { display: grid; place-items: center; width: 6rem; height: 6rem; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(212, 77, 77, 0.2); box-shadow: 0 0 0 10px rgba(212, 77, 77, 0.06), 0 10px 30px rgba(212, 77, 77, 0.18); }
+.rx-beam-logo img { width: 3rem; height: 3rem; }
+.rx-beam-no.grande { width: 4.5rem; height: 4.5rem; border-color: rgba(212, 77, 77, 0.2); }
+.rx-beam-no.grande svg { width: 2rem; height: 2rem; }
+.rx-beam-legenda { max-width: 9rem; font-size: .8125rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-align: center; line-height: 1.35; color: #D44D4D; }
+.rx-beam-base { fill: none; stroke: #E4E6EC; stroke-width: 1.5; }
+.rx-beam-feixe { fill: none; stroke: #D44D4D; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 14 86; stroke-dashoffset: 100; animation: rx-beam-corre var(--dur, 4s) linear var(--atraso, 0s) infinite; filter: drop-shadow(0 0 4px rgba(212, 77, 77, 0.55)); }
+@keyframes rx-beam-corre { from { stroke-dashoffset: 100; } to { stroke-dashoffset: -14; } }
+@media (prefers-reduced-motion: reduce) { .rx-beam-feixe { display: none; } }
+/* celular: círculos e textos menores, tudo na mesma composição */
+@media (max-width: 639px) {
+  .rx-beam { grid-template-columns: minmax(0, 1fr) auto auto; gap: 0 2.25rem; margin-top: 2rem; }
+  .rx-beam-centro .rx-beam-legenda { display: none; } /* no celular, só o logo no centro */
+  .rx-beam-col { gap: .5rem; }
+  .rx-beam-item { gap: .5rem; }
+  .rx-beam-no { width: 2.25rem; height: 2.25rem; }
+  .rx-beam-no svg { width: 1rem; height: 1rem; }
+  .rx-beam-nome { font-size: .75rem; line-height: 1.25; }
+  .rx-beam-logo { width: 4rem; height: 4rem; box-shadow: 0 0 0 6px rgba(212, 77, 77, 0.06), 0 8px 20px rgba(212, 77, 77, 0.18); }
+  .rx-beam-logo img { width: 2rem; height: 2rem; }
+  .rx-beam-no.grande { width: 3.25rem; height: 3.25rem; }
+  .rx-beam-no.grande svg { width: 1.5rem; height: 1.5rem; }
+  .rx-beam-legenda { font-size: .625rem; max-width: 5rem; }
+}
+
+/* "Onde buscamos": versão mais compacta */
+.rx-beam { max-width: 44rem; gap: 0 clamp(2rem, 7vw, 5.5rem); margin-top: 2.25rem; }
+.rx-beam-col { gap: .375rem; }
+.rx-beam-item { gap: .625rem; }
+.rx-beam-no { width: 2.125rem; height: 2.125rem; box-shadow: 0 2px 8px rgba(13, 17, 25, 0.07); }
+.rx-beam-no svg { width: 1rem; height: 1rem; }
+.rx-beam-nome { font-size: .8125rem; line-height: 1.25; }
+.rx-beam-logo { width: 4.5rem; height: 4.5rem; box-shadow: 0 0 0 7px rgba(212, 77, 77, 0.06), 0 8px 22px rgba(212, 77, 77, 0.16); }
+.rx-beam-logo img { width: 2.25rem; height: 2.25rem; }
+.rx-beam-no.grande { width: 3.25rem; height: 3.25rem; }
+.rx-beam-no.grande svg { width: 1.5rem; height: 1.5rem; }
+.rx-beam-legenda { font-size: .6875rem; max-width: 8rem; }
+.rx-beam-centro, .rx-beam-fim { gap: .5rem; }
+@media (max-width: 639px) {
+  .rx-beam { gap: 0 1.75rem; margin-top: 1.75rem; padding-left: .25rem; padding-right: .25rem; }
+  .rx-beam-nome { max-width: 9.5rem; }
+  .rx-beam-col { gap: .25rem; }
+  .rx-beam-item { gap: .4375rem; }
+  .rx-beam-no { width: 1.875rem; height: 1.875rem; }
+  .rx-beam-no svg { width: .875rem; height: .875rem; }
+  .rx-beam-nome { font-size: .6875rem; }
+  .rx-beam-logo { width: 3.25rem; height: 3.25rem; box-shadow: 0 0 0 5px rgba(212, 77, 77, 0.06), 0 6px 16px rgba(212, 77, 77, 0.16); }
+  .rx-beam-logo img { width: 1.625rem; height: 1.625rem; }
+  .rx-beam-no.grande { width: 2.625rem; height: 2.625rem; }
+  .rx-beam-no.grande svg { width: 1.25rem; height: 1.25rem; }
+  .rx-beam-legenda { font-size: .5625rem; max-width: 4.5rem; }
+}
+
+/* "Onde buscamos": 6 setores de cada lado do Studio (lado direito com o ícone antes do nome) */
+.rx-beam { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); max-width: 40rem; }
+.rx-beam-col { gap: .875rem; }
+.rx-beam-col.dir .rx-beam-item { flex-direction: row; text-align: left; }
+@media (max-width: 639px) {
+  .rx-beam { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0 1.5rem; }
+  .rx-beam-col { gap: .75rem; }
+  .rx-beam-centro .rx-beam-legenda { display: block; }
+}
+/* telas bem estreitas (ex.: iPhone SE): menos espaço entre as colunas e nomes um pouco menores */
+@media (max-width: 374px) {
+  .rx-beam { gap: 0 .875rem; }
+  .rx-beam-item { gap: .3125rem; }
+  .rx-beam-nome { font-size: .625rem; white-space: nowrap; }
+  .rx-beam-no { width: 1.625rem; height: 1.625rem; }
+  .rx-beam-logo { width: 2.75rem; height: 2.75rem; }
+  .rx-beam-logo img { width: 1.375rem; height: 1.375rem; }
+  .rx-beam-legenda { font-size: .5rem; max-width: 4rem; }
+}
+
+/* "Onde buscamos": texto à esquerda e os 12 setores em anel ao redor do Studio à direita.
+   Um ponto de luz percorre o anel devagar. No celular, o texto fica em cima e o anel embaixo. */
+.rx-onde { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 30rem); align-items: center; gap: 3rem; margin-top: 5rem; }
+html body .rx-onde .rx-onde-cab { margin: 0; max-width: none; text-align: left; }
+html body .rx-onde .rx-onde-cab h2 { text-align: left !important; margin-left: 0 !important; }
+html body .rx-onde .rx-onde-cab .rp-texto { text-align: left !important; margin: 1rem 0 0 !important; }
+.rx-anel { --r: 41%; container-type: inline-size; position: relative; width: 100%; max-width: 30rem; aspect-ratio: 1; margin: 0 auto 1.5rem; }
+.rx-anel-trilha { position: absolute; inset: calc(50% - var(--r)); border-radius: 9999px; border: 1.5px solid #E4E6EC; animation: rx-anel-gira 18s linear infinite; }
+.rx-anel-trilha i { position: absolute; top: -5px; left: calc(50% - 5px); width: 10px; height: 10px; border-radius: 9999px; background: #D44D4D; box-shadow: 0 0 10px 3px rgba(212, 77, 77, 0.45); }
+@keyframes rx-anel-gira { to { transform: rotate(360deg); } }
+.rx-anel-centro { position: absolute; left: 50%; top: 50%; width: 30%; aspect-ratio: 1; transform: translate(-50%, -50%); display: grid; place-items: center; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(212, 77, 77, 0.18); box-shadow: 0 0 0 12px rgba(212, 77, 77, 0.05), 0 14px 40px rgba(212, 77, 77, 0.16); }
+.rx-anel-centro img { width: 48%; height: auto; }
+.rx-anel-lista { list-style: none; margin: 0; padding: 0; }
+.rx-anel-item { position: absolute; left: 50%; top: 50%; display: grid; justify-items: center; gap: .3125rem; width: 6.5rem; margin-left: -3.25rem; margin-top: -1.5rem;
+  transform: rotate(calc(var(--i) * 360deg / var(--n) - 90deg)) translateX(41cqw) rotate(calc(90deg - var(--i) * 360deg / var(--n))); }
+.rx-anel-no { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 9999px; background: #FFFFFF; color: #D44D4D; border: 1px solid #EDF0F5; box-shadow: 0 6px 18px rgba(13, 17, 25, 0.08); transition: transform .2s ease; }
+.rx-anel-no svg { width: 1.25rem; height: 1.25rem; }
+.rx-anel-item:hover .rx-anel-no { transform: scale(1.08); }
+.rx-anel-nome { font-size: .75rem; font-weight: 600; line-height: 1.2; color: #283043; text-align: center; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .rx-anel-trilha { animation: none; } }
+@media (max-width: 1023px) {
+  .rx-onde { grid-template-columns: minmax(0, 1fr); gap: 2rem; margin-top: 3.5rem; }
+  html body .rx-onde .rx-onde-cab, html body .rx-onde .rx-onde-cab h2, html body .rx-onde .rx-onde-cab .rp-texto { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }
+}
+@media (max-width: 639px) {
+  .rx-anel-item { width: 5rem; margin-left: -2.5rem; margin-top: -1.125rem; gap: .25rem; }
+  .rx-anel-no { width: 2.25rem; height: 2.25rem; }
+  .rx-anel-no svg { width: 1rem; height: 1rem; }
+  .rx-anel-nome { font-size: .625rem; }
+  .rx-anel-centro { box-shadow: 0 0 0 7px rgba(212, 77, 77, 0.05), 0 10px 26px rgba(212, 77, 77, 0.16); }
+}
+@media (max-width: 374px) {
+  .rx-anel-no { width: 1.875rem; height: 1.875rem; }
+  .rx-anel-no svg { width: .875rem; height: .875rem; }
+  .rx-anel-nome { font-size: .5625rem; }
+  .rx-anel-item { margin-top: -.9375rem; }
+}
+
+/* "Onde buscamos": esfera com padrão de circuito girando devagar, o Studio no centro e alguns setores flutuando ao redor.
+   Computador: esfera à esquerda e texto à direita. Celular e tablet: texto em cima e esfera embaixo. */
+.rx-onde { grid-template-columns: minmax(0, 30rem) minmax(0, 1fr); gap: 4rem; }
+.rx-esfera { position: relative; width: 100%; max-width: 30rem; aspect-ratio: 1; margin: 0 auto; }
+.rx-esfera-circuito { position: absolute; inset: 0; width: 100%; height: 100%; animation: rx-esfera-gira 80s linear infinite; }
+@keyframes rx-esfera-gira { to { transform: rotate(360deg); } }
+.rx-esfera-centro { position: absolute; left: 50%; top: 50%; width: 28%; aspect-ratio: 1; transform: translate(-50%, -50%); display: grid; place-items: center; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 18px 50px rgba(13, 17, 25, 0.10), 0 4px 12px rgba(13, 17, 25, 0.05); }
+.rx-esfera-centro img { width: 48%; height: auto; }
+.rx-esfera-bolhas { list-style: none; margin: 0; padding: 0; }
+.rx-esfera-bolha { position: absolute; display: grid; place-items: center; width: 16%; aspect-ratio: 1; border-radius: 9999px; background: #FFFFFF; color: #D44D4D; border: 4px solid #FFFFFF; box-shadow: 0 12px 30px rgba(13, 17, 25, 0.12); animation: rx-esfera-flutua 6s ease-in-out infinite; }
+.rx-esfera-bolha svg { width: 42%; height: 42%; }
+/* posições ao redor da borda da esfera e atrasos diferentes na flutuação */
+.rx-esfera-bolha.b1 { left: 24%; top: 7%; animation-delay: 0s; }
+.rx-esfera-bolha.b2 { left: 78%; top: 18%; width: 13%; animation-delay: -1.2s; }
+.rx-esfera-bolha.b3 { left: 86%; top: 52%; width: 12%; animation-delay: -2.4s; }
+.rx-esfera-bolha.b4 { left: 66%; top: 78%; animation-delay: -3.6s; }
+.rx-esfera-bolha.b5 { left: 10%; top: 70%; width: 13%; animation-delay: -4.8s; }
+.rx-esfera-bolha.b6 { left: -2%; top: 34%; width: 12%; animation-delay: -0.6s; }
+@keyframes rx-esfera-flutua { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(4px, -10px); } 66% { transform: translate(-5px, 6px); } }
+@media (prefers-reduced-motion: reduce) { .rx-esfera-circuito, .rx-esfera-bolha { animation: none; } }
+@media (max-width: 1023px) {
+  .rx-onde { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .rx-onde .rx-onde-cab { order: -1; }
+  .rx-esfera { max-width: 22rem; }
+}
+.rx-esfera .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* "Onde buscamos": ecossistema. Desenho em 1536×1024 (SVG) com textos sobrepostos em %; os tamanhos acompanham a largura (cqw).
+   Computador: tudo. Celular e tablet: só a roda (recorte central) e os setores em lista embaixo. */
+.rx-onde.eco { display: block; margin-top: 0; }
+html body .rx-onde.eco .rx-onde-cab { text-align: center; max-width: 44rem; margin: 0 auto; }
+html body .rx-onde.eco .rx-onde-cab h2, html body .rx-onde.eco .rx-onde-cab .rp-texto { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }
+.rx-eco { position: relative; width: 100%; max-width: 72rem; margin: 2.5rem auto 0; aspect-ratio: 1536 / 1024; overflow: hidden; }
+.rx-eco-palco { position: absolute; left: 0; top: 0; width: 100%; aspect-ratio: 1536 / 1024; container-type: inline-size; }
+.rx-eco-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.rx-eco ul { list-style: none; margin: 0; padding: 0; }
+.rx-eco-esp, .rx-eco-setor, .rx-eco-centro { position: absolute; transform: translate(-50%, -50%); }
+.rx-eco-esp { display: grid; justify-items: center; gap: .6cqw; width: 12cqw; text-align: center; font-size: 1.3cqw; font-weight: 600; line-height: 1.2; color: #131A27; }
+.rx-eco-esp svg { width: 2.7cqw; height: 2.7cqw; color: #D44D4D; }
+.rx-eco-centro { display: grid; justify-items: center; align-content: center; gap: .6cqw; width: 18.2cqw; aspect-ratio: 1; border-radius: 9999px; background: radial-gradient(circle at 50% 35%, #FFFFFF 0%, #FBF7F7 100%); box-shadow: 0 0 0 1px rgba(212, 77, 77, 0.12), 0 1.2cqw 3cqw rgba(212, 77, 77, 0.18); text-align: center; }
+.rx-eco-centro svg { width: 3.4cqw; height: 3.4cqw; color: #D44D4D; }
+.rx-eco-centro p { margin: 0; max-width: 15cqw; font-size: 1.9cqw; font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: #131A27; }
+.rx-eco-centro strong { color: #D44D4D; }
+.rx-eco-setor { display: flex; align-items: center; gap: 1.3cqw; padding: 1.1cqw 2.2cqw 1.1cqw 1.8cqw; white-space: nowrap; border-radius: 9999px; background: rgba(255, 255, 255, 0.92); border: 1px solid #EDF0F5; box-shadow: 0 .8cqw 2.2cqw rgba(13, 17, 25, 0.07); font-size: 1.3cqw; font-weight: 600; line-height: 1.25; color: #131A27; }
+.rx-eco-setor svg { flex: none; width: 2.6cqw; height: 2.6cqw; color: #D44D4D; }
+.rx-eco-lista { display: none; }
+/* celular e tablet: recorte da roda (centro 768,540; raio 390) e setores em lista */
+@media (max-width: 1023px) {
+  .rx-eco { max-width: 30rem; aspect-ratio: 1; margin-top: 2rem; }
+  .rx-eco-palco { width: 196.92%; left: -48.46%; top: -19.23%; }
+  .rx-eco-setores, .rx-eco-con { display: none; }
+  .rx-eco-lista { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; max-width: 30rem; margin: 1.5rem auto 0; padding: 0; list-style: none; }
+  .rx-eco-lista li { display: flex; align-items: center; gap: .5rem; padding: .5rem .75rem; border-radius: 9999px; background: #FFFFFF; border: 1px solid #EDF0F5; box-shadow: 0 2px 8px rgba(13, 17, 25, 0.05); font-size: .8125rem; font-weight: 600; line-height: 1.25; color: #131A27; }
+  .rx-eco-lista svg { flex: none; width: 1.125rem; height: 1.125rem; color: #D44D4D; }
+}
+/* etiquetas de setor no tamanho da referência (encostam no ponto do anel) */
+.rx-eco-setor { justify-content: center; gap: 1.6cqw; min-width: 15.5cqw; min-height: 5.3cqw; padding: 1.2cqw 2.4cqw; font-size: 1.42cqw; box-shadow: 0 .6cqw 1.8cqw rgba(13, 17, 25, 0.07); }
+.rx-eco-setor svg { width: 2.9cqw; height: 2.9cqw; }
+.rx-eco-esp { font-size: 1.42cqw; }
+.rx-eco-esp svg { width: 3cqw; height: 3cqw; }
+/* computador: a etiqueta de baixo (Tecnologia) fica à mesma distância do anel que a de cima (Saúde) */
+@media (min-width: 1024px) { .rx-eco { overflow: visible; margin-bottom: 2.5rem; } }
+
+/* Ecossistema: animações. Entrada (com JavaScript): primeiro o núcleo, depois as pétalas uma a uma e, por fim, os setores
+   um a um em sentido anti-horário a partir de Saúde.
+   Contínuas: luz percorrendo o anel, pontos pulsando e brilho do centro. */
+.rx-eco-luz { animation: rx-eco-gira 14s linear infinite; }
+@keyframes rx-eco-gira { to { transform: rotate(360deg); } }
+.rx-eco-ponto { animation: rx-eco-pulsa 3s ease-in-out infinite; animation-delay: calc(var(--i) * -0.25s); }
+@keyframes rx-eco-pulsa { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.35); } }
+.rx-eco-brilho { animation: rx-eco-respira 5s ease-in-out infinite; }
+@keyframes rx-eco-respira { 0%, 100% { opacity: .75; transform: scale(.96); } 50% { opacity: 1; transform: scale(1.04); } }
+/* estado inicial (sem transição, para já começar escondido) */
+.rx-eco.anima .rx-eco-petala, .rx-eco.anima .rx-eco-esp, .rx-eco.anima .rx-eco-setor, .rx-eco.anima .rx-eco-con, .rx-eco.anima .rx-eco-centro { opacity: 0; transition: none; }
+.rx-eco.anima .rx-eco-petala { transform: scale(.82); }
+.rx-eco.anima .rx-eco-centro { transform: translate(-50%, -50%) scale(.6); }
+.rx-eco.anima .rx-eco-setor { transform: translate(-50%, -50%) translateY(10px); }
+/* entrada: 1º o núcleo, 2º as pétalas (com os nomes), 3º os setores em sentido anti-horário a partir de Saúde */
+.rx-eco.anima.visivel .rx-eco-centro { opacity: 1; transform: translate(-50%, -50%); transition: opacity .6s ease .1s, transform .8s cubic-bezier(0.16, 1, 0.3, 1) .1s; }
+.rx-eco.anima.visivel .rx-eco-petala { opacity: 1; transform: none; transition: opacity .6s ease, transform .7s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(.7s + var(--i) * .09s); }
+.rx-eco.anima.visivel .rx-eco-esp { opacity: 1; transition: opacity .5s ease; transition-delay: calc(.95s + var(--i) * .09s); }
+.rx-eco.anima.visivel .rx-eco-setor { opacity: 1; transform: translate(-50%, -50%); transition: opacity .5s ease, transform .6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(1.9s + var(--j) * .12s); }
+.rx-eco.anima.visivel .rx-eco-con { opacity: 1; transition: opacity .5s ease; transition-delay: calc(1.9s + var(--j) * .12s); }
+@media (prefers-reduced-motion: reduce) { .rx-eco-luz, .rx-eco-ponto, .rx-eco-brilho { animation: none; } }

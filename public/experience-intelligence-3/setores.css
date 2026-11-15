@@ -1,0 +1,94 @@
+/* Carrossel de setores (mesmo componente da página Seja Parceiro), usado na seção "Onde a experiência faz diferença".
+   Copiado de src/rede-parceiros-inicio.css; as fotos vêm de /rede-parceiros/setores/. */
+/* "Onde buscamos": carrossel com um card largo por setor. A pessoa navega pelas setas, pelos pontos ou deslizando;
+   no computador, um pedaço do próximo card aparece para indicar que há mais. */
+.rx-setores { margin-top: 2.5rem; text-align: left; width: 100%; min-width: 0; box-sizing: border-box; }
+.rx-setores-trilha { width: 100%; box-sizing: border-box; }
+.rx-setores-trilha { --rx-lado: 9%; list-style: none; margin: 0; padding: .25rem 0 1.5rem; display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-x: contain; }
+.rx-setores-trilha::-webkit-scrollbar { display: none; }
+/* espaçadores: o primeiro e o último card também param no centro */
+.rx-setores-trilha::before, .rx-setores-trilha::after { content: ""; flex: 0 0 calc(var(--rx-lado) - var(--rx-vao, 1.25rem)); }
+.rx-setores-trilha:focus-visible { outline: 2px solid #D44D4D; outline-offset: 4px; border-radius: 28px; }
+.rx-setor-slide { flex: 0 0 82%; scroll-snap-align: center; display: flex; flex-direction: column; padding: 2.25rem 2.5rem; border-radius: 28px; background: #FFFFFF; border: 1px solid #EDF0F5; box-shadow: 0 10px 30px -5px rgba(13, 17, 25, 0.06), 0 4px 14px -2px rgba(13, 17, 25, 0.04); }
+.rx-setor-cab { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.5rem; margin-bottom: 1.75rem; border-bottom: 1px solid #EDF0F5; }
+.rx-setor-ic { display: grid; place-items: center; flex: none; width: 3.5rem; height: 3.5rem; border-radius: 16px; background: #FDF2F2; color: #D44D4D; }
+.rx-setor-ic svg { width: 1.75rem; height: 1.75rem; }
+html body .rx-setor-cab h3 { margin: 0; font-size: 1.625rem; font-weight: 700; letter-spacing: -0.02em; color: #131A27; }
+.rx-setor-cab p { margin: .25rem 0 0; font-size: 1rem; line-height: 1.5; color: #627288; }
+.rx-setor-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 3rem; }
+html body .rx-setor-col h4 { margin: 0 0 1rem; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #D44D4D; }
+html body .rx-setor-col.desafios h4 { color: #5C6986; }
+.rx-setor-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+.rx-setor-col li { display: flex; gap: .625rem; align-items: flex-start; font-size: 1rem; line-height: 1.5; color: #283043; }
+.rx-setor-col li svg { flex: none; width: 1.125rem; height: 1.125rem; margin-top: .25rem; color: #D44D4D; }
+.rx-setor-col.desafios li svg { color: #5C6986; }
+.rx-setores-ctrl { display: flex; align-items: center; justify-content: center; gap: .75rem; }
+.rx-setores-seta { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 9999px; border: 1px solid #D6DCE6; background: #FFFFFF; color: #283043; cursor: pointer; transition: background-color .2s ease, border-color .2s ease, color .2s ease; }
+.rx-setores-seta svg { width: 1.125rem; height: 1.125rem; }
+.rx-setores-seta:hover { border-color: rgba(212, 77, 77, 0.4); color: #D44D4D; }
+.rx-setores-seta.proximo { background: #D44D4D; border-color: #D44D4D; color: #FFFFFF; }
+.rx-setores-seta.proximo:hover { background: #B82828; border-color: #B82828; color: #FFFFFF; }
+.rx-setores-seta:focus-visible { outline: 2px solid #D44D4D; outline-offset: 2px; }
+.rx-setores-pontos { display: flex; align-items: center; gap: .375rem; padding: 0 .25rem; }
+.rx-setores-pontos button { width: .5rem; height: .5rem; padding: 0; border: 0; border-radius: 9999px; background: #CBD4E1; cursor: pointer; transition: width .25s ease, background-color .25s ease; }
+.rx-setores-pontos button[aria-current="true"] { width: 1.5rem; background: #D44D4D; }
+.rx-setores-pos { margin: 0; min-width: 5.5rem; text-align: center; font-size: .875rem; font-weight: 600; color: #627288; font-variant-numeric: tabular-nums; }
+@media (min-width: 640px) { .rx-setores-pos { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
+@media (max-width: 639px) { .rx-setores-pontos { display: none; } }
+@media (max-width: 1023px) { .rx-setores-trilha { --rx-lado: 6%; } .rx-setor-slide { flex-basis: 88%; padding: 1.75rem; } }
+@media (max-width: 639px) {
+  .rx-setores-trilha { --rx-lado: 5%; --rx-vao: .75rem; gap: .75rem; padding-bottom: 1.25rem; }
+  .rx-setor-slide { flex-basis: 90%; padding: 1.25rem; border-radius: 22px; }
+  .rx-setor-ic { width: 2.75rem; height: 2.75rem; border-radius: 12px; }
+  .rx-setor-ic svg { width: 1.375rem; height: 1.375rem; }
+  html body .rx-setor-cab h3 { font-size: 1.1875rem; }
+  .rx-setor-cab p { font-size: .875rem; }
+  .rx-setor-cols { grid-template-columns: minmax(0, 1fr); }
+  .rx-setor-col li { font-size: .9375rem; }
+}
+@media (prefers-reduced-motion: reduce) { .rx-setores-trilha { scroll-behavior: auto; } .rx-setores-pontos button { transition: none; } }
+
+
+/* Carrossel de setores: cabeçalho com foto no topo do card (computador 280px, tablet 220px, celular 180px de altura).
+   A foto ocupa toda a largura do card; nas telas mais estreitas aparece a parte central. Sem foto: faixa neutra com o ícone. */
+.rx-setor-foto { position: relative; margin: -2.25rem -2.5rem 1.75rem; height: 280px; overflow: hidden; border-radius: 27px 27px 0 0; background: #EDF0F5; }
+.rx-setor-foto img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--rx-foco, center); }
+.rx-setor-foto.sem-foto { display: grid; place-items: center; color: rgba(212, 77, 77, 0.35); background: linear-gradient(135deg, #F6F7FA 0%, #FDF2F2 100%); }
+@media (max-width: 1023px) { .rx-setor-foto { height: 220px; margin: -1.75rem -1.75rem 1.5rem; } }
+@media (max-width: 639px) { .rx-setor-foto { height: 180px; margin: -1.25rem -1.25rem 1.25rem; border-radius: 21px 21px 0 0; } }
+
+/* Ícone, título e descrição sobre a foto: faixa escura suave de baixo para cima garante a leitura em qualquer foto */
+.rx-setor-foto .rx-setor-cab { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; margin: 0; padding: 3.5rem 2.5rem 1.5rem; border: 0; background: linear-gradient(to top, rgba(13, 17, 25, 0.94) 0%, rgba(13, 17, 25, 0.76) 50%, rgba(13, 17, 25, 0) 100%); text-shadow: 0 1px 2px rgba(13, 17, 25, 0.35); }
+html body .rx-setor-foto .rx-setor-cab h3 { color: #FFFFFF; }
+.rx-setor-foto .rx-setor-cab p { color: rgba(255, 255, 255, 0.88); }
+.rx-setor-foto .rx-setor-ic { background: rgba(255, 255, 255, 0.16); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+/* sem foto (provisório): fundo escuro do design system, no mesmo formato */
+.rx-setor-foto.sem-foto { display: block; background: linear-gradient(135deg, #5C6986 0%, #283043 100%); color: inherit; }
+.rx-setor-foto.sem-foto .rx-setor-cab { background: none; }
+.rx-setor-marca { position: absolute; top: 1.5rem; right: 2rem; color: rgba(255, 255, 255, 0.14); }
+.rx-setor-marca svg { width: 7rem; height: 7rem; stroke-width: 1.25; }
+.rx-setor-foto + .rx-setor-cols, .rx-setor-foto ~ .rx-setor-cols { margin-top: 0; }
+@media (max-width: 1023px) { .rx-setor-foto .rx-setor-cab { padding: 3rem 1.75rem 1.25rem; } }
+@media (max-width: 639px) {
+  .rx-setor-foto .rx-setor-cab { padding: 2.5rem 1.25rem 1rem; gap: .75rem; }
+  .rx-setor-foto .rx-setor-cab p { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* uma linha */
+  .rx-setor-foto .rx-setor-cab > div { min-width: 0; }
+  .rx-setor-marca svg { width: 4.5rem; height: 4.5rem; }
+  .rx-setor-marca { top: 1rem; right: 1.25rem; }
+}
+
+/* Foco de cada foto nas telas estreitas (onde só uma parte da largura aparece): enquadra o rosto das pessoas */
+@media (max-width: 1023px) {
+  #setor-saude .rx-setor-foto img { --rx-foco: 30% center; }
+  #setor-hospitalidade .rx-setor-foto img { --rx-foco: 67% center; }
+  #setor-varejo .rx-setor-foto img { --rx-foco: 18% center; }
+  #setor-financeiro .rx-setor-foto img { --rx-foco: 30% center; }
+  #setor-educacao .rx-setor-foto img { --rx-foco: 60% center; }
+  #setor-mobilidade .rx-setor-foto img { --rx-foco: 30% center; }
+  #setor-imobiliario .rx-setor-foto img { --rx-foco: 20% center; }
+  #setor-industria .rx-setor-foto img { --rx-foco: 22% center; }
+  #setor-eventos .rx-setor-foto img { --rx-foco: 55% center; }
+  #setor-tecnologia .rx-setor-foto img { --rx-foco: 100% center; }
+  #setor-terceiro .rx-setor-foto img { --rx-foco: 85% center; }
+  #setor-publico .rx-setor-foto img { --rx-foco: 45% center; }
+}
