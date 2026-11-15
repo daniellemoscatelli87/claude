@@ -45,6 +45,19 @@
   .aceite input { flex: none; width: 1.125rem; height: 1.125rem; margin: .1875rem 0 0; accent-color: #D44D4D; }
   .aceite.invalido { border-color: #D44D4D; background: #FDF2F2; }
   .aceite-nota { margin: .75rem 0 0; font-size: .8125rem; color: #627288; }
+  /* link "termos" (abre a modal com o texto do termo) */
+  .link-termo { display: inline; min-height: 0; padding: 0; border: 0; background: none; font: inherit; font-weight: 600; color: #D44D4D; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+  .link-termo:hover { color: #B82828; }
+  .link-termo:focus-visible { outline: 2px solid #D44D4D; outline-offset: 2px; border-radius: 4px; }
+  .modal-termo { width: min(34rem, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 1.5rem; border: 0; border-radius: 24px; background: #FFFFFF; color: #131A27; box-shadow: 0 24px 64px rgba(13, 17, 25, 0.24); overflow-y: auto; }
+  .modal-termo::backdrop { background: rgba(13, 17, 25, 0.5); }
+  .mt-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+  .mt-topo h2 { margin: 0; font-size: 1.125rem; line-height: 1.35; }
+  .mt-x { flex: none; width: 40px; min-height: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: #F6F7FA; color: #283043; }
+  .mt-x:hover { background: #EDF0F5; }
+  .mt-x svg { width: 20px; height: 20px; }
+  .modal-termo .termo { margin: 0 0 1.25rem; }
+  .mt-acoes { display: flex; justify-content: flex-end; }
   button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.5rem; border-radius: 9999px; font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; }
   .sim { border: 0; background: #D44D4D; color: #FFFFFF; }
   .sim:hover { background: #B82828; }
@@ -90,14 +103,13 @@
   .pequeno { min-height: 44px; font-size: .9375rem; padding: 0 1.25rem; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
   .li-campo { display: grid; gap: .5rem; margin-bottom: 1rem; }
-  .li-ver { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem .75rem; padding: .625rem .625rem .625rem 1rem; border: 1px solid #D6DCE6; border-radius: 12px; }
-  .li-ver a { min-width: 0; overflow-wrap: anywhere; font-size: .9375rem; }
-  .li-ver a { flex: 1 1 10rem; }
-  .li-ver .nao { min-height: 36px; padding: 0 .875rem; font-size: .875rem; }
   .status { margin: 0 0 1.25rem; padding: .875rem 1rem; border-radius: 14px; font-size: .9375rem; line-height: 1.5; }
   .status.ok { background: rgba(79, 181, 123, 0.12); color: #1F6B3A; }
   .status.no { background: #EDF0F5; color: #283043; }
   .erro { margin: 1rem 0 0; color: #B82828; font-size: .9375rem; }
+  /* feedback da foto, logo abaixo do campo */
+  .foto-erro { display: flex; align-items: flex-start; gap: .5rem; margin: .75rem 0 0; color: #B82828; font-size: .875rem; line-height: 1.45; }
+  .foto-erro svg { width: 1.125rem; height: 1.125rem; flex: none; margin-top: .05rem; }
   a { color: #D44D4D; font-weight: 600; text-underline-offset: 4px; }
   .enviado { display: grid; justify-items: center; gap: .25rem; margin-top: .5rem; padding: 0; border: 0; background: transparent; text-align: center; }
   .enviado:focus { outline: none; }
@@ -109,6 +121,11 @@
   .enviado-botao { display: inline-flex; align-items: center; min-height: 48px; margin-top: .5rem; padding: 0 1.75rem; border-radius: 9999px; background: #D44D4D; color: #FFFFFF !important; font-weight: 600; text-decoration: none; }
   .enviado-botao:hover { background: #B82828; }
   [hidden] { display: none !important; }
+  /* Skeleton do Design System: bloco --muted (#E8EDF3), raio 8px, pulso (animate-pulse) */
+  .sk-b { background: #E8EDF3; border-radius: 8px; animation: sk-pulso 2s cubic-bezier(.4, 0, .6, 1) infinite; }
+  .sk-card { width: 100%; }
+  @keyframes sk-pulso { 50% { opacity: .5; } }
+  @media (prefers-reduced-motion: reduce) { .sk-b { animation: none; } }
 </style>
 </head>
 <body>
@@ -117,7 +134,27 @@
   <p class="selo">Galeria de profissionais</p>
   <h1>Seu perfil na galeria da rede</h1>
   <p class="lead">Veja como o seu perfil profissional vai aparecer no site e decida se autoriza a exibição.</p>
-  <p id="carregando" class="lead" role="status">Carregando…</p>
+  <!-- Skeleton (Design System: Feedback > Skeleton Loading) enquanto os dados do perfil carregam -->
+  <div id="carregando" class="sk" role="status" aria-busy="true">
+    <span class="sr-only">Carregando…</span>
+    <div class="sk-b" style="height:1.1rem;width:9.5rem;margin:1.75rem 0 1rem"></div>
+    <div class="sk-b" style="height:.9rem;width:7rem"></div>
+    <div class="sk-b" style="height:.75rem;width:60%;margin-top:.5rem"></div>
+    <div class="sk-b" style="height:3rem;width:100%;margin-top:.75rem"></div>
+    <div class="sk-b" style="height:.9rem;width:9rem;margin-top:1.5rem"></div>
+    <div class="sk-b" style="height:.75rem;width:50%;margin-top:.5rem"></div>
+    <div class="sk-b" style="height:3rem;width:100%;margin-top:.75rem"></div>
+    <div class="sk-b" style="height:.9rem;width:5rem;margin-top:1.5rem"></div>
+    <div class="sk-b" style="height:3rem;width:9.5rem;margin-top:.75rem;border-radius:999px"></div>
+    <div class="sk-b" style="height:1.1rem;width:10rem;margin:2rem 0 1rem"></div>
+    <div class="card sk-card">
+      <div class="sk-b" style="height:6rem;width:6rem;border-radius:50%"></div>
+      <div class="sk-b" style="height:1.1rem;width:70%;margin-top:1.25rem"></div>
+      <div class="sk-b" style="height:.9rem;width:45%;margin-top:.6rem"></div>
+      <div class="sk-b" style="height:.8rem;width:25%;margin-top:.6rem"></div>
+      <div style="display:flex;gap:.375rem;margin-top:1rem"><div class="sk-b" style="height:1.5rem;width:5rem;border-radius:999px"></div><div class="sk-b" style="height:1.5rem;width:4rem;border-radius:999px"></div></div>
+    </div>
+  </div>
   <p class="erro" id="erro-geral" role="alert" hidden></p>
 
   <div id="conteudo" hidden>
@@ -126,11 +163,10 @@
     <label class="esp-campo">Especialidade<small>Sugerida a partir do seu cadastro. Se preferir, altere. Até 80 caracteres.</small><input type="text" id="especialidade" maxlength="80"></label>
     <div class="li-campo">
       <span class="foto-rot">Link do seu LinkedIn<small>Informado no seu cadastro. Se precisar, altere.</small></span>
-      <div class="li-ver" id="li-ver" hidden><a id="li-link" href="#" target="_blank" rel="noopener noreferrer"></a><button type="button" class="nao pequeno" id="li-alterar">Alterar</button></div>
-      <label id="li-editar" style="margin:0" hidden><span class="sr-only">Link do seu LinkedIn</span><input type="url" id="linkedin" maxlength="300" placeholder="https://www.linkedin.com/in/seu-perfil" autocomplete="url"></label>
+      <label id="li-editar" style="margin:0"><span class="sr-only">Link do seu LinkedIn</span><input type="url" id="linkedin" maxlength="300" placeholder="https://www.linkedin.com/in/seu-perfil" autocomplete="url"></label>
     </div>
     <div class="foto-campo">
-      <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP. Depois de escolher, ajuste o enquadramento.</small></span>
+      <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP, até 15 MB. Depois de escolher, ajuste o enquadramento.</small></span>
       <div class="foto-acoes">
         <label class="botao-arquivo" id="foto-enviar" for="foto-arquivo"><span>Enviar foto</span></label>
         <input type="file" id="foto-arquivo" accept="image/jpeg,image/png,image/webp" class="sr-only">
@@ -141,6 +177,7 @@
           <button type="button" class="ic-btn" id="foto-remover" title="Excluir foto"><span class="sr-only">Excluir foto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
         </div>
       </div>
+      <p class="foto-erro" id="foto-erro" role="alert" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg><span id="foto-erro-txt"></span></p>
       <div class="recorte" id="recorte" hidden>
         <p class="recorte-dica">Arraste a foto para enquadrar o rosto no círculo e use o zoom se precisar.</p>
         <div class="recorte-area" id="rec-area" tabindex="0" aria-label="Área de recorte da foto. Use as setas do teclado para mover."><img id="rec-img" alt="" draggable="false"></div>
@@ -159,15 +196,20 @@
     </div>
     <p class="nota">É assim que o seu perfil vai aparecer no site <a href="https://www.danimoscatelli.com.br/rede-parceiros/" target="_blank" rel="noopener">www.danimoscatelli.com.br/rede-parceiros</a></p>
 
-    <h2>Autorização</h2>
-    <p class="termo" id="termo"></p>
-    <label class="aceite" id="aceite-box" hidden><input type="checkbox" id="aceite"><span>Autorizo a exibição do meu perfil na Galeria de Profissionais, conforme o termo acima.</span></label>
+    <h2 id="aut-tit" hidden>Autorização</h2>
+    <label class="aceite" id="aceite-box" hidden><input type="checkbox" id="aceite"><span>Autorizo a exibição do meu perfil na Galeria de Profissionais, conforme os <button type="button" class="link-termo" data-termo>termos</button>.</span></label>
     <div class="acoes">
       <button type="button" class="sim" id="enviar">Enviar perfil</button>
     </div>
-    <p class="aceite-nota">Ao enviar, você concorda com a exibição do seu perfil na Galeria de Profissionais do site.</p>
+    <p class="aceite-nota">Ao enviar, você concorda com a exibição do seu perfil na Galeria de Profissionais do site, conforme os <button type="button" class="link-termo" data-termo>termos</button>.</p>
     <p class="erro" id="erro" role="alert" hidden></p>
   </div>
+  <!-- Termos da galeria em modal: abre pelo link "termos" -->
+  <dialog class="modal-termo" id="modal-termo" aria-labelledby="modal-termo-tit">
+    <div class="mt-topo"><h2 id="modal-termo-tit">Termos da Galeria de Profissionais</h2><button type="button" class="mt-x" id="modal-termo-x" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+    <p class="termo" id="termo"></p>
+    <div class="mt-acoes"><button type="button" class="sim pequeno" id="modal-termo-ok">Fechar</button></div>
+  </dialog>
   <section class="enviado" id="enviado" hidden aria-label="Perfil enviado com sucesso!" tabindex="-1">
     <img class="enviado-foto" src="/rede-parceiros/galeria/dani-positivo-v3.webp" alt="Dani Moscatelli fazendo sinal de positivo com as duas mãos, ao lado de um selo de confirmado" width="1254" height="1254" loading="lazy">
     <p>Obrigada por fazer parte da Galeria de Profissionais da Rede de Parceiros. Seu perfil vai compor a galeria do site.</p>
@@ -216,10 +258,25 @@
       rec.base = V / Math.min(rec.img.naturalWidth, rec.img.naturalHeight);
       $("rec-img").src = rec.url; $("rec-zoom").value = String(rec.zoom); recDesenhar(); $("rec-area").focus();
     }
+    // modal dos termos
+    (function () {
+      var dlg = $("modal-termo"), origem = null;
+      document.querySelectorAll("[data-termo]").forEach(function (b) {
+        b.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); origem = b; dlg.showModal(); $("modal-termo-ok").focus(); });
+      });
+      function fechar() { dlg.close(); }
+      $("modal-termo-x").addEventListener("click", fechar); $("modal-termo-ok").addEventListener("click", fechar);
+      dlg.addEventListener("click", function (e) { if (e.target !== dlg) return; var r = dlg.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) fechar(); });
+      dlg.addEventListener("close", function () { if (origem) origem.focus(); });
+    })();
+    function fotoErro(msg) { $("foto-erro-txt").textContent = msg; $("foto-erro").hidden = !msg; }
     $("foto-arquivo").addEventListener("change", function (e) {
       var f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
-      var erro = $("erro"); erro.hidden = true;
-      if (!/^image\/(jpeg|png|webp)$/.test(f.type) || f.size > 15 * 1024 * 1024) { erro.textContent = "Envie uma foto em JPG, PNG ou WEBP de até 15 MB."; erro.hidden = false; return; }
+      fotoErro("");
+      // feedback logo abaixo do campo quando a imagem está fora dos parâmetros (formato ou tamanho)
+      var mb = (f.size / 1024 / 1024).toFixed(1).replace(".", ",");
+      if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { fotoErro("O arquivo “" + f.name + "” não é JPG, PNG ou WEBP. Escolha uma foto em um desses formatos."); return; }
+      if (f.size > 15 * 1024 * 1024) { fotoErro("A foto “" + f.name + "” tem " + mb + " MB. Escolha uma foto de até 15 MB."); return; }
       nomePendente = f.name;
       var url = URL.createObjectURL(f), img = new Image();
       img.onload = function () {
@@ -230,7 +287,7 @@
         rec.x = (V - img.naturalWidth * rec.base) / 2; rec.y = (V - img.naturalHeight * rec.base) / 2;
         recAbrir();
       };
-      img.onerror = function () { URL.revokeObjectURL(url); erro.textContent = "Não foi possível abrir esta imagem."; erro.hidden = false; };
+      img.onerror = function () { URL.revokeObjectURL(url); fotoErro("Não foi possível abrir “" + f.name + "”. O arquivo pode estar corrompido. Escolha outra foto."); };
       img.src = url;
     });
     (function () {
@@ -256,7 +313,6 @@
       $("previa").scrollIntoView({ behavior: "smooth", block: "center" });
     });
     $("rec-cancelar").addEventListener("click", function () { $("recorte").hidden = true; });
-    $("li-alterar").addEventListener("click", function () { $("li-ver").hidden = true; $("li-editar").hidden = false; $("linkedin").focus(); $("linkedin").select(); });
     $("foto-remover").addEventListener("click", function () { fotoNova = ""; nomeArquivo = ""; removerFoto = !!fotoAtual; mostrarFoto(""); $("recorte").hidden = true; });
     function atualizarIn() { $("p-in").style.visibility = $("linkedin").value.trim() ? "visible" : "hidden"; }
     post({ acao: "ver" }).then(function (d) {
@@ -270,12 +326,10 @@
       $("linkedin").value = d.linkedin || "";
       $("termo").textContent = d.texto;
       fotoAtual = d.foto_url || ""; mostrarFoto(fotoAtual);
-      // LinkedIn do cadastro: aparece como link, com a opção de alterar; sem link no cadastro, já abre o campo.
-      if (d.linkedin) { $("li-link").href = d.linkedin; $("li-link").textContent = d.linkedin.replace(/^https:\/\/(www\.)?/, ""); $("li-ver").hidden = false; }
-      else { $("li-editar").hidden = false; }
+      // LinkedIn do cadastro: já vem no campo, aberto para edição.
       status(d.status); atualizarIn();
       // quem já autorizou (no formulário de cadastro ou antes) não precisa marcar de novo; quem está na base sem autorizar marca a caixa
-      $("aceite-box").hidden = d.status === "autorizado";
+      $("aceite-box").hidden = d.status === "autorizado"; $("aut-tit").hidden = d.status === "autorizado";
       $("linkedin").addEventListener("input", atualizarIn);
     }).catch(function (e) { $("carregando").hidden = true; $("erro-geral").textContent = e.message; $("erro-geral").hidden = false; });
     // Confete no topo da tela ao enviar o perfil, o mesmo do fim do cadastro de parceiros (respeita quem prefere menos movimento).

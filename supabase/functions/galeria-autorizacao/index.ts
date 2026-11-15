@@ -1,8 +1,8 @@
 // Autorização de exibição do perfil na Galeria de profissionais (pública; o token pessoal do e-mail identifica o parceiro).
 // { acao: "ver", t }  devolve só o que aparece na galeria (nome, cargo, áreas, segmentos, LinkedIn) e a decisão atual.
 // { acao: "decidir", t, decisao: "autorizado" | "recusado", especialidade?, linkedin, foto?, remover_foto? }
-//     Especialidade: sugerida a partir do campo 13 do cadastro (ou do texto definido pelo Studio); o parceiro pode alterar.
-//     Vazia ou igual ao campo 13, volta a usar o campo 13.
+//     Especialidade: sugerida a partir do campo 13 do cadastro (rótulo curto) (ou do texto definido pelo Studio); o parceiro pode alterar.
+//     Vazia ou igual ao rótulo do campo 13, volta a usar o rótulo do campo 13.
 //     grava a decisão no cadastro e no histórico imutável (texto exibido + versão + dados + navegador).
 //     foto: imagem JPEG em base64 (a página já recorta em quadrado e reduz; aqui só JPEG de até 1,5 MB).
 //     Ao não autorizar, a foto enviada é apagada.
@@ -25,6 +25,19 @@ const json = (body: unknown, status = 200) =>
 const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const limpa = (s: unknown) => String(s ?? "").replace(/\.\s*$/, "").trim();
+// Rótulo curto da especialidade (mesma regra de public.rotulo_especialidade no banco): de um texto longo,
+// fica a parte de mais peso, até 40 caracteres.
+function rotulo(t: unknown) {
+  let s = limpa(t);
+  const corta = (re: RegExp) => s.split(re)[0].trim();
+  const tenta = (p: string) => { if (p) s = p; return s.length <= 40; };
+  s = corta(/\s{2,}|\.\s|:\s|\s[-–—]\s/);
+  if (s.length <= 40) return s;
+  if (tenta(corta(/\s+(?:com|focad[oa]s?|voltad[oa]s?|especializad[oa]s?)\s/i))) return s;
+  if (tenta(s.replace(/\s*\([^)]*\)/g, "").replace(/\s{2,}/g, " ").trim())) return s;
+  if (tenta(corta(/[,;]\s/))) return s;
+  return s.slice(0, 40).replace(/\s+\S*$/, "") + "…";
+}
 const linkedinOk = (u: string) => !u || /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\//i.test(u);
 // Link do LinkedIn informado no cadastro: aceita "linkedin.com/in/..." ou "www.linkedin.com/..." e completa com https://.
 const normalizaLinkedin = (u: unknown) => { const v = String(u ?? "").trim(); return /^(www\.)?([a-z]{2,3}\.)?linkedin\.com\//i.test(v) ? "https://" + v.replace(/^https?:\/\//i, "") : v.replace(/^http:\/\//i, "https://"); };
@@ -51,7 +64,7 @@ Deno.serve(async (req) => {
   if (error) { console.error(error.message); return json({ error: "Não foi possível carregar agora. Tente novamente." }, 500); }
   if (!r) return json({ error: "Link inválido. Use o link que está no e-mail recebido." }, 404);
 
-  const esp = limpa(r.principal_especializacao);
+  const esp = rotulo(r.principal_especializacao);
   const dados = {
     nome: r.nome,
     cargo: r.galeria_cargo || esp,

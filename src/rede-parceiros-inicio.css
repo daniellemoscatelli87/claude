@@ -1376,3 +1376,8 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 
 /* tempo de carreira no card da galeria */
 .rx-gal-tempo { margin: -.625rem 0 1rem; font-size: .8125rem; color: #627288; }
+
+/* Card "Vamos construir juntos?" na mesma largura do painel de especialidades (máx. 1088px, mesmas margens) */
+@media (min-width: 1024px) {
+  html body .rx-fechamento .rp-carta { width: min(68rem, calc(100% - 4rem)); margin-inline: auto; box-sizing: border-box; }
+}
