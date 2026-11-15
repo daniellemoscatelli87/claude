@@ -37,7 +37,9 @@ html.embutido:not(.modal-direto) body { display: flex; flex-direction: column; }
 html.embutido:not(.modal-direto) .modal-topo { position: relative; flex: none; }
 html.embutido:not(.modal-direto) .wrap { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; max-width: none; width: 100%; margin: 0;
   padding-left: max(16px, calc((100% - 760px) / 2 + 16px)); padding-right: max(16px, calc((100% - 760px) / 2 + 16px));
-  scrollbar-width: thin; scrollbar-color: #B3BDD0 transparent; }
+ }
+/* barra de rolagem fina; no Chrome e no Safari ela para antes da curva do canto inferior da janela */
+@supports not selector(::-webkit-scrollbar) { html.embutido:not(.modal-direto) .wrap { scrollbar-width: thin; scrollbar-color: #B3BDD0 transparent; } }
 html.embutido:not(.modal-direto) .wrap::-webkit-scrollbar { width: 8px; }
 /* a barra do botão gruda no fim da área que rola (o espaço inferior do formulário saiu, pois a margem da barra o compensava) */
 html.embutido:not(.modal-direto) .wrap { padding-bottom: 0; }
@@ -52,7 +54,7 @@ html.embutido .nav-bar::before { border-top: 0 !important; box-shadow: none !imp
 html.embutido .nav-bar::after { content: ""; position: absolute; top: 0; left: calc(50% - 50vw); width: 100vw; height: 1px; pointer-events: none;
   background: linear-gradient(90deg, rgba(179, 189, 208, 0) 0%, rgba(179, 189, 208, 0.9) 22%, rgba(179, 189, 208, 0.9) 78%, rgba(179, 189, 208, 0) 100%); }
 html.embutido:not(.modal-direto) .wrap::-webkit-scrollbar-thumb { background: #B3BDD0; border-radius: 9999px; border: 2px solid #FFFFFF; }
-html.embutido:not(.modal-direto) .wrap::-webkit-scrollbar-track { background: transparent; }
+html.embutido:not(.modal-direto) .wrap::-webkit-scrollbar-track { background: transparent; margin: 6px 0 28px; }
 /* Cabeçalho do cadastro (janela/modal): título, aviso de obrigatórios, X e barra de progresso */
 .modal-topo { display: none; }
 html.embutido .modal-topo { position: sticky; top: 0; z-index: 60; display: block; padding: .875rem 1.25rem .75rem; background: #FFFFFF; border-bottom: 1px solid rgba(19, 26, 39, 0.09); font-family: "Plus Jakarta Sans", sans-serif; }
@@ -168,6 +170,9 @@ html.embutido .nav-bar .modal-obs span[aria-hidden] { color: #D44D4D; }
   @media (max-width: 560px) { .card { padding: 24px 18px; } }
   /* Na janela (modal), o formulário fica solto, sem a caixa em volta */
   html.embutido .card { background: transparent; border: 0; border-radius: 0; padding: 8px 0 0; }
+  /* espaço fixo entre o último campo e o rodapé com o botão */
+  html.embutido .card.step { padding-bottom: 16px; }
+  .q textarea { vertical-align: top; } /* sem o vão de linha abaixo do campo de texto */
   @media (min-width: 561px) { html.embutido .card { margin-inline: -16px; } html.embutido .nav-bar { margin-left: -16px !important; margin-right: -16px !important; } } /* alinhado ao título e à barra de progresso */
   h1 { font-size: 26px; margin: 0 0 8px; letter-spacing: .02em; }
   h2 { font-size: 20px; margin: 0 0 24px; color: var(--ink); }
