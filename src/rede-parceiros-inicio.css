@@ -1594,3 +1594,30 @@ html body .rx-onde .rx-onde-cab .rp-texto { text-align: left !important; margin:
   .rx-anel-nome { font-size: .5625rem; }
   .rx-anel-item { margin-top: -.9375rem; }
 }
+
+/* "Onde buscamos": esfera com padrão de circuito girando devagar, o Studio no centro e alguns setores flutuando ao redor.
+   Computador: esfera à esquerda e texto à direita. Celular e tablet: texto em cima e esfera embaixo. */
+.rx-onde { grid-template-columns: minmax(0, 30rem) minmax(0, 1fr); gap: 4rem; }
+.rx-esfera { position: relative; width: 100%; max-width: 30rem; aspect-ratio: 1; margin: 0 auto; }
+.rx-esfera-circuito { position: absolute; inset: 0; width: 100%; height: 100%; animation: rx-esfera-gira 80s linear infinite; }
+@keyframes rx-esfera-gira { to { transform: rotate(360deg); } }
+.rx-esfera-centro { position: absolute; left: 50%; top: 50%; width: 28%; aspect-ratio: 1; transform: translate(-50%, -50%); display: grid; place-items: center; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 18px 50px rgba(13, 17, 25, 0.10), 0 4px 12px rgba(13, 17, 25, 0.05); }
+.rx-esfera-centro img { width: 48%; height: auto; }
+.rx-esfera-bolhas { list-style: none; margin: 0; padding: 0; }
+.rx-esfera-bolha { position: absolute; display: grid; place-items: center; width: 16%; aspect-ratio: 1; border-radius: 9999px; background: #FFFFFF; color: #D44D4D; border: 4px solid #FFFFFF; box-shadow: 0 12px 30px rgba(13, 17, 25, 0.12); animation: rx-esfera-flutua 6s ease-in-out infinite; }
+.rx-esfera-bolha svg { width: 42%; height: 42%; }
+/* posições ao redor da borda da esfera e atrasos diferentes na flutuação */
+.rx-esfera-bolha.b1 { left: 24%; top: 7%; animation-delay: 0s; }
+.rx-esfera-bolha.b2 { left: 78%; top: 18%; width: 13%; animation-delay: -1.2s; }
+.rx-esfera-bolha.b3 { left: 86%; top: 52%; width: 12%; animation-delay: -2.4s; }
+.rx-esfera-bolha.b4 { left: 66%; top: 78%; animation-delay: -3.6s; }
+.rx-esfera-bolha.b5 { left: 10%; top: 70%; width: 13%; animation-delay: -4.8s; }
+.rx-esfera-bolha.b6 { left: -2%; top: 34%; width: 12%; animation-delay: -0.6s; }
+@keyframes rx-esfera-flutua { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(4px, -10px); } 66% { transform: translate(-5px, 6px); } }
+@media (prefers-reduced-motion: reduce) { .rx-esfera-circuito, .rx-esfera-bolha { animation: none; } }
+@media (max-width: 1023px) {
+  .rx-onde { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .rx-onde .rx-onde-cab { order: -1; }
+  .rx-esfera { max-width: 22rem; }
+}
+.rx-esfera .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
