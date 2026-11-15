@@ -65,7 +65,21 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
   topo.className = 'folha-cola-topo';
   topo.setAttribute('aria-hidden', 'true');
   document.body.prepend(topo);
-  document.documentElement.classList.add('com-folha-cola');
+  // O encaixe só fica ligado enquanto a folha ainda não chegou ao topo. Depois que ela cola, o encaixe é desligado e a
+  // rolagem do conteúdo fica 100% nativa (com o encaixe ligado o tempo todo, a rolagem dentro do card travava no celular).
+  const raiz = document.documentElement;
+  const h = document.getElementById('site-header');
+  let agendado = false;
+  const atualizar = () => {
+    agendado = false;
+    const alvo = folha.getBoundingClientRect().top + window.scrollY - (h?.offsetHeight ?? 0);
+    raiz.classList.toggle('com-folha-cola', window.scrollY < alvo - 1);
+  };
+  atualizar();
+  requestAnimationFrame(atualizar); // o espaço do topo de cada página é medido pelo script da própria página, logo depois
+  window.addEventListener('load', atualizar);
+  window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(atualizar); } }, { passive: true });
+  window.addEventListener('resize', atualizar);
 })();
 
 /* ---------- Aviso "Tem um projeto?" (só na página inicial) ---------- */

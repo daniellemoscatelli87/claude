@@ -1489,3 +1489,29 @@ main + footer.relative { padding-top: 6rem !important; }
   main p.rounded-full.bg-coral-50, .convite-selo, .depois-convite-selo { padding: .25rem .75rem !important; font-size: 11px !important; line-height: 15px !important; }
   main p.rounded-full.bg-coral-50 > span, .convite-selo span, .depois-convite-selo span { width: .375rem !important; height: .375rem !important; }
 }
+
+/* Celular e tablet: a foto do topo ocupa a tela até a mesma altura da Home e do Seja Parceiro, deixando só o filete do
+   card branco aparecendo acima do botão flutuante */
+@media (max-width: 1023px) {
+  html body .hero-piloto { height: calc(100svh - 79px) !important; }
+  html body #hero-fundo, html body #hero-fundo img { height: calc(100svh - 79px) !important; }
+}
+
+/* Celular e tablet: foto do topo enquadrando a Dani e o homem à esquerda. A foto é ampliada pela largura (mostra do
+   homem até a Dani) e presa na base; o espaço acima dela, atrás do menu, fica no tom escuro da própria foto. */
+@media (max-width: 1023px) {
+  html body #hero-fundo { background: #1d1a1f !important; background-image: none !important; }
+  html body #hero-fundo img { inset: auto auto 0 -6vw !important; width: 261vw !important; max-width: none !important; height: auto !important; min-height: 0 !important;
+    aspect-ratio: 1672 / 941 !important; object-fit: cover !important; object-position: 0% 100% !important;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18%); mask-image: linear-gradient(to bottom, transparent 0, #000 18%); }
+}
+/* tablet: a tela é larga o bastante para a foto cobrir o topo inteiro mostrando os dois */
+@media (min-width: 640px) and (max-width: 1023px) {
+  html body #hero-fundo img { inset: 0 !important; width: 100% !important; height: 100% !important; aspect-ratio: auto !important; object-position: 4% 50% !important;
+    -webkit-mask-image: none; mask-image: none; }
+}
+/* celular: foto vertical própria (Dani e o homem), cobrindo o topo inteiro */
+@media (max-width: 639px) {
+  html body #hero-fundo img { inset: 0 !important; width: 100% !important; height: 100% !important; aspect-ratio: auto !important; object-fit: cover !important; object-position: 50% 30% !important;
+    -webkit-mask-image: none; mask-image: none; }
+}
