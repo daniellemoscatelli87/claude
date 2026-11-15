@@ -1663,8 +1663,13 @@ html body .rx-onde.eco .rx-onde-cab h2, html body .rx-onde.eco .rx-onde-cab .rp-
    Contínuas: luz percorrendo o anel, pontos pulsando e brilho do centro. */
 .rx-eco-luz { animation: rx-eco-gira 14s linear infinite; }
 @keyframes rx-eco-gira { to { transform: rotate(360deg); } }
-.rx-eco-ponto { animation: rx-eco-pulsa 3s ease-in-out infinite; animation-delay: calc(var(--i) * -0.25s); }
-@keyframes rx-eco-pulsa { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.35); } }
+/* pontos dos setores vazados; acendem quando a luz do anel passa por eles (mesma volta de 14s; --t = posição no anel, de 0 a 1) */
+.rx-eco-ponto { animation: rx-eco-acende 14s linear infinite; animation-delay: calc(var(--t) * 14s); }
+@keyframes rx-eco-acende {
+  0% { fill: #D44D4D; transform: scale(1.45); filter: drop-shadow(0 0 6px rgba(212, 77, 77, 0.7)); }
+  6% { fill: #D44D4D; transform: scale(1.1); filter: drop-shadow(0 0 3px rgba(212, 77, 77, 0.45)); }
+  16%, 100% { fill: #FFFFFF; transform: scale(1); filter: none; }
+}
 .rx-eco-brilho { animation: rx-eco-respira 5s ease-in-out infinite; }
 @keyframes rx-eco-respira { 0%, 100% { opacity: .75; transform: scale(.96); } 50% { opacity: 1; transform: scale(1.04); } }
 /* estado inicial (sem transição, para já começar escondido) */
