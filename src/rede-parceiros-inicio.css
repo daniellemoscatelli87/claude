@@ -1353,7 +1353,7 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 }
 /* celular e tablet: o hero termina um pouco antes da dobra, para um pedacinho da folha branca aparecer acima do botão,
    emendando na foto dos personagens */
-@media (max-width: 1023px) { .rp-hero { min-height: calc(100svh - 79px) !important; } }
+@media (max-width: 1023px) { .rp-hero { min-height: calc(100svh - 69px) !important; } }
 @media (max-width: 1023px) { .rp-hero-modelo { min-height: 200px !important; } }
 /* computador: sem o card branco grande por trás do conteúdo (o fundo da página já é branco) */
 @media (min-width: 1024px) {
@@ -1773,3 +1773,6 @@ html body .rp-carta-luz span:nth-child(1) { display: none !important; }
 @media (min-width: 768px) {
   html body .rx-fechamento .rp-carta, html body .rx-fechamento .rp-carta:hover { box-shadow: 0 2px 8px rgba(13, 17, 25, 0.03), 0 24px 64px -16px rgba(13, 17, 25, 0.14) !important; }
 }
+
+/* Celular e tablet: a foto do trio um pouco mais para cima no topo */
+@media (max-width: 1023px) { html body .rp-hero .rp-hero-modelo { margin-top: -1.25rem !important; } }
