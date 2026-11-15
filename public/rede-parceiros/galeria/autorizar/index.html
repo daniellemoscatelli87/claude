@@ -94,6 +94,9 @@
   .status.ok { background: rgba(79, 181, 123, 0.12); color: #1F6B3A; }
   .status.no { background: #EDF0F5; color: #283043; }
   .erro { margin: 1rem 0 0; color: #B82828; font-size: .9375rem; }
+  /* feedback da foto, logo abaixo do campo */
+  .foto-erro { display: flex; align-items: flex-start; gap: .5rem; margin: .75rem 0 0; color: #B82828; font-size: .875rem; line-height: 1.45; }
+  .foto-erro svg { width: 1.125rem; height: 1.125rem; flex: none; margin-top: .05rem; }
   a { color: #D44D4D; font-weight: 600; text-underline-offset: 4px; }
   .enviado { display: grid; justify-items: center; gap: .25rem; margin-top: .5rem; padding: 0; border: 0; background: transparent; text-align: center; }
   .enviado:focus { outline: none; }
@@ -150,7 +153,7 @@
       <label id="li-editar" style="margin:0"><span class="sr-only">Link do seu LinkedIn</span><input type="url" id="linkedin" maxlength="300" placeholder="https://www.linkedin.com/in/seu-perfil" autocomplete="url"></label>
     </div>
     <div class="foto-campo">
-      <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP. Depois de escolher, ajuste o enquadramento.</small></span>
+      <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP, até 15 MB. Depois de escolher, ajuste o enquadramento.</small></span>
       <div class="foto-acoes">
         <label class="botao-arquivo" id="foto-enviar" for="foto-arquivo"><span>Enviar foto</span></label>
         <input type="file" id="foto-arquivo" accept="image/jpeg,image/png,image/webp" class="sr-only">
@@ -161,6 +164,7 @@
           <button type="button" class="ic-btn" id="foto-remover" title="Excluir foto"><span class="sr-only">Excluir foto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
         </div>
       </div>
+      <p class="foto-erro" id="foto-erro" role="alert" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg><span id="foto-erro-txt"></span></p>
       <div class="recorte" id="recorte" hidden>
         <p class="recorte-dica">Arraste a foto para enquadrar o rosto no círculo e use o zoom se precisar.</p>
         <div class="recorte-area" id="rec-area" tabindex="0" aria-label="Área de recorte da foto. Use as setas do teclado para mover."><img id="rec-img" alt="" draggable="false"></div>
@@ -236,10 +240,14 @@
       rec.base = V / Math.min(rec.img.naturalWidth, rec.img.naturalHeight);
       $("rec-img").src = rec.url; $("rec-zoom").value = String(rec.zoom); recDesenhar(); $("rec-area").focus();
     }
+    function fotoErro(msg) { $("foto-erro-txt").textContent = msg; $("foto-erro").hidden = !msg; }
     $("foto-arquivo").addEventListener("change", function (e) {
       var f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
-      var erro = $("erro"); erro.hidden = true;
-      if (!/^image\/(jpeg|png|webp)$/.test(f.type) || f.size > 15 * 1024 * 1024) { erro.textContent = "Envie uma foto em JPG, PNG ou WEBP de até 15 MB."; erro.hidden = false; return; }
+      fotoErro("");
+      // feedback logo abaixo do campo quando a imagem está fora dos parâmetros (formato ou tamanho)
+      var mb = (f.size / 1024 / 1024).toFixed(1).replace(".", ",");
+      if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { fotoErro("O arquivo “" + f.name + "” não é JPG, PNG ou WEBP. Escolha uma foto em um desses formatos."); return; }
+      if (f.size > 15 * 1024 * 1024) { fotoErro("A foto “" + f.name + "” tem " + mb + " MB. Escolha uma foto de até 15 MB."); return; }
       nomePendente = f.name;
       var url = URL.createObjectURL(f), img = new Image();
       img.onload = function () {
@@ -250,7 +258,7 @@
         rec.x = (V - img.naturalWidth * rec.base) / 2; rec.y = (V - img.naturalHeight * rec.base) / 2;
         recAbrir();
       };
-      img.onerror = function () { URL.revokeObjectURL(url); erro.textContent = "Não foi possível abrir esta imagem."; erro.hidden = false; };
+      img.onerror = function () { URL.revokeObjectURL(url); fotoErro("Não foi possível abrir “" + f.name + "”. O arquivo pode estar corrompido. Escolha outra foto."); };
       img.src = url;
     });
     (function () {
