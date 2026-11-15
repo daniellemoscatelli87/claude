@@ -5,6 +5,9 @@
 //     vai para a IA (sem nome, e-mail ou contato). A sugestão fica guardada em especialidade_ia; se a IA não responder,
 //     usa o rótulo curto por regra. O parceiro pode alterar.
 //     Vazia ou igual ao rótulo do campo 13, volta a usar o rótulo do campo 13.
+//     Tags: a IA escolhe e resume as áreas e segmentos marcados no cadastro (sem inventar competências), até caber em
+//     2 linhas no card; vai para a IA só o perfil profissional (sem nome, e-mail ou contato). Fica em galeria_tags_ia;
+//     ao autorizar, as tags da prévia ficam em galeria_tags. Sem resposta da IA, valem as áreas e segmentos.
 //     grava a decisão no cadastro e no histórico imutável (texto exibido + versão + dados + navegador).
 //     foto: imagem JPEG em base64 (a página já recorta em quadrado e reduz; aqui só JPEG de até 1,5 MB).
 //     Ao não autorizar, a foto enviada é apagada.
@@ -72,6 +75,43 @@ async function termoIA(texto: string): Promise<string> {
   }
   return "";
 }
+// Tags do card sugeridas pela IA: escolhe e resume as áreas e segmentos marcados (até 6 tags curtas). [] se não conseguir.
+async function tagsIA(perfil: { especialidade: string; areas: string[]; segmentos: string[]; atividades: string; conhecimento_segmento: string }): Promise<string[]> {
+  const key = Deno.env.get("GEMINI_API_KEY");
+  const opcoes = [...perfil.areas, ...perfil.segmentos];
+  if (!key || !opcoes.length) return [];
+  const body = JSON.stringify({
+    systemInstruction: { parts: [{ text: "Você recebe o perfil profissional de uma pessoa (sem dados pessoais) e a lista de áreas e segmentos que ela marcou. " +
+      "Escolha as tags do card de perfil dela: de 3 a 6 tags, as mais relevantes para quem é a pessoa, considerando a especialidade, as atividades e o conhecimento de segmento. " +
+      "Regras: cada tag deve vir de um item da lista de áreas e segmentos; você pode encurtar o nome do item (até 24 caracteres, ex.: \"Saúde e serviços hospitalares\" vira \"Saúde\"), " +
+      "mas não crie competências, ferramentas ou segmentos que não estejam na lista. Sem repetir sentido entre tags. Inicial maiúscula, sem ponto final, sem aspas nem markdown. " +
+      'Responda somente com JSON: {"tags": ["..."]}' }] },
+    contents: [{ role: "user", parts: [{ text: JSON.stringify({ ...perfil, atividades: perfil.atividades.slice(0, 1500), conhecimento_segmento: perfil.conhecimento_segmento.slice(0, 1000) }) }] }],
+    generationConfig: { responseMimeType: "application/json", temperature: 0.2, maxOutputTokens: 512 },
+  });
+  // garantia de que a IA não inventou: toda palavra da tag precisa estar nas áreas e segmentos marcados
+  const norm = (x: string) => x.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const base = norm(opcoes.join(" | "));
+  const daLista = (tag: string) => { const ws = norm(tag).split(/[^a-z0-9/]+/).filter((w) => w.length >= 2 && !["de", "da", "do", "das", "dos", "e"].includes(w)); return ws.length > 0 && ws.every((w) => base.includes(w)); };
+  const fim = Date.now() + 12000;
+  for (const m of ["gemini-flash-latest", "gemini-2.5-flash", "gemini-flash-lite-latest", "gemini-2.5-flash-lite"]) {
+    if (Date.now() > fim - 1500) break;
+    try {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`, {
+        method: "POST", headers: { "x-goog-api-key": key, "content-type": "application/json" }, body, signal: AbortSignal.timeout(Math.min(8000, fim - Date.now())),
+      });
+      if (!res.ok) { console.error("Gemini tags", m, res.status); continue; }
+      const out = await res.json();
+      const t = (out.candidates?.[0]?.content?.parts ?? []).filter((x: { thought?: boolean }) => !x.thought).map((x: { text?: string }) => x.text ?? "").join("");
+      const lista = (JSON.parse(t.slice(t.indexOf("{"), t.lastIndexOf("}") + 1)).tags ?? []) as unknown[];
+      const tags = [...new Set(lista.map((x) => String(x ?? "").replace(/[*_`"“”]/g, "").replace(/\s+/g, " ").replace(/[.;:,]\s*$/, "").trim())
+        .filter((x) => x && x.length <= 24 && daLista(x)))].slice(0, 6);
+      if (tags.length) return tags;
+      console.error("Gemini tags", m, "sem tags válidas");
+    } catch (e) { console.error("Gemini tags", m, String(e).slice(0, 120)); }
+  }
+  return [];
+}
 const linkedinOk = (u: string) => !u || /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\//i.test(u);
 // Link do LinkedIn informado no cadastro: aceita "linkedin.com/in/..." ou "www.linkedin.com/..." e completa com https://.
 const normalizaLinkedin = (u: unknown) => { const v = String(u ?? "").trim(); return /^(www\.)?([a-z]{2,3}\.)?linkedin\.com\//i.test(v) ? "https://" + v.replace(/^https?:\/\//i, "") : v.replace(/^http:\/\//i, "https://"); };
@@ -93,22 +133,32 @@ Deno.serve(async (req) => {
   const t = String(p.t ?? "");
   if (!UUID.test(t)) return json({ error: "Link inválido. Use o link que está no e-mail recebido." }, 400);
   const { data: r, error } = await admin.from("cadastros")
-    .select("id, nome, principal_especializacao, especialidade_ia, especialidade_ia_de, tempo_especialidade, areas_experiencia, segmentos, linkedin, galeria_status, galeria_cargo, galeria_linkedin, galeria_foto_url")
+    .select("id, nome, principal_especializacao, especialidade_ia, especialidade_ia_de, galeria_tags_ia, galeria_tags_ia_de, atividades_entregaveis, conhecimento_segmento, tempo_especialidade, areas_experiencia, segmentos, linkedin, galeria_status, galeria_cargo, galeria_linkedin, galeria_foto_url")
     .eq("galeria_token", t).maybeSingle();
   if (error) { console.error(error.message); return json({ error: "Não foi possível carregar agora. Tente novamente." }, 500); }
   if (!r) return json({ error: "Link inválido. Use o link que está no e-mail recebido." }, 404);
 
   const esp = rotulo(r.principal_especializacao);
-  // sugestão da IA: gerada uma vez por texto do campo 13 (fica guardada); sem resposta da IA, vale o rótulo por regra
+  // sugestões da IA (especialidade e tags), geradas em paralelo uma vez por versão do cadastro e guardadas;
+  // sem resposta da IA, valem o rótulo por regra e as áreas e segmentos
   const campo13 = limpa(r.principal_especializacao);
+  const perfil = { especialidade: campo13, areas: (r.areas_experiencia ?? []).map(limpa), segmentos: (r.segmentos ?? []).map(limpa),
+    atividades: String(r.atividades_entregaveis ?? ""), conhecimento_segmento: String(r.conhecimento_segmento ?? "") };
+  const origemTags = JSON.stringify(perfil);
   let sugestao = r.especialidade_ia_de === campo13 && r.especialidade_ia ? r.especialidade_ia : "";
-  if (!sugestao && !r.galeria_cargo && p.acao === "ver" && campo13) {
-    sugestao = await termoIA(campo13);
-    if (sugestao) await admin.from("cadastros").update({ especialidade_ia: sugestao, especialidade_ia_de: campo13 }).eq("id", r.id);
+  let tags: string[] = r.galeria_tags_ia_de === origemTags && r.galeria_tags_ia?.length ? r.galeria_tags_ia : [];
+  if (p.acao === "ver") {
+    const gerarTermo = !sugestao && !r.galeria_cargo && !!campo13;
+    const [novoTermo, novasTags] = await Promise.all([gerarTermo ? termoIA(campo13) : Promise.resolve(""), tags.length ? Promise.resolve([]) : tagsIA(perfil)]);
+    const salvar: Record<string, unknown> = {};
+    if (novoTermo) { sugestao = novoTermo; salvar.especialidade_ia = novoTermo; salvar.especialidade_ia_de = campo13; }
+    if (novasTags.length) { tags = novasTags; salvar.galeria_tags_ia = novasTags; salvar.galeria_tags_ia_de = origemTags; }
+    if (Object.keys(salvar).length) await admin.from("cadastros").update(salvar).eq("id", r.id);
   }
   const dados = {
     nome: r.nome,
     cargo: r.galeria_cargo || sugestao || esp,
+    tags,
     tempo: limpa(r.tempo_especialidade),
     areas: (r.areas_experiencia ?? []).map(limpa),
     segmentos: (r.segmentos ?? []).map(limpa),
@@ -150,6 +200,8 @@ Deno.serve(async (req) => {
     galeria_status: decisao, galeria_decidido_em: agora,
     galeria_linkedin: decisao === "autorizado" ? (linkedin || null) : r.galeria_linkedin,
     galeria_foto_url: fotoUrl, galeria_cargo: galeriaCargo,
+    // tags aprovadas na prévia (as da IA); sem tags da IA, o card usa as áreas e segmentos
+    galeria_tags: decisao === "autorizado" && tags.length ? tags : null,
   }).eq("id", r.id);
   if (e2) { console.error(e2.message); return json({ error: "Não foi possível registrar agora. Tente novamente." }, 500); }
   return json({ ok: true, status: decisao, foto_url: fotoUrl ?? "" });

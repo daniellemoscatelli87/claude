@@ -282,7 +282,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   const secao = document.getElementById('galeria');
   const grade = secao?.querySelector<HTMLUListElement>('.rx-gal-grade');
   if (!secao || !grade) return;
-  type Perfil = { nome: string; cargo: string | null; tempo?: string | null; areas: string[] | null; segmentos: string[] | null; linkedin: string | null; foto_url: string | null };
+  type Perfil = { nome: string; cargo: string | null; tempo?: string | null; areas: string[] | null; segmentos: string[] | null; tags?: string[] | null; linkedin: string | null; foto_url: string | null };
   const MINIMO = 3;
   const limpa = (s: string) => s.replace(/\.\s*$/, '').trim();
   const el = <K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, text?: string) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
@@ -303,9 +303,9 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     topo.appendChild(foto);
     const href = linkSeguro(p.linkedin);
     if (href) { const a = el('a', 'rx-gal-in'); a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.setAttribute('aria-label', `LinkedIn de ${p.nome} (abre em nova aba)`); a.innerHTML = LI; topo.appendChild(a); }
-    // tags: áreas de atuação e segmentos marcados no cadastro (no máximo 2 linhas, pelo CSS)
+    // tags: as aprovadas na prévia (sugeridas pela IA); sem elas, áreas e segmentos do cadastro (no máximo 2 linhas, pelo CSS)
     const tags = el('ul', 'rx-gal-areas'); tags.setAttribute('aria-label', 'Áreas de atuação e segmentos');
-    [...new Set([...(p.areas || []), ...(p.segmentos || [])].map(limpa).filter(Boolean))].forEach((a) => tags.appendChild(el('li', undefined, a)));
+    [...new Set((p.tags?.length ? p.tags : [...(p.areas || []), ...(p.segmentos || [])]).map(limpa).filter(Boolean))].forEach((a) => tags.appendChild(el('li', undefined, a)));
     const nivel = p.tempo ? tempoCarreira(p.tempo) : ''; const tempo = el('p', 'rx-gal-tempo', nivel); tempo.hidden = !nivel;
     li.append(topo, el('h3', undefined, p.nome), el('p', 'rx-gal-esp', limpa(p.cargo || '')), tempo, tags);
     return li;
