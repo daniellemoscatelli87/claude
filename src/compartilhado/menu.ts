@@ -75,8 +75,31 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
     const alvo = folha.getBoundingClientRect().top + window.scrollY - (h?.offsetHeight ?? 0);
     raiz.classList.toggle('com-folha-cola', window.scrollY < alvo - 1);
   };
+  // Alça "Saiba mais" presa à borda de cima da folha, enquanto ela ainda não subiu (como a alça do computador)
+  const alca = document.createElement('a');
+  alca.className = 'alca-movel';
+  alca.href = '#';
+  alca.innerHTML = 'Saiba mais<span class="alca-movel-seta" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="m18 14-6 6-6-6"/></svg></span>';
+  alca.addEventListener('click', (e) => {
+    e.preventDefault();
+    const alvo = folha.getBoundingClientRect().top + window.scrollY - (h?.offsetHeight ?? 0);
+    window.scrollTo({ top: alvo, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  });
+  document.body.appendChild(alca);
+  const posAlca = () => {
+    const topo = folha.getBoundingClientRect().top;
+    raiz.style.setProperty('--alca-topo', `${Math.round(topo)}px`);
+    const tampa = document.querySelector<HTMLElement>('.ih-tampa, .rp-tampa, .pp-tampa');
+    if (tampa) alca.style.background = getComputedStyle(tampa).backgroundColor;
+    alca.classList.toggle('oculta', window.scrollY > 8);
+  };
+  const atualizarTudo = () => { atualizar(); posAlca(); };
+  window.addEventListener('scroll', () => requestAnimationFrame(posAlca), { passive: true });
+  window.addEventListener('resize', posAlca);
+  window.addEventListener('load', posAlca);
+  requestAnimationFrame(posAlca);
   atualizar();
-  requestAnimationFrame(atualizar); // o espaço do topo de cada página é medido pelo script da própria página, logo depois
+  requestAnimationFrame(atualizarTudo); // o espaço do topo de cada página é medido pelo script da própria página, logo depois
   window.addEventListener('load', atualizar);
   window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(atualizar); } }, { passive: true });
   window.addEventListener('resize', atualizar);

@@ -1493,8 +1493,8 @@ main + footer.relative { padding-top: 6rem !important; }
 /* Celular e tablet: a foto do topo ocupa a tela até a mesma altura da Home e do Seja Parceiro, deixando só o filete do
    card branco aparecendo acima do botão flutuante */
 @media (max-width: 1023px) {
-  html body .hero-piloto { height: calc(100svh - 64px) !important; }
-  html body #hero-fundo, html body #hero-fundo img { height: calc(100svh - 64px) !important; }
+  html body .hero-piloto { height: calc(100svh - 59px) !important; }
+  html body #hero-fundo, html body #hero-fundo img { height: calc(100svh - 59px) !important; }
 }
 
 /* Celular e tablet: foto do topo enquadrando a Dani e o homem à esquerda. A foto é ampliada pela largura (mostra do
