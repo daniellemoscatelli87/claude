@@ -1655,3 +1655,5 @@ html body .rx-onde.eco .rx-onde-cab h2, html body .rx-onde.eco .rx-onde-cab .rp-
 .rx-eco-setor svg { width: 2.9cqw; height: 2.9cqw; }
 .rx-eco-esp { font-size: 1.42cqw; }
 .rx-eco-esp svg { width: 3cqw; height: 3cqw; }
+/* computador: a etiqueta de baixo (Tecnologia) fica à mesma distância do anel que a de cima (Saúde) */
+@media (min-width: 1024px) { .rx-eco { overflow: visible; margin-bottom: 2.5rem; } }
