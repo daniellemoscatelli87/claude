@@ -462,29 +462,41 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   if ('ResizeObserver' in window) new ResizeObserver(f).observe(hero);
 })();
 
-/* ---------- "Onde buscamos": setores em etiquetas (abas: clique, setas e Home/End) ---------- */
+/* ---------- "Onde buscamos": carrossel de setores (setas, pontos, arrastar e teclado) ---------- */
 {
-  const lista = document.querySelector<HTMLElement>('.rx-chips');
-  if (lista) {
-    const abas = Array.from(lista.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
-    const escolher = (aba: HTMLButtonElement, foco = false) => {
-      abas.forEach((a) => {
-        const on = a === aba;
-        a.setAttribute('aria-selected', String(on));
-        a.tabIndex = on ? 0 : -1;
-        const painel = document.getElementById(a.getAttribute('aria-controls') || '');
-        if (painel) painel.hidden = !on;
-      });
-      if (foco) aba.focus();
+  const trilha = document.querySelector<HTMLElement>('.rx-setores-trilha');
+  const pontos = document.querySelector<HTMLElement>('.rx-setores-pontos');
+  const pos = document.querySelector<HTMLElement>('.rx-setores-pos');
+  if (trilha && pontos && pos) {
+    const slides = Array.from(trilha.querySelectorAll<HTMLElement>('.rx-setor-slide'));
+    const nome = (s: HTMLElement) => s.querySelector('h3')?.textContent || '';
+    const atual = () => {
+      const x = trilha.scrollLeft;
+      let melhor = 0;
+      slides.forEach((s, i) => { if (Math.abs(s.offsetLeft - trilha.offsetLeft - x) < Math.abs(slides[melhor].offsetLeft - trilha.offsetLeft - x)) melhor = i; });
+      // no fim da trilha, o último card conta como atual
+      return trilha.scrollLeft + trilha.clientWidth >= trilha.scrollWidth - 4 ? slides.length - 1 : melhor;
     };
-    abas.forEach((aba, i) => {
-      aba.addEventListener('click', () => escolher(aba));
-      aba.addEventListener('keydown', (e) => {
-        const ir: Record<string, number> = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: abas.length - 1 };
-        if (!(e.key in ir)) return;
-        e.preventDefault();
-        escolher(abas[(ir[e.key] + abas.length) % abas.length], true);
-      });
+    const ir = (i: number) => {
+      const n = (i + slides.length) % slides.length;
+      trilha.scrollTo({ left: slides[n].offsetLeft - trilha.offsetLeft });
+    };
+    slides.forEach((s, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.setAttribute('aria-label', `Ir para ${nome(s)}`); b.tabIndex = -1;
+      b.addEventListener('click', () => ir(i));
+      pontos.appendChild(b);
     });
+    const marcar = () => {
+      const a = atual();
+      Array.from(pontos.children).forEach((b, i) => b.setAttribute('aria-current', String(i === a)));
+      pos.textContent = `${a + 1} de ${slides.length} · ${nome(slides[a])}`;
+    };
+    document.querySelectorAll<HTMLButtonElement>('.rx-setores-seta').forEach((b) => b.addEventListener('click', () => ir(atual() + Number(b.dataset.dir))));
+    trilha.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); ir(atual() + (e.key === 'ArrowRight' ? 1 : -1)); } });
+    let pedido = 0;
+    trilha.addEventListener('scroll', () => { cancelAnimationFrame(pedido); pedido = requestAnimationFrame(marcar); }, { passive: true });
+    addEventListener('resize', marcar);
+    marcar();
   }
 }

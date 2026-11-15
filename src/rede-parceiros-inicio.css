@@ -1388,38 +1388,48 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-onde-cab .rp-texto { margin: 1rem auto 0 !important; text-align: center !important; }
 @media (max-width: 767px) { .rx-onde-cab { margin-top: 3.5rem; } }
 
-/* "Onde buscamos": os 12 setores em etiquetas (todas à vista, quebrando linha) e, abaixo, um painel largo com o setor
-   escolhido: tipos de projeto e desafios lado a lado. */
-.rx-setores { margin-top: 2.25rem; text-align: left; }
-.rx-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; max-width: 60rem; margin: 0 auto 1.5rem; }
-.rx-chip { display: inline-flex; align-items: center; gap: .5rem; padding: .5rem 1rem .5rem .75rem; border: 1px solid #E4E6EC; border-radius: 9999px; background: #FFFFFF; font: inherit; font-size: .875rem; font-weight: 600; color: #283043; cursor: pointer; transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease; }
-.rx-chip svg { width: 1rem; height: 1rem; flex: none; color: #D44D4D; transition: color .2s ease; }
-.rx-chip:hover { border-color: rgba(212, 77, 77, 0.35); background: #FDF2F2; }
-.rx-chip:focus-visible { outline: 2px solid #D44D4D; outline-offset: 2px; }
-.rx-chip[aria-selected="true"] { background: #D44D4D; border-color: #D44D4D; color: #FFFFFF; box-shadow: 0 6px 16px rgba(212, 77, 77, 0.25); }
-.rx-chip[aria-selected="true"] svg { color: #FFFFFF; }
-.rx-setor-painel { max-width: 60rem; margin: 0 auto; padding: 2rem 2.25rem; border-radius: 24px; background: #FFFFFF; border: 1px solid #EDF0F5; box-shadow: 0 8px 24px rgba(13, 17, 25, 0.06); animation: rx-setor-entra .35s cubic-bezier(0.16, 1, 0.3, 1); }
-.rx-setor-painel:focus-visible { outline: 2px solid #D44D4D; outline-offset: 3px; }
-@keyframes rx-setor-entra { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-.rx-setor-cab { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid #EDF0F5; }
-.rx-setor-ic { display: grid; place-items: center; flex: none; width: 3rem; height: 3rem; border-radius: 14px; background: #FDF2F2; color: #D44D4D; }
-.rx-setor-ic svg { width: 1.5rem; height: 1.5rem; }
-html body .rx-setor-cab h3 { margin: 0; font-size: 1.375rem; font-weight: 700; letter-spacing: -0.02em; color: #131A27; }
-.rx-setor-cab p { margin: .25rem 0 0; font-size: .9375rem; line-height: 1.5; color: #627288; }
-.rx-setor-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2.5rem; }
-html body .rx-setor-col h4 { margin: 0 0 .875rem; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #D44D4D; }
+/* "Onde buscamos": carrossel com um card largo por setor. A pessoa navega pelas setas, pelos pontos ou deslizando;
+   no computador, um pedaço do próximo card aparece para indicar que há mais. */
+.rx-setores { margin-top: 2.5rem; text-align: left; width: 100%; min-width: 0; box-sizing: border-box; }
+.rx-setores-trilha { width: 100%; box-sizing: border-box; }
+.rx-setores-trilha { list-style: none; margin: 0; padding: .25rem .25rem 1.5rem; display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-x: contain; }
+.rx-setores-trilha::-webkit-scrollbar { display: none; }
+.rx-setores-trilha:focus-visible { outline: 2px solid #D44D4D; outline-offset: 4px; border-radius: 28px; }
+.rx-setor-slide { flex: 0 0 82%; scroll-snap-align: start; display: flex; flex-direction: column; padding: 2.25rem 2.5rem; border-radius: 28px; background: #FFFFFF; border: 1px solid #EDF0F5; box-shadow: 0 10px 30px -5px rgba(13, 17, 25, 0.06), 0 4px 14px -2px rgba(13, 17, 25, 0.04); }
+.rx-setor-cab { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.5rem; margin-bottom: 1.75rem; border-bottom: 1px solid #EDF0F5; }
+.rx-setor-ic { display: grid; place-items: center; flex: none; width: 3.5rem; height: 3.5rem; border-radius: 16px; background: #FDF2F2; color: #D44D4D; }
+.rx-setor-ic svg { width: 1.75rem; height: 1.75rem; }
+html body .rx-setor-cab h3 { margin: 0; font-size: 1.625rem; font-weight: 700; letter-spacing: -0.02em; color: #131A27; }
+.rx-setor-cab p { margin: .25rem 0 0; font-size: 1rem; line-height: 1.5; color: #627288; }
+.rx-setor-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 3rem; }
+html body .rx-setor-col h4 { margin: 0 0 1rem; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #D44D4D; }
 html body .rx-setor-col.desafios h4 { color: #5C6986; }
-.rx-setor-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .625rem; }
-.rx-setor-col li { display: flex; gap: .625rem; align-items: flex-start; font-size: .9375rem; line-height: 1.5; color: #283043; }
-.rx-setor-col li svg { flex: none; width: 1.125rem; height: 1.125rem; margin-top: .1875rem; color: #D44D4D; }
+.rx-setor-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+.rx-setor-col li { display: flex; gap: .625rem; align-items: flex-start; font-size: 1rem; line-height: 1.5; color: #283043; }
+.rx-setor-col li svg { flex: none; width: 1.125rem; height: 1.125rem; margin-top: .25rem; color: #D44D4D; }
 .rx-setor-col.desafios li svg { color: #5C6986; }
-@media (prefers-reduced-motion: reduce) { .rx-setor-painel { animation: none; } }
+.rx-setores-ctrl { display: flex; align-items: center; justify-content: center; gap: .75rem; }
+.rx-setores-seta { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 9999px; border: 1px solid #D6DCE6; background: #FFFFFF; color: #283043; cursor: pointer; transition: background-color .2s ease, border-color .2s ease, color .2s ease; }
+.rx-setores-seta svg { width: 1.125rem; height: 1.125rem; }
+.rx-setores-seta:hover { border-color: rgba(212, 77, 77, 0.4); color: #D44D4D; }
+.rx-setores-seta.proximo { background: #D44D4D; border-color: #D44D4D; color: #FFFFFF; }
+.rx-setores-seta.proximo:hover { background: #B82828; border-color: #B82828; color: #FFFFFF; }
+.rx-setores-seta:focus-visible { outline: 2px solid #D44D4D; outline-offset: 2px; }
+.rx-setores-pontos { display: flex; align-items: center; gap: .375rem; padding: 0 .25rem; }
+.rx-setores-pontos button { width: .5rem; height: .5rem; padding: 0; border: 0; border-radius: 9999px; background: #CBD4E1; cursor: pointer; transition: width .25s ease, background-color .25s ease; }
+.rx-setores-pontos button[aria-current="true"] { width: 1.5rem; background: #D44D4D; }
+.rx-setores-pos { margin: 0; min-width: 5.5rem; text-align: center; font-size: .875rem; font-weight: 600; color: #627288; font-variant-numeric: tabular-nums; }
+@media (min-width: 640px) { .rx-setores-pos { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
+@media (max-width: 639px) { .rx-setores-pontos { display: none; } }
+@media (max-width: 1023px) { .rx-setor-slide { flex-basis: 88%; padding: 1.75rem; } }
 @media (max-width: 639px) {
-  .rx-chips { gap: .375rem; margin-bottom: 1rem; }
-  .rx-chip { padding: .4375rem .75rem .4375rem .625rem; font-size: .8125rem; }
-  .rx-setor-painel { padding: 1.25rem; border-radius: 20px; }
-  .rx-setor-ic { width: 2.5rem; height: 2.5rem; border-radius: 12px; }
-  .rx-setor-ic svg { width: 1.25rem; height: 1.25rem; }
-  html body .rx-setor-cab h3 { font-size: 1.125rem; }
+  .rx-setores-trilha { gap: .75rem; padding-bottom: 1.25rem; }
+  .rx-setor-slide { flex-basis: 90%; padding: 1.25rem; border-radius: 22px; }
+  .rx-setor-ic { width: 2.75rem; height: 2.75rem; border-radius: 12px; }
+  .rx-setor-ic svg { width: 1.375rem; height: 1.375rem; }
+  html body .rx-setor-cab h3 { font-size: 1.1875rem; }
+  .rx-setor-cab p { font-size: .875rem; }
   .rx-setor-cols { grid-template-columns: minmax(0, 1fr); }
+  .rx-setor-col li { font-size: .9375rem; }
 }
+@media (prefers-reduced-motion: reduce) { .rx-setores-trilha { scroll-behavior: auto; } .rx-setores-pontos button { transition: none; } }
