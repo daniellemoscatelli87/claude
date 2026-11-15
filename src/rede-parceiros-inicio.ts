@@ -462,19 +462,29 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   if ('ResizeObserver' in window) new ResizeObserver(f).observe(hero);
 })();
 
-/* ---------- "Onde buscamos": grade de setores que expande no lugar (um aberto por vez; clicar de novo fecha) ---------- */
+/* ---------- "Onde buscamos": setores em etiquetas (abas: clique, setas e Home/End) ---------- */
 {
-  const cards = Array.from(document.querySelectorAll<HTMLButtonElement>('.rx-setor-card'));
-  const abrir = (card: HTMLButtonElement | null, rolar = true) => {
-    cards.forEach((c) => {
-      const on = c === card;
-      c.setAttribute('aria-expanded', String(on));
-      const painel = document.getElementById(c.getAttribute('aria-controls') || '');
-      if (painel) painel.hidden = !on;
+  const lista = document.querySelector<HTMLElement>('.rx-chips');
+  if (lista) {
+    const abas = Array.from(lista.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const escolher = (aba: HTMLButtonElement, foco = false) => {
+      abas.forEach((a) => {
+        const on = a === aba;
+        a.setAttribute('aria-selected', String(on));
+        a.tabIndex = on ? 0 : -1;
+        const painel = document.getElementById(a.getAttribute('aria-controls') || '');
+        if (painel) painel.hidden = !on;
+      });
+      if (foco) aba.focus();
+    };
+    abas.forEach((aba, i) => {
+      aba.addEventListener('click', () => escolher(aba));
+      aba.addEventListener('keydown', (e) => {
+        const ir: Record<string, number> = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: abas.length - 1 };
+        if (!(e.key in ir)) return;
+        e.preventDefault();
+        escolher(abas[(ir[e.key] + abas.length) % abas.length], true);
+      });
     });
-    // o painel aberto fica à vista (útil no celular, quando abre embaixo do card)
-    if (card && rolar) { const painel = document.getElementById(card.getAttribute('aria-controls') || ''); const r = painel?.getBoundingClientRect(); if (r && r.bottom > innerHeight) painel!.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }
-  };
-  cards.forEach((c) => c.addEventListener('click', () => abrir(c.getAttribute('aria-expanded') === 'true' ? null : c)));
-  if (cards[0]) abrir(cards[0], false);
+  }
 }
