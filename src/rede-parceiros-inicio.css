@@ -1556,3 +1556,41 @@ html body .rx-setor-foto .rx-setor-cab h3 { color: #FFFFFF; }
   .rx-beam-logo img { width: 1.375rem; height: 1.375rem; }
   .rx-beam-legenda { font-size: .5rem; max-width: 4rem; }
 }
+
+/* "Onde buscamos": texto à esquerda e os 12 setores em anel ao redor do Studio à direita.
+   Um ponto de luz percorre o anel devagar. No celular, o texto fica em cima e o anel embaixo. */
+.rx-onde { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 30rem); align-items: center; gap: 3rem; margin-top: 5rem; }
+html body .rx-onde .rx-onde-cab { margin: 0; max-width: none; text-align: left; }
+html body .rx-onde .rx-onde-cab h2 { text-align: left !important; margin-left: 0 !important; }
+html body .rx-onde .rx-onde-cab .rp-texto { text-align: left !important; margin: 1rem 0 0 !important; }
+.rx-anel { --r: 41%; container-type: inline-size; position: relative; width: 100%; max-width: 30rem; aspect-ratio: 1; margin: 0 auto 1.5rem; }
+.rx-anel-trilha { position: absolute; inset: calc(50% - var(--r)); border-radius: 9999px; border: 1.5px solid #E4E6EC; animation: rx-anel-gira 18s linear infinite; }
+.rx-anel-trilha i { position: absolute; top: -5px; left: calc(50% - 5px); width: 10px; height: 10px; border-radius: 9999px; background: #D44D4D; box-shadow: 0 0 10px 3px rgba(212, 77, 77, 0.45); }
+@keyframes rx-anel-gira { to { transform: rotate(360deg); } }
+.rx-anel-centro { position: absolute; left: 50%; top: 50%; width: 30%; aspect-ratio: 1; transform: translate(-50%, -50%); display: grid; place-items: center; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(212, 77, 77, 0.18); box-shadow: 0 0 0 12px rgba(212, 77, 77, 0.05), 0 14px 40px rgba(212, 77, 77, 0.16); }
+.rx-anel-centro img { width: 48%; height: auto; }
+.rx-anel-lista { list-style: none; margin: 0; padding: 0; }
+.rx-anel-item { position: absolute; left: 50%; top: 50%; display: grid; justify-items: center; gap: .3125rem; width: 6.5rem; margin-left: -3.25rem; margin-top: -1.5rem;
+  transform: rotate(calc(var(--i) * 360deg / var(--n) - 90deg)) translateX(41cqw) rotate(calc(90deg - var(--i) * 360deg / var(--n))); }
+.rx-anel-no { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 9999px; background: #FFFFFF; color: #D44D4D; border: 1px solid #EDF0F5; box-shadow: 0 6px 18px rgba(13, 17, 25, 0.08); transition: transform .2s ease; }
+.rx-anel-no svg { width: 1.25rem; height: 1.25rem; }
+.rx-anel-item:hover .rx-anel-no { transform: scale(1.08); }
+.rx-anel-nome { font-size: .75rem; font-weight: 600; line-height: 1.2; color: #283043; text-align: center; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .rx-anel-trilha { animation: none; } }
+@media (max-width: 1023px) {
+  .rx-onde { grid-template-columns: minmax(0, 1fr); gap: 2rem; margin-top: 3.5rem; }
+  html body .rx-onde .rx-onde-cab, html body .rx-onde .rx-onde-cab h2, html body .rx-onde .rx-onde-cab .rp-texto { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }
+}
+@media (max-width: 639px) {
+  .rx-anel-item { width: 5rem; margin-left: -2.5rem; margin-top: -1.125rem; gap: .25rem; }
+  .rx-anel-no { width: 2.25rem; height: 2.25rem; }
+  .rx-anel-no svg { width: 1rem; height: 1rem; }
+  .rx-anel-nome { font-size: .625rem; }
+  .rx-anel-centro { box-shadow: 0 0 0 7px rgba(212, 77, 77, 0.05), 0 10px 26px rgba(212, 77, 77, 0.16); }
+}
+@media (max-width: 374px) {
+  .rx-anel-no { width: 1.875rem; height: 1.875rem; }
+  .rx-anel-no svg { width: .875rem; height: .875rem; }
+  .rx-anel-nome { font-size: .5625rem; }
+  .rx-anel-item { margin-top: -.9375rem; }
+}
