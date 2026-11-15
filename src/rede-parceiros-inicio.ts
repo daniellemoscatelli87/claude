@@ -627,7 +627,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   }
 });
 
-/* ---------- Match de profissionais: à esquerda o resumo das 7 etapas (a ativa em destaque); à direita a cena da etapa ----------
+/* ---------- Match de profissionais: à esquerda um resumo em texto e tópicos (o tópico da etapa em cena fica em destaque); à direita a cena da etapa ----------
    Troca sozinha (6,5 s por etapa; 10 s na última, a do kanban) com a barrinha de progresso no ponto ativo. A pessoa pode
    ir e voltar pelas setas e pelos pontos e pausar; o mouse sobre o componente também pausa. Só roda quando está na tela. */
 (() => {
@@ -635,7 +635,11 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   if (!palco) return;
   const txts = Array.from(palco.querySelectorAll<HTMLElement>('.rx-mt-txt'));
   const cenas = Array.from(palco.querySelectorAll<HTMLElement>('.rx-mt-cena'));
-  const pontos = Array.from(palco.querySelectorAll<HTMLButtonElement>('[data-ir]'));
+  const topicos = Array.from(palco.querySelectorAll<HTMLButtonElement>('.rx-mt-topico'));
+  const NOMES = ['Cadastro', 'Base de parceiros', 'Cruzamento com IA', 'Qualificação', 'Contato e alinhamento', 'Ranking de compatibilidade', 'O trabalho acontece'];
+  const agoraN = palco.querySelector<HTMLElement>('.rx-mt-agora-n');
+  const agoraT = palco.querySelector<HTMLElement>('.rx-mt-agora-t');
+  const barra = palco.querySelector<HTMLElement>('.rx-mt-agora');
   const pausa = palco.querySelector<HTMLButtonElement>('.rx-mt-pausa')!;
   const total = cenas.length;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -651,11 +655,14 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
       if (on) { e.classList.remove('ativa'); void e.offsetWidth; }
       e.classList.toggle('ativa', on);
     }));
-    pontos.forEach((p, i) => { p.classList.toggle('ativa', i + 1 === atual); p.classList.toggle('feito', i + 1 < atual); p.setAttribute('aria-current', i + 1 === atual ? 'step' : 'false'); p.style.setProperty('--p', '0%'); });
+    topicos.forEach((t) => { const on = (t.dataset.etapas || '').split(',').map(Number).includes(atual); t.classList.toggle('ativa', on); t.setAttribute('aria-current', on ? 'step' : 'false'); });
+    if (agoraN) agoraN.textContent = `Etapa ${String(atual).padStart(2, '0')} de ${String(total).padStart(2, '0')}`;
+    if (agoraT) agoraT.textContent = NOMES[atual - 1] || '';
+    barra?.style.setProperty('--pn', '0');
   };
   const atualizarPausa = () => { pausa.textContent = pausado ? 'Retomar' : 'Pausar'; pausa.setAttribute('aria-pressed', String(pausado)); };
   palco.querySelectorAll<HTMLButtonElement>('[data-passo]').forEach((b) => b.addEventListener('click', () => mostrar(atual + Number(b.dataset.passo))));
-  pontos.forEach((p) => p.addEventListener('click', () => mostrar(Number(p.dataset.ir))));
+  topicos.forEach((t) => t.addEventListener('click', () => mostrar(Number(t.dataset.ir))));
   pausa.addEventListener('click', () => { pausado = !pausado; atualizarPausa(); });
   palco.addEventListener('mouseenter', () => { sobre = true; });
   palco.addEventListener('mouseleave', () => { sobre = false; });
@@ -665,8 +672,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     ultimo = t;
     if (!pausado && !sobre && visivel && !document.hidden) {
       decorrido += dt;
-      const p = pontos[atual - 1];
-      p?.style.setProperty('--p', `${Math.min(100, (decorrido / DUR(atual)) * 100)}%`);
+      barra?.style.setProperty('--pn', String(Math.min(1, decorrido / DUR(atual))));
       if (decorrido >= DUR(atual)) mostrar(atual + 1);
     }
     requestAnimationFrame(passo);

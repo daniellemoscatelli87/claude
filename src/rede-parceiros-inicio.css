@@ -2431,3 +2431,38 @@ html body .rx-mt-ctrl { margin-top: 1rem; padding-left: 1rem; }
   .rx-mt-item { padding: .5rem .75rem; align-items: center; }
   .rx-mt-item.ativa { align-items: start; padding: .75rem; }
 }
+
+/* Match de profissionais: lado esquerdo com texto + tópicos. O tópico da etapa em cena ganha destaque (marcador
+   vermelho e texto escuro); embaixo, a etapa atual com a barrinha de tempo e os controles. */
+.rx-mt-intro { margin: 0 0 1.25rem; font-size: 1.0625rem; line-height: 1.6; color: #283043; }
+.rx-mt-topicos { list-style: none; margin: 0; padding: 0; display: grid; gap: .25rem; }
+.rx-mt-topico { width: 100%; display: grid; grid-template-columns: .875rem minmax(0, 1fr); gap: .875rem; align-items: start; padding: .75rem .875rem; border: 0; border-radius: 14px; background: transparent;
+  text-align: left; font: inherit; cursor: pointer; transition: background-color .3s ease; }
+.rx-mt-topico:hover { background: rgba(237, 240, 245, .6); }
+.rx-mt-tmarca { width: .625rem; height: .625rem; margin-top: .4rem; border-radius: 9999px; border: 2px solid #D6DCE6; background: #FFFFFF; transition: all .3s ease; }
+.rx-mt-tcorpo { display: grid; gap: .25rem; }
+.rx-mt-tcorpo strong { font-size: 1rem; color: #627288; transition: color .3s ease; }
+.rx-mt-tcorpo > span { font-size: .875rem; line-height: 1.55; color: #8898B0; transition: color .3s ease; }
+.rx-mt-tchips { display: flex !important; flex-wrap: wrap; gap: .375rem; margin-top: .375rem; }
+.rx-mt-tchips i { font-style: normal; padding: .1875rem .5rem; border-radius: 9999px; background: #EDF0F5; font-size: .75rem; font-weight: 500; color: #627288; }
+.rx-mt-topico.ativa { background: #FFFFFF; box-shadow: 0 0 0 1px #E4E8EF, 0 12px 30px -20px rgba(13, 17, 25, .3); }
+.rx-mt-topico.ativa .rx-mt-tmarca { border-color: #D44D4D; background: #D44D4D; box-shadow: 0 0 0 4px rgba(212, 77, 77, .15); }
+.rx-mt-topico.ativa strong { color: #131A27; }
+.rx-mt-topico.ativa .rx-mt-tcorpo > span { color: #495669; }
+.rx-mt-topico.ativa .rx-mt-tchips i { background: #FDF2F2; color: #B83A3A; }
+.rx-mt-topico:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, .45); }
+.rx-mt-agora { position: relative; display: flex; align-items: baseline; gap: .625rem; margin: 1.25rem 0 0; padding: 0 .875rem .625rem; font-size: .8125rem; }
+.rx-mt-agora::before, .rx-mt-agora::after { content: ""; position: absolute; left: .875rem; bottom: 0; height: 2px; border-radius: 9999px; }
+.rx-mt-agora::before { right: .875rem; background: #EDF0F5; }
+.rx-mt-agora::after { width: calc((100% - 1.75rem) * var(--pn, 0)); background: #D44D4D; }
+.rx-mt-agora-n { font-size: .6875rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #D44D4D; }
+.rx-mt-agora-t { color: #131A27; }
+html body .rx-mt-ctrl { margin-top: .875rem; padding-left: .875rem; }
+@media (max-width: 1023px) {
+  .rx-mt-intro { order: 3; text-align: left; font-size: 1rem; margin: .5rem 0 0; }
+  .rx-mt-topicos { order: 4; }
+  .rx-mt-agora { order: 2; margin-top: 0; }
+  .rx-mt-dir { order: 1; } html body .rx-mt-ctrl { order: 2; }
+  .rx-mt-topico:not(.ativa) .rx-mt-tcorpo > span { display: none; }
+}
+@media (max-width: 1023px) { html body .rx-mt-topico:not(.ativa) .rx-mt-tchips { display: none !important; } }
