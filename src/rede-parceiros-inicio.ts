@@ -636,7 +636,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const txts = Array.from(palco.querySelectorAll<HTMLElement>('.rx-mt-txt'));
   const cenas = Array.from(palco.querySelectorAll<HTMLElement>('.rx-mt-cena'));
   const topicos = Array.from(palco.querySelectorAll<HTMLButtonElement>('.rx-mt-topico'));
-  const NOMES = ['Cadastro', 'Base de parceiros', 'Cruzamento com IA', 'Qualificação', 'Contato e alinhamento', 'Ranking de compatibilidade', 'O trabalho acontece'];
+  const NOMES = ['Cadastro', 'Base de parceiros', 'Novo projeto', 'Cruzamento com IA', 'Qualificação', 'Contato e alinhamento', 'Ranking de compatibilidade', 'O trabalho acontece'];
   const agoraN = palco.querySelector<HTMLElement>('.rx-mt-agora-n');
   const agoraT = palco.querySelector<HTMLElement>('.rx-mt-agora-t');
   const barra = palco.querySelector<HTMLElement>('.rx-mt-agora');
