@@ -251,3 +251,6 @@ html body #ie3-home .ih-clientes .ih-clientes-card { border-radius: 56px !import
 }
 /* celular e tablet: menos espaço entre o título e os parágrafos (como no Seja Parceiro), para a foto ganhar altura */
 @media (max-width: 1023px) { html body .ih-hero #ih-titulo { margin-bottom: 0 !important; } }
+/* Textos do hero: versão mais curta no celular e tablet */
+.ih-so-movel { display: none; }
+@media (max-width: 1023px) { html body .ih-so-pc { display: none !important; } html body .ih-so-movel { display: block; } }
