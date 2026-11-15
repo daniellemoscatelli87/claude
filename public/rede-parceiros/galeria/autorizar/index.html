@@ -166,7 +166,7 @@
       <label id="li-editar" style="margin:0"><span class="sr-only">Link do seu LinkedIn</span><input type="url" id="linkedin" maxlength="300" placeholder="https://www.linkedin.com/in/seu-perfil" autocomplete="url"></label>
     </div>
     <div class="foto-campo">
-      <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP, até 15 MB. Depois de escolher, ajuste o enquadramento.</small></span>
+      <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP, até 15 MB e com pelo menos 300 × 300 pixels. Depois de escolher, ajuste o enquadramento.</small></span>
       <div class="foto-acoes">
         <label class="botao-arquivo" id="foto-enviar" for="foto-arquivo"><span>Enviar foto</span></label>
         <input type="file" id="foto-arquivo" accept="image/jpeg,image/png,image/webp" class="sr-only">
@@ -280,6 +280,8 @@
       nomePendente = f.name;
       var url = URL.createObjectURL(f), img = new Image();
       img.onload = function () {
+        // mínimo de 300 × 300 pixels para a foto não ficar borrada no card
+        if (img.naturalWidth < 300 || img.naturalHeight < 300) { URL.revokeObjectURL(url); fotoErro("A foto “" + f.name + "” tem " + img.naturalWidth + " × " + img.naturalHeight + " pixels. Escolha uma foto com pelo menos 300 × 300 pixels para não ficar borrada."); return; }
         if (rec.url) URL.revokeObjectURL(rec.url);
         rec = { img: img, url: url, base: 1, zoom: 1, x: 0, y: 0 };
         $("recorte").hidden = false; V = $("rec-area").clientWidth; rec.base = V / Math.min(img.naturalWidth, img.naturalHeight);
