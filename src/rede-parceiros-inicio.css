@@ -2990,3 +2990,5 @@ html body .rx-mv6 .rx-mv-conv { display: none; }
   html body .rx-mv-fila li.vez .rx-mv-convidar { flex-basis: 100%; justify-items: end; }
   html body .rx-mv-fila li.vez .rx-mv-convidar > span { width: max-content; }
 }
+/* sem a barrinha de tempo na barra do topo do mockup */
+html body .rx-mt-tela-topo.rx-mt-agora::before, html body .rx-mt-tela-topo.rx-mt-agora::after { content: none !important; display: none !important; }
