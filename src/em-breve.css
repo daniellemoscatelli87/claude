@@ -264,3 +264,9 @@ html body #ie3-home .ih-clientes .ih-clientes-card { border-radius: 56px !import
   html body .ih-hero .ih-so-movel { margin-top: 0 !important; }
   html body .ih-hero .ih-selo-movel { margin-bottom: 14px !important; }
 }
+
+/* Títulos das seções da home no mesmo padrão do Seja Parceiro e do Projeto Piloto:
+   celular 24 px, computador 36 px; altura de linha 1,2; mesma cor */
+html body #ie3-home h2 { font-size: 1.5rem !important; line-height: 1.2 !important; letter-spacing: -0.02em !important; font-weight: 700 !important; color: #131A27 !important; }
+html body #ie3-home h2 span { font-size: inherit !important; letter-spacing: inherit !important; }
+@media (min-width: 768px) { html body #ie3-home h2 { font-size: 2.25rem !important; } }

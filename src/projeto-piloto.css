@@ -1524,3 +1524,9 @@ main + footer.relative { padding-top: 6rem !important; }
   html body.cabecalho-sobre-hero .site-header::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: calc(100% + 1.5rem); z-index: -1; pointer-events: none;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 55%, rgba(0, 0, 0, 0) 100%); }
 }
+
+/* Títulos das seções no mesmo padrão da Home e do Seja Parceiro: celular 24 px, computador 36 px; altura de linha 1,2 */
+html body main h2 { line-height: 1.2 !important; letter-spacing: -0.02em !important; }
+html body main h2 span { font-size: inherit !important; }
+@media (min-width: 768px) { html body main h2 { font-size: 2.25rem !important; } }
+html body main h2:not(.secao-escura h2) { color: #131A27; }
