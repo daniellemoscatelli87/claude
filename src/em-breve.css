@@ -63,10 +63,8 @@ html { overflow-x: clip; }
 .pagina-inicio .site-header:not(.is-scrolled) .btn-contato { border-color: #D44D4D; color: #D44D4D; }
 .pagina-inicio .site-header:not(.is-scrolled) .btn-contato:hover { background: #D44D4D; color: #fff; }
 
-/* Home: rolagem travada em telas grandes, onde todo o conteúdo cabe na tela.
-   Em telas menores (celular, notebooks baixos) a rolagem continua, para nenhum conteúdo ficar inacessível. */
+/* Home: a rolagem não é mais travada (a página tem as seções da IE-3 abaixo do hero) */
 @media (min-width: 1024px) and (min-height: 860px) {
-  html:has(body.pagina-inicio), body.pagina-inicio { height: 100dvh; overflow: hidden; }
   body.pagina-inicio > footer { padding-top: 1rem; padding-bottom: 1rem; }
   body.pagina-inicio > main { padding-top: 1rem; padding-bottom: 1rem; }
 }
