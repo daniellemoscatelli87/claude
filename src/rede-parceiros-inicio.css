@@ -2697,3 +2697,25 @@ html body .rx-mv-dpessoa img { width: 2.5rem; height: 2.5rem; margin: 0; }
   .rx-mv-crit { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 767px) { html body .rx-mv-crit { grid-template-columns: 1fr; gap: .3125rem; } html body .rx-mv-crit b { white-space: normal; } }
+/* perfil aderente: a foto da Marina grande dentro do medidor; abaixo o percentual, o nome e o cargo */
+.rx-mv-dpess { flex: none; display: grid; justify-items: center; text-align: center; gap: .125rem; width: 10rem; }
+html body .rx-mv4 .rx-mv-dpess .rx-mv-gauge { width: 7.5rem; height: 7.5rem; margin-bottom: .5rem; }
+.rx-mv-dpess .rx-mv-gauge img { position: absolute; inset: 11px; width: calc(100% - 22px) !important; height: calc(100% - 22px) !important; border-radius: 9999px; object-fit: cover; }
+.rx-mv-dpct { font-size: 1.375rem; font-weight: 700; letter-spacing: -0.02em; color: #D44D4D; line-height: 1.1; }
+.rx-mv-dpct small { font-size: .75rem; font-weight: 600; letter-spacing: 0; color: #8898B0; }
+.rx-mv-dpess strong { font-size: .9375rem; color: #131A27; }
+.rx-mv-dpess > small { font-size: .6875rem; color: #627288; }
+html body .rx-mv4 .rx-mv-dest-txt { align-self: center; }
+html body .rx-mv4 .rx-mv-dsub { margin-top: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .rx-mv4.ativa .rx-mv-dpess img { animation: rx-mv-pop .5s cubic-bezier(.34,1.4,.64,1) .5s both; }
+  .rx-mv4.ativa .rx-mv-dpct, .rx-mv4.ativa .rx-mv-dpess strong, .rx-mv4.ativa .rx-mv-dpess > small { animation: rx-mt-surge .45s ease 1.1s both; }
+}
+@media (max-width: 767px) {
+  html body .rx-mv4 .rx-mv-destaque { flex-direction: column; align-items: center; flex-wrap: nowrap; }
+  html body .rx-mv4 .rx-mv-dest-txt { display: grid; width: 100%; }
+  html body .rx-mv4 .rx-mv-dpess .rx-mv-gauge { width: 6.5rem; height: 6.5rem; }
+  html body .rx-mv-crit { grid-template-columns: 1fr 1fr; }
+  html body .rx-mv-crit small { display: none; }
+}
+@media (min-width: 768px) { html body .rx-mv4 .rx-mv-crit { grid-template-columns: 1fr; gap: .3125rem; } html body .rx-mv4 .rx-mv-crit li { padding: .3125rem .625rem; } html body .rx-mv4 .rx-mv-crit li > span:last-child { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; flex: 1; } }
