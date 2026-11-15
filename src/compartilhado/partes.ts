@@ -23,8 +23,8 @@ const AVISO = `
             <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
           </span>
           <span id="cta-contato-texto" class="block">
-            <span class="block text-sm sm:text-[15px] font-bold leading-snug text-ds-fg">Tem um desafio ou uma ideia?</span>
-            <span class="mt-0.5 block text-[13px] sm:text-sm leading-relaxed text-ds-muted-fg">Vamos conversar sobre seu projeto.</span>
+            <span class="block text-sm sm:text-[15px] font-bold leading-snug text-ds-fg">Tem um projeto?</span>
+            <span class="mt-0.5 block text-[13px] sm:text-sm leading-relaxed text-ds-muted-fg">Vamos conversar sobre ele.</span>
           </span>
         </button>
         <button type="button" id="cta-contato-fechar" aria-label="Fechar aviso" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full text-ds-muted-fg hover:text-ds-fg hover:bg-ds-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ds-ring cursor-pointer">
