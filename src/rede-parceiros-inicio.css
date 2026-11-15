@@ -2554,3 +2554,26 @@ html body .rx-mt-tela-topo .rx-mt-agora-t { font-size: .8125rem; }
 }
 /* tag do perfil na cena do cadastro: rosa claro, "100% completo" */
 html body .rx-mv-pct { background: #FDF2F2; color: #D44D4D; border: 1px solid rgba(212, 77, 77, .18); }
+
+/* Base de parceiros: primeiro aparecem os perfis que já estão na base; por último entra a Marina (canto inferior
+   direito) com uma explosão de confetes, enquanto os outros cards ficam em preto e branco e apagados; quando os
+   confetes somem, tudo volta ao normal. Da base para o "Novo projeto" a troca é direta (sem piscar). */
+html body .rx-mt-palco.direto .rx-mt-cena { transition: none !important; }
+html body .rx-mv2 .rx-mv-grade li.novo { z-index: 2; }
+.rx-mv-confete { position: absolute; left: 50%; top: 45%; width: 0; height: 0; pointer-events: none; z-index: 3; }
+.rx-mv-confete i { position: absolute; left: 0; top: 0; width: var(--w); height: calc(var(--w) * .55); border-radius: 2px; background: var(--c); opacity: 0; }
+.rx-mv-confete i:nth-child(3n) { border-radius: 9999px; height: var(--w); }
+@media (prefers-reduced-motion: no-preference) {
+  html body .rx-mv2.ativa .rx-mv-grade li { animation: rx-mv-pop .5s cubic-bezier(.34,1.32,.64,1) both; animation-delay: calc(.3s + var(--d) * .14s); }
+  html body .rx-mv2.ativa .rx-mv-grade li:not(.novo) { animation: rx-mv-pop .5s cubic-bezier(.34,1.32,.64,1) both, rx-mv-cinza 2.4s ease 1.5s both; animation-delay: calc(.3s + var(--d) * .14s), 1.5s; }
+  html body .rx-mv2.ativa .rx-mv-grade li.novo { animation: rx-mv-novo2 .8s cubic-bezier(.34,1.45,.64,1) 1.5s both; }
+  html body .rx-mv2.ativa .rx-mv-novo { animation: rx-mv-pop .4s cubic-bezier(.34,1.5,.64,1) 2s both; }
+  html body .rx-mv2.ativa .rx-mv-confete i { animation: rx-mv-confete 1.9s cubic-bezier(.2,.7,.4,1) both; animation-delay: calc(1.6s + var(--t)); }
+}
+@keyframes rx-mv-novo2 { 0% { opacity: 0; transform: scale(.6); } 60% { opacity: 1; transform: scale(1.06); } 100% { opacity: 1; transform: none; } }
+@keyframes rx-mv-cinza { 0% { filter: none; opacity: 1; } 15%, 75% { filter: grayscale(1); opacity: .4; } 100% { filter: none; opacity: 1; } }
+@keyframes rx-mv-confete {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(.6); }
+  45% { opacity: 1; transform: translate(var(--x), var(--y)) rotate(calc(var(--r) * .5)) scale(1); }
+  100% { opacity: 0; transform: translate(calc(var(--x) * 1.25), calc(var(--y) + var(--q) + 120px)) rotate(var(--r)) scale(1); }
+}

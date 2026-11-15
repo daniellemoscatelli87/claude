@@ -646,7 +646,10 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const DUR = (n: number) => (n === total ? 10000 : 6500);
   let atual = 1, decorrido = 0, pausado = reduzir, sobre = false, visivel = false, ultimo = 0;
   const mostrar = (n: number) => {
+    const antes = atual;
     atual = ((n - 1 + total) % total) + 1;
+    // da base de parceiros (2) para o novo projeto (3) a tela é a mesma: troca direta, sem o esmaecer
+    palco.classList.toggle('direto', antes === 2 && atual === 3);
     decorrido = 0;
     palco.dataset.n = String(atual);
     [txts, cenas].forEach((g) => g.forEach((e) => {
