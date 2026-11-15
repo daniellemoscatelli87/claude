@@ -243,11 +243,11 @@ html body #ie3-home .ih-clientes .ih-clientes-card { border-radius: 56px !import
 }
 @keyframes ih-ping { 75%, 100% { transform: scale(2); opacity: 0; } }
 
-/* Celular e tablet: foto vertical própria (post-its), preenchendo o espaço até a base do topo como a foto do trio
-   no Seja Parceiro (cobre a área, alinhada pelo alto) */
+/* Celular e tablet: foto vertical própria (post-its), inteira (do alto dos post-its até a base), no espaço que sobra
+   até a base do topo, alinhada embaixo */
 @media (max-width: 1023px) {
   html body .ih-hero .contents > div:first-child > div { display: none; }
-  html body .ih-hero .contents > div:first-child img { object-fit: cover !important; object-position: 50% 0% !important; filter: none !important; }
+  html body .ih-hero .contents > div:first-child img { object-fit: contain !important; object-position: 50% 100% !important; filter: none !important; }
 }
 /* celular e tablet: menos espaço entre o título e os parágrafos (como no Seja Parceiro), para a foto ganhar altura */
 @media (max-width: 1023px) { html body .ih-hero #ih-titulo { margin-bottom: 0 !important; } }
