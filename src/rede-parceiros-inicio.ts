@@ -105,22 +105,22 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   }, 4500);
 })();
 
-/* ---------- Formatos de parceria: kanban animado de projetos (exemplos) ----------
-   Cada card é um projeto: avatar do profissional (pessoa fictícia gerada por IA), tipo de projeto e status.
-   A cada poucos segundos um card avança de coluna (A iniciar → Em andamento → Entregue → volta ao início). */
+/* ---------- Como funciona a colaboração: kanban animado com exemplos ilustrativos de participações ----------
+   Cada card é uma participação: avatar do profissional (pessoa fictícia gerada por IA), contribuição e área de especialização.
+   A cada poucos segundos um card avança de coluna (Convites → Em colaboração → Concluídas → volta ao início). */
 (() => {
   const quadro = document.querySelector<HTMLElement>('.rx-kb-quadro');
   const pausa = document.querySelector<HTMLButtonElement>('.rx-kanban .rp-lista-pausa');
   if (!quadro) return;
-  const STATUS = ['A iniciar', 'Em andamento', 'Entregue'];
+  const STATUS = ['Convite', 'Em colaboração', 'Concluída'];
   const projetos = [
-    { tipo: 'Pesquisa com pacientes', av: 3, cargo: 'UX Researcher', s: 1 },
-    { tipo: 'Jornada de check-in de hotel', av: 2, cargo: 'Service Designer', s: 0 },
-    { tipo: 'App de matrícula escolar', av: 1, cargo: 'UX/UI Designer', s: 1 },
-    { tipo: 'Painel de vendas do varejo', av: 4, cargo: 'Analista de Dados', s: 2 },
-    { tipo: 'Onboarding de conta digital', av: 5, cargo: 'Product Designer', s: 0 },
-    { tipo: 'Automação com IA na fábrica', av: 2, cargo: 'Especialista em IA', s: 2 },
-    { tipo: 'Treinamento da equipe de atendimento', av: 5, cargo: 'Especialista em CX', s: 1 },
+    { tipo: 'Pesquisa com usuários', av: 3, cargo: 'UX Researcher', s: 1 },
+    { tipo: 'Mapeamento de jornada', av: 2, cargo: 'Service Designer', s: 0 },
+    { tipo: 'Protótipo de interface', av: 1, cargo: 'UX/UI Designer', s: 1 },
+    { tipo: 'Painel de indicadores', av: 4, cargo: 'Analista de Dados', s: 2 },
+    { tipo: 'Fluxo de primeiro acesso', av: 5, cargo: 'Product Designer', s: 0 },
+    { tipo: 'Automação com IA', av: 2, cargo: 'Especialista em IA', s: 2 },
+    { tipo: 'Capacitação de atendimento', av: 5, cargo: 'Especialista em CX', s: 1 },
   ];
   const cols = Array.from(quadro.querySelectorAll<HTMLElement>('.rx-kb-col'));
   const listas = cols.map((c) => c.querySelector<HTMLUListElement>('.rx-kb-cards')!);
@@ -461,3 +461,42 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   window.addEventListener('resize', f);
   if ('ResizeObserver' in window) new ResizeObserver(f).observe(hero);
 })();
+
+/* ---------- "Onde buscamos": carrossel de setores (setas, pontos, arrastar e teclado) ---------- */
+{
+  const trilha = document.querySelector<HTMLElement>('.rx-setores-trilha');
+  const pontos = document.querySelector<HTMLElement>('.rx-setores-pontos');
+  const pos = document.querySelector<HTMLElement>('.rx-setores-pos');
+  if (trilha && pontos && pos) {
+    const slides = Array.from(trilha.querySelectorAll<HTMLElement>('.rx-setor-slide'));
+    const nome = (s: HTMLElement) => s.querySelector('h3')?.textContent || '';
+    const atual = () => {
+      const x = trilha.scrollLeft;
+      let melhor = 0;
+      slides.forEach((s, i) => { if (Math.abs(s.offsetLeft - trilha.offsetLeft - x) < Math.abs(slides[melhor].offsetLeft - trilha.offsetLeft - x)) melhor = i; });
+      // no fim da trilha, o último card conta como atual
+      return trilha.scrollLeft + trilha.clientWidth >= trilha.scrollWidth - 4 ? slides.length - 1 : melhor;
+    };
+    const ir = (i: number) => {
+      const n = (i + slides.length) % slides.length;
+      trilha.scrollTo({ left: slides[n].offsetLeft - trilha.offsetLeft });
+    };
+    slides.forEach((s, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.setAttribute('aria-label', `Ir para ${nome(s)}`); b.tabIndex = -1;
+      b.addEventListener('click', () => ir(i));
+      pontos.appendChild(b);
+    });
+    const marcar = () => {
+      const a = atual();
+      Array.from(pontos.children).forEach((b, i) => b.setAttribute('aria-current', String(i === a)));
+      pos.textContent = `${a + 1} de ${slides.length} · ${nome(slides[a])}`;
+    };
+    document.querySelectorAll<HTMLButtonElement>('.rx-setores-seta').forEach((b) => b.addEventListener('click', () => ir(atual() + Number(b.dataset.dir))));
+    trilha.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); ir(atual() + (e.key === 'ArrowRight' ? 1 : -1)); } });
+    let pedido = 0;
+    trilha.addEventListener('scroll', () => { cancelAnimationFrame(pedido); pedido = requestAnimationFrame(marcar); }, { passive: true });
+    addEventListener('resize', marcar);
+    marcar();
+  }
+}
