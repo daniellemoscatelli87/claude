@@ -131,7 +131,8 @@ html body #ie3-home #depoimentos { border-top: 0 !important; }
   .ih-folha { position: relative; z-index: 1; margin-top: -28px; background: #FFFFFF; }
   .ih-tampa { display: block; position: fixed; z-index: 21; left: 0; right: 0; top: var(--ih-tampa, 100vh); height: 28px; background: #FFFFFF; border-radius: 28px 28px 0 0; pointer-events: none; }
   .ih-movel { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; padding: 1.5rem 1.5rem 0; }
-  .ih-movel .ih-form { display: flex; flex-direction: column; align-items: center; }
+  .ih-movel .ih-form { display: flex; flex-direction: column; align-items: stretch; max-width: 34rem; }
+  .ih-movel #notify-form { width: 100%; }
   .ih-movel #notify-msg { padding-left: 0; text-align: center; }
   .ih-movel .ih-p3 { margin: 0; max-width: 34rem; display: flex; flex-direction: column; align-items: center; text-align: center; font-size: .9375rem; line-height: 1.6; color: var(--color-brand-muted, #627288); }
   .ih-movel .ih-p3 p { margin: 0; }
