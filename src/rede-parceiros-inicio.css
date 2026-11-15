@@ -1373,3 +1373,6 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 @media (max-width: 1023px) { .rp-hero h1, .rp-hero .rp-lead { position: relative; top: 10px; } }
 /* celular: mesmo respiro visual antes e depois do gráfico de segmentos */
 @media (max-width: 1023px) { .rx-orbita-area { margin-bottom: -48px !important; } }
+
+/* tempo de carreira no card da galeria */
+.rx-gal-tempo { margin: -.625rem 0 1rem; font-size: .8125rem; color: #627288; }
