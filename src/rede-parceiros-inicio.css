@@ -2466,3 +2466,27 @@ html body .rx-mt-ctrl { margin-top: .875rem; padding-left: .875rem; }
   .rx-mt-topico:not(.ativa) .rx-mt-tcorpo > span { display: none; }
 }
 @media (max-width: 1023px) { html body .rx-mt-topico:not(.ativa) .rx-mt-tchips { display: none !important; } }
+/* lado esquerdo mais enxuto, na altura do mockup */
+@media (min-width: 1024px) {
+  .rx-mt-intro { margin-bottom: .75rem; font-size: 1rem; }
+  .rx-mt-topicos { gap: .125rem; }
+  .rx-mt-topico { padding: .625rem .875rem; }
+  .rx-mt-tcorpo { gap: .125rem; }
+  .rx-mt-tcorpo strong { font-size: .9375rem; }
+  .rx-mt-tcorpo > span { font-size: .8125rem; line-height: 1.5; }
+  .rx-mt-tchips { gap: .25rem; margin-top: .25rem; }
+  .rx-mt-tchips i { font-size: .6875rem; padding: .125rem .4375rem; }
+  .rx-mt-agora { margin-top: .875rem; }
+  html body .rx-mt-ctrl { margin-top: .625rem; }
+}
+@media (min-width: 1024px) {
+  html body .rx-mt-palco { align-items: stretch; }
+  html body .rx-mt-esq { display: flex; flex-direction: column; justify-content: space-between; }
+  html body .rx-mt-dir { display: flex; align-items: center; }
+  html body .rx-mt-dir .rx-mt-tela { width: 100%; }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .rx-mt-intro { font-size: .9375rem; }
+  .rx-mt-tcorpo > span { font-size: .75rem; }
+  .rx-mt-topico { padding: .5rem .75rem; }
+}
