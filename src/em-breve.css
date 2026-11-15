@@ -113,7 +113,7 @@ html body #ie3-home #depoimentos { border-top: 0 !important; }
   .pagina-inicio .site-header, .pagina-inicio .site-header.is-scrolled, html body.pagina-inicio .site-header.is-scrolled { transform: none !important; translate: none !important; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
   html body.pagina-inicio .site-header.is-hidden { transform: none !important; }
   html:has(body.pagina-inicio) { scroll-padding-top: calc(var(--altura-cabecalho, 68px) + 2.5rem); }
-  .ih-hero { position: fixed; top: 0; left: 0; right: 0; z-index: 20; display: flex; flex-direction: column; min-height: calc(100svh - 69px);
+  .ih-hero { position: fixed; top: 0; left: 0; right: 0; z-index: 20; display: flex; flex-direction: column; min-height: calc(100svh - 64px);
     padding-top: calc(var(--altura-cabecalho, 68px) + .25rem); clip-path: inset(0 0 calc(100% - var(--ih-tampa, 100vh) - 28px) 0); }
   .ih-hero-grade { flex: 1 0 auto; display: flex; flex-direction: column; }
   .ih-hero-grade > .grid { flex: 1 0 auto; display: flex; flex-direction: column; gap: 0; }
@@ -211,7 +211,7 @@ html body #ie3-home #depoimentos .max-w-5xl.bg-white,
 /* Celular e tablet: o topo termina sempre na mesma altura do Projeto Piloto e do Seja Parceiro (filete do card branco
    na mesma posição); em telas baixas a foto encolhe para caber */
 @media (max-width: 1023px) {
-  html body .ih-hero { height: calc(100svh - 69px); min-height: 0; }
+  html body .ih-hero { height: calc(100svh - 64px); min-height: 0; }
   html body .ih-hero .contents > div:first-child { min-height: 0; }
 }
 
@@ -254,3 +254,13 @@ html body #ie3-home .ih-clientes .ih-clientes-card { border-radius: 56px !import
 /* Textos do hero: versão mais curta no celular e tablet */
 .ih-so-movel { display: none; }
 @media (max-width: 1023px) { html body .ih-so-pc { display: none !important; } html body .ih-so-movel { display: block; } }
+/* celular e tablet: título e parágrafo do hero no mesmo padrão do Seja Parceiro (peso, cores, espaços e posição) */
+@media (max-width: 1023px) {
+  html body .ih-hero #ih-titulo { font-weight: 700 !important; color: #131A27 !important; margin-bottom: 10px !important; position: relative; top: 10px; }
+  html body .ih-hero .ih-so-movel { color: #495669 !important; position: relative; top: 10px; }
+  html body .ih-hero #ih-titulo + div { margin-top: 0 !important; }
+}
+@media (max-width: 1023px) {
+  html body .ih-hero .ih-so-movel { margin-top: 0 !important; }
+  html body .ih-hero .ih-selo-movel { margin-bottom: 14px !important; }
+}
