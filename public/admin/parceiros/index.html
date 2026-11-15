@@ -57,6 +57,8 @@
   .tp-gal.wait { background: #fdf3e2; color: #8a5a12; }
   .tp-gal.no { background: #fdf2f2; color: #b82828; }
   .tp-gal.none { background: var(--track); color: var(--muted); }
+  .tp-gal.com-ic { display: inline-flex; align-items: center; gap: 6px; }
+  .tp-gal.com-ic svg { width: 14px; height: 14px; flex: none; }
   .tab-parceiros tr.novo .tp-nome::after { content: ""; display: inline-block; width: 7px; height: 7px; margin-left: 8px; border-radius: 50%; background: var(--red); vertical-align: middle; }
   .ini-foto { overflow: hidden; padding: 0 !important; }
   .ini-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -706,7 +708,20 @@ function areasAtuacao(r) {
 const limpaTxt = (x) => String(x || "").replace(/\.\s*$/, "").trim();
 // link do LinkedIn informado (aceita "linkedin.com/in/..." sem https)
 const linkLinkedin = (u) => { const v = String(u || "").trim(); if (!/linkedin\.com\//i.test(v)) return ""; return /^https?:\/\//i.test(v) ? v.replace(/^http:/i, "https:") : "https://" + v; };
-const espGaleria = (r) => limpaTxt(r.galeria_cargo) || limpaTxt(r.principal_especializacao);
+// Rótulo curto da especialidade no card (mesma regra de public.rotulo_especialidade no banco):
+// de um texto longo no campo 13, fica a parte de mais peso, até 40 caracteres.
+function rotuloEsp(t) {
+  let s = limpaTxt(t);
+  const corta = (re) => s.split(re)[0].trim();
+  const tenta = (p) => { if (p) s = p; return s.length <= 40; };
+  s = corta(/\s{2,}|\.\s|:\s|\s[-–—]\s/);
+  if (s.length <= 40) return s;
+  if (tenta(corta(/\s+(?:com|focad[oa]s?|voltad[oa]s?|especializad[oa]s?)\s/i))) return s;
+  if (tenta(s.replace(/\s*\([^)]*\)/g, "").replace(/\s{2,}/g, " ").trim())) return s;
+  if (tenta(corta(/[,;]\s/))) return s;
+  return s.slice(0, 40).replace(/\s+\S*$/, "") + "…";
+}
+const espGaleria = (r) => limpaTxt(r.galeria_cargo) || rotuloEsp(r.principal_especializacao);
 const tempoGaleria = (r) => NIVEL[r.tempo_especialidade] || "";
 function summaryCard(r) {
   // o card inteiro abre a ficha; o ícone do LinkedIn é um link próprio (abre o perfil em outra aba)
@@ -993,14 +1008,16 @@ function galeriaCard(data) {
       if (error) { try { erro = (await error.context.json()).error || erro; } catch {} }
       bConv.disabled = false;
       if (erro) { bConv.textContent = data.galeria_convite_em ? "Reenviar convite" : "Enviar convite"; return Admin.toast(erro); }
-      data.galeria_convite_em = new Date().toISOString(); convTxt.textContent = Admin.fmtDate(data.galeria_convite_em); bConv.textContent = "Reenviar convite"; statusDd.textContent = "Aguardando resposta";
+      data.galeria_convite_em = new Date().toISOString(); convTxt.textContent = Admin.fmtDate(data.galeria_convite_em); bConv.textContent = "Reenviar convite"; statusDd.replaceChildren(tagAguardando());
       Admin.log("Enviou o convite da galeria para " + (data.nome || "parceiro"));
       Admin.toast("Convite enviado para " + data.email + ".");
     });
     acoes.appendChild(bConv);
   }
   linha("Convite enviado", conv);
-  const statusDd = linha("Status", st === "autorizado" ? "Exibição autorizada" : st === "recusado" ? "Exibição não autorizada" : data.galeria_convite_em ? "Aguardando resposta" : "Ainda não convidado");
+  // "Aguardando resposta" aparece como tag com ícone de relógio
+  const tagAguardando = () => { const t = el("span", "tp-gal wait com-ic"); t.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'; t.append("Aguardando resposta"); return t; };
+  const statusDd = linha("Status", st === "autorizado" ? "Exibição autorizada" : st === "recusado" ? "Exibição não autorizada" : data.galeria_convite_em ? tagAguardando() : "Ainda não convidado");
   // Exibir: switch (sim/não). Só é possível exibir quem autorizou; ocultar não altera a autorização do parceiro.
   const sw = el("button", "gal-switch"); sw.type = "button"; sw.setAttribute("role", "switch"); sw.setAttribute("aria-label", "Exibir na galeria");
   const rot = el("span", "gal-sw-txt");
@@ -1029,7 +1046,7 @@ function galeriaCard(data) {
     if (data.galeria_linkedin) { const li = el("a", "gal-mini-in", "LinkedIn"); li.href = data.galeria_linkedin; li.target = "_blank"; li.rel = "noopener noreferrer"; topoC.appendChild(li); }
     card.appendChild(topoC);
     card.appendChild(el("div", "gal-mini-nome", data.nome || "Sem nome"));
-    const esp = data.galeria_cargo || String(data.principal_especializacao || "").replace(/\.\s*$/, "").trim();
+    const esp = espGaleria(data);
     card.appendChild(el("div", "gal-mini-esp", esp || "Sem especialidade"));
     if (tempoGaleria(data)) card.appendChild(el("div", "gal-mini-tempo", tempoGaleria(data)));
     const tags = el("ul", "gal-mini-tags");
@@ -1038,7 +1055,7 @@ function galeriaCard(data) {
     box.appendChild(card);
     const info = [];
     info.push(data.galeria_foto_url ? "Foto enviada pela pessoa." : "Sem foto enviada: o card mostra as iniciais.");
-    info.push(data.galeria_cargo ? "Especialidade escrita pela pessoa." : "Especialidade do campo 13 do cadastro.");
+    info.push(data.galeria_cargo ? "Especialidade escrita pela pessoa." : "Especialidade resumida do campo 13 do cadastro.");
     info.push(data.galeria_linkedin ? "LinkedIn informado." : "Sem LinkedIn.");
     box.appendChild(el("p", "muted gal-perfil-info", info.join(" ")));
     c.appendChild(box);

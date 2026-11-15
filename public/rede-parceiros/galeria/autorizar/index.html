@@ -109,6 +109,11 @@
   .enviado-botao { display: inline-flex; align-items: center; min-height: 48px; margin-top: .5rem; padding: 0 1.75rem; border-radius: 9999px; background: #D44D4D; color: #FFFFFF !important; font-weight: 600; text-decoration: none; }
   .enviado-botao:hover { background: #B82828; }
   [hidden] { display: none !important; }
+  /* Skeleton do Design System: bloco --muted (#E8EDF3), raio 8px, pulso (animate-pulse) */
+  .sk-b { background: #E8EDF3; border-radius: 8px; animation: sk-pulso 2s cubic-bezier(.4, 0, .6, 1) infinite; }
+  .sk-card { width: 100%; }
+  @keyframes sk-pulso { 50% { opacity: .5; } }
+  @media (prefers-reduced-motion: reduce) { .sk-b { animation: none; } }
 </style>
 </head>
 <body>
@@ -117,7 +122,27 @@
   <p class="selo">Galeria de profissionais</p>
   <h1>Seu perfil na galeria da rede</h1>
   <p class="lead">Veja como o seu perfil profissional vai aparecer no site e decida se autoriza a exibição.</p>
-  <p id="carregando" class="lead" role="status">Carregando…</p>
+  <!-- Skeleton (Design System: Feedback > Skeleton Loading) enquanto os dados do perfil carregam -->
+  <div id="carregando" class="sk" role="status" aria-busy="true">
+    <span class="sr-only">Carregando…</span>
+    <div class="sk-b" style="height:1.1rem;width:9.5rem;margin:1.75rem 0 1rem"></div>
+    <div class="sk-b" style="height:.9rem;width:7rem"></div>
+    <div class="sk-b" style="height:.75rem;width:60%;margin-top:.5rem"></div>
+    <div class="sk-b" style="height:3rem;width:100%;margin-top:.75rem"></div>
+    <div class="sk-b" style="height:.9rem;width:9rem;margin-top:1.5rem"></div>
+    <div class="sk-b" style="height:.75rem;width:50%;margin-top:.5rem"></div>
+    <div class="sk-b" style="height:3rem;width:100%;margin-top:.75rem"></div>
+    <div class="sk-b" style="height:.9rem;width:5rem;margin-top:1.5rem"></div>
+    <div class="sk-b" style="height:3rem;width:9.5rem;margin-top:.75rem;border-radius:999px"></div>
+    <div class="sk-b" style="height:1.1rem;width:10rem;margin:2rem 0 1rem"></div>
+    <div class="card sk-card">
+      <div class="sk-b" style="height:6rem;width:6rem;border-radius:50%"></div>
+      <div class="sk-b" style="height:1.1rem;width:70%;margin-top:1.25rem"></div>
+      <div class="sk-b" style="height:.9rem;width:45%;margin-top:.6rem"></div>
+      <div class="sk-b" style="height:.8rem;width:25%;margin-top:.6rem"></div>
+      <div style="display:flex;gap:.375rem;margin-top:1rem"><div class="sk-b" style="height:1.5rem;width:5rem;border-radius:999px"></div><div class="sk-b" style="height:1.5rem;width:4rem;border-radius:999px"></div></div>
+    </div>
+  </div>
   <p class="erro" id="erro-geral" role="alert" hidden></p>
 
   <div id="conteudo" hidden>
