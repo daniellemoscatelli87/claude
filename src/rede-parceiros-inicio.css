@@ -1827,3 +1827,20 @@ html body .rx-pilar h3 { padding-right: 1.5rem !important; }
   html body .rx-pilar-ic svg { top: 1rem; right: 1rem; }
 }
 @media (max-width: 1023px) and (min-width: 768px) { html body .rx-pilar-ic { margin-bottom: .5rem !important; } }
+
+/* Borda animada dos cards de "O que é a rede": um traço de luz vermelha percorre a borda de cada card, um de cada vez
+   (1º, 2º, 3º) e o ciclo recomeça */
+@property --rx-ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.rx-pilar-borda { position: absolute; inset: -1px; border-radius: inherit; padding: 2px; pointer-events: none; opacity: 0;
+  background: conic-gradient(from var(--rx-ang), transparent 0deg, transparent 210deg, rgba(212, 77, 77, 0.3) 270deg, #D44D4D 350deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+@media (prefers-reduced-motion: no-preference) {
+  .rx-pilar-borda { animation: rx-borda 5.4s linear infinite; animation-delay: calc(var(--i, 0) * 1.8s); }
+}
+@keyframes rx-borda {
+  0% { --rx-ang: 0deg; opacity: 0; }
+  4% { opacity: 1; }
+  29% { opacity: 1; }
+  33.33% { --rx-ang: 360deg; opacity: 0; }
+  100% { --rx-ang: 360deg; opacity: 0; }
+}
