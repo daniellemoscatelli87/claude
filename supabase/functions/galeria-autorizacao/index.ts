@@ -1,7 +1,9 @@
 // Autorização de exibição do perfil na Galeria de profissionais (pública; o token pessoal do e-mail identifica o parceiro).
 // { acao: "ver", t }  devolve só o que aparece na galeria (nome, cargo, áreas, segmentos, LinkedIn) e a decisão atual.
 // { acao: "decidir", t, decisao: "autorizado" | "recusado", especialidade?, linkedin, foto?, remover_foto? }
-//     Especialidade: sugerida a partir do campo 13 do cadastro (rótulo curto) (ou do texto definido pelo Studio); o parceiro pode alterar.
+//     Especialidade: sugerida por IA (Gemini) a partir do campo 13 do cadastro: um termo curto. Só o texto do campo 13
+//     vai para a IA (sem nome, e-mail ou contato). A sugestão fica guardada em especialidade_ia; se a IA não responder,
+//     usa o rótulo curto por regra. O parceiro pode alterar.
 //     Vazia ou igual ao rótulo do campo 13, volta a usar o rótulo do campo 13.
 //     grava a decisão no cadastro e no histórico imutável (texto exibido + versão + dados + navegador).
 //     foto: imagem JPEG em base64 (a página já recorta em quadrado e reduz; aqui só JPEG de até 1,5 MB).
@@ -38,6 +40,38 @@ function rotulo(t: unknown) {
   if (tenta(corta(/[,;]\s/))) return s;
   return s.slice(0, 40).replace(/\s+\S*$/, "") + "…";
 }
+// Termo curto sugerido pela IA a partir do texto do campo 13 (até 40 caracteres). Devolve "" se não conseguir.
+async function termoIA(texto: string): Promise<string> {
+  const key = Deno.env.get("GEMINI_API_KEY");
+  if (!key || !texto) return "";
+  const body = JSON.stringify({
+    systemInstruction: { parts: [{ text: "Você recebe a descrição que um profissional escreveu sobre a própria especialidade. " +
+      "Transforme em um rótulo curto de especialidade para um card de perfil: de 1 a 5 palavras, no máximo 40 caracteres, " +
+      "com a inicial maiúscula nas palavras principais (preposições e artigos em minúscula). " +
+      "Use as palavras da própria pessoa, no idioma em que ela escreveu: não traduza (ex.: \"atuo com pesquisa de usuários e design de serviços\" vira " +
+      "\"Pesquisa de Usuários e Design de Serviços\"). Fique com a especialidade de mais peso. Não use verbos, frases, pontuação final, aspas nem markdown. " +
+      'Responda somente com JSON: {"rotulo": "..."}' }] },
+    contents: [{ role: "user", parts: [{ text: texto.slice(0, 1500) }] }],
+    generationConfig: { responseMimeType: "application/json", temperature: 0.2, maxOutputTokens: 256 },
+  });
+  const fim = Date.now() + 12000; // no máximo 12 s de espera para a página não demorar
+  for (const m of ["gemini-flash-latest", "gemini-2.5-flash", "gemini-flash-lite-latest", "gemini-2.5-flash-lite"]) {
+    if (Date.now() > fim - 1500) break;
+    try {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`, {
+        method: "POST", headers: { "x-goog-api-key": key, "content-type": "application/json" }, body, signal: AbortSignal.timeout(Math.min(8000, fim - Date.now())),
+      });
+      if (!res.ok) { console.error("Gemini", m, res.status); continue; }
+      const out = await res.json();
+      const t = (out.candidates?.[0]?.content?.parts ?? []).filter((x: { thought?: boolean }) => !x.thought).map((x: { text?: string }) => x.text ?? "").join("");
+      const r = String(JSON.parse(t.slice(t.indexOf("{"), t.lastIndexOf("}") + 1)).rotulo ?? "")
+        .replace(/[*_`"“”]/g, "").replace(/\s+/g, " ").replace(/[.;:,]\s*$/, "").trim();
+      if (r && r.length <= 40) return r;
+      console.error("Gemini", m, "rótulo fora do padrão", r.length);
+    } catch (e) { console.error("Gemini", m, String(e).slice(0, 120)); }
+  }
+  return "";
+}
 const linkedinOk = (u: string) => !u || /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\//i.test(u);
 // Link do LinkedIn informado no cadastro: aceita "linkedin.com/in/..." ou "www.linkedin.com/..." e completa com https://.
 const normalizaLinkedin = (u: unknown) => { const v = String(u ?? "").trim(); return /^(www\.)?([a-z]{2,3}\.)?linkedin\.com\//i.test(v) ? "https://" + v.replace(/^https?:\/\//i, "") : v.replace(/^http:\/\//i, "https://"); };
@@ -59,15 +93,22 @@ Deno.serve(async (req) => {
   const t = String(p.t ?? "");
   if (!UUID.test(t)) return json({ error: "Link inválido. Use o link que está no e-mail recebido." }, 400);
   const { data: r, error } = await admin.from("cadastros")
-    .select("id, nome, principal_especializacao, tempo_especialidade, areas_experiencia, segmentos, linkedin, galeria_status, galeria_cargo, galeria_linkedin, galeria_foto_url")
+    .select("id, nome, principal_especializacao, especialidade_ia, especialidade_ia_de, tempo_especialidade, areas_experiencia, segmentos, linkedin, galeria_status, galeria_cargo, galeria_linkedin, galeria_foto_url")
     .eq("galeria_token", t).maybeSingle();
   if (error) { console.error(error.message); return json({ error: "Não foi possível carregar agora. Tente novamente." }, 500); }
   if (!r) return json({ error: "Link inválido. Use o link que está no e-mail recebido." }, 404);
 
   const esp = rotulo(r.principal_especializacao);
+  // sugestão da IA: gerada uma vez por texto do campo 13 (fica guardada); sem resposta da IA, vale o rótulo por regra
+  const campo13 = limpa(r.principal_especializacao);
+  let sugestao = r.especialidade_ia_de === campo13 && r.especialidade_ia ? r.especialidade_ia : "";
+  if (!sugestao && !r.galeria_cargo && p.acao === "ver" && campo13) {
+    sugestao = await termoIA(campo13);
+    if (sugestao) await admin.from("cadastros").update({ especialidade_ia: sugestao, especialidade_ia_de: campo13 }).eq("id", r.id);
+  }
   const dados = {
     nome: r.nome,
-    cargo: r.galeria_cargo || esp,
+    cargo: r.galeria_cargo || sugestao || esp,
     tempo: limpa(r.tempo_especialidade),
     areas: (r.areas_experiencia ?? []).map(limpa),
     segmentos: (r.segmentos ?? []).map(limpa),
