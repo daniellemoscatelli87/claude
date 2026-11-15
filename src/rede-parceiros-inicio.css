@@ -1768,3 +1768,8 @@ html body .rp-carta-luz span:nth-child(1) { display: none !important; }
 
 /* Celular: "Possíveis atribuições" sem as linhas divisórias entre os itens */
 @media (max-width: 639px) { html body .rx-numerada li, html body .rx-numerada li:last-child { border-top: 0 !important; border-bottom: 0 !important; } }
+
+/* Card "Vamos construir juntos?": sombra mais difusa (a mesma do card "Clientes atendidos" da home) */
+@media (min-width: 768px) {
+  html body .rx-fechamento .rp-carta, html body .rx-fechamento .rp-carta:hover { box-shadow: 0 2px 8px rgba(13, 17, 25, 0.03), 0 24px 64px -16px rgba(13, 17, 25, 0.14) !important; }
+}
