@@ -2992,3 +2992,5 @@ html body .rx-mv6 .rx-mv-conv { display: none; }
 }
 /* sem a barrinha de tempo na barra do topo do mockup */
 html body .rx-mt-tela-topo.rx-mt-agora::before, html body .rx-mt-tela-topo.rx-mt-agora::after { content: none !important; display: none !important; }
+/* cadastro: sem a barra de progresso no topo do formulário */
+html body .rx-mf-prog { display: none !important; }
