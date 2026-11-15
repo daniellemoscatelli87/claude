@@ -239,7 +239,6 @@ html.menu-aberto { overflow: hidden; }
    que as páginas somam ao menu para os links internos (scroll-padding-top). */
 .folha-cola-topo { display: none; }
 @media (max-width: 1023px) {
-  html.com-folha-cola { scroll-snap-type: y proximity; }
   .folha-cola { scroll-snap-align: start; scroll-snap-stop: always; scroll-margin-top: -2.5rem; }
   .folha-cola-topo { display: block; position: absolute; top: 0; left: 0; width: 1px; height: 1px; pointer-events: none; scroll-snap-align: start; scroll-snap-stop: always; }
 }

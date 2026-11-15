@@ -54,9 +54,11 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
 })();
 
 /* ---------- Celular e tablet: a folha branca do conteúdo "cola" no topo antes de o conteúdo rolar ----------
-   Nas páginas com o topo parado atrás do menu (Home, Projeto Piloto, Seja Parceiro), a rolagem para primeiro no ponto em
-   que a folha encosta no menu (scroll-snap com parada obrigatória); só no gesto seguinte o conteúdo desliza por baixo da
-   tampa. Um marcador no início da página dá o outro ponto de parada (o topo, com a foto inteira). */
+   Nas páginas com o topo parado atrás do menu (Home, Projeto Piloto, Seja Parceiro): se a rolagem parar com a folha no meio
+   do caminho (entre a foto inteira e a folha encostada no menu), ela termina o movimento sozinha, suavemente, no sentido em
+   que a pessoa estava rolando: para cima até colar no menu, ou para baixo até mostrar a foto inteira. Depois que a folha
+   cola, a rolagem do conteúdo é a nativa do celular (sem encaixe CSS, que deixava a rolagem travada e às vezes parava a
+   folha no meio da tela). */
 (() => {
   const folha = document.querySelector<HTMLElement>('.ih-folha, .rx-folha, .divisao-hero');
   if (!folha) return;
@@ -69,11 +71,28 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
   // rolagem do conteúdo fica 100% nativa (com o encaixe ligado o tempo todo, a rolagem dentro do card travava no celular).
   const raiz = document.documentElement;
   const h = document.getElementById('site-header');
-  let agendado = false;
+  const pequeno = matchMedia('(max-width: 1023px)');
+  const reduzir = matchMedia('(prefers-reduced-motion: reduce)');
+  const alvoFolha = () => folha.getBoundingClientRect().top + window.scrollY - (h?.offsetHeight ?? 0);
+  let tocando = false;
+  let ultimoY = window.scrollY;
+  let sentido = 0; // 1 = rolando para baixo (folha subindo), -1 = para cima
+  let espera = 0;
+  const completar = () => {
+    if (!pequeno.matches || tocando) return;
+    const y = window.scrollY, alvo = alvoFolha();
+    if (y <= 1 || y >= alvo - 1) return; // já na foto inteira ou com a folha colada
+    const destino = sentido > 0 ? alvo : sentido < 0 ? 0 : (y > alvo / 2 ? alvo : 0);
+    window.scrollTo({ top: destino, behavior: reduzir.matches ? 'auto' : 'smooth' });
+  };
+  const agendar = (ms: number) => { clearTimeout(espera); espera = window.setTimeout(completar, ms); };
+  window.addEventListener('touchstart', () => { tocando = true; clearTimeout(espera); }, { passive: true });
+  window.addEventListener('touchend', () => { tocando = false; agendar(160); }, { passive: true });
+  window.addEventListener('touchcancel', () => { tocando = false; agendar(160); }, { passive: true });
   const atualizar = () => {
-    agendado = false;
-    const alvo = folha.getBoundingClientRect().top + window.scrollY - (h?.offsetHeight ?? 0);
-    raiz.classList.toggle('com-folha-cola', window.scrollY < alvo - 1);
+    const y = window.scrollY;
+    if (Math.abs(y - ultimoY) > 1) sentido = y > ultimoY ? 1 : -1;
+    ultimoY = y;
   };
   // Alça "Saiba mais" presa à borda de cima da folha, enquanto ela ainda não subiu (como a alça do computador)
   const alca = document.createElement('a');
@@ -98,11 +117,9 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
   window.addEventListener('resize', posAlca);
   window.addEventListener('load', posAlca);
   requestAnimationFrame(posAlca);
-  atualizar();
   requestAnimationFrame(atualizarTudo); // o espaço do topo de cada página é medido pelo script da própria página, logo depois
-  window.addEventListener('load', atualizar);
-  window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(atualizar); } }, { passive: true });
-  window.addEventListener('resize', atualizar);
+  // a cada rolagem: guarda o sentido e, quando ela parar (inércia incluída), completa o movimento da folha se preciso
+  window.addEventListener('scroll', () => { atualizar(); if (!tocando) agendar(140); }, { passive: true });
 })();
 
 /* ---------- Aviso "Tem um projeto?" (só na página inicial) ---------- */
