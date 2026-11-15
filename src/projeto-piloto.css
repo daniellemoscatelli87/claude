@@ -1510,3 +1510,8 @@ main + footer.relative { padding-top: 6rem !important; }
   html body #hero-fundo img { inset: 0 !important; width: 100% !important; height: 100% !important; aspect-ratio: auto !important; object-position: 4% 50% !important;
     -webkit-mask-image: none; mask-image: none; }
 }
+/* celular: foto vertical própria (Dani e o homem), cobrindo o topo inteiro */
+@media (max-width: 639px) {
+  html body #hero-fundo img { inset: 0 !important; width: 100% !important; height: 100% !important; aspect-ratio: auto !important; object-fit: cover !important; object-position: 50% 30% !important;
+    -webkit-mask-image: none; mask-image: none; }
+}
