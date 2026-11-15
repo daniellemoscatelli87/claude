@@ -502,44 +502,44 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
 }
 
 
-/* ---------- Ecossistema: entrada animada quando aparece na tela (sem movimento reduzido) ---------- */
-{
-  const eco = document.querySelector<HTMLElement>('[data-eco]');
-  if (eco && !matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
-    eco.classList.add('anima');
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { eco.classList.add('visivel'); obs.disconnect(); } }, { threshold: 0.25 });
-    obs.observe(eco);
-  }
-}
-
-/* ---------- Ecossistema: luz percorrendo o anel e setores acendendo no instante em que ela toca o ponto ----------
-   Um único relógio: a cada quadro calcula o ângulo da luz (uma volta a cada 14 s, a partir do topo, sentido horário)
-   e acende o ponto e a etiqueta do setor cujo ângulo (--t, de 0 a 1) a luz acabou de alcançar. Pausa fora da tela. */
+/* ---------- Ecossistema: entrada animada (núcleo → pétalas → luz dá uma volta e revela os setores um a um) ----------
+   A luz parte do topo em sentido horário; cada setor (--t = posição no anel, de 0 a 1) aparece no instante em que ela
+   passa, aceso por um momento. Depois da volta completa, a luz some e tudo fica parado. */
 {
   const eco = document.querySelector<HTMLElement>('[data-eco]');
   const luz = eco?.querySelector<SVGGElement>('.rx-eco-luz');
-  if (eco && luz && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const VOLTA = 14000, ACESO = 0.04; // fica aceso por 4% da volta (~0,56 s) e depois apaga devagar (CSS)
+  if (eco && luz && !matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    eco.classList.add('anima');
+    const VOLTA = 7000, ACESO = 700, INICIO_LUZ = 2000; // a luz começa depois das pétalas (≈1,9 s)
     const pontos = Array.from(eco.querySelectorAll<SVGCircleElement>('.rx-eco-ponto'));
     const setores = Array.from(eco.querySelectorAll<HTMLElement>('.rx-eco-setor'));
+    const linhas = Array.from(eco.querySelectorAll<SVGLineElement>('.rx-eco-con'));
     const pos = pontos.map((p) => parseFloat(p.style.getPropertyValue('--t')) || 0);
-    luz.style.animation = 'none'; // gira pelo transform-origin (centro do anel) definido no próprio elemento
-    let inicio = 0, pausa = 0, rodando = false;
-    const quadro = (agora: number) => {
-      if (!rodando) return;
-      if (!inicio) inicio = agora;
-      const f = ((agora - inicio) % VOLTA) / VOLTA;
-      luz.style.transform = `rotate(${(f * 360).toFixed(2)}deg)`;
-      pos.forEach((t, i) => {
-        const on = (f - t + 1) % 1 < ACESO;
-        pontos[i].classList.toggle('aceso', on);
-        setores[i]?.classList.toggle('aceso', on);
-      });
+    luz.style.animation = 'none';
+    const revelar = (i: number) => {
+      [pontos[i], setores[i], linhas[i]].forEach((el) => el?.classList.add('mostrado', 'aceso'));
+      setTimeout(() => [pontos[i], setores[i], linhas[i]].forEach((el) => el?.classList.remove('aceso')), ACESO);
+    };
+    const girar = () => {
+      luz.classList.add('ativa');
+      const feitos = new Set<number>();
+      let inicio = 0;
+      const quadro = (agora: number) => {
+        if (!inicio) inicio = agora;
+        const f = Math.min((agora - inicio) / VOLTA, 1);
+        luz.style.transform = `rotate(${(f * 360).toFixed(2)}deg)`;
+        pos.forEach((t, i) => { if (!feitos.has(i) && f >= t) { feitos.add(i); revelar(i); } });
+        if (f < 1) requestAnimationFrame(quadro);
+        else luz.classList.remove('ativa');
+      };
       requestAnimationFrame(quadro);
     };
-    new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !rodando) { rodando = true; if (pausa) inicio += performance.now() - pausa; requestAnimationFrame(quadro); }
-      else if (!e.isIntersecting && rodando) { rodando = false; pausa = performance.now(); }
-    }).observe(eco);
+    const obs = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      obs.disconnect();
+      eco.classList.add('visivel');
+      setTimeout(girar, INICIO_LUZ);
+    }, { threshold: 0.25 });
+    obs.observe(eco);
   }
 }
