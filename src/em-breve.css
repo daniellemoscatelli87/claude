@@ -200,3 +200,10 @@ html body #ie3-home .ih-clientes-card p.mb-12 { margin-bottom: 1.5rem !important
 html body #ie3-home .ih-logos { overflow-x: auto !important; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
 html body #ie3-home .ih-logos::-webkit-scrollbar { display: none; }
 html body #ie3-home .ih-logos .client-marquee-track { animation: none !important; }
+
+/* ---------- Cards da home com o mesmo arredondamento (24 px, o mesmo dos cards do Projeto Piloto e do Seja Parceiro) ---------- */
+html body #ie3-home .testimonial-card,
+html body #ie3-home #artigos article,
+html body #ie3-home #artigos .rounded-2xl,
+html body #ie3-home #depoimentos .max-w-5xl.bg-white,
+.ih-clientes-card { border-radius: 24px !important; }
