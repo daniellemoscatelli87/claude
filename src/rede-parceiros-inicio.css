@@ -1684,3 +1684,13 @@ html body .rx-onde.eco .rx-onde-cab h2, html body .rx-onde.eco .rx-onde-cab .rp-
 .rx-eco.anima.visivel .rx-eco-setor { opacity: 1; transform: translate(-50%, -50%); transition: opacity .5s ease, transform .6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(1.9s + var(--j) * .12s); }
 .rx-eco.anima.visivel .rx-eco-con { opacity: 1; transition: opacity .5s ease; transition-delay: calc(1.9s + var(--j) * .12s); }
 @media (prefers-reduced-motion: reduce) { .rx-eco-luz, .rx-eco-ponto, .rx-eco-brilho { animation: none; } }
+/* setores em cinza claro; acendem em vermelho quando a luz do anel passa pelo ponto deles e depois apagam (mesma volta de 14s) */
+.rx-eco-setor { color: #A3ADBD; transition-property: opacity, transform; }
+.rx-eco-setor svg, .rx-eco .rx-eco-setor svg { color: inherit; }
+.rx-eco-setor { animation: rx-eco-setor-acende 14s linear infinite; animation-delay: calc(var(--t) * 14s); }
+@keyframes rx-eco-setor-acende {
+  0% { color: #D44D4D; border-color: rgba(212, 77, 77, 0.35); box-shadow: 0 .6cqw 2.2cqw rgba(212, 77, 77, 0.18); }
+  9% { color: #D44D4D; border-color: rgba(212, 77, 77, 0.35); box-shadow: 0 .6cqw 2.2cqw rgba(212, 77, 77, 0.18); }
+  22%, 100% { color: #A3ADBD; border-color: #EDF0F5; box-shadow: 0 .6cqw 1.8cqw rgba(13, 17, 25, 0.07); }
+}
+@media (prefers-reduced-motion: reduce) { .rx-eco-setor { animation: none; color: #283043; } .rx-eco-setor svg { color: #D44D4D; } }
