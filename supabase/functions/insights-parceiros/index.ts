@@ -7,6 +7,8 @@
 // O resultado fica em cache (tabela insights_parceiros) e só é gerado de novo quando os dados mudam.
 // Com { somente_cache: true }, não chama a IA: devolve a análise da base atual, a última análise
 // guardada com desatualizada: true (os cadastros mudaram desde então) ou { vazio: true }.
+// Com { acao: "novo_cadastro", id } (chamada pelo gatilho do banco a cada novo cadastro, sem login): gera a análise
+// da base atual em segundo plano. Só vale para um cadastro criado há menos de 10 minutos (o id vem do banco).
 // Quando um modelo está ocupado (503/429) ou devolve uma resposta que não é JSON válido (por exemplo,
 // cortada no meio), tenta o próximo modelo gratuito da lista.
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
@@ -58,15 +60,32 @@ async function sha256(s: string) {
   return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return json({ error: "Método não permitido" }, 405);
+  const pedido = await req.json().catch(() => ({}));
+
+  // novo cadastro: dispara a análise da base em segundo plano e responde na hora
+  if (pedido?.acao === "novo_cadastro") {
+    const id = String(pedido.id ?? "");
+    if (!UUID.test(id)) return json({ error: "id inválido" }, 400);
+    const { data: c } = await admin.from("cadastros").select("created_at").eq("id", id).maybeSingle();
+    if (!c || Date.now() - new Date(c.created_at).getTime() > 10 * 60 * 1000) return json({ error: "Sem permissão" }, 403);
+    // deno-lint-ignore no-explicit-any
+    (globalThis as any).EdgeRuntime?.waitUntil(analisar({}).then((r) => console.log("Análise automática", r.status)));
+    return json({ ok: true }, 202);
+  }
 
   const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
   const { data: auth } = await admin.auth.getUser(token);
   if (auth.user?.app_metadata?.role !== "admin") return json({ error: "Sem permissão" }, 403);
+  return analisar(pedido);
+});
 
-  const pedido = await req.json().catch(() => ({}));
+// deno-lint-ignore no-explicit-any
+async function analisar(pedido: any): Promise<Response> {
   const desafio = typeof pedido?.desafio === "string" ? pedido.desafio.trim().slice(0, 3000) : "";
 
   // A análise considera sempre a base inteira de parceiros.
@@ -150,4 +169,4 @@ Deno.serve(async (req) => {
   }
   const { data: saved } = await admin.from("insights_parceiros").upsert({ hash, conteudo: final, base: base.length }).select("gerado_em").single();
   return json({ ...final, gerado_em: saved?.gerado_em ?? new Date().toISOString(), base: base.length });
-});
+}

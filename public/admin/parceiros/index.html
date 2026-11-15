@@ -44,6 +44,7 @@
   .tab-parceiros tbody tr:hover, .tab-parceiros tbody tr:focus-visible { background: var(--track); outline: none; }
   .tab-parceiros tbody tr:last-child td { border-bottom: 0; }
   .tp-col-quem { min-width: 230px; max-width: 280px; }
+  .tp-col-area { min-width: 210px; } /* duas áreas cabem em uma ou duas linhas */
   .tp-quem { display: flex; align-items: center; gap: 12px; }
   .tp-quem .ini { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; font-weight: 700; font-size: 14px; background: var(--red-tint); color: var(--red); }
   .tp-txt { min-width: 0; }
@@ -268,12 +269,23 @@
   .btn-danger:hover { background: var(--red-tint); }
   .btn-danger:disabled { opacity: .6; cursor: wait; }
   /* Análise da IA */
-  .ai-resumo { margin: 0 0 14px; font-size: 15px; line-height: 1.55; }
-  .ai-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-  @media (max-width: 800px) { .ai-grid { grid-template-columns: 1fr; } }
-  .ai-col .pc-h { margin-bottom: 6px; }
-  .ai-col.lacunas .pc-h { color: #a06d00; }
-  .ai-col.recomendacoes .pc-h { color: var(--slate); }
+  /* Análise da rede em estilo dashboard: resumo em destaque e um painel por grupo, com o número citado em cada item */
+  .ai-resumo { display: flex; gap: 12px; align-items: flex-start; margin: 0 0 16px; padding: 14px 16px; border-radius: 16px; background: var(--red-tint, #FDF2F2); font-size: 15px; line-height: 1.55; color: #131A27; }
+  .ai-resumo svg { flex: none; width: 20px; height: 20px; margin-top: 2px; color: var(--red); }
+  .ai-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  @media (max-width: 900px) { .ai-grid { grid-template-columns: 1fr; } }
+  .ai-col { --ai-cor: #1e7b45; --ai-fundo: #e6f4ea; display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 16px; background: #F6F7FA; border: 1px solid #EDF0F5; }
+  .ai-col.lacunas { --ai-cor: #a06d00; --ai-fundo: #fdf3dc; }
+  .ai-col.recomendacoes { --ai-cor: var(--slate); --ai-fundo: var(--slate-tint); }
+  .ai-col-h { display: flex; align-items: center; gap: 10px; }
+  .ai-col-ic { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--ai-fundo); color: var(--ai-cor); flex: none; }
+  .ai-col-ic svg { width: 18px; height: 18px; }
+  .ai-col-t { flex: 1; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ai-cor); }
+  .ai-col-n { min-width: 26px; padding: 2px 8px; border-radius: 999px; background: var(--ai-fundo); color: var(--ai-cor); font-size: 12px; font-weight: 700; text-align: center; }
+  .ai-itens { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .ai-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 12px; background: #FFFFFF; border: 1px solid #EDF0F5; font-size: 14px; line-height: 1.45; color: #283043; }
+  .ai-num { flex: none; min-width: 52px; font-size: 20px; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: var(--ai-cor); }
+  .ai-pt { flex: none; width: 8px; height: 8px; margin: 6px 4px 0 2px; border-radius: 50%; background: var(--ai-cor); }
   .ai-loading { font-style: italic; margin: 0; }
   /* Filtro por área e desafio */
   .area-filter { margin-bottom: 8px; }
@@ -862,14 +874,13 @@ function candidaturas(rows) {
   const list = document.getElementById("list"); list.replaceChildren();
   if (!rows.length) return list.appendChild(el("div", "empty", ALL.length ? "Nenhuma candidatura para os filtros atuais." : "Nenhuma candidatura ainda."));
   // Tabela: uma linha por parceiro; a linha inteira abre a candidatura.
-  const PJ = { "Sim, tenho CNPJ ativo (MEI, empresa ou consultoria própria).": "CNPJ ativo", "Estou em processo de formalização.": "Em formalização", "Atualmente não tenho CNPJ, mas tenho interesse em atuar como PJ.": "Sem CNPJ, com interesse", "Não tenho interesse em atuar como PJ.": "Sem interesse" };
   const DISP = { "Disponibilidade imediata.": "Imediata", "Disponibilidade mediante agendamento.": "Mediante agendamento", "Disponibilidade parcial, conciliando com outros projetos.": "Parcial", "Disponibilidade apenas para projetos pontuais.": "Projetos pontuais" };
   const horas = (h) => !h ? "" : /variável/i.test(h) ? "horas variáveis" : clean(h).replace(/^Até /, "até ").replace(/^De /, "").replace(/^Mais de /, "+").replace(/ horas semanais$/, " h/semana");
   const galStatus = (r) => r.galeria_status === "autorizado" ? ["Autorizado", "ok"] : r.galeria_status === "recusado" ? ["Recusado", "no"] : r.galeria_convite_em ? ["Aguardando resposta", "wait"] : ["Não convidado", "none"];
   const wrap = el("div", "tab-wrap");
   const t = el("table", "tab-parceiros");
   const thead = el("thead"); const hr = el("tr");
-  ["Parceiro", "Senioridade", "Área de atuação", "Situação PJ", "Disponibilidade", "Galeria", "Publicado", "Cadastro"].forEach((h) => hr.appendChild(el("th", null, h)));
+  ["Parceiro", "Senioridade", "Área de atuação", "Disponibilidade", "Galeria", "Publicado", "Cadastro"].forEach((h) => hr.appendChild(el("th", null, h)));
   thead.appendChild(hr); t.appendChild(thead);
   const tb = el("tbody");
   rows.forEach((r) => {
@@ -883,8 +894,7 @@ function candidaturas(rows) {
     tx.append(a, el("div", "tp-sub", espGaleria(r)));
     quem.append(avatar(r), tx); td(quem, "tp-col-quem");
     const nv = el("div"); nv.append(el("div", "tp-forte", NIVEL[r.tempo_especialidade] || "–"), el("div", "tp-sub", r.tempo_especialidade ? clean(r.tempo_especialidade) : "")); td(nv);
-    td(areasAtuacao(r).join(" · ") || "–");
-    td(PJ[r.atuacao_pj] || (r.atuacao_pj ? clean(r.atuacao_pj) : "–"));
+    td(areasAtuacao(r).join(" · ") || "–", "tp-col-area");
     const dp = el("div"); dp.append(el("div", null, DISP[r.disponibilidade_colaborar] || (r.disponibilidade_colaborar ? clean(r.disponibilidade_colaborar) : "–")), el("div", "tp-sub", horas(r.horas_semanais))); td(dp);
     const [gt, gc] = galStatus(r); td(el("span", "tp-gal " + gc, gt));
     const pub = publicado(r); td(el("span", "gal " + (pub ? "sim" : "nao"), pub ? "Sim" : "Não"));
@@ -926,14 +936,29 @@ function fillAnalysis() {
     box.appendChild(av);
   }
   const a = IA.analise || {};
-  if (a.resumo) box.appendChild(el("p", "ai-resumo", a.resumo));
-  const grupos = [["forcas", "Pontos fortes da rede"], ["lacunas", "Lacunas"], ["recomendacoes", "Recomendações"]];
+  const svg = (d) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+  if (a.resumo) { const r = el("div", "ai-resumo"); r.innerHTML = svg('<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/>'); r.appendChild(el("p", null, a.resumo)); r.lastChild.style.margin = "0"; box.appendChild(r); }
+  const grupos = [
+    ["forcas", "Pontos fortes", '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>'],
+    ["lacunas", "Lacunas", '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>'],
+    ["recomendacoes", "Recomendações", '<path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>'],
+  ];
   const g = el("div", "ai-grid");
-  grupos.forEach(([k, t]) => {
+  grupos.forEach(([k, t, ic]) => {
     const itens = a[k] || [];
     if (!itens.length) return;
-    const col = el("div", "ai-col " + k); col.appendChild(el("div", "pc-h", t));
-    const ul = el("ul", "ai-list"); itens.forEach((x) => ul.appendChild(el("li", null, x)));
+    const col = el("section", "ai-col " + k); col.setAttribute("aria-label", t);
+    const h = el("div", "ai-col-h"); const i = el("span", "ai-col-ic"); i.innerHTML = svg(ic);
+    h.append(i, el("span", "ai-col-t", t), el("span", "ai-col-n", String(itens.length))); col.appendChild(h);
+    const ul = el("ul", "ai-itens");
+    itens.forEach((x) => {
+      // o primeiro número citado no item (ex.: 100%, 7) aparece em destaque; sem número, um marcador
+      // ("mais de 50%" vira "+50%", para não mudar o sentido)
+      const m = String(x).match(/(mais de\s+|acima de\s+)?(\d+(?:[.,]\d+)?\s*%|\b\d+\b)/i);
+      const n = m ? (m[1] ? "+" : "") + m[2].replace(/\s+/g, "") : "";
+      const li = el("li", "ai-item"); li.append(n ? el("span", "ai-num", n) : el("span", "ai-pt"), el("span", null, x));
+      ul.appendChild(li);
+    });
     col.appendChild(ul); g.appendChild(col);
   });
   box.appendChild(g);
