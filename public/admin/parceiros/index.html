@@ -269,23 +269,23 @@
   .btn-danger:hover { background: var(--red-tint); }
   .btn-danger:disabled { opacity: .6; cursor: wait; }
   /* Análise da IA */
-  /* Análise da rede em estilo dashboard: resumo em destaque e um painel por grupo, com o número citado em cada item */
-  .ai-resumo { display: flex; gap: 12px; align-items: flex-start; margin: 0 0 16px; padding: 14px 16px; border-radius: 16px; background: var(--red-tint, #FDF2F2); font-size: 15px; line-height: 1.55; color: #131A27; }
-  .ai-resumo svg { flex: none; width: 20px; height: 20px; margin-top: 2px; color: var(--red); }
-  .ai-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-  @media (max-width: 900px) { .ai-grid { grid-template-columns: 1fr; } }
-  .ai-col { --ai-cor: #1e7b45; --ai-fundo: #e6f4ea; display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 16px; background: #F6F7FA; border: 1px solid #EDF0F5; }
-  .ai-col.lacunas { --ai-cor: #a06d00; --ai-fundo: #fdf3dc; }
-  .ai-col.recomendacoes { --ai-cor: var(--slate); --ai-fundo: var(--slate-tint); }
-  .ai-col-h { display: flex; align-items: center; gap: 10px; }
-  .ai-col-ic { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--ai-fundo); color: var(--ai-cor); flex: none; }
-  .ai-col-ic svg { width: 18px; height: 18px; }
-  .ai-col-t { flex: 1; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ai-cor); }
-  .ai-col-n { min-width: 26px; padding: 2px 8px; border-radius: 999px; background: var(--ai-fundo); color: var(--ai-cor); font-size: 12px; font-weight: 700; text-align: center; }
+  /* Análise da rede (padrões do Design System): resumo, abas "Default Tabs" com contador e itens no estilo "Alert"
+     (sucesso, aviso e informação: fundo suave, ícone na cor do tipo); os números do texto ficam em negrito */
+  .ai-card { --ai-ok: #4fb57b; --ai-ok-bg: rgba(79, 181, 123, 0.1); --ai-av: #e5a94e; --ai-av-bg: rgba(229, 169, 78, 0.1); --ai-in: #448abc; --ai-in-bg: rgba(68, 138, 188, 0.1); }
+  .ai-resumo { margin: 0 0 18px; font-size: 15px; line-height: 1.6; color: #283043; }
+  .ai-tabs { display: flex; gap: 4px; width: fit-content; max-width: 100%; overflow-x: auto; padding: 4px; margin: 0 0 14px; border-radius: 10px; background: #E8EDF3; }
+  .ai-tab { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 0; border-radius: 8px; background: transparent; font: inherit; font-size: 14px; font-weight: 500; color: #627288; white-space: nowrap; cursor: pointer; }
+  .ai-tab:hover { color: #131A27; }
+  .ai-tab[aria-selected="true"] { background: #FFFFFF; color: #131A27; box-shadow: 0 1px 2px rgba(13, 17, 25, 0.08), 0 1px 3px rgba(13, 17, 25, 0.06); }
+  .ai-tab:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+  .ai-tab-n { min-width: 22px; padding: 1px 7px; border-radius: 999px; font-size: 12px; font-weight: 700; text-align: center; background: var(--ai-c-bg); color: var(--ai-c); }
+  .ai-tab.forcas, .ai-itens.forcas { --ai-c: var(--ai-ok); --ai-c-bg: var(--ai-ok-bg); }
+  .ai-tab.lacunas, .ai-itens.lacunas { --ai-c: var(--ai-av); --ai-c-bg: var(--ai-av-bg); }
+  .ai-tab.recomendacoes, .ai-itens.recomendacoes { --ai-c: var(--ai-in); --ai-c-bg: var(--ai-in-bg); }
   .ai-itens { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-  .ai-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 12px; background: #FFFFFF; border: 1px solid #EDF0F5; font-size: 14px; line-height: 1.45; color: #283043; }
-  .ai-num { flex: none; min-width: 52px; font-size: 20px; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: var(--ai-cor); }
-  .ai-pt { flex: none; width: 8px; height: 8px; margin: 6px 4px 0 2px; border-radius: 50%; background: var(--ai-cor); }
+  .ai-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: var(--ai-c-bg); border: 1px solid color-mix(in srgb, var(--ai-c) 20%, transparent); font-size: 14px; line-height: 1.5; color: #131A27; }
+  .ai-item svg { flex: none; width: 18px; height: 18px; margin-top: 1px; color: var(--ai-c); }
+  .ai-item strong { font-weight: 700; }
   .ai-loading { font-style: italic; margin: 0; }
   /* Filtro por área e desafio */
   .area-filter { margin-bottom: 8px; }
@@ -937,31 +937,36 @@ function fillAnalysis() {
   }
   const a = IA.analise || {};
   const svg = (d) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
-  if (a.resumo) { const r = el("div", "ai-resumo"); r.innerHTML = svg('<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/>'); r.appendChild(el("p", null, a.resumo)); r.lastChild.style.margin = "0"; box.appendChild(r); }
+  if (a.resumo) box.appendChild(el("p", "ai-resumo", a.resumo));
   const grupos = [
     ["forcas", "Pontos fortes", '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>'],
     ["lacunas", "Lacunas", '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>'],
-    ["recomendacoes", "Recomendações", '<path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>'],
-  ];
-  const g = el("div", "ai-grid");
-  grupos.forEach(([k, t, ic]) => {
-    const itens = a[k] || [];
-    if (!itens.length) return;
-    const col = el("section", "ai-col " + k); col.setAttribute("aria-label", t);
-    const h = el("div", "ai-col-h"); const i = el("span", "ai-col-ic"); i.innerHTML = svg(ic);
-    h.append(i, el("span", "ai-col-t", t), el("span", "ai-col-n", String(itens.length))); col.appendChild(h);
-    const ul = el("ul", "ai-itens");
-    itens.forEach((x) => {
-      // o primeiro número citado no item (ex.: 100%, 7) aparece em destaque; sem número, um marcador
-      // ("mais de 50%" vira "+50%", para não mudar o sentido)
-      const m = String(x).match(/(mais de\s+|acima de\s+)?(\d+(?:[.,]\d+)?\s*%|\b\d+\b)/i);
-      const n = m ? (m[1] ? "+" : "") + m[2].replace(/\s+/g, "") : "";
-      const li = el("li", "ai-item"); li.append(n ? el("span", "ai-num", n) : el("span", "ai-pt"), el("span", null, x));
-      ul.appendChild(li);
-    });
-    col.appendChild(ul); g.appendChild(col);
+    ["recomendacoes", "Recomendações", '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>'],
+  ].filter(([k]) => (a[k] || []).length);
+  if (!grupos.length) return;
+  // abas: um grupo por vez (o último escolhido fica guardado no navegador)
+  let ativa = grupos[0][0]; try { const g = localStorage.getItem("ai-aba"); if (grupos.some(([k]) => k === g)) ativa = g; } catch {}
+  const tabs = el("div", "ai-tabs"); tabs.setAttribute("role", "tablist"); tabs.setAttribute("aria-label", "Análise da rede");
+  const painel = el("div"); painel.setAttribute("role", "tabpanel");
+  // números do texto em negrito (100%, mais de 50%, 7 parceiros)
+  const comNumeros = (t) => { const f = document.createDocumentFragment(); String(t).split(/((?:mais de |acima de )?\d+(?:[.,]\d+)?\s*%?)/i).forEach((pt, i) => f.append(i % 2 ? el("strong", null, pt) : pt)); return f; };
+  const mostrar = (k) => {
+    ativa = k; try { localStorage.setItem("ai-aba", k); } catch {}
+    tabs.querySelectorAll(".ai-tab").forEach((b) => { const on = b.dataset.k === k; b.setAttribute("aria-selected", String(on)); b.tabIndex = on ? 0 : -1; });
+    const [, t, ic] = grupos.find(([g]) => g === k);
+    const ul = el("ul", "ai-itens " + k); ul.setAttribute("aria-label", t);
+    (a[k] || []).forEach((x) => { const li = el("li", "ai-item"); li.innerHTML = svg(ic); const tx = el("span"); tx.appendChild(comNumeros(x)); li.appendChild(tx); ul.appendChild(li); });
+    painel.replaceChildren(ul);
+  };
+  grupos.forEach(([k, t]) => {
+    const b = el("button", "ai-tab " + k); b.type = "button"; b.dataset.k = k; b.setAttribute("role", "tab");
+    b.append(t, el("span", "ai-tab-n", String(a[k].length)));
+    b.addEventListener("click", () => mostrar(k));
+    b.addEventListener("keydown", (e) => { if (!["ArrowRight", "ArrowLeft"].includes(e.key)) return; const bs = [...tabs.children]; const n = bs[(bs.indexOf(b) + (e.key === "ArrowRight" ? 1 : bs.length - 1)) % bs.length]; n.focus(); n.click(); });
+    tabs.appendChild(b);
   });
-  box.appendChild(g);
+  box.append(tabs, painel);
+  mostrar(ativa);
   meta.textContent = IA.gerado_em ? "Gerada por IA com base em " + plural(IA.base, "parceiro", "parceiros") + " · " + Admin.fmtDate(IA.gerado_em) : "";
 }
 async function loadAnalysis(gerar = false) {
