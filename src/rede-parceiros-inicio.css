@@ -2665,3 +2665,6 @@ html body .rx-mv-loading small { color: #627288; }
 /* card do perfil mais aderente: título no topo (no lugar da etiqueta) */
 html body .rx-mv4 .rx-mv-destaque { flex-wrap: wrap; align-content: center; row-gap: .75rem; }
 .rx-mv-dtit { flex-basis: 100%; margin: 0; font-size: .6875rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #D44D4D; }
+/* títulos dos cards do mockup (Novo desafio, Perfil aderente) em cinza, com ícone */
+html body .rx-mv-dtit, html body .rx-mv-rot { display: inline-flex; align-items: center; gap: .375rem; color: #8898B0; }
+html body .rx-mv-dtit svg { width: .875rem; height: .875rem; flex: none; }
