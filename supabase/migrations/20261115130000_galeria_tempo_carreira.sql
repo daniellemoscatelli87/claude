@@ -1,11 +1,11 @@
--- Galeria: o card passa a mostrar o tempo de carreira (campo 23 do cadastro).
--- Termo novo (galeria-v3-2026-11-15) inclui o tempo de carreira. Quem autorizou numa versão anterior só aparece
--- com o tempo de carreira depois de aceitar o termo novo (ao enviar o perfil pela página de autorização).
+-- Galeria: o card passa a mostrar a senioridade (Júnior, Pleno, Sênior, Especialista), calculada pelo tempo
+-- de carreira (campo 23 do cadastro). Termo novo (galeria-v3-2026-11-15) inclui a senioridade. Quem autorizou
+-- numa versão anterior só aparece com a senioridade depois de aceitar o termo novo (ao enviar o perfil pela página de autorização).
 create or replace function public.galeria_texto_termo() returns table (versao text, texto text)
 language sql immutable set search_path = '' as $$
   select 'galeria-v3-2026-11-15'::text,
     ('Autorizo a Dani Moscatelli | Experience Design Studio a exibir, na Galeria de profissionais do site danimoscatelli.com.br, ' ||
-     'o meu nome, especialidade, tempo de carreira, áreas de atuação, segmentos, link do LinkedIn e foto, conforme a prévia apresentada. ' ||
+     'o meu nome, especialidade, senioridade, áreas de atuação, segmentos, link do LinkedIn e foto, conforme a prévia apresentada. ' ||
      'E-mail, telefone e cidade não serão exibidos. Posso solicitar a exclusão do meu perfil da galeria a qualquer momento pelo e-mail ' ||
      'contato@danimoscatelli.com.br, e também a troca ou a exclusão da foto por esse e-mail.')::text;
 $$;

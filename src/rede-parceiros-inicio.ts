@@ -288,8 +288,9 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   const el = <K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, text?: string) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
   const LI = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>';
   const linkSeguro = (u: string | null) => (u && /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\//i.test(u) ? u : '');
-  // "Entre 6 e 10 anos." -> "6 a 10 anos de carreira"
-  const tempoCarreira = (t: string) => limpa(t).replace(/^Entre (\d+) e (\d+)/, '$1 a $2').replace(/^Mais de/, 'Mais de').replace(/^Menos de/, 'Menos de') + ' de carreira';
+  // senioridade pelo tempo de carreira (campo 23 do cadastro)
+  const NIVEL: Record<string, string> = { "Menos de 1 ano": "Júnior", "Entre 1 e 2 anos": "Júnior", "Entre 3 e 5 anos": "Pleno", "Entre 6 e 10 anos": "Sênior", "Entre 11 e 15 anos": "Especialista", "Entre 16 e 20 anos": "Especialista", "Mais de 20 anos": "Especialista" };
+  const tempoCarreira = (t: string) => NIVEL[limpa(t)] || '';
   const iniciais = (n: string) => n.trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toUpperCase();
   const fotoSegura = (u: string | null) => (u && /^https:\/\//i.test(u) ? u : '');
   function card(p: Perfil) {
@@ -305,7 +306,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     // tags: áreas de atuação e segmentos marcados no cadastro (no máximo 2 linhas, pelo CSS)
     const tags = el('ul', 'rx-gal-areas'); tags.setAttribute('aria-label', 'Áreas de atuação e segmentos');
     [...new Set([...(p.areas || []), ...(p.segmentos || [])].map(limpa).filter(Boolean))].forEach((a) => tags.appendChild(el('li', undefined, a)));
-    const tempo = el('p', 'rx-gal-tempo', p.tempo ? tempoCarreira(p.tempo) : ''); tempo.hidden = !p.tempo;
+    const nivel = p.tempo ? tempoCarreira(p.tempo) : ''; const tempo = el('p', 'rx-gal-tempo', nivel); tempo.hidden = !nivel;
     li.append(topo, el('h3', undefined, p.nome), el('p', 'rx-gal-esp', limpa(p.cargo || '')), tempo, tags);
     return li;
   }
@@ -316,7 +317,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     secao!.hidden = false;
   }
   if (new URLSearchParams(location.search).get('galeria') === 'exemplo') {
-    const f = (nome: string, av: number | null, cargo: string, areas: string[], segmentos: string[], tempo = 'Entre 6 e 10 anos.'): Perfil =>
+    const f = (nome: string, av: number | null, cargo: string, areas: string[], segmentos: string[], tempo = 'Entre 6 e 10 anos'): Perfil =>
       ({ nome, cargo, tempo, areas, segmentos, linkedin: 'https://www.linkedin.com/', foto_url: av ? `${location.origin}/rede-parceiros/avatares/avatar-${av}.webp` : null });
     mostrar([
       f('Marina Alves', 5, 'UX Researcher', ['Pesquisa com usuários', 'UX Research', 'Facilitação'], ['Saúde', 'Educação']),

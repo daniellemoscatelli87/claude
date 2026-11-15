@@ -11,7 +11,7 @@ import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 // Versão e texto exatos apresentados na página de autorização. Ao mudar o texto, mude a versão.
 const TEXTO_VERSAO = "galeria-v3-2026-11-15";
 const TEXTO = "Autorizo a Dani Moscatelli | Experience Design Studio a exibir, na Galeria de profissionais do site danimoscatelli.com.br, " +
-  "o meu nome, especialidade, tempo de carreira, áreas de atuação, segmentos, link do LinkedIn e foto, conforme a prévia apresentada. " +
+  "o meu nome, especialidade, senioridade, áreas de atuação, segmentos, link do LinkedIn e foto, conforme a prévia apresentada. " +
   "E-mail, telefone e cidade não serão exibidos. Posso solicitar a exclusão do meu perfil da galeria a qualquer momento pelo e-mail " +
   "contato@danimoscatelli.com.br, e também a troca ou a exclusão da foto por esse e-mail.";
 

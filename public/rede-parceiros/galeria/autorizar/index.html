@@ -264,7 +264,7 @@
       $("p-nome").textContent = d.nome || ""; $("p-ini").textContent = iniciais(d.nome);
       // especialidade: campo 13 do cadastro (ou o texto definido pelo Studio); tags: áreas e segmentos
       $("especialidade").value = d.cargo || ""; $("p-cargo").textContent = d.cargo || "";
-      $("p-tempo").textContent = d.tempo ? d.tempo.replace(/^Entre (\d+) e (\d+)/, "$1 a $2") + " de carreira" : ""; $("p-tempo").hidden = !d.tempo;
+      var NIVEL = { "Menos de 1 ano": "Júnior", "Entre 1 e 2 anos": "Júnior", "Entre 3 e 5 anos": "Pleno", "Entre 6 e 10 anos": "Sênior", "Entre 11 e 15 anos": "Especialista", "Entre 16 e 20 anos": "Especialista", "Mais de 20 anos": "Especialista" }; var nivel = NIVEL[String(d.tempo || "").replace(/\.\s*$/, "")] || ""; $("p-tempo").textContent = nivel; $("p-tempo").hidden = !nivel;
       $("especialidade").addEventListener("input", function () { $("p-cargo").textContent = $("especialidade").value.trim() || d.cargo || ""; });
       d.areas.concat(d.segmentos).filter(function (a, i, l) { return a && l.indexOf(a) === i; }).forEach(function (a) { var li = document.createElement("li"); li.textContent = a; $("p-areas").appendChild(li); });
       $("linkedin").value = d.linkedin || "";

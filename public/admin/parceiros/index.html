@@ -702,7 +702,7 @@ function areasAtuacao(r) {
 // O card inteiro abre a ficha do parceiro.
 const limpaTxt = (x) => String(x || "").replace(/\.\s*$/, "").trim();
 const espGaleria = (r) => limpaTxt(r.galeria_cargo) || limpaTxt(r.principal_especializacao);
-const tempoGaleria = (r) => r.tempo_especialidade ? limpaTxt(r.tempo_especialidade).replace(/^Entre (\d+) e (\d+)/, "$1 a $2") + " de carreira" : "";
+const tempoGaleria = (r) => NIVEL[r.tempo_especialidade] || "";
 function summaryCard(r) {
   const c = el("a", "card pcs gal-site"); c.href = "/admin/parceiros/?id=" + r.id;
   c.setAttribute("aria-label", "Abrir o perfil de " + (r.nome || "parceiro"));
@@ -711,7 +711,7 @@ function summaryCard(r) {
   c.appendChild(topo);
   c.appendChild(el("h3", null, r.nome || "Sem nome"));
   c.appendChild(el("p", "gs-esp", espGaleria(r) || "Especialidade não informada"));
-  if (r.tempo_especialidade) c.appendChild(el("p", "gs-tempo", tempoGaleria(r)));
+  if (tempoGaleria(r)) c.appendChild(el("p", "gs-tempo", tempoGaleria(r)));
   const tags = el("ul", "gs-tags");
   [...new Set([...(r.areas_experiencia || []), ...(r.segmentos || [])].map(limpaTxt).filter(Boolean))].forEach((t) => tags.appendChild(el("li", null, t)));
   c.appendChild(tags);
@@ -1021,7 +1021,7 @@ function galeriaCard(data) {
     card.appendChild(el("div", "gal-mini-nome", data.nome || "Sem nome"));
     const esp = data.galeria_cargo || String(data.principal_especializacao || "").replace(/\.\s*$/, "").trim();
     card.appendChild(el("div", "gal-mini-esp", esp || "Sem especialidade"));
-    if (data.tempo_especialidade) card.appendChild(el("div", "gal-mini-tempo", tempoGaleria(data)));
+    if (tempoGaleria(data)) card.appendChild(el("div", "gal-mini-tempo", tempoGaleria(data)));
     const tags = el("ul", "gal-mini-tags");
     [...new Set([...(data.areas_experiencia || []), ...(data.segmentos || [])].map((x) => String(x).replace(/\.\s*$/, "").trim()).filter(Boolean))].forEach((x) => tags.appendChild(el("li", null, x)));
     card.appendChild(tags);
