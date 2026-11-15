@@ -1459,4 +1459,5 @@ html body .rx-setor-foto .rx-setor-cab h3 { color: #FFFFFF; }
 /* Foco de cada foto nas telas estreitas (onde só uma parte da largura aparece): enquadra o rosto das pessoas */
 @media (max-width: 1023px) {
   #setor-saude .rx-setor-foto img { --rx-foco: 30% center; }
+  #setor-hospitalidade .rx-setor-foto img { --rx-foco: 67% center; }
 }
