@@ -1624,7 +1624,7 @@ html body .rx-onde .rx-onde-cab .rp-texto { text-align: left !important; margin:
 
 /* "Onde buscamos": ecossistema. Desenho em 1536×1024 (SVG) com textos sobrepostos em %; os tamanhos acompanham a largura (cqw).
    Computador: tudo. Celular e tablet: só a roda (recorte central) e os setores em lista embaixo. */
-.rx-onde.eco { display: block; margin-top: 5rem; }
+.rx-onde.eco { display: block; margin-top: 0; }
 html body .rx-onde.eco .rx-onde-cab { text-align: center; max-width: 44rem; margin: 0 auto; }
 html body .rx-onde.eco .rx-onde-cab h2, html body .rx-onde.eco .rx-onde-cab .rp-texto { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }
 .rx-eco { position: relative; width: 100%; max-width: 72rem; margin: 2.5rem auto 0; aspect-ratio: 1536 / 1024; overflow: hidden; }
