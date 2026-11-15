@@ -1473,33 +1473,38 @@ html body .rx-setor-foto .rx-setor-cab h3 { color: #FFFFFF; }
   #setor-publico .rx-setor-foto img { --rx-foco: 45% center; }
 }
 
-/* "Onde buscamos": setores ligados ao centro (projetos e consultoria do Studio) por linhas com um feixe animado.
-   As linhas são desenhadas pelo script a partir da posição real de cada círculo. */
-.rx-beam { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 0 clamp(3rem, 10vw, 9rem); max-width: 60rem; margin: 3rem auto 0; padding: 1rem 0; text-align: left; }
+/* "Onde buscamos": os setores (esquerda) se ligam ao Studio (centro), que leva à experiência entregue (direita).
+   As linhas são desenhadas pelo script a partir da posição real de cada círculo; um feixe vermelho percorre cada uma. */
+.rx-beam { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 0 clamp(2.5rem, 9vw, 8rem); max-width: 56rem; margin: 3rem auto 0; padding: .5rem 0; text-align: left; }
 .rx-beam-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
-.rx-beam-col { position: relative; z-index: 1; list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
-.rx-beam-item { display: flex; align-items: center; gap: .875rem; }
-.rx-beam-col.esq .rx-beam-item { flex-direction: row-reverse; text-align: right; }
-.rx-beam-no { display: grid; place-items: center; flex: none; width: 3.25rem; height: 3.25rem; border-radius: 9999px; background: #FFFFFF; color: #D44D4D; border: 1px solid #EDF0F5; box-shadow: 0 4px 14px rgba(13, 17, 25, 0.08); }
-.rx-beam-no svg { width: 1.375rem; height: 1.375rem; }
+.rx-beam-col { position: relative; z-index: 1; list-style: none; margin: 0; padding: 0; display: grid; gap: .625rem; }
+.rx-beam-item { display: flex; flex-direction: row-reverse; align-items: center; gap: .75rem; text-align: right; }
+.rx-beam-no { display: grid; place-items: center; flex: none; width: 2.75rem; height: 2.75rem; border-radius: 9999px; background: #FFFFFF; color: #D44D4D; border: 1px solid #EDF0F5; box-shadow: 0 4px 14px rgba(13, 17, 25, 0.08); }
+.rx-beam-no svg { width: 1.25rem; height: 1.25rem; }
 .rx-beam-nome { font-size: .9375rem; font-weight: 600; line-height: 1.3; color: #283043; }
-.rx-beam-centro { position: relative; z-index: 1; display: grid; justify-items: center; gap: .75rem; }
+.rx-beam-centro, .rx-beam-fim { position: relative; z-index: 1; display: grid; justify-items: center; gap: .75rem; }
+.rx-beam-fim { justify-self: start; }
 .rx-beam-logo { display: grid; place-items: center; width: 6rem; height: 6rem; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(212, 77, 77, 0.2); box-shadow: 0 0 0 10px rgba(212, 77, 77, 0.06), 0 10px 30px rgba(212, 77, 77, 0.18); }
 .rx-beam-logo img { width: 3rem; height: 3rem; }
+.rx-beam-no.grande { width: 4.5rem; height: 4.5rem; border-color: rgba(212, 77, 77, 0.2); }
+.rx-beam-no.grande svg { width: 2rem; height: 2rem; }
 .rx-beam-legenda { max-width: 9rem; font-size: .8125rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-align: center; line-height: 1.35; color: #D44D4D; }
 .rx-beam-base { fill: none; stroke: #E4E6EC; stroke-width: 1.5; }
 .rx-beam-feixe { fill: none; stroke: #D44D4D; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 14 86; stroke-dashoffset: 100; animation: rx-beam-corre var(--dur, 4s) linear var(--atraso, 0s) infinite; filter: drop-shadow(0 0 4px rgba(212, 77, 77, 0.55)); }
 @keyframes rx-beam-corre { from { stroke-dashoffset: 100; } to { stroke-dashoffset: -14; } }
 @media (prefers-reduced-motion: reduce) { .rx-beam-feixe { display: none; } }
-/* celular: círculos menores e o nome embaixo de cada um */
+/* celular: círculos e textos menores, tudo na mesma composição */
 @media (max-width: 639px) {
-  .rx-beam { gap: 0 1.5rem; margin-top: 2rem; }
-  .rx-beam-col { gap: 1rem; }
-  .rx-beam-item, .rx-beam-col.esq .rx-beam-item { flex-direction: column; text-align: center; gap: .375rem; }
-  .rx-beam-no { width: 2.75rem; height: 2.75rem; }
-  .rx-beam-no svg { width: 1.125rem; height: 1.125rem; }
-  .rx-beam-nome { font-size: .75rem; max-width: 7rem; }
-  .rx-beam-logo { width: 4.25rem; height: 4.25rem; box-shadow: 0 0 0 6px rgba(212, 77, 77, 0.06), 0 8px 20px rgba(212, 77, 77, 0.18); }
-  .rx-beam-logo img { width: 2.125rem; height: 2.125rem; }
-  .rx-beam-legenda { font-size: .625rem; max-width: 5.5rem; }
+  .rx-beam { grid-template-columns: minmax(0, 1fr) auto auto; gap: 0 2.25rem; margin-top: 2rem; }
+  .rx-beam-centro .rx-beam-legenda { display: none; } /* no celular, só o logo no centro */
+  .rx-beam-col { gap: .5rem; }
+  .rx-beam-item { gap: .5rem; }
+  .rx-beam-no { width: 2.25rem; height: 2.25rem; }
+  .rx-beam-no svg { width: 1rem; height: 1rem; }
+  .rx-beam-nome { font-size: .75rem; line-height: 1.25; }
+  .rx-beam-logo { width: 4rem; height: 4rem; box-shadow: 0 0 0 6px rgba(212, 77, 77, 0.06), 0 8px 20px rgba(212, 77, 77, 0.18); }
+  .rx-beam-logo img { width: 2rem; height: 2rem; }
+  .rx-beam-no.grande { width: 3.25rem; height: 3.25rem; }
+  .rx-beam-no.grande svg { width: 1.5rem; height: 1.5rem; }
+  .rx-beam-legenda { font-size: .625rem; max-width: 5rem; }
 }
