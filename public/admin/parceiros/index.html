@@ -306,6 +306,9 @@
   .gs-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .gs-in { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; color: #627288; background: #F6F7FA; border: 1px solid #EDF0F5; }
   .gs-in svg { width: 16px; height: 16px; }
+  .gs-in:hover { color: #fff; background: #D44D4D; border-color: #D44D4D; }
+  .gs-in:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+  .gal-site { cursor: pointer; }
   .gal-site h3 { margin: 0; font-size: 18px; font-weight: 700; color: #131A27; }
   .gs-esp { margin: 4px 0 14px; font-size: 14px; font-weight: 600; color: #D44D4D; }
   .gs-tempo { margin: -10px 0 14px; font-size: 13px; color: #627288; }
@@ -701,13 +704,20 @@ function areasAtuacao(r) {
 // Card igual ao da Galeria de Profissionais do site (foto, LinkedIn, nome, especialidade e tags).
 // O card inteiro abre a ficha do parceiro.
 const limpaTxt = (x) => String(x || "").replace(/\.\s*$/, "").trim();
+// link do LinkedIn informado (aceita "linkedin.com/in/..." sem https)
+const linkLinkedin = (u) => { const v = String(u || "").trim(); if (!/linkedin\.com\//i.test(v)) return ""; return /^https?:\/\//i.test(v) ? v.replace(/^http:/i, "https:") : "https://" + v; };
 const espGaleria = (r) => limpaTxt(r.galeria_cargo) || limpaTxt(r.principal_especializacao);
 const tempoGaleria = (r) => NIVEL[r.tempo_especialidade] || "";
 function summaryCard(r) {
-  const c = el("a", "card pcs gal-site"); c.href = "/admin/parceiros/?id=" + r.id;
+  // o card inteiro abre a ficha; o ícone do LinkedIn é um link próprio (abre o perfil em outra aba)
+  const href = "/admin/parceiros/?id=" + r.id;
+  const c = el("article", "card pcs gal-site"); c.tabIndex = 0; c.setAttribute("role", "link");
   c.setAttribute("aria-label", "Abrir o perfil de " + (r.nome || "parceiro"));
+  c.addEventListener("click", (e) => { if (e.target.closest(".gs-in")) return; if (e.metaKey || e.ctrlKey) window.open(href, "_blank"); else location.href = href; });
+  c.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target === c) location.href = href; });
   const topo = el("div", "gs-topo"); topo.appendChild(avatar(r, "gs-foto"));
-  if (r.galeria_linkedin || r.linkedin) { const li = el("span", "gs-in"); li.setAttribute("aria-hidden", "true"); li.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>'; topo.appendChild(li); }
+  const liUrl = linkLinkedin(r.galeria_linkedin || r.linkedin);
+  if (liUrl) { const li = el("a", "gs-in"); li.href = liUrl; li.target = "_blank"; li.rel = "noopener noreferrer"; li.title = "Abrir o LinkedIn"; li.setAttribute("aria-label", "LinkedIn de " + (r.nome || "parceiro") + " (abre em nova aba)"); li.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>'; topo.appendChild(li); }
   c.appendChild(topo);
   c.appendChild(el("h3", null, r.nome || "Sem nome"));
   c.appendChild(el("p", "gs-esp", espGaleria(r) || "Especialidade não informada"));
