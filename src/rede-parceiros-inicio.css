@@ -1508,3 +1508,31 @@ html body .rx-setor-foto .rx-setor-cab h3 { color: #FFFFFF; }
   .rx-beam-no.grande svg { width: 1.5rem; height: 1.5rem; }
   .rx-beam-legenda { font-size: .625rem; max-width: 5rem; }
 }
+
+/* "Onde buscamos": versão mais compacta */
+.rx-beam { max-width: 44rem; gap: 0 clamp(2rem, 7vw, 5.5rem); margin-top: 2.25rem; }
+.rx-beam-col { gap: .375rem; }
+.rx-beam-item { gap: .625rem; }
+.rx-beam-no { width: 2.125rem; height: 2.125rem; box-shadow: 0 2px 8px rgba(13, 17, 25, 0.07); }
+.rx-beam-no svg { width: 1rem; height: 1rem; }
+.rx-beam-nome { font-size: .8125rem; line-height: 1.25; }
+.rx-beam-logo { width: 4.5rem; height: 4.5rem; box-shadow: 0 0 0 7px rgba(212, 77, 77, 0.06), 0 8px 22px rgba(212, 77, 77, 0.16); }
+.rx-beam-logo img { width: 2.25rem; height: 2.25rem; }
+.rx-beam-no.grande { width: 3.25rem; height: 3.25rem; }
+.rx-beam-no.grande svg { width: 1.5rem; height: 1.5rem; }
+.rx-beam-legenda { font-size: .6875rem; max-width: 8rem; }
+.rx-beam-centro, .rx-beam-fim { gap: .5rem; }
+@media (max-width: 639px) {
+  .rx-beam { gap: 0 1.75rem; margin-top: 1.75rem; padding-left: .25rem; padding-right: .25rem; }
+  .rx-beam-nome { max-width: 9.5rem; }
+  .rx-beam-col { gap: .25rem; }
+  .rx-beam-item { gap: .4375rem; }
+  .rx-beam-no { width: 1.875rem; height: 1.875rem; }
+  .rx-beam-no svg { width: .875rem; height: .875rem; }
+  .rx-beam-nome { font-size: .6875rem; }
+  .rx-beam-logo { width: 3.25rem; height: 3.25rem; box-shadow: 0 0 0 5px rgba(212, 77, 77, 0.06), 0 6px 16px rgba(212, 77, 77, 0.16); }
+  .rx-beam-logo img { width: 1.625rem; height: 1.625rem; }
+  .rx-beam-no.grande { width: 2.625rem; height: 2.625rem; }
+  .rx-beam-no.grande svg { width: 1.25rem; height: 1.25rem; }
+  .rx-beam-legenda { font-size: .5625rem; max-width: 4.5rem; }
+}
