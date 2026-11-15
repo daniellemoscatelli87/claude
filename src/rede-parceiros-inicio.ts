@@ -626,3 +626,52 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     li.appendChild(f);
   }
 });
+
+/* ---------- Match de profissionais: troca as 7 etapas (texto à esquerda + cena à direita) ----------
+   Troca sozinha (6,5 s por etapa; 10 s na última, a do kanban) com a barrinha de progresso no ponto ativo. A pessoa pode
+   ir e voltar pelas setas e pelos pontos e pausar; o mouse sobre o componente também pausa. Só roda quando está na tela. */
+(() => {
+  const palco = document.querySelector<HTMLElement>('[data-match]');
+  if (!palco) return;
+  const txts = Array.from(palco.querySelectorAll<HTMLElement>('.rx-mt-txt'));
+  const cenas = Array.from(palco.querySelectorAll<HTMLElement>('.rx-mt-cena'));
+  const pontos = Array.from(palco.querySelectorAll<HTMLButtonElement>('.rx-mt-ponto'));
+  const pausa = palco.querySelector<HTMLButtonElement>('.rx-mt-pausa')!;
+  const total = txts.length;
+  const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DUR = (n: number) => (n === total ? 10000 : 6500);
+  let atual = 1, decorrido = 0, pausado = reduzir, sobre = false, visivel = false, ultimo = 0;
+  const mostrar = (n: number) => {
+    atual = ((n - 1 + total) % total) + 1;
+    decorrido = 0;
+    palco.dataset.n = String(atual);
+    [txts, cenas].forEach((g) => g.forEach((e) => {
+      const on = Number(e.dataset.n) === atual;
+      // reinicia as animações da cena: tira e devolve a classe
+      if (on) { e.classList.remove('ativa'); void e.offsetWidth; }
+      e.classList.toggle('ativa', on);
+    }));
+    pontos.forEach((p, i) => { p.classList.toggle('ativa', i + 1 === atual); p.classList.toggle('feito', i + 1 < atual); p.setAttribute('aria-current', String(i + 1 === atual)); p.style.setProperty('--p', '0%'); });
+  };
+  const atualizarPausa = () => { pausa.textContent = pausado ? 'Retomar' : 'Pausar'; pausa.setAttribute('aria-pressed', String(pausado)); };
+  palco.querySelectorAll<HTMLButtonElement>('[data-passo]').forEach((b) => b.addEventListener('click', () => mostrar(atual + Number(b.dataset.passo))));
+  pontos.forEach((p) => p.addEventListener('click', () => mostrar(Number(p.dataset.ir))));
+  pausa.addEventListener('click', () => { pausado = !pausado; atualizarPausa(); });
+  palco.addEventListener('mouseenter', () => { sobre = true; });
+  palco.addEventListener('mouseleave', () => { sobre = false; });
+  new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }, { threshold: 0.35 }).observe(palco);
+  const passo = (t: number) => {
+    const dt = ultimo ? Math.min(100, t - ultimo) : 0;
+    ultimo = t;
+    if (!pausado && !sobre && visivel && !document.hidden) {
+      decorrido += dt;
+      const p = pontos[atual - 1];
+      p?.style.setProperty('--p', `${Math.min(100, (decorrido / DUR(atual)) * 100)}%`);
+      if (decorrido >= DUR(atual)) mostrar(atual + 1);
+    }
+    requestAnimationFrame(passo);
+  };
+  mostrar(1);
+  atualizarPausa();
+  requestAnimationFrame(passo);
+})();
