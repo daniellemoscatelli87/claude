@@ -500,3 +500,37 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     marcar();
   }
 }
+
+/* ---------- "Onde buscamos": linhas de cada setor até o centro, com um feixe animado ----------
+   As curvas são recalculadas quando o tamanho muda; cada feixe começa num momento diferente. */
+{
+  const raiz = document.querySelector<HTMLElement>('[data-beam]');
+  const svg = raiz?.querySelector<SVGSVGElement>('.rx-beam-svg');
+  const centro = raiz?.querySelector<HTMLElement>('[data-beam-centro] .rx-beam-logo');
+  if (raiz && svg && centro) {
+    const nos = Array.from(raiz.querySelectorAll<HTMLElement>('[data-beam-no] .rx-beam-no'));
+    const NS = 'http://www.w3.org/2000/svg';
+    const desenhar = () => {
+      const r = raiz.getBoundingClientRect();
+      const c = centro.getBoundingClientRect();
+      const cx = c.left + c.width / 2 - r.left, cy = c.top + c.height / 2 - r.top;
+      svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
+      svg.replaceChildren();
+      nos.forEach((no, i) => {
+        const n = no.getBoundingClientRect();
+        const esquerda = n.left + n.width / 2 < cx;
+        const x1 = esquerda ? n.right - r.left : n.left - r.left, y1 = n.top + n.height / 2 - r.top;
+        const x2 = esquerda ? cx - c.width / 2 : cx + c.width / 2;
+        const meio = (x1 + x2) / 2;
+        const d = `M ${x1} ${y1} C ${meio} ${y1}, ${meio} ${cy}, ${x2} ${cy}`;
+        const base = document.createElementNS(NS, 'path'); base.setAttribute('d', d); base.setAttribute('class', 'rx-beam-base');
+        const feixe = document.createElementNS(NS, 'path'); feixe.setAttribute('d', d); feixe.setAttribute('class', 'rx-beam-feixe'); feixe.setAttribute('pathLength', '100');
+        feixe.style.setProperty('--atraso', `${((i * 0.73) % 4).toFixed(2)}s`);
+        feixe.style.setProperty('--dur', `${3.5 + (i % 3) * 0.5}s`);
+        svg.append(base, feixe);
+      });
+    };
+    new ResizeObserver(desenhar).observe(raiz);
+    desenhar();
+  }
+}
