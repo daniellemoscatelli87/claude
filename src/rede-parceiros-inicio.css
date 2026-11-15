@@ -1753,3 +1753,6 @@ html body .rx-pilar h3 { margin: 0; font-size: 1.125rem !important; font-weight:
   html body .rx-folha .rp-selo, html body .rp-carta-selo { padding: .25rem .75rem !important; font-size: 11px !important; line-height: 15px !important; }
   html body .rx-folha .rp-selo span, html body .rp-carta-selo span { width: .375rem !important; height: .375rem !important; }
 }
+
+/* Card "Vamos construir juntos?": sem a luz vermelha do canto superior direito (perto da foto) */
+html body .rp-carta-luz span:nth-child(1) { display: none !important; }
