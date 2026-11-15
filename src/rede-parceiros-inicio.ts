@@ -312,7 +312,12 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   }
   function mostrar(lista: Perfil[], exemplo: boolean) {
     if (lista.length < MINIMO) return;
-    grade!.replaceChildren(...lista.map(card));
+    // card convite no fim da galeria: abre o cadastro
+    const voce = el('li', 'rx-gal-voce');
+    const link = el('a'); link.href = '/rede-parceiros/cadastro/';
+    link.innerHTML = '<span class="rx-gal-voce-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6"/><path d="M22 11h-6"/></svg></span><strong>Você aqui</strong><span class="rx-gal-voce-txt">Faça parte da rede e apareça na galeria.</span><span class="rx-gal-voce-cta">Quero ser parceiro<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>';
+    voce.appendChild(link);
+    grade!.replaceChildren(...lista.map(card), voce);
     secao!.querySelector<HTMLElement>('.rx-gal-aviso')!.hidden = !exemplo;
     secao!.hidden = false;
   }
@@ -544,43 +549,54 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   }
 }
 
-/* ---------- "O que é a rede": feixes animados entre Contato → Relacionamento → Indicação ----------
-   Desenha uma curva suave entre um ícone e o próximo (horizontal no computador, vertical no celular) e um feixe com
-   gradiente vermelho que percorre a curva; o segundo feixe sai quando o primeiro chega. Redesenha quando o tamanho muda. */
+/* ---------- "O que é a rede": feixes animados entre Contato → Relacionamento → Indicação (estilo Animated Beam) ----------
+   Linha reta entre um ícone e o próximo (horizontal no computador, vertical no celular). O feixe é um gradiente que
+   desliza ao longo da linha: some nas pontas e brilha no meio, com um halo suave. O segundo sai quando o primeiro chega. */
 {
   const lista = document.querySelector<HTMLElement>('[data-feixe]');
   const svg = lista?.querySelector<SVGSVGElement>('.rx-pilares-svg');
   if (lista && svg) {
     const ics = Array.from(lista.querySelectorAll<HTMLElement>('.rx-pilar-ic'));
     const NS = 'http://www.w3.org/2000/svg';
+    const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const CICLO = 3.6, VIAGEM = 1.8; // segundos: cada feixe atravessa em 1,8 s; o próximo sai quando ele chega
     const desenhar = () => {
       const r = lista.getBoundingClientRect();
       svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
       svg.replaceChildren();
-      const defs = document.createElementNS(NS, 'defs'); svg.appendChild(defs);
+      const defs = document.createElementNS(NS, 'defs');
+      defs.innerHTML = '<filter id="rxFeixeHalo" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="3"/></filter>';
+      svg.appendChild(defs);
       for (let i = 0; i < ics.length - 1; i++) {
         const a = ics[i].getBoundingClientRect(), b = ics[i + 1].getBoundingClientRect();
         const vertical = Math.abs(b.top - a.top) > Math.abs(b.left - a.left);
         const ax = a.left + a.width / 2 - r.left, ay = a.top + a.height / 2 - r.top, bx = b.left + b.width / 2 - r.left, by = b.top + b.height / 2 - r.top;
-        const ra = a.width / 2 + 6, rb = b.width / 2 + 6;
-        let d: string, g: [number, number, number, number];
-        if (vertical) {
-          const y1 = ay + ra, y2 = by - rb, curva = 0;
-          d = `M ${ax} ${y1} Q ${ax + curva} ${(y1 + y2) / 2} ${bx} ${y2}`; g = [ax, y1, bx, y2];
-        } else {
-          const x1 = ax + ra, x2 = bx - rb, curva = -26;
-          d = `M ${x1} ${ay} Q ${(x1 + x2) / 2} ${ay + curva} ${x2} ${by}`; g = [x1, ay, x2, by];
-        }
-        const grad = document.createElementNS(NS, 'linearGradient');
-        grad.setAttribute('id', `rxFeixe${i}`); grad.setAttribute('gradientUnits', 'userSpaceOnUse');
-        grad.setAttribute('x1', String(g[0])); grad.setAttribute('y1', String(g[1])); grad.setAttribute('x2', String(g[2])); grad.setAttribute('y2', String(g[3]));
-        grad.innerHTML = '<stop offset="0" stop-color="#F0A3A3"/><stop offset="1" stop-color="#D44D4D"/>';
-        defs.appendChild(grad);
+        const ra = a.width / 2 + 4, rb = b.width / 2 + 4;
+        const [x1, y1, x2, y2] = vertical ? [ax, ay + ra, bx, by - rb] : [ax + ra, ay, bx - rb, by];
+        const d = `M ${x1} ${y1} L ${x2} ${y2}`;
         const base = document.createElementNS(NS, 'path'); base.setAttribute('d', d); base.setAttribute('class', 'rx-feixe-base');
-        const feixe = document.createElementNS(NS, 'path'); feixe.setAttribute('d', d); feixe.setAttribute('class', 'rx-feixe');
-        feixe.setAttribute('pathLength', '100'); feixe.setAttribute('stroke', `url(#rxFeixe${i})`);
-        feixe.style.setProperty('--atraso', `${i * 1.6}s`);
-        svg.append(base, feixe);
+        svg.appendChild(base);
+        if (reduzir) continue;
+        // gradiente que desliza: transparente → rosa → vermelho → transparente, com comprimento L
+        const comp = vertical ? y2 - y1 : x2 - x1, L = Math.max(60, comp * 0.35);
+        const eixo = vertical ? ['y1', 'y2'] : ['x1', 'x2'], ini = vertical ? y1 : x1, fim = vertical ? y2 : x2;
+        const g = document.createElementNS(NS, 'linearGradient');
+        g.setAttribute('id', `rxFeixe${i}`); g.setAttribute('gradientUnits', 'userSpaceOnUse');
+        g.setAttribute('x1', String(vertical ? x1 : ini - L)); g.setAttribute('x2', String(vertical ? x1 : ini));
+        g.setAttribute('y1', String(vertical ? ini - L : y1)); g.setAttribute('y2', String(vertical ? ini : y1));
+        g.innerHTML = '<stop offset="0" stop-color="#D44D4D" stop-opacity="0"/><stop offset=".55" stop-color="#F0A3A3" stop-opacity=".9"/><stop offset=".9" stop-color="#D44D4D"/><stop offset="1" stop-color="#D44D4D" stop-opacity="0"/>';
+        const k = (VIAGEM / CICLO).toFixed(3);
+        [[eixo[0], ini - L, fim], [eixo[1], ini, fim + L]].forEach(([attr, de, ate]) => {
+          const an = document.createElementNS(NS, 'animate');
+          an.setAttribute('attributeName', String(attr)); an.setAttribute('values', `${de};${ate};${ate}`); an.setAttribute('keyTimes', `0;${k};1`);
+          an.setAttribute('keySplines', '.45 0 .55 1;0 0 1 1'); an.setAttribute('calcMode', 'spline');
+          an.setAttribute('dur', `${CICLO}s`); an.setAttribute('begin', `${i * VIAGEM}s`); an.setAttribute('repeatCount', 'indefinite');
+          g.appendChild(an);
+        });
+        defs.appendChild(g);
+        const halo = document.createElementNS(NS, 'path'); halo.setAttribute('d', d); halo.setAttribute('class', 'rx-feixe-halo'); halo.setAttribute('stroke', `url(#rxFeixe${i})`); halo.setAttribute('filter', 'url(#rxFeixeHalo)');
+        const feixe = document.createElementNS(NS, 'path'); feixe.setAttribute('d', d); feixe.setAttribute('class', 'rx-feixe'); feixe.setAttribute('stroke', `url(#rxFeixe${i})`);
+        svg.append(halo, feixe);
       }
     };
     new ResizeObserver(desenhar).observe(lista);

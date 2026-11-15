@@ -1722,10 +1722,10 @@ html body .rx-pilar h3 { margin: 0; font-size: 1.125rem !important; font-weight:
 .rx-pilares-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
 .rx-pilar { z-index: 1; }
 .rx-feixe-base { fill: none; stroke: #E4E6EC; stroke-width: 2; stroke-linecap: round; }
-.rx-feixe { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 22 78; stroke-dashoffset: 100; animation: rx-feixe-corre 3.2s cubic-bezier(.45, 0, .55, 1) infinite; animation-delay: var(--atraso, 0s); }
-@keyframes rx-feixe-corre { 0% { stroke-dashoffset: 100; opacity: 0; } 8% { opacity: 1; } 50% { stroke-dashoffset: -22; opacity: 1; } 55%, 100% { stroke-dashoffset: -22; opacity: 0; } }
+.rx-feixe { fill: none; stroke-width: 2.5; stroke-linecap: round; }
+.rx-feixe-halo { fill: none; stroke-width: 6; stroke-linecap: round; opacity: .55; }
 @media (max-width: 767px) { .rx-pilar h3, .rx-pilar p { background: transparent !important; } }
-@media (prefers-reduced-motion: reduce) { .rx-feixe { display: none; } }
+
 /* celular: ícone à esquerda e texto à direita; o feixe corre só pela coluna dos ícones */
 @media (max-width: 767px) {
   .rx-pilares { max-width: 24rem; gap: 2rem; }
@@ -1734,3 +1734,16 @@ html body .rx-pilar h3 { margin: 0; font-size: 1.125rem !important; font-weight:
   html body .rx-pilar h3 { align-self: end; padding: 0 !important; }
   .rx-pilar p { max-width: none; padding: 0 !important; }
 }
+
+/* Galeria: card "Você aqui" (borda pontilhada) que abre o cadastro */
+.rx-gal-voce { display: flex; }
+.rx-gal-voce a { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .5rem; min-height: 16rem; padding: 1.5rem; border-radius: 24px; border: 2px dashed rgba(212, 77, 77, 0.35); background: rgba(253, 242, 242, 0.35); text-align: center; text-decoration: none; color: #131A27; transition: border-color .2s ease, background-color .2s ease, transform .25s ease; }
+.rx-gal-voce a:hover { border-color: #D44D4D; background: #FDF2F2; transform: translateY(-3px); }
+.rx-gal-voce a:focus-visible { outline: 2px solid #D44D4D; outline-offset: 3px; }
+.rx-gal-voce-ic { display: grid; place-items: center; width: 4.5rem; height: 4.5rem; border-radius: 9999px; border: 2px dashed rgba(212, 77, 77, 0.45); color: #D44D4D; background: #FFFFFF; margin-bottom: .25rem; }
+.rx-gal-voce-ic svg { width: 1.75rem; height: 1.75rem; }
+.rx-gal-voce strong { font-size: 1.125rem; font-weight: 700; }
+.rx-gal-voce-txt { max-width: 15rem; font-size: .875rem; line-height: 1.5; color: #627288; }
+.rx-gal-voce-cta { display: inline-flex; align-items: center; gap: .375rem; margin-top: .5rem; font-size: .875rem; font-weight: 700; color: #D44D4D; }
+.rx-gal-voce-cta svg { width: 1rem; height: 1rem; transition: transform .2s ease; }
+.rx-gal-voce a:hover .rx-gal-voce-cta svg { transform: translateX(3px); }
