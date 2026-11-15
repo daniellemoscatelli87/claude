@@ -45,6 +45,19 @@
   .aceite input { flex: none; width: 1.125rem; height: 1.125rem; margin: .1875rem 0 0; accent-color: #D44D4D; }
   .aceite.invalido { border-color: #D44D4D; background: #FDF2F2; }
   .aceite-nota { margin: .75rem 0 0; font-size: .8125rem; color: #627288; }
+  /* link "termos" (abre a modal com o texto do termo) */
+  .link-termo { display: inline; min-height: 0; padding: 0; border: 0; background: none; font: inherit; font-weight: 600; color: #D44D4D; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+  .link-termo:hover { color: #B82828; }
+  .link-termo:focus-visible { outline: 2px solid #D44D4D; outline-offset: 2px; border-radius: 4px; }
+  .modal-termo { width: min(34rem, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 1.5rem; border: 0; border-radius: 24px; background: #FFFFFF; color: #131A27; box-shadow: 0 24px 64px rgba(13, 17, 25, 0.24); overflow-y: auto; }
+  .modal-termo::backdrop { background: rgba(13, 17, 25, 0.5); }
+  .mt-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+  .mt-topo h2 { margin: 0; font-size: 1.125rem; line-height: 1.35; }
+  .mt-x { flex: none; width: 40px; min-height: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: #F6F7FA; color: #283043; }
+  .mt-x:hover { background: #EDF0F5; }
+  .mt-x svg { width: 20px; height: 20px; }
+  .modal-termo .termo { margin: 0 0 1.25rem; }
+  .mt-acoes { display: flex; justify-content: flex-end; }
   button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.5rem; border-radius: 9999px; font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; }
   .sim { border: 0; background: #D44D4D; color: #FFFFFF; }
   .sim:hover { background: #B82828; }
@@ -183,15 +196,20 @@
     </div>
     <p class="nota">É assim que o seu perfil vai aparecer no site <a href="https://www.danimoscatelli.com.br/rede-parceiros/" target="_blank" rel="noopener">www.danimoscatelli.com.br/rede-parceiros</a></p>
 
-    <h2>Autorização</h2>
-    <p class="termo" id="termo"></p>
-    <label class="aceite" id="aceite-box" hidden><input type="checkbox" id="aceite"><span>Autorizo a exibição do meu perfil na Galeria de Profissionais, conforme o termo acima.</span></label>
+    <h2 id="aut-tit" hidden>Autorização</h2>
+    <label class="aceite" id="aceite-box" hidden><input type="checkbox" id="aceite"><span>Autorizo a exibição do meu perfil na Galeria de Profissionais, conforme os <button type="button" class="link-termo" data-termo>termos</button>.</span></label>
     <div class="acoes">
       <button type="button" class="sim" id="enviar">Enviar perfil</button>
     </div>
-    <p class="aceite-nota">Ao enviar, você concorda com a exibição do seu perfil na Galeria de Profissionais do site.</p>
+    <p class="aceite-nota">Ao enviar, você concorda com a exibição do seu perfil na Galeria de Profissionais do site, conforme os <button type="button" class="link-termo" data-termo>termos</button>.</p>
     <p class="erro" id="erro" role="alert" hidden></p>
   </div>
+  <!-- Termos da galeria em modal: abre pelo link "termos" -->
+  <dialog class="modal-termo" id="modal-termo" aria-labelledby="modal-termo-tit">
+    <div class="mt-topo"><h2 id="modal-termo-tit">Termos da Galeria de Profissionais</h2><button type="button" class="mt-x" id="modal-termo-x" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+    <p class="termo" id="termo"></p>
+    <div class="mt-acoes"><button type="button" class="sim pequeno" id="modal-termo-ok">Fechar</button></div>
+  </dialog>
   <section class="enviado" id="enviado" hidden aria-label="Perfil enviado com sucesso!" tabindex="-1">
     <img class="enviado-foto" src="/rede-parceiros/galeria/dani-positivo-v3.webp" alt="Dani Moscatelli fazendo sinal de positivo com as duas mãos, ao lado de um selo de confirmado" width="1254" height="1254" loading="lazy">
     <p>Obrigada por fazer parte da Galeria de Profissionais da Rede de Parceiros. Seu perfil vai compor a galeria do site.</p>
@@ -240,6 +258,17 @@
       rec.base = V / Math.min(rec.img.naturalWidth, rec.img.naturalHeight);
       $("rec-img").src = rec.url; $("rec-zoom").value = String(rec.zoom); recDesenhar(); $("rec-area").focus();
     }
+    // modal dos termos
+    (function () {
+      var dlg = $("modal-termo"), origem = null;
+      document.querySelectorAll("[data-termo]").forEach(function (b) {
+        b.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); origem = b; dlg.showModal(); $("modal-termo-ok").focus(); });
+      });
+      function fechar() { dlg.close(); }
+      $("modal-termo-x").addEventListener("click", fechar); $("modal-termo-ok").addEventListener("click", fechar);
+      dlg.addEventListener("click", function (e) { if (e.target !== dlg) return; var r = dlg.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) fechar(); });
+      dlg.addEventListener("close", function () { if (origem) origem.focus(); });
+    })();
     function fotoErro(msg) { $("foto-erro-txt").textContent = msg; $("foto-erro").hidden = !msg; }
     $("foto-arquivo").addEventListener("change", function (e) {
       var f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
@@ -300,7 +329,7 @@
       // LinkedIn do cadastro: já vem no campo, aberto para edição.
       status(d.status); atualizarIn();
       // quem já autorizou (no formulário de cadastro ou antes) não precisa marcar de novo; quem está na base sem autorizar marca a caixa
-      $("aceite-box").hidden = d.status === "autorizado";
+      $("aceite-box").hidden = d.status === "autorizado"; $("aut-tit").hidden = d.status === "autorizado";
       $("linkedin").addEventListener("input", atualizarIn);
     }).catch(function (e) { $("carregando").hidden = true; $("erro-geral").textContent = e.message; $("erro-geral").hidden = false; });
     // Confete no topo da tela ao enviar o perfil, o mesmo do fim do cadastro de parceiros (respeita quem prefere menos movimento).
