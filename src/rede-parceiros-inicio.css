@@ -2650,3 +2650,10 @@ html body .rx-mv2 .rx-mv-grade li.novo { z-index: 2; }
 }
 @keyframes rx-mv-load { 0% { opacity: 0; transform: translate(-50%, -44%) scale(.95); } 10%, 82% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(.97); } }
 @keyframes rx-mv-pulsa2 { 50% { transform: scale(1.25); opacity: .7; } }
+/* loading da IA no padrão do DS: card branco, borda clara, sombra suave, ícone em vermelho sobre rosa claro */
+html body .rx-mv-loading { background: rgba(255, 255, 255, .96); color: #131A27; border: 1px solid #E4E8EF; box-shadow: 0 2px 8px rgba(13, 17, 25, .04), 0 24px 50px -20px rgba(13, 17, 25, .25); }
+html body .rx-mv-load-ic { background: #FDF2F2; border-radius: 9999px; }
+html body .rx-mv-load-ic .rx-mv-spin.r { border-color: rgba(212, 77, 77, .15); border-top-color: #D44D4D; }
+html body .rx-mv-load-ic svg { color: #D44D4D; }
+html body .rx-mv-loading strong { color: #131A27; }
+html body .rx-mv-loading small { color: #627288; }
