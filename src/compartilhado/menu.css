@@ -196,8 +196,9 @@ html.menu-aberto { overflow: hidden; }
 }
 /* Celular e tablet: o mesmo aviso fica fixo ao lado do botão do WhatsApp (à esquerda dele), com a seta apontando para o botão */
 @media (max-width: 1023px) {
-  #cta-contato.cta-whats { position: fixed !important; top: auto !important; left: auto !important; right: calc(20px + 56px + 12px) !important; bottom: 20px !important; margin: 0 !important; z-index: 30;
-    min-height: 56px; display: flex; align-items: center; max-width: calc(100vw - 20px - 56px - 12px - 12px) !important; }
+  /* ocupa todo o espaço que sobra à esquerda do botão (mesma margem de 20 px da borda) */
+  #cta-contato.cta-whats { position: fixed !important; top: auto !important; left: 20px !important; right: calc(20px + 56px + 12px) !important; bottom: 20px !important; margin: 0 !important; z-index: 30;
+    width: auto !important; min-height: 56px; display: flex; align-items: center; max-width: none !important; }
   #cta-contato.cta-whats > span[aria-hidden="true"] { top: calc(50% - 7px) !important; bottom: auto !important; left: auto !important; right: -7px !important; rotate: 135deg; }
   #cta-contato.cta-whats > div { width: 100%; }
   #cta-contato.cta-whats > div > button:first-of-type { padding: .625rem 2.5rem .625rem .75rem; gap: .625rem; }
@@ -207,7 +208,7 @@ html.menu-aberto { overflow: hidden; }
   .cta-contato.cta-whats { animation: cta-entrada-whats .45s ease-out .6s both, cta-flutua 2.6s ease-in-out 1.2s 3; }
 }
 @media (min-width: 640px) and (max-width: 1023px) {
-  #cta-contato.cta-whats { right: calc(24px + 56px + 12px) !important; bottom: 24px !important; }
+  #cta-contato.cta-whats { left: 24px !important; right: calc(24px + 56px + 12px) !important; bottom: 24px !important; }
 }
 /* Desktop: ao rolar, uma faixa clara translúcida com desfoque aparece por trás da pílula do menu e some em degradê para baixo */
 @media (min-width: 1024px) {
