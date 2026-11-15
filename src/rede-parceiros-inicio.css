@@ -2994,3 +2994,10 @@ html body .rx-mv6 .rx-mv-conv { display: none; }
 html body .rx-mt-tela-topo.rx-mt-agora::before, html body .rx-mt-tela-topo.rx-mt-agora::after { content: none !important; display: none !important; }
 /* cadastro: sem a barra de progresso no topo do formulário */
 html body .rx-mf-prog { display: none !important; }
+/* botões do mockup com tamanho padrão (altura 2rem, texto .75rem) e alinhados à direita */
+html body .rx-mf-enviar, html body .rx-mv-buscar, html body .rx-mv-contatar { display: grid; width: max-content; height: auto; margin: .25rem 0 0 auto; align-self: flex-end; justify-self: end; }
+html body .rx-mf-enviar > span, html body .rx-mv-buscar > span, html body .rx-mv-contatar > span { position: relative; inset: auto; grid-area: 1 / 1; height: 2rem; padding: 0 1rem; gap: .375rem;
+  border-radius: 9999px; font-size: .75rem; font-weight: 700; white-space: nowrap; }
+html body .rx-mf-enviar > span svg, html body .rx-mv-buscar > span svg, html body .rx-mv-contatar > span svg { width: .875rem; height: .875rem; }
+html body .rx-mv-novoproj, html body .rx-mv-convidar > span { height: 2rem; padding: 0 1rem; font-size: .75rem; }
+@media (max-width: 767px) { html body .rx-mv-fila li.vez .rx-mv-convidar .rx-mv-cursor { left: auto; right: 2.75rem; } }
