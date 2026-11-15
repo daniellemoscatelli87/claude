@@ -122,8 +122,8 @@ html body #ie3-home #depoimentos { border-top: 0 !important; }
   .ih-hero .coluna-inicio { flex: none; gap: 0; }
   .ih-hero .coluna-inicio > * + * { margin-top: .75rem !important; }
   .ih-hero .coluna-inicio h1 { font-size: clamp(1.375rem, 6.2vw, 2.25rem); line-height: 1.12; }
-  .ih-hero .coluna-inicio > div:nth-child(3) { font-size: .875rem; line-height: 1.5; max-width: 34rem; }
-  .ih-hero .coluna-inicio > div:nth-child(3) > * + * { margin-top: .5rem; }
+  .ih-hero .coluna-inicio > div:nth-child(2) { font-size: .875rem; line-height: 1.5; max-width: 34rem; }
+  .ih-hero .coluna-inicio > div:nth-child(2) > * + * { margin-top: .5rem; }
   /* foto: ocupa o espaço que sobra até a base */
   .ih-hero .contents > div:first-child { order: 0; position: relative; flex: 1 1 0; min-height: 200px; margin: 1rem 0 0; max-width: none; }
   .ih-hero .contents > div:first-child > img { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; object-fit: contain; object-position: 50% 100%; filter: none; }
@@ -133,5 +133,16 @@ html body #ie3-home #depoimentos { border-top: 0 !important; }
   .ih-movel { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; padding: 1.5rem 1.5rem 0; }
   .ih-movel .ih-form { display: flex; flex-direction: column; align-items: center; }
   .ih-movel #notify-msg { padding-left: 0; text-align: center; }
-  .ih-movel .ih-p3 { margin: 0; max-width: 34rem; text-align: center; font-size: .9375rem; line-height: 1.6; color: var(--color-brand-muted, #627288); }
+  .ih-movel .ih-p3 { margin: 0; max-width: 34rem; display: flex; flex-direction: column; align-items: center; text-align: center; font-size: .9375rem; line-height: 1.6; color: var(--color-brand-muted, #627288); }
+  .ih-movel .ih-p3 p { margin: 0; }
+  /* depoimentos: as tags menores, para caberem 2 por linha */
+  html body #ie3-home .ih-tags { gap: .5rem; }
+  html body #ie3-home .ih-tags > span { padding: .375rem .625rem; font-size: 11px; white-space: nowrap; }
 }
+
+/* Tag "Em breve": igual à tag "Prova social & reconhecimento"; fica acima do parágrafo "Enquanto o novo site…" */
+.ih-p3 .ih-tag { display: inline-flex; align-items: center; margin-bottom: .75rem; padding: 6px 16px; border-radius: 9999px; background: #FFF5F5; border: 1px solid rgba(251, 213, 213, 0.8);
+  font-size: 12px; font-weight: 700; line-height: 16px; letter-spacing: .2em; text-transform: uppercase; color: #C83232; user-select: none; }
+.ih-p3 p { margin: 0; }
+/* aviso abaixo do campo de e-mail: só aparece quando há mensagem (erro ou confirmação) */
+#notify-msg:empty { display: none; }
