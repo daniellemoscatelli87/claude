@@ -1658,35 +1658,34 @@ html body .rx-onde.eco .rx-onde-cab h2, html body .rx-onde.eco .rx-onde-cab .rp-
 /* computador: a etiqueta de baixo (Tecnologia) fica à mesma distância do anel que a de cima (Saúde) */
 @media (min-width: 1024px) { .rx-eco { overflow: visible; margin-bottom: 2.5rem; } }
 
-/* Ecossistema: animações. Entrada (com JavaScript): primeiro o núcleo, depois as pétalas uma a uma e, por fim, os setores
-   um a um em sentido anti-horário a partir de Saúde.
-   Contínuas: luz percorrendo o anel, pontos pulsando e brilho do centro. */
+/* Ecossistema: animações (com JavaScript, sem movimento reduzido).
+   1º o núcleo; 2º as pétalas uma a uma em sentido horário; 3º a luz dá UMA volta no anel e cada setor (ponto, linha e
+   etiqueta) aparece no instante em que a luz passa por ele, aceso em vermelho, e depois fica no estado normal.
+   Quando todos aparecem, a luz some. O brilho do centro continua respirando. */
 .rx-eco-brilho { animation: rx-eco-respira 5s ease-in-out infinite; }
 @keyframes rx-eco-respira { 0%, 100% { opacity: .75; transform: scale(.96); } 50% { opacity: 1; transform: scale(1.04); } }
-/* estado inicial (sem transição, para já começar escondido) */
-.rx-eco.anima .rx-eco-petala, .rx-eco.anima .rx-eco-esp, .rx-eco.anima .rx-eco-setor, .rx-eco.anima .rx-eco-con, .rx-eco.anima .rx-eco-centro { opacity: 0; transition: none; }
+/* estado normal dos setores (texto escuro, ícone vermelho) */
+.rx-eco-setor { color: #131A27; }
+.rx-eco-setor svg { color: #D44D4D; }
+/* luz: só aparece durante a volta */
+.rx-eco-luz { opacity: 0; transition: opacity .6s ease; }
+.rx-eco.anima .rx-eco-luz.ativa { opacity: 1; }
+/* estado inicial */
+.rx-eco.anima .rx-eco-petala, .rx-eco.anima .rx-eco-esp, .rx-eco.anima .rx-eco-setor, .rx-eco.anima .rx-eco-con, .rx-eco.anima .rx-eco-ponto, .rx-eco.anima .rx-eco-centro { opacity: 0; transition: none; }
 .rx-eco.anima .rx-eco-petala { transform: scale(.82); }
 .rx-eco.anima .rx-eco-centro { transform: translate(-50%, -50%) scale(.6); }
-.rx-eco.anima .rx-eco-setor { transform: translate(-50%, -50%) translateY(10px); }
-/* entrada: 1º o núcleo, 2º as pétalas (com os nomes), 3º os setores em sentido anti-horário a partir de Saúde */
+.rx-eco.anima .rx-eco-setor { transform: translate(-50%, -50%) scale(.92); }
+/* 1º núcleo, 2º pétalas (sentido horário, a partir de Design) */
 .rx-eco.anima.visivel .rx-eco-centro { opacity: 1; transform: translate(-50%, -50%); transition: opacity .6s ease .1s, transform .8s cubic-bezier(0.16, 1, 0.3, 1) .1s; }
-.rx-eco.anima.visivel .rx-eco-petala { opacity: 1; transform: none; transition: opacity .6s ease, transform .7s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(.7s + var(--i) * .09s); }
-.rx-eco.anima.visivel .rx-eco-esp { opacity: 1; transition: opacity .5s ease; transition-delay: calc(.95s + var(--i) * .09s); }
-.rx-eco.anima.visivel .rx-eco-setor { opacity: 1; transform: translate(-50%, -50%);
-  transition: opacity .5s ease calc(1.9s + var(--j) * .12s), transform .6s cubic-bezier(0.16, 1, 0.3, 1) calc(1.9s + var(--j) * .12s), color 1.1s ease, border-color 1.1s ease, box-shadow 1.1s ease; }
-/* ao acender: cor imediata (sem transição); ao apagar: volta ao cinza em 1,1 s, junto com o ponto */
-.rx-eco.anima.visivel .rx-eco-setor.aceso, .rx-eco .rx-eco-setor.aceso { transition: opacity .5s ease, transform .6s cubic-bezier(0.16, 1, 0.3, 1), color 0s, border-color 0s, box-shadow 0s; }
-.rx-eco.anima.visivel .rx-eco-con { opacity: 1; transition: opacity .5s ease; transition-delay: calc(1.9s + var(--j) * .12s); }
-@media (prefers-reduced-motion: reduce) { .rx-eco-luz, .rx-eco-ponto, .rx-eco-brilho { animation: none; } }
-/* Luz do anel, pontos e setores controlados pelo script (um só relógio): o setor acende no instante em que a luz toca o ponto
-   dele (sem transição ao acender) e apaga devagar. Setores em cinza claro quando apagados. */
-.rx-eco-ponto { transition: fill 1.1s ease, transform 1.1s ease, filter 1.1s ease; }
-.rx-eco-ponto.aceso { fill: #D44D4D; transform: scale(1.45); filter: drop-shadow(0 0 6px rgba(212, 77, 77, 0.7)); transition: none; }
-.rx-eco-setor { color: #A3ADBD; transition: color 1.1s ease, border-color 1.1s ease, box-shadow 1.1s ease, opacity .5s ease, transform .6s cubic-bezier(0.16, 1, 0.3, 1); }
-.rx-eco .rx-eco-setor svg { color: inherit; }
-.rx-eco .rx-eco-setor.aceso { color: #D44D4D; border-color: rgba(212, 77, 77, 0.35); box-shadow: 0 .6cqw 2.2cqw rgba(212, 77, 77, 0.18); transition: opacity .5s ease, transform .6s cubic-bezier(0.16, 1, 0.3, 1); }
-/* movimento reduzido: sem luz e etiquetas legíveis paradas */
-@media (prefers-reduced-motion: reduce) { .rx-eco-luz { display: none; } .rx-eco-setor { color: #283043; } .rx-eco .rx-eco-setor svg { color: #D44D4D; } }
+.rx-eco.anima.visivel .rx-eco-petala { opacity: 1; transform: none; transition: opacity .6s ease, transform .7s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(.7s + var(--i) * .12s); }
+.rx-eco.anima.visivel .rx-eco-esp { opacity: 1; transition: opacity .5s ease; transition-delay: calc(.95s + var(--i) * .12s); }
+/* 3º setores: aparecem quando a luz passa (classe "mostrado"), acesos por um instante (classe "aceso") */
+.rx-eco.anima .rx-eco-setor.mostrado { opacity: 1; transform: translate(-50%, -50%); transition: opacity .35s ease, transform .5s cubic-bezier(0.16, 1, 0.3, 1), color 1.1s ease, border-color 1.1s ease, box-shadow 1.1s ease; }
+.rx-eco.anima .rx-eco-con.mostrado, .rx-eco.anima .rx-eco-ponto.mostrado { opacity: 1; transition: opacity .35s ease, fill 1.1s ease, transform 1.1s ease, filter 1.1s ease; }
+.rx-eco .rx-eco-setor.aceso { color: #D44D4D; border-color: rgba(212, 77, 77, 0.35); box-shadow: 0 .6cqw 2.2cqw rgba(212, 77, 77, 0.18); }
+.rx-eco .rx-eco-setor.aceso svg { color: #D44D4D; }
+.rx-eco .rx-eco-ponto.aceso { fill: #D44D4D; transform: scale(1.45); filter: drop-shadow(0 0 6px rgba(212, 77, 77, 0.7)); }
+@media (prefers-reduced-motion: reduce) { .rx-eco-luz { display: none; } .rx-eco-brilho { animation: none; } }
 
 /* Divisor com rótulo acima dos blocos de "Como funciona a colaboração" */
 .rx-divisor { display: flex; align-items: center; gap: 1rem; margin: 0 0 -1.5rem; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A96AB; white-space: nowrap; }
@@ -1716,3 +1715,35 @@ html body .rx-pilar h3 { margin: 0; font-size: 1.125rem !important; font-weight:
   .rx-pilares::before { top: 2rem; bottom: 2rem; left: 50%; right: auto; width: 2px; height: auto; background: repeating-linear-gradient(180deg, rgba(212, 77, 77, 0.35) 0 6px, transparent 6px 12px); }
   html body .rx-pilar h3, .rx-pilar p { position: relative; background: #FFFFFF; padding: 0 .25rem; }
 }
+
+/* "O que é a rede": feixe animado (estilo Animated Beam) ligando Contato → Relacionamento → Indicação.
+   As linhas são desenhadas pelo script entre os ícones; um feixe com gradiente percorre cada uma, em sequência. */
+.rx-pilares::before { content: none !important; }
+.rx-pilares-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
+.rx-pilar { z-index: 1; }
+.rx-feixe-base { fill: none; stroke: #E4E6EC; stroke-width: 2; stroke-linecap: round; }
+.rx-feixe { fill: none; stroke-width: 2.5; stroke-linecap: round; }
+.rx-feixe-halo { fill: none; stroke-width: 6; stroke-linecap: round; opacity: .55; }
+@media (max-width: 767px) { .rx-pilar h3, .rx-pilar p { background: transparent !important; } }
+
+/* celular: ícone à esquerda e texto à direita; o feixe corre só pela coluna dos ícones */
+@media (max-width: 767px) {
+  .rx-pilares { max-width: 24rem; gap: 2rem; }
+  .rx-pilar { grid-template-columns: 4rem minmax(0, 1fr); grid-template-rows: auto auto; justify-items: start; column-gap: 1.25rem; row-gap: .25rem; text-align: left; padding: 0; }
+  .rx-pilar-ic { grid-row: 1 / span 2; margin-bottom: 0; align-self: start; }
+  html body .rx-pilar h3 { align-self: end; padding: 0 !important; }
+  .rx-pilar p { max-width: none; padding: 0 !important; }
+}
+
+/* Galeria: card "Você aqui" (borda pontilhada) que abre o cadastro */
+.rx-gal-voce { display: flex; }
+.rx-gal-voce a { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .5rem; min-height: 16rem; padding: 1.5rem; border-radius: 24px; border: 2px dashed rgba(212, 77, 77, 0.35); background: rgba(253, 242, 242, 0.35); text-align: center; text-decoration: none; color: #131A27; transition: border-color .2s ease, background-color .2s ease, transform .25s ease; }
+.rx-gal-voce a:hover { border-color: #D44D4D; background: #FDF2F2; transform: translateY(-3px); }
+.rx-gal-voce a:focus-visible { outline: 2px solid #D44D4D; outline-offset: 3px; }
+.rx-gal-voce-ic { display: grid; place-items: center; width: 4.5rem; height: 4.5rem; border-radius: 9999px; border: 2px dashed rgba(212, 77, 77, 0.45); color: #D44D4D; background: #FFFFFF; margin-bottom: .25rem; }
+.rx-gal-voce-ic svg { width: 1.75rem; height: 1.75rem; }
+.rx-gal-voce strong { font-size: 1.125rem; font-weight: 700; }
+.rx-gal-voce-txt { max-width: 15rem; font-size: .875rem; line-height: 1.5; color: #627288; }
+.rx-gal-voce-cta { display: inline-flex; align-items: center; gap: .375rem; margin-top: .5rem; font-size: .875rem; font-weight: 700; color: #D44D4D; }
+.rx-gal-voce-cta svg { width: 1rem; height: 1rem; transition: transform .2s ease; }
+.rx-gal-voce a:hover .rx-gal-voce-cta svg { transform: translateX(3px); }

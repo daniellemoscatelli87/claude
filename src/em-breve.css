@@ -63,13 +63,75 @@ html { overflow-x: clip; }
 .pagina-inicio .site-header:not(.is-scrolled) .btn-contato { border-color: #D44D4D; color: #D44D4D; }
 .pagina-inicio .site-header:not(.is-scrolled) .btn-contato:hover { background: #D44D4D; color: #fff; }
 
-/* Home: a rolagem não é mais travada (a página tem as seções da IE-3 abaixo do hero) */
-@media (min-width: 1024px) and (min-height: 860px) {
-  body.pagina-inicio > footer { padding-top: 1rem; padding-bottom: 1rem; }
-  body.pagina-inicio > main { padding-top: 1rem; padding-bottom: 1rem; }
-}
 /* Celular: conteúdo da coluna principal centralizado */
 @media (max-width: 767px) {
   .coluna-inicio { align-items: center; text-align: center; }
   .coluna-inicio #notify-msg { padding-left: 0; text-align: center; }
+}
+
+/* =========================================================================
+   Home com a mesma estrutura do Projeto Piloto e do Seja Parceiro:
+   hero num painel arredondado com a alça "Saiba mais"; abaixo, a folha branca com as seções; rodapé claro.
+   ========================================================================= */
+body.pagina-inicio { background: #FFFFFF; }
+.ih-hero { position: relative; isolation: isolate; overflow: hidden; background: #EEF2F7; }
+.ih-alca { display: none; }
+.ih-movel { display: none; }
+.ih-tampa, .ih-hero-espaco { display: none; }
+/* as seções da IE-3 ficam direto na página (sem o card branco grande por trás), como no Seja Parceiro */
+html body #ie3-home > div { max-width: none !important; padding: 0 !important; margin: 0 !important; }
+html body #ie3-home > div > div { border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
+html body #ie3-home #depoimentos { border-top: 0 !important; }
+/* rodapé claro (mesmas cores do Seja Parceiro) */
+.ih-rodape { background: #D6DCE6; }
+.ih-rodape .rodape-base { color: #495669; }
+.ih-rodape .rodape-base span[aria-hidden] { color: #8898B0; }
+.ih-rodape .rodape-topo { border-bottom-color: rgba(19, 26, 39, 0.12); }
+.ih-rodape .rodape-ds { color: #283043; text-decoration-color: rgba(40, 48, 67, .4); }
+@keyframes ih-alca-entra { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: none; } }
+
+/* Computador: painel com 16 px de respiro, menu por cima, alça recortada no centro da base */
+@media (min-width: 1024px) {
+  .ih-hero { margin: calc(-1 * var(--altura-cabecalho, 99px) + 1rem) 1rem 0; padding: calc(var(--altura-cabecalho, 99px) - 1rem + 1rem) 0 4.75rem;
+    min-height: calc(100svh - 2rem); border-radius: 32px; display: flex; align-items: center; }
+  .ih-alca { position: absolute; z-index: 30; left: 0; right: 0; bottom: 0; margin: 0 auto; width: 320px; height: 56px; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 16px;
+    border-radius: 40px 40px 0 0; background: #FFFFFF; color: #131A27; font-size: 1rem; font-weight: 600; text-decoration: none; }
+  .ih-alca-seta { width: 20px; height: 32px; border-radius: 9999px; border: 1px solid #D6DCE6; color: #D44D4D; display: flex; align-items: center; justify-content: center; transition: background-color .2s ease; }
+  .ih-alca-seta svg { width: 14px; height: 14px; }
+  .ih-alca:hover .ih-alca-seta { background: #FDF2F2; }
+  .ih-alca:focus-visible { outline: none; box-shadow: inset 0 0 0 2px #D44D4D; }
+  .ih-folha { margin-top: 1rem; }
+  /* o painel cabe na primeira tela, com a alça visível */
+  .ih-hero .contents > div:first-child { margin-top: 0; }
+  .ih-hero .contents > div:first-child > img { max-height: min(540px, calc(100svh - 360px)); }
+  .ih-hero .ih-redes { padding-bottom: 0; }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) { .ih-alca { animation: ih-alca-entra .7s cubic-bezier(0.16, 1, 0.3, 1) .6s both; } }
+
+/* Celular e tablet: mesma navegação do Seja Parceiro. O hero (texto no topo, foto na base) fica fixo atrás do menu
+   transparente; a folha branca sobe por cima e prende logo abaixo do menu com a tampa arredondada.
+   O campo de e-mail e as redes sociais ficam no começo da folha. */
+@media (max-width: 1023px) {
+  .pagina-inicio .site-header, .pagina-inicio .site-header.is-scrolled, html body.pagina-inicio .site-header.is-scrolled { transform: none !important; translate: none !important; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  html body.pagina-inicio .site-header.is-hidden { transform: none !important; }
+  html:has(body.pagina-inicio) { scroll-padding-top: calc(var(--altura-cabecalho, 68px) + 2.5rem); }
+  .ih-hero { position: fixed; top: 0; left: 0; right: 0; z-index: 20; display: flex; flex-direction: column; min-height: calc(100svh - 84px);
+    padding-top: calc(var(--altura-cabecalho, 68px) + .25rem); clip-path: inset(0 0 calc(100% - var(--ih-tampa, 100vh) - 28px) 0); }
+  .ih-hero-grade { flex: 1 0 auto; display: flex; flex-direction: column; }
+  .ih-hero-grade > .grid { flex: 1 0 auto; display: flex; flex-direction: column; gap: 0; }
+  .ih-hero .coluna-inicio { flex: none; gap: 0; }
+  .ih-hero .coluna-inicio > * + * { margin-top: .75rem !important; }
+  .ih-hero .coluna-inicio h1 { font-size: clamp(1.375rem, 6.2vw, 2.25rem); line-height: 1.12; }
+  .ih-hero .coluna-inicio > div:nth-child(3) { font-size: .875rem; line-height: 1.5; max-width: 34rem; }
+  .ih-hero .coluna-inicio > div:nth-child(3) > * + * { margin-top: .5rem; }
+  /* foto: ocupa o espaço que sobra até a base */
+  .ih-hero .contents > div:first-child { order: 0; position: relative; flex: 1 1 0; min-height: 200px; margin: 1rem 0 0; max-width: none; }
+  .ih-hero .contents > div:first-child > img { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; object-fit: contain; object-position: 50% 100%; filter: none; }
+  .ih-hero-espaco { display: block; }
+  .ih-folha { position: relative; z-index: 1; margin-top: -28px; background: #FFFFFF; }
+  .ih-tampa { display: block; position: fixed; z-index: 21; left: 0; right: 0; top: var(--ih-tampa, 100vh); height: 28px; background: #FFFFFF; border-radius: 28px 28px 0 0; pointer-events: none; }
+  .ih-movel { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; padding: 1.5rem 1.5rem 0; }
+  .ih-movel .ih-form { display: flex; flex-direction: column; align-items: center; }
+  .ih-movel #notify-msg { padding-left: 0; text-align: center; }
+  .ih-movel .ih-p3 { margin: 0; max-width: 34rem; text-align: center; font-size: .9375rem; line-height: 1.6; color: var(--color-brand-muted, #627288); }
 }
