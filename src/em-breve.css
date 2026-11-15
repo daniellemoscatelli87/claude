@@ -152,3 +152,5 @@ html body #ie3-home #depoimentos { border-top: 0 !important; }
   .ih-tag, html body #ie3-home .ih-secao-tag { padding: 4px 12px !important; }
   .ih-tag, html body #ie3-home .ih-secao-tag > span { font-size: 11px !important; letter-spacing: .18em !important; line-height: 15px !important; }
 }
+/* Celular: título "Veja todas as 35 recomendações na íntegra" menor */
+@media (max-width: 767px) { html body #ie3-home .ih-rec-titulo { font-size: 1.0625rem !important; line-height: 1.35 !important; } }
