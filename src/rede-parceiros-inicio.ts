@@ -643,7 +643,8 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const pausa = palco.querySelector<HTMLButtonElement>('.rx-mt-pausa')!;
   const total = cenas.length;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const DUR = (n: number) => (n === total ? 10000 : 6500);
+  // tempo de cada etapa; a base de parceiros (2) passa logo depois dos confetes para o clique em "Novo projeto"
+  const DUR = (n: number) => (n === total ? 10000 : n === 2 ? 4000 : 6500);
   let atual = 1, decorrido = 0, pausado = reduzir, sobre = false, visivel = false, ultimo = 0;
   const mostrar = (n: number) => {
     const antes = atual;
