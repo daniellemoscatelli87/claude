@@ -173,7 +173,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     // rodízio em 3 passos (Entregue → A iniciar, Em andamento → Entregue, A iniciar → Em andamento):
     // cada coluna fica sempre com 1 a 3 cards, então a altura do quadro não muda
     const origem = [2, 1, 0][vez % 3]; vez++;
-    const primeiro = listas[origem].firstElementChild as HTMLLIElement | null;
+    const primeiro = listas[origem].querySelector<HTMLLIElement>(':scope > .rx-kb-card:not(.rx-kb-fixo)'); // o card fixo (convite aceito no match) não se move
     if (!primeiro) return;
     const i = cards.indexOf(primeiro);
     const antes = new Map<HTMLElement, DOMRect>();
@@ -644,7 +644,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const total = cenas.length;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // tempo de cada etapa; a base de parceiros (2) passa logo depois dos confetes para o clique em "Novo projeto"
-  const DUR = (n: number) => (n === total ? 10000 : n === 2 ? 4000 : 6500);
+  const DUR = (n: number) => ([0, 6500, 4000, 6500, 8000, 7000, 8500, 5500, 10000][n] || 6500);
   let atual = 1, decorrido = 0, pausado = reduzir, sobre = false, visivel = false, ultimo = 0;
   const mostrar = (n: number) => {
     const antes = atual;
