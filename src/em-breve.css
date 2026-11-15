@@ -168,3 +168,42 @@ html body #ie3-home #depoimentos { border-top: 0 !important; }
   body.pagina-inicio #cta-contato.cta-whats { z-index: 44 !important; }
 }
 @media (max-width: 767px) and (prefers-reduced-motion: reduce) { .faixa-flutuante { transition: none; } }
+
+/* ---------- Espaçamento entre as seções da home: o mesmo respiro entre o fim de uma seção e o começo da próxima ---------- */
+html body #ie3-home #depoimentos, html body #ie3-home #artigos { padding-top: 5rem !important; padding-bottom: 5rem !important; }
+html body #ie3-home #depoimentos .relative.mb-10 { margin-bottom: 1.5rem !important; }   /* carrossel → card "Veja todas" */
+html body #ie3-home #artigos { padding-top: 3rem !important; }   /* o card "Veja todas" já tem respiro (sombra) embaixo */
+@media (max-width: 767px) {
+  html body #ie3-home #depoimentos, html body #ie3-home #artigos { padding-top: 3.5rem !important; padding-bottom: 3.5rem !important; }
+  html body #ie3-home #artigos { padding-top: 2.5rem !important; }
+  .ih-movel { padding-bottom: 1rem !important; }
+}
+
+/* ---------- Clientes atendidos: card sobre o rodapé (igual ao card "Programa Projeto Piloto") ---------- */
+html body #ie3-home .ih-clientes { padding-top: 1rem !important; padding-bottom: 0 !important; position: relative; z-index: 2;
+  background: linear-gradient(to bottom, #FFFFFF calc(100% - 9rem), #D6DCE6 calc(100% - 9rem)) !important; }
+.ih-clientes-card { position: relative; isolation: isolate; overflow: hidden; border-radius: 24px; border: 1px solid rgba(19, 26, 39, 0.09); background: #FFFFFF;
+  padding: 3rem 3rem 2.5rem; box-shadow: 0 1px 3px rgba(13, 17, 25, 0.07), 0 2px 6px rgba(13, 17, 25, 0.05); }
+.ih-luz { position: absolute; z-index: -1; pointer-events: none; border-radius: 9999px; filter: blur(64px); }
+.ih-luz-1 { right: -4rem; top: -4rem; width: 14rem; height: 14rem; background: rgba(212, 77, 77, 0.10); }
+.ih-luz-2 { left: -2.5rem; bottom: -5rem; width: 10rem; height: 10rem; background: rgba(212, 77, 77, 0.05); }
+html body #ie3-home .ih-clientes-card p.mb-12 { margin-bottom: 1.5rem !important; }
+.ih-rodape { padding-top: 5rem !important; }
+@media (max-width: 767px) {
+  html body #ie3-home .ih-clientes { background: linear-gradient(to bottom, #FFFFFF calc(100% - 6rem), #D6DCE6 calc(100% - 6rem)) !important; }
+  html body #ie3-home .ih-clientes > div { padding-left: .5rem !important; padding-right: .5rem !important; }
+  .ih-clientes-card { padding: 2rem 1.25rem 1.75rem; }
+  .ih-rodape { padding-top: 3.5rem !important; }
+}
+
+/* ---------- Logos dos clientes: rolam sozinhos e também podem ser navegados (arrastar ou setas) ---------- */
+html body #ie3-home .ih-logos { overflow-x: auto !important; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+html body #ie3-home .ih-logos::-webkit-scrollbar { display: none; }
+html body #ie3-home .ih-logos .client-marquee-track { animation: none !important; }
+
+/* ---------- Cards da home com o mesmo arredondamento (24 px, o mesmo dos cards do Projeto Piloto e do Seja Parceiro) ---------- */
+html body #ie3-home .testimonial-card,
+html body #ie3-home #artigos article,
+html body #ie3-home #artigos .rounded-2xl,
+html body #ie3-home #depoimentos .max-w-5xl.bg-white,
+.ih-clientes-card { border-radius: 24px !important; }
