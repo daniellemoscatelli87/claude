@@ -1515,3 +1515,6 @@ main + footer.relative { padding-top: 6rem !important; }
   html body #hero-fundo img { inset: 0 !important; width: 100% !important; height: 100% !important; aspect-ratio: auto !important; object-fit: cover !important; object-position: 50% 30% !important;
     -webkit-mask-image: none; mask-image: none; }
 }
+
+/* Celular e tablet: ícone do logo no canto superior esquerdo (como na Home e no Seja Parceiro) */
+@media (max-width: 1023px) { html body.cabecalho-sobre-hero .site-header header > a:first-child { visibility: visible !important; } }
