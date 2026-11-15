@@ -1814,3 +1814,16 @@ html body .rx-pilar:not(:last-child)::after { content: ""; position: absolute; t
   html body .rx-pilar:not(:last-child)::after { top: auto; bottom: -2rem; right: auto; left: 50%; width: 10px; height: 2rem; margin: 0 0 0 -5px;
     background: radial-gradient(circle, #D44D4D 0 4px, transparent 4.5px) center / 10px 10px no-repeat, linear-gradient(#D6DCE6, #D6DCE6) center / 2px 100% no-repeat; }
 }
+/* números em destaque (01, 02, 03) no lugar do quadrado do ícone; o ícone fica pequeno e discreto no canto do card */
+html body .rx-pilares { counter-reset: rx-pilar; }
+html body .rx-pilar { counter-increment: rx-pilar; }
+html body .rx-pilar-ic { position: static !important; display: block !important; width: 3.5rem !important; height: auto !important; background: none !important; border-radius: 0 !important; }
+html body .rx-pilar-ic::before { content: counter(rx-pilar, decimal-leading-zero); display: block; font-size: 2.5rem; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: #D44D4D; }
+html body .rx-pilar-ic svg { position: absolute; top: 1.25rem; right: 1.25rem; width: 1.125rem !important; height: 1.125rem !important; color: #B3BDD0; }
+html body .rx-pilar h3 { padding-right: 1.5rem !important; }
+@media (max-width: 767px) {
+  html body .rx-pilar-ic { width: 3rem !important; height: auto !important; }
+  html body .rx-pilar-ic::before { font-size: 2.125rem; }
+  html body .rx-pilar-ic svg { top: 1rem; right: 1rem; }
+}
+@media (max-width: 1023px) and (min-width: 768px) { html body .rx-pilar-ic { margin-bottom: .5rem !important; } }
