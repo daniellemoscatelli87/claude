@@ -19,7 +19,7 @@
   .gal-mini-in { font-size: 12px; font-weight: 600; color: var(--red); }
   .gal-mini-nome { font-weight: 700; font-size: 16px; }
   .gal-mini-esp { font-size: 14px; font-weight: 600; color: var(--red); margin: 2px 0 10px; }
-  .gal-mini-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .gal-mini-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; max-height: 58px; overflow: hidden; } /* no máximo 2 linhas */
   .gal-mini-tags li { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: #F6F7FA; border: 1px solid var(--line); }
   .gal-perfil-info { margin: 10px 0 0; font-size: 13px; }
   .gal-acoes { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
@@ -738,7 +738,7 @@ function summaryCard(r) {
   c.appendChild(el("p", "gs-esp", espGaleria(r) || "Especialidade não informada"));
   if (tempoGaleria(r)) c.appendChild(el("p", "gs-tempo", tempoGaleria(r)));
   const tags = el("ul", "gs-tags");
-  [...new Set([...(r.areas_experiencia || []), ...(r.segmentos || [])].map(limpaTxt).filter(Boolean))].forEach((t) => tags.appendChild(el("li", null, t)));
+  [...new Set((r.galeria_tags?.length ? r.galeria_tags : [...(r.areas_experiencia || []), ...(r.segmentos || [])]).map(limpaTxt).filter(Boolean))].forEach((t) => tags.appendChild(el("li", null, t)));
   c.appendChild(tags);
   const m = matchOf(r);
   if (m && m.motivo) { const w = el("p", "gs-why"); w.append(el("strong", null, "Por que atende: "), m.motivo); c.appendChild(w); }
@@ -1050,7 +1050,7 @@ function galeriaCard(data) {
     card.appendChild(el("div", "gal-mini-esp", esp || "Sem especialidade"));
     if (tempoGaleria(data)) card.appendChild(el("div", "gal-mini-tempo", tempoGaleria(data)));
     const tags = el("ul", "gal-mini-tags");
-    [...new Set([...(data.areas_experiencia || []), ...(data.segmentos || [])].map((x) => String(x).replace(/\.\s*$/, "").trim()).filter(Boolean))].forEach((x) => tags.appendChild(el("li", null, x)));
+    [...new Set((data.galeria_tags?.length ? data.galeria_tags : [...(data.areas_experiencia || []), ...(data.segmentos || [])]).map((x) => String(x).replace(/\.\s*$/, "").trim()).filter(Boolean))].forEach((x) => tags.appendChild(el("li", null, x)));
     card.appendChild(tags);
     box.appendChild(card);
     const info = [];
@@ -1069,7 +1069,7 @@ function galeriaCard(data) {
       bExc.disabled = true;
       const caminho = (String(data.galeria_foto_url || "").match(/\/object\/public\/galeria\/(.+)$/) || [])[1];
       if (caminho) await Admin.sb.storage.from("galeria").remove([decodeURIComponent(caminho)]);
-      const limpo = { galeria_status: null, galeria_decidido_em: null, galeria_cargo: null, galeria_linkedin: null, galeria_foto_url: null, galeria_oculto: false, galeria_aceite_cadastro: false };
+      const limpo = { galeria_status: null, galeria_decidido_em: null, galeria_cargo: null, galeria_tags: null, galeria_linkedin: null, galeria_foto_url: null, galeria_oculto: false, galeria_aceite_cadastro: false };
       const { error } = await Admin.sb.from("cadastros").update(limpo).eq("id", data.id);
       bExc.disabled = false;
       if (error) return Admin.toast("Não foi possível excluir agora: " + error.message);
