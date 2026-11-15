@@ -1876,3 +1876,6 @@ html body .rx-pilar h3 { padding-right: 1.5rem !important; }
   33.2% { opacity: 1; background-position: 0 0%; }
   33.33%, 100% { opacity: 0; background-position: 0 0%; }
 }
+
+/* Títulos das seções no mesmo padrão da Home e do Projeto Piloto: altura de linha 1,2 e espaçamento -0,02em */
+html body main h2 { line-height: 1.2 !important; letter-spacing: -0.02em !important; }
