@@ -1695,3 +1695,10 @@ html body .rx-onde.eco .rx-onde-cab h2, html body .rx-onde.eco .rx-onde-cab .rp-
 /* sem a linha de cima da primeira fileira de blocos (o divisor com rótulo já separa) */
 .rx-divisor + .rx-numerada > li:first-child { border-top: 0 !important; }
 @media (min-width: 640px) { .rx-divisor + .rx-numerada > li:nth-child(-n+2) { border-top: 0 !important; } }
+
+/* "O que é a rede": seção de texto antes de "Quem buscamos" */
+html body .rx-rede .rx-rede-cab { max-width: 46rem; margin: 0 auto; text-align: center; }
+html body .rx-rede .rx-rede-cab h2, html body .rx-rede .rx-rede-cab .rp-texto { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }
+html body .rx-rede .rx-rede-cab .rp-texto + .rp-texto { margin-top: .875rem !important; }
+.rx-rede { padding-bottom: 1rem; }
+.rx-rede + .rx-secao { padding-top: 3.5rem; }
