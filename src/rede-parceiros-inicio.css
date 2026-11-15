@@ -2490,3 +2490,10 @@ html body .rx-mt-ctrl { margin-top: .875rem; padding-left: .875rem; }
   .rx-mt-tcorpo > span { font-size: .75rem; }
   .rx-mt-topico { padding: .5rem .75rem; }
 }
+/* etapa atual (número, nome e barrinha de tempo) na barra de cima do mockup */
+html body .rx-mt-tela-topo.rx-mt-agora { position: relative; margin: 0; padding: .75rem 1rem; gap: .625rem; align-items: center; }
+html body .rx-mt-tela-topo.rx-mt-agora::before { left: 0; right: 0; bottom: -1px; border-radius: 0; background: transparent; }
+html body .rx-mt-tela-topo.rx-mt-agora::after { left: 0; bottom: -1px; border-radius: 0; width: calc(100% * var(--pn, 0)); }
+html body .rx-mt-tela-topo .rx-mt-agora-n { font-size: .6875rem; }
+html body .rx-mt-tela-topo .rx-mt-agora-t { font-size: .8125rem; }
+@media (min-width: 1024px) { html body .rx-mt-esq { justify-content: flex-start; } html body .rx-mt-ctrl { margin-top: auto; } .rx-mt-intro { margin-bottom: 1rem; } .rx-mt-topicos { gap: .375rem; } }
