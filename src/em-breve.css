@@ -270,3 +270,6 @@ html body #ie3-home .ih-clientes .ih-clientes-card { border-radius: 56px !import
 html body #ie3-home h2 { font-size: 1.5rem !important; line-height: 1.2 !important; letter-spacing: -0.02em !important; font-weight: 700 !important; color: #131A27 !important; }
 html body #ie3-home h2 span { font-size: inherit !important; letter-spacing: inherit !important; }
 @media (min-width: 768px) { html body #ie3-home h2 { font-size: 2.25rem !important; } }
+/* "Veja todas as 35 recomendações na íntegra": um pouco menor e mais discreto */
+html body #ie3-home .ih-rec-titulo { font-size: 1.25rem !important; font-weight: 600 !important; line-height: 1.35 !important; }
+@media (max-width: 767px) { html body #ie3-home .ih-rec-titulo { font-size: 1rem !important; } }
