@@ -53,6 +53,21 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
   if ('ResizeObserver' in window) new ResizeObserver(medir).observe(h);
 })();
 
+/* ---------- Celular e tablet: a folha branca do conteúdo "cola" no topo antes de o conteúdo rolar ----------
+   Nas páginas com o topo parado atrás do menu (Home, Projeto Piloto, Seja Parceiro), a rolagem para primeiro no ponto em
+   que a folha encosta no menu (scroll-snap com parada obrigatória); só no gesto seguinte o conteúdo desliza por baixo da
+   tampa. Um marcador no início da página dá o outro ponto de parada (o topo, com a foto inteira). */
+(() => {
+  const folha = document.querySelector<HTMLElement>('.ih-folha, .rx-folha, .divisao-hero');
+  if (!folha) return;
+  folha.classList.add('folha-cola');
+  const topo = document.createElement('div');
+  topo.className = 'folha-cola-topo';
+  topo.setAttribute('aria-hidden', 'true');
+  document.body.prepend(topo);
+  document.documentElement.classList.add('com-folha-cola');
+})();
+
 /* ---------- Aviso "Tem um projeto?" (só na página inicial) ---------- */
 (() => {
   const c = document.getElementById('cta-contato');

@@ -97,3 +97,61 @@ sugerirEmail(notifyEmail, true);
   window.addEventListener('resize', f);
   if ('ResizeObserver' in window) new ResizeObserver(f).observe(hero);
 })();
+
+/* ---------- Clientes atendidos: os logos rolam sozinhos e a pessoa pode navegar (arrastar/deslizar ou setas) ----------
+   A lista é duplicada para a rolagem ser contínua; ao tocar, arrastar, passar o mouse ou usar as setas, a rolagem
+   automática pausa e volta alguns segundos depois. Sem rolagem automática para quem prefere menos movimento. */
+(() => {
+  const caixa = document.querySelector<HTMLElement>('.ih-logos');
+  const trilha = caixa?.querySelector<HTMLElement>('.client-marquee-track');
+  const grupo = trilha?.firstElementChild as HTMLElement | null;
+  if (!caixa || !trilha || !grupo) return;
+  const copia = grupo.cloneNode(true) as HTMLElement;
+  copia.setAttribute('aria-hidden', 'true');
+  copia.querySelectorAll('img').forEach((i) => { i.alt = ''; });
+  trilha.appendChild(copia);
+  const volta = () => copia.offsetLeft - grupo.offsetLeft; // largura de uma lista + espaço entre elas
+  let pos = 0;
+  let pausadoAte = 0;
+  let mouseSobre = false;
+  const ajustar = () => {
+    const v = volta();
+    if (v <= 0) return;
+    if (caixa.scrollLeft >= v) caixa.scrollLeft -= v;
+    else if (caixa.scrollLeft <= 0) caixa.scrollLeft += v;
+    pos = caixa.scrollLeft;
+  };
+  const pausar = (ms = 4000) => { pausadoAte = performance.now() + ms; };
+  caixa.addEventListener('pointerdown', () => pausar(6000));
+  caixa.addEventListener('touchstart', () => pausar(6000), { passive: true });
+  caixa.addEventListener('wheel', () => pausar(), { passive: true });
+  caixa.addEventListener('mouseenter', () => { mouseSobre = true; });
+  caixa.addEventListener('mouseleave', () => { mouseSobre = false; });
+  let rolando = 0;
+  caixa.addEventListener('scroll', () => { clearTimeout(rolando); rolando = window.setTimeout(ajustar, 120); }, { passive: true });
+  document.querySelectorAll<HTMLButtonElement>('[data-logos]').forEach((b) => b.addEventListener('click', () => {
+    pausar(5000);
+    ajustar();
+    caixa.scrollBy({ left: Number(b.dataset.logos) * Math.max(200, caixa.clientWidth * 0.6), behavior: 'smooth' });
+  }));
+  // começa um pouco adiante, para haver logos dos dois lados ao voltar
+  requestAnimationFrame(() => { caixa.scrollLeft = 1; pos = 1; });
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let visivel = false;
+  new IntersectionObserver(([en]) => { visivel = en.isIntersecting; }).observe(caixa);
+  let ultimo = performance.now();
+  const passo = (t: number) => {
+    const dt = Math.min(64, t - ultimo);
+    ultimo = t;
+    if (visivel && !mouseSobre && t > pausadoAte) {
+      pos += dt * 0.04; // 40 px por segundo
+      const v = volta();
+      if (v > 0 && pos >= v) pos -= v;
+      caixa.scrollLeft = pos;
+    } else {
+      pos = caixa.scrollLeft;
+    }
+    requestAnimationFrame(passo);
+  };
+  requestAnimationFrame(passo);
+})();
