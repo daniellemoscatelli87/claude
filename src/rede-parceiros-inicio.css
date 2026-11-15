@@ -2552,3 +2552,5 @@ html body .rx-mt-tela-topo .rx-mt-agora-t { font-size: .8125rem; }
   .rx-mv-mlinha { grid-template-columns: 1fr 1fr; }
   .rx-mv-modal { padding: .875rem; gap: .5rem; }
 }
+/* tag do perfil na cena do cadastro: rosa claro, "100% completo" */
+html body .rx-mv-pct { background: #FDF2F2; color: #D44D4D; border: 1px solid rgba(212, 77, 77, .18); }
