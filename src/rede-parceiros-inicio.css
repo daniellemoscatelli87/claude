@@ -1536,3 +1536,13 @@ html body .rx-setor-foto .rx-setor-cab h3 { color: #FFFFFF; }
   .rx-beam-no.grande svg { width: 1.25rem; height: 1.25rem; }
   .rx-beam-legenda { font-size: .5625rem; max-width: 4.5rem; }
 }
+
+/* "Onde buscamos": 6 setores de cada lado do Studio (lado direito com o ícone antes do nome) */
+.rx-beam { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); max-width: 40rem; }
+.rx-beam-col { gap: .875rem; }
+.rx-beam-col.dir .rx-beam-item { flex-direction: row; text-align: left; }
+@media (max-width: 639px) {
+  .rx-beam { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0 1.5rem; }
+  .rx-beam-col { gap: .75rem; }
+  .rx-beam-centro .rx-beam-legenda { display: block; }
+}
