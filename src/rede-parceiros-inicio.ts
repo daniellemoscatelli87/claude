@@ -511,3 +511,35 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     obs.observe(eco);
   }
 }
+
+/* ---------- Ecossistema: luz percorrendo o anel e setores acendendo no instante em que ela toca o ponto ----------
+   Um único relógio: a cada quadro calcula o ângulo da luz (uma volta a cada 14 s, a partir do topo, sentido horário)
+   e acende o ponto e a etiqueta do setor cujo ângulo (--t, de 0 a 1) a luz acabou de alcançar. Pausa fora da tela. */
+{
+  const eco = document.querySelector<HTMLElement>('[data-eco]');
+  const luz = eco?.querySelector<SVGGElement>('.rx-eco-luz');
+  if (eco && luz && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const VOLTA = 14000, ACESO = 0.04; // fica aceso por 4% da volta (~0,56 s) e depois apaga devagar (CSS)
+    const pontos = Array.from(eco.querySelectorAll<SVGCircleElement>('.rx-eco-ponto'));
+    const setores = Array.from(eco.querySelectorAll<HTMLElement>('.rx-eco-setor'));
+    const pos = pontos.map((p) => parseFloat(p.style.getPropertyValue('--t')) || 0);
+    luz.style.animation = 'none'; // gira pelo transform-origin (centro do anel) definido no próprio elemento
+    let inicio = 0, pausa = 0, rodando = false;
+    const quadro = (agora: number) => {
+      if (!rodando) return;
+      if (!inicio) inicio = agora;
+      const f = ((agora - inicio) % VOLTA) / VOLTA;
+      luz.style.transform = `rotate(${(f * 360).toFixed(2)}deg)`;
+      pos.forEach((t, i) => {
+        const on = (f - t + 1) % 1 < ACESO;
+        pontos[i].classList.toggle('aceso', on);
+        setores[i]?.classList.toggle('aceso', on);
+      });
+      requestAnimationFrame(quadro);
+    };
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !rodando) { rodando = true; if (pausa) inicio += performance.now() - pausa; requestAnimationFrame(quadro); }
+      else if (!e.isIntersecting && rodando) { rodando = false; pausa = performance.now(); }
+    }).observe(eco);
+  }
+}
