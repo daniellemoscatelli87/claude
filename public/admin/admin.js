@@ -53,7 +53,6 @@
     ] },
     { id: "lancamento", href: "/admin/lancamento/", label: "Lançamento", icon: "rocket" },
     { id: "store", href: "/admin/store/", label: "Store", icon: "bag" },
-    { id: "configuracoes", href: "/admin/configuracoes/", label: "Configurações", icon: "settings" },
   ];
 
   const $ = (id) => document.getElementById(id);
@@ -179,7 +178,7 @@
     drawer.setAttribute("aria-label", "Menu");
     drawer.innerHTML = `<button type="button" class="close" id="drawer-close" aria-label="Fechar menu">${icon("close")}</button>
       <a class="side-logo" href="/admin/"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
-      <div class="who"><img class="avatar" id="who-avatar" src="${ADMIN_AVATAR}" alt="${ADMIN_NAME}" width="44" height="44"><div><div class="n" id="who-name">${ADMIN_NAME}</div><div class="e" id="who-email"></div></div></div>
+      <div class="who"><img class="avatar" id="who-avatar" src="${ADMIN_AVATAR}" alt="${ADMIN_NAME}" width="44" height="44"><div><div class="n" id="who-name">${ADMIN_NAME}</div><a class="e who-config" id="who-email" href="/admin/configuracoes/"${page === "configuracoes" ? ' aria-current="page"' : ""}>${icon("settings")}Configurações</a></div></div>
       <nav>${PAGES.map((p) => {
         const ativo = p.id === page || (p.sub || []).some((x) => x.id === page);
         const item = `<a href="${p.href}"${ativo ? (p.sub ? ' class="pai-ativo"' : ' aria-current="page"') : ""}>${icon(p.icon)}${p.label}<span class="nav-count hidden" data-count="${p.id}"></span></a>`;
@@ -383,7 +382,7 @@
     const p = profile(u);
     $("who-name").textContent = p.nome;
     $("who-avatar").src = p.avatar; $("who-avatar").alt = p.nome;
-    $("who-email").textContent = p.email;
+    $("who-email").title = p.email || "";
   }
 
   // Log da plataforma: registra uma ação da administradora (visível em Configurações).

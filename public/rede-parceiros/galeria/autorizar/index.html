@@ -82,6 +82,7 @@
   .esp-campo { display: grid; gap: .375rem; margin-bottom: 1rem; }
   .esp-campo small { font-weight: 400; }
   .li-campo { margin-bottom: 1rem; }
+  .card .tempo { margin: -6px 0 12px; font-size: .8125rem; color: #627288; }
   .foto-acoes { display: flex; flex-wrap: wrap; gap: .625rem; align-items: center; }
   .botao-arquivo { display: inline-flex; align-items: center; min-height: 44px; margin: 0; padding: 0 1.25rem; border-radius: 9999px; border: 1px solid #D44D4D; color: #D44D4D; font-size: .9375rem; font-weight: 600; cursor: pointer; }
   .botao-arquivo:hover { background: #FDF2F2; }
@@ -153,6 +154,7 @@
       <div class="topo"><span class="foto" id="p-ini" aria-hidden="true"></span><img class="foto foto-img" id="p-img" alt="" hidden><span class="in" id="p-in" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span></div>
       <h3 id="p-nome"></h3>
       <p class="esp" id="p-cargo"></p>
+      <p class="tempo" id="p-tempo"></p>
       <ul class="tags" id="p-areas" aria-label="Áreas de atuação e segmentos"></ul>
     </div>
     <p class="nota">É assim que o seu perfil vai aparecer no site <a href="https://www.danimoscatelli.com.br/rede-parceiros/" target="_blank" rel="noopener">www.danimoscatelli.com.br/rede-parceiros</a></p>
@@ -262,6 +264,7 @@
       $("p-nome").textContent = d.nome || ""; $("p-ini").textContent = iniciais(d.nome);
       // especialidade: campo 13 do cadastro (ou o texto definido pelo Studio); tags: áreas e segmentos
       $("especialidade").value = d.cargo || ""; $("p-cargo").textContent = d.cargo || "";
+      var NIVEL = { "Menos de 1 ano": "Júnior", "Entre 1 e 2 anos": "Júnior", "Entre 3 e 5 anos": "Pleno", "Entre 6 e 10 anos": "Sênior", "Entre 11 e 15 anos": "Especialista", "Entre 16 e 20 anos": "Especialista", "Mais de 20 anos": "Especialista" }; var nivel = NIVEL[String(d.tempo || "").replace(/\.\s*$/, "")] || ""; $("p-tempo").textContent = nivel; $("p-tempo").hidden = !nivel;
       $("especialidade").addEventListener("input", function () { $("p-cargo").textContent = $("especialidade").value.trim() || d.cargo || ""; });
       d.areas.concat(d.segmentos).filter(function (a, i, l) { return a && l.indexOf(a) === i; }).forEach(function (a) { var li = document.createElement("li"); li.textContent = a; $("p-areas").appendChild(li); });
       $("linkedin").value = d.linkedin || "";

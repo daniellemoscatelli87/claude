@@ -9,11 +9,11 @@
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
 // Versão e texto exatos apresentados na página de autorização. Ao mudar o texto, mude a versão.
-const TEXTO_VERSAO = "galeria-v2-2026-11-14";
+const TEXTO_VERSAO = "galeria-v3-2026-11-15";
 const TEXTO = "Autorizo a Dani Moscatelli | Experience Design Studio a exibir, na Galeria de profissionais do site danimoscatelli.com.br, " +
-  "o meu nome, cargo, áreas de atuação, segmentos, link do LinkedIn e foto, conforme a prévia apresentada. " +
-  "E-mail, telefone e cidade não serão exibidos. Posso retirar esta autorização a qualquer momento pelo mesmo link ou pelo e-mail " +
-  "contato@danimoscatelli.com.br, e também solicitar a troca ou a exclusão da foto por esse e-mail.";
+  "o meu nome, especialidade, senioridade, áreas de atuação, segmentos, link do LinkedIn e foto, conforme a prévia apresentada. " +
+  "E-mail, telefone e cidade não serão exibidos. Posso solicitar a exclusão do meu perfil da galeria a qualquer momento pelo e-mail " +
+  "contato@danimoscatelli.com.br, e também a troca ou a exclusão da foto por esse e-mail.";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
   const t = String(p.t ?? "");
   if (!UUID.test(t)) return json({ error: "Link inválido. Use o link que está no e-mail recebido." }, 400);
   const { data: r, error } = await admin.from("cadastros")
-    .select("id, nome, principal_especializacao, areas_experiencia, segmentos, linkedin, galeria_status, galeria_cargo, galeria_linkedin, galeria_foto_url")
+    .select("id, nome, principal_especializacao, tempo_especialidade, areas_experiencia, segmentos, linkedin, galeria_status, galeria_cargo, galeria_linkedin, galeria_foto_url")
     .eq("galeria_token", t).maybeSingle();
   if (error) { console.error(error.message); return json({ error: "Não foi possível carregar agora. Tente novamente." }, 500); }
   if (!r) return json({ error: "Link inválido. Use o link que está no e-mail recebido." }, 404);
@@ -55,6 +55,7 @@ Deno.serve(async (req) => {
   const dados = {
     nome: r.nome,
     cargo: r.galeria_cargo || esp,
+    tempo: limpa(r.tempo_especialidade),
     areas: (r.areas_experiencia ?? []).map(limpa),
     segmentos: (r.segmentos ?? []).map(limpa),
     linkedin: r.galeria_linkedin ?? (linkedinOk(normalizaLinkedin(r.linkedin)) ? normalizaLinkedin(r.linkedin) : ""),
