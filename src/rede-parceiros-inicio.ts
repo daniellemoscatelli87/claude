@@ -627,7 +627,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   }
 });
 
-/* ---------- Match de profissionais: troca as 7 etapas (texto à esquerda + cena à direita) ----------
+/* ---------- Match de profissionais: à esquerda o resumo das 7 etapas (a ativa em destaque); à direita a cena da etapa ----------
    Troca sozinha (6,5 s por etapa; 10 s na última, a do kanban) com a barrinha de progresso no ponto ativo. A pessoa pode
    ir e voltar pelas setas e pelos pontos e pausar; o mouse sobre o componente também pausa. Só roda quando está na tela. */
 (() => {
@@ -635,9 +635,9 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   if (!palco) return;
   const txts = Array.from(palco.querySelectorAll<HTMLElement>('.rx-mt-txt'));
   const cenas = Array.from(palco.querySelectorAll<HTMLElement>('.rx-mt-cena'));
-  const pontos = Array.from(palco.querySelectorAll<HTMLButtonElement>('.rx-mt-ponto'));
+  const pontos = Array.from(palco.querySelectorAll<HTMLButtonElement>('[data-ir]'));
   const pausa = palco.querySelector<HTMLButtonElement>('.rx-mt-pausa')!;
-  const total = txts.length;
+  const total = cenas.length;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const DUR = (n: number) => (n === total ? 10000 : 6500);
   let atual = 1, decorrido = 0, pausado = reduzir, sobre = false, visivel = false, ultimo = 0;
@@ -651,7 +651,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
       if (on) { e.classList.remove('ativa'); void e.offsetWidth; }
       e.classList.toggle('ativa', on);
     }));
-    pontos.forEach((p, i) => { p.classList.toggle('ativa', i + 1 === atual); p.classList.toggle('feito', i + 1 < atual); p.setAttribute('aria-current', String(i + 1 === atual)); p.style.setProperty('--p', '0%'); });
+    pontos.forEach((p, i) => { p.classList.toggle('ativa', i + 1 === atual); p.classList.toggle('feito', i + 1 < atual); p.setAttribute('aria-current', i + 1 === atual ? 'step' : 'false'); p.style.setProperty('--p', '0%'); });
   };
   const atualizarPausa = () => { pausa.textContent = pausado ? 'Retomar' : 'Pausar'; pausa.setAttribute('aria-pressed', String(pausado)); };
   palco.querySelectorAll<HTMLButtonElement>('[data-passo]').forEach((b) => b.addEventListener('click', () => mostrar(atual + Number(b.dataset.passo))));

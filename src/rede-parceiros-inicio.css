@@ -2403,3 +2403,31 @@ html body .rx-mt-cena { align-self: stretch; display: flex; flex-direction: colu
 /* troca de etapa sem sobrepor textos e cenas: a anterior some rápido e só depois a nova aparece */
 html body .rx-mt-txt, html body .rx-mt-cena { transition: opacity .25s ease, transform .3s ease, visibility 0s .25s; }
 html body .rx-mt-txt.ativa, html body .rx-mt-cena.ativa { transition: opacity .5s ease .28s, transform .6s cubic-bezier(0.16, 1, 0.3, 1) .28s, visibility 0s; }
+
+/* Match de profissionais: lado esquerdo com o resumo das 7 etapas. A etapa em cena fica em destaque (fundo branco,
+   número vermelho e barrinha de tempo); as outras ficam discretas e podem ser clicadas. */
+.rx-mt-resumo { list-style: none; margin: 0; padding: 0; display: grid; gap: .25rem; }
+.rx-mt-item { position: relative; width: 100%; display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); gap: .875rem; align-items: start; padding: .75rem 1rem; border: 1px solid transparent; border-radius: 16px;
+  background: transparent; text-align: left; font: inherit; cursor: pointer; overflow: hidden; transition: background-color .3s ease, border-color .3s ease, box-shadow .3s ease; }
+.rx-mt-item:hover { background: rgba(237, 240, 245, 0.6); }
+.rx-mt-inum { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 9999px; border: 1px solid #D6DCE6; background: #FFFFFF; font-size: .75rem; font-weight: 700; color: #8898B0; transition: all .3s ease; }
+.rx-mt-icorpo { display: grid; gap: .125rem; padding-top: .125rem; }
+.rx-mt-icorpo strong { font-size: .9375rem; font-weight: 700; color: #627288; transition: color .3s ease; }
+.rx-mt-isum { font-size: .8125rem; line-height: 1.45; color: #8898B0; transition: color .3s ease; }
+.rx-mt-ibar { position: absolute; left: 1rem; right: 1rem; bottom: 0; height: 2px; border-radius: 9999px; background: transparent; overflow: hidden; }
+.rx-mt-ibar i { display: block; height: 100%; width: 0; background: #D44D4D; }
+.rx-mt-item.feito .rx-mt-inum { border-color: rgba(212, 77, 77, .4); color: #D44D4D; }
+.rx-mt-item.ativa { background: #FFFFFF; border-color: #E4E8EF; box-shadow: 0 12px 30px -20px rgba(13, 17, 25, .3); }
+.rx-mt-item.ativa .rx-mt-inum { background: #D44D4D; border-color: #D44D4D; color: #FFFFFF; }
+.rx-mt-item.ativa strong { color: #131A27; }
+.rx-mt-item.ativa .rx-mt-isum { color: #495669; }
+.rx-mt-item.ativa .rx-mt-ibar { background: #F3E3E4; }
+.rx-mt-item.ativa .rx-mt-ibar i { width: var(--p, 0%); }
+.rx-mt-item:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.45); }
+html body .rx-mt-ctrl { margin-top: 1rem; padding-left: 1rem; }
+@media (max-width: 1023px) {
+  .rx-mt-resumo { order: 3; }
+  .rx-mt-item:not(.ativa) .rx-mt-isum { display: none; }
+  .rx-mt-item { padding: .5rem .75rem; align-items: center; }
+  .rx-mt-item.ativa { align-items: start; padding: .75rem; }
+}
