@@ -477,7 +477,7 @@
   <button type="button" class="close" id="pd-close" aria-label="Fechar perfil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   <div class="pd-body" id="pd-body"></div>
 </aside>
-<script src="/admin/form-parceiros.js?v=20261115"></script>
+<script src="/admin/form-parceiros.js?v=20261115b"></script>
 <script>
 const { el } = Admin;
 const Q = Object.fromEntries(FORM_PARCEIROS.flatMap((s) => s.questions).map((q) => [q.id, q]));
@@ -1225,6 +1225,9 @@ Admin.init({ page: "parceiros", onReady: async () => {
     como_conheceu: { "Já conhecia o trabalho da Dani Moscatelli.": "Indicação da Dani Moscatelli." },
   };
   for (const r of data) for (const [k, map] of Object.entries(LEGADO)) if (map[r[k]]) r[k] = map[r[k]];
+  // Setores (pergunta 16): as 23 opções antigas passam para os 12 setores atuais (o banco guarda o que a pessoa marcou).
+  const SEG_LEGADO = {"Saúde e serviços hospitalares.": "Saúde.", "Clínicas e consultórios.": "Saúde.", "Operadoras de planos de saúde.": "Saúde.", "Saúde digital e Healthtechs.": "Saúde.", "Turismo e hospitalidade.": "Hospitalidade e turismo.", "Hotelaria e meios de hospedagem.": "Hospitalidade e turismo.", "Gastronomia e alimentação.": "Hospitalidade e turismo.", "Varejo e comércio.": "Varejo.", "E-commerce e marketplaces.": "Varejo.", "Serviços financeiros e Fintechs.": "Serviços financeiros.", "Educação e Edtechs.": "Educação.", "Tecnologia e software.": "Tecnologia.", "Telecomunicações.": "Tecnologia.", "Indústria e manufatura.": "Indústria.", "Agronegócio.": "Indústria.", "Mobilidade e transportes.": "Mobilidade e logística.", "Logística e distribuição.": "Mobilidade e logística.", "Setor público e serviços governamentais.": "Setor público.", "Terceiro setor e organizações sociais.": "Terceiro setor.", "Mercado imobiliário.": "Outros segmentos.", "Construção civil e arquitetura.": "Outros segmentos.", "Entretenimento e eventos.": "Outros segmentos."};
+  for (const r of data) if (Array.isArray(r.segmentos)) r.segmentos = [...new Set(r.segmentos.map((v) => SEG_LEGADO[v] || v))];
   ALL = data;
   if (!document.getElementById("f-areas_experiencia")) {
     buildFilters(); buildAreaChips(); initDesafio(); initProfiles();
