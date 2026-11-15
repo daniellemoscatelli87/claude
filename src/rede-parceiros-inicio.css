@@ -1546,3 +1546,13 @@ html body .rx-setor-foto .rx-setor-cab h3 { color: #FFFFFF; }
   .rx-beam-col { gap: .75rem; }
   .rx-beam-centro .rx-beam-legenda { display: block; }
 }
+/* telas bem estreitas (ex.: iPhone SE): menos espaço entre as colunas e nomes um pouco menores */
+@media (max-width: 374px) {
+  .rx-beam { gap: 0 .875rem; }
+  .rx-beam-item { gap: .3125rem; }
+  .rx-beam-nome { font-size: .625rem; white-space: nowrap; }
+  .rx-beam-no { width: 1.625rem; height: 1.625rem; }
+  .rx-beam-logo { width: 2.75rem; height: 2.75rem; }
+  .rx-beam-logo img { width: 1.375rem; height: 1.375rem; }
+  .rx-beam-legenda { font-size: .5rem; max-width: 4rem; }
+}
