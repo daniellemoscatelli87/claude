@@ -880,7 +880,7 @@ function candidaturas(rows) {
     const td = (child, cls) => { const c = el("td", cls); typeof child === "string" ? (c.textContent = child || "–") : c.appendChild(child); tr.appendChild(c); return c; };
     const quem = el("div", "tp-quem"); const tx = el("div", "tp-txt");
     const a = el("a", "tp-nome", r.nome || "Sem nome"); a.href = href; a.addEventListener("click", (e) => e.stopPropagation());
-    tx.append(a, el("div", "tp-sub", r.principal_especializacao ? clean(r.principal_especializacao) : ""));
+    tx.append(a, el("div", "tp-sub", espGaleria(r)));
     quem.append(avatar(r), tx); td(quem, "tp-col-quem");
     const nv = el("div"); nv.append(el("div", "tp-forte", NIVEL[r.tempo_especialidade] || "–"), el("div", "tp-sub", r.tempo_especialidade ? clean(r.tempo_especialidade) : "")); td(nv);
     td(areasAtuacao(r).join(" · ") || "–");
