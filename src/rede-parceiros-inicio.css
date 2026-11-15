@@ -2400,3 +2400,6 @@ html body .rx-mt-cena { align-self: stretch; display: flex; flex-direction: colu
   .rx-mv-dest-txt { justify-items: center; text-align: center; }
   .rx-mv-campos { flex: 1; align-content: space-between; }
 }
+/* troca de etapa sem sobrepor textos e cenas: a anterior some rápido e só depois a nova aparece */
+html body .rx-mt-txt, html body .rx-mt-cena { transition: opacity .25s ease, transform .3s ease, visibility 0s .25s; }
+html body .rx-mt-txt.ativa, html body .rx-mt-cena.ativa { transition: opacity .5s ease .28s, transform .6s cubic-bezier(0.16, 1, 0.3, 1) .28s, visibility 0s; }
