@@ -1621,3 +1621,32 @@ html body .rx-onde .rx-onde-cab .rp-texto { text-align: left !important; margin:
   .rx-esfera { max-width: 22rem; }
 }
 .rx-esfera .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* "Onde buscamos": ecossistema. Desenho em 1536×1024 (SVG) com textos sobrepostos em %; os tamanhos acompanham a largura (cqw).
+   Computador: tudo. Celular e tablet: só a roda (recorte central) e os setores em lista embaixo. */
+.rx-onde.eco { display: block; margin-top: 5rem; }
+html body .rx-onde.eco .rx-onde-cab { text-align: center; max-width: 44rem; margin: 0 auto; }
+html body .rx-onde.eco .rx-onde-cab h2, html body .rx-onde.eco .rx-onde-cab .rp-texto { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }
+.rx-eco { position: relative; width: 100%; max-width: 72rem; margin: 2.5rem auto 0; aspect-ratio: 1536 / 1024; overflow: hidden; }
+.rx-eco-palco { position: absolute; left: 0; top: 0; width: 100%; aspect-ratio: 1536 / 1024; container-type: inline-size; }
+.rx-eco-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.rx-eco ul { list-style: none; margin: 0; padding: 0; }
+.rx-eco-esp, .rx-eco-setor, .rx-eco-centro { position: absolute; transform: translate(-50%, -50%); }
+.rx-eco-esp { display: grid; justify-items: center; gap: .6cqw; width: 12cqw; text-align: center; font-size: 1.3cqw; font-weight: 600; line-height: 1.2; color: #131A27; }
+.rx-eco-esp svg { width: 2.7cqw; height: 2.7cqw; color: #D44D4D; }
+.rx-eco-centro { display: grid; justify-items: center; align-content: center; gap: .6cqw; width: 18.2cqw; aspect-ratio: 1; border-radius: 9999px; background: radial-gradient(circle at 50% 35%, #FFFFFF 0%, #FBF7F7 100%); box-shadow: 0 0 0 1px rgba(212, 77, 77, 0.12), 0 1.2cqw 3cqw rgba(212, 77, 77, 0.18); text-align: center; }
+.rx-eco-centro svg { width: 3.4cqw; height: 3.4cqw; color: #D44D4D; }
+.rx-eco-centro p { margin: 0; max-width: 15cqw; font-size: 1.9cqw; font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: #131A27; }
+.rx-eco-centro strong { color: #D44D4D; }
+.rx-eco-setor { display: flex; align-items: center; gap: 1.3cqw; padding: 1.1cqw 2.2cqw 1.1cqw 1.8cqw; white-space: nowrap; border-radius: 9999px; background: rgba(255, 255, 255, 0.92); border: 1px solid #EDF0F5; box-shadow: 0 .8cqw 2.2cqw rgba(13, 17, 25, 0.07); font-size: 1.3cqw; font-weight: 600; line-height: 1.25; color: #131A27; }
+.rx-eco-setor svg { flex: none; width: 2.6cqw; height: 2.6cqw; color: #D44D4D; }
+.rx-eco-lista { display: none; }
+/* celular e tablet: recorte da roda (centro 768,540; raio 390) e setores em lista */
+@media (max-width: 1023px) {
+  .rx-eco { max-width: 30rem; aspect-ratio: 1; margin-top: 2rem; }
+  .rx-eco-palco { width: 196.92%; left: -48.46%; top: -19.23%; }
+  .rx-eco-setores, .rx-eco-con { display: none; }
+  .rx-eco-lista { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; max-width: 30rem; margin: 1.5rem auto 0; padding: 0; list-style: none; }
+  .rx-eco-lista li { display: flex; align-items: center; gap: .5rem; padding: .5rem .75rem; border-radius: 9999px; background: #FFFFFF; border: 1px solid #EDF0F5; box-shadow: 0 2px 8px rgba(13, 17, 25, 0.05); font-size: .8125rem; font-weight: 600; line-height: 1.25; color: #131A27; }
+  .rx-eco-lista svg { flex: none; width: 1.125rem; height: 1.125rem; color: #D44D4D; }
+}
