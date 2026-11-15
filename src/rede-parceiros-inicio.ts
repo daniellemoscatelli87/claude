@@ -501,3 +501,13 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   }
 }
 
+
+/* ---------- Ecossistema: entrada animada quando aparece na tela (sem movimento reduzido) ---------- */
+{
+  const eco = document.querySelector<HTMLElement>('[data-eco]');
+  if (eco && !matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    eco.classList.add('anima');
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { eco.classList.add('visivel'); obs.disconnect(); } }, { threshold: 0.25 });
+    obs.observe(eco);
+  }
+}
