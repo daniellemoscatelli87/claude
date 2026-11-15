@@ -1934,3 +1934,20 @@ html body .rx-pilar-feixe::after { content: ""; position: absolute; left: 50%; t
 }
 /* Títulos das seções no mesmo padrão da Home e do Projeto Piloto: altura de linha 1,2 e espaçamento -0,02em */
 html body main h2 { line-height: 1.2 !important; letter-spacing: -0.02em !important; }
+
+/* Galeria: o card inteiro abre o LinkedIn do profissional em nova aba (o link do ícone se estende sobre o card);
+   no hover, uma luz percorre a borda continuamente e o ícone do LinkedIn fica vermelho */
+.rx-gal-clicavel { cursor: pointer; }
+.rx-gal-clicavel .rx-gal-in::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.rx-gal-clicavel { border-radius: 24px; }
+.rx-gal-borda { position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; opacity: 0; transition: opacity .3s ease;
+  background: conic-gradient(from var(--rx-ang), transparent 0deg, transparent 200deg, rgba(212, 77, 77, 0.1) 260deg, rgba(212, 77, 77, 0.5) 330deg, #D44D4D 356deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+@media (hover: hover) {
+  .rx-gal-clicavel:hover .rx-gal-borda { opacity: 1; }
+  .rx-gal-clicavel:hover .rx-gal-in { color: #D44D4D; background: #FDF2F2; border-color: rgba(212, 77, 77, 0.3); }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .rx-gal-clicavel:hover .rx-gal-borda { animation: rx-gira 2.4s linear infinite; } }
+@media (hover: hover) and (prefers-reduced-motion: reduce) { .rx-gal-borda { background: #D44D4D; } }
+@keyframes rx-gira { to { --rx-ang: 360deg; } }
+.rx-gal-clicavel:focus-within .rx-gal-borda { opacity: 1; }

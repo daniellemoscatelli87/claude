@@ -302,7 +302,13 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     else { const ini = el('span', 'rx-gal-ini', iniciais(p.nome)); ini.setAttribute('aria-hidden', 'true'); foto.appendChild(ini); }
     topo.appendChild(foto);
     const href = linkSeguro(p.linkedin);
-    if (href) { const a = el('a', 'rx-gal-in'); a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.setAttribute('aria-label', `LinkedIn de ${p.nome} (abre em nova aba)`); a.innerHTML = LI; topo.appendChild(a); }
+    // com LinkedIn: o card inteiro abre o perfil em nova aba (o link do ícone se estende sobre o card) e, no hover, a borda
+    // ganha uma luz que gira e o ícone fica vermelho
+    if (href) {
+      const a = el('a', 'rx-gal-in'); a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.setAttribute('aria-label', `LinkedIn de ${p.nome} (abre em nova aba)`); a.innerHTML = LI; topo.appendChild(a);
+      li.classList.add('rx-gal-clicavel');
+      const borda = el('span', 'rx-gal-borda'); borda.setAttribute('aria-hidden', 'true'); li.appendChild(borda);
+    }
     // tags: as aprovadas na prévia (sugeridas pela IA); sem elas, áreas e segmentos do cadastro (no máximo 2 linhas, pelo CSS)
     const tags = el('ul', 'rx-gal-areas'); tags.setAttribute('aria-label', 'Áreas de atuação e segmentos');
     [...new Set((p.tags?.length ? p.tags : [...(p.areas || []), ...(p.segmentos || [])]).map(limpa).filter(Boolean))].forEach((a) => tags.appendChild(el('li', undefined, a)));
