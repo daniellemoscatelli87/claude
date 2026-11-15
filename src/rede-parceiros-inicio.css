@@ -1650,3 +1650,8 @@ html body .rx-onde.eco .rx-onde-cab h2, html body .rx-onde.eco .rx-onde-cab .rp-
   .rx-eco-lista li { display: flex; align-items: center; gap: .5rem; padding: .5rem .75rem; border-radius: 9999px; background: #FFFFFF; border: 1px solid #EDF0F5; box-shadow: 0 2px 8px rgba(13, 17, 25, 0.05); font-size: .8125rem; font-weight: 600; line-height: 1.25; color: #131A27; }
   .rx-eco-lista svg { flex: none; width: 1.125rem; height: 1.125rem; color: #D44D4D; }
 }
+/* etiquetas de setor no tamanho da referência (encostam no ponto do anel) */
+.rx-eco-setor { justify-content: center; gap: 1.6cqw; min-width: 15.5cqw; min-height: 5.3cqw; padding: 1.2cqw 2.4cqw; font-size: 1.42cqw; box-shadow: 0 .6cqw 1.8cqw rgba(13, 17, 25, 0.07); }
+.rx-eco-setor svg { width: 2.9cqw; height: 2.9cqw; }
+.rx-eco-esp { font-size: 1.42cqw; }
+.rx-eco-esp svg { width: 3cqw; height: 3cqw; }
