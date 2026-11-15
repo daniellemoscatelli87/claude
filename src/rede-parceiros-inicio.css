@@ -1747,3 +1747,9 @@ html body .rx-pilar h3 { margin: 0; font-size: 1.125rem !important; font-weight:
 .rx-gal-voce-cta { display: inline-flex; align-items: center; gap: .375rem; margin-top: .5rem; font-size: .875rem; font-weight: 700; color: #D44D4D; }
 .rx-gal-voce-cta svg { width: 1rem; height: 1rem; transition: transform .2s ease; }
 .rx-gal-voce a:hover .rx-gal-voce-cta svg { transform: translateX(3px); }
+
+/* Celular: tags das seções um pouco menores (a do topo já é menor) */
+@media (max-width: 767px) {
+  html body .rx-folha .rp-selo, html body .rp-carta-selo { padding: .25rem .75rem !important; font-size: 11px !important; line-height: 15px !important; }
+  html body .rx-folha .rp-selo span, html body .rp-carta-selo span { width: .375rem !important; height: .375rem !important; }
+}

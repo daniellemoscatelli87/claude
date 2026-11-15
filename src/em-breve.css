@@ -54,9 +54,7 @@ html { overflow-x: clip; }
 /* "Meu negócio é..." com o mesmo tamanho de texto dos outros campos. */
 .biz-label { font-size: 13px; }
 
-/* Botão "Notificar lançamento": padrão vermelho (crimson-500) com texto branco */
-.notify-btn { background-color: #D44D4D; color: #fff; box-shadow: 0 10px 25px -3px rgba(212, 77, 77, 0.3); }
-.notify-btn[data-state="idle"]:hover { background-color: #B82828; box-shadow: 0 12px 28px -3px rgba(212, 77, 77, 0.4); }
+/* Botão "Notificar lançamento": rosa claro com texto vermelho (regras no topo do arquivo) */
 .notify-btn:focus-visible { box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.4); }
 
 /* Home: botão Contato do cabeçalho em vermelho outline */
@@ -122,8 +120,8 @@ html body #ie3-home #depoimentos { border-top: 0 !important; }
   .ih-hero .coluna-inicio { flex: none; gap: 0; }
   .ih-hero .coluna-inicio > * + * { margin-top: .75rem !important; }
   .ih-hero .coluna-inicio h1 { font-size: clamp(1.375rem, 6.2vw, 2.25rem); line-height: 1.12; }
-  .ih-hero .coluna-inicio > div:nth-child(3) { font-size: .875rem; line-height: 1.5; max-width: 34rem; }
-  .ih-hero .coluna-inicio > div:nth-child(3) > * + * { margin-top: .5rem; }
+  .ih-hero .coluna-inicio > div:nth-child(2) { font-size: .875rem; line-height: 1.5; max-width: 34rem; }
+  .ih-hero .coluna-inicio > div:nth-child(2) > * + * { margin-top: .5rem; }
   /* foto: ocupa o espaço que sobra até a base */
   .ih-hero .contents > div:first-child { order: 0; position: relative; flex: 1 1 0; min-height: 200px; margin: 1rem 0 0; max-width: none; }
   .ih-hero .contents > div:first-child > img { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; object-fit: contain; object-position: 50% 100%; filter: none; }
@@ -131,7 +129,42 @@ html body #ie3-home #depoimentos { border-top: 0 !important; }
   .ih-folha { position: relative; z-index: 1; margin-top: -28px; background: #FFFFFF; }
   .ih-tampa { display: block; position: fixed; z-index: 21; left: 0; right: 0; top: var(--ih-tampa, 100vh); height: 28px; background: #FFFFFF; border-radius: 28px 28px 0 0; pointer-events: none; }
   .ih-movel { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; padding: 1.5rem 1.5rem 0; }
-  .ih-movel .ih-form { display: flex; flex-direction: column; align-items: center; }
+  .ih-movel .ih-form { display: flex; flex-direction: column; align-items: stretch; max-width: 34rem; }
+  .ih-movel #notify-form { width: 100%; }
   .ih-movel #notify-msg { padding-left: 0; text-align: center; }
-  .ih-movel .ih-p3 { margin: 0; max-width: 34rem; text-align: center; font-size: .9375rem; line-height: 1.6; color: var(--color-brand-muted, #627288); }
+  .ih-movel .ih-p3 { margin: 0; max-width: 34rem; display: flex; flex-direction: column; align-items: center; text-align: center; font-size: .9375rem; line-height: 1.6; color: var(--color-brand-muted, #627288); }
+  .ih-movel .ih-p3 p { margin: 0; }
+  /* depoimentos: as tags menores, para caberem 2 por linha */
+  html body #ie3-home .ih-tags { gap: .5rem; }
+  html body #ie3-home .ih-tags > span { padding: .375rem .625rem; font-size: 11px; white-space: nowrap; }
 }
+
+/* Tag "Em breve": igual à tag "Prova social & reconhecimento". No computador fica acima do título; no celular desce
+   para a folha, acima do parágrafo "Enquanto o novo site…" */
+.ih-tag { align-self: flex-start; display: inline-flex; align-items: center; margin-bottom: .75rem; padding: 6px 16px; border-radius: 9999px; background: #FFF5F5; border: 1px solid rgba(251, 213, 213, 0.8);
+  font-size: 12px; font-weight: 700; line-height: 16px; letter-spacing: .2em; text-transform: uppercase; color: #C83232; user-select: none; }
+.ih-p3 p { margin: 0; }
+/* aviso abaixo do campo de e-mail: só aparece quando há mensagem (erro ou confirmação) */
+#notify-msg:empty { display: none; }
+@media (max-width: 1023px) { .ih-movel .ih-tag { align-self: center; margin-bottom: -.75rem; } }
+/* Celular: tags das seções um pouco menores */
+@media (max-width: 767px) {
+  .ih-tag, html body #ie3-home .ih-secao-tag { padding: 4px 12px !important; }
+  .ih-tag, html body #ie3-home .ih-secao-tag > span { font-size: 11px !important; letter-spacing: .18em !important; line-height: 15px !important; }
+}
+/* Celular: título "Veja todas as 35 recomendações na íntegra" menor */
+@media (max-width: 767px) { html body #ie3-home .ih-rec-titulo { font-size: 1.0625rem !important; line-height: 1.35 !important; } }
+/* Celular: faixa escura com desfoque atrás do botão do WhatsApp e do aviso "Tem um projeto?" (a mesma do Projeto Piloto
+   e do Seja Parceiro); aparece enquanto o aviso estiver na tela */
+.faixa-flutuante { display: none; }
+@media (max-width: 767px) {
+  .faixa-flutuante { display: block; position: fixed; left: 0; right: 0; bottom: 0; height: 7.5rem; z-index: 43; pointer-events: none;
+    background: linear-gradient(to top, rgba(13, 17, 25, 0.6) 0%, rgba(13, 17, 25, 0.35) 45%, rgba(13, 17, 25, 0) 100%);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    -webkit-mask-image: linear-gradient(to top, #000 40%, transparent); mask-image: linear-gradient(to top, #000 40%, transparent);
+    opacity: 0; transition: opacity .3s ease; }
+  body:has(#cta-contato.cta-whats:not(.is-oculto)) .faixa-flutuante { opacity: 1; }
+  body.pagina-inicio > a[href^="https://wa.me/"] { z-index: 45; }
+  body.pagina-inicio #cta-contato.cta-whats { z-index: 44 !important; }
+}
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) { .faixa-flutuante { transition: none; } }

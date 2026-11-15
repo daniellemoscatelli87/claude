@@ -1,5 +1,5 @@
 // Componentes compartilhados das páginas do site (início, Projeto Piloto e Rede de Parceiros):
-// cabeçalho (logo que vira ícone ao rolar, menu sanduíche), gaveta de contato e o aviso "Tem um desafio ou uma ideia?".
+// cabeçalho (logo que vira ícone ao rolar, menu sanduíche), gaveta de contato e o aviso "Tem um projeto?".
 // O HTML vem de src/compartilhado/partes.ts, inserido na hora do build (vite.config.ts);
 // o CSS (src/compartilhado/menu.css) é importado pelo CSS de cada página.
 
@@ -53,7 +53,7 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
   if ('ResizeObserver' in window) new ResizeObserver(medir).observe(h);
 })();
 
-/* ---------- Aviso "Tem um desafio ou uma ideia?" (só na página inicial) ---------- */
+/* ---------- Aviso "Tem um projeto?" (só na página inicial) ---------- */
 (() => {
   const c = document.getElementById('cta-contato');
   if (!c) return;
@@ -63,9 +63,9 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
   if (fechado) c.classList.add('is-oculto');
   document.getElementById('cta-contato-fechar')?.addEventListener('click', esconder);
   document.querySelectorAll('[data-open-contact]').forEach((b) => b.addEventListener('click', esconder));
-  // Desktop: o aviso aponta para o botão do WhatsApp e o clique abre a conversa por lá
+  // O aviso aponta para o botão do WhatsApp (no computador, acima dele; no celular, ao lado) e o clique abre a conversa por lá
   const whats = document.querySelector<HTMLAnchorElement>('a[href^="https://wa.me/"]');
-  if (whats && window.matchMedia('(min-width: 1024px)').matches) {
+  if (whats) {
     document.querySelector('[aria-describedby="cta-contato-texto"]')?.removeAttribute('aria-describedby');
     document.body.appendChild(c);
     c.classList.add('cta-whats');
@@ -73,7 +73,7 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
     if (acao) {
       const novo = acao.cloneNode(true) as HTMLElement;
       novo.removeAttribute('data-open-contact');
-      novo.setAttribute('aria-label', 'Tem um desafio ou uma ideia? Conversar com a Dani no WhatsApp');
+      novo.setAttribute('aria-label', 'Tem um projeto? Conversar com a Dani no WhatsApp');
       acao.replaceWith(novo);
       novo.addEventListener('click', () => {
         (window as any).dmEvento?.('clique_aviso_whatsapp');
