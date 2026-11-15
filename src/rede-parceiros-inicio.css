@@ -1387,3 +1387,52 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 .rx-onde-cab h2 { margin-top: .25rem; }
 .rx-onde-cab .rp-texto { margin: 1rem auto 0 !important; text-align: center !important; }
 @media (max-width: 767px) { .rx-onde-cab { margin-top: 3.5rem; } }
+
+/* "Onde buscamos": setores (abas verticais) à esquerda e, à direita, o painel com os tipos de projeto e os desafios do setor.
+   No celular e no tablet, os setores viram uma fileira rolável acima do painel. */
+.rx-setores { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 1.25rem; margin-top: 2.5rem; align-items: start; text-align: left; }
+/* computador: o painel acompanha a rolagem ao lado da lista */
+@media (min-width: 1024px) { .rx-setores-detalhe { position: sticky; top: 6.5rem; } }
+.rx-setores-lista { display: flex; flex-direction: column; gap: .25rem; padding: .5rem; border-radius: 24px; background: #F6F7FA; border: 1px solid #EDF0F5; }
+.rx-setor-tab { display: flex; align-items: center; gap: .75rem; width: 100%; padding: .4375rem .75rem; border: 0; border-radius: 16px; background: transparent; font: inherit; font-size: .9375rem; font-weight: 600; color: #283043; text-align: left; cursor: pointer; transition: background-color .2s ease, color .2s ease, box-shadow .2s ease; }
+.rx-setor-tab:hover { background: #FFFFFF; }
+.rx-setor-tab:focus-visible { outline: 2px solid #D44D4D; outline-offset: 2px; }
+.rx-setor-tab[aria-selected="true"] { background: #FFFFFF; color: #131A27; box-shadow: 0 1px 2px rgba(13, 17, 25, 0.06), 0 4px 12px rgba(13, 17, 25, 0.06); }
+.rx-setor-nome { flex: 1; min-width: 0; }
+.rx-setor-ic { display: grid; place-items: center; flex: none; width: 2rem; height: 2rem; border-radius: 10px; background: #FFFFFF; color: #627288; border: 1px solid #EDF0F5; transition: background-color .2s ease, color .2s ease; }
+.rx-setor-ic svg { width: 1.125rem; height: 1.125rem; }
+.rx-setor-tab[aria-selected="true"] .rx-setor-ic { background: #FDF2F2; color: #D44D4D; border-color: rgba(212, 77, 77, 0.15); }
+.rx-setor-seta { display: grid; color: #B3BDD0; opacity: 0; transition: opacity .2s ease, transform .2s ease; }
+.rx-setor-seta svg { width: 1rem; height: 1rem; }
+.rx-setor-tab[aria-selected="true"] .rx-setor-seta { opacity: 1; color: #D44D4D; }
+.rx-setores-detalhe { min-width: 0; }
+.rx-setor-painel { padding: 2rem; border-radius: 24px; background: #FFFFFF; border: 1px solid #EDF0F5; box-shadow: 0 8px 24px rgba(13, 17, 25, 0.06); animation: rx-setor-entra .35s cubic-bezier(0.16, 1, 0.3, 1); }
+.rx-setor-painel:focus-visible { outline: 2px solid #D44D4D; outline-offset: 3px; }
+@keyframes rx-setor-entra { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.rx-setor-cab { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid #EDF0F5; }
+.rx-setor-ic.grande { width: 3.25rem; height: 3.25rem; border-radius: 16px; background: #FDF2F2; color: #D44D4D; border-color: rgba(212, 77, 77, 0.15); }
+.rx-setor-ic.grande svg { width: 1.5rem; height: 1.5rem; }
+html body .rx-setor-cab h3 { margin: 0; font-size: 1.375rem; font-weight: 700; letter-spacing: -0.02em; color: #131A27; }
+.rx-setor-cab p { margin: .25rem 0 0; font-size: .9375rem; line-height: 1.5; color: #627288; }
+.rx-setor-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; }
+html body .rx-setor-col h4 { margin: 0 0 .875rem; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #D44D4D; }
+html body .rx-setor-col.desafios h4 { color: #5C6986; }
+.rx-setor-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .625rem; }
+.rx-setor-col li { display: flex; gap: .625rem; align-items: flex-start; font-size: .9375rem; line-height: 1.5; color: #283043; }
+.rx-setor-col li svg { flex: none; width: 1.125rem; height: 1.125rem; margin-top: .1875rem; color: #D44D4D; }
+.rx-setor-col.desafios li svg { color: #5C6986; }
+@media (prefers-reduced-motion: reduce) { .rx-setor-painel { animation: none; } }
+@media (max-width: 1023px) {
+  .rx-setores { grid-template-columns: minmax(0, 1fr); gap: 1rem; margin-top: 2rem; }
+  .rx-setores-lista { flex-direction: row; overflow-x: auto; scrollbar-width: none; padding: .375rem; border-radius: 9999px; scroll-snap-type: x proximity; }
+  .rx-setores-lista::-webkit-scrollbar { display: none; }
+  .rx-setor-tab { width: auto; flex: none; padding: .375rem .875rem .375rem .375rem; border-radius: 9999px; font-size: .875rem; white-space: nowrap; scroll-snap-align: start; }
+  .rx-setor-ic { width: 1.875rem; height: 1.875rem; border-radius: 9999px; }
+  .rx-setor-ic svg { width: 1rem; height: 1rem; }
+  .rx-setor-seta { display: none; }
+}
+@media (max-width: 639px) {
+  .rx-setor-painel { padding: 1.25rem; border-radius: 20px; }
+  .rx-setor-cols { grid-template-columns: minmax(0, 1fr); }
+  html body .rx-setor-cab h3 { font-size: 1.125rem; }
+}

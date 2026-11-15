@@ -461,3 +461,32 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   window.addEventListener('resize', f);
   if ('ResizeObserver' in window) new ResizeObserver(f).observe(hero);
 })();
+
+/* ---------- "Onde buscamos": setores em abas (clique, setas e Home/End) ---------- */
+{
+  const lista = document.querySelector<HTMLElement>('.rx-setores-lista');
+  if (lista) {
+    const abas = Array.from(lista.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const escolher = (aba: HTMLButtonElement, foco = false) => {
+      abas.forEach((a) => {
+        const on = a === aba;
+        a.setAttribute('aria-selected', String(on));
+        a.tabIndex = on ? 0 : -1;
+        const painel = document.getElementById(a.getAttribute('aria-controls') || '');
+        if (painel) painel.hidden = !on;
+      });
+      if (foco) aba.focus();
+      // na fileira do celular, a aba escolhida fica visível
+      if (getComputedStyle(lista).flexDirection === 'row') aba.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+    };
+    abas.forEach((aba, i) => {
+      aba.addEventListener('click', () => escolher(aba));
+      aba.addEventListener('keydown', (e) => {
+        const ir: Record<string, number> = { ArrowDown: i + 1, ArrowRight: i + 1, ArrowUp: i - 1, ArrowLeft: i - 1, Home: 0, End: abas.length - 1 };
+        if (!(e.key in ir)) return;
+        e.preventDefault();
+        escolher(abas[(ir[e.key] + abas.length) % abas.length], true);
+      });
+    });
+  }
+}
