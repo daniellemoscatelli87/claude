@@ -1765,3 +1765,6 @@ html body .rp-carta-luz span:nth-child(1) { display: none !important; }
   html body .rx-gal-grade > li { flex: 0 0 85%; scroll-snap-align: start; }
   html body .rx-gal-voce a { min-height: 100%; }
 }
+
+/* Celular: "Possíveis atribuições" sem as linhas divisórias entre os itens */
+@media (max-width: 639px) { html body .rx-numerada li, html body .rx-numerada li:last-child { border-top: 0 !important; border-bottom: 0 !important; } }
