@@ -1392,10 +1392,12 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
    no computador, um pedaço do próximo card aparece para indicar que há mais. */
 .rx-setores { margin-top: 2.5rem; text-align: left; width: 100%; min-width: 0; box-sizing: border-box; }
 .rx-setores-trilha { width: 100%; box-sizing: border-box; }
-.rx-setores-trilha { list-style: none; margin: 0; padding: .25rem .25rem 1.5rem; display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-x: contain; }
+.rx-setores-trilha { --rx-lado: 9%; list-style: none; margin: 0; padding: .25rem 0 1.5rem; display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-x: contain; }
 .rx-setores-trilha::-webkit-scrollbar { display: none; }
+/* espaçadores: o primeiro e o último card também param no centro */
+.rx-setores-trilha::before, .rx-setores-trilha::after { content: ""; flex: 0 0 calc(var(--rx-lado) - var(--rx-vao, 1.25rem)); }
 .rx-setores-trilha:focus-visible { outline: 2px solid #D44D4D; outline-offset: 4px; border-radius: 28px; }
-.rx-setor-slide { flex: 0 0 82%; scroll-snap-align: start; display: flex; flex-direction: column; padding: 2.25rem 2.5rem; border-radius: 28px; background: #FFFFFF; border: 1px solid #EDF0F5; box-shadow: 0 10px 30px -5px rgba(13, 17, 25, 0.06), 0 4px 14px -2px rgba(13, 17, 25, 0.04); }
+.rx-setor-slide { flex: 0 0 82%; scroll-snap-align: center; display: flex; flex-direction: column; padding: 2.25rem 2.5rem; border-radius: 28px; background: #FFFFFF; border: 1px solid #EDF0F5; box-shadow: 0 10px 30px -5px rgba(13, 17, 25, 0.06), 0 4px 14px -2px rgba(13, 17, 25, 0.04); }
 .rx-setor-cab { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.5rem; margin-bottom: 1.75rem; border-bottom: 1px solid #EDF0F5; }
 .rx-setor-ic { display: grid; place-items: center; flex: none; width: 3.5rem; height: 3.5rem; border-radius: 16px; background: #FDF2F2; color: #D44D4D; }
 .rx-setor-ic svg { width: 1.75rem; height: 1.75rem; }
@@ -1421,9 +1423,9 @@ html body .rx-setor-col.desafios h4 { color: #5C6986; }
 .rx-setores-pos { margin: 0; min-width: 5.5rem; text-align: center; font-size: .875rem; font-weight: 600; color: #627288; font-variant-numeric: tabular-nums; }
 @media (min-width: 640px) { .rx-setores-pos { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
 @media (max-width: 639px) { .rx-setores-pontos { display: none; } }
-@media (max-width: 1023px) { .rx-setor-slide { flex-basis: 88%; padding: 1.75rem; } }
+@media (max-width: 1023px) { .rx-setores-trilha { --rx-lado: 6%; } .rx-setor-slide { flex-basis: 88%; padding: 1.75rem; } }
 @media (max-width: 639px) {
-  .rx-setores-trilha { gap: .75rem; padding-bottom: 1.25rem; }
+  .rx-setores-trilha { --rx-lado: 5%; --rx-vao: .75rem; gap: .75rem; padding-bottom: 1.25rem; }
   .rx-setor-slide { flex-basis: 90%; padding: 1.25rem; border-radius: 22px; }
   .rx-setor-ic { width: 2.75rem; height: 2.75rem; border-radius: 12px; }
   .rx-setor-ic svg { width: 1.375rem; height: 1.375rem; }

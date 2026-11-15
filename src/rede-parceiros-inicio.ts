@@ -470,16 +470,16 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   if (trilha && pontos && pos) {
     const slides = Array.from(trilha.querySelectorAll<HTMLElement>('.rx-setor-slide'));
     const nome = (s: HTMLElement) => s.querySelector('h3')?.textContent || '';
+    // posição de rolagem que deixa o card no centro da trilha
+    const alvo = (sl: HTMLElement) => sl.offsetLeft - trilha.offsetLeft - (trilha.clientWidth - sl.offsetWidth) / 2;
     const atual = () => {
-      const x = trilha.scrollLeft;
       let melhor = 0;
-      slides.forEach((s, i) => { if (Math.abs(s.offsetLeft - trilha.offsetLeft - x) < Math.abs(slides[melhor].offsetLeft - trilha.offsetLeft - x)) melhor = i; });
-      // no fim da trilha, o último card conta como atual
-      return trilha.scrollLeft + trilha.clientWidth >= trilha.scrollWidth - 4 ? slides.length - 1 : melhor;
+      slides.forEach((sl, i) => { if (Math.abs(alvo(sl) - trilha.scrollLeft) < Math.abs(alvo(slides[melhor]) - trilha.scrollLeft)) melhor = i; });
+      return melhor;
     };
     const ir = (i: number) => {
       const n = (i + slides.length) % slides.length;
-      trilha.scrollTo({ left: slides[n].offsetLeft - trilha.offsetLeft });
+      trilha.scrollTo({ left: alvo(slides[n]) });
     };
     slides.forEach((s, i) => {
       const b = document.createElement('button');
