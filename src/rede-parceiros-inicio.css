@@ -2590,3 +2590,46 @@ html body .rx-mv2 .rx-mv-grade li.novo { z-index: 2; }
 }
 @keyframes rx-mv-escreve { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
 @keyframes rx-mv-sel { from { border-color: #D6DCE6; background: #FFFFFF; color: #627288; } to { border-color: #D44D4D; background: #FDF2F2; color: #D44D4D; } }
+
+/* Cruzamento com IA: a base de parceiros em skeleton e uma varredura da IA por cima; alguns perfis são detectados */
+.rx-mv-varre { position: relative; flex: 1; border-radius: 16px; overflow: hidden; }
+.rx-mv-skel { height: 100%; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .625rem; }
+.rx-mv-skel li { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4375rem; padding: .75rem .5rem; border-radius: 14px; background: #FFFFFF; border: 1px solid #E4E8EF;
+  transition: border-color .4s ease, box-shadow .4s ease; }
+.rx-mv-skel .sk { display: block; border-radius: 9999px; background: linear-gradient(90deg, #EDF0F5 0%, #F6F7FA 50%, #EDF0F5 100%) 0 0 / 200% 100%; }
+.rx-mv-skel .av { width: 2.25rem; height: 2.25rem; }
+.rx-mv-skel .l1 { width: 60%; height: .5rem; } .rx-mv-skel .l2 { width: 42%; height: .4375rem; } .rx-mv-skel .ch { width: 34%; height: .875rem; margin-top: .125rem; }
+.rx-mv-scan2 { position: absolute; left: -2%; right: -2%; top: 0; height: 4.5rem; pointer-events: none; opacity: 0;
+  background: linear-gradient(180deg, rgba(212, 77, 77, 0) 0%, rgba(212, 77, 77, .14) 70%, rgba(212, 77, 77, .32) 100%); border-bottom: 2px solid #D44D4D;
+  box-shadow: 0 6px 18px -4px rgba(212, 77, 77, .55); }
+.rx-mv-status { display: flex; align-items: center; justify-content: center; gap: .5rem; margin: 0; font-size: .75rem; font-weight: 600; color: #627288; }
+.rx-mv-spin.r { width: .875rem; height: .875rem; border-color: rgba(212, 77, 77, .25); border-top-color: #D44D4D; }
+@media (prefers-reduced-motion: no-preference) {
+  .rx-mv3.ativa .rx-mv-skel .sk { animation: rx-mv-brilho 1.2s linear infinite; }
+  .rx-mv3.ativa .rx-mv-skel li { animation: rx-mv-pop .4s ease both; animation-delay: calc(.1s + var(--d) * .05s); }
+  .rx-mv3.ativa .rx-mv-scan2 { animation: rx-mv-varre 2.4s cubic-bezier(.45,0,.55,1) .6s 2 both; }
+  .rx-mv3.ativa .rx-mv-skel li.m { animation: rx-mv-pop .4s ease both, rx-mv-marca .5s ease 3.4s forwards; animation-delay: calc(.1s + var(--d) * .05s), 3.4s; }
+  .rx-mv3.ativa .rx-mv-skel li.m .sk { animation: rx-mv-brilho 1.2s linear infinite, rx-mv-skrosa .5s ease 3.4s forwards; }
+  .rx-mv3.ativa .rx-mv-ia-tag { animation: rx-mv-pulsa 1.4s ease-in-out .3s 4; }
+  .rx-mv3.ativa .rx-mv-spin.r { animation: rx-mv-gira .8s linear infinite; }
+}
+@keyframes rx-mv-brilho { to { background-position: -200% 0; } }
+@keyframes rx-mv-varre { 0% { opacity: 0; transform: translateY(-4.5rem); } 10% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; transform: translateY(var(--h, 20rem)); } }
+@keyframes rx-mv-skrosa { to { background: #FBE3E3; } }
+.rx-mv-varre { --h: 22rem; }
+@media (max-width: 767px) { .rx-mv-skel { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; } .rx-mv-varre { --h: 40rem; } }
+
+/* Qualificação: o card rosa do desafio no topo */
+.rx-mv4 .rx-mv-desafio { margin: 0; padding: .875rem 1.125rem; }
+.rx-mv4 .rx-mv-desafio strong { margin: .25rem 0 .5rem; font-size: .9375rem; }
+.rx-mv4 .rx-mv-destaque { padding: .875rem 1.25rem; gap: 1.5rem; }
+.rx-mv4 .rx-mv-gauge { width: 7rem; height: 7rem; } .rx-mv4 .rx-mv-gauge b { font-size: 1.75rem; }
+.rx-mv4 .rx-mv-dest-txt img { width: 2.5rem; height: 2.5rem; margin-bottom: .25rem; }
+.rx-mv4 .rx-mv-barras { padding: .75rem 1.25rem; gap: .5rem; }
+@media (prefers-reduced-motion: no-preference) { .rx-mv4.ativa .rx-mv-desafio { animation: rx-mt-surge .5s cubic-bezier(.16,1,.3,1) .1s both; } }
+@media (max-width: 767px) { .rx-mv4 .rx-mv-destaque { flex-direction: row; } .rx-mv4 .rx-mv-gauge { width: 6rem; height: 6rem; } .rx-mv4 .rx-mv-gauge b { font-size: 1.5rem; } .rx-mv4 .rx-mv-dest-txt { justify-items: start; text-align: left; } }
+@media (max-width: 767px) {
+  .rx-mv3 .rx-mv-cab { justify-content: center; }
+  .rx-mv3 .rx-mv-cab strong { display: none; }
+  .rx-mv-varre { --h: 30rem; }
+}
