@@ -1687,3 +1687,8 @@ html body .rx-onde.eco .rx-onde-cab h2, html body .rx-onde.eco .rx-onde-cab .rp-
 .rx-eco .rx-eco-setor.aceso { color: #D44D4D; border-color: rgba(212, 77, 77, 0.35); box-shadow: 0 .6cqw 2.2cqw rgba(212, 77, 77, 0.18); transition: opacity .5s ease, transform .6s cubic-bezier(0.16, 1, 0.3, 1); }
 /* movimento reduzido: sem luz e etiquetas legíveis paradas */
 @media (prefers-reduced-motion: reduce) { .rx-eco-luz { display: none; } .rx-eco-setor { color: #283043; } .rx-eco .rx-eco-setor svg { color: #D44D4D; } }
+
+/* Divisor com rótulo acima dos blocos de "Como funciona a colaboração" */
+.rx-divisor { display: flex; align-items: center; gap: 1rem; margin: 0 0 -1.5rem; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A96AB; white-space: nowrap; }
+.rx-divisor::before, .rx-divisor::after { content: ""; flex: 1; height: 1px; background: #E4E6EC; }
+@media (max-width: 1023px) { .rx-divisor { margin-bottom: -1rem; } }
