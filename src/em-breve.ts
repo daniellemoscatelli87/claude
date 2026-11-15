@@ -52,3 +52,48 @@ notifyEmail.addEventListener('input', () => {
 });
 
 sugerirEmail(notifyEmail, true);
+
+/* ---------- Celular e tablet: mesma navegação do Seja Parceiro — o hero fica fixo atrás do menu; a folha branca sobe por
+   cima, prende logo abaixo do menu (tampa arredondada parada) e o conteúdo rola por baixo dela. O campo de e-mail e as
+   redes sociais descem do hero para o começo da folha (e voltam ao hero no computador). ---------- */
+(() => {
+  const h = document.getElementById('site-header');
+  const hero = document.querySelector<HTMLElement>('.ih-hero');
+  const folha = document.querySelector<HTMLElement>('.ih-folha');
+  const movel = document.getElementById('ih-movel');
+  // descem para a folha no celular: o 3º parágrafo (que convida a deixar o e-mail), o campo de e-mail e as redes sociais
+  const itens = ['.ih-p3', '.ih-form', '.ih-redes'].map((s) => document.querySelector<HTMLElement>(s));
+  if (!h || !hero || !folha || !movel || itens.some((i) => !i)) return;
+  const pequeno = window.matchMedia('(max-width: 1023px)');
+  // lugares originais no hero, para devolver no computador
+  const marcas = itens.map((i) => { const m = document.createComment('ih'); i!.before(m); return m; });
+  const posicionar = () => {
+    if (pequeno.matches) movel.append(...(itens as HTMLElement[]));
+    else itens.forEach((i, n) => marcas[n].after(i!));
+  };
+  posicionar();
+  pequeno.addEventListener('change', posicionar);
+
+  const espaco = document.createElement('div');
+  espaco.className = 'ih-hero-espaco';
+  espaco.setAttribute('aria-hidden', 'true');
+  hero.after(espaco);
+  const tampa = document.createElement('div');
+  tampa.className = 'ih-tampa';
+  tampa.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(tampa);
+  const raiz = document.documentElement;
+  let agendado = false;
+  const f = () => {
+    agendado = false;
+    if (!pequeno.matches) { raiz.style.removeProperty('--ih-tampa'); espaco.style.height = ''; return; }
+    // o hero é fixo a partir do topo da tela; o espaço começa abaixo do cabeçalho, então desconta essa diferença
+    espaco.style.height = `${Math.max(0, hero.offsetHeight - (espaco.getBoundingClientRect().top + window.scrollY))}px`;
+    const topo = Math.max(folha.getBoundingClientRect().top, h.offsetHeight);
+    raiz.style.setProperty('--ih-tampa', `${Math.round(topo)}px`);
+  };
+  f();
+  window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(f); } }, { passive: true });
+  window.addEventListener('resize', f);
+  if ('ResizeObserver' in window) new ResizeObserver(f).observe(hero);
+})();
