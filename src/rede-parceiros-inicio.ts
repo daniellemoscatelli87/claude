@@ -543,3 +543,47 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     obs.observe(eco);
   }
 }
+
+/* ---------- "O que é a rede": feixes animados entre Contato → Relacionamento → Indicação ----------
+   Desenha uma curva suave entre um ícone e o próximo (horizontal no computador, vertical no celular) e um feixe com
+   gradiente vermelho que percorre a curva; o segundo feixe sai quando o primeiro chega. Redesenha quando o tamanho muda. */
+{
+  const lista = document.querySelector<HTMLElement>('[data-feixe]');
+  const svg = lista?.querySelector<SVGSVGElement>('.rx-pilares-svg');
+  if (lista && svg) {
+    const ics = Array.from(lista.querySelectorAll<HTMLElement>('.rx-pilar-ic'));
+    const NS = 'http://www.w3.org/2000/svg';
+    const desenhar = () => {
+      const r = lista.getBoundingClientRect();
+      svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
+      svg.replaceChildren();
+      const defs = document.createElementNS(NS, 'defs'); svg.appendChild(defs);
+      for (let i = 0; i < ics.length - 1; i++) {
+        const a = ics[i].getBoundingClientRect(), b = ics[i + 1].getBoundingClientRect();
+        const vertical = Math.abs(b.top - a.top) > Math.abs(b.left - a.left);
+        const ax = a.left + a.width / 2 - r.left, ay = a.top + a.height / 2 - r.top, bx = b.left + b.width / 2 - r.left, by = b.top + b.height / 2 - r.top;
+        const ra = a.width / 2 + 6, rb = b.width / 2 + 6;
+        let d: string, g: [number, number, number, number];
+        if (vertical) {
+          const y1 = ay + ra, y2 = by - rb, curva = 0;
+          d = `M ${ax} ${y1} Q ${ax + curva} ${(y1 + y2) / 2} ${bx} ${y2}`; g = [ax, y1, bx, y2];
+        } else {
+          const x1 = ax + ra, x2 = bx - rb, curva = -26;
+          d = `M ${x1} ${ay} Q ${(x1 + x2) / 2} ${ay + curva} ${x2} ${by}`; g = [x1, ay, x2, by];
+        }
+        const grad = document.createElementNS(NS, 'linearGradient');
+        grad.setAttribute('id', `rxFeixe${i}`); grad.setAttribute('gradientUnits', 'userSpaceOnUse');
+        grad.setAttribute('x1', String(g[0])); grad.setAttribute('y1', String(g[1])); grad.setAttribute('x2', String(g[2])); grad.setAttribute('y2', String(g[3]));
+        grad.innerHTML = '<stop offset="0" stop-color="#F0A3A3"/><stop offset="1" stop-color="#D44D4D"/>';
+        defs.appendChild(grad);
+        const base = document.createElementNS(NS, 'path'); base.setAttribute('d', d); base.setAttribute('class', 'rx-feixe-base');
+        const feixe = document.createElementNS(NS, 'path'); feixe.setAttribute('d', d); feixe.setAttribute('class', 'rx-feixe');
+        feixe.setAttribute('pathLength', '100'); feixe.setAttribute('stroke', `url(#rxFeixe${i})`);
+        feixe.style.setProperty('--atraso', `${i * 1.6}s`);
+        svg.append(base, feixe);
+      }
+    };
+    new ResizeObserver(desenhar).observe(lista);
+    desenhar();
+  }
+}
