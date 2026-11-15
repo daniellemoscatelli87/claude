@@ -1451,7 +1451,8 @@ html body .rx-setor-foto .rx-setor-cab h3 { color: #FFFFFF; }
 @media (max-width: 1023px) { .rx-setor-foto .rx-setor-cab { padding: 3rem 1.75rem 1.25rem; } }
 @media (max-width: 639px) {
   .rx-setor-foto .rx-setor-cab { padding: 2.5rem 1.25rem 1rem; gap: .75rem; }
-  .rx-setor-foto .rx-setor-cab p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .rx-setor-foto .rx-setor-cab p { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* uma linha */
+  .rx-setor-foto .rx-setor-cab > div { min-width: 0; }
   .rx-setor-marca svg { width: 4.5rem; height: 4.5rem; }
   .rx-setor-marca { top: 1rem; right: 1.25rem; }
 }
