@@ -273,3 +273,12 @@ html body #ie3-home h2 span { font-size: inherit !important; letter-spacing: inh
 /* "Veja todas as 35 recomendações na íntegra": um pouco menor e mais discreto */
 html body #ie3-home .ih-rec-titulo { font-size: 1.25rem !important; font-weight: 600 !important; line-height: 1.35 !important; }
 @media (max-width: 767px) { html body #ie3-home .ih-rec-titulo { font-size: 1rem !important; } }
+/* Computador: tag "Em breve" igual à tag "DM | Partners & Connections" do Seja Parceiro (branca, borda cinza, ponto vermelho) */
+@media (min-width: 1024px) {
+  html body .ih-hero .ih-tag { position: relative; gap: 8px; padding: 6px 16px; border: 1px solid #B3BDD0; background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 1px 2px rgba(13, 17, 25, 0.05); color: #283043; font-size: 12px; font-weight: 700; letter-spacing: .2em; line-height: 18px; }
+  html body .ih-hero .ih-tag::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 9999px; background: #D44D4D; }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  html body .ih-hero .ih-tag::after { content: ""; position: absolute; left: 16px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 9999px; background: #D44D4D; opacity: .75; animation: ih-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; }
+}
