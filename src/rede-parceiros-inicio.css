@@ -1463,4 +1463,5 @@ html body .rx-setor-foto .rx-setor-cab h3 { color: #FFFFFF; }
   #setor-hospitalidade .rx-setor-foto img { --rx-foco: 67% center; }
   #setor-varejo .rx-setor-foto img { --rx-foco: 18% center; }
   #setor-financeiro .rx-setor-foto img { --rx-foco: 30% center; }
+  #setor-educacao .rx-setor-foto img { --rx-foco: 60% center; }
 }
