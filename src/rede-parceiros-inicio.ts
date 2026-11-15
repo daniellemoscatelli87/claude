@@ -604,11 +604,19 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   }
 }
 
-/* ---------- "O que é a rede": borda animada nos cards, em sequência (1º, depois 2º, depois 3º) ---------- */
-document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i) => {
+/* ---------- "O que é a rede": animação dos cards em sequência ---------- */
+/* Sequência por card (2,6 s cada): a luz dá a volta na borda → o ícone do canto pisca → o feixe percorre a linha até o
+   próximo card → o próximo card repete. Depois do 3º, o ciclo recomeça no 1º. */
+document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, todos) => {
+  li.style.setProperty('--i', String(i));
   const b = document.createElement('span');
   b.className = 'rx-pilar-borda';
   b.setAttribute('aria-hidden', 'true');
-  b.style.setProperty('--i', String(i));
   li.appendChild(b);
+  if (i < todos.length - 1) {
+    const f = document.createElement('span');
+    f.className = 'rx-pilar-feixe';
+    f.setAttribute('aria-hidden', 'true');
+    li.appendChild(f);
+  }
 });

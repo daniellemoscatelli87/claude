@@ -190,7 +190,7 @@ html.menu-aberto { overflow: hidden; }
    o clique abre a conversa no WhatsApp (o script move o aviso para o fim da página e troca a ação) */
 @media (min-width: 1024px) {
   #cta-contato.cta-whats { position: fixed !important; top: auto !important; left: auto !important; right: 1.5rem !important; bottom: calc(1.5rem + 3.5rem + 1rem) !important; margin: 0 !important; z-index: 30; }
-  #cta-contato.cta-whats > span[aria-hidden="true"] { top: auto !important; bottom: -7px !important; left: auto !important; right: 21px !important; rotate: 225deg; }
+  #cta-contato.cta-whats > span[aria-hidden="true"] { top: auto !important; bottom: -7px !important; left: auto !important; right: 21px !important; rotate: 225deg; z-index: 2; }
   .cta-contato.cta-whats { animation: cta-entrada-whats .45s ease-out .6s both, cta-flutua 2.6s ease-in-out 1.2s 3; }
   @keyframes cta-entrada-whats { from { opacity: 0; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
 }
@@ -199,7 +199,7 @@ html.menu-aberto { overflow: hidden; }
   /* ocupa todo o espaço que sobra à esquerda do botão (mesma margem de 20 px da borda) */
   #cta-contato.cta-whats { position: fixed !important; top: auto !important; left: 20px !important; right: calc(20px + 56px + 12px) !important; bottom: 20px !important; margin: 0 !important; z-index: 30;
     width: auto !important; min-height: 56px; display: flex; align-items: center; max-width: none !important; }
-  #cta-contato.cta-whats > span[aria-hidden="true"] { top: calc(50% - 7px) !important; bottom: auto !important; left: auto !important; right: -7px !important; rotate: 135deg; }
+  #cta-contato.cta-whats > span[aria-hidden="true"] { top: calc(50% - 7px) !important; bottom: auto !important; left: auto !important; right: -7px !important; rotate: 135deg; z-index: 2; }
   #cta-contato.cta-whats > div { width: 100%; }
   #cta-contato.cta-whats > div > button:first-of-type { padding: .625rem 2.5rem .625rem .75rem; gap: .625rem; }
   #cta-contato.cta-whats > div > button:first-of-type > span:first-child { width: 2rem; height: 2rem; }
@@ -239,7 +239,6 @@ html.menu-aberto { overflow: hidden; }
    que as páginas somam ao menu para os links internos (scroll-padding-top). */
 .folha-cola-topo { display: none; }
 @media (max-width: 1023px) {
-  html.com-folha-cola { scroll-snap-type: y proximity; }
   .folha-cola { scroll-snap-align: start; scroll-snap-stop: always; scroll-margin-top: -2.5rem; }
   .folha-cola-topo { display: block; position: absolute; top: 0; left: 0; width: 1px; height: 1px; pointer-events: none; scroll-snap-align: start; scroll-snap-stop: always; }
 }

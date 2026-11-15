@@ -1828,19 +1828,51 @@ html body .rx-pilar h3 { padding-right: 1.5rem !important; }
 }
 @media (max-width: 1023px) and (min-width: 768px) { html body .rx-pilar-ic { margin-bottom: .5rem !important; } }
 
-/* Borda animada dos cards de "O que é a rede": um traço de luz vermelha percorre a borda de cada card, um de cada vez
-   (1º, 2º, 3º) e o ciclo recomeça */
+/* Animação dos cards de "O que é a rede", um card de cada vez (2,6 s por card; ciclo de 7,8 s):
+   1) a luz dá a volta na borda (0–1,4 s)  2) o ícone do canto pisca (1,4–1,9 s)
+   3) o feixe percorre a linha até o próximo card (1,9–2,6 s)  4) o próximo card repete; depois do 3º, recomeça */
 @property --rx-ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 .rx-pilar-borda { position: absolute; inset: -1px; border-radius: inherit; padding: 2px; pointer-events: none; opacity: 0;
   background: conic-gradient(from var(--rx-ang), transparent 0deg, transparent 210deg, rgba(212, 77, 77, 0.3) 270deg, #D44D4D 350deg, transparent 360deg);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
-@media (prefers-reduced-motion: no-preference) {
-  .rx-pilar-borda { animation: rx-borda 5.4s linear infinite; animation-delay: calc(var(--i, 0) * 1.8s); }
+/* feixe sobre a linha conectora (mesma posição do conector) */
+.rx-pilar-feixe { position: absolute; top: 50%; right: -3.5rem; width: 3.5rem; height: 2px; margin-top: -1px; pointer-events: none; opacity: 0; z-index: 1;
+  background: linear-gradient(90deg, transparent 0, #F0A3A3 35%, #D44D4D 50%, transparent 65%) no-repeat; background-size: 200% 100%; background-position: 100% 0;
+  filter: drop-shadow(0 0 3px rgba(212, 77, 77, 0.6)); }
+@media (max-width: 1023px) and (min-width: 768px) { .rx-pilar-feixe { right: -2rem; width: 2rem; } }
+@media (max-width: 767px) {
+  .rx-pilar-feixe { top: auto; bottom: -2rem; right: auto; left: 50%; width: 2px; height: 2rem; margin: 0 0 0 -1px;
+    background: linear-gradient(180deg, transparent 0, #F0A3A3 35%, #D44D4D 50%, transparent 65%) no-repeat; background-size: 100% 200%; background-position: 0 100%; }
 }
+@media (prefers-reduced-motion: no-preference) {
+  .rx-pilar-borda { animation: rx-borda 7.8s linear infinite; animation-delay: calc(var(--i, 0) * 2.6s); }
+  html body .rx-pilar-ic svg { animation: rx-pisca 7.8s ease-in-out infinite; animation-delay: calc(var(--i, 0) * 2.6s); }
+  .rx-pilar-feixe { animation: rx-feixe-h 7.8s linear infinite; animation-delay: calc(var(--i, 0) * 2.6s); }
+}
+@media (prefers-reduced-motion: no-preference) and (max-width: 767px) { .rx-pilar-feixe { animation-name: rx-feixe-v; } }
 @keyframes rx-borda {
   0% { --rx-ang: 0deg; opacity: 0; }
-  4% { opacity: 1; }
-  29% { opacity: 1; }
-  33.33% { --rx-ang: 360deg; opacity: 0; }
+  1.5% { opacity: 1; }
+  16.5% { opacity: 1; }
+  17.95% { --rx-ang: 360deg; opacity: 0; }
   100% { --rx-ang: 360deg; opacity: 0; }
+}
+@keyframes rx-pisca {
+  0%, 17.95% { color: #B3BDD0; transform: none; }
+  19.6% { color: #D44D4D; transform: scale(1.25); }
+  21.2% { color: #B3BDD0; transform: none; }
+  22.8% { color: #D44D4D; transform: scale(1.25); }
+  24.36%, 100% { color: #B3BDD0; transform: none; }
+}
+@keyframes rx-feixe-h {
+  0%, 24.3% { opacity: 0; background-position: 100% 0; }
+  24.36% { opacity: 1; background-position: 100% 0; }
+  33.2% { opacity: 1; background-position: 0% 0; }
+  33.33%, 100% { opacity: 0; background-position: 0% 0; }
+}
+@keyframes rx-feixe-v {
+  0%, 24.3% { opacity: 0; background-position: 0 100%; }
+  24.36% { opacity: 1; background-position: 0 100%; }
+  33.2% { opacity: 1; background-position: 0 0%; }
+  33.33%, 100% { opacity: 0; background-position: 0 0%; }
 }
