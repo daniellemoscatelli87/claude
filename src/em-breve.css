@@ -154,3 +154,17 @@ html body #ie3-home #depoimentos { border-top: 0 !important; }
 }
 /* Celular: título "Veja todas as 35 recomendações na íntegra" menor */
 @media (max-width: 767px) { html body #ie3-home .ih-rec-titulo { font-size: 1.0625rem !important; line-height: 1.35 !important; } }
+/* Celular: faixa escura com desfoque atrás do botão do WhatsApp e do aviso "Tem um projeto?" (a mesma do Projeto Piloto
+   e do Seja Parceiro); aparece enquanto o aviso estiver na tela */
+.faixa-flutuante { display: none; }
+@media (max-width: 767px) {
+  .faixa-flutuante { display: block; position: fixed; left: 0; right: 0; bottom: 0; height: 7.5rem; z-index: 43; pointer-events: none;
+    background: linear-gradient(to top, rgba(13, 17, 25, 0.6) 0%, rgba(13, 17, 25, 0.35) 45%, rgba(13, 17, 25, 0) 100%);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    -webkit-mask-image: linear-gradient(to top, #000 40%, transparent); mask-image: linear-gradient(to top, #000 40%, transparent);
+    opacity: 0; transition: opacity .3s ease; }
+  body:has(#cta-contato.cta-whats:not(.is-oculto)) .faixa-flutuante { opacity: 1; }
+  body.pagina-inicio > a[href^="https://wa.me/"] { z-index: 45; }
+  body.pagina-inicio #cta-contato.cta-whats { z-index: 44 !important; }
+}
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) { .faixa-flutuante { transition: none; } }
