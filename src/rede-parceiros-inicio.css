@@ -2668,3 +2668,32 @@ html body .rx-mv4 .rx-mv-destaque { flex-wrap: wrap; align-content: center; row-
 /* títulos dos cards do mockup (Novo desafio, Perfil aderente) em cinza, com ícone */
 html body .rx-mv-dtit, html body .rx-mv-rot { display: inline-flex; align-items: center; gap: .375rem; color: #8898B0; }
 html body .rx-mv-dtit svg { width: .875rem; height: .875rem; flex: none; }
+/* card do perfil aderente mais completo: medidor à esquerda; à direita a pessoa e os critérios atendidos */
+html body .rx-mv4 .rx-mv-destaque { justify-content: flex-start; align-items: center; column-gap: 1.5rem; }
+html body .rx-mv4 .rx-mv-dest-txt { flex: 1; min-width: 0; display: grid; justify-items: stretch; gap: .5rem; text-align: left; }
+.rx-mv-dpessoa { display: flex; align-items: center; gap: .625rem; }
+html body .rx-mv-dpessoa img { width: 2.5rem; height: 2.5rem; margin: 0; }
+.rx-mv-dpessoa strong { display: block; font-size: 1rem; color: #131A27; }
+.rx-mv-dpessoa small { font-size: .75rem; color: #627288; }
+.rx-mv-dsub { margin: .25rem 0 0; font-size: .625rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #8898B0; }
+.rx-mv-crit { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .375rem; }
+.rx-mv-crit li { display: flex; align-items: center; gap: .5rem; padding: .375rem .5rem; border-radius: 10px; background: #F6F7FA; }
+.rx-mv-crit .ck { flex: none; display: grid; place-items: center; width: 1.125rem; height: 1.125rem; border-radius: 9999px; background: #FDE7E7; color: #D44D4D; }
+.rx-mv-crit .ck svg { width: .625rem; height: .625rem; }
+.rx-mv-crit li > span:last-child { display: grid; min-width: 0; }
+.rx-mv-crit b { font-size: .75rem; font-weight: 600; color: #131A27; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rx-mv-crit small { font-size: .625rem; color: #8898B0; }
+@media (prefers-reduced-motion: no-preference) {
+  .rx-mv4.ativa .rx-mv-crit li { animation: rx-mt-surge .4s cubic-bezier(.16,1,.3,1) both; animation-delay: calc(1.6s + var(--d) * .25s); }
+  .rx-mv4.ativa .rx-mv-crit .ck { animation: rx-mv-ok2 .35s cubic-bezier(.34,1.5,.64,1) both; animation-delay: calc(1.8s + var(--d) * .25s); }
+}
+@keyframes rx-mv-ok2 { from { transform: scale(0); } to { transform: none; } }
+@media (max-width: 767px) {
+  html body .rx-mv4 .rx-mv-destaque { flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
+  html body .rx-mv4 .rx-mv-gauge { width: 5.5rem; height: 5.5rem; } html body .rx-mv4 .rx-mv-gauge b { font-size: 1.375rem; }
+  html body .rx-mv4 .rx-mv-dest-txt { display: contents; }
+  .rx-mv-dpessoa { flex: 1; }
+  .rx-mv-dsub, .rx-mv-crit { flex-basis: 100%; }
+  .rx-mv-crit { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 767px) { html body .rx-mv-crit { grid-template-columns: 1fr; gap: .3125rem; } html body .rx-mv-crit b { white-space: normal; } }
