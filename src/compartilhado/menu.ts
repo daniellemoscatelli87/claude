@@ -100,15 +100,6 @@ function travarFoco(painel: HTMLElement, aberto: () => boolean) {
   window.addEventListener('resize', posAlca);
   window.addEventListener('load', posAlca);
   window.addEventListener('pageshow', posAlca);
-  // Safari do iPhone: ao chegar de outra página, às vezes ele não desenha a foto, a faixa e os botões fixos na parte de baixo
-  // da tela (fica uma faixa branca até a pessoa rolar). Uma rolagem mínima e invisível, de 1px e de volta, faz o Safari
-  // redesenhar a tela como acontece quando a pessoa rola.
-  const redesenhar = () => {
-    if (!matchMedia('(max-width: 1023px)').matches || window.scrollY > 0) return;
-    window.scrollTo(0, 1);
-    requestAnimationFrame(() => { if (window.scrollY <= 1) window.scrollTo(0, 0); });
-  };
-  window.addEventListener('pageshow', () => { setTimeout(redesenhar, 60); setTimeout(redesenhar, 400); });
   if ('ResizeObserver' in window) new ResizeObserver(() => posAlca()).observe(document.body);
   requestAnimationFrame(posAlca);
   requestAnimationFrame(() => requestAnimationFrame(posAlca)); // o espaço do topo de cada página é medido pelo script da própria página, logo depois
