@@ -3,7 +3,7 @@
 -- pode alterar ou excluir enquanto o envio não aconteceu. Um relógio do banco (pg_cron) confere a cada minuto
 -- se há envio vencido e, só nesse caso, chama a função galeria-convite, que envia e grava o resultado.
 
-create extension if not exists pg_cron;
+create extension if not exists pg_cron with schema pg_catalog;
 
 create table if not exists public.galeria_agendamentos (
   id uuid primary key default gen_random_uuid(),
