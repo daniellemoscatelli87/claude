@@ -768,7 +768,8 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     ritmo(c);
     topicos.forEach((t) => { const on = (t.dataset.etapas || '').split(',').map(Number).includes(atual); t.classList.toggle('ativa', on); t.setAttribute('aria-current', on ? 'step' : 'false'); });
     if (agoraN) agoraN.textContent = atual > ETAPAS ? 'Rede de Parceiros' : `Etapa ${String(atual).padStart(2, '0')} de ${String(ETAPAS).padStart(2, '0')}`;
-    if (agoraT) agoraT.textContent = NOMES[atual - 1] || '';
+    if (agoraT) agoraT.textContent = atual > ETAPAS ? '' : NOMES[atual - 1] || '';
+    palco.classList.toggle('no-convite', atual > ETAPAS); // cena final: no topo, só "Rede de Parceiros"
   };
   palco.querySelector<HTMLButtonElement>('.rx-mv-rever')?.addEventListener('click', () => mostrar(1));
   topicos.forEach((t) => t.addEventListener('click', () => mostrar(Number(t.dataset.ir))));
