@@ -3424,3 +3424,6 @@ html body .rx-eco.anima .rx-eco-brilho { opacity: 0 !important; animation: none;
 html body .rx-eco.anima.nucleo .rx-eco-brilho { opacity: 1 !important; animation: rx-eco-respira 5s ease-in-out 1.2s infinite; }
 /* núcleo e brilho em cinza claro (sem o rosa), aparecendo só junto com o núcleo */
 html body .rx-eco-centro { background: radial-gradient(circle at 50% 35%, #FFFFFF 0%, #F6F7FA 100%); box-shadow: 0 0 0 1px rgba(19, 26, 39, .08), 0 1.2cqw 3cqw rgba(13, 17, 25, .12); }
+/* fundo do núcleo como uma sombra bem sutil: sem a "respiração" e acompanhando o núcleo */
+html body .rx-eco.anima.nucleo .rx-eco-brilho { animation: none; }
+html body .rx-eco-centro { box-shadow: 0 0 0 1px rgba(19, 26, 39, .05), 0 1cqw 2.6cqw rgba(13, 17, 25, .07); }
