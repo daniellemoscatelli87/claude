@@ -3001,3 +3001,12 @@ html body .rx-mf-enviar > span, html body .rx-mv-buscar > span, html body .rx-mv
 html body .rx-mf-enviar > span svg, html body .rx-mv-buscar > span svg, html body .rx-mv-contatar > span svg { width: .875rem; height: .875rem; }
 html body .rx-mv-novoproj, html body .rx-mv-convidar > span { height: 2rem; padding: 0 1rem; font-size: .75rem; }
 @media (max-width: 767px) { html body .rx-mv-fila li.vez .rx-mv-convidar .rx-mv-cursor { left: auto; right: 2.75rem; } }
+/* o cursor do mouse passa sempre por cima dos cards no caminho até o botão
+   (o bloco que contém o cursor fica numa camada acima dos vizinhos) */
+html body .rx-mv25 .rx-mv-cab { position: relative; z-index: 2; }
+html body .rx-mv4 .rx-mv-destaque { position: relative; z-index: 2; }
+html body .rx-mv-fila li.vez { z-index: 2; }
+html body .rx-mv-contato { position: relative; z-index: 2; }
+html body .rx-mv-escrever { position: relative; z-index: 2; }
+html body .rx-mf-enviar, html body .rx-mv-buscar, html body .rx-mv-contatar { position: relative; z-index: 2; }
+html body .rx-mv-cursor { z-index: 10; }
