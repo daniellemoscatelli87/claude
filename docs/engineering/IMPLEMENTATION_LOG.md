@@ -360,6 +360,31 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-16 · Grid e espaçamento: tokens, classes e página nova (D-049; publicado: DM v49 e FindLook v73)
+
+- **Origem:** pedido da dona do produto para criar o sistema de grid e explicar o uso. Ela aprovou os valores (ver D-049).
+- **Feito (nos dois DS):**
+  - **`src/styles/theme.css`:** tokens `--space-1` a `--space-24`, `--grid-columns`/`-margin`/`-gutter` (com media queries de 640 e 1024 px), `--content-reading`/`-default`/`-wide` e `--section-space`/`-hero`, mais as classes `.ds-container`, `.ds-container-reading`, `.ds-container-wide`, `.ds-grid`, `.ds-section` e `.ds-section-hero`.
+  - **`GridShowcase.tsx` (novo, o mesmo nos dois):**
+    - visão geral (tabela por tela);
+    - escala com o uso de cada passo;
+    - grid de colunas com demonstração para celular, tablet e desktop;
+    - larguras máximas;
+    - ritmo vertical;
+    - como usar (três layouts reais com `.ds-grid` e a tabela "No código");
+    - o que evitar e tokens.
+  - **`App.tsx`:** item "Grid e espaçamento" em Fundamentos, com 8 subitens.
+  - **`FoundationShowcase.tsx`:** a seção `spacing` vira o aviso `VejaEm` com o botão "Ver Grid e espaçamento".
+  - **`VejaEm.tsx`:** ganhou `rotuloBotao`.
+  - **Changelog** atualizado.
+- **Verificação:** `pnpm build` e Playwright nos dois DS, em 1440 claro e escuro, 768 e 390 px:
+  - os tokens computados mudam por tela: 4/8/12 colunas, margem 16/24/32 px, seção 64/80 px;
+  - nos exemplos de uso, os blocos por linha ficam 3/2/1 (cards), 2/1/1 (menu e conteúdo) e 2/1/1 (texto e imagem) no desktop, no tablet e no celular, nessa ordem;
+  - a demonstração mostra 4, 8 e 12 colunas;
+  - o link de Fundamentos chega à escala;
+  - sem rolagem horizontal e sem erros.
+- **Commits:** DM `376649a` e FindLook `4db493a`. Os mesmos testes passaram nos endereços públicos.
+
 ## 2026-11-14 · Shine Border mais ligeiro (publicado: DM v48 e FindLook v72)
 
 - **Origem:** a dona do produto achou a animação lenta e pediu que fosse "um pouco mais ligeira".

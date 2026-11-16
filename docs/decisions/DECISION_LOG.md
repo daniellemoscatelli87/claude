@@ -409,6 +409,31 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-049 · 16/11/2026 · Sistema de grid e espaçamento (DM e FindLook)
+
+- **Origem:** a dona do produto percebeu que o DS não tinha um sistema de grid que padronizasse espaçamentos e pediu para criá-lo e explicar o uso.
+- **O que já havia:** em Fundamentos, só uma escala visual de espaçamento (4 a 96 px), com nomes `--space-*` que não existiam no CSS. Não havia colunas, margens, calhas, larguras nem ritmo entre seções.
+- **Base:** os valores partiram do que o site já usa: `px-4 sm:px-6 lg:px-8`, `max-w-6xl`, `py-16`/`py-20` e grids de 1, 2, 3 e 12 colunas.
+- **Decisões dela:** aprovou os valores propostos, as três larguras, a página nova e o ritmo vertical.
+  - **Escala:** base de 4 px, com tokens reais `--space-1` (4 px) a `--space-24` (96 px).
+  - **Grid:**
+
+    | Tela | A partir de | Colunas | Margem | Calha |
+    |---|---|---|---|---|
+    | Celular | 0 | 4 | 16 px | 16 px |
+    | Tablet | 640 px | 8 | 24 px | 24 px |
+    | Desktop | 1024 px | 12 | 32 px | 24 px |
+
+  - **Larguras máximas:** leitura 768 px, padrão 1152 px, larga 1280 px.
+  - **Ritmo vertical:** 64 px entre seções no celular, 80 px no desktop e 96 px antes e depois do hero.
+  - **Página:** nova página "Grid e espaçamento" em Fundamentos. A seção Espaçamento antiga vira link para ela.
+- **Implementação:** tokens no `:root` do `theme.css` (com media queries) e classes `.ds-container` (-reading/-wide), `.ds-grid` e `.ds-section` (-hero). Os spans usam `col-span-*` do Tailwind com `sm:` e `lg:`.
+- **Trade-off:**
+  - As páginas já existentes dos DS e do site ainda não foram migradas para essas classes: o padrão vale para o que for feito daqui em diante.
+  - No desktop a calha fica em 24 px (e não 32 px), para manter o que o site já usa.
+
+---
+
 ## D-048 · 14/11/2026 · Página Cards: tudo sobre cards num só lugar, recomendado separado do que evitar
 
 - **Origem:** a dona do produto achou a página de cards confusa. Ela quer saber, ao entrar:
