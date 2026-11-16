@@ -333,21 +333,29 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - um termo de jargão na interface ("walkthrough" em `observation_light`).
 - **Código e banco:** nenhum alterado.
 
-## 2026-11-16 · Rastreamento dos e-mails da Rede de Parceiros (site), não publicado
+## 2026-11-16 · Padrões do site no design system (D-030)
+
+- **Produto:** `.janela-topo` (`apps/experience-intelligence/src/app/globals.css`) sem `border-bottom`; fundo graphite-50 (`#EDF0F5`) até 72% e degradê até transparente, padding inferior 26 px, `z-index: 1` para o conteúdo passar por baixo ao rolar.
+- **Documentação:** `docs/design-system/COMPONENTES.md` com a `Janela` atualizada, a seção "Padrões do site registrados para uso futuro" (accordion e cabeçalho de janela/gaveta) e as regras 4 (descrição de seção 14 px no celular) e 5 (sombras).
+- **Site (mesmo período, publicado à parte):** accordions do Projeto Piloto no estilo dos da Rede de Parceiros; cabeçalho com degradê nas gavetas de contato e de cadastro (`.gaveta-topo`); descrições `.sec-desc` em 14 px no celular; cards do mockup com a sombra do DS.
+- **Banco e migrações:** nenhuma alteração.
+- **Verificação executada:** em `apps/experience-intelligence`: `npm run typecheck` (sem erros), `npm run lint` (sem erros; 3 avisos antigos de `only-export-components`), `npm test` (48 de 48), `npm run build` (exportação estática). No navegador (Playwright, iPhone 13 e 1280 px), `/cadastro/` → "Como usamos seus dados": cabeçalho com o degradê, sem borda, e o texto passa por baixo dele ao rolar.
+## 2026-11-16 · Rastreamento dos e-mails da Rede de Parceiros (site), publicado
 
 - **Banco:** migração `supabase/migrations/20261116120000_email_rastreio.sql`: tabelas `email_envios` e `email_eventos` (RLS: leitura só da administradora; ela só pode alterar `visualizado_em`) e função `registrar_email_evento` (só `service_role`).
 - **Funções:** nova `email-eventos` (webhook do Resend, `verify_jwt` desligado, assinatura Svix verificada); `galeria-convite` e `comunicado-parceiros` gravam cada e-mail aceito pelo Resend em `email_envios`.
 - **Área restrita:** sino com "abriu o e-mail" e "clicou no link do e-mail"; card "E-mails enviados" no perfil do parceiro, que marca os avisos como vistos.
 - **Política de Privacidade:** item "E-mails da Rede de Parceiros" e data de atualização.
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
-- **Pendente:** aplicar a migração e publicar as funções no Supabase; ligar o rastreamento de abertura e de cliques no domínio do Resend; criar o webhook no Resend e guardar o segredo em `RESEND_WEBHOOK_SECRET_RASTREIO` (não usar `RESEND_WEBHOOK_SECRET`, que é das respostas de contato); teste de ponta a ponta com um e-mail real.
+- **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
-## 2026-11-16 · Cadastro de parceiros e página da galeria (site), não publicado
+## 2026-11-16 · Cadastro de parceiros e página da galeria (site), publicado
 
 - **Cadastro (`rede-parceiros/cadastro/index.html`):** nome completo obrigatório (pelo menos duas palavras com duas letras ou mais; espaços extras removidos ao salvar); campos de link com "https://" fixo antes do campo (a pessoa digita só o restante; se colar o link inteiro, o https:// sai do campo).
 - **Página da galeria (`public/rede-parceiros/galeria/autorizar/`):** abre sem esperar a IA (antes levava de 9 a 11 s, medido nos logs da função); as sugestões da IA chegam depois e atualizam a prévia sem apagar o que a pessoa digitou; novo campo Senioridade (opções do campo 23 do cadastro, com o nível do card); LinkedIn com "https://" fixo.
 - **Função `galeria-autorizacao`:** `ver` responde sem chamar a IA e informa `ia_pendente`; nova ação `ia`; `decidir` aceita `tempo` (só valores do campo 23) e atualiza `tempo_especialidade` do cadastro quando muda; o histórico da autorização guarda a senioridade exibida.
 - **Verificação executada:** navegador (iPhone 13) com servidor simulado: validação do nome (Matheus e Matheus S recusados; Ana Lu e Maria da Silva aceitos), prefixo fixo (colar link inteiro, apagar tudo, host errado); página da galeria visível em 0,75 s com a IA atrasada 4 s, troca de senioridade refletida na prévia e enviada no formato do cadastro; `node --check` e `esbuild` da função; `npm run build`.
+- **Publicação (16/11):** função `galeria-autorizacao` publicada (versão 13); `ver` no ar responde em 0,8 a 1 s.
 
 ## Estado do repositório encontrado (19/10/2026)
 

@@ -1532,3 +1532,24 @@ html body main h2 span { font-size: inherit !important; }
 html body main h2:not(.secao-escura h2) { color: #131A27; }
 /* Guia de participação: título com linhas equilibradas quando quebra (sem palavra solta na 2ª linha) */
 #guia-titulo { text-wrap: balance; }
+
+/* ---------- Guia de participação: accordions no mesmo estilo dos do Seja Parceiro (padrão único do site) ----------
+   card branco com borda do DS e raio 16px, sem sombra; número em vermelho; pergunta 17px (16px no celular) que fica
+   vermelha quando aberta; resposta 15px graphite-500 com divisor interno alinhado ao texto. */
+html body #accordion-group > * + * { margin-top: 12px !important; }
+html body #accordion-group .accordion-item, html body #accordion-group .accordion-item.active { border-radius: 16px; border: 1px solid rgba(19, 26, 39, 0.09); background: #FFFFFF !important; box-shadow: none !important; }
+html body #accordion-group .accordion-trigger { padding: 20px 24px; gap: 14px; border-radius: 16px; }
+html body #accordion-group .accordion-header, html body #accordion-group .accordion-item.active .accordion-header { font-size: 17px; font-weight: 600; line-height: 1.4; color: #131A27; gap: 14px; align-items: center; }
+html body #accordion-group .accordion-header > span:first-child { flex: none; min-width: 24px; font-size: 15px; font-weight: 600; letter-spacing: .04em; line-height: 1.5; color: #D44D4D; }
+html body #accordion-group .accordion-chevron { width: 20px; height: 20px; color: #627288; }
+html body #accordion-group .accordion-item.active .accordion-chevron { color: #D44D4D; }
+html body #accordion-group .accordion-content > div > div { margin: 0 24px 22px 62px; padding: 16px 0 0; border-top: 1px solid #EDF0F5; font-size: 15px; line-height: 1.65; color: #495669; }
+html body #accordion-group .accordion-content p, html body #accordion-group .accordion-content li, html body #accordion-group .accordion-content span:not(.text-coral-600) { font-size: 15px; line-height: 1.65; color: #495669; }
+html body #accordion-group .accordion-content p.text-slate-800, html body #accordion-group .accordion-content p.text-slate-900, html body #accordion-group .accordion-content strong { font-size: 15px; font-weight: 600; color: #131A27; }
+html body #accordion-group .accordion-content p.text-slate-500 { font-size: 14px; color: #627288; }
+@media (max-width: 767px) {
+  html body #accordion-group .accordion-trigger { padding: 16px 18px; }
+  html body #accordion-group .accordion-header, html body #accordion-group .accordion-item.active .accordion-header { font-size: 16px; }
+  html body #accordion-group .accordion-content > div > div { margin: 0 18px 18px; }
+}
+html body #accordion-group .accordion-item.active .accordion-chevron { transform: rotate(180deg) !important; rotate: none; }

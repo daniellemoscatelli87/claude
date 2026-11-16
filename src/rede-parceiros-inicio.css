@@ -3611,3 +3611,17 @@ html body .rx-mv-grade li.novo, html body .rx-mv-fila li.vez { box-shadow: 0 4px
 @media (max-width: 1023px) { html body .rx-mt-palco[data-match] .rx-mt-simular { align-self: flex-end; margin-left: 0; margin-right: .875rem; } }
 /* convite: divisor acima da assinatura em cinza (borda do DS) */
 html body .rp-carta-rodape { border-top-color: rgba(19, 26, 39, 0.09); }
+/* celular: "Ver simulação" centralizado */
+@media (max-width: 1023px) { html body .rx-mt-palco[data-match] .rx-mt-simular { align-self: center; margin-left: 0; margin-right: 0; } }
+/* "Sobre a rede": sem conectores entre os cards (celular e computador) */
+html body .rx-pilar:not(:last-child)::after { content: none !important; display: none !important; }
+/* celular: timeline do Match animada como a do Projeto Piloto (sem ícones) */
+@media (max-width: 1023px) {
+  html body .rx-mt-palco.tl-anima ul.rx-mt-topicos > li:not(:last-child)::after { background: linear-gradient(to bottom, #D44D4D calc(var(--p, 0) * 100%), #E4E8EF calc(var(--p, 0) * 100%)) !important; }
+  html body .rx-mt-palco.tl-anima ul.rx-mt-topicos > li .rx-mt-topico .rx-mt-tmarca { background: #FFFFFF !important; border-color: #D44D4D !important; box-shadow: none !important;
+    transition: background-color .25s ease, box-shadow .25s ease, scale .4s cubic-bezier(.34, 1.56, .64, 1) !important; }
+  html body .rx-mt-palco.tl-anima ul.rx-mt-topicos > li.tl-feita .rx-mt-topico .rx-mt-tmarca,
+  html body .rx-mt-palco.tl-anima ul.rx-mt-topicos > li.tl-atual .rx-mt-topico .rx-mt-tmarca { background: #D44D4D !important; }
+  html body .rx-mt-palco.tl-anima ul.rx-mt-topicos > li.tl-atual .rx-mt-topico .rx-mt-tmarca { scale: 1.2; box-shadow: 0 0 0 5px rgba(212, 77, 77, .15) !important; }
+}
+@media (max-width: 1023px) and (prefers-reduced-motion: reduce) { html body .rx-mt-palco.tl-anima ul.rx-mt-topicos > li .rx-mt-topico .rx-mt-tmarca { transition: none !important; } }

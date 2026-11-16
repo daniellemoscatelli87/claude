@@ -67,7 +67,7 @@ export function cabecalhoHtml(pagina: Pagina): string {
 export const GAVETA_HTML = `<!-- Gaveta de contato -->
 <div id="drawer-backdrop" aria-hidden="true" class="fixed inset-0 bg-ds-fg/40 backdrop-blur-sm z-40 transition-opacity duration-300 ease-in-out opacity-0 pointer-events-none"></div>
 <aside id="contact-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" class="fixed top-0 right-0 bottom-0 z-50 w-full sm:w-[500px] md:w-[540px] max-w-full bg-white text-ds-fg shadow-ds-xl transition-transform duration-300 ease-in-out flex flex-col justify-between overflow-hidden sm:rounded-l-3xl translate-x-full invisible">
-  <div id="drawer-header" class="px-6 sm:px-8 pt-5 pb-3.5 border-b border-ds-border flex items-start justify-between relative bg-white z-10">
+  <div id="drawer-header" class="gaveta-topo px-6 sm:px-8 pt-5 pb-3.5 flex items-start justify-between relative z-10">
     <div>
       <div class="inline-flex items-center gap-2 text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-ds-primary bg-ds-primary-muted rounded-full px-3 py-0.5 mb-1"><span aria-hidden="true" class="w-1.5 h-1.5 rounded-full bg-ds-primary"></span> Contato &amp; Parcerias</div>
       <h2 id="drawer-title" class="text-[1.5rem] sm:text-[1.875rem] font-extrabold text-ds-fg tracking-[-0.025em] leading-tight">Inicie uma conversa</h2>
