@@ -1353,7 +1353,7 @@ body.parceiros-inicio { background: #EEF2F7 !important; }
 }
 /* celular e tablet: o hero termina um pouco antes da dobra, para um pedacinho da folha branca aparecer acima do botão,
    emendando na foto dos personagens */
-@media (max-width: 1023px) { .rp-hero { min-height: calc(100svh - 59px) !important; } }
+@media (max-width: 1023px) { .rp-hero { min-height: calc(100svh - 62px) !important; } }
 @media (max-width: 1023px) { .rp-hero-modelo { min-height: 200px !important; } }
 /* computador: sem o card branco grande por trás do conteúdo (o fundo da página já é branco) */
 @media (min-width: 1024px) {
