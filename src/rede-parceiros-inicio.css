@@ -3435,3 +3435,7 @@ html body .rx-eco-centro p { max-width: none; font-size: 1.38cqw; line-height: 1
 html body .rx-eco-centro p > span { display: block; white-space: nowrap; }
 html body .rx-eco-centro p { font-size: 1.2cqw; }
 html body .rx-eco-centro p small { font-size: 1.1cqw; }
+/* núcleo: "12 setores" em vermelho e destaque; embaixo "Expertises conectadas." */
+html body .rx-eco-centro p { display: grid; justify-items: center; gap: .35cqw; }
+html body .rx-eco-centro p .rx-eco-num { display: block; font-size: 2cqw; font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; color: #D44D4D; }
+html body .rx-eco-centro p > span { font-size: 1.25cqw; font-weight: 700; color: #131A27; }
