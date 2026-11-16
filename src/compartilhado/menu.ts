@@ -18,6 +18,22 @@ export async function insert(table: string, row: Record<string, unknown>) {
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
+/* Trava o foco do teclado dentro de um painel aberto (menu do celular, gaveta de contato):
+   Tab no último item volta ao primeiro e Shift+Tab no primeiro vai ao último. */
+const FOCAVEIS = 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+function travarFoco(painel: HTMLElement, aberto: () => boolean) {
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab' || !aberto()) return;
+    const itens = [...painel.querySelectorAll<HTMLElement>(FOCAVEIS)].filter((el) => el.offsetParent !== null || el === document.activeElement);
+    if (!itens.length) return;
+    const primeiro = itens[0], ultimo = itens[itens.length - 1];
+    const atual = document.activeElement as HTMLElement | null;
+    if (!atual || !painel.contains(atual)) { e.preventDefault(); (e.shiftKey ? ultimo : primeiro).focus(); return; }
+    if (e.shiftKey && atual === primeiro) { e.preventDefault(); ultimo.focus(); }
+    else if (!e.shiftKey && atual === ultimo) { e.preventDefault(); primeiro.focus(); }
+  });
+}
+
 /* ---------- Cabeçalho: ganha fundo ao rolar; a altura fica em --altura-cabecalho ---------- */
 (() => {
   const h = document.getElementById('site-header');
@@ -205,6 +221,7 @@ function closeDrawer() {
 }
 
 document.querySelectorAll('[data-open-contact]').forEach((b) => b.addEventListener('click', openDrawer));
+travarFoco(drawer, () => !drawer.classList.contains('translate-x-full'));
 $('btn-close-drawer').addEventListener('click', closeDrawer);
 $('btn-success-close').addEventListener('click', closeDrawer);
 backdrop.addEventListener('click', closeDrawer);
@@ -411,6 +428,8 @@ contactForm.addEventListener('change', salvarRascunho);
   document.getElementById('menu-fechar')?.addEventListener('click', () => { definir(false); botao.focus(); });
   fundo?.addEventListener('click', () => definir(false));
   const aberto = () => botao.getAttribute('aria-expanded') === 'true';
+  // O botão de fechar fica dentro do painel; o foco circula só pelo menu enquanto ele estiver aberto.
+  travarFoco(painel, aberto);
   botao.addEventListener('click', () => {
     const abrir = !aberto();
     definir(abrir);
