@@ -256,3 +256,6 @@ html.menu-aberto { overflow: hidden; }
 }
 /* celular: durante o gesto que traz a folha para o topo, o encaixe é obrigatório (a folha para colada no menu) */
 @media (max-width: 1023px) { html.folha-trava { scroll-snap-type: y mandatory; } }
+
+/* celular: descrição abaixo do título de cada seção no mesmo tamanho em todas as páginas (14px, como na Home) */
+@media (max-width: 767px) { html body .sec-desc { font-size: .875rem !important; line-height: 1.55 !important; } }

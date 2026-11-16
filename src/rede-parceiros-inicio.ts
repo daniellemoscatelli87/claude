@@ -871,3 +871,21 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   });
   document.addEventListener('click', () => fechar());
 }
+
+/* ---------- Celular: as etapas da timeline do Match e os cards de "Sobre a rede" surgem um a um conforme a rolagem ---------- */
+{
+  const pequeno = matchMedia('(max-width: 1023px)');
+  const itens = Array.from(document.querySelectorAll<HTMLElement>('.rx-mt-palco[data-match] .rx-mt-topicos > li, .rx-pilares > li.rx-pilar'));
+  if (itens.length && pequeno.matches && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const obs = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('visto');
+      obs.unobserve(e.target);
+    }), { threshold: 0.2, rootMargin: '0px 0px -12% 0px' });
+    itens.forEach((el) => {
+      // o que já está na tela ao carregar aparece sem esperar a rolagem
+      el.classList.add('surge');
+      obs.observe(el);
+    });
+  }
+}
