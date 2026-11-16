@@ -3341,3 +3341,40 @@ html body .rx-mt-c7 .rx-kb-ju .rx-kb-novo { top: .4375rem; right: .4375rem; padd
 html body .rx-mt-c7 .rx-kb-ju .rx-kb-corpo { padding-right: 2.25rem; }
 html body .rx-mt-c7 .rx-kb-ju .rx-kb-novo { top: auto; bottom: .5rem; right: .5rem; }
 html body .rx-mt-c7 .rx-kb-ju .rx-kb-corpo { padding-right: 0; }
+
+/* =========================================================================
+   Ajustes finos do Match de profissionais
+   ========================================================================= */
+/* fundo escuro das modais cobre toda a janela do mockup, até a borda */
+html body .rx-mt-c7 { overflow: visible; }
+html body .rx-mv-kbveu { inset: -1.5rem; }
+/* briefing escrito frase a frase (sem cortar linhas no meio) */
+html body .rx-mv-brief span { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  html body .rx-mv25.ativa .rx-mv-brief { animation: none; }
+  html body .rx-mv25.ativa .rx-mv-brief span { animation: rx-mv-frase .7s ease both; animation-delay: calc(2.3s + var(--k) * .9s); }
+}
+@media (prefers-reduced-motion: reduce) { html body .rx-mv-brief span { opacity: 1; } }
+@keyframes rx-mv-frase { from { opacity: 0; filter: blur(3px); } to { opacity: 1; filter: none; } }
+/* kanban: os cards apagados voltam às cores suavemente; a notificação chega devagar */
+html body .rx-mt-c7 .rx-kb-card { transition: opacity 1.4s ease, filter 1.4s ease; }
+html body .rx-mt-c7.foco .rx-kb-card:not(.rx-kb-ju) { transition: opacity 1.4s ease, filter 1.4s ease; }
+html body .rx-mv-sino { transition: border-color .8s ease, color .8s ease; }
+html body .rx-mv-sino.chega > b { animation: rx-mv-badge .9s cubic-bezier(.16,1,.3,1) forwards; }
+html body .rx-mv-sino.chega > svg:first-child { animation: rx-mv-balanca 1.4s ease-in-out .2s 1; }
+@keyframes rx-mv-badge { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: none; } }
+html body .rx-mv-kbveu { transition: opacity .7s ease; }
+html body .rx-mv-kbmodal { transition: opacity .6s ease, transform .7s cubic-bezier(.16,1,.3,1); }
+
+/* coluna da esquerda em timeline: linha vertical ligando as fases; fase atual em vermelho, já vistas marcadas */
+html body .rx-mt-topicos { gap: .25rem; }
+html body .rx-mt-topicos > li { position: relative; }
+html body .rx-mt-topicos > li:not(:last-child)::after { content: ""; position: absolute; left: calc(.875rem + .4375rem - 1px); top: 1.85rem; bottom: -.6rem; width: 2px; border-radius: 2px; background: #E4E8EF; transition: background-color .6s ease; }
+html body .rx-mt-topicos > li:has(.feito)::after { background: rgba(212, 77, 77, .55); }
+html body .rx-mt-topico, html body .rx-mt-topico.ativa { background: transparent !important; box-shadow: none !important; }
+html body .rx-mt-topico:hover { background: rgba(237, 240, 245, .5) !important; }
+html body .rx-mt-tmarca { position: relative; z-index: 1; width: .875rem; height: .875rem; margin-top: .3rem; border: 2px solid #D6DCE6; background: #FFFFFF; }
+html body .rx-mt-topico.feito .rx-mt-tmarca { border-color: #D44D4D; background: #D44D4D; box-shadow: none; }
+html body .rx-mt-topico.ativa .rx-mt-tmarca { border-color: #D44D4D; background: #FFFFFF; box-shadow: 0 0 0 4px rgba(212, 77, 77, .15); }
+html body .rx-mt-topico.ativa .rx-mt-tmarca::after { content: ""; position: absolute; inset: 2px; border-radius: 9999px; background: #D44D4D; }
+html body .rx-mt-topico.feito strong { color: #283043; }

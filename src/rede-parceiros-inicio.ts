@@ -644,13 +644,15 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const total = cenas.length;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const LENTO = 1.35;
-  const BASE = [0, 6500, 4000, 6500, 8000, 7000, 10000, 7000, 13500, Infinity];
+  const BASE = [0, 6500, 4000, 6500, 8000, 7000, 12500, 7000, 13500, Infinity];
+  const EXTRA: Record<number, number> = { 6: 1.25 }; // a conversa (etapa 6) roda um pouco mais devagar
   const DUR = (n: number) => (BASE[n] || 6500) * LENTO;
   let atual = 1, decorrido = 0, pausado = reduzir, visivel = false, ultimo = 0, rodando = true;
   const cenaAtual = () => cenas[atual - 1];
   // aplica o ritmo (e a pausa, se for o caso) às animações de um elemento e dos filhos
   const ritmo = (el: Element | null | undefined) => {
-    el?.getAnimations({ subtree: true }).forEach((a) => { a.playbackRate = 1 / LENTO; if (!rodando) a.pause(); });
+    const f = LENTO * (EXTRA[atual] || 1);
+    el?.getAnimations({ subtree: true }).forEach((a) => { a.playbackRate = 1 / f; if (!rodando) a.pause(); });
   };
 
   /* Kanban (etapa 8): o card da Juliana entra em "Convites" com destaque; chega uma notificação no sino; o cursor clica no
@@ -763,7 +765,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     c.classList.add('ativa');
     void c.offsetWidth;
     ritmo(c);
-    topicos.forEach((t) => { const on = (t.dataset.etapas || '').split(',').map(Number).includes(atual); t.classList.toggle('ativa', on); t.setAttribute('aria-current', on ? 'step' : 'false'); });
+    topicos.forEach((t) => { const et = (t.dataset.etapas || '').split(',').map(Number); const on = et.includes(atual); t.classList.toggle('ativa', on); t.classList.toggle('feito', Math.max(...et) < atual); t.setAttribute('aria-current', on ? 'step' : 'false'); });
     // topo do mockup: sempre só "Rede de Parceiros" (fixo no HTML)
   };
   palco.querySelector<HTMLButtonElement>('.rx-mv-rever')?.addEventListener('click', () => mostrar(1));
