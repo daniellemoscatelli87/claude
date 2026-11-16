@@ -199,6 +199,9 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   let visivel = false;
   new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }, { threshold: 0.3 }).observe(quadro.closest('.rx-kanban') || quadro);
   // ritmo moderado: um card muda de coluna a cada 3,2 s e, entre uma mudança e outra, as barras dos projetos em andamento avançam
+  // dentro do mockup do Match de profissionais o quadro fica parado: o destaque é só o card da Juliana (cena do match)
+  const noMockup = !!quadro.closest('.rx-mt-c7');
+  if (noMockup) return;
   setInterval(() => { if (!pausado && visivel && !document.hidden) avancar(); }, 3200);
   setInterval(() => {
     if (pausado || !visivel || document.hidden) return;
@@ -644,13 +647,14 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const total = cenas.length;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // tempo de cada etapa; a base de parceiros (2) passa logo depois dos confetes para o clique em "Novo projeto"
-  const DUR = (n: number) => ([0, 6500, 4000, 6500, 8000, 7000, 8500, 5500, 10000][n] || 6500);
+  const DUR = (n: number) => ([0, 6500, 4000, 6500, 8000, 7000, 8500, 7000, 9000][n] || 6500);
   let atual = 1, decorrido = 0, pausado = reduzir, sobre = false, visivel = false, ultimo = 0;
   const mostrar = (n: number) => {
     const antes = atual;
     atual = ((n - 1 + total) % total) + 1;
     // da base de parceiros (2) para o novo projeto (3) a tela é a mesma: troca direta, sem o esmaecer
     palco.classList.toggle('direto', antes === 2 && atual === 3);
+    kanban(atual === total);
     decorrido = 0;
     palco.dataset.n = String(atual);
     [txts, cenas].forEach((g) => g.forEach((e) => {
@@ -663,6 +667,42 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     if (agoraN) agoraN.textContent = `Etapa ${String(atual).padStart(2, '0')} de ${String(total).padStart(2, '0')}`;
     if (agoraT) agoraT.textContent = NOMES[atual - 1] || '';
     barra?.style.setProperty('--pn', '0');
+  };
+  /* cena do kanban: o card da Juliana entra em "Convites" com destaque; chega o aviso de que ela aceitou; o cursor fecha
+     o aviso e o card passa para "Em colaboração". Os outros cards ficam apagados para a atenção ficar nela. */
+  const quadroMt = palco.querySelector<HTMLElement>('.rx-mt-c7 .rx-kb-quadro');
+  const colsMt = quadroMt ? Array.from(quadroMt.querySelectorAll<HTMLElement>('.rx-kb-cards')) : [];
+  const toast = palco.querySelector<HTMLElement>('.rx-mv-toast');
+  let cardJu: HTMLLIElement | null = null;
+  let timers: number[] = [];
+  const contarMt = () => quadroMt?.querySelectorAll<HTMLElement>('.rx-kb-col').forEach((c) => { const q = c.querySelector('.rx-kb-qtd'); if (q) q.textContent = String(c.querySelectorAll('.rx-kb-card').length); });
+  const kanban = (on: boolean) => {
+    timers.forEach(clearTimeout); timers = [];
+    cardJu?.remove(); cardJu = null;
+    toast?.classList.remove('mostra', 'fecha');
+    palco.querySelector('.rx-mt-c7')?.classList.toggle('foco', on);
+    palco.querySelector('.rx-mt-c7')?.classList.remove('movendo');
+    contarMt();
+    if (!on || colsMt.length < 2) return;
+    const li = document.createElement('li');
+    li.className = 'rx-kb-card rx-kb-ju';
+    li.innerHTML = '<img src="/rede-parceiros/avatares/avatar-3.webp" alt="" width="32" height="32"><span class="rx-kb-corpo"><strong>Design Organizacional</strong><span class="rx-kb-cargo">Product Designer</span><span class="rx-kb-status" data-s="0">Convite</span><span class="rx-kb-barra" aria-hidden="true"><i style="width:0%"></i></span></span><em class="rx-kb-novo">Novo</em>';
+    cardJu = li;
+    const t = (ms: number, f: () => void) => timers.push(window.setTimeout(f, ms));
+    t(500, () => { colsMt[0].prepend(li); contarMt(); li.classList.add('entra'); });
+    t(2200, () => toast?.classList.add('mostra'));
+    t(4900, () => toast?.classList.add('fecha'));
+    t(5400, () => {
+      const antes = li.getBoundingClientRect();
+      colsMt[1].prepend(li); contarMt();
+      const st = li.querySelector<HTMLElement>('.rx-kb-status')!; st.textContent = 'Em colaboração'; st.dataset.s = '1';
+      li.querySelector<HTMLElement>('.rx-kb-barra i')!.style.width = '14%';
+      const depois = li.getBoundingClientRect();
+      const cena = palco.querySelector('.rx-mt-c7');
+      cena?.classList.add('movendo');
+      li.animate([{ transform: `translate(${antes.left - depois.left}px, ${antes.top - depois.top}px)` }, { transform: 'none' }], { duration: reduzir ? 0 : 750, easing: 'cubic-bezier(0.34, 1.2, 0.64, 1)' })
+        .finished.then(() => cena?.classList.remove('movendo')).catch(() => cena?.classList.remove('movendo'));
+    });
   };
   const atualizarPausa = () => { pausa.textContent = pausado ? 'Retomar' : 'Pausar'; pausa.setAttribute('aria-pressed', String(pausado)); };
   palco.querySelectorAll<HTMLButtonElement>('[data-passo]').forEach((b) => b.addEventListener('click', () => mostrar(atual + Number(b.dataset.passo))));
