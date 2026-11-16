@@ -3235,3 +3235,6 @@ html body .rx-mv-voto .rx-mv-descartar .rx-mv-cursor { left: 55%; top: 55%; widt
   .rx-mv-voto > span { width: 1.75rem; height: 1.75rem; }
   html body .rx-mv-voto .rx-mv-descartar { height: 1.75rem; }
 }
+/* ranking: só o próprio link vira "Convite enviado"; o status embaixo do nome não muda */
+html body .rx-mv6.ativa .rx-mv-fila2 .rx-mv-st .a, html body .rx-mv6.ativa .rx-mv-fila2 .rx-mv-st .b { animation: none !important; }
+html body .rx-mv-fila2 .rx-mv-st .a { opacity: 1; } html body .rx-mv-fila2 .rx-mv-st .b { opacity: 0; }
