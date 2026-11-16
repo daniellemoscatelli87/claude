@@ -3380,3 +3380,32 @@ html body .rx-mt-topico.ativa .rx-mt-tmarca::after { content: ""; position: abso
 html body .rx-mt-topico.feito strong { color: #283043; }
 /* título introdutório da coluna esquerda */
 html body .rx-mt-intro { font-size: 1.0625rem; font-weight: 700; color: #131A27; }
+
+/* =========================================================================
+   "O que é a rede" — cards invertidos: ícone vermelho numa base rosa-clara à esquerda e o número pequeno no canto
+   superior direito; sem a linha divisória. Sem animação automática: no hover a borda ganha a luz girando e o
+   número fica vermelho.
+   ========================================================================= */
+html body .rx-pilar { grid-template-columns: 3rem minmax(0, 1fr) !important; column-gap: 1.125rem !important; }
+html body .rx-pilar::before { content: none !important; display: none !important; }
+html body .rx-pilar-ic { position: static !important; display: grid !important; place-items: center; width: 3rem !important; height: 3rem !important; border-radius: 14px !important;
+  background: #FDF2F2 !important; color: #D44D4D !important; grid-column: 1 !important; grid-row: 1 / span 2 !important; }
+html body .rx-pilar-ic svg { position: static !important; width: 1.375rem !important; height: 1.375rem !important; color: #D44D4D !important; animation: none !important; }
+html body .rx-pilar-ic::before { position: absolute; top: 1rem; right: 1.125rem; font-size: .875rem !important; font-weight: 700; letter-spacing: .04em; line-height: 1; color: #B3BDD0 !important; transition: color .3s ease; }
+html body .rx-pilar h3, html body .rx-pilar p { grid-column: 2 !important; }
+html body .rx-pilar h3 { padding-right: 2rem !important; }
+/* sem animação automática */
+html body .rx-pilar, html body .rx-pilar-borda, html body .rx-pilar-feixe, html body .rx-pilar-feixe::after { animation: none !important; }
+html body .rx-pilar-feixe { display: none !important; }
+html body .rx-pilar-borda { opacity: 0; transition: opacity .3s ease; }
+@media (hover: hover) {
+  html body .rx-pilar:hover .rx-pilar-borda { opacity: 1; }
+  html body .rx-pilar:hover .rx-pilar-ic::before { color: #D44D4D !important; }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { html body .rx-pilar:hover .rx-pilar-borda { animation: rx-gira 2.4s linear infinite !important; } }
+@media (max-width: 767px) {
+  html body .rx-pilar { grid-template-columns: 2.75rem minmax(0, 1fr) !important; }
+  html body .rx-pilar-ic { width: 2.75rem !important; height: 2.75rem !important; border-radius: 12px !important; }
+  html body .rx-pilar-ic svg { width: 1.25rem !important; height: 1.25rem !important; }
+  html body .rx-pilar-ic::before { top: .875rem; right: 1rem; }
+}
