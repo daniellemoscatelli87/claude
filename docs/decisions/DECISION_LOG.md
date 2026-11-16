@@ -352,6 +352,18 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 
 ---
 
+## D-030 · 16/11/2026 · Rastreamento dos e-mails da Rede de Parceiros (site)
+
+- **Origem:** Dona do produto: saber quando cada integrante abre o comunicado da galeria, ser notificada e ver isso no perfil. Respostas: abertura e cliques; aviso no painel (sino) e no perfil; frase na Política de Privacidade aprovada.
+- **Decisão:**
+  - os e-mails do convite da galeria e dos comunicados registram entrega, abertura e clique pelos avisos (webhook) do Resend, gravados por e-mail enviado em `email_envios`, associado ao cadastro;
+  - aviso no sino da área restrita na primeira abertura e no primeiro clique de cada e-mail; o aviso sai quando o perfil é aberto;
+  - Política de Privacidade passa a informar o registro de entrega, abertura e acesso aos links.
+- **Limites conhecidos:** a abertura é estimativa (Apple Mail abre sozinho; bloqueio de imagens esconde aberturas); o clique é o sinal confiável; só vale para e-mails enviados depois da ativação.
+- **Segurança:** avisos aceitos só com assinatura válida do Resend (segredo `RESEND_WEBHOOK_SECRET` nos segredos do Supabase, nunca no código); tabelas com RLS só para a administradora; e-mails que não são da rede são ignorados.
+
+---
+
 ## Decisões pendentes
 
 
