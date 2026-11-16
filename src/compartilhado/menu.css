@@ -253,3 +253,12 @@ html.menu-aberto { overflow: hidden; }
    num degradê sutil até o formulário, sem linha divisória */
 html body .gaveta-topo { padding-bottom: 2rem !important; border-bottom: 0 !important;
   background: linear-gradient(180deg, #EDF0F5 0%, #EDF0F5 72%, rgba(255, 255, 255, 0) 100%) !important; }
+
+/* celular: a faixa escura atrás dos botões flutuantes continua 6rem abaixo da borda da tela. No Safari do iPhone, ao chegar
+   de outra página já rolada, a tela mostra um pedaço além da borda informada ao site; sem isso ele ficava branco.
+   Dentro da tela, o degradê é o mesmo de antes. */
+@media (max-width: 767px) {
+  html body .faixa-flutuante { bottom: -6rem; height: 13.5rem;
+    background: linear-gradient(to top, rgba(13, 17, 25, 0.6) 0, rgba(13, 17, 25, 0.6) 6rem, rgba(13, 17, 25, 0.35) 9.375rem, rgba(13, 17, 25, 0) 13.5rem);
+    -webkit-mask-image: linear-gradient(to top, #000 9rem, transparent 13.5rem); mask-image: linear-gradient(to top, #000 9rem, transparent 13.5rem); }
+}
