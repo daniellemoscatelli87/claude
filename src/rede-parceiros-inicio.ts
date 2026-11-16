@@ -475,6 +475,12 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(f); } }, { passive: true });
   window.addEventListener('resize', f);
   if ('ResizeObserver' in window) new ResizeObserver(f).observe(hero);
+  // recalcula também quando a página termina de carregar, ao voltar/chegar pelo histórico do Safari e quando o tamanho de
+  // algo muda (fontes e imagens que chegam depois mudam a posição da folha)
+  window.addEventListener('load', f);
+  window.addEventListener('pageshow', f);
+  requestAnimationFrame(() => requestAnimationFrame(f));
+  if ('ResizeObserver' in window) { const ro = new ResizeObserver(() => f()); ro.observe(document.body); }
 })();
 
 /* ---------- "Onde buscamos": carrossel de setores (setas, pontos, arrastar e teclado) ---------- */
