@@ -259,3 +259,8 @@ html.menu-aberto { overflow: hidden; }
 
 /* celular: descrição abaixo do título de cada seção no mesmo tamanho em todas as páginas (14px, como na Home) */
 @media (max-width: 767px) { html body .sec-desc { font-size: .875rem !important; line-height: 1.55 !important; } }
+
+/* Gavetas de contato e de cadastro: cabeçalho como o do cadastro do Seja Parceiro — fundo graphite-50 que se dissolve
+   num degradê sutil até o formulário, sem linha divisória */
+html body .gaveta-topo { padding-bottom: 2rem !important; border-bottom: 0 !important;
+  background: linear-gradient(180deg, #EDF0F5 0%, #EDF0F5 72%, rgba(255, 255, 255, 0) 100%) !important; }
