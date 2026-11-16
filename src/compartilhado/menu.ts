@@ -99,6 +99,8 @@ function travarFoco(painel: HTMLElement, aberto: () => boolean) {
   window.addEventListener('scroll', () => requestAnimationFrame(posAlca), { passive: true });
   window.addEventListener('resize', posAlca);
   window.addEventListener('load', posAlca);
+  window.addEventListener('pageshow', posAlca);
+  if ('ResizeObserver' in window) new ResizeObserver(() => posAlca()).observe(document.body);
   requestAnimationFrame(posAlca);
   requestAnimationFrame(() => requestAnimationFrame(posAlca)); // o espaço do topo de cada página é medido pelo script da própria página, logo depois
 })();
