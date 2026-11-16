@@ -86,7 +86,20 @@ const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as 
     window.scrollTo({ top: destino, behavior: reduzir.matches ? 'auto' : 'smooth' });
   };
   const agendar = (ms: number) => { clearTimeout(espera); espera = window.setTimeout(completar, ms); };
-  window.addEventListener('touchstart', () => { tocando = true; clearTimeout(espera); }, { passive: true });
+  /* Trava: um gesto que começa com a folha abaixo do menu termina com a folha colada no topo — mesmo num deslize rápido,
+     a rolagem para ali (encaixe obrigatório só durante esse gesto, mais uma parada de segurança). Só o gesto seguinte rola
+     o conteúdo, com a rolagem nativa do celular. */
+  let trava = false;
+  const ligarTrava = (on: boolean) => { trava = on; raiz.classList.toggle('folha-trava', on); };
+  const pararNaFolha = () => {
+    if (!trava || !pequeno.matches) return;
+    const alvo = alvoFolha();
+    if (window.scrollY > alvo + 1) window.scrollTo({ top: alvo, behavior: 'auto' });
+  };
+  window.addEventListener('scroll', () => { if (trava && !tocando) pararNaFolha(); }, { passive: true });
+  // a trava continua até o próximo toque: então, com a folha já colada, ela é desligada e o conteúdo rola livre
+  window.addEventListener('touchstart', () => { tocando = true; clearTimeout(espera); ligarTrava(pequeno.matches && window.scrollY < alvoFolha() - 1); }, { passive: true });
+  window.addEventListener('touchend', () => { tocando = false; pararNaFolha(); }, { passive: true });
   window.addEventListener('touchend', () => { tocando = false; agendar(160); }, { passive: true });
   window.addEventListener('touchcancel', () => { tocando = false; agendar(160); }, { passive: true });
   const atualizar = () => {

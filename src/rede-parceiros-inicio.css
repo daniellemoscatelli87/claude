@@ -3442,3 +3442,73 @@ html body .rx-eco-centro p > span { font-size: 1.25cqw; font-weight: 700; color:
 html body .rx-eco-centro p .rx-eco-num { font-size: 1.6cqw; font-weight: 700; }
 /* núcleo: compensa o espaço interno do ícone e do texto para o conteúdo ficar exatamente no centro vertical */
 html body .rx-eco-centro { padding-bottom: .23cqw; }
+/* celular e tablet: setores em volta da roda, como no computador, só com o ícone; ao tocar, o nome aparece num balão */
+.rx-eco-cm { display: none; }
+@media (max-width: 1023px) {
+  html body .rx-eco { aspect-ratio: 1; }
+  html body .rx-eco-palco { width: 149.13%; left: -24.56%; top: -2.43%; }
+  html body .rx-eco-setores { display: block; }
+  html body .rx-eco-cm { display: inline; }
+  html body .rx-eco-lista { display: none; }
+  html body .rx-eco-setor { left: var(--ml) !important; top: var(--mt) !important; z-index: 2; display: grid; place-items: center; gap: 0; width: 6cqw; min-width: 0; height: 6cqw; min-height: 0; padding: 0; border-radius: 9999px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  html body .rx-eco-setor svg { width: 2.9cqw; height: 2.9cqw; }
+  html body .rx-eco-setor > span { position: absolute; display: none; padding: .4rem .65rem; border-radius: .5rem; background: #131A27; color: #FFFFFF; font-size: .75rem; font-weight: 600; line-height: 1.25; white-space: nowrap; box-shadow: 0 4px 14px rgba(13, 17, 25, .18); pointer-events: none; }
+  html body .rx-eco-setor > span br { display: none; }
+  html body .rx-eco-setor.aberto { z-index: 3; color: #D44D4D; border-color: rgba(212, 77, 77, .45); }
+  html body .rx-eco-setor.aberto > span { display: block; }
+  html body .rx-eco-setor[data-lado^="c"] > span { left: 50%; transform: translateX(-50%); }
+  html body .rx-eco-setor[data-lado^="e"] > span { left: 0; }
+  html body .rx-eco-setor[data-lado^="d"] > span { right: 0; }
+  html body .rx-eco-setor[data-lado$="b"] > span { top: calc(100% + .4rem); }
+  html body .rx-eco-setor[data-lado$="a"] > span { bottom: calc(100% + .4rem); }
+  html body .rx-eco-esp { font-size: 1.55cqw; }
+  html body .rx-eco-esp svg { width: 3.4cqw; height: 3.4cqw; }
+  html body .rx-eco-centro p .rx-eco-num { font-size: 2cqw; }
+  html body .rx-eco-centro p > span { font-size: 1.55cqw; }
+  html body .rx-eco-centro svg { width: 4cqw; height: 4cqw; }
+}
+.rx-eco.anima .rx-eco-cm { opacity: 0; }
+.rx-eco.anima .rx-eco-cm.mostrado { opacity: 1; transition: opacity .35s ease; }
+/* celular e tablet: no núcleo, só "12 setores" */
+@media (max-width: 1023px) { html body .rx-eco-centro p > span { display: none; } }
+
+/* =========================================================================
+   Match no celular e tablet: timeline parada (sem animação), botão "Ver simulação" e o mockup numa janela em tela
+   cheia, com cara de app no celular. No computador nada muda.
+   ========================================================================= */
+.rx-mt-simular, .rx-mt-janela { display: none; }
+@media (max-width: 1023px) {
+  html body .rx-mt-palco[data-match] > .rx-mt-dir, html body .rx-mt-palco[data-match] .rx-mt-dir { display: none; }
+  html body .rx-mt-palco[data-match] .rx-mt-esq { display: flex; flex-direction: column; }
+  html body .rx-mt-palco[data-match] .rx-mt-topico { pointer-events: none; cursor: default; }
+  html body .rx-mt-palco[data-match] .rx-mt-topico .rx-mt-tmarca { border-color: #D44D4D !important; background: #D44D4D !important; box-shadow: none !important; transition: none !important; }
+  html body .rx-mt-palco[data-match] .rx-mt-topico .rx-mt-tmarca::after { content: none !important; }
+  html body .rx-mt-palco[data-match] .rx-mt-topico strong { color: #131A27 !important; }
+  html body .rx-mt-palco[data-match] .rx-mt-topico .rx-mt-tcorpo > span { display: block !important; color: #495669 !important; }
+  html body .rx-mt-palco[data-match] .rx-mt-topicos > li:not(:last-child)::after { background: rgba(212, 77, 77, .55) !important; transition: none !important; }
+  html body .rx-mt-palco[data-match] .rx-mt-topico .rx-mt-tchips { display: none !important; }
+  .rx-mt-simular { display: inline-flex; align-self: flex-start; align-items: center; justify-content: center; height: 3rem; margin: 1.25rem 0 0 .875rem; padding: 0 1.5rem; border-radius: 9999px; border: 1.5px solid #D44D4D; background: transparent; color: #D44D4D; font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color .2s ease; }
+  .rx-mt-simular:hover, .rx-mt-simular:active { background: #FDF2F2; }
+  .rx-mt-simular:focus-visible { outline: none; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px rgba(212, 77, 77, 0.6); }
+
+  html.rx-mt-travada, html.rx-mt-travada body { overflow: hidden !important; }
+  html body .rx-mt-janela:not([hidden]) { position: fixed; inset: 0; z-index: 1000; display: flex; flex-direction: column; max-width: none; margin: 0; gap: 0; padding: 0 0 env(safe-area-inset-bottom); background: #F6F7FA; }
+  .rx-mt-jcab { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: calc(.625rem + env(safe-area-inset-top)) .75rem .625rem 1.25rem; background: #FFFFFF; border-bottom: 1px solid #EDF0F5; }
+  .rx-mt-jcab strong { font-size: 1rem; font-weight: 700; color: #131A27; }
+  .rx-mt-jfechar { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 0; border-radius: 9999px; background: transparent; color: #131A27; cursor: pointer; }
+  .rx-mt-jfechar:hover { background: #EDF0F5; }
+  .rx-mt-jfechar:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212, 77, 77, .45); }
+  .rx-mt-jfechar svg { width: 1.375rem; height: 1.375rem; }
+  html body .rx-mt-janela .rx-mt-dir { display: flex !important; flex: 1; min-height: 0; order: 0; }
+  html body .rx-mt-janela .rx-mt-tela { display: flex; flex-direction: column; width: 100%; height: 100%; border: 0; border-radius: 0; box-shadow: none; }
+  html body .rx-mt-janela .rx-mt-cenas { flex: 1; height: auto !important; min-height: 0 !important; }
+}
+@media (max-width: 1023px) {
+  html body .rx-mt-janela:not([hidden]) { align-items: stretch; justify-content: flex-start; }
+  html body .rx-mt-janela .rx-mt-dir { position: relative; overflow: hidden; align-items: stretch; }
+  html body .rx-mt-janela .rx-mt-tela { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  html body .rx-mt-janela .rx-mt-tela-topo { order: 0; flex: none; }
+  /* as duas seleções do cadastro ficam uma sob a outra: a lista de cima abre por cima do campo de baixo */
+  html body .rx-mf-grade .rx-mf-campo.sel { z-index: calc(10 - var(--d)); }
+}
+@media (max-width: 1023px) { html body .rx-mt-palco[data-match] .rx-mt-simular { order: 5; } }
