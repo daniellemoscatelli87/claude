@@ -3176,3 +3176,4 @@ html body .rx-mv-toast::before { content: ""; position: absolute; top: -6px; rig
 @keyframes rx-mf-lista { 0% { opacity: 0; transform: translateY(-4px); } 15%, 80% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-4px); } }
 @keyframes rx-mf-opt { to { background: #FDF2F2; color: #D44D4D; font-weight: 600; } }
 @keyframes rx-mf-gira { 0%, 100% { transform: none; } 15%, 80% { transform: rotate(180deg); } }
+html body .rx-mv4 .rx-mv-desafio strong { margin-bottom: 0; }
