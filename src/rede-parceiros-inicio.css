@@ -3542,3 +3542,19 @@ html body .rx-eco-centro { padding-bottom: .23cqw; }
 }
 @keyframes rx-mv-entra-fila-j { from { max-height: 0; opacity: 0; } to { max-height: 12rem; padding-top: 2.25rem; padding-bottom: 1.125rem; border-width: 1px; opacity: 1; margin-top: 0; } }
 @media (max-width: 1023px) { html body .rx-mt-janela .rx-mv-fila li.vez .rx-mv-convidar { justify-items: start; } }
+/* conversa: a resposta final do Studio também é digitada no campo e enviada (cursor clica em enviar) antes de aparecer */
+html body .rx-mv-campo-msg b.r2 { position: absolute; left: .875rem; right: .875rem; }
+@media (prefers-reduced-motion: no-preference) {
+  html body .rx-mv5.ativa .rx-mv-campo-msg b.r2 { animation: rx-mv-msg-dig 2s linear 5.5s both; }
+  html body .rx-mv5.ativa .rx-mv-campo-msg .ph { animation: rx-mv-ph 2.2s linear .3s both, rx-mv-ph2 2s linear 5.5s forwards; }
+  html body .rx-mv5.ativa .rx-mv-enviar-msg .rx-mv-cursor { animation: rx-mv-cur3 1.4s cubic-bezier(.45,0,.25,1) 1.4s both, rx-mv-cur3b 1.4s cubic-bezier(.45,0,.25,1) 6.5s forwards; }
+  html body .rx-mv5.ativa .rx-mv-enviar-msg { animation: rx-mv-clique .3s ease 2.5s both, rx-mv-clique2 .3s ease 7.6s forwards; }
+  html body .rx-mv5.ativa .rx-mv-msg.eu.r2 { animation: rx-mt-surge .45s cubic-bezier(.16,1,.3,1) 7.8s both; }
+  html body .rx-mv5.ativa .rx-mv-fechar .rx-mv-cursor { animation: rx-mv-cur2 1s cubic-bezier(.45,0,.25,1) 9.1s both; }
+  html body .rx-mv5.ativa .rx-mv-fechar { animation: rx-mv-clique .3s ease 10s both; }
+  html body .rx-mv5.ativa .rx-mv-conversa { animation: rx-mv-fecha .45s ease 10.25s both; }
+}
+@media (prefers-reduced-motion: reduce) { html body .rx-mv-campo-msg b.r2 { display: none; } }
+@keyframes rx-mv-ph2 { 0%, 8% { opacity: 1; } 10%, 98% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes rx-mv-cur3b { 0% { opacity: 0; transform: translate(-6rem, -5rem); } 20% { opacity: 1; } 75% { opacity: 1; transform: none; } 85% { transform: scale(.85); } 100% { opacity: 0; transform: none; } }
+@keyframes rx-mv-clique2 { 50% { transform: scale(.94); } 100% { transform: none; } }
