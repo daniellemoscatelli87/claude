@@ -282,3 +282,5 @@ html body #ie3-home .ih-rec-titulo { font-size: 1.25rem !important; font-weight:
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
   html body .ih-hero .ih-tag::after { content: ""; position: absolute; left: 16px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 9999px; background: #D44D4D; opacity: .75; animation: ih-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; }
 }
+/* Celular: o "Em breve" começa abaixo da tampa arredondada da folha (28px), sem ser cortado quando a folha cola no topo */
+@media (max-width: 1023px) { html body .ih-movel { padding-top: 2.5rem; } }
