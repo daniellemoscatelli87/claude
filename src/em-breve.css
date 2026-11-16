@@ -284,3 +284,15 @@ html body #ie3-home .ih-rec-titulo { font-size: 1.25rem !important; font-weight:
 }
 /* Celular: o "Em breve" começa abaixo da tampa arredondada da folha (28px), sem ser cortado quando a folha cola no topo */
 @media (max-width: 1023px) { html body .ih-movel { padding-top: 2.5rem; } }
+
+/* Celular e tablet (Home): os cantos arredondados abaixo do menu são um recorte do topo fixo (e não uma faixa de cor
+   fixa), então o conteúdo que passa por baixo aparece com a cor dele */
+@media (max-width: 1023px) {
+  html body .ih-hero { clip-path: none !important;
+    -webkit-mask-image: linear-gradient(#000, #000), radial-gradient(circle at 100% 100%, transparent 27.5px, #000 28px), radial-gradient(circle at 0 100%, transparent 27.5px, #000 28px);
+    mask-image: linear-gradient(#000, #000), radial-gradient(circle at 100% 100%, transparent 27.5px, #000 28px), radial-gradient(circle at 0 100%, transparent 27.5px, #000 28px);
+    -webkit-mask-size: 100% var(--ih-tampa, 100vh), 28px 28px, 28px 28px; mask-size: 100% var(--ih-tampa, 100vh), 28px 28px, 28px 28px;
+    -webkit-mask-position: 0 0, 0 var(--ih-tampa, 100vh), 100% var(--ih-tampa, 100vh); mask-position: 0 0, 0 var(--ih-tampa, 100vh), 100% var(--ih-tampa, 100vh);
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+  .ih-tampa { visibility: hidden; } /* continua existindo só para a aba "Saiba mais" copiar a cor */
+}
