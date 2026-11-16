@@ -3440,3 +3440,5 @@ html body .rx-eco-centro p { display: grid; justify-items: center; gap: .35cqw; 
 html body .rx-eco-centro p .rx-eco-num { display: block; font-size: 2cqw; font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; color: #D44D4D; }
 html body .rx-eco-centro p > span { font-size: 1.25cqw; font-weight: 700; color: #131A27; }
 html body .rx-eco-centro p .rx-eco-num { font-size: 1.6cqw; font-weight: 700; }
+/* núcleo: compensa o espaço interno do ícone e do texto para o conteúdo ficar exatamente no centro vertical */
+html body .rx-eco-centro { padding-bottom: .23cqw; }
