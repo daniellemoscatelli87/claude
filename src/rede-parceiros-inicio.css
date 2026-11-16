@@ -3010,3 +3010,30 @@ html body .rx-mv-contato { position: relative; z-index: 2; }
 html body .rx-mv-escrever { position: relative; z-index: 2; }
 html body .rx-mf-enviar, html body .rx-mv-buscar, html body .rx-mv-contatar { position: relative; z-index: 2; }
 html body .rx-mv-cursor { z-index: 10; }
+/* computador: "Entrar em contato" no canto superior direito do card, na linha do título "Perfil aderente" */
+@media (min-width: 768px) {
+  html body .rx-mv4 .rx-mv-contatar { position: absolute; top: .5rem; right: 1rem; margin: 0; z-index: 3; }
+  html body .rx-mv4 .rx-mv-dtit { min-height: 2rem; }
+}
+/* conversa com avatares: o logo do Studio ao lado das mensagens do Studio e a foto da Marina ao lado das dela */
+html body .rx-mv5 .rx-mv-msg { display: flex; align-items: flex-end; gap: .5rem; max-width: 88%; padding: 0; background: none !important; border-radius: 0; }
+html body .rx-mv5 .rx-mv-msg > p { margin: 0; padding: .625rem .875rem; border-radius: 16px; font-size: .8125rem; line-height: 1.5; }
+html body .rx-mv5 .rx-mv-msg.eu > p { background: #D44D4D; color: #FFFFFF; border-bottom-right-radius: 4px; }
+html body .rx-mv5 .rx-mv-msg.ela > p { background: #F3F5F8; color: #283043; border-bottom-left-radius: 4px; }
+.rx-mv-av { flex: none; display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 9999px; overflow: hidden; background: #F3F5F8; }
+.rx-mv-av img { width: 100%; height: 100%; object-fit: cover; }
+.rx-mv-av.st { background: #FDF2F2; border: 1px solid rgba(212, 77, 77, .2); }
+.rx-mv-av.st img { width: 1rem; height: 1rem; object-fit: contain; }
+.rx-mv-dig-linha { align-self: flex-start; display: flex; align-items: flex-end; gap: .5rem; opacity: 0; }
+html body .rx-mv5 .rx-mv-dig-linha .rx-mv-digitando { opacity: 1; margin: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  html body .rx-mv5.ativa .rx-mv-dig-linha { animation: rx-mv-digit2 1.6s ease 3.3s both; }
+  html body .rx-mv5.ativa .rx-mv-dig-linha .rx-mv-digitando { animation: none; }
+}
+@media (max-width: 767px) { html body .rx-mv5 .rx-mv-msg > p { font-size: .75rem; } }
+html body .rx-mv5 .rx-mv-dig-linha .rx-mv-digitando { align-self: flex-end; }
+html body .rx-mv5 .rx-mv-msg .rx-mv-av { align-self: flex-end; }
+/* "digitando…" com avatar: aparece e some só com opacidade/altura máxima, sem sobrepor a mensagem acima */
+@keyframes rx-mv-digit3 { 0% { opacity: 0; max-height: 3rem; } 15%, 85% { opacity: 1; max-height: 3rem; } 99% { opacity: 0; max-height: 3rem; } 100% { opacity: 0; max-height: 0; } }
+@media (prefers-reduced-motion: no-preference) { html body .rx-mv5.ativa .rx-mv-dig-linha { animation: rx-mv-digit3 1.6s ease 3.3s both; } }
+html body .rx-mv5 .rx-mv-dig-linha { max-height: 3rem; overflow: hidden; flex: none; }
