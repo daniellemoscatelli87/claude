@@ -3183,3 +3183,12 @@ html body .rx-mv4 .rx-mv-desafio strong { margin-bottom: 0; }
   html body .rx-mv4 .rx-mv-dtit { min-height: 0; }
   html body .rx-mv4 .rx-mv-destaque { flex: 1 1 auto; align-content: center; }
 }
+/* conversa: o Studio agradece a devolutiva da Marina antes de fechar a janela */
+html body .rx-mv5 .rx-mv-msg.r2 { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  html body .rx-mv5.ativa .rx-mv-msg.eu.r2 { animation: rx-mt-surge .45s cubic-bezier(.16,1,.3,1) 6.3s both; }
+  html body .rx-mv5.ativa .rx-mv-fechar .rx-mv-cursor { animation: rx-mv-cur2 1s cubic-bezier(.45,0,.25,1) 7.6s both; }
+  html body .rx-mv5.ativa .rx-mv-fechar { animation: rx-mv-clique .3s ease 8.5s both; }
+  html body .rx-mv5.ativa .rx-mv-conversa { animation: rx-mv-fecha .45s ease 8.75s both; }
+}
+@media (prefers-reduced-motion: reduce) { html body .rx-mv5 .rx-mv-msg.r2 { opacity: 1; } }

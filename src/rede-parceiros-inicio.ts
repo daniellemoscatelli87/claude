@@ -646,7 +646,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const total = cenas.length;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const LENTO = 1.35;
-  const BASE = [0, 6500, 4000, 6500, 8000, 7000, 8500, 7000, 12500];
+  const BASE = [0, 6500, 4000, 6500, 8000, 7000, 10000, 7000, 12500];
   const DUR = (n: number) => (BASE[n] || 6500) * LENTO;
   let atual = 1, decorrido = 0, pausado = reduzir, visivel = false, ultimo = 0, rodando = true;
   const cenaAtual = () => cenas[atual - 1];
