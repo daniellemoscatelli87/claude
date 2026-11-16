@@ -3238,3 +3238,17 @@ html body .rx-mv-voto .rx-mv-descartar .rx-mv-cursor { left: 55%; top: 55%; widt
 /* ranking: só o próprio link vira "Convite enviado"; o status embaixo do nome não muda */
 html body .rx-mv6.ativa .rx-mv-fila2 .rx-mv-st .a, html body .rx-mv6.ativa .rx-mv-fila2 .rx-mv-st .b { animation: none !important; }
 html body .rx-mv-fila2 .rx-mv-st .a { opacity: 1; } html body .rx-mv-fila2 .rx-mv-st .b { opacity: 0; }
+/* ranking: percentual com base colorida (vermelho alta, laranja média, amarelo baixa compatibilidade);
+   status no canto superior direito do card; aprovar em verde e reprovar em vermelho */
+html body .rx-mv-fila2 .rx-mv-rfoto em { margin-top: .125rem; padding: .0625rem .4375rem; border-radius: 9999px; font-size: .6875rem; line-height: 1.4; }
+html body .rx-mv-fila2 .rx-mv-rfoto em.alta { background: #FDE7E7; color: #C0392B; }
+html body .rx-mv-fila2 .rx-mv-rfoto em.media { background: #FDEBD9; color: #C2610C; }
+html body .rx-mv-fila2 .rx-mv-rfoto em.baixa { background: #FDF5CF; color: #8A6A00; }
+html body .rx-mv-fila2 li.fora .rx-mv-rfoto em { background: #EDF0F5; color: #A6B1C2; }
+html body .rx-mv-fila2 > li { position: relative; }
+html body .rx-mv-fila2 .nm > small { position: absolute; top: .5rem; right: .875rem; padding: .0625rem .5rem; border-radius: 9999px; background: #F3F5F8; font-size: .625rem !important; font-weight: 600; color: #627288; white-space: nowrap; }
+html body .rx-mv-fila2 .nm > small.rx-mv-st { display: grid !important; }
+html body .rx-mv-fila2 > li { padding-top: 1.375rem; }
+.rx-mv-voto > span.up { border-color: rgba(31, 138, 76, .35); color: #1F8A4C; background: #F2FAF5; }
+.rx-mv-voto > span.dn { border-color: rgba(212, 77, 77, .35); color: #D44D4D; background: #FFF6F6; }
+@media (max-width: 767px) { html body .rx-mv-fila2 .nm > small { right: .625rem; top: .375rem; } html body .rx-mv-fila2 > li { padding-top: 1.5rem; } }
