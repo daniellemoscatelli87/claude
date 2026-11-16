@@ -333,6 +333,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - um termo de jargão na interface ("walkthrough" em `observation_light`).
 - **Código e banco:** nenhum alterado.
 
+## 2026-11-16 · Padrões do site no design system (D-030)
+
+- **Produto:** `.janela-topo` (`apps/experience-intelligence/src/app/globals.css`) sem `border-bottom`; fundo graphite-50 (`#EDF0F5`) até 72% e degradê até transparente, padding inferior 26 px, `z-index: 1` para o conteúdo passar por baixo ao rolar.
+- **Documentação:** `docs/design-system/COMPONENTES.md` com a `Janela` atualizada, a seção "Padrões do site registrados para uso futuro" (accordion e cabeçalho de janela/gaveta) e as regras 4 (descrição de seção 14 px no celular) e 5 (sombras).
+- **Site (mesmo período, publicado à parte):** accordions do Projeto Piloto no estilo dos da Rede de Parceiros; cabeçalho com degradê nas gavetas de contato e de cadastro (`.gaveta-topo`); descrições `.sec-desc` em 14 px no celular; cards do mockup com a sombra do DS.
+- **Banco e migrações:** nenhuma alteração.
+- **Verificação executada:** em `apps/experience-intelligence`: `npm run typecheck` (sem erros), `npm run lint` (sem erros; 3 avisos antigos de `only-export-components`), `npm test` (48 de 48), `npm run build` (exportação estática). No navegador (Playwright, iPhone 13 e 1280 px), `/cadastro/` → "Como usamos seus dados": cabeçalho com o degradê, sem borda, e o texto passa por baixo dele ao rolar.
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:

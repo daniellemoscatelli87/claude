@@ -352,6 +352,18 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 
 ---
 
+## D-030 · 16/11/2026 · Padrões do site levados ao design system
+
+- **Origem:** Dona do produto ("Verifique se isso deve ser levado para o design System" e "Sim, pode fazer"), depois de padronizar no site os accordions, o cabeçalho das gavetas, as descrições de seção e as sombras.
+- **Decisão:**
+  - cabeçalho de janelas e gavetas sem linha divisória, com fundo graphite-50 e degradê sutil até o conteúdo; aplicado à `Janela` do produto, que replica esse padrão do site;
+  - accordion único do site (estilo das Dúvidas frequentes da Rede de Parceiros) registrado no design system para uso futuro; o produto ainda não tem accordion;
+  - regras de tipografia (descrição de seção em 14 px no celular) e de sombra (cards com `--shadow-ds-md`, brilho vermelho só em botões) registradas.
+- **Fora do design system:** a linha do tempo animada e os itens que surgem ao rolar ficam como recursos das páginas do site, não componentes do produto.
+- **Trade-off:** o degradê ocupa um pouco mais de altura no topo da janela (padding inferior de 26 px) em troca da transição sem linha, igual à do site.
+
+---
+
 ## Decisões pendentes
 
 
