@@ -26,7 +26,7 @@ itens.forEach((item) => {
     itens.forEach((outro) => definirAberto(outro, outro === item ? abrir : false));
   });
 });
-if (itens[0]) definirAberto(itens[0], true);
+itens.forEach((item) => definirAberto(item, false)); // todos começam fechados
 
 /* ---------- Formulário ---------- */
 const form = $<HTMLFormElement>('form-piloto');
