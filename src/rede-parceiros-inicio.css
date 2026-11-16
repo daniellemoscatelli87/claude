@@ -3115,3 +3115,10 @@ html body .rx-mt-c7.movendo .rx-kb-col, html body .rx-mt-c7.movendo .rx-kb-cards
   .rx-mv-rcab strong { font-size: .9375rem; }
   html body .rx-mv-fila2 .nm strong { font-size: .875rem; }
 }
+/* ranking: os 3 perfis (após o descarte) cabem inteiros no mockup */
+html body .rx-mv6 { gap: .5rem; }
+html body .rx-mv-fila2 { gap: .4375rem; }
+html body .rx-mv-fila2 > li { padding-top: .375rem; padding-bottom: .375rem; }
+@keyframes rx-mv-entra-fila { from { flex-grow: 0; max-height: 0; opacity: 0; } to { flex-grow: 1; max-height: 12rem; padding-top: .375rem; padding-bottom: .375rem; border-width: 1px; opacity: 1; margin-top: 0; } }
+@keyframes rx-mv-sai { to { flex-grow: 0; max-height: 0; padding-top: 0; padding-bottom: 0; border-width: 0; opacity: 0; margin-bottom: -.4375rem; transform: translateX(-12%); } }
+html body .rx-mv-fila2 li.entra { margin-top: -.4375rem; }
