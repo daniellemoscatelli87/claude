@@ -3625,3 +3625,15 @@ html body .rx-pilar:not(:last-child)::after { content: none !important; display:
   html body .rx-mt-palco.tl-anima ul.rx-mt-topicos > li.tl-atual .rx-mt-topico .rx-mt-tmarca { scale: 1.2; box-shadow: 0 0 0 5px rgba(212, 77, 77, .15) !important; }
 }
 @media (max-width: 1023px) and (prefers-reduced-motion: reduce) { html body .rx-mt-palco.tl-anima ul.rx-mt-topicos > li .rx-mt-topico .rx-mt-tmarca { transition: none !important; } }
+
+/* Celular e tablet (Seja Parceiro): os cantos arredondados abaixo do menu são um recorte do topo fixo (e não uma faixa de cor
+   fixa), então o conteúdo que passa por baixo aparece com a cor dele */
+@media (max-width: 1023px) {
+  html body .rp-hero { clip-path: none !important;
+    -webkit-mask-image: linear-gradient(#000, #000), radial-gradient(circle at 100% 100%, transparent 27.5px, #000 28px), radial-gradient(circle at 0 100%, transparent 27.5px, #000 28px);
+    mask-image: linear-gradient(#000, #000), radial-gradient(circle at 100% 100%, transparent 27.5px, #000 28px), radial-gradient(circle at 0 100%, transparent 27.5px, #000 28px);
+    -webkit-mask-size: 100% var(--rp-tampa, 100vh), 28px 28px, 28px 28px; mask-size: 100% var(--rp-tampa, 100vh), 28px 28px, 28px 28px;
+    -webkit-mask-position: 0 0, 0 var(--rp-tampa, 100vh), 100% var(--rp-tampa, 100vh); mask-position: 0 0, 0 var(--rp-tampa, 100vh), 100% var(--rp-tampa, 100vh);
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+  .rp-tampa { visibility: hidden; } /* continua existindo só para a aba "Saiba mais" copiar a cor */
+}

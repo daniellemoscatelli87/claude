@@ -69,60 +69,15 @@ function travarFoco(painel: HTMLElement, aberto: () => boolean) {
   if ('ResizeObserver' in window) new ResizeObserver(medir).observe(h);
 })();
 
-/* ---------- Celular e tablet: a folha branca do conteúdo "cola" no topo antes de o conteúdo rolar ----------
-   Nas páginas com o topo parado atrás do menu (Home, Projeto Piloto, Seja Parceiro): se a rolagem parar com a folha no meio
-   do caminho (entre a foto inteira e a folha encostada no menu), ela termina o movimento sozinha, suavemente, no sentido em
-   que a pessoa estava rolando: para cima até colar no menu, ou para baixo até mostrar a foto inteira. Depois que a folha
-   cola, a rolagem do conteúdo é a nativa do celular (sem encaixe CSS, que deixava a rolagem travada e às vezes parava a
-   folha no meio da tela). */
+/* ---------- Celular e tablet: alça "Saiba mais" na borda de cima da folha branca ----------
+   Nas páginas com o topo parado atrás do menu (Home, Projeto Piloto, Seja Parceiro), a folha sobe por cima da foto com a
+   rolagem nativa do celular, sem encaixe nem movimento automático (no Safari do iPhone eles brigavam com a inércia da
+   rolagem: a folha voltava para baixo e a tela parecia travada). */
 (() => {
   const folha = document.querySelector<HTMLElement>('.ih-folha, .rx-folha, .divisao-hero');
   if (!folha) return;
-  folha.classList.add('folha-cola');
-  const topo = document.createElement('div');
-  topo.className = 'folha-cola-topo';
-  topo.setAttribute('aria-hidden', 'true');
-  document.body.prepend(topo);
-  // O encaixe só fica ligado enquanto a folha ainda não chegou ao topo. Depois que ela cola, o encaixe é desligado e a
-  // rolagem do conteúdo fica 100% nativa (com o encaixe ligado o tempo todo, a rolagem dentro do card travava no celular).
   const raiz = document.documentElement;
   const h = document.getElementById('site-header');
-  const pequeno = matchMedia('(max-width: 1023px)');
-  const reduzir = matchMedia('(prefers-reduced-motion: reduce)');
-  const alvoFolha = () => folha.getBoundingClientRect().top + window.scrollY - (h?.offsetHeight ?? 0);
-  let tocando = false;
-  let ultimoY = window.scrollY;
-  let sentido = 0; // 1 = rolando para baixo (folha subindo), -1 = para cima
-  let espera = 0;
-  const completar = () => {
-    if (!pequeno.matches || tocando) return;
-    const y = window.scrollY, alvo = alvoFolha();
-    if (y <= 1 || y >= alvo - 1) return; // já na foto inteira ou com a folha colada
-    const destino = sentido > 0 ? alvo : sentido < 0 ? 0 : (y > alvo / 2 ? alvo : 0);
-    window.scrollTo({ top: destino, behavior: reduzir.matches ? 'auto' : 'smooth' });
-  };
-  const agendar = (ms: number) => { clearTimeout(espera); espera = window.setTimeout(completar, ms); };
-  /* Trava: um gesto que começa com a folha abaixo do menu termina com a folha colada no topo — mesmo num deslize rápido,
-     a rolagem para ali (encaixe obrigatório só durante esse gesto, mais uma parada de segurança). Só o gesto seguinte rola
-     o conteúdo, com a rolagem nativa do celular. */
-  let trava = false;
-  const ligarTrava = (on: boolean) => { trava = on; raiz.classList.toggle('folha-trava', on); };
-  const pararNaFolha = () => {
-    if (!trava || !pequeno.matches) return;
-    const alvo = alvoFolha();
-    if (window.scrollY > alvo + 1) window.scrollTo({ top: alvo, behavior: 'auto' });
-  };
-  window.addEventListener('scroll', () => { if (trava && !tocando) pararNaFolha(); }, { passive: true });
-  // a trava continua até o próximo toque: então, com a folha já colada, ela é desligada e o conteúdo rola livre
-  window.addEventListener('touchstart', () => { tocando = true; clearTimeout(espera); ligarTrava(pequeno.matches && window.scrollY < alvoFolha() - 1); }, { passive: true });
-  window.addEventListener('touchend', () => { tocando = false; pararNaFolha(); }, { passive: true });
-  window.addEventListener('touchend', () => { tocando = false; agendar(160); }, { passive: true });
-  window.addEventListener('touchcancel', () => { tocando = false; agendar(160); }, { passive: true });
-  const atualizar = () => {
-    const y = window.scrollY;
-    if (Math.abs(y - ultimoY) > 1) sentido = y > ultimoY ? 1 : -1;
-    ultimoY = y;
-  };
   // Alça "Saiba mais" presa à borda de cima da folha, enquanto ela ainda não subiu (como a alça do computador)
   const alca = document.createElement('a');
   alca.className = 'alca-movel';
@@ -141,14 +96,11 @@ function travarFoco(painel: HTMLElement, aberto: () => boolean) {
     if (tampa) alca.style.background = getComputedStyle(tampa).backgroundColor;
     alca.classList.toggle('oculta', window.scrollY > 8);
   };
-  const atualizarTudo = () => { atualizar(); posAlca(); };
   window.addEventListener('scroll', () => requestAnimationFrame(posAlca), { passive: true });
   window.addEventListener('resize', posAlca);
   window.addEventListener('load', posAlca);
   requestAnimationFrame(posAlca);
-  requestAnimationFrame(atualizarTudo); // o espaço do topo de cada página é medido pelo script da própria página, logo depois
-  // a cada rolagem: guarda o sentido e, quando ela parar (inércia incluída), completa o movimento da folha se preciso
-  window.addEventListener('scroll', () => { atualizar(); if (!tocando) agendar(140); }, { passive: true });
+  requestAnimationFrame(() => requestAnimationFrame(posAlca)); // o espaço do topo de cada página é medido pelo script da própria página, logo depois
 })();
 
 /* ---------- Aviso "Tem um projeto?" (só na página inicial) ---------- */

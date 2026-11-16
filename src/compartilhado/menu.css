@@ -234,15 +234,6 @@ html.menu-aberto { overflow: hidden; }
   html body .site-header.is-scrolled .btn-contato:hover { background: #D44D4D !important; color: #FFFFFF !important; }
 }
 
-/* Celular e tablet: a folha branca do conteúdo "cola" logo abaixo do menu antes de o conteúdo rolar (src/compartilhado/menu.ts).
-   O ponto de parada deixa o topo da folha exatamente na altura do menu: a margem negativa desconta o respiro de 2,5rem
-   que as páginas somam ao menu para os links internos (scroll-padding-top). */
-.folha-cola-topo { display: none; }
-@media (max-width: 1023px) {
-  .folha-cola { scroll-snap-align: start; scroll-snap-stop: always; scroll-margin-top: -2.5rem; }
-  .folha-cola-topo { display: block; position: absolute; top: 0; left: 0; width: 1px; height: 1px; pointer-events: none; scroll-snap-align: start; scroll-snap-stop: always; }
-}
-
 /* Celular e tablet: alça "Saiba mais" (tipografia pequena) recortada no centro da borda de cima da folha branca */
 .alca-movel { display: none; }
 @media (max-width: 1023px) {
@@ -254,8 +245,6 @@ html.menu-aberto { overflow: hidden; }
   .alca-movel-seta svg { width: 10px; height: 10px; }
   .alca-movel:focus-visible { outline: none; box-shadow: inset 0 0 0 2px #D44D4D; }
 }
-/* celular: durante o gesto que traz a folha para o topo, o encaixe é obrigatório (a folha para colada no menu) */
-@media (max-width: 1023px) { html.folha-trava { scroll-snap-type: y mandatory; } }
 
 /* celular: descrição abaixo do título de cada seção no mesmo tamanho em todas as páginas (14px, como na Home) */
 @media (max-width: 767px) { html body .sec-desc { font-size: .875rem !important; line-height: 1.55 !important; } }
