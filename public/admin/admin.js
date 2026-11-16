@@ -403,6 +403,17 @@
         sb.from("contatos").select("id, nome, assunto, created_at").not("visualizado_em", "is", null).gte("created_at", desde).order("created_at", { ascending: false }).limit(30),
         sb.from("cadastros").select("id, nome, principal_especializacao, created_at").not("visualizado_em", "is", null).gte("created_at", desde).order("created_at", { ascending: false }).limit(30),
       ]);
+      // E-mails da Rede de Parceiros abertos ou com link clicado (aviso até a administradora abrir o perfil).
+      const emailsSel = "id, cadastro_id, assunto, aberto_em, clicado_em, cadastros(nome)";
+      const [ev, evv] = await Promise.all([
+        sb.from("email_envios").select(emailsSel, { count: "exact" }).is("visualizado_em", null).or("aberto_em.not.is.null,clicado_em.not.is.null").order("created_at", { ascending: false }).limit(200),
+        sb.from("email_envios").select(emailsSel).not("visualizado_em", "is", null).gte("visualizado_em", desde).order("visualizado_em", { ascending: false }).limit(30),
+      ]);
+      const emailItem = (x) => {
+        const nome = (x.cadastros && x.cadastros.nome) || "Parceiro";
+        const clicou = !!x.clicado_em;
+        return { href: "/admin/parceiros/?id=" + x.cadastro_id + "#emails", at: clicou ? x.clicado_em : x.aberto_em, text: nome + (clicou ? " clicou no link do e-mail" : " abriu o e-mail"), sub: x.assunto, icon: clicou ? "mailCheck" : "mailOpen" };
+      };
       const contatos = c.data || [], parceiros = p.data || [];
       const ids = contatos.map((x) => x.id);
       const respostas = new Map();
@@ -410,17 +421,19 @@
         const { data } = await sb.from("mensagens_recebidas").select("contato_id, created_at").in("contato_id", ids).order("created_at", { ascending: false });
         (data || []).forEach((m) => { if (!respostas.has(m.contato_id)) respostas.set(m.contato_id, m.created_at); });
       }
-      const n = { contatos: c.count || 0, parceiros: p.count || 0 };
+      const n = { contatos: c.count || 0, parceiros: p.count || 0, emails: ev.count || 0 };
       const items = [
         ...contatos.map((x) => ({ href: "/admin/contatos/?id=" + x.id, at: respostas.get(x.id) || x.created_at, text: (respostas.has(x.id) ? "Nova resposta de " : "Nova mensagem de ") + (x.nome || "contato"), sub: x.assunto, icon: "mail" })),
         ...parceiros.map((x) => ({ href: "/admin/parceiros/?id=" + x.id, at: x.created_at, text: "Nova candidatura de " + (x.nome || "parceiro"), sub: x.principal_especializacao, icon: "users" })),
+        ...(ev.data || []).map(emailItem),
       ].sort((a, b) => new Date(b.at) - new Date(a.at));
       const vistas = [
         ...(cv.data || []).map((x) => ({ href: "/admin/contatos/?id=" + x.id, at: x.created_at, text: "Mensagem de " + (x.nome || "contato"), sub: x.assunto, icon: "mail" })),
         ...(pv.data || []).map((x) => ({ href: "/admin/parceiros/?id=" + x.id, at: x.created_at, text: "Candidatura de " + (x.nome || "parceiro"), sub: x.principal_especializacao, icon: "users" })),
+        ...(evv.data || []).filter((x) => x.aberto_em || x.clicado_em).map(emailItem),
       ].sort((a, b) => new Date(b.at) - new Date(a.at)).slice(0, 30);
 
-      const total = n.contatos + n.parceiros;
+      const total = n.contatos + n.parceiros + n.emails;
       const dot = $("bell-dot");
       dot.textContent = total > 99 ? "99+" : String(total);
       dot.classList.toggle("hidden", !total);
@@ -442,10 +455,10 @@
         return a;
       };
       if (items.length) { list.appendChild(el("div", "notif-sec", "Novas")); items.forEach((it) => list.appendChild(item(it, true))); }
-      else list.appendChild(el("div", "empty", "Nenhuma notificação nova. Mensagens e candidaturas ainda não abertas aparecem aqui."));
+      else list.appendChild(el("div", "empty", "Nenhuma notificação nova. Mensagens, candidaturas e e-mails abertos pelos parceiros aparecem aqui."));
       if (vistas.length) { list.appendChild(el("div", "notif-sec", "Já visualizadas")); vistas.forEach((it) => list.appendChild(item(it, false))); }
       return n;
-    })().catch(() => ({ contatos: 0, parceiros: 0 }));
+    })().catch(() => ({ contatos: 0, parceiros: 0, emails: 0 }));
     return notifPromise;
   }
   const notifications = () => notifPromise || loadNotifications();
@@ -526,5 +539,5 @@
   if (document.readyState === "loading") addEventListener("DOMContentLoaded", olhosNaPagina); else olhosNaPagina();
   new MutationObserver(olhosNaPagina).observe(document.documentElement, { childList: true, subtree: true });
 
-  window.Admin = { sb, el, init, log, profile, applyProfile, icon, notifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES, confirmDialog, toast };
+  window.Admin = { sb, el, init, log, profile, applyProfile, icon, notifications, refreshNotifications: loadNotifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES, confirmDialog, toast };
 })();

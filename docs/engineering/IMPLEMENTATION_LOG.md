@@ -333,6 +333,15 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - um termo de jargão na interface ("walkthrough" em `observation_light`).
 - **Código e banco:** nenhum alterado.
 
+## 2026-11-16 · Rastreamento dos e-mails da Rede de Parceiros (site), não publicado
+
+- **Banco:** migração `supabase/migrations/20261116120000_email_rastreio.sql`: tabelas `email_envios` e `email_eventos` (RLS: leitura só da administradora; ela só pode alterar `visualizado_em`) e função `registrar_email_evento` (só `service_role`).
+- **Funções:** nova `email-eventos` (webhook do Resend, `verify_jwt` desligado, assinatura Svix verificada); `galeria-convite` e `comunicado-parceiros` gravam cada e-mail aceito pelo Resend em `email_envios`.
+- **Área restrita:** sino com "abriu o e-mail" e "clicou no link do e-mail"; card "E-mails enviados" no perfil do parceiro, que marca os avisos como vistos.
+- **Política de Privacidade:** item "E-mails da Rede de Parceiros" e data de atualização.
+- **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
+- **Pendente:** aplicar a migração e publicar as funções no Supabase; ligar o rastreamento de abertura e de cliques no domínio do Resend; criar o webhook no Resend e guardar o segredo em `RESEND_WEBHOOK_SECRET_RASTREIO` (não usar `RESEND_WEBHOOK_SECRET`, que é das respostas de contato); teste de ponta a ponta com um e-mail real.
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:

@@ -159,6 +159,16 @@ function montar(nome: string, token: string, modo: Modo = "convite") {
 }
 
 type Linha = { id: string; nome: string; email: string; galeria_token: string };
+// Rastreamento (entrega, abertura e clique): cada e-mail aceito pelo Resend fica associado ao cadastro.
+// A resposta do envio em lote traz os ids na mesma ordem dos e-mails enviados.
+async function registrarEnvios<T extends { id: string }>(lote: T[], dados: unknown, origem: string, assunto: (r: T) => string) {
+  const ids = Array.isArray(dados) ? dados.map((d) => (d && typeof d === "object" ? String((d as { id?: string }).id ?? "") : "")) : [];
+  const linhas = lote.map((r, i) => ({ resend_id: ids[i], cadastro_id: r.id, origem, assunto: assunto(r) })).filter((l) => l.resend_id);
+  if (!linhas.length) return [] as string[];
+  const { error } = await admin.from("email_envios").insert(linhas);
+  if (error) console.error("email_envios", error.message);
+  return linhas.map((l) => l.resend_id);
+}
 async function enviar(lista: Linha[], modo: Modo = "convite") {
   let enviados = 0, falhas = 0;
   for (let i = 0; i < lista.length; i += 100) {
@@ -173,6 +183,7 @@ async function enviar(lista: Linha[], modo: Modo = "convite") {
     const ok = Array.isArray(out.data) ? out.data.length : lote.length;
     const ids = lote.slice(0, ok).map((r) => r.id);
     if (ids.length) await admin.from("cadastros").update({ galeria_convite_em: new Date().toISOString() }).in("id", ids);
+    await registrarEnvios(lote.slice(0, ok), out.data, "galeria-convite", (r) => assuntoDe(modo, r.nome));
     enviados += ok; falhas += lote.length - ok;
   }
   return { enviados, falhas };
