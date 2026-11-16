@@ -703,14 +703,40 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     if (on) cardJu = novoCard();
   };
 
+  /* Troca de etapa fluida: a cena que sai congela no estado final e se desfaz suavemente enquanto a nova surge por cima
+     (crossfade), sem voltar ao início nem piscar. */
+  const SAIDA = 650;
+  let saidaTimer = 0;
+  let saindo: HTMLElement | null = null;
+  const concluirSaida = () => {
+    clearTimeout(saidaTimer);
+    if (saindo) { saindo.classList.remove('ativa', 'saindo'); if (saindo === c7 && atual !== total) kanban(false); }
+    saindo = null;
+  };
   const mostrar = (n: number) => {
+    const antes = atual;
+    const velha = cenaAtual();
+    concluirSaida();
     atual = ((n - 1 + total) % total) + 1;
     decorrido = 0;
     palco.dataset.n = String(atual);
-    cenas.forEach((e) => e.classList.remove('ativa'));
-    kanban(atual === total);
     const c = cenaAtual();
+    const direto = antes === 2 && atual === 3; // a base de parceiros e o novo projeto são a mesma tela
+    cenas.forEach((e) => { if (e !== velha && e !== c) e.classList.remove('ativa', 'saindo'); });
+    if (velha && velha !== c && velha.classList.contains('ativa')) {
+      if (direto) velha.classList.remove('ativa');
+      else {
+        velha.getAnimations({ subtree: true }).forEach((an) => an.pause());
+        velha.classList.add('saindo');
+        saindo = velha;
+        saidaTimer = window.setTimeout(concluirSaida, SAIDA);
+      }
+    }
+    if (atual === total) kanban(true);
+    else if (velha !== c7) kanban(false);
+    c.classList.remove('ativa', 'saindo');
     void c.offsetWidth; // reinicia as animações da cena
+    palco.classList.toggle('direto', direto);
     c.classList.add('ativa');
     void c.offsetWidth;
     ritmo(c);

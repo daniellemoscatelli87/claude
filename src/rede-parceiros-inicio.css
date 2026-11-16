@@ -3263,3 +3263,10 @@ html body .rx-mv-fila2 li > b { position: absolute; top: 0; left: 0; width: auto
   background: #EDF0F5; font-size: .6875rem !important; font-weight: 700; line-height: 1.4; color: #627288; }
 
 @media (max-width: 767px) { html body .rx-mv-fila2 li > b { display: block !important; border-radius: 15px 0 10px 0; } }
+/* crossfade entre etapas: a nova surge por cima enquanto a anterior (congelada no estado final) se desfaz */
+html body .rx-mt-cena.ativa { z-index: 2; transition: opacity .6s ease !important; }
+html body .rx-mt-cena.ativa.saindo { z-index: 1; opacity: 0; transition: opacity .6s ease !important; }
+html body .rx-mt-palco.direto .rx-mt-cena.ativa { transition: none !important; }
+/* ranking: foto e dados mais para a direita, afastados da abinha da posição */
+html body .rx-mv-fila2 > li { padding-left: 2.25rem !important; }
+@media (max-width: 767px) { html body .rx-mv-fila2 > li { padding-left: 1.5rem !important; } }
