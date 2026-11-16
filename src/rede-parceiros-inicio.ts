@@ -640,14 +640,14 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   if (!palco) return;
   const cenas = Array.from(palco.querySelectorAll<HTMLElement>('.rx-mt-cena'));
   const topicos = Array.from(palco.querySelectorAll<HTMLButtonElement>('.rx-mt-topico'));
-  const NOMES = ['Cadastro', 'Base de parceiros', 'Novo projeto', 'Cruzamento com IA', 'Qualificação', 'Contato e alinhamento', 'Ranking de compatibilidade', 'O trabalho acontece'];
+  const NOMES = ['Cadastro', 'Base de parceiros', 'Novo projeto', 'Cruzamento com IA', 'Qualificação', 'Contato e alinhamento', 'Ranking de compatibilidade', 'O trabalho acontece', 'Faça parte da rede'];
+  const ETAPAS = 8; // a 9ª cena é o convite final: a animação para ali
   const agoraN = palco.querySelector<HTMLElement>('.rx-mt-agora-n');
   const agoraT = palco.querySelector<HTMLElement>('.rx-mt-agora-t');
-  const pausa = palco.querySelector<HTMLButtonElement>('.rx-mt-pausa')!;
   const total = cenas.length;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const LENTO = 1.35;
-  const BASE = [0, 6500, 4000, 6500, 8000, 7000, 10000, 7000, 13500];
+  const BASE = [0, 6500, 4000, 6500, 8000, 7000, 10000, 7000, 13500, Infinity];
   const DUR = (n: number) => (BASE[n] || 6500) * LENTO;
   let atual = 1, decorrido = 0, pausado = reduzir, visivel = false, ultimo = 0, rodando = true;
   const cenaAtual = () => cenas[atual - 1];
@@ -736,7 +736,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   let saindo: HTMLElement | null = null;
   const concluirSaida = () => {
     clearTimeout(saidaTimer);
-    if (saindo) { saindo.classList.remove('ativa', 'saindo'); if (saindo === c7 && atual !== total) kanban(false); }
+    if (saindo) { saindo.classList.remove('ativa', 'saindo'); if (saindo === c7 && atual !== ETAPAS) kanban(false); }
     saindo = null;
   };
   const mostrar = (n: number) => {
@@ -758,7 +758,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
         saidaTimer = window.setTimeout(concluirSaida, SAIDA);
       }
     }
-    if (atual === total) kanban(true);
+    if (atual === ETAPAS) kanban(true);
     else if (velha !== c7) kanban(false);
     c.classList.remove('ativa', 'saindo');
     void c.offsetWidth; // reinicia as animações da cena
@@ -767,13 +767,11 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     void c.offsetWidth;
     ritmo(c);
     topicos.forEach((t) => { const on = (t.dataset.etapas || '').split(',').map(Number).includes(atual); t.classList.toggle('ativa', on); t.setAttribute('aria-current', on ? 'step' : 'false'); });
-    if (agoraN) agoraN.textContent = `Etapa ${String(atual).padStart(2, '0')} de ${String(total).padStart(2, '0')}`;
+    if (agoraN) agoraN.textContent = atual > ETAPAS ? 'Rede de Parceiros' : `Etapa ${String(atual).padStart(2, '0')} de ${String(ETAPAS).padStart(2, '0')}`;
     if (agoraT) agoraT.textContent = NOMES[atual - 1] || '';
   };
-  const atualizarPausa = () => { pausa.textContent = pausado ? 'Retomar' : 'Pausar'; pausa.setAttribute('aria-pressed', String(pausado)); };
-  palco.querySelectorAll<HTMLButtonElement>('[data-passo]').forEach((b) => b.addEventListener('click', () => mostrar(atual + Number(b.dataset.passo))));
+  palco.querySelector<HTMLButtonElement>('.rx-mv-rever')?.addEventListener('click', () => mostrar(1));
   topicos.forEach((t) => t.addEventListener('click', () => mostrar(Number(t.dataset.ir))));
-  pausa.addEventListener('click', () => { pausado = !pausado; atualizarPausa(); });
   new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }, { threshold: 0.35 }).observe(palco);
   const passo = (t: number) => {
     const dt = ultimo ? Math.min(100, t - ultimo) : 0;
@@ -782,12 +780,11 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     if (r !== rodando) { rodando = r; cenaAtual()?.getAnimations({ subtree: true }).forEach((a) => (r ? a.play() : a.pause())); }
     if (rodando) {
       decorrido += dt;
-      if (atual === total) while (proxPasso < passosKanban.length && decorrido >= passosKanban[proxPasso][0] * LENTO) passosKanban[proxPasso++][1]();
-      if (decorrido >= DUR(atual)) mostrar(atual + 1);
+      if (atual === ETAPAS) while (proxPasso < passosKanban.length && decorrido >= passosKanban[proxPasso][0] * LENTO) passosKanban[proxPasso++][1]();
+      if (atual < total && decorrido >= DUR(atual)) mostrar(atual + 1);
     }
     requestAnimationFrame(passo);
   };
   mostrar(1);
-  atualizarPausa();
   requestAnimationFrame(passo);
 })();
