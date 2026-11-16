@@ -33,6 +33,17 @@ const esc = (v: unknown) =>
   String(v ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+// Rastreamento (entrega, abertura e clique): cada e-mail aceito pelo Resend fica associado ao cadastro.
+// A resposta do envio em lote traz os ids na mesma ordem dos e-mails enviados.
+async function registrarEnvios(lote: { id: string }[], dados: unknown, assunto: string) {
+  const ids = Array.isArray(dados) ? dados.map((d) => (d && typeof d === "object" ? String((d as { id?: string }).id ?? "") : "")) : [];
+  const linhas = lote.map((r, i) => ({ resend_id: ids[i], cadastro_id: r.id, origem: "comunicado", assunto })).filter((l) => l.resend_id);
+  if (!linhas.length) return [] as string[];
+  const { error } = await admin.from("email_envios").insert(linhas);
+  if (error) console.error("email_envios", error.message);
+  return linhas.map((l) => l.resend_id);
+}
+
 // Mesmo visual do e-mail de lançamento; o rodapé explica por que a pessoa recebeu e traz o link de descadastro.
 function montar(assunto: string, titulo: string, mensagem: string, token: string) {
   const paragrafos = mensagem.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)
@@ -89,6 +100,7 @@ Deno.serve(async (req) => {
   // Um e-mail por pessoa (ninguém vê o endereço dos outros), em lotes de até 100 pelo envio em lote do Resend.
   let enviados = 0, falhas = 0;
   const entregues: string[] = [];
+  const resendIds: string[] = [];
   for (let i = 0; i < validos.length; i += 100) {
     const lote = validos.slice(i, i + 100);
     const res = await fetch("https://api.resend.com/emails/batch", {
@@ -109,12 +121,14 @@ Deno.serve(async (req) => {
     if (!res.ok) { console.error("Resend", res.status, JSON.stringify(out).slice(0, 300)); falhas += lote.length; continue; }
     const ok = Array.isArray(out.data) ? out.data.length : lote.length;
     entregues.push(...lote.slice(0, ok).map((r) => r.id));
+    resendIds.push(...await registrarEnvios(lote.slice(0, ok), out.data, assunto));
     enviados += ok; falhas += lote.length - ok;
   }
   const filtros = p.filtros && typeof p.filtros === "object" ? p.filtros : {};
-  const { error: errHist } = await admin.from("comunicados").insert({
+  const { data: hist, error: errHist } = await admin.from("comunicados").insert({
     enviado_por: auth.user!.id, assunto, titulo, mensagem, filtros, destinatarios: entregues, enviados, falhas,
-  });
+  }).select("id").single();
   if (errHist) console.error("comunicados", errHist.message);
+  else if (resendIds.length) await admin.from("email_envios").update({ comunicado_id: hist.id }).in("resend_id", resendIds);
   return json({ enviados, falhas, ignorados });
 });
