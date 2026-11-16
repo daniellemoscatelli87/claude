@@ -889,3 +889,37 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     });
   }
 }
+
+/* ---------- Celular: timeline do Match como a do Projeto Piloto — a linha vermelha preenche o trilho conforme a
+   rolagem; etapas já percorridas ficam marcadas, a atual ganha destaque e as seguintes ficam só com o contorno ---------- */
+{
+  const palco = document.querySelector<HTMLElement>('.rx-mt-palco[data-match]');
+  const itens = Array.from(palco?.querySelectorAll<HTMLElement>('.rx-mt-topicos > li') ?? []);
+  const pequeno = matchMedia('(max-width: 1023px)');
+  if (palco && itens.length) {
+    let agendado = false;
+    const marca = (li: HTMLElement) => { const r = li.querySelector('.rx-mt-tmarca')!.getBoundingClientRect(); return r.top + r.height / 2; };
+    const atualizar = () => {
+      agendado = false;
+      const ligado = pequeno.matches;
+      palco.classList.toggle('tl-anima', ligado);
+      if (!ligado) return;
+      const limite = window.innerHeight * 0.6;
+      let atual = -1;
+      itens.forEach((li, i) => { if (marca(li) < limite) atual = i; });
+      itens.forEach((li, i) => {
+        li.classList.toggle('tl-feita', i < atual);
+        li.classList.toggle('tl-atual', i === atual);
+        if (i < itens.length - 1) {
+          const ini = marca(li), fim = marca(itens[i + 1]);
+          li.style.setProperty('--p', Math.min(1, Math.max(0, (limite - ini) / (fim - ini))).toFixed(3));
+        }
+      });
+    };
+    const pedir = () => { if (!agendado) { agendado = true; requestAnimationFrame(atualizar); } };
+    window.addEventListener('scroll', pedir, { passive: true });
+    window.addEventListener('resize', pedir);
+    pequeno.addEventListener('change', pedir);
+    atualizar();
+  }
+}
