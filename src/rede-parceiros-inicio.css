@@ -3306,3 +3306,5 @@ html body .rx-mt-c7 .rx-kb-ju .rx-kb-status[data-s="1"]::before { background: #D
 @keyframes rx-mv-hover { to { color: #A8322F; text-decoration-color: #A8322F; } }
 html body .rx-mv-fila2 .rx-mv-convidar .b { background: transparent !important; border: 0 !important; color: #1F8A4C; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(31, 138, 76, .35); }
 html body .rx-mv-fila2 .rx-mv-convidar > span { padding: 0 .125rem; }
+/* correção: na passagem direta (base de parceiros → novo projeto) a cena nova também fica visível */
+html body .rx-mt-palco.direto .rx-mt-cena.ativa { opacity: 1; visibility: visible; }
