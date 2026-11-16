@@ -646,7 +646,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const total = cenas.length;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const LENTO = 1.35;
-  const BASE = [0, 6500, 4000, 6500, 8000, 7000, 12500, 7000, 13500, Infinity];
+  const BASE = [0, 6500, 4000, 6500, 8000, 7000, 14000, 7000, 13500, Infinity]; // a conversa (6) inclui a digitação da resposta final do Studio
   const EXTRA: Record<number, number> = { 6: 1.25 }; // a conversa (etapa 6) roda um pouco mais devagar
   const DUR = (n: number) => (BASE[n] || 6500) * LENTO;
   let atual = 1, decorrido = 0, pausado = reduzir, visivel = false, ultimo = 0, rodando = true;

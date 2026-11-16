@@ -3512,3 +3512,93 @@ html body .rx-eco-centro { padding-bottom: .23cqw; }
   html body .rx-mf-grade .rx-mf-campo.sel { z-index: calc(10 - var(--d)); }
 }
 @media (max-width: 1023px) { html body .rx-mt-palco[data-match] .rx-mt-simular { order: 5; } }
+/* celular: o vão entre o conteúdo de uma seção e o da seguinte é sempre de 80px (medido do último elemento visível
+   até o primeiro da próxima); as folgas são divididas entre o fim de uma seção e o começo da outra */
+@media (max-width: 767px) {
+  html body section#rede { padding-bottom: 14px !important; }
+  html body section#quem { padding-top: 42px !important; padding-bottom: 28px !important; }
+  html body section#match { padding-top: 40px !important; padding-bottom: 38px !important; }
+  html body section#galeria { padding-top: 39px !important; padding-bottom: 38px !important; }
+  html body section#cadastro { padding-top: 26px !important; padding-bottom: 48px !important; }
+}
+/* simulação no celular — ranking: cards na altura do conteúdo (sem esticar), com foto, nome e ações maiores */
+@media (max-width: 1023px) {
+  html body .rx-mt-janela .rx-mv6 { gap: 1rem; }
+  html body .rx-mt-janela .rx-mv6 .rx-mv-rcab strong { font-size: 1.125rem; }
+  html body .rx-mt-janela .rx-mv6 .rx-mv-rcab small { display: block; margin-top: .125rem; font-size: .8125rem; }
+  html body .rx-mt-janela .rx-mv-fila2 { flex: none; gap: .75rem; }
+  html body .rx-mt-janela .rx-mv-fila2 > li { flex: none !important; column-gap: 1rem; padding: 2.25rem 1rem 1.125rem; padding-left: 1.25rem !important; }
+  html body .rx-mt-janela .rx-mv6.ativa .rx-mv-fila2 li.entra { animation-name: rx-mv-entra-fila-j; }
+  html body .rx-mt-janela .rx-mv-fila2 li > b { font-size: .8125rem; }
+  html body .rx-mt-janela .rx-mv-fila2 .nm > small { top: .625rem; right: .75rem; font-size: .75rem !important; }
+  html body .rx-mt-janela .rx-mv-rfoto .anel { width: 3.75rem; height: 3.75rem; }
+  html body .rx-mt-janela .rx-mv-fila2 .rx-mv-rfoto em { font-size: .8125rem; }
+  html body .rx-mt-janela .rx-mv-fila2 .nm strong { font-size: 1.125rem; }
+  html body .rx-mt-janela .rx-mv-fila2 .rx-mv-convidar > span { height: 2rem; font-size: .875rem; gap: .375rem; }
+  html body .rx-mt-janela .rx-mv-fila2 .rx-mv-convidar svg { width: 1rem; height: 1rem; }
+  html body .rx-mt-janela .rx-mv-voto { gap: .5rem; }
+  html body .rx-mt-janela .rx-mv-voto > span { width: 2.5rem; height: 2.5rem; }
+  html body .rx-mt-janela .rx-mv-voto > span > svg:first-child { width: 1.125rem; height: 1.125rem; }
+}
+@keyframes rx-mv-entra-fila-j { from { max-height: 0; opacity: 0; } to { max-height: 12rem; padding-top: 2.25rem; padding-bottom: 1.125rem; border-width: 1px; opacity: 1; margin-top: 0; } }
+@media (max-width: 1023px) { html body .rx-mt-janela .rx-mv-fila li.vez .rx-mv-convidar { justify-items: start; } }
+/* conversa: a resposta final do Studio também é digitada no campo e enviada (cursor clica em enviar) antes de aparecer */
+html body .rx-mv-campo-msg b.r2 { position: absolute; left: .875rem; right: .875rem; }
+@media (prefers-reduced-motion: no-preference) {
+  html body .rx-mv5.ativa .rx-mv-campo-msg b.r2 { animation: rx-mv-msg-dig 2s linear 5.5s both; }
+  html body .rx-mv5.ativa .rx-mv-campo-msg .ph { animation: rx-mv-ph 2.2s linear .3s both, rx-mv-ph2 2s linear 5.5s forwards; }
+  html body .rx-mv5.ativa .rx-mv-enviar-msg .rx-mv-cursor { animation: rx-mv-cur3 1.4s cubic-bezier(.45,0,.25,1) 1.4s both, rx-mv-cur3b 1.4s cubic-bezier(.45,0,.25,1) 6.5s forwards; }
+  html body .rx-mv5.ativa .rx-mv-enviar-msg { animation: rx-mv-clique .3s ease 2.5s both, rx-mv-clique2 .3s ease 7.6s forwards; }
+  html body .rx-mv5.ativa .rx-mv-msg.eu.r2 { animation: rx-mt-surge .45s cubic-bezier(.16,1,.3,1) 7.8s both; }
+  html body .rx-mv5.ativa .rx-mv-fechar .rx-mv-cursor { animation: rx-mv-cur2 1s cubic-bezier(.45,0,.25,1) 9.1s both; }
+  html body .rx-mv5.ativa .rx-mv-fechar { animation: rx-mv-clique .3s ease 10s both; }
+  html body .rx-mv5.ativa .rx-mv-conversa { animation: rx-mv-fecha .45s ease 10.25s both; }
+}
+@media (prefers-reduced-motion: reduce) { html body .rx-mv-campo-msg b.r2 { display: none; } }
+@keyframes rx-mv-ph2 { 0%, 8% { opacity: 1; } 10%, 98% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes rx-mv-cur3b { 0% { opacity: 0; transform: translate(-6rem, -5rem); } 20% { opacity: 1; } 75% { opacity: 1; transform: none; } 85% { transform: scale(.85); } 100% { opacity: 0; transform: none; } }
+@keyframes rx-mv-clique2 { 50% { transform: scale(.94); } 100% { transform: none; } }
+/* celular: um mini card em cada etapa da timeline, com um trecho da simulação daquela etapa */
+.rx-mt-tprev { display: none; }
+@media (max-width: 1023px) {
+  html body .rx-mt-palco[data-match] .rx-mt-tcorpo { min-width: 0; }
+  .rx-mt-tprev { display: grid; gap: .5rem; margin: .75rem 0 .25rem; padding: .75rem; border-radius: 14px; background: #FFFFFF; border: 1px solid #E4E8EF; box-shadow: 0 10px 24px -18px rgba(13, 17, 25, .35); text-align: left; font-size: .75rem; line-height: 1.35; color: #131A27; }
+  .rx-mt-tprev img { display: block; border-radius: 9999px; object-fit: cover; }
+  .rx-mt-tprev small { display: block; font-size: .6875rem; color: #8898B0; }
+  .rx-mt-tprev b { font-weight: 600; }
+  /* 1 · cadastro */
+  .rx-mt-tprev.p1 .pt { font-size: .8125rem; font-weight: 700; }
+  .rx-mt-tprev.p1 .pc { display: grid; gap: .1875rem; }
+  .rx-mt-tprev.p1 .pc b { display: block; padding: .375rem .625rem; border-radius: 8px; border: 1px solid #E4E8EF; font-weight: 500; }
+  .rx-mt-tprev.p1 .pb { justify-self: end; padding: .375rem .875rem; border-radius: 9999px; background: #D44D4D; color: #FFFFFF; font-weight: 600; }
+  /* 2 · perfil compatível */
+  .rx-mt-tprev.p2 { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: .625rem; }
+  .rx-mt-tprev.p2 .av { padding: 2px; border-radius: 9999px; border: 2px solid #D44D4D; }
+  .rx-mt-tprev.p2 .av img { width: 2.25rem; height: 2.25rem; }
+  .rx-mt-tprev.p2 .pn b { display: block; font-size: .8125rem; }
+  .rx-mt-tprev.p2 em { font-style: normal; padding: .1875rem .5rem; border-radius: 9999px; background: #FDE7E7; color: #C0392B; font-weight: 700; white-space: nowrap; }
+  /* 3 · convite no chat */
+  .rx-mt-tprev.p3 .msg { display: flex; align-items: flex-end; justify-content: flex-end; gap: .375rem; }
+  .rx-mt-tprev.p3 .bl { max-width: 85%; padding: .5rem .75rem; border-radius: 14px 14px 4px 14px; background: #D44D4D; color: #FFFFFF; }
+  .rx-mt-tprev.p3 .msg img { flex: none; width: 1.25rem; height: 1.25rem; padding: 2px; background: #FDF2F2; border: 1px solid rgba(212, 77, 77, .25); box-sizing: content-box; }
+  .rx-mt-tprev.p3 .dig { display: flex; align-items: flex-end; gap: .375rem; }
+  .rx-mt-tprev.p3 .dig img { width: 1.5rem; height: 1.5rem; }
+  .rx-mt-tprev.p3 .pts { display: flex; gap: .25rem; padding: .5rem .625rem; border-radius: 14px 14px 14px 4px; background: #F3F5F8; }
+  .rx-mt-tprev.p3 .pts i { width: .3125rem; height: .3125rem; border-radius: 9999px; background: #A6B1C2; }
+  /* 4 · kanban */
+  .rx-mt-tprev.p4 { background: #F6F7FA; }
+  .rx-mt-tprev.p4 .col { display: flex; align-items: center; gap: .375rem; font-weight: 600; }
+  .rx-mt-tprev.p4 .col i { width: .5rem; height: .5rem; border-radius: 9999px; background: #3B82C4; }
+  .rx-mt-tprev.p4 .card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: .625rem; padding: .625rem; border-radius: 10px; background: #FFFFFF; border: 1px solid rgba(212, 77, 77, .35); }
+  .rx-mt-tprev.p4 .card img { width: 2rem; height: 2rem; }
+  .rx-mt-tprev.p4 .tag { display: inline-flex; align-items: center; gap: .25rem; padding: .125rem .5rem; border-radius: 9999px; background: #FDF2F2; color: #D44D4D; font-weight: 600; }
+  .rx-mt-tprev.p4 .tag i { width: .375rem; height: .375rem; border-radius: 9999px; background: #D44D4D; }
+}
+@media (max-width: 1023px) {
+  html body .rx-mt-palco[data-match] .rx-mt-topico .rx-mt-tcorpo > span.rx-mt-tprev { display: grid !important; font-size: .75rem !important; line-height: 1.35 !important; color: #131A27 !important; font-weight: 400; }
+  html body .rx-mt-palco[data-match] .rx-mt-tprev.p1 .pb { justify-self: end; margin-top: .125rem; }
+}
+/* mockup: cards em destaque com a sombra padrão do DS (--shadow-ds-md), sem sombra vermelha; a borda continua marcando o destaque */
+html body .rx-mv-grade li.novo, html body .rx-mv-fila li.vez { box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06); }
+@keyframes rx-mv-marca { to { border-color: rgba(212, 77, 77, .45); box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06); } }
+@keyframes rx-mv-vez { from { transform: none; box-shadow: none; } 50% { transform: scale(1.02); } to { transform: none; box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06); } }
