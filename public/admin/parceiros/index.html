@@ -36,6 +36,38 @@
   .cm-gal-acts .btn-ok:disabled, .cm-gal-acts .btn-ghost:disabled { opacity: .5; cursor: not-allowed; }
   .cm-prev { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #f4f5f8; }
   .cm-prev iframe { display: block; width: 100%; height: 520px; border: 0; }
+  /* envios agendados da autorização da galeria */
+  .ag-lista { margin-top: 16px; border-top: 1px solid var(--track); padding-top: 14px; }
+  .ag-lista h3 { margin: 0 0 8px; font-size: 15px; }
+  .ag-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 12px 0; }
+  .ag-item + .ag-item { border-top: 1px solid var(--track); }
+  .ag-item .ag-tx { display: grid; gap: 3px; min-width: 0; }
+  .ag-item b { font-size: 14px; }
+  .ag-item .ag-sub { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+  .ag-item .ag-acts { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  @media (max-width: 560px) { .ag-item { grid-template-columns: 1fr; } .ag-item .ag-acts { justify-content: flex-start; } }
+  .ag-dlg { width: min(640px, 94vw); max-height: 92vh; overflow: auto; border: 0; border-radius: 18px; padding: 0; box-shadow: 0 20px 60px -10px rgb(15 23 42 / .35); }
+  .ag-dlg .cm-prev iframe { height: 420px; }
+  .ag-dlg::backdrop { background: rgb(15 23 42 / .45); }
+  .ag-in { position: relative; padding: 22px; display: grid; gap: 14px; }
+  .ag-in h2 { margin: 0; font-size: 20px; padding-right: 40px; }
+  .ag-x { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; background: none; border-radius: 10px; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
+  .ag-x svg { width: 22px; height: 22px; }
+  .ag-modo { display: grid; gap: 8px; border: 0; margin: 0; padding: 0; }
+  .ag-modo legend, .ag-campo > span { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .ag-modo label { display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer; }
+  .ag-modo input { width: 18px; height: 18px; accent-color: var(--red); }
+  .ag-pessoas { display: grid; gap: 8px; }
+  .ag-pessoas input[type=search] { font-size: 16px; }
+  .ag-pessoas-lista { max-height: 240px; overflow: auto; border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
+  .ag-pessoa { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+  .ag-pessoa:hover { background: #f6f7fa; }
+  .ag-pessoa input { width: 18px; height: 18px; flex: none; accent-color: var(--red); }
+  .ag-pessoa small { display: block; font-size: 12px; color: var(--muted); }
+  .ag-campo { display: grid; }
+  .ag-campo input { font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--dark); max-width: 280px; }
+  .ag-dlg-acts { display: flex; flex-wrap: wrap-reverse; gap: 8px; justify-content: space-between; align-items: center; }
+  .ag-dlg-acts .btn-ok { margin-left: auto; }
   .tab-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: -4px; padding: 4px; }
   .tab-parceiros { width: 100%; min-width: 960px; border-collapse: collapse; font-size: 13px; }
   .tab-parceiros th { text-align: left; padding: 0 10px 10px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); white-space: nowrap; border-bottom: 1px solid var(--track); }
@@ -457,10 +489,12 @@
         <div class="cm-gal-acts">
           <button type="button" class="btn-ghost" id="gal-prev">Ver o e-mail</button>
           <button type="button" class="btn-ghost" id="gal-reenviar">Reenviar a quem não respondeu</button>
+          <button type="button" class="btn-ghost" id="gal-agendar">Agendar envio</button>
           <button type="button" class="btn-ok" id="gal-enviar">Enviar aos não convidados</button>
         </div>
         <div class="cm-prev hidden" id="gal-prev-box" style="margin-top:14px"><iframe title="E-mail de autorização da galeria" id="gal-prev-frame"></iframe></div>
         <p class="msg err hidden" id="gal-err"></p>
+        <div class="ag-lista" id="ag-lista" hidden><h3>Envios agendados</h3><div id="ag-itens"></div></div>
       </div>
       <div class="card"><div class="rows" id="list"></div></div>
     </section>
@@ -473,6 +507,30 @@
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/admin/admin.js?v=20261115c"></script>
+<!-- Agendar (ou alterar) o envio do pedido de autorização da galeria -->
+<dialog class="ag-dlg" id="ag-dlg" aria-labelledby="ag-t">
+  <div class="ag-in">
+    <button type="button" class="ag-x" id="ag-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <h2 id="ag-t">Agendar envio</h2>
+    <p class="muted" style="margin:-6px 0 0;font-size:14px">Pedido de autorização da galeria. Quem já decidiu ou se descadastrou dos comunicados não recebe, mesmo que esteja na lista.</p>
+    <fieldset class="ag-modo"><legend>Para quem</legend>
+      <label><input type="radio" name="ag-modo" value="todos" checked><span id="ag-todos-txt">Todos que ainda não decidiram</span></label>
+      <label><input type="radio" name="ag-modo" value="selecionados"><span>Escolher pessoas</span></label>
+    </fieldset>
+    <div class="ag-pessoas" id="ag-pessoas" hidden>
+      <input type="search" id="ag-busca" placeholder="Buscar por nome ou e-mail" aria-label="Buscar parceiro">
+      <div class="ag-pessoas-lista" id="ag-pessoas-lista"></div>
+      <span class="muted" id="ag-sel-n" style="font-size:12px"></span>
+    </div>
+    <label class="ag-campo"><span>Data e hora do envio</span><input type="datetime-local" id="ag-quando"></label>
+    <div class="cm-prev hidden" id="ag-prev"><iframe title="E-mail de autorização da galeria" id="ag-prev-frame"></iframe></div>
+    <p class="msg err hidden" id="ag-err"></p>
+    <div class="ag-dlg-acts">
+      <button type="button" class="btn-ghost" id="ag-ver">Ver o e-mail</button>
+      <button type="button" class="btn-ok" id="ag-salvar">Agendar</button>
+    </div>
+  </div>
+</dialog>
 <dialog class="desafio-dlg" id="desafio-dlg" aria-labelledby="desafio-h">
   <h2 id="desafio-h">Qual é o desafio do projeto?</h2>
   <p class="muted">Descreva o projeto, o cliente ou segmento, o que precisa ser entregue e as condições (prazo, presencial ou remoto). A IA analisa todos os perfis e mostra os mais aderentes primeiro.</p>
@@ -883,6 +941,115 @@ function initGaleria(recarregar) {
   document.getElementById("gal-reenviar").addEventListener("click", (e) => disparar(true, e.currentTarget));
 }
 
+/* ---------- Agendamento do envio da autorização da galeria ----------
+   A administradora escolhe para quem (todos que ainda não decidiram, ou pessoas escolhidas), data e hora, vê o e-mail
+   e agenda; enquanto não foi enviado, pode alterar ou excluir. O banco confere a cada minuto e a função envia. */
+const AG = { lista: [], editando: null, sel: new Set() };
+const elegivel = (r) => !r.galeria_status && !r.comunicados_descadastro_em && !!r.email;
+const fmtQuando = (iso) => new Date(iso).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+const paraLocal = (iso) => { const d = new Date(iso); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); };
+function agPara(a) {
+  if (a.modo === "todos") return "Todos que ainda não decidiram";
+  const nomes = (a.destinatarios || []).map((id) => (ALL.find((r) => r.id === id) || {}).nome || "Parceiro excluído");
+  return nomes.length > 3 ? nomes.slice(0, 3).join(", ") + " e mais " + (nomes.length - 3) : nomes.join(", ");
+}
+async function agCarregar() {
+  const { data, error } = await Admin.sb.from("galeria_agendamentos").select("*").order("agendado_para", { ascending: false }).limit(30);
+  AG.lista = error ? [] : (data || []);
+  agListar();
+}
+function agListar() {
+  const box = document.getElementById("ag-lista"), itens = document.getElementById("ag-itens");
+  itens.replaceChildren(); box.hidden = !AG.lista.length;
+  AG.lista.forEach((a) => {
+    const it = el("div", "ag-item"), tx = el("div", "ag-tx"), acts = el("div", "ag-acts");
+    const sit = { agendado: ["Agendado", "wait"], enviando: ["Enviando", "wait"], enviado: ["Enviado", "ok"], falhou: ["Não enviado", "no"] }[a.situacao] || [a.situacao, "none"];
+    const topo = el("div"); topo.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap";
+    topo.append(el("b", null, fmtQuando(a.agendado_para)), el("span", "tp-gal " + sit[1], sit[0]));
+    tx.append(topo, el("span", "ag-sub", "Para: " + agPara(a)));
+    if (a.situacao === "enviado") tx.append(el("span", "ag-sub", plural(a.enviados, "enviado", "enviados") + (a.falhas ? " · " + plural(a.falhas, "não enviado", "não enviados") : "") + (a.ignorados ? " · " + plural(a.ignorados, "já tinha decidido", "já tinham decidido") : "")));
+    if (a.situacao === "falhou") tx.append(el("span", "ag-sub", "O envio não aconteceu. Agende de novo."));
+    if (a.situacao === "agendado") {
+      const alt = el("button", "btn-ghost", "Alterar"); alt.type = "button"; alt.addEventListener("click", () => agAbrir(a));
+      const exc = el("button", "btn-ghost", "Excluir"); exc.type = "button";
+      exc.addEventListener("click", async () => {
+        if (!(await Admin.confirmDialog({ title: "Excluir o envio agendado?", message: "O envio de " + fmtQuando(a.agendado_para) + " será cancelado. Nenhum e-mail é enviado.", ok: "Excluir", danger: true }))) return;
+        const { error } = await Admin.sb.from("galeria_agendamentos").delete().eq("id", a.id).eq("situacao", "agendado");
+        if (error) return Admin.toast("Não foi possível excluir: " + error.message);
+        Admin.log("Excluiu o envio agendado da autorização da galeria", fmtQuando(a.agendado_para));
+        await agCarregar(); Admin.toast("Envio agendado excluído.");
+      });
+      acts.append(alt, exc);
+    }
+    it.append(tx, acts); itens.appendChild(it);
+  });
+}
+function agPessoas() {
+  const q = document.getElementById("ag-busca").value.trim().toLowerCase();
+  const lista = document.getElementById("ag-pessoas-lista"); lista.replaceChildren();
+  const rows = ALL.filter(elegivel).filter((r) => !q || [r.nome, r.email].join(" ").toLowerCase().includes(q)).sort((a, b) => String(a.nome).localeCompare(String(b.nome), "pt-BR"));
+  if (!rows.length) lista.appendChild(el("div", "empty", "Ninguém para mostrar."));
+  rows.forEach((r) => {
+    const lb = el("label", "ag-pessoa"), cb = el("input"); cb.type = "checkbox"; cb.checked = AG.sel.has(r.id);
+    cb.addEventListener("change", () => { cb.checked ? AG.sel.add(r.id) : AG.sel.delete(r.id); agSelN(); });
+    const tx = el("span"); tx.append(r.nome || r.email, el("small", null, r.galeria_convite_em ? "Convidado em " + fmtQuando(r.galeria_convite_em) + ", sem resposta" : "Ainda não convidado"));
+    lb.append(cb, tx); lista.appendChild(lb);
+  });
+  agSelN();
+}
+function agSelN() { document.getElementById("ag-sel-n").textContent = AG.sel.size ? plural(AG.sel.size, "pessoa escolhida", "pessoas escolhidas") : "Nenhuma pessoa escolhida"; }
+const agModo = () => document.querySelector('input[name="ag-modo"]:checked').value;
+function agErro(x) { const e = document.getElementById("ag-err"); e.textContent = x; e.classList.toggle("hidden", !x); }
+function agAbrir(a) {
+  AG.editando = a || null;
+  AG.sel = new Set(a && a.modo === "selecionados" ? a.destinatarios : []);
+  document.getElementById("ag-t").textContent = a ? "Alterar envio agendado" : "Agendar envio";
+  document.getElementById("ag-salvar").textContent = a ? "Salvar alterações" : "Agendar";
+  document.querySelector(`input[name="ag-modo"][value="${a ? a.modo : "todos"}"]`).checked = true;
+  document.getElementById("ag-todos-txt").textContent = "Todos que ainda não decidiram (" + ALL.filter(elegivel).length + " hoje)";
+  document.getElementById("ag-pessoas").hidden = agModo() !== "selecionados";
+  document.getElementById("ag-busca").value = "";
+  // sugestão para um novo agendamento: amanhã às 9h
+  const sug = new Date(); sug.setDate(sug.getDate() + 1); sug.setHours(9, 0, 0, 0);
+  const campo = document.getElementById("ag-quando"); campo.value = paraLocal(a ? a.agendado_para : sug.toISOString()); campo.min = paraLocal(new Date().toISOString());
+  document.getElementById("ag-prev").classList.add("hidden"); document.getElementById("ag-ver").textContent = "Ver o e-mail";
+  agErro(""); agPessoas(); document.getElementById("ag-dlg").showModal();
+}
+function initAgendamento() {
+  const dlg = document.getElementById("ag-dlg");
+  document.getElementById("gal-agendar").addEventListener("click", () => agAbrir(null));
+  document.getElementById("ag-fechar").addEventListener("click", () => dlg.close());
+  document.querySelectorAll('input[name="ag-modo"]').forEach((r) => r.addEventListener("change", () => { document.getElementById("ag-pessoas").hidden = agModo() !== "selecionados"; agErro(""); }));
+  document.getElementById("ag-busca").addEventListener("input", agPessoas);
+  document.getElementById("ag-ver").addEventListener("click", async (e) => {
+    const box = document.getElementById("ag-prev");
+    if (!box.classList.contains("hidden")) { box.classList.add("hidden"); e.currentTarget.textContent = "Ver o e-mail"; return; }
+    const b = e.currentTarget; b.disabled = true;
+    const res = await chamarGaleria({ acao: "preview" }); b.disabled = false;
+    if (res.error) return agErro(res.error);
+    document.getElementById("ag-prev-frame").srcdoc = res.html; box.classList.remove("hidden"); b.textContent = "Fechar o e-mail";
+    box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+  document.getElementById("ag-salvar").addEventListener("click", async (e) => {
+    const modo = agModo(), v = document.getElementById("ag-quando").value;
+    if (modo === "selecionados" && !AG.sel.size) return agErro("Escolha pelo menos uma pessoa.");
+    if (!v) return agErro("Informe a data e a hora do envio.");
+    const quando = new Date(v);
+    if (isNaN(quando) || quando.getTime() < Date.now() + 60000) return agErro("Escolha uma data e hora a partir do próximo minuto.");
+    const dados = { modo, destinatarios: modo === "selecionados" ? [...AG.sel] : [], agendado_para: quando.toISOString() };
+    const b = e.currentTarget; b.disabled = true;
+    const { error } = AG.editando
+      ? await Admin.sb.from("galeria_agendamentos").update({ ...dados, atualizado_em: new Date().toISOString() }).eq("id", AG.editando.id).eq("situacao", "agendado")
+      : await Admin.sb.from("galeria_agendamentos").insert(dados);
+    b.disabled = false;
+    if (error) return agErro("Não foi possível salvar: " + error.message);
+    Admin.log((AG.editando ? "Alterou" : "Agendou") + " o envio da autorização da galeria", fmtQuando(dados.agendado_para) + " · " + (modo === "todos" ? "todos que ainda não decidiram" : plural(AG.sel.size, "pessoa", "pessoas")));
+    dlg.close(); await agCarregar();
+    Admin.toast((AG.editando ? "Agendamento alterado para " : "Envio agendado para ") + fmtQuando(dados.agendado_para) + ".");
+  });
+  agCarregar();
+}
+
 /* ---------- Candidaturas ---------- */
 function candidaturas(rows) {
   const list = document.getElementById("list"); list.replaceChildren();
@@ -1291,6 +1458,7 @@ Admin.init({ page: "parceiros", onReady: async () => {
   ALL = data;
   if (!document.getElementById("f-areas_experiencia")) {
     buildFilters(); buildAreaChips(); initDesafio(); initProfiles();
+    initAgendamento();
     initGaleria(async () => {
       const { data: d } = await Admin.sb.from("cadastros").select("id, galeria_status, galeria_convite_em");
       (d || []).forEach((x) => { const r = ALL.find((y) => y.id === x.id); if (r) Object.assign(r, x); });

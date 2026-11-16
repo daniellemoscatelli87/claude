@@ -357,6 +357,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** navegador (iPhone 13) com servidor simulado: validação do nome (Matheus e Matheus S recusados; Ana Lu e Maria da Silva aceitos), prefixo fixo (colar link inteiro, apagar tudo, host errado); página da galeria visível em 0,75 s com a IA atrasada 4 s, troca de senioridade refletida na prévia e enviada no formato do cadastro; `node --check` e `esbuild` da função; `npm run build`.
 - **Publicação (16/11):** função `galeria-autorizacao` publicada (versão 13); `ver` no ar responde em 0,8 a 1 s.
 
+## 2026-11-16 · Agendamento do envio da autorização da galeria (SITE-01), não publicado
+
+- **Banco:** migração `supabase/migrations/20261116150000_galeria_agendamentos.sql`: liga o `pg_cron`; tabela `galeria_agendamentos` (RLS: só a administradora; criar, alterar e excluir só com situação `agendado`; o que foi enviado fica como histórico); tabela `agendador_chave` (chave interna, ninguém de fora lê); função `disparar_agendamentos_galeria` (só chama a função de envio quando há agendamento vencido); tarefa do `pg_cron` a cada minuto.
+- **Função `galeria-convite`:** nova ação `agendados` (confere a chave interna, reserva cada agendamento vencido uma única vez, envia a todos que ainda não decidiram ou só aos escolhidos que ainda não decidiram e grava enviados, não enviados e quem já tinha decidido).
+- **Área restrita (Parceiros > Autorização da galeria):** botão "Agendar envio"; janela com "Para quem" (todos que ainda não decidiram ou escolher pessoas, com busca), data e hora, "Ver o e-mail"; lista "Envios agendados" com situação, "Alterar" e "Excluir" enquanto agendado.
+- **Verificação executada:** painel com login e dados simulados (validações, conversão do horário de Brasília, criar, alterar, excluir); migração num Postgres 16 local sem o `pg_cron` (RLS, colunas alteráveis, chave protegida, função protegida); `esbuild` da função; `npm run build`.
+- **Pendente:** aplicar a migração, publicar a função e o site; teste real com um agendamento para o e-mail de teste.
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:

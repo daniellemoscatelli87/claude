@@ -146,4 +146,4 @@ Pedidos da dona do produto para o site do estúdio (área restrita), fora do pro
 
 | ID | Item | Situação |
 |---|---|---|
-| SITE-01 | **Agendar o envio da autorização da galeria** (Parceiros > Autorização da galeria): escolher os destinatários (alguns ou todos), definir data e hora, visualizar o e-mail antes, programar o envio e depois alterar ou excluir o agendamento. Pedido em 16/11/2026. | Na fila; aguarda proposta e aprovação antes de começar |
+| SITE-01 | **Agendar o envio da autorização da galeria** (Parceiros > Autorização da galeria): escolher os destinatários (alguns ou todos), definir data e hora, visualizar o e-mail antes, programar o envio e depois alterar ou excluir o agendamento. Pedido em 16/11/2026. | Implementado em 16/11/2026, aguardando publicação |

@@ -8,6 +8,9 @@
 // { acao: "pendentes", reenviar } (administradora) envia para quem ainda não decidiu e ainda não foi
 //                               convidado; com reenviar: true, também para quem foi convidado e não respondeu.
 //                               Quem se descadastrou dos comunicados fica de fora do envio em massa.
+// { acao: "agendados", chave } Chamada pelo relógio do banco (pg_cron) quando há envio agendado vencido. A chave é
+//                               conferida com public.agendador_chave. Envia cada agendamento uma única vez (todos que
+//                               ainda não decidiram, ou só os escolhidos que ainda não decidiram) e grava o resultado.
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
 const REMETENTE = "Dani Moscatelli <contato@danimoscatelli.com.br>";
@@ -204,6 +207,35 @@ Deno.serve(async (req) => {
     if (exc) return json({ ok: true });
     await enviar([r], "bv");
     return json({ ok: true });
+  }
+
+  if (p.acao === "agendados") {
+    const { data: k } = await admin.from("agendador_chave").select("chave").eq("id", 1).maybeSingle();
+    if (!k || typeof p.chave !== "string" || p.chave !== k.chave) return json({ error: "Sem permissão" }, 403);
+    // reserva os envios vencidos (cada um sai uma única vez, mesmo com chamadas repetidas)
+    const { data: fila, error: eFila } = await admin.from("galeria_agendamentos")
+      .update({ situacao: "enviando", atualizado_em: new Date().toISOString() })
+      .eq("situacao", "agendado").lte("agendado_para", new Date().toISOString())
+      .select("id, modo, destinatarios");
+    if (eFila) { console.error("agendados", eFila.message); return json({ error: "Erro ao ler a fila" }, 500); }
+    const feitos = [];
+    for (const ag of fila ?? []) {
+      try {
+        let q = admin.from("cadastros").select("id, nome, email, galeria_token")
+          .is("galeria_status", null).is("comunicados_descadastro_em", null).not("email", "is", null);
+        if (ag.modo === "selecionados") q = q.in("id", ag.destinatarios ?? []);
+        const { data: lista, error: eLista } = await q;
+        if (eLista) throw new Error(eLista.message);
+        const r = lista?.length ? await enviar(lista, "bv") : { enviados: 0, falhas: 0 };
+        const ignorados = ag.modo === "selecionados" ? Math.max(0, (ag.destinatarios ?? []).length - (lista?.length ?? 0)) : 0;
+        await admin.from("galeria_agendamentos").update({ situacao: "enviado", executado_em: new Date().toISOString(), enviados: r.enviados, falhas: r.falhas, ignorados }).eq("id", ag.id);
+        feitos.push({ id: ag.id, ...r, ignorados });
+      } catch (e) {
+        console.error("agendamento", ag.id, String(e).slice(0, 200));
+        await admin.from("galeria_agendamentos").update({ situacao: "falhou", executado_em: new Date().toISOString(), erro: String(e).slice(0, 300) }).eq("id", ag.id);
+      }
+    }
+    return json({ ok: true, feitos });
   }
 
   const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
