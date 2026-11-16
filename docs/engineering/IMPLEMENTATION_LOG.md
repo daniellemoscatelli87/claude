@@ -360,6 +360,35 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-16 · Auditoria dos DS, lote 2 (D-051; publicado: DM v51 e FindLook v77)
+
+- **Feito nos dois DS:**
+  - `theme.css`: tokens de movimento, `--color-*-muted` no `@theme` e `--surface-tint` no DM;
+  - `shared/temaTokens.ts` lê o `theme.css` (`?raw`), e `TokenTable` e a grade de cores de Fundamentos usam esses valores;
+  - `ui/button` com 40 px, 15 px seminegrito e `--primary-hover`; `ui/input`, `select` e `toggle` com 40 px;
+  - foco único (`focus-visible:ring-2 ring-offset-2`) em `ui/` e nas páginas;
+  - `ui/alert` com as variantes `success`, `info`, `warning` e `error`;
+  - `ui/password-field` com caixa de dicas `primary/5` e checks na cor primária;
+  - as páginas Formulário e Feedback usam `ui/button`, `ui/input` e `ui/alert`;
+  - Tokens e Desenvolver com os nomes `--duration-normal` e `--ease-out`.
+- **Só no FindLook:**
+  - `ui/status-chip.tsx`, usado pela página Estados de informação;
+  - textos dos componentes em português (paginação, fechar, carrossel, trilha de navegação, menu lateral);
+  - menu em português com o termo técnico;
+  - exemplos de moda em Dados, Feedback, Overlays, Movimento e Cards.
+- **Integração:** o `main` do FindLook tinha dois commits de outra conversa (Voltar ao topo e Botões flutuantes). No rebase houve conflito só no `changelog.ts`, resolvido mantendo as três entradas. O build passou depois disso.
+- **Testes:**
+  - `pnpm build` dos dois DS: ok;
+  - Playwright:
+    - tabelas de tokens com 0 divergências em 158 linhas nos dois DS, no ar (antes eram 66 no FindLook e 13 no DM);
+    - página Formulário com botões padrão e campos de 40 px;
+    - foco pelo teclado com respiro branco de 2 px e anel de 4 px;
+    - nenhum erro de página;
+  - capturas aprovadas pela dona do produto: botões, campos, senha, alertas, Dados e exemplos.
+- **Pendente:**
+  - resto do item 10 (trilha de navegação, paginação, dica de contexto, gaveta, abas, diálogo, sanfona, menu suspenso);
+  - o produto FindLook ainda precisa acrescentar `ui/status-chip.tsx` em `design-system/arquivos.txt` para sincronizá-lo.
+
 ## 2026-11-16 · Site: foco preso no menu do celular e na gaveta de contato (item 6 da auditoria; publicado)
 
 - **Feito:** a função `travarFoco` em `src/compartilhado/menu.ts`, aplicada ao `#menu-mobile` e ao `#contact-drawer`. Enquanto o painel está aberto, Tab e Shift+Tab circulam só dentro dele.

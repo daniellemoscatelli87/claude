@@ -409,6 +409,26 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-051 · 16/11/2026 · Auditoria dos DS, lote 2: padrão único de botão, campo e foco; FindLook em português com exemplos de moda (DM v51 e FindLook v77)
+
+- **Origem:** lote 2 (prioridade alta) da lista da auditoria. A dona do produto aprovou cada parte por capturas.
+- **Sem decisão dela (correção):**
+  - Os tokens de movimento documentados passaram a existir no `theme.css`. Valem os nomes da página Movimento: `--duration-normal` e `--ease-out` substituem `--duration-base` e `--ease-default`.
+  - As cores `*-muted` foram mapeadas como classes.
+  - O Dani Moscatelli ganhou `--surface-tint` (= `--primary-muted`).
+  - As tabelas de tokens leem os valores do `theme.css`.
+- **Decisões dela:**
+  - **Botão e campo (proposta C):** o componente real passa a ser igual ao que a documentação mostra. Botão de 40 px, texto 15 px seminegrito e cantos 12 px; campo, seleção e alternador também com 40 px. As páginas de formulário e de alertas usam os componentes de `ui/`.
+  - **Foco:** um só destaque, o anel de 2 px com respiro de 2 px, só pelo teclado.
+  - **Campo de senha:** caixa de dicas num rosa mais claro (`primary/5`) e checks na cor primária de cada DS.
+  - **FindLook:**
+    - o menu fica em português com o termo técnico entre parênteses, por exemplo "Menu suspenso (dropdown)";
+    - os exemplos de software genérico e os do estúdio foram trocados por lojas, peças e buscas fictícias, identificadas como exemplo;
+    - as perguntas e o plano usam só fatos oficiais da marca, e não há depoimentos inventados.
+- **Componentes em `ui/`:** só o StatusChip era um componente reutilizável preso numa página. Foi para `ui/status-chip` no FindLook. Os modelos de login e de preço, a moldura do painel e os conteúdos do Wobble e do Shine são demonstrações e ficaram onde estão.
+- **Trade-off:** no produto FindLook, botões e campos ficam 4 px mais altos e com texto mais forte quando a sincronização for aprovada.
+- **Pendente do item 10:** trilha de navegação, paginação, dica de contexto, gaveta, abas, diálogo, sanfona e menu suspenso ainda são cópias nas páginas.
+
 ## D-050 · 16/11/2026 · Auditoria dos DS, lote 1: sombras, campos, cores de estado e erro (DM v50 e FindLook v74)
 
 - **Origem:** a dona do produto pediu uma varredura nos dois DS (inconsistências, falta de documentação, componentes inexistentes e divergências com os produtos), depois uma lista de tarefas por prioridade e, por fim, que tudo fosse executado com aprovação visual. Este é o lote 1 (prioridade máxima).
