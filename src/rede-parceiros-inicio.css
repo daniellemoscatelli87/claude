@@ -3512,3 +3512,12 @@ html body .rx-eco-centro { padding-bottom: .23cqw; }
   html body .rx-mf-grade .rx-mf-campo.sel { z-index: calc(10 - var(--d)); }
 }
 @media (max-width: 1023px) { html body .rx-mt-palco[data-match] .rx-mt-simular { order: 5; } }
+/* celular: o vão entre o conteúdo de uma seção e o da seguinte é sempre de 80px (medido do último elemento visível
+   até o primeiro da próxima); as folgas são divididas entre o fim de uma seção e o começo da outra */
+@media (max-width: 767px) {
+  html body section#rede { padding-bottom: 14px !important; }
+  html body section#quem { padding-top: 42px !important; padding-bottom: 28px !important; }
+  html body section#match { padding-top: 40px !important; padding-bottom: 38px !important; }
+  html body section#galeria { padding-top: 39px !important; padding-bottom: 38px !important; }
+  html body section#cadastro { padding-top: 26px !important; padding-bottom: 48px !important; }
+}
