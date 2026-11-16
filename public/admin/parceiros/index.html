@@ -515,6 +515,7 @@
     <p class="muted" style="margin:-6px 0 0;font-size:14px">Pedido de autorização da galeria. Quem já decidiu ou se descadastrou dos comunicados não recebe, mesmo que esteja na lista.</p>
     <fieldset class="ag-modo"><legend>Para quem</legend>
       <label><input type="radio" name="ag-modo" value="todos" checked><span id="ag-todos-txt">Todos que ainda não decidiram</span></label>
+      <span class="muted" id="ag-todos-nomes" style="font-size:12px;margin:-4px 0 0 28px"></span>
       <label><input type="radio" name="ag-modo" value="selecionados"><span>Escolher pessoas</span></label>
     </fieldset>
     <div class="ag-pessoas" id="ag-pessoas" hidden>
@@ -948,10 +949,16 @@ const AG = { lista: [], editando: null, sel: new Set() };
 const elegivel = (r) => !r.galeria_status && !r.comunicados_descadastro_em && !!r.email;
 const fmtQuando = (iso) => new Date(iso).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
 const paraLocal = (iso) => { const d = new Date(iso); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); };
-function agPara(a) {
-  if (a.modo === "todos") return "Todos que ainda não decidiram";
+// Nomes de quem recebe. "Todos": quem ainda não decidiu agora (a lista é refeita na hora do envio).
+const agNomesTodos = () => ALL.filter(elegivel).map((r) => r.nome || r.email).sort((x, y) => String(x).localeCompare(String(y), "pt-BR"));
+const agJunta = (nomes, max) => !nomes.length ? "ninguém" : nomes.length > max ? nomes.slice(0, max).join(", ") + " e mais " + (nomes.length - max) : nomes.join(", ");
+function agPara(a, max = 3) {
+  if (a.modo === "todos") {
+    if (a.situacao && a.situacao !== "agendado") return "Todos que ainda não decidiram";
+    const n = agNomesTodos(); return "Todos que ainda não decidiram (" + n.length + "): " + agJunta(n, max);
+  }
   const nomes = (a.destinatarios || []).map((id) => (ALL.find((r) => r.id === id) || {}).nome || "Parceiro excluído");
-  return nomes.length > 3 ? nomes.slice(0, 3).join(", ") + " e mais " + (nomes.length - 3) : nomes.join(", ");
+  return (nomes.length === 1 ? "1 pessoa: " : nomes.length + " pessoas: ") + agJunta(nomes, max);
 }
 async function agCarregar() {
   const { data, error } = await Admin.sb.from("galeria_agendamentos").select("*").order("agendado_para", { ascending: false }).limit(30);
@@ -966,9 +973,11 @@ function agListar() {
     const sit = { agendado: ["Agendado", "wait"], enviando: ["Enviando", "wait"], enviado: ["Enviado", "ok"], falhou: ["Não enviado", "no"] }[a.situacao] || [a.situacao, "none"];
     const topo = el("div"); topo.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap";
     topo.append(el("b", null, fmtQuando(a.agendado_para)), el("span", "tp-gal " + sit[1], sit[0]));
-    tx.append(topo, el("span", "ag-sub", "Para: " + agPara(a)));
+    const para = el("span", "ag-sub", "Para: " + agPara(a, 6)); para.title = agPara(a, 1000);
+    tx.append(topo, para);
+    if (a.modo === "todos" && a.situacao === "agendado") tx.append(el("span", "ag-sub", "A lista de \u201ctodos\u201d é atualizada na hora do envio."));
     if (a.situacao === "enviado") tx.append(el("span", "ag-sub", plural(a.enviados, "enviado", "enviados") + (a.falhas ? " · " + plural(a.falhas, "não enviado", "não enviados") : "") + (a.ignorados ? " · " + plural(a.ignorados, "já tinha decidido", "já tinham decidido") : "")));
-    if (a.situacao === "falhou") tx.append(el("span", "ag-sub", "O envio não aconteceu. Agende de novo."));
+    if (a.situacao === "falhou") tx.append(el("span", "ag-sub", "O envio não aconteceu" + (a.erro && /^Pausado/.test(a.erro) ? " (pausado antes da hora)" : "") + ". Agende de novo."));
     if (a.situacao === "agendado") {
       const alt = el("button", "btn-ghost", "Alterar"); alt.type = "button"; alt.addEventListener("click", () => agAbrir(a));
       const exc = el("button", "btn-ghost", "Excluir"); exc.type = "button";
@@ -1007,7 +1016,9 @@ function agAbrir(a) {
   document.getElementById("ag-salvar").textContent = a ? "Salvar alterações" : "Agendar";
   document.querySelector(`input[name="ag-modo"][value="${a ? a.modo : "todos"}"]`).checked = true;
   document.getElementById("ag-todos-txt").textContent = "Todos que ainda não decidiram (" + ALL.filter(elegivel).length + " hoje)";
+  document.getElementById("ag-todos-nomes").textContent = agJunta(agNomesTodos(), 1000);
   document.getElementById("ag-pessoas").hidden = agModo() !== "selecionados";
+  document.getElementById("ag-todos-nomes").hidden = agModo() === "selecionados";
   document.getElementById("ag-busca").value = "";
   // sugestão para um novo agendamento: amanhã às 9h
   const sug = new Date(); sug.setDate(sug.getDate() + 1); sug.setHours(9, 0, 0, 0);
@@ -1019,7 +1030,8 @@ function initAgendamento() {
   const dlg = document.getElementById("ag-dlg");
   document.getElementById("gal-agendar").addEventListener("click", () => agAbrir(null));
   document.getElementById("ag-fechar").addEventListener("click", () => dlg.close());
-  document.querySelectorAll('input[name="ag-modo"]').forEach((r) => r.addEventListener("change", () => { document.getElementById("ag-pessoas").hidden = agModo() !== "selecionados"; agErro(""); }));
+  const agModoMostra = () => { const sel = agModo() === "selecionados"; document.getElementById("ag-pessoas").hidden = !sel; document.getElementById("ag-todos-nomes").hidden = sel; };
+  document.querySelectorAll('input[name="ag-modo"]').forEach((r) => r.addEventListener("change", () => { agModoMostra(); agErro(""); }));
   document.getElementById("ag-busca").addEventListener("input", agPessoas);
   document.getElementById("ag-ver").addEventListener("click", async (e) => {
     const box = document.getElementById("ag-prev");
