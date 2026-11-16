@@ -3159,3 +3159,20 @@ html body .rx-mv-toast.mostra .rx-mv-tfechar .rx-mv-cursor, html body .rx-mv-toa
 html body .rx-mv-toast.cur .rx-mv-tfechar .rx-mv-cursor { animation: rx-mv-cur2 1.1s cubic-bezier(.45,0,.25,1) both; }
 html body .rx-mv-toast.cur .rx-mv-tfechar { animation: rx-mv-clique .3s ease 1s both; }
 html body .rx-mv-toast::before { content: ""; position: absolute; top: -6px; right: .875rem; width: 10px; height: 10px; background: #FFFFFF; border-left: 1px solid #E4E8EF; border-top: 1px solid #E4E8EF; transform: rotate(45deg); }
+/* cadastro: Tempo de experiência e Senioridade são seleções — a lista abre, a opção é destacada e escolhida */
+.rx-mf-campo.sel { position: relative; z-index: 3; }
+.rx-mf-campo.sel .rx-mf-v { max-width: none; opacity: 0; }
+.rx-mf-lista { position: absolute; left: 0; right: 0; top: calc(100% + .25rem); display: grid; padding: .25rem; border-radius: 10px; background: #FFFFFF; border: 1px solid #E4E8EF;
+  box-shadow: 0 14px 30px -14px rgba(13, 17, 25, .35); opacity: 0; transform: translateY(-4px); pointer-events: none; }
+.rx-mf-lista i { font-style: normal; padding: .3125rem .5rem; border-radius: 7px; font-size: .75rem; color: #283043; }
+@media (prefers-reduced-motion: no-preference) {
+  .rx-mv1.ativa .rx-mf-campo.sel .rx-mf-v { animation: rx-mt-in .2s ease forwards; animation-delay: calc(.3s + var(--d) * .6s + .62s); }
+  .rx-mv1.ativa .rx-mf-campo.sel .rx-mf-lista { animation: rx-mf-lista .75s ease both; animation-delay: calc(.3s + var(--d) * .6s + .05s); }
+  .rx-mv1.ativa .rx-mf-campo.sel .rx-mf-lista i.on { animation: rx-mf-opt .2s ease forwards; animation-delay: calc(.3s + var(--d) * .6s + .35s); }
+  .rx-mv1.ativa .rx-mf-campo.sel .rx-mf-seta { animation: rx-mf-gira .75s ease both; animation-delay: calc(.3s + var(--d) * .6s + .05s); }
+  .rx-mv1.ativa .rx-mf-campo.sel .rx-mf-in { animation: rx-mf-foco 1s ease both; animation-delay: calc(.3s + var(--d) * .6s); }
+}
+@media (prefers-reduced-motion: reduce) { .rx-mf-campo.sel .rx-mf-v { opacity: 1; } }
+@keyframes rx-mf-lista { 0% { opacity: 0; transform: translateY(-4px); } 15%, 80% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-4px); } }
+@keyframes rx-mf-opt { to { background: #FDF2F2; color: #D44D4D; font-weight: 600; } }
+@keyframes rx-mf-gira { 0%, 100% { transform: none; } 15%, 80% { transform: rotate(180deg); } }
