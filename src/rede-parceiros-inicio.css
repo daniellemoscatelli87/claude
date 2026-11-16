@@ -3598,3 +3598,7 @@ html body .rx-mv-campo-msg b.r2 { position: absolute; left: .875rem; right: .875
   html body .rx-mt-palco[data-match] .rx-mt-topico .rx-mt-tcorpo > span.rx-mt-tprev { display: grid !important; font-size: .75rem !important; line-height: 1.35 !important; color: #131A27 !important; font-weight: 400; }
   html body .rx-mt-palco[data-match] .rx-mt-tprev.p1 .pb { justify-self: end; margin-top: .125rem; }
 }
+/* mockup: cards em destaque com a sombra padrão do DS (--shadow-ds-md), sem sombra vermelha; a borda continua marcando o destaque */
+html body .rx-mv-grade li.novo, html body .rx-mv-fila li.vez { box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06); }
+@keyframes rx-mv-marca { to { border-color: rgba(212, 77, 77, .45); box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06); } }
+@keyframes rx-mv-vez { from { transform: none; box-shadow: none; } 50% { transform: scale(1.02); } to { transform: none; box-shadow: 0 4px 12px rgba(13, 17, 25, 0.08), 0 12px 36px rgba(13, 17, 25, 0.06); } }
