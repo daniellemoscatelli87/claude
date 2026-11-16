@@ -3257,3 +3257,9 @@ html body .rx-mv-rfoto.alta .anel circle { stroke: #FDE7E7; } html body .rx-mv-r
 html body .rx-mv-rfoto.media .anel circle { stroke: #FDEBD9; } html body .rx-mv-rfoto.media .anel circle.v { stroke: #E8862F; }
 html body .rx-mv-rfoto.baixa .anel circle { stroke: #FDF5CF; } html body .rx-mv-rfoto.baixa .anel circle.v { stroke: #E5B92E; }
 html body .rx-mv-fila2 li.fora .rx-mv-rfoto .anel circle { stroke: #EDF0F5; } html body .rx-mv-fila2 li.fora .rx-mv-rfoto .anel circle.v { stroke: #B3BDD0; }
+/* ranking: posição numa "abinha" cinza no canto superior esquerdo do card, acompanhando a curva */
+html body .rx-mv-fila2 > li { grid-template-columns: auto minmax(0, 1fr) auto !important; overflow: hidden; }
+html body .rx-mv-fila2 li > b { position: absolute; top: 0; left: 0; width: auto !important; padding: .1875rem .625rem .1875rem .75rem; border-radius: 17px 0 12px 0;
+  background: #EDF0F5; font-size: .6875rem !important; font-weight: 700; line-height: 1.4; color: #627288; }
+
+@media (max-width: 767px) { html body .rx-mv-fila2 li > b { display: block !important; border-radius: 15px 0 10px 0; } }
