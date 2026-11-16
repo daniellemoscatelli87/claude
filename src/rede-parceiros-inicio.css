@@ -3469,3 +3469,5 @@ html body .rx-eco-centro { padding-bottom: .23cqw; }
 }
 .rx-eco.anima .rx-eco-cm { opacity: 0; }
 .rx-eco.anima .rx-eco-cm.mostrado { opacity: 1; transition: opacity .35s ease; }
+/* celular e tablet: no núcleo, só "12 setores" */
+@media (max-width: 1023px) { html body .rx-eco-centro p > span { display: none; } }
