@@ -34,10 +34,18 @@
   .cm-hist h2 { margin: 28px 0 10px; font-size: 18px; }
   .cm-row .gal { justify-self: start; margin-top: 2px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #EDF0F5; color: #495669; }
   .cm-row .gal.ok { background: rgba(79, 181, 123, 0.14); color: #1f6b3a; }
-  .cm-h { padding: 12px 4px; display: grid; gap: 2px; }
+  .cm-h { padding: 14px 4px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 16px; }
   .cm-h + .cm-h { border-top: 1px solid var(--track); }
-  .cm-h strong { font-size: 14px; }
-  .cm-h span { font-size: 12px; color: var(--muted); }
+  .cm-h .cm-h-tx { display: grid; gap: 3px; min-width: 0; }
+  .cm-h strong { font-size: 14px; overflow-wrap: anywhere; }
+  .cm-h .cm-h-tit { font-size: 13px; color: var(--dark); overflow-wrap: anywhere; }
+  .cm-h .cm-h-para, .cm-h .cm-h-quando { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+  .cm-h .cm-h-para b { font-weight: 600; color: #495669; }
+  .cm-h .btn-ghost { white-space: nowrap; }
+  @media (max-width: 560px) { .cm-h { grid-template-columns: 1fr; } .cm-h .btn-ghost { justify-self: start; margin-top: 6px; } }
+  .cm-ver-meta { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; margin: 0; font-size: 14px; }
+  .cm-ver-meta dt { color: var(--muted); }
+  .cm-ver-meta dd { margin: 0; overflow-wrap: anywhere; }
   .cm-dlg { width: min(640px, 94vw); max-height: 92vh; border: 0; border-radius: 18px; padding: 0; box-shadow: 0 20px 60px -10px rgb(15 23 42 / .35); }
   .cm-dlg::backdrop { background: rgb(15 23 42 / .45); }
   .cm-in { position: relative; padding: 22px; display: grid; gap: 14px; }
@@ -88,6 +96,16 @@
       <button type="button" class="btn-ghost" id="btn-prev">Pré-visualizar e-mail</button>
       <button type="button" class="btn-send" id="btn-send">Enviar</button>
     </div>
+  </div>
+</dialog>
+<!-- E-mail enviado: destinatários, data, assunto, título e o e-mail como o parceiro recebeu -->
+<dialog class="cm-dlg" id="ver" aria-labelledby="ver-t">
+  <div class="cm-in">
+    <button type="button" class="cm-x" id="ver-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <h2 id="ver-t">Comunicado enviado</h2>
+    <dl class="cm-ver-meta" id="ver-meta"></dl>
+    <div class="cm-prev" id="ver-prev"><iframe title="E-mail enviado" id="ver-frame"></iframe></div>
+    <p class="msg err hidden" id="ver-err"></p>
   </div>
 </dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -155,14 +173,41 @@ async function carregar() {
   opcoes(document.getElementById("f-seg"), data.flatMap((r) => r.segmentos || []));
   render();
 }
+// Enviados: para quem, data e hora, assunto, título e a ação para ver o e-mail como foi enviado.
+const nomeDe = (id) => { const r = ALL.find((x) => x.id === id); return r ? (r.nome || r.email || "Parceiro") : "Parceiro excluído"; };
+const quando = (iso) => { const d = new Date(iso); return d.toLocaleDateString("pt-BR") + ", " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }); };
+function paraTexto(ids, max) {
+  const nomes = (ids || []).map(nomeDe);
+  if (!nomes.length) return "Ninguém recebeu";
+  return nomes.length > max ? nomes.slice(0, max).join(", ") + " e mais " + (nomes.length - max) : nomes.join(", ");
+}
+async function verEmail(c) {
+  const dlg = document.getElementById("ver"), meta = document.getElementById("ver-meta"), frame = document.getElementById("ver-frame"), err = document.getElementById("ver-err");
+  meta.replaceChildren(); err.classList.add("hidden");
+  const item = (r, v) => meta.append(el("dt", null, r), el("dd", null, v));
+  item("Para", paraTexto(c.destinatarios, 1000)); item("Enviado em", quando(c.created_at)); item("Assunto", c.assunto); item("Título", c.titulo);
+  if (c.falhas) item("Não enviados", String(c.falhas));
+  frame.srcdoc = "<p style='font-family:Arial,sans-serif;color:#64748b;padding:24px'>Carregando o e-mail…</p>";
+  dlg.showModal();
+  // o mesmo modelo do envio, com o assunto, o título e a mensagem gravados no histórico
+  const res = await chamar({ acao: "preview", assunto: c.assunto, titulo: c.titulo, mensagem: c.mensagem });
+  if (res.error) { frame.srcdoc = ""; err.textContent = res.error; err.classList.remove("hidden"); return; }
+  frame.srcdoc = res.html;
+}
 async function historico() {
   const box = document.getElementById("hist"); box.replaceChildren();
-  const { data, error } = await Admin.sb.from("comunicados").select("created_at, assunto, enviados, falhas").order("created_at", { ascending: false }).limit(30);
+  const { data, error } = await Admin.sb.from("comunicados").select("id, created_at, assunto, titulo, mensagem, destinatarios, enviados, falhas").order("created_at", { ascending: false }).limit(30);
   if (error || !data.length) return box.appendChild(el("div", "empty", error ? "Não foi possível carregar o histórico." : "Nenhum comunicado enviado ainda."));
   data.forEach((c) => {
-    const d = new Date(c.created_at);
     const h = el("div", "cm-h");
-    h.append(el("strong", null, c.assunto), el("span", null, d.toLocaleDateString("pt-BR") + ", " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) + " · " + plural(c.enviados, "enviado", "enviados") + (c.falhas ? " · " + plural(c.falhas, "não enviado", "não enviados") : "")));
+    const tx = el("div", "cm-h-tx");
+    const para = el("span", "cm-h-para"); para.append(el("b", null, "Para: "), paraTexto(c.destinatarios, 3));
+    tx.append(el("strong", null, c.assunto), el("span", "cm-h-tit", "Título: " + c.titulo), para,
+      el("span", "cm-h-quando", quando(c.created_at) + " · " + plural(c.enviados, "enviado", "enviados") + (c.falhas ? " · " + plural(c.falhas, "não enviado", "não enviados") : "")));
+    const ver = el("button", "btn-ghost", "Ver e-mail"); ver.type = "button";
+    ver.setAttribute("aria-label", "Ver o e-mail “" + c.assunto + "”");
+    ver.addEventListener("click", () => verEmail(c));
+    h.append(tx, ver);
     box.appendChild(h);
   });
 }
@@ -214,7 +259,9 @@ Admin.init({ page: "comunicados", onReady: async () => {
     filtrados().filter(recebe).forEach((r) => (e.target.checked ? SEL.add(r.id) : SEL.delete(r.id)));
     render();
   });
-  await Promise.all([carregar(), historico()]);
+  document.getElementById("ver-fechar").addEventListener("click", () => document.getElementById("ver").close());
+  // os nomes dos destinatários vêm da lista de parceiros: carrega a lista antes do histórico
+  await carregar(); await historico();
 }});
 </script>
 </body>

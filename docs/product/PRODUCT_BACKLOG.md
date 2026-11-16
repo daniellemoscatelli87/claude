@@ -137,3 +137,13 @@ Conforme a seção 14 de `CHALLENGE_METHODOLOGY.md` e o `CLAUDE.md`:
 - Integração com sistemas clínicos ou coleta de dados pessoais de pacientes.
 - Agente autônomo que executa ações externas.
 - Métricas preditivas.
+
+---
+
+## Site do estúdio: fila de pedidos (não iniciados)
+
+Pedidos da dona do produto para o site do estúdio (área restrita), fora do produto DM | Experience Intelligence.
+
+| ID | Item | Situação |
+|---|---|---|
+| SITE-01 | **Agendar o envio da autorização da galeria** (Parceiros > Autorização da galeria): escolher os destinatários (alguns ou todos), definir data e hora, visualizar o e-mail antes, programar o envio e depois alterar ou excluir o agendamento. Pedido em 16/11/2026. | Na fila; aguarda proposta e aprovação antes de começar |
