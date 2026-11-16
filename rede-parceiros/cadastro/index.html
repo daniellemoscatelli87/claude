@@ -236,6 +236,11 @@ html.embutido .nav-bar .modal-obs span[aria-hidden] { color: #D44D4D; }
     transition: border-color .15s, box-shadow .15s;
   }
   textarea { min-height: 120px; resize: vertical; }
+  /* link com "https://" fixo antes do campo */
+  .url-campo { position: relative; }
+  .url-pre { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 15px; color: var(--muted); pointer-events: none; }
+  .url-campo input[type=url] { padding-left: 70px; }
+  .q.invalid .url-campo input[type=url] { border-color: var(--error); }
   .uf-cidade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 12px; }
   @media (max-width: 560px) { .uf-cidade { grid-template-columns: 1fr; } }
   .uf-cidade label span { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
@@ -496,12 +501,12 @@ const ESTADOS = [["AC","Acre"],["AL","Alagoas"],["AP","Amapá"],["AM","Amazonas"
 
 const SECTIONS = [
   { title: "Informações profissionais e contato", n: "Seção 1", questions: [
-    { id: "nome", n: 1, label: "Qual é o seu nome completo?", type: "text", required: true },
+    { id: "nome", n: 1, label: "Qual é o seu nome completo?", type: "text", required: true, nomeCompleto: true, errMsg: "Informe o seu nome completo, com nome e sobrenome." },
     { id: "empresa", n: 2, label: "Qual é o nome da sua empresa?", type: "text", required: false, help: "Se você atua por meio de uma empresa, consultoria ou estúdio próprio." },
     { id: "email", n: 3, label: "Qual é o seu e-mail profissional?", type: "email", required: true },
     { id: "telefone", n: 4, label: "Qual é o seu telefone/WhatsApp para contato?", type: "tel", required: true, help: "Informe o número com DDD." },
     { id: "cidade_estado", n: 5, label: "Em qual cidade e estado você reside atualmente?", type: "uf_cidade", required: true, help: "Escolha o estado para carregar as cidades." },
-    { id: "linkedin", n: 6, label: "Qual é o seu perfil no LinkedIn?", type: "url", urlHost: "linkedin.com", placeholder: "https://www.linkedin.com/in/seu-perfil", required: false, help: "Insira o link completo." },
+    { id: "linkedin", n: 6, label: "Qual é o seu perfil no LinkedIn?", type: "url", urlHost: "linkedin.com", placeholder: "www.linkedin.com/in/seu-perfil", required: false, help: "Insira o link completo." },
     { id: "apresentacao", n: 7, label: "Como você se apresenta profissionalmente?", type: "paragraph", required: true, help: "Descreva brevemente sua atuação, suas principais competências e o tipo de contribuição que costuma oferecer aos projetos." },
   ]},
   { title: "Modelo de atuação e contratação", n: "Seção 2", questions: [
@@ -706,7 +711,7 @@ function questionHtml(q) {
   let field = "";
   if (q.type === "paragraph") field = `<textarea id="${q.id}" name="${q.id}"></textarea>`;
   else if (q.type === "url")
-    field = `<input type="url" inputmode="url" autocapitalize="off" spellcheck="false" id="${q.id}" name="${q.id}" placeholder="${esc(q.placeholder || "https://")}" autocomplete="url">`;
+    field = `<div class="url-campo"><span class="url-pre" aria-hidden="true">https://</span><input type="url" inputmode="url" autocapitalize="off" spellcheck="false" id="${q.id}" name="${q.id}" placeholder="${esc((q.placeholder || "").replace(/^https?:\/\//i, ""))}" autocomplete="url" aria-describedby="${q.id}-pre"><span class="sr-only" id="${q.id}-pre">O endereço já começa com https://. Digite o restante.</span></div>`;
   else if (q.type === "text" || q.type === "email" || q.type === "tel")
     field = `<input type="${q.type}" id="${q.id}" name="${q.id}" autocomplete="${{ nome: "name", email: "email", telefone: "tel" }[q.id] || "off"}"${q.maxlength ? ` maxlength="${q.maxlength}"` : ""}${q.placeholder ? ` placeholder="${esc(q.placeholder)}"` : ""}>`;
   else if (q.type === "list")
@@ -765,11 +770,12 @@ function value(q) {
   if (q.type === "radio") return form.querySelector(`input[name="${q.id}"]:checked`)?.value || "";
   if (q.type === "list") return [...form.querySelectorAll(`[data-list="${q.id}"] input`)].map((i) => i.value.trim()).filter(Boolean).join("\n");
   if (q.type === "idiomas") return langRows(q).filter((r) => r.idioma && r.nivel).map((r) => r.idioma + ": " + r.nivel).join("\n");
-  if (q.type === "url") { const v = form.elements[q.id].value.trim(); return v === "https://" || v === "http://" ? "" : withScheme(v); }
+  if (q.type === "url") return withScheme(form.elements[q.id].value);
   if (q.type === "uf_cidade") {
     const uf = form.elements[q.id + "_uf"].value, cidade = form.elements[q.id + "_cidade"].value.trim();
     return uf && cidade ? `${cidade} - ${uf}` : "";
   }
+  if (q.nomeCompleto) return form.elements[q.id].value.trim().replace(/\s+/g, " ");
   return form.elements[q.id].value.trim();
 }
 
@@ -883,15 +889,15 @@ form.addEventListener("change", (e) => {
 const otherText = (q) => (form.elements[q.id + "__outro"]?.value || "").trim();
 const otherChecked = (q) => [...form.querySelectorAll(`input[name="${q.id}"]:checked`)].some((i) => isOther(i.value));
 
-// Máscara de link: começa com https://, sem espaços; completa o https:// se a pessoa colar só o endereço.
-const withScheme = (v) => (v && !/^[a-z][a-z0-9+.-]*:\/\//i.test(v) ? "https://" + v.replace(/^\/+/, "") : v);
+// Link: o "https://" fica fixo antes do campo (a pessoa não consegue apagar); o campo guarda só o restante.
+// Se a pessoa colar o link inteiro, o https:// (ou http://) do começo é retirado do campo.
+const semScheme = (v) => String(v || "").replace(/\s+/g, "").replace(/^(?:https?:\/\/)+/i, "").replace(/^\/+/, "");
+const withScheme = (v) => (semScheme(v) ? "https://" + semScheme(v) : "");
 function validUrl(v, host) {
   try { const u = new URL(v); return /^https?:$/.test(u.protocol) && u.hostname.includes(".") && (!host || u.hostname === host || u.hostname.endsWith("." + host)); } catch { return false; }
 }
 form.querySelectorAll('input[type="url"]').forEach((i) => {
-  i.addEventListener("focus", () => { if (!i.value) i.value = "https://"; });
-  i.addEventListener("input", () => { i.value = i.value.replace(/\s+/g, ""); });
-  i.addEventListener("blur", () => { i.value = i.value === "https://" || i.value === "http://" ? "" : withScheme(i.value); });
+  i.addEventListener("input", () => { const v = semScheme(i.value); if (v !== i.value) i.value = v; });
 });
 form.querySelectorAll('input[type="tel"]').forEach((i) => i.addEventListener("input", () => { i.value = maskPhone(i.value); }));
 
@@ -940,7 +946,9 @@ function validateQuestion(q) {
   if (otherBad) ok = false;
   const err = form.querySelector(`[data-q="${q.id}"] .err`);
   if (err) { err.dataset.base ??= err.textContent; err.textContent = otherBad ? "Escreva qual é a opção “Outro”." : emailDup ? EMAIL_DUP_MSG : err.dataset.base; }
-  if (ok && q.type === "url" && v && v !== "https://") ok = validUrl(withScheme(v), q.urlHost);
+  if (ok && q.type === "url" && v) ok = validUrl(v, q.urlHost);
+  // nome completo: pelo menos nome e sobrenome (duas palavras com duas letras ou mais)
+  if (ok && q.nomeCompleto && v) ok = v.split(/\s+/).filter((p) => (p.match(/\p{L}/gu) || []).length >= 2).length >= 2;
   form.querySelector(`[data-q="${q.id}"]`).classList.toggle("invalid", !ok);
   return ok;
 }

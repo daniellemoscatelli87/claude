@@ -1,6 +1,9 @@
 // Autorização de exibição do perfil na Galeria de profissionais (pública; o token pessoal do e-mail identifica o parceiro).
-// { acao: "ver", t }  devolve só o que aparece na galeria (nome, cargo, áreas, segmentos, LinkedIn) e a decisão atual.
-// { acao: "decidir", t, decisao: "autorizado" | "recusado", especialidade?, linkedin, foto?, remover_foto? }
+// { acao: "ver", t }  devolve na hora só o que aparece na galeria (nome, cargo, senioridade, áreas, segmentos, LinkedIn)
+//     e a decisão atual, sem esperar a IA; ia_pendente: true quando ainda faltam as sugestões da IA.
+// { acao: "ia", t }   gera (uma vez) e devolve as sugestões da IA: { cargo, tags }. A página chama depois de abrir.
+// { acao: "decidir", t, decisao: "autorizado" | "recusado", especialidade?, tempo?, linkedin, foto?, remover_foto? }
+//     tempo: tempo na principal especialidade (define a senioridade); se mudar, atualiza o cadastro do parceiro.
 //     Especialidade: sugerida por IA (Gemini) a partir do campo 13 do cadastro: um termo curto. Só o texto do campo 13
 //     vai para a IA (sem nome, e-mail ou contato). A sugestão fica guardada em especialidade_ia; se a IA não responder,
 //     usa o rótulo curto por regra. O parceiro pode alterar.
@@ -112,6 +115,8 @@ async function tagsIA(perfil: { especialidade: string; areas: string[]; segmento
   }
   return [];
 }
+// Opções do campo 23 do cadastro (tempo na principal especialidade), na mesma grafia gravada no cadastro.
+const TEMPOS = ["Menos de 1 ano.", "Entre 1 e 2 anos.", "Entre 3 e 5 anos.", "Entre 6 e 10 anos.", "Entre 11 e 15 anos.", "Entre 16 e 20 anos.", "Mais de 20 anos."];
 const linkedinOk = (u: string) => !u || /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\//i.test(u);
 // Link do LinkedIn informado no cadastro: aceita "linkedin.com/in/..." ou "www.linkedin.com/..." e completa com https://.
 const normalizaLinkedin = (u: unknown) => { const v = String(u ?? "").trim(); return /^(www\.)?([a-z]{2,3}\.)?linkedin\.com\//i.test(v) ? "https://" + v.replace(/^https?:\/\//i, "") : v.replace(/^http:\/\//i, "https://"); };
@@ -147,13 +152,17 @@ Deno.serve(async (req) => {
   const origemTags = JSON.stringify(perfil);
   let sugestao = r.especialidade_ia_de === campo13 && r.especialidade_ia ? r.especialidade_ia : "";
   let tags: string[] = r.galeria_tags_ia_de === origemTags && r.galeria_tags_ia?.length ? r.galeria_tags_ia : [];
-  if (p.acao === "ver") {
-    const gerarTermo = !sugestao && !r.galeria_cargo && !!campo13;
-    const [novoTermo, novasTags] = await Promise.all([gerarTermo ? termoIA(campo13) : Promise.resolve(""), tags.length ? Promise.resolve([]) : tagsIA(perfil)]);
+  const gerarTermo = !sugestao && !r.galeria_cargo && !!campo13;
+  const gerarTags = !tags.length && (perfil.areas.length + perfil.segmentos.length) > 0;
+  // A IA leva alguns segundos: a página abre na hora com o rótulo por regra e as áreas e segmentos,
+  // e pede as sugestões da IA em seguida (acao "ia").
+  if (p.acao === "ia") {
+    const [novoTermo, novasTags] = await Promise.all([gerarTermo ? termoIA(campo13) : Promise.resolve(""), gerarTags ? tagsIA(perfil) : Promise.resolve([])]);
     const salvar: Record<string, unknown> = {};
     if (novoTermo) { sugestao = novoTermo; salvar.especialidade_ia = novoTermo; salvar.especialidade_ia_de = campo13; }
     if (novasTags.length) { tags = novasTags; salvar.galeria_tags_ia = novasTags; salvar.galeria_tags_ia_de = origemTags; }
     if (Object.keys(salvar).length) await admin.from("cadastros").update(salvar).eq("id", r.id);
+    return json({ cargo: r.galeria_cargo || sugestao || esp, tags });
   }
   const dados = {
     nome: r.nome,
@@ -165,7 +174,7 @@ Deno.serve(async (req) => {
     linkedin: r.galeria_linkedin ?? (linkedinOk(normalizaLinkedin(r.linkedin)) ? normalizaLinkedin(r.linkedin) : ""),
     foto_url: r.galeria_foto_url ?? "",
   };
-  if (p.acao === "ver") return json({ ...dados, status: r.galeria_status, texto: TEXTO, texto_versao: TEXTO_VERSAO });
+  if (p.acao === "ver") return json({ ...dados, tempo: r.tempo_especialidade ?? "", tempos: TEMPOS, ia_pendente: gerarTermo || gerarTags, status: r.galeria_status, texto: TEXTO, texto_versao: TEXTO_VERSAO });
   if (p.acao !== "decidir") return json({ error: "Ação inválida" }, 400);
 
   const decisao = p.decisao === "autorizado" ? "autorizado" : p.decisao === "recusado" ? "recusado" : "";
@@ -174,6 +183,10 @@ Deno.serve(async (req) => {
   const espIn = typeof p.especialidade === "string" ? limpa(p.especialidade).slice(0, 80) : null;
   const galeriaCargo = decisao === "autorizado" && espIn !== null ? (espIn && espIn !== esp ? espIn : null) : r.galeria_cargo;
   if (!linkedinOk(linkedin)) return json({ error: "Informe um link do LinkedIn começando com https://www.linkedin.com/" }, 400);
+  // Senioridade: só valores do campo 23 do cadastro; vazio mantém o que está no cadastro.
+  const tempoIn = typeof p.tempo === "string" && p.tempo ? p.tempo : null;
+  if (tempoIn !== null && !TEMPOS.includes(tempoIn)) return json({ error: "Escolha a senioridade na lista." }, 400);
+  const tempoNovo = decisao === "autorizado" && tempoIn !== null && tempoIn !== r.tempo_especialidade ? tempoIn : null;
 
   // Foto: nova (substitui e apaga a anterior), removida a pedido, ou apagada quando não autoriza.
   let fotoUrl: string | null = r.galeria_foto_url;
@@ -189,7 +202,7 @@ Deno.serve(async (req) => {
   }
 
   const agora = new Date().toISOString();
-  const exibidos = { ...dados, cargo: galeriaCargo || esp, linkedin, foto_url: fotoUrl ?? "" };
+  const exibidos = { ...dados, cargo: galeriaCargo || esp, linkedin, foto_url: fotoUrl ?? "", tempo: limpa(tempoNovo ?? r.tempo_especialidade) };
   const { error: e1 } = await admin.from("galeria_autorizacoes").insert({
     cadastro_id: r.id, decisao, texto_versao: TEXTO_VERSAO, texto: TEXTO,
     dados_exibidos: decisao === "autorizado" ? exibidos : {},
@@ -202,6 +215,8 @@ Deno.serve(async (req) => {
     galeria_foto_url: fotoUrl, galeria_cargo: galeriaCargo,
     // tags aprovadas na prévia (as da IA); sem tags da IA, o card usa as áreas e segmentos
     galeria_tags: decisao === "autorizado" && tags.length ? tags : null,
+    // senioridade alterada na página: atualiza o próprio cadastro (campo 23)
+    ...(tempoNovo ? { tempo_especialidade: tempoNovo } : {}),
   }).eq("id", r.id);
   if (e2) { console.error(e2.message); return json({ error: "Não foi possível registrar agora. Tente novamente." }, 500); }
   return json({ ok: true, status: decisao, foto_url: fotoUrl ?? "" });

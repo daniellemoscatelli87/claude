@@ -342,6 +342,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Pendente:** aplicar a migração e publicar as funções no Supabase; ligar o rastreamento de abertura e de cliques no domínio do Resend; criar o webhook no Resend e guardar o segredo em `RESEND_WEBHOOK_SECRET_RASTREIO` (não usar `RESEND_WEBHOOK_SECRET`, que é das respostas de contato); teste de ponta a ponta com um e-mail real.
 
+## 2026-11-16 · Cadastro de parceiros e página da galeria (site), não publicado
+
+- **Cadastro (`rede-parceiros/cadastro/index.html`):** nome completo obrigatório (pelo menos duas palavras com duas letras ou mais; espaços extras removidos ao salvar); campos de link com "https://" fixo antes do campo (a pessoa digita só o restante; se colar o link inteiro, o https:// sai do campo).
+- **Página da galeria (`public/rede-parceiros/galeria/autorizar/`):** abre sem esperar a IA (antes levava de 9 a 11 s, medido nos logs da função); as sugestões da IA chegam depois e atualizam a prévia sem apagar o que a pessoa digitou; novo campo Senioridade (opções do campo 23 do cadastro, com o nível do card); LinkedIn com "https://" fixo.
+- **Função `galeria-autorizacao`:** `ver` responde sem chamar a IA e informa `ia_pendente`; nova ação `ia`; `decidir` aceita `tempo` (só valores do campo 23) e atualiza `tempo_especialidade` do cadastro quando muda; o histórico da autorização guarda a senioridade exibida.
+- **Verificação executada:** navegador (iPhone 13) com servidor simulado: validação do nome (Matheus e Matheus S recusados; Ana Lu e Maria da Silva aceitos), prefixo fixo (colar link inteiro, apagar tudo, host errado); página da galeria visível em 0,75 s com a IA atrasada 4 s, troca de senioridade refletida na prévia e enviada no formato do cadastro; `node --check` e `esbuild` da função; `npm run build`.
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:
