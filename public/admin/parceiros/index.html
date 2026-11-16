@@ -27,7 +27,7 @@
   .gal-excluir:hover { background: #fdf2f2; }
   .cm-gal { margin-bottom: 16px; }
   .cm-gal h2 { margin: 0 0 6px; font-size: 18px; }
-  .cm-gal-n { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+  .cm-gal-n { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
   .cm-gal-n div { padding: 12px; border-radius: 12px; background: #F6F7FA; border: 1px solid var(--line); }
   .cm-gal-n strong { display: block; font-size: 22px; }
   .cm-gal-n span { font-size: 12px; color: var(--muted); }
@@ -844,6 +844,12 @@ function resumoGaleria() {
   itens.forEach(([t, v]) => { const d = el("div"); d.append(el("strong", null, String(v)), el("span", null, t)); box.appendChild(d); });
   document.getElementById("gal-enviar").disabled = !itens[3][1];
   document.getElementById("gal-reenviar").disabled = !itens[2][1];
+  // Quantos parceiros abriram o e-mail da galeria (rastreamento do Resend; cada parceiro conta uma vez).
+  const vis = el("div", "gal-vis"); vis.append(el("strong", null, "…"), el("span", null, "visualizaram o e-mail"));
+  vis.title = "Parceiros que abriram o e-mail da galeria. A abertura é uma estimativa: alguns programas de e-mail abrem a mensagem sozinhos e outros bloqueiam a contagem.";
+  box.appendChild(vis);
+  Admin.sb.from("email_envios").select("cadastro_id").eq("origem", "galeria-convite").not("aberto_em", "is", null).limit(5000)
+    .then(({ data, error }) => { vis.firstChild.textContent = error ? "–" : String(new Set((data || []).map((x) => x.cadastro_id)).size); });
 }
 async function chamarGaleria(body) {
   const { data, error } = await Admin.sb.functions.invoke("galeria-convite", { body });
