@@ -517,7 +517,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
 }
 
 
-/* ---------- Ecossistema: entrada animada (núcleo → pétalas → luz dá uma volta e revela os setores um a um) ----------
+/* ---------- Ecossistema: entrada animada (pétalas → luz dá uma volta e revela os setores um a um → núcleo) ----------
    A luz parte do topo em sentido horário; cada setor (--t = posição no anel, de 0 a 1) aparece no instante em que ela
    passa, aceso por um momento. Depois da volta completa, a luz some e tudo fica parado. */
 {
@@ -525,7 +525,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   const luz = eco?.querySelector<SVGGElement>('.rx-eco-luz');
   if (eco && luz && !matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
     eco.classList.add('anima');
-    const VOLTA = 7000, ACESO = 700, INICIO_LUZ = 2000; // a luz começa depois das pétalas (≈1,9 s)
+    const VOLTA = 7000, ACESO = 700, INICIO_LUZ = 1500; // a luz começa depois das pétalas (≈1,4 s)
     const pontos = Array.from(eco.querySelectorAll<SVGCircleElement>('.rx-eco-ponto'));
     const setores = Array.from(eco.querySelectorAll<HTMLElement>('.rx-eco-setor'));
     const linhas = Array.from(eco.querySelectorAll<SVGLineElement>('.rx-eco-con'));
@@ -545,7 +545,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
         luz.style.transform = `rotate(${(f * 360).toFixed(2)}deg)`;
         pos.forEach((t, i) => { if (!feitos.has(i) && f >= t) { feitos.add(i); revelar(i); } });
         if (f < 1) requestAnimationFrame(quadro);
-        else luz.classList.remove('ativa');
+        else { luz.classList.remove('ativa'); setTimeout(() => eco.classList.add('nucleo'), 350); } // por último, o núcleo
       };
       requestAnimationFrame(quadro);
     };
