@@ -529,10 +529,12 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     const pontos = Array.from(eco.querySelectorAll<SVGCircleElement>('.rx-eco-ponto'));
     const setores = Array.from(eco.querySelectorAll<HTMLElement>('.rx-eco-setor'));
     const linhas = Array.from(eco.querySelectorAll<SVGLineElement>('.rx-eco-con'));
+    const curtas = Array.from(eco.querySelectorAll<SVGLineElement>('.rx-eco-cm'));
     const pos = pontos.map((p) => parseFloat(p.style.getPropertyValue('--t')) || 0);
     luz.style.animation = 'none';
     const revelar = (i: number) => {
       [pontos[i], setores[i], linhas[i]].forEach((el) => el?.classList.add('mostrado', 'aceso'));
+      curtas[i]?.classList.add('mostrado');
       setTimeout(() => [pontos[i], setores[i], linhas[i]].forEach((el) => el?.classList.remove('aceso')), ACESO);
     };
     const girar = () => {
@@ -786,3 +788,23 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   mostrar(1);
   requestAnimationFrame(passo);
 })();
+
+/* ---------- Ecossistema no celular: setores só com ícone; ao tocar, o nome aparece (toque fora fecha) ---------- */
+{
+  const eco = document.querySelector<HTMLElement>('[data-eco]');
+  const pequeno = matchMedia('(max-width: 1023px)');
+  const setores = Array.from(eco?.querySelectorAll<HTMLElement>('.rx-eco-setor') ?? []);
+  const fechar = (exceto?: HTMLElement) => setores.forEach((s) => { if (s !== exceto) { s.classList.remove('aberto'); s.setAttribute('aria-expanded', 'false'); } });
+  const preparar = () => setores.forEach((s) => {
+    if (pequeno.matches) { s.tabIndex = 0; s.setAttribute('role', 'button'); s.setAttribute('aria-label', s.textContent?.trim() ?? ''); s.setAttribute('aria-expanded', 'false'); }
+    else { s.removeAttribute('tabindex'); s.removeAttribute('role'); s.removeAttribute('aria-label'); s.removeAttribute('aria-expanded'); s.classList.remove('aberto'); }
+  });
+  preparar();
+  pequeno.addEventListener('change', preparar);
+  const alternar = (s: HTMLElement) => { const abrir = !s.classList.contains('aberto'); fechar(s); s.classList.toggle('aberto', abrir); s.setAttribute('aria-expanded', String(abrir)); };
+  setores.forEach((s) => {
+    s.addEventListener('click', (e) => { if (!pequeno.matches) return; e.stopPropagation(); alternar(s); });
+    s.addEventListener('keydown', (e) => { if (!pequeno.matches) return; if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); alternar(s); } else if (e.key === 'Escape') fechar(); });
+  });
+  document.addEventListener('click', () => fechar());
+}

@@ -3442,3 +3442,30 @@ html body .rx-eco-centro p > span { font-size: 1.25cqw; font-weight: 700; color:
 html body .rx-eco-centro p .rx-eco-num { font-size: 1.6cqw; font-weight: 700; }
 /* núcleo: compensa o espaço interno do ícone e do texto para o conteúdo ficar exatamente no centro vertical */
 html body .rx-eco-centro { padding-bottom: .23cqw; }
+/* celular e tablet: setores em volta da roda, como no computador, só com o ícone; ao tocar, o nome aparece num balão */
+.rx-eco-cm { display: none; }
+@media (max-width: 1023px) {
+  html body .rx-eco { aspect-ratio: 1; }
+  html body .rx-eco-palco { width: 149.13%; left: -24.56%; top: -2.43%; }
+  html body .rx-eco-setores { display: block; }
+  html body .rx-eco-cm { display: inline; }
+  html body .rx-eco-lista { display: none; }
+  html body .rx-eco-setor { left: var(--ml) !important; top: var(--mt) !important; z-index: 2; display: grid; place-items: center; gap: 0; width: 6cqw; min-width: 0; height: 6cqw; min-height: 0; padding: 0; border-radius: 9999px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  html body .rx-eco-setor svg { width: 2.9cqw; height: 2.9cqw; }
+  html body .rx-eco-setor > span { position: absolute; display: none; padding: .4rem .65rem; border-radius: .5rem; background: #131A27; color: #FFFFFF; font-size: .75rem; font-weight: 600; line-height: 1.25; white-space: nowrap; box-shadow: 0 4px 14px rgba(13, 17, 25, .18); pointer-events: none; }
+  html body .rx-eco-setor > span br { display: none; }
+  html body .rx-eco-setor.aberto { z-index: 3; color: #D44D4D; border-color: rgba(212, 77, 77, .45); }
+  html body .rx-eco-setor.aberto > span { display: block; }
+  html body .rx-eco-setor[data-lado^="c"] > span { left: 50%; transform: translateX(-50%); }
+  html body .rx-eco-setor[data-lado^="e"] > span { left: 0; }
+  html body .rx-eco-setor[data-lado^="d"] > span { right: 0; }
+  html body .rx-eco-setor[data-lado$="b"] > span { top: calc(100% + .4rem); }
+  html body .rx-eco-setor[data-lado$="a"] > span { bottom: calc(100% + .4rem); }
+  html body .rx-eco-esp { font-size: 1.75cqw; }
+  html body .rx-eco-esp svg { width: 3.4cqw; height: 3.4cqw; }
+  html body .rx-eco-centro p .rx-eco-num { font-size: 2cqw; }
+  html body .rx-eco-centro p > span { font-size: 1.55cqw; }
+  html body .rx-eco-centro svg { width: 4cqw; height: 4cqw; }
+}
+.rx-eco.anima .rx-eco-cm { opacity: 0; }
+.rx-eco.anima .rx-eco-cm.mostrado { opacity: 1; transition: opacity .35s ease; }
