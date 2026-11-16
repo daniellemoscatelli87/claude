@@ -668,7 +668,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const novoCard = () => {
     const li = document.createElement('li');
     li.className = 'rx-kb-card rx-kb-ju';
-    li.innerHTML = '<img src="/rede-parceiros/avatares/avatar-3.webp" alt="" width="32" height="32"><span class="rx-kb-corpo"><strong>Design Organizacional</strong><span class="rx-kb-cargo">Product Designer</span><span class="rx-kb-status" data-s="0">Convite</span><span class="rx-kb-barra" aria-hidden="true"><i style="width:0%"></i></span></span><em class="rx-kb-novo">Novo</em>';
+    li.innerHTML = '<img src="/rede-parceiros/avatares/avatar-3.webp" alt="" width="32" height="32"><span class="rx-kb-corpo"><strong>Jornada do Paciente</strong><span class="rx-kb-cargo">Product Designer</span><span class="rx-kb-status" data-s="0">Convite</span><span class="rx-kb-barra" aria-hidden="true"><i style="width:0%"></i></span></span><em class="rx-kb-novo">Novo</em>';
     return li;
   };
   const passosKanban: [number, () => void][] = [
