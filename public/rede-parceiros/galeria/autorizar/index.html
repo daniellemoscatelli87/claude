@@ -38,6 +38,14 @@
   label small { font-weight: 400; color: #627288; }
   input { width: 100%; font: inherit; font-size: 1rem; padding: .75rem .875rem; border: 1px solid #D6DCE6; border-radius: 12px; color: #131A27; background: #FFFFFF; }
   input:focus-visible { outline: none; border-color: #D44D4D; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.2); }
+  /* senioridade: lista no mesmo estilo dos campos */
+  select.campo-sel { width: 100%; font: inherit; font-size: 1rem; padding: .75rem 2.5rem .75rem .875rem; border: 1px solid #D6DCE6; border-radius: 12px; color: #131A27; cursor: pointer;
+    appearance: none; -webkit-appearance: none; background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23627288' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right .875rem center / 1rem; }
+  select.campo-sel:focus-visible { outline: none; border-color: #D44D4D; box-shadow: 0 0 0 3px rgba(212, 77, 77, 0.2); }
+  /* LinkedIn com "https://" fixo antes do campo */
+  .url-campo { position: relative; }
+  .url-pre { position: absolute; left: .875rem; top: 50%; transform: translateY(-50%); font-size: 1rem; color: #627288; pointer-events: none; }
+  .url-campo input { padding-left: 4.4rem; }
   .termo { margin: 0 0 1.25rem; padding: 1rem 1.125rem; border-radius: 16px; background: #F6F7FA; border: 1px solid #EDF0F5; font-size: .875rem; line-height: 1.6; color: #283043; }
   .acoes { display: flex; flex-wrap: wrap; gap: .75rem; }
   .aceite { display: flex; align-items: flex-start; gap: .625rem; margin: 0 0 1rem; padding: .875rem 1rem; border: 1px solid #E4E6EC; border-radius: 12px; background: #FFFFFF; font-size: .9375rem; font-weight: 500; line-height: 1.5; color: #131A27; cursor: pointer; }
@@ -161,9 +169,10 @@
     <p class="status" id="status" role="status" hidden></p>
     <h2>Dados do seu perfil</h2>
     <label class="esp-campo">Especialidade<small>Sugerida a partir do seu cadastro. Se preferir, altere. Até 80 caracteres.</small><input type="text" id="especialidade" maxlength="80"></label>
+    <label class="esp-campo">Senioridade<small>Pelo tempo de atuação na sua principal especialidade, informado no cadastro. Se mudou, atualize: o seu cadastro também é atualizado.</small><select id="tempo" class="campo-sel"></select></label>
     <div class="li-campo">
       <span class="foto-rot">Link do seu LinkedIn<small>Informado no seu cadastro. Se precisar, altere.</small></span>
-      <label id="li-editar" style="margin:0"><span class="sr-only">Link do seu LinkedIn</span><input type="url" id="linkedin" maxlength="300" placeholder="https://www.linkedin.com/in/seu-perfil" autocomplete="url"></label>
+      <label id="li-editar" style="margin:0"><span class="sr-only">Link do seu LinkedIn (já começa com https://; digite o restante)</span><span class="url-campo"><span class="url-pre" aria-hidden="true">https://</span><input type="url" id="linkedin" maxlength="300" placeholder="www.linkedin.com/in/seu-perfil" autocomplete="url" inputmode="url" autocapitalize="off" spellcheck="false"></span></label>
     </div>
     <div class="foto-campo">
       <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP, até 15 MB e com pelo menos 300 × 300 pixels. Depois de escolher, ajuste o enquadramento.</small></span>
@@ -317,15 +326,37 @@
     $("rec-cancelar").addEventListener("click", function () { $("recorte").hidden = true; });
     $("foto-remover").addEventListener("click", function () { fotoNova = ""; nomeArquivo = ""; removerFoto = !!fotoAtual; mostrarFoto(""); $("recorte").hidden = true; });
     function atualizarIn() { $("p-in").style.visibility = $("linkedin").value.trim() ? "visible" : "hidden"; }
+    // LinkedIn: o "https://" fica fixo; se a pessoa colar o link inteiro, o https:// do começo sai do campo
+    var semScheme = function (v) { return String(v || "").replace(/\s+/g, "").replace(/^(?:https?:\/\/)+/i, ""); };
+    $("linkedin").addEventListener("input", function () { var v = semScheme($("linkedin").value); if (v !== $("linkedin").value) $("linkedin").value = v; });
     post({ acao: "ver" }).then(function (d) {
       $("carregando").hidden = true; $("conteudo").hidden = false;
       $("p-nome").textContent = d.nome || ""; $("p-ini").textContent = iniciais(d.nome);
       // especialidade: campo 13 do cadastro (ou o texto definido pelo Studio); tags: áreas e segmentos
       $("especialidade").value = d.cargo || ""; $("p-cargo").textContent = d.cargo || "";
-      var NIVEL = { "Menos de 1 ano": "Júnior", "Entre 1 e 2 anos": "Júnior", "Entre 3 e 5 anos": "Pleno", "Entre 6 e 10 anos": "Sênior", "Entre 11 e 15 anos": "Especialista", "Entre 16 e 20 anos": "Especialista", "Mais de 20 anos": "Especialista" }; var nivel = NIVEL[String(d.tempo || "").replace(/\.\s*$/, "")] || ""; $("p-tempo").textContent = nivel; $("p-tempo").hidden = !nivel;
-      $("especialidade").addEventListener("input", function () { $("p-cargo").textContent = $("especialidade").value.trim() || d.cargo || ""; });
-      ((d.tags && d.tags.length) ? d.tags : d.areas.concat(d.segmentos)).filter(function (a, i, l) { return a && l.indexOf(a) === i; }).forEach(function (a) { var li = document.createElement("li"); li.textContent = a; $("p-areas").appendChild(li); });
-      $("linkedin").value = d.linkedin || "";
+      // Senioridade: as opções do cadastro (tempo na principal especialidade) com o nível que aparece no card.
+      var NIVEL = { "Menos de 1 ano": "Júnior", "Entre 1 e 2 anos": "Júnior", "Entre 3 e 5 anos": "Pleno", "Entre 6 e 10 anos": "Sênior", "Entre 11 e 15 anos": "Especialista", "Entre 16 e 20 anos": "Especialista", "Mais de 20 anos": "Especialista" };
+      var nivelDe = function (t) { return NIVEL[String(t || "").replace(/\.\s*$/, "")] || ""; };
+      var sel = $("tempo");
+      if (!d.tempo) { var vazio = document.createElement("option"); vazio.value = ""; vazio.textContent = "Selecione"; sel.appendChild(vazio); }
+      (d.tempos || []).forEach(function (t) { var o = document.createElement("option"); o.value = t; o.textContent = t.replace(/\.\s*$/, "") + " · " + nivelDe(t); sel.appendChild(o); });
+      sel.value = d.tempo || "";
+      function mostrarNivel() { var nivel = nivelDe(sel.value); $("p-tempo").textContent = nivel; $("p-tempo").hidden = !nivel; }
+      mostrarNivel(); sel.addEventListener("change", mostrarNivel);
+      var espEditada = false;
+      $("especialidade").addEventListener("input", function () { espEditada = true; $("p-cargo").textContent = $("especialidade").value.trim() || d.cargo || ""; });
+      function mostrarTags(tags) {
+        var lista = $("p-areas"); lista.replaceChildren();
+        ((tags && tags.length) ? tags : d.areas.concat(d.segmentos)).filter(function (a, i, l) { return a && l.indexOf(a) === i; }).forEach(function (a) { var li = document.createElement("li"); li.textContent = a; lista.appendChild(li); });
+      }
+      mostrarTags(d.tags);
+      // A página abre na hora; as sugestões da IA (especialidade e tags) chegam em seguida e atualizam a prévia,
+      // sem apagar o que a pessoa já tiver digitado.
+      if (d.ia_pendente) post({ acao: "ia" }).then(function (ia) {
+        if (ia.cargo && !espEditada) { d.cargo = ia.cargo; $("especialidade").value = ia.cargo; $("p-cargo").textContent = ia.cargo; }
+        if (ia.tags && ia.tags.length) mostrarTags(ia.tags);
+      }).catch(function () {});
+      $("linkedin").value = String(d.linkedin || "").replace(/^(?:https?:\/\/)+/i, "");
       $("termo").textContent = d.texto;
       fotoAtual = d.foto_url || ""; mostrarFoto(fotoAtual);
       // LinkedIn do cadastro: já vem no campo, aberto para edição.
@@ -368,7 +399,8 @@ function confetti() {
       var erro = $("erro"); erro.hidden = true;
       if (!$("aceite-box").hidden && !$("aceite").checked) { $("aceite-box").classList.add("invalido"); erro.textContent = "Marque a autorização para enviar o seu perfil."; erro.hidden = false; $("aceite").focus(); return; }
       $("enviar").disabled = true; $("enviar").textContent = "Enviando…";
-      post({ acao: "decidir", decisao: "autorizado", especialidade: $("especialidade").value, linkedin: $("linkedin").value, foto: fotoNova, remover_foto: removerFoto })
+      var li = semScheme($("linkedin").value);
+      post({ acao: "decidir", decisao: "autorizado", especialidade: $("especialidade").value, tempo: $("tempo").value, linkedin: li ? "https://" + li : "", foto: fotoNova, remover_foto: removerFoto })
         .then(function (r) {
           // tela final: some com o formulário e mostra a confirmação com o link para o site
           fotoNova = ""; removerFoto = false;
