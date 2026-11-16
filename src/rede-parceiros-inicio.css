@@ -3252,3 +3252,8 @@ html body .rx-mv-fila2 > li { padding-top: 1.375rem; }
 .rx-mv-voto > span.up { border-color: rgba(31, 138, 76, .35); color: #1F8A4C; background: #F2FAF5; }
 .rx-mv-voto > span.dn { border-color: rgba(212, 77, 77, .35); color: #D44D4D; background: #FFF6F6; }
 @media (max-width: 767px) { html body .rx-mv-fila2 .nm > small { right: .625rem; top: .375rem; } html body .rx-mv-fila2 > li { padding-top: 1.5rem; } }
+/* ranking: o anel em volta da foto na mesma cor da etiqueta do percentual */
+html body .rx-mv-rfoto.alta .anel circle { stroke: #FDE7E7; } html body .rx-mv-rfoto.alta .anel circle.v { stroke: #D44D4D; }
+html body .rx-mv-rfoto.media .anel circle { stroke: #FDEBD9; } html body .rx-mv-rfoto.media .anel circle.v { stroke: #E8862F; }
+html body .rx-mv-rfoto.baixa .anel circle { stroke: #FDF5CF; } html body .rx-mv-rfoto.baixa .anel circle.v { stroke: #E5B92E; }
+html body .rx-mv-fila2 li.fora .rx-mv-rfoto .anel circle { stroke: #EDF0F5; } html body .rx-mv-fila2 li.fora .rx-mv-rfoto .anel circle.v { stroke: #B3BDD0; }
