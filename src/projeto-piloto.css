@@ -1530,3 +1530,5 @@ html body main h2 { line-height: 1.2 !important; letter-spacing: -0.02em !import
 html body main h2 span { font-size: inherit !important; }
 @media (min-width: 768px) { html body main h2 { font-size: 2.25rem !important; } }
 html body main h2:not(.secao-escura h2) { color: #131A27; }
+/* Guia de participação: título com linhas equilibradas quando quebra (sem palavra solta na 2ª linha) */
+#guia-titulo { text-wrap: balance; }
