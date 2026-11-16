@@ -112,22 +112,23 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   const quadro = document.querySelector<HTMLElement>('.rx-kb-quadro');
   const pausa = document.querySelector<HTMLButtonElement>('.rx-kanban .rp-lista-pausa');
   if (!quadro) return;
-  const STATUS = ['Convite', 'Em colaboração', 'Concluída'];
+  // cada card é uma pessoa: o título é o nome, a linha de baixo a especialidade e a tag a atividade do momento
   const projetos = [
-    { tipo: 'Pesquisa com usuários', av: 3, cargo: 'UX Researcher', s: 1 },
-    { tipo: 'Mapeamento de jornada', av: 2, cargo: 'Service Designer', s: 0 },
-    { tipo: 'Protótipo de interface', av: 1, cargo: 'UX/UI Designer', s: 1 },
-    { tipo: 'Painel de indicadores', av: 4, cargo: 'Analista de Dados', s: 2 },
-    { tipo: 'Fluxo de primeiro acesso', av: 5, cargo: 'Product Designer', s: 0 },
-    { tipo: 'Automação com IA', av: 2, cargo: 'Especialista em IA', s: 2 },
-    { tipo: 'Capacitação de atendimento', av: 5, cargo: 'Especialista em CX', s: 1 },
-  ];
+    { nome: 'Lucas Ferreira', ini: 'LF', cargo: 'Desenvolvedor Front-end', tag: 'Convite', s: 0 },
+    { nome: 'Beatriz Lima', ini: 'BL', cargo: 'Service Designer', tag: 'Convite', s: 0 },
+    { nome: 'Rafael Costa', av: 2, cargo: 'UX Researcher', tag: 'Pesquisa', s: 1 },
+    { nome: 'Camila Rocha', av: 1, cargo: 'UX/UI Designer', tag: 'Prototipação', s: 1 },
+    { nome: 'Ana Souza', ini: 'AS', cargo: 'Especialista em CX', tag: 'VoC', s: 1 },
+    { nome: 'Diego Moreira', av: 4, cargo: 'Analista de Dados', tag: 'Indicadores', s: 2 },
+    { nome: 'Pedro Alves', ini: 'PA', cargo: 'Especialista em IA', tag: 'Automação', s: 2 },
+  ] as { nome: string; av?: number; ini?: string; cargo: string; tag: string; s: number }[];
+  const foto = (p: { av?: number; ini?: string }, t = 32) => (p.av ? `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="${t}" height="${t}" loading="lazy">` : `<span class="rx-kb-ini" aria-hidden="true">${p.ini}</span>`);
   const cols = Array.from(quadro.querySelectorAll<HTMLElement>('.rx-kb-col'));
   const listas = cols.map((c) => c.querySelector<HTMLUListElement>('.rx-kb-cards')!);
   const cards = projetos.map((p) => {
     const li = document.createElement('li');
     li.className = 'rx-kb-card';
-    li.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="32" height="32" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-cargo">${p.cargo}</span><span class="rx-kb-status"></span><span class="rx-kb-barra" aria-hidden="true"><i></i></span></span>`;
+    li.innerHTML = `${foto(p)}<span class="rx-kb-corpo"><strong>${p.nome}</strong><span class="rx-kb-cargo">${p.cargo}</span><span class="rx-kb-status"></span><span class="rx-kb-barra" aria-hidden="true"><i></i></span></span>`;
     return li;
   });
   // progresso de cada projeto: A iniciar = 0, Em andamento = avança aos poucos, Entregue = 100
@@ -135,7 +136,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   const pintar = (i: number) => { cards[i].querySelector<HTMLElement>('.rx-kb-barra i')!.style.width = `${prog[i]}%`; };
   const aplicarStatus = (i: number) => {
     const st = cards[i].querySelector<HTMLElement>('.rx-kb-status')!;
-    st.textContent = STATUS[projetos[i].s];
+    st.textContent = projetos[i].tag;
     st.dataset.s = String(projetos[i].s);
   };
   const contar = () => cols.forEach((c, k) => { c.querySelector('.rx-kb-qtd')!.textContent = String(listas[k].children.length); });
@@ -149,7 +150,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   quadro.after(unico);
   const mostrarUnico = (i: number, animar: boolean) => {
     const p = projetos[i];
-    unico.innerHTML = `<img src="/rede-parceiros/avatares/avatar-${p.av}.webp" alt="" width="48" height="48" loading="lazy"><span class="rx-kb-corpo"><strong>${p.tipo}</strong><span class="rx-kb-cargo">${p.cargo}</span><span class="rx-kb-status" data-s="${p.s}">${STATUS[p.s]}</span></span>`;
+    unico.innerHTML = `${foto(p, 48)}<span class="rx-kb-corpo"><strong>${p.nome}</strong><span class="rx-kb-cargo">${p.cargo}</span><span class="rx-kb-status" data-s="${p.s}">${p.tag}</span></span>`;
     if (animar && unico.offsetParent) unico.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
   };
   let unicoVez = 0; // no celular o card percorre os projetos em sequência: a cada troca, outro projeto e outro profissional
@@ -646,7 +647,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const total = cenas.length;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const LENTO = 1.35;
-  const BASE = [0, 6500, 4000, 6500, 8000, 7000, 10000, 7000, 12500];
+  const BASE = [0, 6500, 4000, 6500, 8000, 7000, 10000, 7000, 13500];
   const DUR = (n: number) => (BASE[n] || 6500) * LENTO;
   let atual = 1, decorrido = 0, pausado = reduzir, visivel = false, ultimo = 0, rodando = true;
   const cenaAtual = () => cenas[atual - 1];
@@ -661,41 +662,66 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const c7 = palco.querySelector<HTMLElement>('.rx-mt-c7');
   const quadroMt = c7?.querySelector<HTMLElement>('.rx-kb-quadro');
   const colsMt = quadroMt ? Array.from(quadroMt.querySelectorAll<HTMLElement>('.rx-kb-cards')) : [];
-  const toast = c7?.querySelector<HTMLElement>('.rx-mv-toast');
+  const modal = c7?.querySelector<HTMLElement>('.rx-mv-kbmodal');
   const sino = c7?.querySelector<HTMLElement>('.rx-mv-sino');
   let cardJu: HTMLLIElement | null = null;
+  let mao: HTMLElement | null = null;
   const contarMt = () => quadroMt?.querySelectorAll<HTMLElement>('.rx-kb-col').forEach((c) => { const q = c.querySelector('.rx-kb-qtd'); if (q) q.textContent = String(c.querySelectorAll('.rx-kb-card').length); });
   const novoCard = () => {
     const li = document.createElement('li');
     li.className = 'rx-kb-card rx-kb-ju';
-    li.innerHTML = '<img src="/rede-parceiros/avatares/avatar-3.webp" alt="" width="32" height="32"><span class="rx-kb-corpo"><strong>Jornada do Paciente</strong><span class="rx-kb-cargo">Product Designer</span><span class="rx-kb-status" data-s="0">Convite</span><span class="rx-kb-barra" aria-hidden="true"><i style="width:0%"></i></span></span><em class="rx-kb-novo">Novo</em>';
+    li.innerHTML = '<img src="/rede-parceiros/avatares/avatar-3.webp" alt="" width="32" height="32"><span class="rx-kb-corpo"><strong>Juliana Prado</strong><span class="rx-kb-cargo">Product Designer</span><span class="rx-kb-status" data-s="0">Convite</span><span class="rx-kb-barra" aria-hidden="true"><i style="width:0%"></i></span></span><em class="rx-kb-novo">Novo</em>';
     return li;
+  };
+  // cursor que leva o card de uma coluna para a outra
+  const CURSOR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2l15 9-6.5 1.5L16 20l-3 1.5-3.4-7.6L4 18z" fill="#131A27" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+  const centro = (el: Element) => { const r = el.getBoundingClientRect(), c = c7!.getBoundingClientRect(); return { x: r.left + r.width * 0.55 - c.left, y: r.top + r.height * 0.45 - c.top }; };
+  const arrastar = () => {
+    const li = cardJu;
+    if (!li || !c7 || colsMt.length < 2) return;
+    const btn = modal?.querySelector('.rx-mv-kbsim');
+    const de = btn ? centro(btn) : centro(li);
+    const pega = centro(li);
+    mao = document.createElement('span');
+    mao.className = 'rx-mv-mao';
+    mao.innerHTML = CURSOR;
+    mao.style.left = `${pega.x}px`; mao.style.top = `${pega.y}px`;
+    c7.appendChild(mao);
+    const ida = mao.animate([{ transform: `translate(${de.x - pega.x}px, ${de.y - pega.y}px)` }, { transform: 'none' }], { duration: 900, easing: 'cubic-bezier(.45,0,.25,1)', fill: 'both' });
+    ritmo(c7);
+    ida.finished.then(() => {
+      if (!cardJu || !mao) return;
+      li.classList.add('pego');
+      const antes = li.getBoundingClientRect();
+      colsMt[1].prepend(li); contarMt();
+      const depois = li.getBoundingClientRect();
+      const dx = antes.left - depois.left, dy = antes.top - depois.top;
+      c7.classList.add('movendo');
+      const solta = () => {
+        li.classList.remove('pego');
+        const st = li.querySelector<HTMLElement>('.rx-kb-status')!; st.textContent = 'Kickoff'; st.dataset.s = '1';
+        li.querySelector<HTMLElement>('.rx-kb-barra i')!.style.width = '8%';
+        c7.classList.remove('movendo');
+      };
+      li.animate([{ transform: `translate(${dx}px, ${dy}px) rotate(-2deg)` }, { transform: 'rotate(-2deg)', offset: .9 }, { transform: 'none' }], { duration: 1300, easing: 'cubic-bezier(.45,0,.25,1)' }).finished.then(solta).catch(solta);
+      mao.animate([{ transform: 'none' }, { transform: `translate(${-dx}px, ${-dy}px)`, offset: .9 }, { transform: `translate(${-dx}px, ${-dy}px)` }], { duration: 1300, easing: 'cubic-bezier(.45,0,.25,1)', fill: 'forwards' });
+      ritmo(c7);
+    }).catch(() => {});
   };
   const passosKanban: [number, () => void][] = [
     [600, () => { if (!cardJu || colsMt.length < 2) return; colsMt[0].prepend(cardJu); contarMt(); cardJu.classList.add('entra'); ritmo(cardJu); }],
-    [2700, () => { sino?.classList.add('chega'); ritmo(sino); }],
+    [2700, () => { c7?.classList.remove('foco'); sino?.classList.add('chega'); ritmo(sino); }],
     [3900, () => { sino?.classList.add('clica'); ritmo(sino); }],
-    [5200, () => { sino?.classList.remove('chega'); sino?.classList.add('lido'); toast?.classList.add('mostra'); ritmo(toast); }],
-    [7700, () => { toast?.classList.add('cur'); ritmo(toast); }],
-    [8900, () => { toast?.classList.add('fecha'); ritmo(toast); }],
-    [9500, () => {
-      const li = cardJu;
-      if (!li || colsMt.length < 2) return;
-      const antes = li.getBoundingClientRect();
-      colsMt[1].prepend(li); contarMt();
-      const st = li.querySelector<HTMLElement>('.rx-kb-status')!; st.textContent = 'Em colaboração'; st.dataset.s = '1';
-      li.querySelector<HTMLElement>('.rx-kb-barra i')!.style.width = '14%';
-      const depois = li.getBoundingClientRect();
-      c7?.classList.add('movendo');
-      const an = li.animate([{ transform: `translate(${antes.left - depois.left}px, ${antes.top - depois.top}px)` }, { transform: 'none' }], { duration: reduzir ? 0 : 900, easing: 'cubic-bezier(0.34, 1.2, 0.64, 1)' });
-      ritmo(li);
-      an.finished.then(() => c7?.classList.remove('movendo')).catch(() => c7?.classList.remove('movendo'));
-    }],
+    [5200, () => { sino?.classList.remove('chega'); sino?.classList.add('lido'); modal?.classList.add('mostra'); ritmo(modal); }],
+    [7300, () => { modal?.classList.add('cur'); ritmo(modal); }],
+    [8700, () => { modal?.classList.add('fecha'); ritmo(modal); }],
+    [9200, arrastar],
   ];
   let proxPasso = 0;
   const kanban = (on: boolean) => {
     cardJu?.remove(); cardJu = null; proxPasso = 0;
-    toast?.classList.remove('mostra', 'cur', 'fecha');
+    mao?.remove(); mao = null;
+    modal?.classList.remove('mostra', 'cur', 'fecha');
     sino?.classList.remove('chega', 'clica', 'lido');
     c7?.classList.remove('movendo');
     c7?.classList.toggle('foco', on);
