@@ -3177,3 +3177,9 @@ html body .rx-mv-toast::before { content: ""; position: absolute; top: -6px; rig
 @keyframes rx-mf-opt { to { background: #FDF2F2; color: #D44D4D; font-weight: 600; } }
 @keyframes rx-mf-gira { 0%, 100% { transform: none; } 15%, 80% { transform: rotate(180deg); } }
 html body .rx-mv4 .rx-mv-desafio strong { margin-bottom: 0; }
+/* "Entrar em contato" abaixo dos critérios atendidos, alinhado à direita; o card do perfil ocupa a altura que sobrou */
+@media (min-width: 768px) {
+  html body .rx-mv4 .rx-mv-contatar { position: relative; top: auto; right: auto; margin: .375rem 0 0 auto; justify-self: end; }
+  html body .rx-mv4 .rx-mv-dtit { min-height: 0; }
+  html body .rx-mv4 .rx-mv-destaque { flex: 1 1 auto; align-content: center; }
+}
