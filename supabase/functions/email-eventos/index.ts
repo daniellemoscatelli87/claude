@@ -1,5 +1,5 @@
 // Recebe os avisos do Resend (webhook) sobre os e-mails da Rede de Parceiros: entrega, abertura e clique.
-// Só aceita avisos assinados pelo Resend (assinatura Svix com o segredo RESEND_WEBHOOK_SECRET, que fica nos
+// Só aceita avisos assinados pelo Resend (assinatura Svix com o segredo RESEND_WEBHOOK_SECRET_RASTREIO, que fica nos
 // segredos do Supabase). Cada aviso é gravado uma única vez e associado ao cadastro do parceiro pela
 // função registrar_email_evento. E-mails que não são da Rede de Parceiros são ignorados.
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
@@ -32,8 +32,8 @@ async function assinaturaValida(req: Request, corpo: string, segredo: string) {
 
 Deno.serve(async (req) => {
   if (req.method !== "POST") return resp(405, "Método não permitido");
-  const segredo = Deno.env.get("RESEND_WEBHOOK_SECRET");
-  if (!segredo) { console.error("RESEND_WEBHOOK_SECRET ausente"); return resp(500, "Não configurado"); }
+  const segredo = Deno.env.get("RESEND_WEBHOOK_SECRET_RASTREIO");
+  if (!segredo) { console.error("RESEND_WEBHOOK_SECRET_RASTREIO ausente"); return resp(500, "Não configurado"); }
   const corpo = await req.text();
   if (!(await assinaturaValida(req, corpo, segredo))) return resp(401, "Assinatura inválida");
 

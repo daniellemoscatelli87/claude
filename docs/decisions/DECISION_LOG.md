@@ -360,7 +360,7 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - aviso no sino da área restrita na primeira abertura e no primeiro clique de cada e-mail; o aviso sai quando o perfil é aberto;
   - Política de Privacidade passa a informar o registro de entrega, abertura e acesso aos links.
 - **Limites conhecidos:** a abertura é estimativa (Apple Mail abre sozinho; bloqueio de imagens esconde aberturas); o clique é o sinal confiável; só vale para e-mails enviados depois da ativação.
-- **Segurança:** avisos aceitos só com assinatura válida do Resend (segredo `RESEND_WEBHOOK_SECRET` nos segredos do Supabase, nunca no código); tabelas com RLS só para a administradora; e-mails que não são da rede são ignorados.
+- **Segurança:** avisos aceitos só com assinatura válida do Resend (segredo `RESEND_WEBHOOK_SECRET_RASTREIO` nos segredos do Supabase, separado do `RESEND_WEBHOOK_SECRET` das respostas de contato, nunca no código); tabelas com RLS só para a administradora; e-mails que não são da rede são ignorados.
 
 ---
 
