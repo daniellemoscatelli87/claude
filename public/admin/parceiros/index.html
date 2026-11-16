@@ -54,7 +54,7 @@
   .ag-x { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; background: none; border-radius: 10px; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
   .ag-x svg { width: 22px; height: 22px; }
   .ag-modo { display: grid; gap: 8px; border: 0; margin: 0; padding: 0; }
-  .ag-modo legend, .ag-campo > span { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .ag-modo .ag-rot, .ag-campo > span { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
   .ag-modo label { display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer; }
   .ag-modo input { width: 18px; height: 18px; accent-color: var(--red); }
   .ag-pessoas { display: grid; gap: 8px; }
@@ -513,12 +513,10 @@
     <button type="button" class="ag-x" id="ag-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     <h2 id="ag-t">Agendar envio</h2>
     <p class="muted" style="margin:-6px 0 0;font-size:14px">Pedido de autorização da galeria. Quem já decidiu ou se descadastrou dos comunicados não recebe, mesmo que esteja na lista.</p>
-    <fieldset class="ag-modo"><legend>Para quem</legend>
-      <label><input type="radio" name="ag-modo" value="todos" checked><span id="ag-todos-txt">Todos que ainda não decidiram</span></label>
-      <span class="muted" id="ag-todos-nomes" style="font-size:12px;margin:-4px 0 0 28px"></span>
-      <label><input type="radio" name="ag-modo" value="selecionados"><span>Escolher pessoas</span></label>
-    </fieldset>
-    <div class="ag-pessoas" id="ag-pessoas" hidden>
+    <div class="ag-modo"><span class="ag-rot">Para quem</span>
+      <label><input type="checkbox" id="ag-todos-cb"><span id="ag-todos-txt">Marcar todos que ainda não decidiram</span></label>
+    </div>
+    <div class="ag-pessoas" id="ag-pessoas">
       <input type="search" id="ag-busca" placeholder="Buscar por nome ou e-mail" aria-label="Buscar parceiro">
       <div class="ag-pessoas-lista" id="ag-pessoas-lista"></div>
       <span class="muted" id="ag-sel-n" style="font-size:12px"></span>
@@ -1006,19 +1004,21 @@ function agPessoas() {
   });
   agSelN();
 }
-function agSelN() { document.getElementById("ag-sel-n").textContent = AG.sel.size ? plural(AG.sel.size, "pessoa escolhida", "pessoas escolhidas") : "Nenhuma pessoa escolhida"; }
-const agModo = () => document.querySelector('input[name="ag-modo"]:checked').value;
+// Recebe exatamente quem está marcado. "Marcar todos" marca ou desmarca todos que ainda não decidiram.
+function agSelN() {
+  const todos = ALL.filter(elegivel), n = todos.filter((r) => AG.sel.has(r.id)).length, cb = document.getElementById("ag-todos-cb");
+  cb.checked = todos.length > 0 && n === todos.length; cb.indeterminate = n > 0 && n < todos.length;
+  document.getElementById("ag-sel-n").textContent = n ? "Vai para " + plural(n, "pessoa marcada", "pessoas marcadas") + "." : "Nenhuma pessoa marcada";
+}
 function agErro(x) { const e = document.getElementById("ag-err"); e.textContent = x; e.classList.toggle("hidden", !x); }
 function agAbrir(a) {
   AG.editando = a || null;
   AG.sel = new Set(a && a.modo === "selecionados" ? a.destinatarios : []);
   document.getElementById("ag-t").textContent = a ? "Alterar envio agendado" : "Agendar envio";
   document.getElementById("ag-salvar").textContent = a ? "Salvar alterações" : "Agendar";
-  document.querySelector(`input[name="ag-modo"][value="${a ? a.modo : "todos"}"]`).checked = true;
-  document.getElementById("ag-todos-txt").textContent = "Todos que ainda não decidiram (" + ALL.filter(elegivel).length + " hoje)";
-  document.getElementById("ag-todos-nomes").textContent = agJunta(agNomesTodos(), 1000);
-  document.getElementById("ag-pessoas").hidden = agModo() !== "selecionados";
-  document.getElementById("ag-todos-nomes").hidden = agModo() === "selecionados";
+  // novo agendamento ou antigo no modo "todos": começa com todos que ainda não decidiram marcados
+  if (!a || a.modo === "todos") AG.sel = new Set(ALL.filter(elegivel).map((r) => r.id));
+  document.getElementById("ag-todos-txt").textContent = "Marcar todos que ainda não decidiram (" + ALL.filter(elegivel).length + ")";
   document.getElementById("ag-busca").value = "";
   // sugestão para um novo agendamento: amanhã às 9h
   const sug = new Date(); sug.setDate(sug.getDate() + 1); sug.setHours(9, 0, 0, 0);
@@ -1030,8 +1030,10 @@ function initAgendamento() {
   const dlg = document.getElementById("ag-dlg");
   document.getElementById("gal-agendar").addEventListener("click", () => agAbrir(null));
   document.getElementById("ag-fechar").addEventListener("click", () => dlg.close());
-  const agModoMostra = () => { const sel = agModo() === "selecionados"; document.getElementById("ag-pessoas").hidden = !sel; document.getElementById("ag-todos-nomes").hidden = sel; };
-  document.querySelectorAll('input[name="ag-modo"]').forEach((r) => r.addEventListener("change", () => { agModoMostra(); agErro(""); }));
+  document.getElementById("ag-todos-cb").addEventListener("change", (e) => {
+    const ids = ALL.filter(elegivel).map((r) => r.id);
+    AG.sel = new Set(e.target.checked ? ids : []); agPessoas(); agErro("");
+  });
   document.getElementById("ag-busca").addEventListener("input", agPessoas);
   document.getElementById("ag-ver").addEventListener("click", async (e) => {
     const box = document.getElementById("ag-prev");
@@ -1043,19 +1045,21 @@ function initAgendamento() {
     box.scrollIntoView({ behavior: "smooth", block: "nearest" });
   });
   document.getElementById("ag-salvar").addEventListener("click", async (e) => {
-    const modo = agModo(), v = document.getElementById("ag-quando").value;
-    if (modo === "selecionados" && !AG.sel.size) return agErro("Escolha pelo menos uma pessoa.");
+    const v = document.getElementById("ag-quando").value;
+    // só quem está marcado e ainda pode receber
+    const ids = ALL.filter(elegivel).map((r) => r.id).filter((id) => AG.sel.has(id));
+    if (!ids.length) return agErro("Marque pelo menos uma pessoa.");
     if (!v) return agErro("Informe a data e a hora do envio.");
     const quando = new Date(v);
     if (isNaN(quando) || quando.getTime() < Date.now() + 60000) return agErro("Escolha uma data e hora a partir do próximo minuto.");
-    const dados = { modo, destinatarios: modo === "selecionados" ? [...AG.sel] : [], agendado_para: quando.toISOString() };
+    const dados = { modo: "selecionados", destinatarios: ids, agendado_para: quando.toISOString() };
     const b = e.currentTarget; b.disabled = true;
     const { error } = AG.editando
       ? await Admin.sb.from("galeria_agendamentos").update({ ...dados, atualizado_em: new Date().toISOString() }).eq("id", AG.editando.id).eq("situacao", "agendado")
       : await Admin.sb.from("galeria_agendamentos").insert(dados);
     b.disabled = false;
     if (error) return agErro("Não foi possível salvar: " + error.message);
-    Admin.log((AG.editando ? "Alterou" : "Agendou") + " o envio da autorização da galeria", fmtQuando(dados.agendado_para) + " · " + (modo === "todos" ? "todos que ainda não decidiram" : plural(AG.sel.size, "pessoa", "pessoas")));
+    Admin.log((AG.editando ? "Alterou" : "Agendou") + " o envio da autorização da galeria", fmtQuando(dados.agendado_para) + " · " + plural(ids.length, "pessoa", "pessoas"));
     dlg.close(); await agCarregar();
     Admin.toast((AG.editando ? "Agendamento alterado para " : "Envio agendado para ") + fmtQuando(dados.agendado_para) + ".");
   });
