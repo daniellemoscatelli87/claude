@@ -3558,3 +3558,43 @@ html body .rx-mv-campo-msg b.r2 { position: absolute; left: .875rem; right: .875
 @keyframes rx-mv-ph2 { 0%, 8% { opacity: 1; } 10%, 98% { opacity: 0; } 100% { opacity: 1; } }
 @keyframes rx-mv-cur3b { 0% { opacity: 0; transform: translate(-6rem, -5rem); } 20% { opacity: 1; } 75% { opacity: 1; transform: none; } 85% { transform: scale(.85); } 100% { opacity: 0; transform: none; } }
 @keyframes rx-mv-clique2 { 50% { transform: scale(.94); } 100% { transform: none; } }
+/* celular: um mini card em cada etapa da timeline, com um trecho da simulação daquela etapa */
+.rx-mt-tprev { display: none; }
+@media (max-width: 1023px) {
+  html body .rx-mt-palco[data-match] .rx-mt-tcorpo { min-width: 0; }
+  .rx-mt-tprev { display: grid; gap: .5rem; margin: .75rem 0 .25rem; padding: .75rem; border-radius: 14px; background: #FFFFFF; border: 1px solid #E4E8EF; box-shadow: 0 10px 24px -18px rgba(13, 17, 25, .35); text-align: left; font-size: .75rem; line-height: 1.35; color: #131A27; }
+  .rx-mt-tprev img { display: block; border-radius: 9999px; object-fit: cover; }
+  .rx-mt-tprev small { display: block; font-size: .6875rem; color: #8898B0; }
+  .rx-mt-tprev b { font-weight: 600; }
+  /* 1 · cadastro */
+  .rx-mt-tprev.p1 .pt { font-size: .8125rem; font-weight: 700; }
+  .rx-mt-tprev.p1 .pc { display: grid; gap: .1875rem; }
+  .rx-mt-tprev.p1 .pc b { display: block; padding: .375rem .625rem; border-radius: 8px; border: 1px solid #E4E8EF; font-weight: 500; }
+  .rx-mt-tprev.p1 .pb { justify-self: end; padding: .375rem .875rem; border-radius: 9999px; background: #D44D4D; color: #FFFFFF; font-weight: 600; }
+  /* 2 · perfil compatível */
+  .rx-mt-tprev.p2 { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: .625rem; }
+  .rx-mt-tprev.p2 .av { padding: 2px; border-radius: 9999px; border: 2px solid #D44D4D; }
+  .rx-mt-tprev.p2 .av img { width: 2.25rem; height: 2.25rem; }
+  .rx-mt-tprev.p2 .pn b { display: block; font-size: .8125rem; }
+  .rx-mt-tprev.p2 em { font-style: normal; padding: .1875rem .5rem; border-radius: 9999px; background: #FDE7E7; color: #C0392B; font-weight: 700; white-space: nowrap; }
+  /* 3 · convite no chat */
+  .rx-mt-tprev.p3 .msg { display: flex; align-items: flex-end; justify-content: flex-end; gap: .375rem; }
+  .rx-mt-tprev.p3 .bl { max-width: 85%; padding: .5rem .75rem; border-radius: 14px 14px 4px 14px; background: #D44D4D; color: #FFFFFF; }
+  .rx-mt-tprev.p3 .msg img { flex: none; width: 1.25rem; height: 1.25rem; padding: 2px; background: #FDF2F2; border: 1px solid rgba(212, 77, 77, .25); box-sizing: content-box; }
+  .rx-mt-tprev.p3 .dig { display: flex; align-items: flex-end; gap: .375rem; }
+  .rx-mt-tprev.p3 .dig img { width: 1.5rem; height: 1.5rem; }
+  .rx-mt-tprev.p3 .pts { display: flex; gap: .25rem; padding: .5rem .625rem; border-radius: 14px 14px 14px 4px; background: #F3F5F8; }
+  .rx-mt-tprev.p3 .pts i { width: .3125rem; height: .3125rem; border-radius: 9999px; background: #A6B1C2; }
+  /* 4 · kanban */
+  .rx-mt-tprev.p4 { background: #F6F7FA; }
+  .rx-mt-tprev.p4 .col { display: flex; align-items: center; gap: .375rem; font-weight: 600; }
+  .rx-mt-tprev.p4 .col i { width: .5rem; height: .5rem; border-radius: 9999px; background: #3B82C4; }
+  .rx-mt-tprev.p4 .card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: .625rem; padding: .625rem; border-radius: 10px; background: #FFFFFF; border: 1px solid rgba(212, 77, 77, .35); }
+  .rx-mt-tprev.p4 .card img { width: 2rem; height: 2rem; }
+  .rx-mt-tprev.p4 .tag { display: inline-flex; align-items: center; gap: .25rem; padding: .125rem .5rem; border-radius: 9999px; background: #FDF2F2; color: #D44D4D; font-weight: 600; }
+  .rx-mt-tprev.p4 .tag i { width: .375rem; height: .375rem; border-radius: 9999px; background: #D44D4D; }
+}
+@media (max-width: 1023px) {
+  html body .rx-mt-palco[data-match] .rx-mt-topico .rx-mt-tcorpo > span.rx-mt-tprev { display: grid !important; font-size: .75rem !important; line-height: 1.35 !important; color: #131A27 !important; font-weight: 400; }
+  html body .rx-mt-palco[data-match] .rx-mt-tprev.p1 .pb { justify-self: end; margin-top: .125rem; }
+}
