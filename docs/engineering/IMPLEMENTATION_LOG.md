@@ -360,6 +360,35 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-16 · Auditoria dos DS, lote 1 (D-050; publicado: DM v50 e FindLook v74)
+
+- **Auditoria (somente leitura, quatro varreduras):** DS do Dani Moscatelli por dentro, DS do FindLook por dentro, produto FindLook comparado com o DS dele, e site e Experience Intelligence comparados com o DS do Dani Moscatelli.
+  - A lista resultante foi entregue à dona do produto e organizada em 27 tarefas, de P1 (máxima) a P4 (mínima).
+  - Constatações conferidas no CSS gerado: as sombras eram as padrão do Tailwind, o `--input` era transparente e o `rounded-xl` do card mede 24 px.
+- **Feito nos dois DS** (`src/styles/theme.css` e páginas Feedback, Form, Foundation, Data, Icons e Cards):
+  - os tokens `--shadow-xs` a `--shadow-xl` foram mapeados no `@theme`;
+  - `--input` = `--border-strong`;
+  - `--success` `#388459`, `--info` `#3D7CAA`, `--warning` `#C2410C`, com os `*-muted` acompanhando;
+  - título dos alertas em `text-foreground`;
+  - texto do raio na página Cards corrigido;
+  - valores das tabelas de tokens atualizados para as cores novas;
+  - entrada no changelog.
+- **Só no Dani Moscatelli:**
+  - estados de erro das páginas passaram a usar `--error`/`--destructive`;
+  - `--primary-text` criado (carmim 500 no claro, carmim 300 no escuro), mapeado no `@theme` e documentado em Cores.
+- **Só no FindLook:** `--error` e `--destructive` passaram a ser `--pink-500` (claro e escuro), e as páginas mantêm o erro em pink.
+- **Fluxo:** trabalho no branch `claude/auditoria-lote1` de cada DS, com aprovação visual por capturas. Depois do "sim" da dona do produto, foi rebaseado no `main` (DM `b806550`, FindLook `e48ca9a`) e publicado pelos workflows do repositório de deploy.
+- **Testes executados:**
+  - `pnpm build` dos dois DS: ok;
+  - Playwright: `.shadow-sm` gera a sombra do token (antes, `#0000001a`), e `border-input` gera `rgba(0, 0, 0, 0.18)`;
+  - capturas de antes e depois dos alertas, do campo com erro e do link em vermelho;
+  - os pacotes publicados contêm a entrada nova do changelog nos dois endereços;
+  - o registro de versões marca `v50` (DM) e `v74` (FindLook) como publicadas.
+- **Pendente:**
+  - item 6 da lista (prender o foco no menu do celular e na gaveta de contato do site);
+  - cerca de 194 `text-primary` no DS do Dani Moscatelli a revisar (lote 3);
+  - o produto FindLook só recebe as mudanças pela rotina de sincronização, com aprovação da dona.
+
 ## 2026-11-16 · Grid e espaçamento: tokens, classes e página nova (D-049; publicado: DM v49 e FindLook v73)
 
 - **Origem:** pedido da dona do produto para criar o sistema de grid e explicar o uso. Ela aprovou os valores (ver D-049).

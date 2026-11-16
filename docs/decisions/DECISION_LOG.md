@@ -409,6 +409,23 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-050 · 16/11/2026 · Auditoria dos DS, lote 1: sombras, campos, cores de estado e erro (DM v50 e FindLook v74)
+
+- **Origem:** a dona do produto pediu uma varredura nos dois DS (inconsistências, falta de documentação, componentes inexistentes e divergências com os produtos), depois uma lista de tarefas por prioridade e, por fim, que tudo fosse executado com aprovação visual. Este é o lote 1 (prioridade máxima).
+- **Sem decisão dela (correção de erro):**
+  - **Sombras:** as classes `shadow-*` usavam as sombras padrão do Tailwind, porque os tokens `--shadow-*` não estavam no `@theme`. Agora estão.
+  - **Raio do card:** a página Cards dizia 12 px, mas o `rounded-xl` do card padrão é 24 px. O texto foi corrigido.
+- **Decisões dela:**
+  - **Borda dos campos:** era transparente no tema claro. Ela escolheu a borda clara: `--input` = `--border-strong`.
+    - **Trade-off:** contraste de cerca de 1,6:1, abaixo do mínimo de 3:1 do WCAG para contorno de campo. A opção acessível (cinza médio, 3,5:1) foi mostrada e recusada.
+  - **Cores de estado:** ela prefere texto branco sobre as cores cheias.
+    - Sucesso e informação foram escurecidos só o necessário para 4,5:1: `#388459` e `#3D7CAA`.
+    - Para o aviso, o âmbar escurecido ficava marrom e ela recusou. O aviso passou a ser laranja queimado `#C2410C` (5,2:1).
+  - **Alertas:** título em grafite, com ícone e borda na cor do estado. O título colorido sobre o fundo claro do alerta ficava perto de 4:1.
+  - **FindLook, erro:** os estados de erro continuam em pink cereja. O próprio token `--error`/`--destructive` passou a ser `--pink-500`, para os componentes também mostrarem o erro em pink. O vermelho `#D1322B` deixou de existir no FindLook.
+  - **Dani Moscatelli, texto em vermelho:** novo `--primary-text` = carmim 500 (`#B82828`, 6,2:1), só para texto e links. O `#D44D4D` como texto dava 4,2:1.
+- **Pendente:** cerca de 194 usos de `text-primary` no DS do Dani Moscatelli ainda não usam o `--primary-text`. Ficaram para a revisão das cores fixas (lote 3), porque alguns estão sobre fundo escuro.
+
 ## D-049 · 16/11/2026 · Sistema de grid e espaçamento (DM e FindLook)
 
 - **Origem:** a dona do produto percebeu que o DS não tinha um sistema de grid que padronizasse espaçamentos e pediu para criá-lo e explicar o uso.
