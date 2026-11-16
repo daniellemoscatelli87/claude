@@ -360,6 +360,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-16 · Site: foco preso no menu do celular e na gaveta de contato (item 6 da auditoria; publicado)
+
+- **Feito:** a função `travarFoco` em `src/compartilhado/menu.ts`, aplicada ao `#menu-mobile` e ao `#contact-drawer`. Enquanto o painel está aberto, Tab e Shift+Tab circulam só dentro dele.
+- **Publicação:** pull request [daniellemoscatelli87/claude#163](https://github.com/daniellemoscatelli87/claude/pull/163), com merge no `main` (`f503248`) depois do "sim" da dona do produto.
+- **Testes:**
+  - Playwright a 390 px, na página inicial e no Projeto Piloto: antes, 3 de 25 Tabs ficavam dentro do menu; depois, 25/25, e 60/60 na gaveta. O Esc devolve o foco ao botão do menu, sem erros de página.
+  - No ar (www.danimoscatelli.com.br): menu 25/25 e gaveta 60/60.
+
 ## 2026-11-16 · Auditoria dos DS, lote 1 (D-050; publicado: DM v50 e FindLook v74)
 
 - **Auditoria (somente leitura, quatro varreduras):** DS do Dani Moscatelli por dentro, DS do FindLook por dentro, produto FindLook comparado com o DS dele, e site e Experience Intelligence comparados com o DS do Dani Moscatelli.
