@@ -517,7 +517,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
 }
 
 
-/* ---------- Ecossistema: entrada animada (núcleo → pétalas → luz dá uma volta e revela os setores um a um) ----------
+/* ---------- Ecossistema: entrada animada (pétalas → luz dá uma volta e revela os setores um a um → núcleo) ----------
    A luz parte do topo em sentido horário; cada setor (--t = posição no anel, de 0 a 1) aparece no instante em que ela
    passa, aceso por um momento. Depois da volta completa, a luz some e tudo fica parado. */
 {
@@ -525,7 +525,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
   const luz = eco?.querySelector<SVGGElement>('.rx-eco-luz');
   if (eco && luz && !matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
     eco.classList.add('anima');
-    const VOLTA = 7000, ACESO = 700, INICIO_LUZ = 2000; // a luz começa depois das pétalas (≈1,9 s)
+    const VOLTA = 7000, ACESO = 700, INICIO_LUZ = 1500; // a luz começa depois das pétalas (≈1,4 s)
     const pontos = Array.from(eco.querySelectorAll<SVGCircleElement>('.rx-eco-ponto'));
     const setores = Array.from(eco.querySelectorAll<HTMLElement>('.rx-eco-setor'));
     const linhas = Array.from(eco.querySelectorAll<SVGLineElement>('.rx-eco-con'));
@@ -545,7 +545,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
         luz.style.transform = `rotate(${(f * 360).toFixed(2)}deg)`;
         pos.forEach((t, i) => { if (!feitos.has(i) && f >= t) { feitos.add(i); revelar(i); } });
         if (f < 1) requestAnimationFrame(quadro);
-        else luz.classList.remove('ativa');
+        else { luz.classList.remove('ativa'); setTimeout(() => eco.classList.add('nucleo'), 350); } // por último, o núcleo
       };
       requestAnimationFrame(quadro);
     };
@@ -640,20 +640,19 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   if (!palco) return;
   const cenas = Array.from(palco.querySelectorAll<HTMLElement>('.rx-mt-cena'));
   const topicos = Array.from(palco.querySelectorAll<HTMLButtonElement>('.rx-mt-topico'));
-  const NOMES = ['Cadastro', 'Base de parceiros', 'Novo projeto', 'Cruzamento com IA', 'Qualificação', 'Contato e alinhamento', 'Ranking de compatibilidade', 'O trabalho acontece', 'Faça parte da rede'];
   const ETAPAS = 8; // a 9ª cena é o convite final: a animação para ali
-  const agoraN = palco.querySelector<HTMLElement>('.rx-mt-agora-n');
-  const agoraT = palco.querySelector<HTMLElement>('.rx-mt-agora-t');
   const total = cenas.length;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const LENTO = 1.35;
-  const BASE = [0, 6500, 4000, 6500, 8000, 7000, 10000, 7000, 13500, Infinity];
+  const BASE = [0, 6500, 4000, 6500, 8000, 7000, 12500, 7000, 13500, Infinity];
+  const EXTRA: Record<number, number> = { 6: 1.25 }; // a conversa (etapa 6) roda um pouco mais devagar
   const DUR = (n: number) => (BASE[n] || 6500) * LENTO;
   let atual = 1, decorrido = 0, pausado = reduzir, visivel = false, ultimo = 0, rodando = true;
   const cenaAtual = () => cenas[atual - 1];
   // aplica o ritmo (e a pausa, se for o caso) às animações de um elemento e dos filhos
   const ritmo = (el: Element | null | undefined) => {
-    el?.getAnimations({ subtree: true }).forEach((a) => { a.playbackRate = 1 / LENTO; if (!rodando) a.pause(); });
+    const f = LENTO * (EXTRA[atual] || 1);
+    el?.getAnimations({ subtree: true }).forEach((a) => { a.playbackRate = 1 / f; if (!rodando) a.pause(); });
   };
 
   /* Kanban (etapa 8): o card da Juliana entra em "Convites" com destaque; chega uma notificação no sino; o cursor clica no
@@ -766,10 +765,8 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     c.classList.add('ativa');
     void c.offsetWidth;
     ritmo(c);
-    topicos.forEach((t) => { const on = (t.dataset.etapas || '').split(',').map(Number).includes(atual); t.classList.toggle('ativa', on); t.setAttribute('aria-current', on ? 'step' : 'false'); });
-    if (agoraN) agoraN.textContent = atual > ETAPAS ? 'Rede de Parceiros' : `Etapa ${String(atual).padStart(2, '0')} de ${String(ETAPAS).padStart(2, '0')}`;
-    if (agoraT) agoraT.textContent = atual > ETAPAS ? '' : NOMES[atual - 1] || '';
-    palco.classList.toggle('no-convite', atual > ETAPAS); // cena final: no topo, só "Rede de Parceiros"
+    topicos.forEach((t) => { const et = (t.dataset.etapas || '').split(',').map(Number); const on = et.includes(atual); t.classList.toggle('ativa', on); t.classList.toggle('feito', Math.max(...et) < atual); t.setAttribute('aria-current', on ? 'step' : 'false'); });
+    // topo do mockup: sempre só "Rede de Parceiros" (fixo no HTML)
   };
   palco.querySelector<HTMLButtonElement>('.rx-mv-rever')?.addEventListener('click', () => mostrar(1));
   topicos.forEach((t) => t.addEventListener('click', () => mostrar(Number(t.dataset.ir))));
