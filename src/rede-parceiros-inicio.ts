@@ -651,6 +651,25 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const DUR = (n: number) => (BASE[n] || 6500) * LENTO;
   let atual = 1, decorrido = 0, pausado = reduzir, visivel = false, ultimo = 0, rodando = true;
   const cenaAtual = () => cenas[atual - 1];
+  /* Celular e tablet: a timeline fica parada (sem animação) e o mockup abre numa janela em tela cheia pelo botão
+     "Ver simulação". A janela fica no fim da página e repete as classes de estado do palco. */
+  const pequeno = matchMedia('(max-width: 1023px)');
+  const dir = palco.querySelector<HTMLElement>('.rx-mt-dir');
+  const abrirBtn = palco.querySelector<HTMLButtonElement>('.rx-mt-simular');
+  let janela: HTMLElement | null = null, aberto = false, escala = 1;
+  /* Na janela, se a tela do celular for baixa, o mockup inteiro encolhe por igual (mantém o desenho de cada cena) */
+  const ALTURA_CENAS = 640;
+  const tela = dir?.querySelector<HTMLElement>('.rx-mt-tela');
+  const ajustar = () => {
+    if (!dir || !tela) return;
+    if (!aberto) { escala = 1; tela.style.cssText = ''; return; }
+    const topo = tela.querySelector<HTMLElement>('.rx-mt-tela-topo')?.offsetHeight ?? 0;
+    const w = dir.clientWidth, h = dir.clientHeight;
+    escala = Math.min(1, h / (ALTURA_CENAS + topo));
+    tela.style.width = `${w / escala}px`;
+    tela.style.height = `${h / escala}px`;
+    tela.style.transform = escala < 1 ? `scale(${escala})` : '';
+  };
   // aplica o ritmo (e a pausa, se for o caso) às animações de um elemento e dos filhos
   const ritmo = (el: Element | null | undefined) => {
     const f = LENTO * (EXTRA[atual] || 1);
@@ -676,7 +695,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   };
   // cursor que leva o card de uma coluna para a outra
   const CURSOR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2l15 9-6.5 1.5L16 20l-3 1.5-3.4-7.6L4 18z" fill="#131A27" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/></svg>';
-  const centro = (el: Element) => { const r = el.getBoundingClientRect(), c = c7!.getBoundingClientRect(); return { x: r.left + r.width * 0.55 - c.left, y: r.top + r.height * 0.45 - c.top }; };
+  const centro = (el: Element) => { const r = el.getBoundingClientRect(), c = c7!.getBoundingClientRect(); return { x: (r.left + r.width * 0.55 - c.left) / escala, y: (r.top + r.height * 0.45 - c.top) / escala }; };
   const arrastar = () => {
     const li = cardJu;
     if (!li || !c7 || colsMt.length < 2) return;
@@ -696,7 +715,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
       const antes = li.getBoundingClientRect();
       colsMt[1].prepend(li); contarMt();
       const depois = li.getBoundingClientRect();
-      const dx = antes.left - depois.left, dy = antes.top - depois.top;
+      const dx = (antes.left - depois.left) / escala, dy = (antes.top - depois.top) / escala;
       c7.classList.add('movendo');
       const solta = () => {
         li.classList.remove('pego');
@@ -747,6 +766,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     atual = ((n - 1 + total) % total) + 1;
     decorrido = 0;
     palco.dataset.n = String(atual);
+    if (janela) janela.dataset.n = String(atual);
     const c = cenaAtual();
     const direto = antes === 2 && atual === 3; // a base de parceiros e o novo projeto são a mesma tela
     cenas.forEach((e) => { if (e !== velha && e !== c) e.classList.remove('ativa', 'saindo'); });
@@ -764,6 +784,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     c.classList.remove('ativa', 'saindo');
     void c.offsetWidth; // reinicia as animações da cena
     palco.classList.toggle('direto', direto);
+    janela?.classList.toggle('direto', direto);
     c.classList.add('ativa');
     void c.offsetWidth;
     ritmo(c);
@@ -776,7 +797,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   const passo = (t: number) => {
     const dt = ultimo ? Math.min(100, t - ultimo) : 0;
     ultimo = t;
-    const r = !pausado && visivel && !document.hidden;
+    const r = !pausado && (pequeno.matches ? aberto : visivel) && !document.hidden;
     if (r !== rodando) { rodando = r; cenaAtual()?.getAnimations({ subtree: true }).forEach((a) => (r ? a.play() : a.pause())); }
     if (rodando) {
       decorrido += dt;
@@ -785,6 +806,48 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     }
     requestAnimationFrame(passo);
   };
+  if (dir && abrirBtn) {
+    janela = document.createElement('div');
+    janela.className = 'rx-mt-palco rx-mt-janela';
+    janela.setAttribute('role', 'dialog');
+    janela.setAttribute('aria-modal', 'true');
+    janela.setAttribute('aria-label', 'Simulação do Match de parceiros');
+    janela.hidden = true;
+    janela.innerHTML = '<div class="rx-mt-jcab"><strong>Simulação</strong><button type="button" class="rx-mt-jfechar" aria-label="Fechar simulação"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>';
+    document.body.appendChild(janela);
+    const fecharBtn = janela.querySelector<HTMLButtonElement>('.rx-mt-jfechar')!;
+    const fechar = () => {
+      if (!aberto || !janela) return;
+      aberto = false;
+      janela.hidden = true;
+      palco.appendChild(dir);
+      ajustar();
+      document.documentElement.classList.remove('rx-mt-travada');
+      abrirBtn.focus({ preventScroll: true });
+    };
+    abrirBtn.addEventListener('click', () => {
+      if (!janela) return;
+      janela.appendChild(dir);
+      janela.hidden = false;
+      aberto = true;
+      document.documentElement.classList.add('rx-mt-travada');
+      ajustar();
+      mostrar(1);
+      fecharBtn.focus({ preventScroll: true });
+    });
+    fecharBtn.addEventListener('click', fechar);
+    janela.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); fechar(); }
+      else if (e.key === 'Tab' && janela) { // o foco circula só entre os controles visíveis da janela
+        const itens = Array.from(janela.querySelectorAll<HTMLElement>('button, a[href]')).filter((el) => el.checkVisibility?.({ visibilityProperty: true }) ?? el.offsetParent !== null);
+        const i = itens.indexOf(document.activeElement as HTMLElement);
+        const prox = itens[(i + (e.shiftKey ? -1 : 1) + itens.length) % itens.length];
+        if (prox) { e.preventDefault(); prox.focus(); }
+      }
+    });
+    pequeno.addEventListener('change', () => { if (!pequeno.matches) fechar(); });
+    window.addEventListener('resize', () => { if (aberto) ajustar(); });
+  }
   mostrar(1);
   requestAnimationFrame(passo);
 })();
