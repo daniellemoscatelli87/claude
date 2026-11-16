@@ -352,7 +352,7 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 
 ---
 
-## D-030 · 16/11/2026 · Rastreamento dos e-mails da Rede de Parceiros (site)
+## D-031 · 16/11/2026 · Rastreamento dos e-mails da Rede de Parceiros (site)
 
 - **Origem:** Dona do produto: saber quando cada integrante abre o comunicado da galeria, ser notificada e ver isso no perfil. Respostas: abertura e cliques; aviso no painel (sino) e no perfil; frase na Política de Privacidade aprovada.
 - **Decisão:**
