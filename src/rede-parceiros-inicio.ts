@@ -640,10 +640,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
   if (!palco) return;
   const cenas = Array.from(palco.querySelectorAll<HTMLElement>('.rx-mt-cena'));
   const topicos = Array.from(palco.querySelectorAll<HTMLButtonElement>('.rx-mt-topico'));
-  const NOMES = ['Cadastro', 'Base de parceiros', 'Novo projeto', 'Cruzamento com IA', 'Qualificação', 'Contato e alinhamento', 'Ranking de compatibilidade', 'O trabalho acontece', 'Faça parte da rede'];
   const ETAPAS = 8; // a 9ª cena é o convite final: a animação para ali
-  const agoraN = palco.querySelector<HTMLElement>('.rx-mt-agora-n');
-  const agoraT = palco.querySelector<HTMLElement>('.rx-mt-agora-t');
   const total = cenas.length;
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const LENTO = 1.35;
@@ -767,9 +764,7 @@ document.querySelectorAll<HTMLElement>('.rx-pilares .rx-pilar').forEach((li, i, 
     void c.offsetWidth;
     ritmo(c);
     topicos.forEach((t) => { const on = (t.dataset.etapas || '').split(',').map(Number).includes(atual); t.classList.toggle('ativa', on); t.setAttribute('aria-current', on ? 'step' : 'false'); });
-    if (agoraN) agoraN.textContent = atual > ETAPAS ? 'Rede de Parceiros' : `Etapa ${String(atual).padStart(2, '0')} de ${String(ETAPAS).padStart(2, '0')}`;
-    if (agoraT) agoraT.textContent = atual > ETAPAS ? '' : NOMES[atual - 1] || '';
-    palco.classList.toggle('no-convite', atual > ETAPAS); // cena final: no topo, só "Rede de Parceiros"
+    // topo do mockup: sempre só "Rede de Parceiros" (fixo no HTML)
   };
   palco.querySelector<HTMLButtonElement>('.rx-mv-rever')?.addEventListener('click', () => mostrar(1));
   topicos.forEach((t) => t.addEventListener('click', () => mostrar(Number(t.dataset.ir))));
