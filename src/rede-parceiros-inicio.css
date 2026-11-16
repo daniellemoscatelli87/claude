@@ -3461,7 +3461,7 @@ html body .rx-eco-centro { padding-bottom: .23cqw; }
   html body .rx-eco-setor[data-lado^="d"] > span { right: 0; }
   html body .rx-eco-setor[data-lado$="b"] > span { top: calc(100% + .4rem); }
   html body .rx-eco-setor[data-lado$="a"] > span { bottom: calc(100% + .4rem); }
-  html body .rx-eco-esp { font-size: 1.75cqw; }
+  html body .rx-eco-esp { font-size: 1.55cqw; }
   html body .rx-eco-esp svg { width: 3.4cqw; height: 3.4cqw; }
   html body .rx-eco-centro p .rx-eco-num { font-size: 2cqw; }
   html body .rx-eco-centro p > span { font-size: 1.55cqw; }
