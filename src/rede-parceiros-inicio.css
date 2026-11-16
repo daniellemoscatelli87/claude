@@ -3192,3 +3192,46 @@ html body .rx-mv5 .rx-mv-msg.r2 { opacity: 0; }
   html body .rx-mv5.ativa .rx-mv-conversa { animation: rx-mv-fecha .45s ease 8.75s both; }
 }
 @media (prefers-reduced-motion: reduce) { html body .rx-mv5 .rx-mv-msg.r2 { opacity: 1; } }
+
+/* =========================================================================
+   Ranking v3: foto com o anel de compatibilidade em volta e o percentual embaixo; nome, status e o link-botão
+   "Enviar convite" embaixo do nome; à direita aprovar (like) e reprovar (dislike). O cursor reprova a Marina
+   (o card sai) e envia o convite para a Juliana.
+   ========================================================================= */
+html body .rx-mv-fila2 > li { display: grid !important; grid-template-columns: 1.5rem auto minmax(0, 1fr) auto; align-items: center; column-gap: .875rem; padding: .5rem 1rem; }
+html body .rx-mv-fila2 li > span.rx-mv-rfoto { flex: none; display: grid; justify-items: center; gap: .125rem; }
+.rx-mv-rfoto .anel { position: relative; width: 3rem; height: 3rem; }
+.rx-mv-rfoto .anel svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.rx-mv-rfoto .anel circle { fill: none; stroke: #F3E3E4; stroke-width: 3.5; }
+.rx-mv-rfoto .anel circle.v { stroke: #D44D4D; stroke-linecap: round; }
+html body .rx-mv-fila2 .rx-mv-rfoto img { position: absolute; inset: 5px; width: calc(100% - 10px) !important; height: calc(100% - 10px) !important; border-radius: 9999px; object-fit: cover; }
+html body .rx-mv-fila2 .rx-mv-rfoto em { font-style: normal; font-size: .75rem; font-weight: 700; color: #D44D4D; line-height: 1.2; }
+html body .rx-mv-fila2 li.fora .rx-mv-rfoto circle.v { stroke: #B3BDD0; }
+html body .rx-mv-fila2 li.fora .rx-mv-rfoto em { color: #A6B1C2; }
+html body .rx-mv-fila2 li > span.nm { display: grid; justify-items: start; gap: .125rem; min-width: 0; }
+html body .rx-mv-fila2 .nm strong { font-size: .9375rem; }
+html body .rx-mv-fila2 .rx-mv-convidar { display: grid; margin-top: .25rem; flex: none; }
+html body .rx-mv-fila2 .rx-mv-convidar > span { height: 1.625rem; padding: 0 .625rem 0 .5rem; gap: .3125rem; border-radius: 9999px; font-size: .6875rem; font-weight: 700; justify-content: flex-start; width: max-content; }
+html body .rx-mv-fila2 .rx-mv-convidar .a { background: transparent; color: #D44D4D; border: 0; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(212, 77, 77, .35); }
+html body .rx-mv-fila2 .rx-mv-convidar svg { width: .75rem; height: .75rem; }
+html body .rx-mv-fila2 .rx-mv-convidar .rx-mv-cursor { left: 3rem; top: 60%; width: 1.375rem; height: 1.375rem; }
+@keyframes rx-mv-hover { to { background: #D44D4D; color: #FFFFFF; text-decoration-color: transparent; } }
+.rx-mv-voto { display: flex; gap: .375rem; }
+html body .rx-mv-fila2 li > span.rx-mv-voto { flex: none; display: flex; }
+.rx-mv-voto > span { position: relative; display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 9999px; border: 1px solid #D6DCE6; background: #FFFFFF; color: #8898B0; padding: 0; }
+.rx-mv-voto > span > svg:first-child { width: .9375rem; height: .9375rem; }
+html body .rx-mv-voto .rx-mv-descartar { height: 2rem; padding: 0; gap: 0; font-size: 0; }
+html body .rx-mv-voto .rx-mv-descartar > svg:first-child { width: .9375rem; height: .9375rem; }
+html body .rx-mv-voto .rx-mv-descartar .rx-mv-cursor { left: 55%; top: 55%; width: 1.375rem; height: 1.375rem; }
+@media (prefers-reduced-motion: no-preference) {
+  html body .rx-mv6.ativa .rx-mv-voto .rx-mv-descartar { animation: rx-mv-clique .3s ease 1.6s both, rx-mv-reprova .3s ease 1.65s forwards; }
+}
+@keyframes rx-mv-reprova { to { background: #D44D4D; border-color: #D44D4D; color: #FFFFFF; } }
+@media (max-width: 767px) {
+  html body .rx-mv-fila2 > li { grid-template-columns: auto minmax(0, 1fr) auto; column-gap: .625rem; padding: .5rem .75rem; }
+  html body .rx-mv-fila2 li > b { display: none; }
+  .rx-mv-rfoto .anel { width: 2.625rem; height: 2.625rem; }
+  .rx-mv-voto { flex-direction: column; gap: .25rem; }
+  .rx-mv-voto > span { width: 1.75rem; height: 1.75rem; }
+  html body .rx-mv-voto .rx-mv-descartar { height: 1.75rem; }
+}
