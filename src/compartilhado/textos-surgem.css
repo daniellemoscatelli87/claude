@@ -12,7 +12,7 @@ html.tx-pronto .tx-selo.tx-visto, html.tx-pronto .tx-desc.tx-visto, html.tx-pron
 /* cards: um de cada vez (computador; no celular já surgem conforme a rolagem) */
 @media (min-width: 1024px) {
   html.tx-pronto .tx-card:not(.tx-visto) { opacity: 0; transform: translateY(24px); filter: blur(6px); }
-  html.tx-pronto .tx-card.tx-visto { animation: tx-card-entra .9s cubic-bezier(0.16, 1, 0.3, 1) calc(.35s + var(--tx-i, 0) * 300ms) both; }
+  html.tx-pronto .tx-card.tx-visto { animation: tx-card-entra .9s cubic-bezier(0.16, 1, 0.3, 1) calc(.35s + var(--tx-i, 0) * 300ms) both !important; }
 }
 @keyframes tx-card-entra { from { opacity: 0; transform: translateY(24px); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
 html.tx-pronto .tx-card.tx-fim { animation: none !important; }
