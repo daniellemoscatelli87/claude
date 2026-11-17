@@ -1,13 +1,15 @@
 /* Textos que surgem (src/compartilhado/textos-surgem.ts): blur reveal no eyebrow, no título (palavra por palavra) e na
    descrição; cards um de cada vez. Só vale quando o script marcou a página (html.tx-pronto). */
 .tx-palavra { display: inline-block; }
-html.tx-pronto .tx-selo, html.tx-pronto .tx-desc, html.tx-pronto .tx-palavra {
-  opacity: 0; filter: blur(10px); transform: translateY(.35em);
-  transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), filter .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
+/* escondido sem transição (o texto some na hora, antes do primeiro desenho); a transição só existe ao surgir */
+html.tx-pronto .tx-selo, html.tx-pronto .tx-desc, html.tx-pronto .tx-palavra { opacity: 0; filter: blur(10px); transform: translateY(.35em); }
 html.tx-pronto .tx-selo { transform: translateY(8px); filter: blur(6px); }
-html.tx-pronto .tx-desc { transform: translateY(12px); filter: blur(6px); transition-duration: .9s; transition-delay: var(--tx-atraso, .3s); }
-html.tx-pronto .tx-titulo .tx-palavra { transition-delay: calc(.12s + var(--tx-k, 0) * 45ms); }
-html.tx-pronto .tx-selo.tx-visto, html.tx-pronto .tx-desc.tx-visto, html.tx-pronto .tx-titulo.tx-visto .tx-palavra { opacity: 1; filter: blur(0); transform: none; }
+html.tx-pronto .tx-desc { transform: translateY(12px); filter: blur(6px); }
+html.tx-pronto .tx-selo.tx-visto, html.tx-pronto .tx-desc.tx-visto, html.tx-pronto .tx-titulo.tx-visto .tx-palavra {
+  opacity: 1; filter: blur(0); transform: none;
+  transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), filter .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
+html.tx-pronto .tx-desc.tx-visto { transition-duration: .9s; transition-delay: var(--tx-atraso, .3s); }
+html.tx-pronto .tx-titulo.tx-visto .tx-palavra { transition-delay: calc(.12s + var(--tx-k, 0) * 45ms); }
 
 /* cards: um de cada vez (computador; no celular já surgem conforme a rolagem) */
 @media (min-width: 1024px) {
@@ -16,3 +18,8 @@ html.tx-pronto .tx-selo.tx-visto, html.tx-pronto .tx-desc.tx-visto, html.tx-pron
 }
 @keyframes tx-card-entra { from { opacity: 0; transform: translateY(24px); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
 html.tx-pronto .tx-card.tx-fim { animation: none !important; }
+
+/* demais blocos (botões, formulários, componentes): em qualquer tela */
+html.tx-pronto .tx-bloco:not(.tx-visto) { opacity: 0; transform: translateY(24px); filter: blur(6px); }
+html.tx-pronto .tx-bloco.tx-visto { animation: tx-card-entra .9s cubic-bezier(0.16, 1, 0.3, 1) calc(.25s + var(--tx-i, 0) * 150ms) both !important; }
+html.tx-pronto .tx-bloco.tx-fim { animation: none !important; }

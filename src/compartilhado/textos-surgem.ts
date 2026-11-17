@@ -29,7 +29,7 @@ function quebrarPalavras(titulo: HTMLElement) {
   return k;
 }
 
-export function textosSurgem(opcoes: { titulos: string; cards?: string[] }) {
+export function textosSurgem(opcoes: { titulos: string; cards?: string[]; blocos?: string[] }) {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
   const blocos: HTMLElement[] = [];
   document.querySelectorAll<HTMLElement>(opcoes.titulos).forEach((titulo) => {
@@ -39,7 +39,13 @@ export function textosSurgem(opcoes: { titulos: string; cards?: string[] }) {
     const antes = titulo.previousElementSibling as HTMLElement | null;
     if (antes && !/^H\d$/.test(antes.tagName)) antes.classList.add('tx-selo');
     // descrição: os parágrafos logo depois do título, um depois do outro
-    let depois = titulo.nextElementSibling as HTMLElement | null, j = 0;
+    let depois = titulo.nextElementSibling as HTMLElement | null; let j = 0;
+    // (ou um bloco só de texto logo depois do título, como na Home)
+    if (depois && depois.tagName === 'DIV' && !depois.querySelector('h1, h2, h3, form, img, button, a')) {
+      depois.classList.add('tx-desc');
+      depois.style.setProperty('--tx-atraso', `${(0.2 + n * PASSO).toFixed(2)}s`);
+      depois = depois.nextElementSibling as HTMLElement | null; j++;
+    }
     while (depois && depois.tagName === 'P') {
       depois.classList.add('tx-desc');
       depois.style.setProperty('--tx-atraso', `${(0.2 + n * PASSO + j * 0.15).toFixed(2)}s`);
@@ -60,6 +66,16 @@ export function textosSurgem(opcoes: { titulos: string; cards?: string[] }) {
       c.addEventListener('animationend', (ev) => { if (ev.target === c && ev.animationName === 'tx-card-entra') c.classList.add('tx-fim'); });
     }));
   });
+  // demais blocos (botões, formulários, componentes): surgem do mesmo jeito, um depois do outro dentro do mesmo grupo
+  const jaAnimado = (el: Element) => el.matches('.tx-selo, .tx-titulo, .tx-desc, .tx-card, .tx-bloco') || !!el.querySelector('.tx-titulo, .tx-card');
+  const porPai = new Map<Element, number>();
+  (opcoes.blocos ?? []).forEach((sel) => document.querySelectorAll<HTMLElement>(sel).forEach((el) => {
+    if (jaAnimado(el) || !el.parentElement) return;
+    const i = porPai.get(el.parentElement) ?? 0;
+    porPai.set(el.parentElement, i + 1);
+    el.classList.add('tx-bloco'); el.style.setProperty('--tx-i', String(i)); blocos.push(el);
+    el.addEventListener('animationend', (ev) => { if (ev.target === el && ev.animationName === 'tx-card-entra') el.classList.add('tx-fim'); });
+  }));
   document.documentElement.classList.add('tx-pronto');
   const obs = new IntersectionObserver((es) => es.forEach((e) => {
     if (!e.isIntersecting) return;
@@ -72,5 +88,7 @@ export function textosSurgem(opcoes: { titulos: string; cards?: string[] }) {
     }
     obs.unobserve(el);
   }), { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
-  blocos.forEach((b) => obs.observe(b));
+  // só começa a observar depois que o estado escondido foi desenhado; senão, o que já está na tela ao abrir (o topo)
+  // aparece pronto, sem a transição
+  requestAnimationFrame(() => requestAnimationFrame(() => blocos.forEach((b) => obs.observe(b))));
 }
