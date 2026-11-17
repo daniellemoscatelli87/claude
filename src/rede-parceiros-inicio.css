@@ -3637,3 +3637,10 @@ html body .rx-pilar:not(:last-child)::after { content: none !important; display:
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
   .rp-tampa { visibility: hidden; } /* continua existindo só para a aba "Saiba mais" copiar a cor */
 }
+
+/* Cards de "Sobre a rede" (computador): no hover, além da borda animada, o card sobe levemente e a sombra cresce */
+@media (min-width: 1024px) and (hover: hover) {
+  html body .rx-pilar { transition: transform .35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .35s ease; }
+  html body .rx-pilar:hover { transform: translateY(-4px); box-shadow: 0 2px 4px rgba(13, 17, 25, 0.04), 0 22px 44px -18px rgba(13, 17, 25, 0.22); }
+}
+@media (min-width: 1024px) and (hover: hover) and (prefers-reduced-motion: reduce) { html body .rx-pilar:hover { transform: none; } }

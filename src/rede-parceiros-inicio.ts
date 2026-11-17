@@ -2,6 +2,9 @@
 // O formulário de cadastro fica em /rede-parceiros/cadastro/.
 import './rede-parceiros-inicio.css';
 import './compartilhado/menu';
+import { textosSurgem } from './compartilhado/textos-surgem';
+
+textosSurgem({ titulos: 'main h1, main h2', cards: ['.rx-pilares > li.rx-pilar', '.rx-acc-item'] });
 
 /* ---------- Cadastro em janela de tela cheia (o formulário é a página /rede-parceiros/cadastro/, carregada dentro) ---------- */
 const tela = document.getElementById('cadastro-parceiro') as HTMLElement | null;

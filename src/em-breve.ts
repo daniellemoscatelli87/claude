@@ -1,5 +1,8 @@
 import './em-breve.css';
 import { insert, sugerirEmail, EMAIL_RE } from './compartilhado/menu';
+import { textosSurgem } from './compartilhado/textos-surgem';
+
+textosSurgem({ titulos: 'main h1, main h2', cards: ['#artigos .grid > *'] });
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
