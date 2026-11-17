@@ -376,6 +376,21 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 
 ---
 
+## D-032 · 17/11/2026 · Padrão de interface e interação por iniciativa própria
+
+- **Origem:** dona do produto: "não quero mais ter que solicitar, já tem que ser propositiva do seu lado".
+- **Decisão:** toda página, tela ou funcionalidade, do produto ou do site do estúdio, nova ou refeita, traz por iniciativa do Claude, sem pedido:
+  - UX, UI e UX writing de qualidade;
+  - motion design (transições, microinterações, retorno visual a cada ação, respeitando "menos movimento");
+  - design de interação (mockups funcionais, simulações de cenários, demonstrações animadas, elementos que reagem ao uso);
+  - visual bonito e moderno dentro do design system;
+  - entrega funcionando e testada, com capturas, inclusive no celular.
+
+  Regra registrada no `CLAUDE.md` (seção "Padrão de interface e interação"), igual à do projeto FindLook.
+- **Limites:** a iniciativa vale para a forma (visual, movimento, interação e textos de interface). Não vale para criar conteúdo, dados ou funcionalidades novas, que continuam sendo perguntados antes. Animação nunca prejudica acessibilidade, desempenho ou clareza.
+
+---
+
 ## Decisões pendentes
 
 
