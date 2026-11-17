@@ -35,6 +35,26 @@ Se os arquivos estiverem ausentes, informe precisamente quais faltam e peça ape
 - Acessibilidade, responsividade mobile e linguagem simples desde o primeiro fluxo.
 - Testar o comportamento com scripts e casos de aceitação. **Nunca afirmar que algo está funcional sem executar/verificar.**
 
+## Padrão de interface e interação (regra permanente da dona do produto, 17/11/2026)
+
+Vale para o produto e para todo o site do estúdio (página inicial, área restrita, Rede de Parceiros e Store). A dona do produto preza muito por design de interação e não quer precisar pedir isso. **Por iniciativa própria, sem esperar pedido,** toda página, tela ou funcionalidade nova ou refeita deve trazer:
+- **UX, UI e UX writing de qualidade:** hierarquia clara, linguagem simples e da marca, estados vazios, de carregamento, de sucesso e de erro bem escritos, e acessibilidade (WCAG 2.2 AA).
+- **Motion design:**
+  - entradas e transições suaves, microinterações e retorno visual a cada ação (por exemplo: carregando, depois sucesso com check, depois volta ao estado inicial);
+  - os tokens e padrões de movimento do design system;
+  - sempre respeitar "menos movimento".
+- **Design de interação:**
+  - mockups funcionais e simulações de cenários (por exemplo, a demonstração com cursor contando a história em etapas);
+  - demonstrações animadas;
+  - elementos que reagem ao uso (hover, toque, rolagem, arrastar), e não telas estáticas.
+- **Interfaces bonitas e modernas,** dentro do design system oficial. O que faltar nele é proposto ao design system primeiro, como já é regra.
+- **Pesquisa quando necessário:** buscar skills e recursos (por exemplo, as skills de design de interface disponíveis e as bibliotecas de animação já usadas no projeto) e entregar **funcionando e testado**, com capturas do resultado, inclusive no celular.
+
+**Limites:**
+- Ser propositiva vale para a forma: visual, movimento, interação e textos de interface da página ou funcionalidade pedida.
+- Não vale para inventar conteúdo, dados ou funcionalidades novas. Novas funcionalidades e mudanças de escopo continuam sendo perguntadas antes.
+- Animação nunca pode prejudicar acessibilidade, desempenho ou clareza.
+
 ## Modo de colaboração: dona do produto trabalha no celular
 
 - Use respostas curtas, orientadas a ação, com **um passo de configuração por vez**, caminhos clicáveis/instruções em português e um critério de verificação para cada passo.
