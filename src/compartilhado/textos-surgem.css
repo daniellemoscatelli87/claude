@@ -16,3 +16,8 @@ html.tx-pronto .tx-selo.tx-visto, html.tx-pronto .tx-desc.tx-visto, html.tx-pron
 }
 @keyframes tx-card-entra { from { opacity: 0; transform: translateY(24px); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
 html.tx-pronto .tx-card.tx-fim { animation: none !important; }
+
+/* demais blocos (botões, formulários, componentes): em qualquer tela */
+html.tx-pronto .tx-bloco:not(.tx-visto) { opacity: 0; transform: translateY(24px); filter: blur(6px); }
+html.tx-pronto .tx-bloco.tx-visto { animation: tx-card-entra .9s cubic-bezier(0.16, 1, 0.3, 1) calc(.25s + var(--tx-i, 0) * 150ms) both !important; }
+html.tx-pronto .tx-bloco.tx-fim { animation: none !important; }
