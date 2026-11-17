@@ -538,6 +538,10 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     const curtas = Array.from(eco.querySelectorAll<SVGLineElement>('.rx-eco-cm'));
     const pos = pontos.map((p) => parseFloat(p.style.getPropertyValue('--t')) || 0);
     luz.style.animation = 'none';
+    // o círculo vermelho se desenha junto com a luz: começa vazio e cresce até onde ela passou
+    const anel = eco.querySelector<SVGCircleElement>('.rx-eco-anel');
+    const desenharAnel = (f: number) => { if (anel) anel.style.strokeDasharray = `${f} 1`; };
+    desenharAnel(0);
     const revelar = (i: number) => {
       [pontos[i], setores[i], linhas[i]].forEach((el) => el?.classList.add('mostrado', 'aceso'));
       curtas[i]?.classList.add('mostrado');
@@ -551,6 +555,7 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
         if (!inicio) inicio = agora;
         const f = Math.min((agora - inicio) / VOLTA, 1);
         luz.style.transform = `rotate(${(f * 360).toFixed(2)}deg)`;
+        desenharAnel(f);
         pos.forEach((t, i) => { if (!feitos.has(i) && f >= t) { feitos.add(i); revelar(i); } });
         if (f < 1) requestAnimationFrame(quadro);
         else { luz.classList.remove('ativa'); setTimeout(() => eco.classList.add('nucleo'), 350); } // por último, o núcleo
