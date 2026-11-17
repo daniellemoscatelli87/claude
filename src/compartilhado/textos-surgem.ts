@@ -88,5 +88,7 @@ export function textosSurgem(opcoes: { titulos: string; cards?: string[]; blocos
     }
     obs.unobserve(el);
   }), { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
-  blocos.forEach((b) => obs.observe(b));
+  // só começa a observar depois que o estado escondido foi desenhado; senão, o que já está na tela ao abrir (o topo)
+  // aparece pronto, sem a transição
+  requestAnimationFrame(() => requestAnimationFrame(() => blocos.forEach((b) => obs.observe(b))));
 }
