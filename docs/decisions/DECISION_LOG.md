@@ -409,6 +409,30 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-052 · 18/11/2026 · Tom de voz e UX writing: textos de inteligência como conversa (DM v52 e FindLook v79)
+
+- **Origem:** a dona do produto pediu uma seção de tom de voz e UX writing, adaptável aos dois DS, com casos do jeito errado e do recomendado. Os requisitos dela:
+  - linguagem natural, sofisticada e acessível;
+  - sem jargão estatístico em títulos, cards e resumos;
+  - proporção não vira quantidade;
+  - não inventar oportunidades, demandas ou vocações;
+  - dados técnicos no detalhamento;
+  - estrutura única para todos os temas, inclusive os novos;
+  - sem títulos repetidos;
+  - escaneabilidade;
+  - preservar abas, layout e DS.
+- **Objetivo dela:** a experiência deve parecer uma conversa com uma inteligência de mercado, e não a leitura de um relatório estatístico.
+- **Decisão:** o componente compartilhado `EscritaDeInteligencia` (igual nos dois DS) tem regras, estrutura, exemplos e revisão.
+  - **Três regras acrescentadas:** hipótese marcada como hipótese, sempre dizer período e base, sem exagero.
+  - **Estrutura da descoberta:** descoberta (título), contexto, leitura possível (opcional, marcada como hipótese), próximo passo (opcional, sem prometer resultado) e detalhamento (recolhido, com números, período, base e método).
+- **FindLook:** quatro seções novas na página Tom de voz, com exemplos do painel do lojista e da Inteligência.
+- **Dani Moscatelli:** página nova "Tom de voz e UX writing" em Diretrizes, com:
+  - quatro princípios tirados das regras do produto (linguagem simples, dizer exatamente o que se sabe, "não sei" como resposta válida, convite à consultoria sem pressão);
+  - a tabela dos tipos de informação;
+  - exemplos do Experience Intelligence.
+- **Junto:** fim do item 10 da auditoria. Trilha de navegação, paginação, dica de contexto e painel lateral usam os componentes reais. A dica deixa de ser pink e passa a ter fundo de popover; o painel lateral usa `ui/sheet`, com foco preso.
+- **Aprovação:** por capturas, em 18/11/2026.
+
 ## D-051 · 16/11/2026 · Auditoria dos DS, lote 2: padrão único de botão, campo e foco; FindLook em português com exemplos de moda (DM v51 e FindLook v77)
 
 - **Origem:** lote 2 (prioridade alta) da lista da auditoria. A dona do produto aprovou cada parte por capturas.

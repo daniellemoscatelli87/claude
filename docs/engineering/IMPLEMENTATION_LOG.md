@@ -360,6 +360,24 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-18 · Tom de voz e UX writing e fim do item 10 da auditoria (D-052; publicado: DM v52 e FindLook v79)
+
+- **Feito nos dois DS:**
+  - `showcase/EscritaDeInteligencia.tsx`, igual nos dois: regras, estrutura da descoberta com card de exemplo e detalhamento recolhível, pares evitar e preferir, revisão;
+  - `ui/breadcrumb`, `ui/pagination` e `ui/tooltip` ajustados ao visual documentado;
+  - a página Overlays usa esses componentes e `ui/sheet` no painel lateral.
+- **FindLook:** `VoiceShowcase` com as seções `voice-inteligencia`, `voice-estrutura`, `voice-exemplos` e `voice-revisao`, e quatro itens novos no menu.
+- **Dani Moscatelli:** `VoiceShowcase.tsx` novo, com as seções `escrita-principios`, `escrita-tipos`, `escrita-inteligencia`, `escrita-estrutura`, `escrita-exemplos` e `escrita-revisao`, e o item "Tom de voz e UX writing" em Diretrizes.
+- **Testes:**
+  - `pnpm build` dos dois DS: ok;
+  - Playwright a 390 px: todas as seções existem, sem rolagem lateral e sem erros, também no ar;
+  - paginação com 40 px e página ativa marcada;
+  - painel lateral com foco preso (12/12 Tabs) e fechando com Esc;
+  - capturas aprovadas pela dona do produto.
+- **Pendente:**
+  - abas, diálogo, sanfona e menu suspenso ainda usam o Radix direto nas páginas (mesmos primitivos, estilo próprio), para o lote 3;
+  - lote 3 (organização e limpeza) e lote 4 (produtos).
+
 ## 2026-11-16 · Auditoria dos DS, lote 2 (D-051; publicado: DM v51 e FindLook v77)
 
 - **Feito nos dois DS:**
