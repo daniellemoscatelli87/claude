@@ -172,10 +172,10 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
    background graphite-950, card rgba(19,26,39,.75), border .07/.12, foreground #E4E9F0, muted graphite-300,
    primary crimson-400, primary-muted .15 com crimson-300, muted rgba(40,48,67,.6), sombras escuras do DS. */
 .transicao-escopo.secao-escura { background: #0D1119; }
-.secao-escura .rv-cabecalho > p:first-child { background: transparent; border-color: rgba(232, 128, 128, 0.6); color: #D44D4D; }
-.secao-escura .rv-cabecalho > p:first-child > span { background: #D44D4D; }
+.secao-escura .rv-cabecalho > p:first-child { background: transparent; border-color: rgba(232, 128, 128, 0.6); color: #E88080; }
+.secao-escura .rv-cabecalho > p:first-child > span { background: #E88080; }
 .secao-escura .rv-cabecalho h2 { color: #E4E9F0; }
-.secao-escura .rv-cabecalho .text-coral-600 { color: #D44D4D; }
+.secao-escura .rv-cabecalho .text-coral-600 { color: #E88080; }
 .secao-escura .rv-cabecalho > p:last-child { color: #8898B0; }
 .secao-escura > .relative > p.rv { color: #627288; }
 /* Cards em vidro (GlassCard do DS, tom claro no tema escuro, intensidade leve):
@@ -185,7 +185,7 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 .secao-escura .card-frente:hover { border-color: rgba(255, 255, 255, 0.22); box-shadow: 0 16px 40px rgba(6, 6, 8, 0.16); }
 @media (prefers-reduced-transparency: reduce) { .secao-escura .card-frente { -webkit-backdrop-filter: none; backdrop-filter: none; background: #1C2333; } }
 .secao-escura .card-frente h3 { color: #E4E9F0; }
-.secao-escura .card-frente h3 + p { color: #D44D4D; }
+.secao-escura .card-frente h3 + p { color: #E88080; }
 .secao-escura .card-frente h3 + p + p { color: #8898B0; }
 .secao-escura .card-frente ul { border-color: rgba(255, 255, 255, 0.07); }
 .secao-escura .card-frente .tag-frente { background: rgba(40, 48, 67, 0.6); border-color: rgba(255, 255, 255, 0.07); color: #8898B0; }
@@ -223,8 +223,8 @@ main a.bg-coral-600, main button.bg-coral-600 { background-color: #D44D4D; }
 main a.bg-coral-600:hover, main button.bg-coral-600:hover { background-color: #B82828; }
 
 /* Fundo escuro: vermelho claro (crimson-300) para texto pequeno e cinzas do tema escuro */
-.secao-escura .rv-cabecalho > p.text-coral-600 { color: #D44D4D; }
-.secao-escura .card-frente h3 + p { color: #D44D4D; }
+.secao-escura .rv-cabecalho > p.text-coral-600 { color: #E88080; }
+.secao-escura .card-frente h3 + p { color: #E88080; }
 .secao-escura > .relative > p.rv { color: #8898B0; }
 /* Números dos cards: decorativos, mas legíveis (≥ 3:1 para texto grande) */
 .secao-escura .card-frente .frente-num { color: #627288; font-weight: 700; font-size: 48px; }
