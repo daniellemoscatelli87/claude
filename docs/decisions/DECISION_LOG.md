@@ -409,6 +409,34 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-054 · 19/11/2026 · Lote 4 nos DS: padrões do site e do produto, gráficos e regra do admin (DM v55 e FindLook v82)
+
+- **Decisões dela:**
+  - **Header do site no celular:** a faixa continua clara ao rolar, sem faixa grafite (opção A). O DS foi atualizado para o que o site já faz.
+  - **Padrões que viram componentes do DS:**
+    - Dani Moscatelli: rodapé, flutuantes, aviso de cookies e detalhes visuais.
+    - FindLook: busca do hero, card de loja e mapa, cadastro do lojista e telas do admin.
+  - **"Entrada ao rolar":** a demonstração reproduz fiel a seção "Onde podemos atuar" do Projeto Piloto, e o card de frente de atuação vira componente (opção 1).
+  - **Regra do admin do FindLook:** nada do admin entra no DS enquanto estiver sendo decidido. Ela decide no FindLook e manda a decisão final para o DS. Por isso o quadro de ativação, as etiquetas de etapa, a agenda, a busca ao vivo e a lista e ficha de loja saíram do DS.
+  - **Faixa de parceiros:** com o botão de pausar (WCAG 2.2.2), mas sem sobrepor os logos e sem botão flutuante. Ele fica numa linha própria, abaixo dos logos.
+  - **Gráficos:**
+    - a rosca fica, redesenhada no padrão dos gráficos do DS;
+    - entram os 10 recomendados do catálogo dela, nos dois DS;
+    - cores: só a cor da marca e variações de tom dela; o grafite só para informação sem destaque ou desabilitada, nunca ao lado da cor da marca.
+  - **Publicação:** "publique". A sombra dos cards seguiu a regra do DS (sem sombra parado); ela não respondeu a essa pergunta antes da ordem de publicar.
+- **Tokens de gráfico:**
+  - FindLook: `--chart-1..5` = pink 500, 700, 400, 300, 200.
+  - Dani Moscatelli: `--chart-1..5` = carmim 500, 700, 400, 300, 200. O carmim 500 vem antes do 400 porque tem mais contraste em linhas finas.
+  - Novos `--chart-neutral` e `--chart-grid`.
+- **Integração:** o `main` do FindLook tinha os gráficos da Central de Inteligência (Rosca, BarrasHorizontais, MapaCoropletico, em `ui/graficos.tsx`), vindos de outra conversa. Eles foram mantidos. Os gráficos novos ficaram em `ui/graficos-inteligencia.tsx`, com o mesmo nome nos dois DS.
+- **Em aberto para ela:**
+  - o verde do WhatsApp com texto branco (cerca de 2:1);
+  - a pílula flutuante "Quero ser parceiro";
+  - o vermelho carmim 400 em texto sobre o fundo escuro da seção "Onde podemos atuar" (4,47:1, igual ao site);
+  - a correção do controle segmentado no celular dentro do componente comum;
+  - no FindLook há agora duas roscas: a da Central (página Dados) e a redesenhada (página Gráficos), e é preciso decidir qual fica;
+  - o rótulo do mapa coroplético da Central é cortado na borda do card.
+
 ## D-053 · 19/11/2026 · Auditoria dos DS, lote 3: organização e limpeza (DM v53 e FindLook v80)
 
 - **Decisões dela:**

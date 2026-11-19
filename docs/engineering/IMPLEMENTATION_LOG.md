@@ -360,6 +360,25 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-19 · Lote 4 nos DS: padrões do site e do produto e gráficos (D-054; publicado: DM v55 e FindLook v82)
+
+- **Dani Moscatelli:**
+  - `ui/` novos: `rodape-site`, `botao-whatsapp`, `aviso-projeto`, `botao-subir`, `aviso-cookies`, `surgir-ao-rolar`, `curva-secao`, `card-frente` e `graficos-inteligencia`;
+  - páginas novas: `SitePatternsShowcase` e `GraficosShowcase`;
+  - `HeaderShowcase`: faixa clara no celular ao rolar.
+- **FindLook:**
+  - `ui/` novos: `barra-fixa-celular`, `busca-pecas`, `card-loja`, `mapa-lojas`, `faixa-parceiros`, `cadastro-lojista` e `graficos-inteligencia`;
+  - `ui/drawer` ganhou a prop `container`;
+  - páginas novas: `ProdutoShowcase` e `GraficosShowcase`;
+  - os componentes do admin foram criados e depois retirados (D-054).
+- **Feito por três agentes em paralelo**, em branches de trabalho; os gráficos foram feitos em worktrees separados. Depois houve merge com o `main`:
+  - conflitos do tipo "manter os dois" em `App.tsx`, resolvidos juntando as listas;
+  - o `ui/graficos.tsx` da outra conversa foi mantido, e o nosso foi renomeado.
+- **Testes:**
+  - `pnpm build` nos dois DS: ok;
+  - varredura de todas as páginas em 1280 e 390 px, localmente e no ar (29 páginas no FindLook, 26 no DM): nenhum erro e nenhuma rolagem lateral;
+  - Playwright dos agentes: gaveta da busca, validações do cadastro, faixa pausando, entrada ao rolar com e sem movimento reduzido, demonstração comparada com o site no ar.
+
 ## 2026-11-19 · DS no celular sem rolagem lateral (publicado: DM v54 e FindLook v81)
 
 - **Feito nos dois DS:**
