@@ -360,6 +360,15 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-19 · DS no celular sem rolagem lateral (publicado: DM v54 e FindLook v81)
+
+- **Feito nos dois DS:**
+  - `ui/pagination` com `flex-wrap`;
+  - abas sublinhadas (Feedback) e abas de Transições de layout (Movimento) com `flex-wrap`;
+  - cards de tipografia (Fundamentos) com `min-w-0` e `break-words`;
+  - Círculos em órbita em uma coluna no celular (`sm:grid-cols-2`) e com `overflow-hidden`.
+- **Testes:** Playwright em 1280 e 390 px, em todas as páginas (27 no FindLook, 24 no DM): nenhum erro e nenhuma rolagem lateral, localmente e no ar.
+
 ## 2026-11-19 · Auditoria dos DS, lote 3 (D-053; publicado: DM v53 e FindLook v80)
 
 - **Feito nos dois DS:**
