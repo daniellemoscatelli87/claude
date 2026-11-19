@@ -360,6 +360,17 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-19 · Seção escura: vermelho pequeno em crimson-300 (D-056)
+
+- **DM DS** (commit `b2a8b23` no `main`, publicado pelo `publish.yml`):
+  - `src/app/components/ui/card-frente.tsx`: o subtítulo passa de `text-crimson-400` para `text-crimson-300`.
+  - `src/app/components/showcase/SitePatternsShowcase.tsx`: selo (texto e ponto) e frase da seção em crimson-300; nota de acessibilidade atualizada (7:1).
+- **Site** (branch `claude/vermelho-escuro`, pull request daniellemoscatelli87/claude#184, aguardando o sim para publicar):
+  - `src/projeto-piloto.css`: `#D44D4D` passa a `#E88080` no selo, no ponto, na frase e no subtítulo dos cards da `.secao-escura`.
+- **Testes:**
+  - DS: `pnpm build` e varredura de todas as páginas (`paginas 26 {}`).
+  - Site: `npm run build`. No navegador, a 390 px, a cor calculada dos textos é rgb(232, 128, 128); captura conferida.
+
 ## 2026-11-19 · Lote 4 nos DS: padrões do site e do produto e gráficos (D-054; publicado: DM v55 e FindLook v82)
 
 - **Dani Moscatelli:**

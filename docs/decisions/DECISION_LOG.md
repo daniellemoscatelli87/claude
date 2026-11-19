@@ -409,6 +409,16 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-056 · 19/11/2026 · Seção escura: texto vermelho pequeno em crimson-300; verde do WhatsApp mantido; pílula de ação vira componente
+
+- **Vermelho sobre fundo escuro (decisão dela, depois de ver a comparação):**
+  - o texto vermelho pequeno da seção escura "Onde podemos atuar" passa de crimson-400 (`#D44D4D`, 4,47:1 sobre graphite-950, abaixo de AA) para crimson-300 (`#E88080`, 7:1);
+  - vale para o selo "Escopo de atuação", a frase abaixo do título e os subtítulos dos cards;
+  - mudou no DM DS (`ui/card-frente.tsx` e a demonstração em Padrões do site) e no site (`src/projeto-piloto.css`, pull request daniellemoscatelli87/claude#184, publicado só com o sim dela).
+- **Verde do WhatsApp:** o botão do WhatsApp mantém o verde da marca do WhatsApp, fora da paleta do DS. É uma exceção da dona do produto.
+- **Pílula de ação:** a pílula flutuante do site ("Quero ser parceiro" / "Cadastrar empresa") vira componente do DM DS (`ui/pilula-de-acao.tsx`, em "Elementos flutuantes"). A publicação depende da aprovação visual dela.
+- **Trade-off:** o vermelho fica um pouco mais rosado na seção escura, em troca de passar com folga no contraste.
+
 ## D-055 · 19/11/2026 · Paleta de gráficos do FindLook e uma rosca só (FindLook v83, DM v56)
 
 - **Decisão dela:**
