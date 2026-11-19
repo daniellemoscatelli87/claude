@@ -409,6 +409,28 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-053 · 19/11/2026 · Auditoria dos DS, lote 3: organização e limpeza (DM v53 e FindLook v80)
+
+- **Decisões dela:**
+  - **Título de seção:** um estilo só, com a fonte de títulos e 24 px (opção B). No Dani Moscatelli isso quer dizer Space Grotesk.
+  - **Notificação (toast):** fazer funcionar, e não retirar.
+  - **Tema escuro do DS do FindLook:** o botão fica.
+  - **Publicação:** fazer tudo e publicar junto.
+- **Sem decisão dela (correção):**
+  - **Raios:** foram levados para a escala do DS (10 → 12, 14 → 16, 5 a 9 → 8, 18 → 16). Ficaram de fora o de 20 px dos cards de vidro, que é documentado, e os de 2 a 4 px em elementos pequenos.
+  - **Cores:** as da paleta padrão do Tailwind viraram tokens. No Dani Moscatelli, todo `text-primary` passou a `text-primary-text`.
+  - **Menu:**
+    - Feedback e Rótulos ganharam conteúdo próprio, e os tokens de Movimento passaram a `motion-tokens`.
+    - Saíram oito itens que só levavam a avisos "Ver em": canvas reveal, Wobble, Shine, cards de KPI, indicador do painel, espaçamento, tokens de Movimento e linha do tempo em Rótulos.
+    - A publicação foi feita com `aceitar_remocoes`.
+  - **Abas, sanfona, menu suspenso, diálogo, confirmação, caixa de seleção, opção e chave:** os componentes de `ui/` foram ajustados ao visual documentado e as páginas passaram a usá-los. A confirmação de exclusão passou a ser `ui/alert-dialog`. A sanfona ganhou a opção `semIcone`.
+  - **Catálogo de componentes:** página nova com todos os arquivos de `ui/`.
+- **Efeito no produto FindLook, quando a sincronização for aprovada:**
+  - caixa de seleção e opção passam de 16 para 20 px, e a chave de 32 para 44 px;
+  - as abas deixam de esticar e quebram linha em vez de rolar;
+  - a dica de contexto fica com fundo claro.
+- **Integração:** o `main` do FindLook tinha a regra "card nunca tem rolagem horizontal", vinda de outra conversa. Os conflitos foram resolvidos mantendo a regra e aplicando o lote 3 por cima.
+
 ## D-052 · 18/11/2026 · Tom de voz e UX writing: textos de inteligência como conversa (DM v52 e FindLook v79)
 
 - **Origem:** a dona do produto pediu uma seção de tom de voz e UX writing, adaptável aos dois DS, com casos do jeito errado e do recomendado. Os requisitos dela:

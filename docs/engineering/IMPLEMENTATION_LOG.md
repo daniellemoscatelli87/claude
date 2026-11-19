@@ -360,6 +360,30 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-19 · Auditoria dos DS, lote 3 (D-053; publicado: DM v53 e FindLook v80)
+
+- **Feito nos dois DS:**
+  - `shared/SectionHeader.tsx`, que substitui 13 cópias no DM e 15 no FindLook;
+  - mapeamento dos raios em cerca de 1.000 classes;
+  - paleta do Tailwind trocada por tokens (101 trocas no FindLook e 109 no DM);
+  - cores fixas dos cards de Movimento e dos fundos da Marca trocadas por tokens;
+  - `ui/sonner` sem next-themes e com `<Toaster />` no App;
+  - `ui/checkbox`, `radio-group`, `switch`, `tabs`, `accordion` ajustados ao visual documentado;
+  - `FeedbackShowcase` com `parte="feedback|rotulos"`;
+  - `CatalogoShowcase` lista os arquivos de `ui/` por `import.meta.glob`.
+- **Problema encontrado e corrigido antes de publicar:** o script que inseria imports também casava com linhas `import` dentro de exemplos de código. O import do título de seção foi parar dentro de um exemplo em Cards (FindLook) e em Linha do tempo (os dois DS), e essas páginas davam erro ao abrir. A varredura de todas as páginas pegou o erro. Os imports foram movidos para o topo e a tabela da Linha do tempo ganhou `min-w-0`.
+- **Testes:**
+  - `pnpm build` dos dois DS: ok;
+  - Playwright:
+    - em 1280 e 390 px, todas as páginas dos dois DS (27 no FindLook, 24 no DM) abrem sem erro, localmente e no ar;
+    - menu suspenso, diálogo, confirmação, sanfonas, abas e controles de formulário funcionam;
+    - as notificações reais aparecem (3/3);
+    - Feedback e Rótulos mostram conteúdos separados;
+    - o catálogo busca e navega.
+- **Pendente:**
+  - rolagem lateral no celular em Cores, Overlays e Movimento (FindLook) e em Feedback, Overlays e Movimento (DM); isso já existia no ar antes do lote 3;
+  - o lote 4 (produtos).
+
 ## 2026-11-18 · Tom de voz e UX writing e fim do item 10 da auditoria (D-052; publicado: DM v52 e FindLook v79)
 
 - **Feito nos dois DS:**
