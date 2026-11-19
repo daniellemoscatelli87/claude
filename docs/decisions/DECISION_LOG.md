@@ -409,6 +409,17 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-055 · 19/11/2026 · Paleta de gráficos do FindLook e uma rosca só (FindLook v83, DM v56)
+
+- **Decisão dela:**
+  - fica valendo a rosca redesenhada, com a paleta que ela enviou: vermelho-700 `#CC3A45`, vermelho-500 `#DA5963`, rosa-400 `#E89AA1`, rosa-300 `#CDB4B8` e cinza-500 `#9A99A1` (o cinza para "Outros" e o que não está em destaque);
+  - a rosca da Central de Inteligência (`Rosca` em `ui/graficos.tsx`) passa a desenhar a redesenhada, mantendo a mesma assinatura para não quebrar o produto.
+- **Ajustes de contraste:**
+  - texto escuro sobre o vermelho-500 (o branco dá 3,8:1);
+  - escala de calor do rosa-300 ao vermelho-700, em tokens `--chart-seq-*` e `--chart-N-texto` definidos em cada DS.
+- **Trade-off:** vermelho-700 e vermelho-500, e rosa-400 e rosa-300, ficam parecidos para quem tem daltonismo (a própria conferência que ela enviou aponta isso). Para compensar, os valores e nomes vão sempre escritos junto de cada parte.
+- **Testes:** varredura de todas as páginas no ar, sem erros (29 páginas no FindLook, 26 no DM).
+
 ## D-054 · 19/11/2026 · Lote 4 nos DS: padrões do site e do produto, gráficos e regra do admin (DM v55 e FindLook v82)
 
 - **Decisões dela:**
