@@ -409,6 +409,23 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-057 · 20/11/2026 · Card de vidro sem vermelho no hover; menu do painel; gráficos sem texto sobre a cor e áreas em degradê
+
+- **Card de vidro (seção escura "Onde podemos atuar"):**
+  - o ícone e as tags continuam em vidro também com o mouse em cima, porque o card não é clicável (decisão dela);
+  - mudou no site (`src/projeto-piloto.css`, pull request daniellemoscatelli87/claude#184, publicado) e no DM DS (`ui/card-frente.tsx`, tom escuro);
+  - no tom claro, que não é vidro, nada mudou.
+- **Menu do painel do FindLook (`ui/painel-shell.tsx`):**
+  - a barrinha do item ativo ocupa a altura toda do item;
+  - a lateral esquerda do item é reta em todos os itens; o hover usa o mesmo formato do ativo.
+- **Gráficos, opção B (decisão dela):**
+  - nenhum texto sobre a cor do gráfico; valores e rótulos ficam fora da marca, sempre na mesma cor de texto;
+  - a paleta e os tokens não mudam.
+- **Gráficos de área (decisão dela):**
+  - linha fina na cor da série e preenchimento em degradê transparente, no padrão do gráfico "Visão geral das buscas";
+  - vale para área empilhada, streamgraph, linhas e área, densidade, violino e o radar.
+- **Status dos gráficos:** a opção B e o degradê estão no branch `claude/graficos-2` dos dois DS, junto com os 25 gráficos do catálogo. Publicação só com o sim dela, depois da aprovação visual por família.
+
 ## D-056 · 19/11/2026 · Seção escura: texto vermelho pequeno em crimson-300; verde do WhatsApp mantido; pílula de ação vira componente
 
 - **Vermelho sobre fundo escuro (decisão dela, depois de ver a comparação):**

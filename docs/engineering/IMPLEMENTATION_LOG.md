@@ -360,6 +360,18 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-20 · Card de vidro sem vermelho no hover e menu do painel (D-057)
+
+- **DM DS** (`b9d859c` no `main`, publicado pelo `publish.yml`): em `ui/card-frente.tsx`, tom escuro, saem as classes de hover do ícone e dos temas; a sombra vermelha do ícone no hover fica só no tom claro. O texto da demonstração em Padrões do site foi atualizado.
+- **Site** (pull request daniellemoscatelli87/claude#184, incorporado por squash em `2b024a4`): em `src/projeto-piloto.css`, o hover de `.frente-icone` e `.tag-frente` na `.secao-escura` repete o estado de repouso.
+- **FindLook DS** (`37799a2` no `main`, publicado pelo `publish-findlook.yml`): em `ui/painel-shell.tsx`, a barra do item ativo passa a `inset-y-0` (sem `rounded-r-full`) e o item usa `rounded-l-none rounded-r-md`.
+- **Testes:**
+  - builds dos três;
+  - varredura de todas as páginas do DM: `paginas 26 {}`;
+  - no navegador, com o mouse em cima do card, o ícone mede rgba(255,255,255,.08) e a tag rgb(179,189,208), no site e no DM;
+  - item do menu: 40 px de altura, barra de 40 px, raio esquerdo 0;
+  - conferência no ar registrada abaixo, quando concluída.
+
 ## 2026-11-19 · Seção escura: vermelho pequeno em crimson-300 (D-056)
 
 - **DM DS** (commit `b2a8b23` no `main`, publicado pelo `publish.yml`):
