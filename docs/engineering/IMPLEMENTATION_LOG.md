@@ -360,6 +360,18 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-20 · Quebras de texto nos dois DS (correção)
+
+- **Apontado pela dona do produto:** cards de tipografia do FindLook com o nome da fonte em coluna.
+- **FindLook DS** (`d1e4af0` no `main`, publicado):
+  - `FoundationShowcase.tsx`: os pesos saem da coluna gigante à direita e vão para uma linha embaixo do token;
+  - sai o rótulo "de uso";
+  - a barra fica inteira.
+- **Os dois DS** (FindLook `d1e4af0`, Dani Moscatelli `9ddb644`, publicados): em `MotionShowcase.tsx`, o `Token` usa `flex-wrap` e o nome fica sem quebra. No celular, `--ease-*` se partia no meio.
+- **Checagem nova:** o script `quebras-paginas.js`, no scratchpad da sessão, procura texto em coluna e palavra partida em todas as páginas, a 1280 e a 390 px.
+  - Antes: só esses dois casos.
+  - Depois, no ar: `paginas 29 {}` (FindLook) e `paginas 26 {}` (Dani Moscatelli).
+
 ## 2026-11-20 · FindLook DS: cores de estado e caixa "Para quem" (D-058)
 
 - **Commits no `main` do FindLook DS** (publicados pelo `publish-findlook.yml`):
