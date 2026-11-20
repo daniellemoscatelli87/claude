@@ -409,6 +409,20 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-058 · 20/11/2026 · FindLook: cores de estado na mesma família e caixa "Para quem" em cinza
+
+- **Problema apontado por ela:** as cores de estado não combinavam entre si; o laranja de aviso e o pink gritavam, e o verde e o azul ficavam apagados. Ela também não gostou do laranja queimado do aviso.
+- **Decisão dela:**
+  - **Verde e azul:** mesma luz e intensidade, com texto branco. Sucesso `#31835D` e informação `#347BA9`, os dois com 4,6:1.
+  - **Aviso:** âmbar `#F0B135` com texto grafite (11:1).
+    - Ela pediu antes um amarelo que aceitasse texto branco. Os únicos possíveis (caramelo `#AA6501`, ouro velho `#9B6D00`, dourado oliva `#8C7401`) foram recusados por ficarem escuros e amarronzados.
+    - Novo token `--warning-text` (`#A66200`, 4,8:1 no branco), só para texto e ícone de aviso sobre fundo claro.
+  - **Erro:** continua o pink cereja.
+  - **Tema escuro:** a mesma família, mais clara, com texto escuro por cima (todas acima de 8:1).
+- **Caixa "Para quem" dos planos:** passa do fundo de aviso para cinza neutro (`bg-muted`, `border-border`, lâmpada em `muted-foreground`). É uma dica, não um aviso.
+- **Trade-off:** o aviso é a única cor de estado com texto escuro. É o padrão de sinalização, amarelo com letra escura.
+- **Produto:** as cores chegam ao FindLook pela sincronização com o design system, que ela aprova. A caixa "Para quem" do cadastro do lojista (`CadastroLojistaCompleto.tsx`) usa o fundo de aviso direto e precisa da mesma troca lá.
+
 ## D-057 · 20/11/2026 · Card de vidro sem vermelho no hover; menu do painel; gráficos sem texto sobre a cor e áreas em degradê
 
 - **Card de vidro (seção escura "Onde podemos atuar"):**

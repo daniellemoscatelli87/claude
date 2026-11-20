@@ -360,6 +360,25 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-20 · FindLook DS: cores de estado e caixa "Para quem" (D-058)
+
+- **Commits no `main` do FindLook DS** (publicados pelo `publish-findlook.yml`):
+  - `1c6a75d`: caixa "Para quem" em cinza;
+  - `e795ce0`: cores de estado.
+- **`src/styles/theme.css`:**
+  - novos valores de `--success`, `--warning`, `--info` e dos `-muted` e `-foreground`, nos temas claro e escuro;
+  - token novo `--warning-text`;
+  - mapeamentos `--color-warning-text` e `--color-{success,warning,info,error}-foreground`.
+- **Classes:**
+  - 33 usos de `text-warning` em 17 arquivos passam a `text-warning-text`;
+  - `bg-{success,info,warning} text-white` passa a `text-{estado}-foreground`.
+- **Documentação:** hexadecimais atualizados em Fundamentos, Dados e Feedback; tabela de contraste com aviso; cor fixa `#388459` em Fundos trocada por `var(--success)`.
+- **Testes:**
+  - `pnpm build`;
+  - varredura de todas as páginas: `paginas 29 {}`;
+  - capturas dos alertas (claro e escuro) e das notificações.
+- **Pendente no produto:** `CadastroLojistaCompleto.tsx` usa `--warning` e `--warning-muted` na caixa "Para quem". Ao sincronizar, a caixa fica âmbar; para ficar cinza como no DS, a troca é feita no produto.
+
 ## 2026-11-20 · Card de vidro sem vermelho no hover e menu do painel (D-057)
 
 - **DM DS** (`b9d859c` no `main`, publicado pelo `publish.yml`): em `ui/card-frente.tsx`, tom escuro, saem as classes de hover do ícone e dos temas; a sombra vermelha do ícone no hover fica só no tom claro. O texto da demonstração em Padrões do site foi atualizado.
