@@ -172,10 +172,10 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
    background graphite-950, card rgba(19,26,39,.75), border .07/.12, foreground #E4E9F0, muted graphite-300,
    primary crimson-400, primary-muted .15 com crimson-300, muted rgba(40,48,67,.6), sombras escuras do DS. */
 .transicao-escopo.secao-escura { background: #0D1119; }
-.secao-escura .rv-cabecalho > p:first-child { background: transparent; border-color: rgba(232, 128, 128, 0.6); color: #D44D4D; }
-.secao-escura .rv-cabecalho > p:first-child > span { background: #D44D4D; }
+.secao-escura .rv-cabecalho > p:first-child { background: transparent; border-color: rgba(232, 128, 128, 0.6); color: #E88080; }
+.secao-escura .rv-cabecalho > p:first-child > span { background: #E88080; }
 .secao-escura .rv-cabecalho h2 { color: #E4E9F0; }
-.secao-escura .rv-cabecalho .text-coral-600 { color: #D44D4D; }
+.secao-escura .rv-cabecalho .text-coral-600 { color: #E88080; }
 .secao-escura .rv-cabecalho > p:last-child { color: #8898B0; }
 .secao-escura > .relative > p.rv { color: #627288; }
 /* Cards em vidro (GlassCard do DS, tom claro no tema escuro, intensidade leve):
@@ -185,13 +185,13 @@ html { scroll-padding-top: var(--altura-cabecalho, 96px); }
 .secao-escura .card-frente:hover { border-color: rgba(255, 255, 255, 0.22); box-shadow: 0 16px 40px rgba(6, 6, 8, 0.16); }
 @media (prefers-reduced-transparency: reduce) { .secao-escura .card-frente { -webkit-backdrop-filter: none; backdrop-filter: none; background: #1C2333; } }
 .secao-escura .card-frente h3 { color: #E4E9F0; }
-.secao-escura .card-frente h3 + p { color: #D44D4D; }
+.secao-escura .card-frente h3 + p { color: #E88080; }
 .secao-escura .card-frente h3 + p + p { color: #8898B0; }
 .secao-escura .card-frente ul { border-color: rgba(255, 255, 255, 0.07); }
 .secao-escura .card-frente .tag-frente { background: rgba(40, 48, 67, 0.6); border-color: rgba(255, 255, 255, 0.07); color: #8898B0; }
 .secao-escura .card-frente:hover .tag-frente { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #D44D4D; }
 .secao-escura .card-frente .frente-icone { background: rgba(212, 77, 77, 0.15); border-color: transparent; color: #D44D4D; }
-.secao-escura .card-frente:hover .frente-icone { background: #D44D4D; border-color: #D44D4D; color: #fff; }
+.secao-escura .card-frente:hover .frente-icone { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); color: #FFFFFF; box-shadow: none; }
 .secao-escura .card-frente .frente-num { color: rgba(255, 255, 255, 0.04); }
 .secao-escura .card-frente:hover .frente-num { color: rgba(212, 77, 77, 0.15); }
 .secao-escura .frente-luz { background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(212, 77, 77, 0.10), transparent 70%); }
@@ -223,8 +223,8 @@ main a.bg-coral-600, main button.bg-coral-600 { background-color: #D44D4D; }
 main a.bg-coral-600:hover, main button.bg-coral-600:hover { background-color: #B82828; }
 
 /* Fundo escuro: vermelho claro (crimson-300) para texto pequeno e cinzas do tema escuro */
-.secao-escura .rv-cabecalho > p.text-coral-600 { color: #D44D4D; }
-.secao-escura .card-frente h3 + p { color: #D44D4D; }
+.secao-escura .rv-cabecalho > p.text-coral-600 { color: #E88080; }
+.secao-escura .card-frente h3 + p { color: #E88080; }
 .secao-escura > .relative > p.rv { color: #8898B0; }
 /* Números dos cards: decorativos, mas legíveis (≥ 3:1 para texto grande) */
 .secao-escura .card-frente .frente-num { color: #627288; font-weight: 700; font-size: 48px; }
@@ -234,7 +234,8 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: #D
 /* Cards de vidro: ícone branco em repouso (vermelho só no hover) e tags só com borda */
 .secao-escura .card-frente .frente-icone { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); color: #FFFFFF; }
 .secao-escura .card-frente .tag-frente { background: transparent; border-color: rgba(255, 255, 255, 0.2); color: #B3BDD0; }
-.secao-escura .card-frente:hover .tag-frente { background: transparent; border-color: rgba(232, 128, 128, 0.6); color: #F3B3B3; }
+/* Card de vidro não é clicável: ícone e tags continuam em vidro no hover (decisão da dona do produto, 19/11/2026) */
+.secao-escura .card-frente:hover .tag-frente { background: transparent; border-color: rgba(255, 255, 255, 0.2); color: #B3BDD0; }
 /* Vidro mais transparente (acabamento "translúcido" do GlassCard no tema escuro): branco 4%, borda 12%, desfoque menor */
 .secao-escura .card-frente { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.12); -webkit-backdrop-filter: blur(10px) saturate(150%); backdrop-filter: blur(10px) saturate(150%); }
 /* Números dos cards de vidro: mesma cor da base do ícone (branco 8%); no hover continuam em crimson-300 */
