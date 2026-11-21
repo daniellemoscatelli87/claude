@@ -409,6 +409,31 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-060 · 21/11/2026 · Gráficos publicados: catálogo completo, paletas de 7 tons e regras de uso (FindLook v90, DM v61)
+
+- **Catálogo:** os 25 gráficos do documento dela entram nos dois DS, menos o sunburst e a cascata, que ela tirou porque o caso de uso não fazia sentido e o visual não agradou.
+- **Texto fora da cor (opção B, 19/11/2026):** nenhum valor ou rótulo fica sobre a cor do gráfico. Ficam fora da marca, na mesma cor de texto, com a bolinha da cor quando precisam ser ligados a uma parte.
+- **Áreas (20/11/2026):** linha fina na cor da série e preenchimento em degradê transparente, no padrão do gráfico "Visão geral das buscas".
+- **Paleta oficial dos gráficos (21/11/2026):**
+  - **FindLook:** a paleta que ela enviou, em 7 tons: #e62040, #ff6e85, #f9b5bf, #e2919e, #c29aa0, #d4d4d4, #ebebeb.
+  - **Dani Moscatelli:** o equivalente, aprovado por ela: #D44D4D, #F0828B, #F2BDC2, #D99BA1, #BFA0A3, #D4D7DC, #EBEEF4.
+  - **Faixas:** 1–2 destaque, 3–5 apoio, 6–7 contexto.
+  - **Uso das cores:** as séries usam os tons em sequência. "Outros" fica no cinza seguinte: tom 6 quando as partes param antes dele, tom 7 nos demais casos. Os mapas de calor usam os tons 6, 4, 2 e 1.
+  - **Histórico:** substitui a paleta de 8 tons do dia anterior. Ela reenviou a paleta porque dois cinzas ficavam próximos demais.
+- **Regras de uso, no DS com as palavras dela:**
+  - 1 gráfico = 1 foco;
+  - importância em ordem;
+  - contexto em cinza;
+  - no máximo 2 tons intensos;
+  - escalas contínuas do cinza ao pink.
+- **Exceção confirmada por ela:** quando o exemplo destaca vários itens (barras ordenadas, inclinação, coordenadas paralelas), os destaques seguem os tons 1, 2 e 3, e o resto fica em cinza.
+- **Trade-offs aceitos por ela:**
+  - os dois cinzas são próximos entre si (1,24:1);
+  - o #ebebeb quase some no branco (1,2:1);
+  - os tons do meio ficam abaixo de 3:1 no fundo branco.
+  - Isso é compensado porque todo gráfico escreve os valores ao lado e tem "Ver dados".
+- **Código:** `ui/graficos-paleta.ts` é a configuração por DS. Os componentes `graficos-inteligencia.tsx` e `graficos-catalogo.tsx` são iguais nos dois DS. `--chart-8` ficou como `var(--chart-7)` para não quebrar o registro de versões.
+
 ## D-059 · 20/11/2026 · Botões: secundário é o de contorno; desabilitado em cinza (DM e FindLook)
 
 - **Decisão dela:**

@@ -360,6 +360,25 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-21 · Gráficos publicados nos dois DS (D-060)
+
+- **Branch `claude/graficos-2` levado ao `main` e publicado:**
+  - FindLook DS `9fd2a55`, v90, com o merge de `main`; o conflito no `changelog.ts` foi resolvido mantendo os dois lados;
+  - Dani Moscatelli DS `e334fe5`, v61.
+  - O registro de versões não apontou remoções.
+- **Arquivos principais:**
+  - `ui/graficos-inteligencia.tsx` e `ui/graficos-catalogo.tsx`, idênticos nos dois DS;
+  - `ui/graficos-paleta.ts`, por DS;
+  - `theme.css` (`--chart-1..7`, `--chart-8` = 7, `--chart-neutral` = 7, `--chart-seq-1..4` = 6, 4, 2, 1);
+  - `GraficosShowcase.tsx`, com cores, regras, exemplos aplicados, texto nos gráficos e catálogo;
+  - token tables em `DataShowcase` e `FoundationShowcase`;
+  - entradas no changelog.
+- **Testes:**
+  - builds;
+  - `todas-paginas` e `quebras-paginas`: `{}` antes de publicar e no ar (29 e 26 páginas);
+  - checagem dos tons de cada gráfico medida no navegador (`tons-check.js`);
+  - no ar, `--chart-1..7` confere com as paletas aprovadas nos dois endereços.
+
 ## 2026-11-20 · Botões: secundário de contorno e desabilitado em cinza (D-059)
 
 - **Commits no `main`:** FindLook DS `0a88a00` e Dani Moscatelli DS `47777d8`, publicados.
