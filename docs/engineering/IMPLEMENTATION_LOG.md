@@ -360,6 +360,20 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-20 · Botões: secundário de contorno e desabilitado em cinza (D-059)
+
+- **Commits no `main`:** FindLook DS `0a88a00` e Dani Moscatelli DS `47777d8`, publicados.
+- **`ui/button.tsx` (os dois DS):**
+  - sai `disabled:pointer-events-none disabled:opacity-50`;
+  - entram `disabled:cursor-not-allowed`, `disabled:bg-disabled`, `disabled:text-disabled-foreground` e `disabled:border-transparent`, com as mesmas cores no `hover` e no `dark`;
+  - `ghost` e `link` desabilitados ficam sem fundo;
+  - a variante `secondary` passa a usar as classes de `outline`.
+- **`theme.css` (os dois DS):** tokens `--disabled` e `--disabled-foreground` no claro e no escuro, mais os mapeamentos `--color-disabled*`.
+- **Testes:**
+  - builds;
+  - `todas-paginas` e `quebras-paginas`: `{}` nos dois (29 e 26 páginas);
+  - no navegador, o desabilitado mostra `cursor: not-allowed` e não muda de fundo nem de texto com o mouse em cima (claro e escuro).
+
 ## 2026-11-20 · Quebras de texto nos dois DS (correção)
 
 - **Apontado pela dona do produto:** cards de tipografia do FindLook com o nome da fonte em coluna.

@@ -409,6 +409,20 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-059 · 20/11/2026 · Botões: secundário é o de contorno; desabilitado em cinza (DM e FindLook)
+
+- **Decisão dela:**
+  - **O botão secundário do DS é o de contorno.** A variante `secondary` passa a ter o mesmo visual de `outline`.
+  - **Desabilitado em cinza,** no lugar do vermelho esmaecido, que ficava carregado:
+    - fundo em cinza médio-claro, para não perder a forma de botão, e texto apagado mas legível;
+    - suavizado um pouco depois da primeira prova, a pedido dela.
+  - **No hover do desabilitado aparece o cursor de proibido,** e a cor do botão não muda.
+- **Tokens novos nos dois DS:** `--disabled` e `--disabled-foreground`, nos temas claro e escuro, feitos com `color-mix` entre dois tons de grafite.
+  - Contraste do texto no FindLook: 3,2:1 (claro) e 4,7:1 (escuro).
+  - Contraste do texto no Dani Moscatelli: 3,7:1 (claro) e 4,0:1 (escuro).
+  - Elemento desabilitado não tem mínimo de contraste exigido; a escolha foi o equilíbrio pedido.
+- **Fechado sem publicar:** o pull request daniellemoscatelli87/FindLook#66, da aba "Atualmente" do Mapa dos bairros. Ela mandou o pedido na janela errada.
+
 ## D-058 · 20/11/2026 · FindLook: cores de estado na mesma família e caixa "Para quem" em cinza
 
 - **Problema apontado por ela:** as cores de estado não combinavam entre si; o laranja de aviso e o pink gritavam, e o verde e o azul ficavam apagados. Ela também não gostou do laranja queimado do aviso.
