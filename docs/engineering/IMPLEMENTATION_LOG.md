@@ -349,6 +349,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
+## 2026-11-23 · Pesquisa Moda em Curitiba: abertura em card, botão sempre à vista e barra de navegação fixa, não publicado
+
+- **Pedido:** abertura dentro de um card; "Começar pesquisa" acima da dobra; botões fixos durante o formulário; "Pergunta X de 10" alinhado com o início da barra de progresso.
+- **O que mudou (`src/pesquisa-moda.css`):** abertura num card branco. No computador, o card é mais largo (920 px) e os quatro boxes de informação ficam em grade 2×2. O bloco do botão fica preso ao pé da tela, com um degradê, enquanto o resto da abertura não couber. A barra Voltar/Continuar fica presa ao pé da tela também no computador, com fundo de ponta a ponta. O texto da etapa ganhou margem automática e fica alinhado com a barra.
+- **Verificação executada:** `npm run build`; Playwright no celular (iPhone 13), em 1440×900 e em 1366×768: botão visível sem rolar (540/664, 743/900, 655/768), "Continuar" visível na pergunta 2, texto da etapa alinhado com a barra (mesmo x), sem erros no console.
+
 ## 2026-11-23 · Pesquisa Moda em Curitiba: identificação no início, uma participação por pessoa, vantagens e tela final com confete (D-034), publicado
 
 - **Banco:** `supabase/migrations/20261123180000_pesquisa_identificacao.sql` (não aplicada): `pesquisa_respostas` ganha `nome`, `email`, `whatsapp`, `identificacao_em`, `identificacao_versao` e `identificacao_texto`, com índices únicos por pesquisa para e-mail (sem diferenciar maiúsculas) e WhatsApp.

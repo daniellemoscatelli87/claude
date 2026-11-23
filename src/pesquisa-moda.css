@@ -64,7 +64,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-btn-sec:hover { color: var(--pq-ink); }
 .pq-barra { height: 4px; border-radius: 999px; background: rgba(19, 26, 39, 0.08); overflow: hidden; }
 .pq-barra span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--pq-red); transition: width .5s var(--pq-ease); }
-.pq-progresso p { margin: 6px 0 0; font-size: 12px; font-weight: 600; color: var(--pq-muted); letter-spacing: .02em; }
+.pq-progresso p { margin: 6px auto 0; font-size: 12px; font-weight: 600; color: var(--pq-muted); letter-spacing: .02em; }
 
 .pq-main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 28px 20px 40px; outline: none; }
 .pq-tela.pq-entra { animation: pq-entra .55s var(--pq-ease) both; }
@@ -85,11 +85,22 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-ic { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--pq-tint); color: var(--pq-red); }
 .pq-ic svg { width: 18px; height: 18px; }
 /* Abertura: textos centralizados; os boxes de informação continuam alinhados à esquerda */
-.pq-intro { text-align: center; }
+.pq-intro { text-align: center; background: var(--pq-card); border: 1px solid var(--pq-linha); border-radius: 24px; box-shadow: var(--pq-sombra); padding: 28px 18px 0; }
 .pq-intro .pq-infos { text-align: left; }
 .pq-intro .pq-texto p { margin-left: auto; margin-right: auto; max-width: 34rem; }
 .pq-fecho { margin: 0 0 24px; font-size: 15px; font-weight: 600; color: var(--pq-ink); }
-.pq-acoes-intro { display: grid; gap: 12px; justify-items: stretch; }
+/* "Começar pesquisa" sempre à vista: preso ao pé da tela enquanto o resto da abertura não couber */
+.pq-acoes-intro { display: grid; gap: 12px; justify-items: stretch; position: sticky; bottom: 0; z-index: 2; margin: 0 -18px; padding: 18px 18px calc(18px + env(safe-area-inset-bottom));
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 22px); border-radius: 0 0 24px 24px; }
+@media (min-width: 640px) {
+  .pq-main:has(> #pq-intro:not([hidden])) { max-width: 920px; }
+  .pq-intro { padding: 40px 44px 0; }
+  .pq-intro .pq-infos { grid-template-columns: 1fr 1fr; margin: 22px 0 18px; }
+  .pq-intro .pq-texto p { max-width: 42rem; }
+  .pq-intro .pq-fecho { margin-bottom: 4px; }
+  .pq-acoes-intro { margin: 0 -44px; padding: 16px 44px 28px; justify-items: center; }
+  .pq-acoes-intro .pq-btn { min-width: 320px; }
+}
 .pq-privacidade { margin: 0; font-size: 13px; color: var(--pq-muted); text-align: center; }
 
 /* Botões */
@@ -229,12 +240,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-erro-geral { margin: 18px 0 0; padding: 12px 14px; border-radius: 12px; background: #FDECEC; color: #8E1F1F; font-size: 14px; font-weight: 600; }
 .pq-isca { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
-/* Navegação: no celular fica presa ao rodapé da tela */
-.pq-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 28px; }
+/* Navegação: presa ao rodapé da tela durante todo o formulário (fundo de ponta a ponta) */
+.pq-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 28px;
+  position: sticky; bottom: 0; z-index: 10; padding: 14px 0 calc(14px + env(safe-area-inset-bottom)); background: rgba(246, 247, 250, 0.95);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 0 0 100vmax rgba(246, 247, 250, 0.95), 0 -1px 0 100vmax var(--pq-linha); clip-path: inset(-1px -100vmax 0); }
 .pq-nav .pq-btn-primario { min-width: 180px; white-space: nowrap; }
 @media (max-width: 639px) {
-  .pq-nav { position: sticky; bottom: 0; z-index: 10; margin: 28px -20px -40px; padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); background: rgba(246, 247, 250, 0.95);
-    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-top: 1px solid var(--pq-linha); }
+  .pq-nav { margin: 28px 0 -40px; padding: 12px 0 calc(12px + env(safe-area-inset-bottom)); }
   .pq-nav .pq-btn-primario { flex: 1; min-width: 0; padding: 0 18px; }
   .pq-nav .pq-btn-voltar { padding: 0 8px; }
 }
