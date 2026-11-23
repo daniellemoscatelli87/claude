@@ -152,12 +152,46 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-nota input:focus-visible + span { outline: 3px solid rgba(212, 77, 77, 0.45); outline-offset: 2px; }
 .pq-extremos { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; font-size: 13px; color: var(--pq-muted); }
 
-/* Matriz: uma linha por característica, com as respostas em pílulas */
+/* Matriz: cada característica é uma escala de 5 pontos (bolinhas num trilho); "Não se aplica" fica no canto */
 .pq-matriz { display: grid; gap: 12px; margin-top: 20px; }
-.pq-linha { border: 1.5px solid var(--pq-linha); border-radius: 14px; background: #fff; margin: 0; padding: 14px 14px 12px; min-width: 0; transition: border-color .2s ease; }
-.pq-linha legend { float: left; width: 100%; padding: 0; margin: 0 0 10px; font-weight: 700; font-size: 15px; color: var(--pq-ink); }
+.pq-linha { position: relative; border: 1.5px solid var(--pq-linha); border-radius: 14px; background: #fff; margin: 0; padding: 14px 14px 12px; min-width: 0; transition: border-color .2s ease, background .2s ease; }
+.pq-linha legend { float: left; width: 100%; padding: 0 128px 0 0; margin: 0 0 6px; font-weight: 700; font-size: 15px; line-height: 1.4; color: var(--pq-ink); }
 .pq-linha legend + * { clear: both; }
 .pq-linha:has(input:checked) { border-color: rgba(212, 77, 77, 0.35); }
+.pq-trilho { --pq-pos: 0; position: relative; display: grid; grid-template-columns: repeat(5, 1fr); margin: 0 -4px; }
+.pq-trilho::before, .pq-trilho-fill { content: ""; position: absolute; top: 50%; left: 10%; height: 4px; margin-top: -2px; border-radius: 999px; pointer-events: none; }
+.pq-trilho::before { right: 10%; background: var(--pq-linha); }
+.pq-trilho-fill { width: calc(var(--pq-pos) * 20%); background: var(--pq-red); opacity: 0; transition: width .45s var(--pq-ease), opacity .2s ease; }
+.pq-trilho.pq-tem .pq-trilho-fill { opacity: 1; }
+.pq-ponto { position: relative; z-index: 1; display: grid; place-items: center; height: 48px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.pq-ponto input, .pq-na-op input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.pq-bola { width: 22px; height: 22px; border-radius: 999px; background: #fff; border: 2px solid rgba(19, 26, 39, 0.22);
+  transition: transform .3s var(--pq-ease), background .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.pq-ponto:hover .pq-bola { border-color: var(--pq-red); transform: scale(1.12); }
+.pq-ponto:active .pq-bola { transform: scale(.92); }
+.pq-trilho.pq-tem .pq-ponto:has(~ .pq-ponto input:checked) .pq-bola { border-color: var(--pq-red); background: var(--pq-tint); }
+.pq-ponto input:checked + .pq-bola { background: var(--pq-red); border-color: var(--pq-red); transform: scale(1.25); box-shadow: 0 0 0 6px rgba(212, 77, 77, 0.14); }
+.pq-ponto input:focus-visible + .pq-bola { outline: 3px solid rgba(212, 77, 77, 0.45); outline-offset: 4px; }
+.pq-extremos { display: flex; justify-content: space-between; gap: 12px; margin-top: 2px; font-size: 12px; font-weight: 600; color: var(--pq-muted); }
+.pq-escolha { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 24px; margin: 8px 0 0; font-size: 14px; font-weight: 700; color: var(--pq-red-escuro); }
+.pq-escolha svg { width: 16px; height: 16px; }
+.pq-escolha-vazia { font-weight: 500; font-size: 13px; color: var(--pq-muted); }
+.pq-escolha.pq-pop { animation: pq-pop .35s var(--pq-ease) both; }
+@keyframes pq-pop { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.pq-na-op { position: absolute; top: 10px; right: 10px; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 600; color: var(--pq-muted); cursor: pointer; transition: background .2s ease, color .2s ease; }
+.pq-na-op:hover { background: var(--pq-fundo); color: var(--pq-ink); }
+.pq-na-caixa { width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid rgba(19, 26, 39, 0.3); display: grid; place-items: center; transition: background .2s ease, border-color .2s ease; }
+.pq-na-op input:checked + .pq-na-caixa { background: var(--pq-ink); border-color: var(--pq-ink); }
+.pq-na-op input:checked + .pq-na-caixa::after { content: ""; width: 8px; height: 4px; margin-top: -2px; border: solid #fff; border-width: 0 0 2px 2px; transform: rotate(-45deg); }
+.pq-na-op:has(input:checked) { color: var(--pq-ink); background: var(--pq-fundo); }
+.pq-na-op input:focus-visible ~ span:last-child { outline: 3px solid rgba(212, 77, 77, 0.45); outline-offset: 3px; border-radius: 4px; }
+.pq-linha.pq-na { background: var(--pq-fundo); border-color: var(--pq-linha); }
+.pq-linha.pq-na .pq-trilho, .pq-linha.pq-na .pq-extremos { opacity: .45; }
+.pq-linha.pq-na .pq-escolha { color: var(--pq-muted); }
+.pq-linha.pq-faltando { border-color: var(--pq-erro); }
+
+/* Pílulas (usadas no perfil) */
 .pq-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .pq-chip { position: relative; cursor: pointer; }
 .pq-chip input { position: absolute; opacity: 0; pointer-events: none; }
@@ -166,8 +200,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-chip:hover span { border-color: rgba(212, 77, 77, 0.45); }
 .pq-chip input:checked + span { background: var(--pq-red); border-color: var(--pq-red); color: #fff; }
 .pq-chip input:focus-visible + span { outline: 3px solid rgba(212, 77, 77, 0.45); outline-offset: 2px; }
-.pq-chip-na span { background: #fff; border-style: dashed; }
-.pq-linha.pq-faltando { border-color: var(--pq-erro); }
+
 
 /* Novidades: contato que aparece abaixo da resposta */
 .pq-contato { display: grid; gap: 16px; margin-top: 18px; padding: 18px 16px; border-radius: 16px; background: #fff; border: 1.5px solid var(--pq-linha); }

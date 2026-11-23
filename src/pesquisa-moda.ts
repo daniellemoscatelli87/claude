@@ -215,20 +215,51 @@ function montarPergunta(p: Pergunta, i: number) {
     extremos.append(el('span', undefined, `0 = ${p.rotulo_min}`), el('span', undefined, `10 = ${p.rotulo_max}`));
     fs.append(grade, extremos);
   } else {
+    // Escala de 5 pontos por característica: bolinhas num trilho (Muito fácil → Muito difícil) e "Não se aplica" à parte
     const linhas = el('div', 'pq-matriz');
     const atual = () => (E.r[p.id] as Record<string, string>) ?? {};
+    const pontos = p.colunas!.filter((c) => c.id !== 'na');
+    const na = p.colunas!.find((c) => c.id === 'na');
     p.linhas!.forEach((l) => {
       const sub = el('fieldset', 'pq-linha'); sub.dataset.linha = l.id;
       sub.appendChild(el('legend', undefined, l.texto));
-      const chips = el('div', 'pq-chips');
-      p.colunas!.forEach((c) => {
-        const lab = el('label', 'pq-chip' + (c.id === 'na' ? ' pq-chip-na' : ''));
+      const trilho = el('div', 'pq-trilho');
+      const fill = el('span', 'pq-trilho-fill'); fill.setAttribute('aria-hidden', 'true');
+      trilho.appendChild(fill);
+      const escolha = el('p', 'pq-escolha'); escolha.setAttribute('aria-hidden', 'true');
+      const marcar = (animar: boolean) => {
+        const v = atual()[l.id];
+        const i = pontos.findIndex((c) => c.id === v);
+        sub.classList.toggle('pq-na', v === 'na');
+        trilho.style.setProperty('--pq-pos', String(Math.max(i, 0)));
+        trilho.classList.toggle('pq-tem', i >= 0);
+        const txt = i >= 0 ? pontos[i].texto : v === 'na' ? (na?.texto ?? '') : '';
+        escolha.innerHTML = txt ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>' : '';
+        escolha.append(txt || 'Toque em uma bolinha');
+        escolha.classList.toggle('pq-escolha-vazia', !txt);
+        if (animar && !reduzir) { escolha.classList.remove('pq-pop'); void escolha.offsetWidth; escolha.classList.add('pq-pop'); }
+      };
+      const mudar = (id: string) => { E.r[p.id] = { ...atual(), [l.id]: id }; salvar(); marcar(true); sub.classList.remove('pq-faltando'); if (p.linhas!.every((x) => atual()[x.id])) limparErro(fs); };
+      pontos.forEach((c) => {
+        const lab = el('label', 'pq-ponto');
         const inp = el('input'); inp.type = 'radio'; inp.name = `${p.id}-${l.id}`; inp.value = c.id; inp.checked = atual()[l.id] === c.id;
-        inp.addEventListener('change', () => { E.r[p.id] = { ...atual(), [l.id]: c.id }; salvar(); sub.classList.remove('pq-faltando'); if (p.linhas!.every((x) => atual()[x.id])) limparErro(fs); });
-        lab.append(inp, el('span', undefined, c.texto));
-        chips.appendChild(lab);
+        inp.setAttribute('aria-label', c.texto);
+        inp.addEventListener('change', () => mudar(c.id));
+        lab.append(inp, el('span', 'pq-bola'));
+        trilho.appendChild(lab);
       });
-      sub.appendChild(chips); linhas.appendChild(sub);
+      const extremos = el('div', 'pq-extremos'); extremos.setAttribute('aria-hidden', 'true');
+      extremos.append(el('span', undefined, pontos[0].texto), el('span', undefined, pontos[pontos.length - 1].texto));
+      sub.append(trilho, extremos, escolha);
+      if (na) {
+        const lab = el('label', 'pq-na-op');
+        const inp = el('input'); inp.type = 'radio'; inp.name = `${p.id}-${l.id}`; inp.value = na.id; inp.checked = atual()[l.id] === na.id;
+        inp.addEventListener('change', () => mudar(na.id));
+        lab.append(inp, el('span', 'pq-na-caixa'), el('span', undefined, na.texto));
+        sub.appendChild(lab);
+      }
+      marcar(false);
+      linhas.appendChild(sub);
     });
     fs.append(linhas);
   }
