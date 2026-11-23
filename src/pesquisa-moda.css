@@ -80,8 +80,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-infos strong { font-size: 14px; color: var(--pq-ink); font-weight: 700; }
 .pq-ic { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--pq-tint); color: var(--pq-red); }
 .pq-ic svg { width: 18px; height: 18px; }
-/* Abertura: vantagens em destaque logo abaixo do título */
-.pq-intro-vantagem { position: relative; overflow: hidden; display: flex; align-items: center; gap: 14px; margin: 4px auto 22px; max-width: 34rem; padding: 14px 18px; text-align: left;
+/* Abertura: vantagens em destaque logo depois da explicação da pesquisa */
+.pq-intro-vantagem { position: relative; overflow: hidden; display: flex; align-items: center; gap: 14px; margin: 22px auto 0; max-width: 34rem; padding: 14px 18px; text-align: left;
   border-radius: 16px; background: var(--pq-tint); border: 1px solid rgba(212, 77, 77, 0.28); color: var(--pq-ink); }
 .pq-intro-vantagem::before { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.7) 50%, transparent 65%); transform: translateX(-100%); animation: pq-brilho 3.2s ease-in-out 1s infinite; }
 @keyframes pq-brilho { 0% { transform: translateX(-100%); } 45%, 100% { transform: translateX(100%); } }
