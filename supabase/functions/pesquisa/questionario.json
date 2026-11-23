@@ -253,28 +253,28 @@
     {
       "id": "q8",
       "tipo": "matriz",
-      "texto": "Em quais características é mais fácil ou difícil encontrar o que você deseja?",
+      "texto": "Quando procura roupas e acessórios, o que é mais fácil ou difícil de encontrar?",
       "apoio": "Marque uma resposta para cada característica.",
       "linhas": [
         {
           "id": "estilo",
-          "texto": "Estilo ou modelo"
+          "texto": "Roupas que combinam com meu estilo"
         },
         {
           "id": "tamanho",
-          "texto": "Tamanho"
+          "texto": "Peças disponíveis no meu tamanho"
         },
         {
           "id": "modelagem",
-          "texto": "Modelagem e caimento"
+          "texto": "Roupas que vestem bem no meu corpo"
         },
         {
           "id": "tecido",
-          "texto": "Tecido e qualidade"
+          "texto": "Peças com o tecido e a qualidade que procuro"
         },
         {
           "id": "acessorios",
-          "texto": "Acessórios com as características desejadas"
+          "texto": "Acessórios que combinam com meu gosto"
         }
       ],
       "colunas": [

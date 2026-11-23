@@ -941,13 +941,13 @@
       const a = atributos[0];
       add("Comportamento", {
         tag: "Satisfação", sinal: { nivel: "atencao", texto: "Atributo que mais pesa" },
-        titulo: `${a.l.texto}: a característica que mais pesa na satisfação`,
+        titulo: `“${a.l.texto}”: o que mais pesa na satisfação`,
         descricao: ["Diferença da nota média entre quem acha fácil e quem acha difícil encontrar cada característica (pergunta 8 × pergunta 4)."],
         base: a.dif.length + a.fac.length, recorte: "Pergunta 8 × pergunta 4",
         kpis: [{ v: fmt1(a.q4fac), t: `nota de quem acha fácil` }, { v: fmt1(a.q4dif), t: `nota de quem acha difícil` }],
         barras: atributos.filter((x) => x.gap > 0).slice(0, 5).map((x) => ({ rotulo: x.l.texto, v: x.gap, txt: `${fmt1(x.gap)} ${x.gap === 1 ? "ponto" : "pontos"}` })), escala: Math.max(...atributos.map((x) => x.gap)),
-        significado: [`Quando ${lc(a.l.texto)} é difícil de encontrar, a satisfação com as compras cai ${fmt1(a.gap)} ${a.gap === 1 ? "ponto" : "pontos"} em média.`],
-        proximo: [`Detalhar com quem respondeu o que falta em ${lc(a.l.texto)}.`],
+        significado: [`Quando é difícil encontrar “${lc(a.l.texto)}”, a satisfação com as compras cai ${fmt1(a.gap)} ${a.gap === 1 ? "ponto" : "pontos"} em média.`],
+        proximo: [`Detalhar com quem respondeu o que falta em “${lc(a.l.texto)}”.`],
       });
     }
     const semSaber = comp.filter((x) => valores(x.respostas.q10).includes("onde_encontrar"));
@@ -992,7 +992,7 @@
     const difs = perg.q8.linhas.map((l) => { const v = comp.map((x) => (x.respostas.q8 || {})[l.id]).filter((y) => y && y !== "na"); return { rotulo: l.texto, v: pct(v.filter((y) => y === "4" || y === "5").length, v.length), n: v.length }; }).filter((x) => x.n).sort((a, b) => b.v - a.v);
     if (difs.length) add("Estratégia", {
       tag: "Oportunidade identificada", sinal: { nivel: "alta", texto: "Prioridade de investigação" },
-      titulo: `${difs[0].rotulo} é a característica mais difícil de encontrar (${difs[0].v}%)`,
+      titulo: `“${difs[0].rotulo}” é o mais difícil de encontrar (${difs[0].v}%)`,
       descricao: ["Percentual de quem acha difícil ou muito difícil encontrar cada característica (pergunta 8, sem contar Não se aplica)."],
       base: n, barras: difs.map((d) => ({ rotulo: d.rotulo, v: d.v, txt: `${d.v}%` })),
       significado: ["Existe uma possível oportunidade para quem conseguir oferecer e mostrar melhor essa característica."],
