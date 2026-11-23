@@ -597,7 +597,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 
 ## 2026-11-23 · Assinatura dos e-mails da página de contatos: telefone, e-mail e site, não publicado
 
-- `supabase/functions/responder-contato/index.ts`: a assinatura passa a ter, nesta ordem, telefone, contato@danimoscatelli.com.br (link `mailto:`) e o site. Sai o Instagram (@danimoscatellistudio). A versão em texto simples segue a mesma ordem.
+- `supabase/functions/responder-contato/index.ts`: a assinatura passa a ter, nesta ordem, o telefone (link para o WhatsApp, `https://wa.me/5541997485414`), contato@danimoscatelli.com.br (link `mailto:`) e o site (link para o site). Sai o Instagram (@danimoscatellistudio). A versão em texto simples segue a mesma ordem.
 - O `comunicado-parceiros` tem uma cópia da mesma assinatura e não foi mudado.
 - Teste executado: a assinatura foi gerada a partir do código da função e conferida em imagem.
 - Na publicação: reimplantar `responder-contato`.

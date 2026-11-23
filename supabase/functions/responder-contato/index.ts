@@ -22,7 +22,7 @@ const ASSINATURA_HTML = `<table role="presentation" cellpadding="0" cellspacing=
 <td valign="top" style="font-family:Arial,Helvetica,sans-serif">
 <p style="margin:0;font-size:18px;line-height:1.3;font-weight:bold;color:#0f172a">Dani Moscatelli</p>
 <p style="margin:2px 0 10px;font-size:14px;line-height:1.4;color:#64748b">CEO | Experience Design <span style="color:#d44d4d;font-weight:bold">Studio</span></p>
-<p style="margin:0;font-size:15px;line-height:1.8"><a href="tel:+5541997485414" style="color:#0f172a;text-decoration:none">+55 (41) 99748-5414</a><br><a href="mailto:contato@danimoscatelli.com.br" style="color:#0f172a;text-decoration:none">contato@danimoscatelli.com.br</a><br><a href="https://www.danimoscatelli.com.br" style="color:#0f172a;text-decoration:none">www.danimoscatelli.com.br</a></p>
+<p style="margin:0;font-size:15px;line-height:1.8"><a href="https://wa.me/5541997485414" style="color:#0f172a;text-decoration:none">+55 (41) 99748-5414</a><br><a href="mailto:contato@danimoscatelli.com.br" style="color:#0f172a;text-decoration:none">contato@danimoscatelli.com.br</a><br><a href="https://www.danimoscatelli.com.br" style="color:#0f172a;text-decoration:none">www.danimoscatelli.com.br</a></p>
 </td></tr></table>`;
 const ASSINATURA_TXT = "Dani Moscatelli\nCEO | Experience Design Studio\n+55 (41) 99748-5414\ncontato@danimoscatelli.com.br\nwww.danimoscatelli.com.br";
 const MAX_ANEXOS = 10;
