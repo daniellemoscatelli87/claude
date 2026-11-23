@@ -54,10 +54,12 @@
   .pa-q-num { flex: none; min-width: 34px; height: 34px; padding: 0 8px; border-radius: 10px; background: var(--crimson-50); color: var(--primary); font-size: 13px; font-weight: 800; display: grid; place-items: center; }
   .pa-q-cab h3 { margin: 0; font-size: 15px; line-height: 1.4; }
   .pa-q-cab .meta { margin: 3px 0 0; font-size: 12px; color: var(--muted-foreground); }
-  .pa-leitura { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: var(--muted); }
-  .pa-leitura .ic { flex: none; color: var(--muted-foreground); margin-top: 1px; }
-  .pa-leitura .ic svg { width: 18px; height: 18px; display: block; }
-  .pa-leitura p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--foreground); }
+  /* "Leitura": Alerta do DS, variante info (alert.tsx): fundo --info-muted, borda na cor do estado a 20%, ícone 20px em --info, texto 14px */
+  .pa-leitura { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 2px 12px; align-items: start; padding: 14px 16px; border-radius: var(--radius-md);
+    background: var(--info-muted); border: 1px solid color-mix(in srgb, var(--info) 20%, transparent); color: var(--foreground); }
+  .pa-leitura .ic { color: var(--info); }
+  .pa-leitura .ic svg { width: 20px; height: 20px; display: block; }
+  .pa-leitura p { margin: 0; font-size: .875rem; line-height: 1.55; color: var(--foreground); }
   .pa-q-pe { margin-top: auto; display: grid; gap: 4px; padding-top: 4px; border-top: 1px solid var(--muted); }
   .pa-q-pe .pa-tabela, .pa-q-pe .pa-nota, .pa-q-pe .pa-outros { margin-top: 8px; }
   .pa-q-vazio { flex: 1; display: grid; place-content: center; gap: 4px; min-height: 120px; padding: 20px; text-align: center; border: 1px dashed var(--border); border-radius: 12px; font-size: 13px; color: var(--muted-foreground); }
@@ -104,8 +106,10 @@
   .pa-fd-n { font-size: 13.5px; color: var(--foreground); }
   .pa-fd-b { display: flex; gap: 2px; height: 22px; border-radius: 6px; overflow: hidden; background: var(--muted); }
   .pa-fd-b i { display: flex; align-items: center; justify-content: center; flex-grow: 0; flex-basis: 0; min-width: 3px; font-style: normal; transition: flex-grow .8s cubic-bezier(.16, 1, .3, 1); }
-  .pa-fd-b i span { font-size: 11px; font-weight: 800; color: var(--foreground); }
-  .pa-fd-b i span.claro { color: #fff; }
+  .pa-fd-vals { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--muted-foreground); }
+  .pa-fd-vals span { display: inline-flex; align-items: center; gap: 6px; }
+  .pa-fd-vals i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .pa-fd-vals b { color: var(--foreground); font-weight: 700; }
   .pa-fd-b em { align-self: center; padding-left: 8px; font-size: 12px; color: var(--muted-foreground); }
   .pa-fd-l small { font-size: 12px; color: var(--muted-foreground); }
   /* Destaques: grade de cartões com número em destaque */
@@ -847,10 +851,14 @@
       const l = el("div", "pa-fd-l");
       l.appendChild(el("span", "pa-fd-n", x.l.texto));
       const barra = el("div", "pa-fd-b");
-      GRUPOS.forEach((gr) => { const v = x.g[gr.id]; if (!v) return; const i = el("i"); i.style.background = gr.cor; i.dataset.g = String(v); const pc = pct(v, x.n); if (pc >= 14) i.appendChild(el("span", "", pc + "%")); dica(i, [[`${pc}%`, `${x.l.texto}: ${gr.rot.toLowerCase()}`]]); barra.appendChild(i); });
+      GRUPOS.forEach((gr) => { const v = x.g[gr.id]; if (!v) return; const i = el("i"); i.style.background = gr.cor; i.dataset.g = String(v); const pc = pct(v, x.n); dica(i, [[`${pc}%`, `${x.l.texto}: ${gr.rot.toLowerCase()}`]]); barra.appendChild(i); });
       if (!x.n) barra.appendChild(el("em", null, "Só “Não se aplica”"));
       l.appendChild(barra);
-      l.appendChild(el("small", null, `${pct(x.g.dif, x.n)}% difícil · ${pct(x.g.fac, x.n)}% fácil` + (x.na ? ` · ${x.na} não se aplica` : "")));
+      // valores ao lado, na mesma ordem das partes, cada um depois de um ponto na cor dela (regra do DS: barra sem número)
+      const vals = el("div", "pa-fd-vals");
+      GRUPOS.forEach((gr) => { const s2 = el("span"); const dot = el("i"); dot.style.background = gr.cor; s2.append(dot, el("b", null, pct(x.g[gr.id], x.n) + "%"), " " + gr.rot.toLowerCase()); vals.appendChild(s2); });
+      if (x.na) vals.appendChild(el("span", "na", `${x.na} não se aplica`));
+      l.appendChild(vals);
       box.appendChild(l);
     });
     box._linhas = linhas;
