@@ -351,6 +351,9 @@ window.addEventListener('message', (e) => { if (e.origin === location.origin && 
     ], true);
     return;
   }
+  // Galeria oculta no site por decisão da Dani (23/11/2026). Para voltar a mostrar, troque para true.
+  const GALERIA_NO_SITE = false;
+  if (!GALERIA_NO_SITE) return;
   fetch('https://lipfvnerohkaajegqvwr.supabase.co/rest/v1/rpc/galeria_publica', {
     method: 'POST',
     headers: { apikey: 'sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej', 'Content-Type': 'application/json' },
