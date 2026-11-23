@@ -118,7 +118,17 @@
   .pa-dest-cab h2 { margin: 0 0 4px; }
   .pa-dest-cab .muted { margin: 0; font-size: 13px; }
   .pa-dest-amostra { font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px; background: #FFF6E0; color: #8a5a00; white-space: nowrap; cursor: help; }
-  .pa-dest-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .pa-dest-grade { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 1100px) { .pa-dest-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .pa-dest-mais { margin-top: 12px; }
+  .pa-dest-mais[hidden] { display: none; }
+  .pa-dest-abre { animation: pa-dest-abre .45s cubic-bezier(.16, 1, .3, 1) both; }
+  @keyframes pa-dest-abre { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .pa-dest-abre { animation: none; } }
+  .pa-dest-bt { margin: 14px auto 0; display: flex; }
+  .pa-dest-bt .seta { display: inline-grid; transition: transform .25s; }
+  .pa-dest-bt .seta svg { width: 16px; height: 16px; }
+  .pa-dest-bt.aberto .seta { transform: rotate(180deg); }
   .pa-dest-it { display: grid; align-content: start; gap: 6px; padding: 16px; border-radius: 14px; background: var(--track); border: 1px solid transparent; transition: transform .2s, box-shadow .2s, border-color .2s; }
   .pa-dest-it:hover { transform: translateY(-2px); border-color: var(--line); box-shadow: 0 4px 12px rgba(13,17,25,.06), 0 12px 36px rgba(13,17,25,.05); }
   .pa-dest-it.forte { background: var(--red-tint); }
@@ -131,7 +141,7 @@
   .pa-dest-it p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--dark); }
   .pa-dest-vazio { grid-column: span 2; display: grid; align-content: center; gap: 4px; padding: 16px; border-radius: 14px; border: 1px dashed var(--line); font-size: 13px; color: var(--muted); }
   .pa-dest-vazio b { color: var(--dark); font-size: 14px; }
-  @media (max-width: 560px) { .pa-dest-vazio { grid-column: auto; } .pa-dest-grade { grid-template-columns: 1fr 1fr; } .pa-dest-v { font-size: 26px; } }
+  @media (max-width: 560px) { .pa-dest-vazio { grid-column: 1 / -1; } .pa-dest-v { font-size: 26px; } .pa-dest-it { padding: 14px 12px; } .pa-dest-tema { flex-direction: column; align-items: flex-start; gap: 6px; font-size: 10.5px; letter-spacing: .02em; overflow-wrap: anywhere; } }
   @media (max-width: 380px) { .pa-dest-grade { grid-template-columns: 1fr; } }
   .pa-bloco { margin-top: 16px; }
   .pa-bloco h2 { margin: 0 0 4px; }
@@ -978,38 +988,54 @@
     if (comp.length && comp.length < 30) { const av = el("span", "pa-dest-amostra", `Amostra pequena: ${plural(comp.length, "resposta completa", "respostas completas")}`); av.title = "Com poucas respostas, os percentuais ainda podem mudar bastante a cada nova participação."; cab.appendChild(av); }
     card.appendChild(cab);
     const grade = el("div", "pa-dest-grade");
-    const add = ({ ic, tema, valor, partes, forte }) => {
-      const d = el("div", "pa-dest-it" + (forte ? " forte" : ""));
+    const itens = [];
+    const add = ({ ic, tema, valor, partes, forte, ordem = 9 }) => {
+      const d = el("div", "pa-dest-it" + (forte ? " forte" : "")); d._ordem = ordem; d._i = itens.length; itens.push(d);
       const t = el("span", "pa-dest-tema"); const i = el("span", "ic"); i.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC_D[ic]}</svg>`; t.append(i, tema);
       const p = el("p"); partes.forEach((x) => p.append(typeof x === "string" ? x : el("strong", null, x.b)));
-      d.append(t, el("b", "pa-dest-v", valor), p); grade.appendChild(d);
+      d.append(t, el("b", "pa-dest-v", valor), p);
+    };
+    // os 4 principais (o problema que a pesquisa investiga) na primeira linha; os demais em "Ver mais destaques"
+    const montar = () => {
+      const ord = [...itens].sort((a, b) => a._ordem - b._ordem || a._i - b._i);
+      ord.slice(0, 4).forEach((d) => grade.appendChild(d));
+      const resto = ord.slice(4);
+      card.appendChild(grade);
+      if (!resto.length) return;
+      const mais = el("div", "pa-dest-grade pa-dest-mais"); mais.id = "pa-dest-mais"; mais.hidden = true;
+      resto.forEach((d) => mais.appendChild(d));
+      const bt = el("button", "pa-btn pa-dest-bt"); bt.type = "button"; bt.setAttribute("aria-expanded", "false"); bt.setAttribute("aria-controls", mais.id);
+      const rot = () => { bt.innerHTML = ""; bt.append(mais.hidden ? `Ver mais destaques (${resto.length})` : "Ver menos"); const sv = el("span", "seta"); sv.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>'; bt.appendChild(sv); bt.classList.toggle("aberto", !mais.hidden); };
+      bt.addEventListener("click", () => { mais.hidden = !mais.hidden; bt.setAttribute("aria-expanded", String(!mais.hidden)); rot(); if (!mais.hidden) { mais.classList.remove("pa-dest-abre"); void mais.offsetWidth; mais.classList.add("pa-dest-abre"); } });
+      rot();
+      card.append(mais, bt);
     };
     const perg = Object.fromEntries(Q.perguntas.map((p) => [p.id, p]));
     const topo = (p, base, filtro = () => true) => { const n = contar(p, base); const op = p.opcoes.filter(filtro).map((o) => ({ ...o, v: n[o.id] || 0 })).sort((a, b) => b.v - a.v)[0]; return op && op.v ? op : null; };
     add({ ic: "publico", tema: "Público", valor: `${pct(comp.length, R.length)}%`, partes: [R.length === 1 ? "da única participação até agora é do público da pesquisa (mora em Curitiba e comprou este ano)." : `das ${R.length} participações são do público da pesquisa: moram em Curitiba e compraram este ano.`] });
     if (!comp.length) {
       grade.appendChild((() => { const d = el("div", "pa-dest-vazio"); d.append(el("b", null, "Os outros destaques aparecem com a primeira resposta completa"), el("span", null, "Quem não mora em Curitiba ou não comprou este ano encerra no começo da pesquisa.")); return d; })());
-      card.appendChild(grade); return card;
+      itens.forEach((d) => grade.prepend(d)); card.appendChild(grade); return card;
     }
     const b2 = respondeu("q2").filter((x) => !valores(x.respostas.q2).includes("nao_comprei"));
     if (perg.q2.tipo === "ranking") {
       const p1 = perg.q2.opcoes.filter((o) => !o.encerra).map((o) => ({ ...o, v: b2.filter((x) => valores(x.respostas.q2)[0] === o.id).length })).sort((a, b) => b.v - a.v)[0];
-      if (p1 && p1.v) add({ ic: "compra", tema: "Onde mais compram", valor: `${pct(p1.v, b2.length)}%`, partes: ["escolheram em 1º lugar ", { b: semOutro(p1.texto) }, "."], forte: true });
+      if (p1 && p1.v) add({ ic: "compra", tema: "Onde mais compram", valor: `${pct(p1.v, b2.length)}%`, partes: ["escolheram em 1º lugar ", { b: semOutro(p1.texto) }, "."], forte: true, ordem: 1 });
     }
     if (perg.q2_1) { const b21 = comp.filter((x) => naCondicao(perg.q2_1, x)); const t = topo(perg.q2_1, b21, (o) => !o.outro); if (t) add({ ic: "motivo", tema: "Por que compram fora", valor: `${pct(t.v, b21.length)}%`, partes: ["de quem compra em marketplaces ou lojas online de outras cidades citam ", { b: lc(t.texto) }, "."] }); }
     const t5 = topo(perg.q5, comp); if (t5) add({ ic: "busca", tema: "Onde a procura começa", valor: `${pct(t5.v, comp.length)}%`, partes: [{ b: semOutro(t5.texto) }, "."] });
     const sm = comp.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; add({ ic: "brecho", tema: "Segunda mão", valor: `${pct(sm, comp.length)}%`, partes: ["compraram de segunda mão (brechós) este ano."] });
     const ng = notas(comp, notaGeral), nc = notas(comp, notaCorr);
     if (ng.length) add({ ic: "nota", tema: "Nota geral das compras", valor: fmt1(ng.reduce((a, b) => a + b, 0) / ng.length), partes: ["de 0 a 10, média de qualidade, estética e correspondência."] });
-    if (nc.length) add({ ic: "alvo", tema: "Correspondência", valor: fmt1(nc.reduce((a, b) => a + b, 0) / nc.length), partes: ["de 0 a 10: o quanto as peças atenderam ao que as pessoas realmente queriam."], forte: true });
+    if (nc.length) add({ ic: "alvo", tema: "Correspondência", valor: fmt1(nc.reduce((a, b) => a + b, 0) / nc.length), partes: ["de 0 a 10: o quanto as peças atenderam ao que as pessoas realmente queriam."], forte: true, ordem: 3 });
     const freq = comp.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length;
-    add({ ic: "alerta", tema: "Dificuldade para encontrar", valor: `${pct(freq, comp.length)}%`, partes: ["frequentemente ou quase sempre têm dificuldade para encontrar exatamente o que desejam."], forte: true });
+    add({ ic: "alerta", tema: "Dificuldade para encontrar", valor: `${pct(freq, comp.length)}%`, partes: ["frequentemente ou quase sempre têm dificuldade para encontrar exatamente o que desejam."], forte: true, ordem: 2 });
     const difs = perg.q8.linhas.map((l) => { const v = comp.map((x) => x.respostas.q8 && x.respostas.q8[l.id]).filter((y) => y && y !== "na"); return { t: l.texto, p: pct(v.filter((y) => y === "4" || y === "5").length, v.length), n: v.length }; }).filter((x) => x.n).sort((a, b) => b.p - a.p);
-    if (difs[0] && difs[0].p) add({ ic: "alerta", tema: "O mais difícil de encontrar", valor: `${difs[0].p}%`, partes: ["acham difícil encontrar ", { b: item(difs[0].t) }, "."] });
+    if (difs[0] && difs[0].p) add({ ic: "alerta", tema: "O mais difícil de encontrar", valor: `${difs[0].p}%`, partes: ["acham difícil encontrar ", { b: item(difs[0].t) }, "."], forte: true, ordem: 4 });
     const viveu = comp.filter((x) => x.respostas.q9 && !x.respostas.q9.opcoes.includes("nao_passei"));
     if (viveu.length) { const des = viveu.filter((x) => x.respostas.q9.opcoes.includes("desisti")).length; add({ ic: "sair", tema: "Desistência", valor: `${pct(des, viveu.length)}%`, partes: ["de quem não encontrou uma peça desistiu da compra em algum momento."] }); }
     const t10 = topo(perg.q10, comp, (o) => !o.exclusiva && !o.outro); if (t10) add({ ic: "obst", tema: "O que mais dificulta", valor: `${pct(t10.v, comp.length)}%`, partes: [{ b: semOutro(t10.texto) }, "."] });
-    card.appendChild(grade);
+    montar();
     return card;
   }
 
