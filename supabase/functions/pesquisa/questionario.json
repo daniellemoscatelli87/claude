@@ -268,7 +268,10 @@
           "texto": "Nunca fiz isso"
         }
       ],
-      "destaque": "comprar algo igual ou parecido"
+      "destaque": [
+        "foto de referência",
+        "comprar algo igual ou parecido"
+      ]
     },
     {
       "id": "q6",
