@@ -2,16 +2,15 @@
 // Área da usuária master: clientes, desafios de cada cliente e desafio completo (somente leitura).
 // Cada abertura fica registrada na auditoria do cliente e no registro da plataforma.
 import { Suspense, useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Shell, Loading } from "@/components/Shell";
+import { Shell, Loading, Titulo, Lead, Cartao, TituloCard, Mensagem, Voltar, TextoOriginal, Definicoes, Etiqueta, ListaDeLinks } from "@/components/Shell";
 import { useSession } from "@/components/session";
 import { isMaster, masterChallenge, masterChallenges, masterOrganizations, type MasterChallengeRow, type MasterOrganization } from "@/application/master";
 import { mensagemDeErro } from "@/application/errors";
 import { FRAMING_QUESTIONS } from "@/domain/challenge/framing";
 
 const data = (iso: string) => new Date(iso).toLocaleDateString("pt-BR");
-const AVISO = <p className="notice">Cada vez que você abre um cliente ou um desafio, o acesso fica registrado na auditoria daquele cliente.</p>;
+const AVISO = <Mensagem tipo="aviso">Cada vez que você abre um cliente ou um desafio, o acesso fica registrado na auditoria daquele cliente.</Mensagem>;
 
 function Master() {
   const { loading, session } = useSession();
@@ -39,37 +38,37 @@ function Master() {
     const c = det?.challenge;
     return (
       <Shell>
-        <p style={{ margin: "0 0 12px" }}><Link href={c ? `/master/?org=${c.organization_id}` : "/master/"}>← Desafios do cliente</Link></p>
-        {erro && <p className="msg err" role="alert">{erro}</p>}
-        {!c ? <h1>Desafio não encontrado</h1> : (
+        <Voltar href={c ? `/master/?org=${c.organization_id}` : "/master/"}>← Desafios do cliente</Voltar>
+        {erro && <Mensagem tipo="erro">{erro}</Mensagem>}
+        {!c ? <Titulo>Desafio não encontrado</Titulo> : (
           <>
-            <span className="tag gray">{det!.organization_name}</span>
-            <h1 style={{ marginTop: 8 }}>{c.title || "Desafio sem nome"}</h1>
+            <Etiqueta tom="neutro">{det!.organization_name}</Etiqueta>
+            <Titulo>{c.title || "Desafio sem nome"}</Titulo>
             {AVISO}
-            <section className="card"><h2>O que o cliente escreveu</h2><p className="original">{c.original_statement}</p></section>
-            <section className="card">
-              <h2>Como foi entendido</h2>
-              <dl className="kv">
+            <Cartao className="gap-2"><TituloCard>O que o cliente escreveu</TituloCard><TextoOriginal>{c.original_statement}</TextoOriginal></Cartao>
+            <Cartao>
+              <TituloCard>Como foi entendido</TituloCard>
+              <Definicoes>
                 <div><dt>Situação</dt><dd>{c.structure_status === "confirmed" ? "Confirmado pelo cliente" : "Aguardando confirmação do cliente"}</dd></div>
                 {c.affected_people?.length > 0 && <div><dt>Quem vive essa situação</dt><dd><ul>{c.affected_people.map((p) => <li key={p}>{p}</li>)}</ul></dd></div>}
                 {c.context_json?.site && <div><dt>Onde acontece</dt><dd>{c.context_json.site}</dd></div>}
                 {c.desired_outcome && <div><dt>O que deveria melhorar</dt><dd>{c.desired_outcome}</dd></div>}
                 {c.known_information?.length > 0 && <div><dt>O que já se sabe</dt><dd><ul>{c.known_information.map((p) => <li key={p}>{p}</li>)}</ul></dd></div>}
                 {c.unknown_information?.length > 0 && <div><dt>O que ainda não se sabe</dt><dd><ul>{c.unknown_information.map((p) => <li key={p}>{p}</li>)}</ul></dd></div>}
-              </dl>
-            </section>
+              </Definicoes>
+            </Cartao>
             {det!.answers.length > 0 && (
-              <section className="card">
-                <h2>Respostas</h2>
-                <dl className="kv">
+              <Cartao>
+                <TituloCard>Respostas</TituloCard>
+                <Definicoes>
                   {det!.answers.map((a) => (
                     <div key={a.question_key}>
                       <dt>{FRAMING_QUESTIONS.find((q) => q.key === a.question_key)?.wording ?? a.question_key}</dt>
                       <dd>{a.status === "answered" ? a.answer_summary : a.status === "pending" ? "Deixado para depois" : "Não sabe ainda"}</dd>
                     </div>
                   ))}
-                </dl>
-              </section>
+                </Definicoes>
+              </Cartao>
             )}
           </>
         )}
@@ -81,18 +80,14 @@ function Master() {
     const nome = orgs?.find((o) => o.id === org)?.name;
     return (
       <Shell>
-        <p style={{ margin: "0 0 12px" }}><Link href="/master/">← Clientes</Link></p>
-        <h1>{nome || "Desafios do cliente"}</h1>
+        <Voltar href="/master/">← Clientes</Voltar>
+        <Titulo>{nome || "Desafios do cliente"}</Titulo>
         {AVISO}
-        {erro && <p className="msg err" role="alert">{erro}</p>}
+        {erro && <Mensagem tipo="erro">{erro}</Mensagem>}
         {!lista && !erro && <Loading />}
-        {lista && lista.length === 0 && <p className="lead">Este cliente ainda não criou desafios.</p>}
+        {lista && lista.length === 0 && <Lead>Este cliente ainda não criou desafios.</Lead>}
         {lista && lista.length > 0 && (
-          <ul className="list-items">
-            {lista.map((d) => (
-              <li key={d.id}><Link href={`/master/?desafio=${d.id}`}><b>{d.title || d.original_statement.slice(0, 90)}</b><small>Criado em {data(d.created_at)}</small></Link></li>
-            ))}
-          </ul>
+          <ListaDeLinks itens={lista.map((d) => ({ id: d.id, href: `/master/?desafio=${d.id}`, titulo: d.title || d.original_statement.slice(0, 90), detalhe: `Criado em ${data(d.created_at)}` }))} />
         )}
       </Shell>
     );
@@ -100,17 +95,13 @@ function Master() {
 
   return (
     <Shell>
-      <h1>Clientes</h1>
-      <p className="lead">Organizações cadastradas na plataforma.</p>
-      {erro && <p className="msg err" role="alert">{erro}</p>}
+      <Titulo>Clientes</Titulo>
+      <Lead>Organizações cadastradas na plataforma.</Lead>
+      {erro && <Mensagem tipo="erro">{erro}</Mensagem>}
       {!orgs && !erro && <Loading />}
-      {orgs && orgs.length === 0 && <p className="lead">Nenhuma organização cadastrada ainda.</p>}
+      {orgs && orgs.length === 0 && <Lead>Nenhuma organização cadastrada ainda.</Lead>}
       {orgs && orgs.length > 0 && (
-        <ul className="list-items">
-          {orgs.map((o) => (
-            <li key={o.id}><Link href={`/master/?org=${o.id}`}><b>{o.name}</b><small>{[o.industry, `${o.members} ${o.members === 1 ? "pessoa" : "pessoas"}`, `${o.challenges} ${o.challenges === 1 ? "desafio" : "desafios"}`, `desde ${data(o.created_at)}`].filter(Boolean).join(" · ")}</small></Link></li>
-          ))}
-        </ul>
+        <ListaDeLinks itens={orgs.map((o) => ({ id: o.id, href: `/master/?org=${o.id}`, titulo: o.name, detalhe: [o.industry, `${o.members} ${o.members === 1 ? "pessoa" : "pessoas"}`, `${o.challenges} ${o.challenges === 1 ? "desafio" : "desafios"}`, `desde ${data(o.created_at)}`].filter(Boolean).join(" · ") }))} />
       )}
     </Shell>
   );

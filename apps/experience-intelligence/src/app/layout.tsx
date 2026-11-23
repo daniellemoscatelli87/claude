@@ -1,6 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import "./globals.css";
+// Design System Dani Moscatelli: fontes, Tailwind v4 e tokens (cópias sincronizadas, ver design-system/README.md).
+import "@/styles/index.css";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { SessionProvider } from "@/components/session";
+
+// O Next descarta o @import url(...) externo do fonts.css do DS ao gerar o CSS. As fontes são carregadas por <link>,
+// com o endereço lido da própria cópia do fonts.css na geração do site: muda junto quando a sincronização trouxer outro.
+const FONTES_DS = /@import url\(['"]?([^'")]+)['"]?\)/.exec(readFileSync(join(process.cwd(), "src/styles/fonts.css"), "utf8"))?.[1];
 
 export const metadata: Metadata = {
   title: "DM | Experience Intelligence",
@@ -16,9 +23,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+        {FONTES_DS && <link href={FONTES_DS} rel="stylesheet" />}
       </head>
-      <body><SessionProvider>{children}</SessionProvider></body>
+      <body className="flex min-h-dvh flex-col"><SessionProvider>{children}</SessionProvider></body>
     </html>
   );
 }

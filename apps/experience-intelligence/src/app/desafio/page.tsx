@@ -4,7 +4,9 @@
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Shell, Loading } from "@/components/Shell";
+import { Shell, Loading, Titulo, Lead, Cartao, TituloCard, Mensagem, Voltar, TextoOriginal, Definicoes, Etiqueta } from "@/components/Shell";
+import { Button } from "@/components/ui/button";
+import { Ajuda, BotaoLink } from "@/design-system/campos";
 import { useSession } from "@/components/session";
 import { StructureEditor } from "@/components/StructureEditor";
 import { NextQuestion } from "@/components/NextQuestion";
@@ -74,9 +76,9 @@ function Desafio() {
   if (c === null) {
     return (
       <Shell>
-        <h1>Desafio não encontrado</h1>
-        <p className="lead">{erro || "Este desafio não existe ou pertence a outra empresa ou negócio."}</p>
-        <Link href="/" className="btn btn-ghost">Voltar ao início</Link>
+        <Titulo>Desafio não encontrado</Titulo>
+        <Lead>{erro || "Este desafio não existe ou pertence a outra empresa ou negócio."}</Lead>
+        <div><Button asChild variant="outline"><Link href="/">Voltar ao início</Link></Button></div>
       </Shell>
     );
   }
@@ -90,27 +92,27 @@ function Desafio() {
 
   return (
     <Shell>
-      <p style={{ margin: "0 0 12px" }}><Link href="/">← Seus desafios</Link></p>
-      <h1>{c.title || "Seu desafio"}</h1>
+      <Voltar href="/">← Seus desafios</Voltar>
+      <Titulo>{c.title || "Seu desafio"}</Titulo>
 
-      <section className="card">
-        <h2>O que você escreveu</h2>
-        <p className="hint" style={{ margin: 0 }}>Guardado exatamente como você escreveu. Não muda quando você edita o restante.</p>
-        <p className="original">{c.original_statement}</p>
-      </section>
+      <Cartao className="gap-2">
+        <TituloCard>O que você escreveu</TituloCard>
+        <Ajuda>Guardado exatamente como você escreveu. Não muda quando você edita o restante.</Ajuda>
+        <TextoOriginal>{c.original_statement}</TextoOriginal>
+      </Cartao>
 
       {!confirmado && (
         iaEstado === "carregando" || iaEstado === "idle" ? (
-          <section className="card"><p className="lead center" role="status" style={{ margin: 0 }}>Organizando o que você contou…</p></section>
+          <Cartao><p className="m-0 text-center text-base text-muted-foreground" role="status">Organizando o que você contou…</p></Cartao>
         ) : (
           <>
             {iaEstado !== "pronto" && (
-              <div className="card stack">
-                <p className="msg err" role="alert">{FALHA_IA[iaEstado]}</p>
+              <Cartao>
+                <Mensagem tipo="erro">{FALHA_IA[iaEstado]}</Mensagem>
                 {canRetryInterpretation(iaEstado) && (
-                  <div className="row end"><button type="button" className="btn btn-ghost" onClick={pedirIa}>Tentar de novo</button></div>
+                  <div className="flex justify-end"><Button type="button" variant="outline" onClick={pedirIa}>Tentar de novo</Button></div>
                 )}
-              </div>
+              </Cartao>
             )}
             <StructureEditor key={iaEstado} challengeId={c.id} initial={ia?.proposal ?? null} ai={ia} editing={false} onSaved={recarregar} />
           </>
@@ -123,56 +125,56 @@ function Desafio() {
 
       {confirmado && !editando && (
         <>
-          <section className="card">
-            <div className="row" style={{ justifyContent: "space-between" }}>
-              <h2 style={{ margin: 0 }}>Como entendemos até agora</h2>
-              <button type="button" className="btn-link" onClick={() => setEditando(true)}>Editar</button>
+          <Cartao>
+            <div className="flex flex-wrap items-center justify-between gap-2.5">
+              <TituloCard>Como entendemos até agora</TituloCard>
+              <BotaoLink onClick={() => setEditando(true)}>Editar</BotaoLink>
             </div>
-            <dl className="kv" style={{ marginTop: 12 }}>
+            <Definicoes>
               {c.affected_people.length > 0 && <div><dt>Quem vive essa situação</dt><dd><ul>{c.affected_people.map((p) => <li key={p}>{p}</li>)}</ul></dd></div>}
               {c.context_json?.site && <div><dt>Onde acontece</dt><dd>{c.context_json.site}</dd></div>}
               {c.desired_outcome && <div><dt>O que deveria melhorar</dt><dd>{c.desired_outcome}</dd></div>}
               {c.known_information.length > 0 && <div><dt>O que já se sabe (ainda sem verificação)</dt><dd><ul>{c.known_information.map((p) => <li key={p}>{p}</li>)}</ul></dd></div>}
               {c.unknown_information.length > 0 && <div><dt>O que ainda não se sabe</dt><dd><ul>{c.unknown_information.map((p) => <li key={p}>{p}</li>)}</ul></dd></div>}
-            </dl>
-          </section>
+            </Definicoes>
+          </Cartao>
 
           {proxima ? (
             <NextQuestion key={proxima.key} challengeId={c.id} question={proxima} progress={progresso} onAnswered={carregar} />
           ) : (
-            <section className="card stack">
-              <span className="tag green" style={{ justifySelf: "start" }}>Primeiro entendimento concluído</span>
-              <h2 style={{ margin: 0 }}>Você terminou as primeiras perguntas</h2>
-              <p style={{ margin: 0 }}>O próximo passo será orientar como descobrir, na prática, o que ainda não se sabe. Essa etapa ainda está em construção na plataforma. Tudo o que você registrou está guardado.</p>
-            </section>
+            <Cartao>
+              <Etiqueta tom="sucesso">Primeiro entendimento concluído</Etiqueta>
+              <TituloCard>Você terminou as primeiras perguntas</TituloCard>
+              <p className="m-0">O próximo passo será orientar como descobrir, na prática, o que ainda não se sabe. Essa etapa ainda está em construção na plataforma. Tudo o que você registrou está guardado.</p>
+            </Cartao>
           )}
 
           {respondidas.length > 0 && (
-            <section className="card">
-              <h2>O que você contou</h2>
-              <dl className="kv">
+            <Cartao>
+              <TituloCard>O que você contou</TituloCard>
+              <Definicoes>
                 {respondidas.map((r) => (
                   <div key={r.question_key}><dt>{FRAMING_QUESTIONS.find((q) => q.key === r.question_key)?.wording}</dt><dd>{r.answer_summary}</dd></div>
                 ))}
-              </dl>
-            </section>
+              </Definicoes>
+            </Cartao>
           )}
 
           {pendencias.length > 0 && (
-            <section className="card">
-              <h2>Ainda não sabemos</h2>
-              <ul className="list-items">
+            <Cartao>
+              <TituloCard>Ainda não sabemos</TituloCard>
+              <ul className="m-0 grid list-none gap-2.5 p-0">
                 {pendencias.map(({ question, answer }) => {
                   const rota = question.unknown.find((o) => o.route === answer.unknown_route);
                   return (
-                    <li key={question.key} className="card soft" style={{ margin: 0 }}>
-                      <b style={{ display: "block", color: "var(--dark)" }}>{question.wording}</b>
-                      {rota && <span><span className="tag gray">{rota.label}</span> {rota.instruction}</span>}
+                    <li key={question.key} className="grid gap-1.5 rounded-md border border-border bg-muted/40 px-4 py-3">
+                      <b className="block font-bold text-foreground">{question.wording}</b>
+                      {rota && <span className="text-[0.9375rem]"><Etiqueta tom="neutro">{rota.label}</Etiqueta> {rota.instruction}</span>}
                     </li>
                   );
                 })}
               </ul>
-            </section>
+            </Cartao>
           )}
         </>
       )}

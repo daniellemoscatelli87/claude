@@ -429,14 +429,13 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Acesso:** continua fechado. Antes de qualquer página, o app pede usuário e senha (`apps/experience-intelligence/functions/_middleware.js`, segredo `SITE_SENHA` no Cloudflare; usuário `dani` ou `SITE_USUARIO`). Depois vem o login por convite do próprio app. Sem o segredo, o app fica fechado.
 - **Aviso de privacidade:** onde dizia "Netlify: hospedagem do aplicativo", agora diz "Cloudflare". Por isso a versão passa a `testes-2026-11-23`, e quem já aceitou recebe o pedido de novo aceite.
 - **Desligamento do Netlify:** só depois que o app estiver funcionando no Cloudflare. O projeto antigo do FindLook no Netlify (`helpful-meerkat-e4c2aa`) também é desligado.
-<<<<<<< HEAD
 
 ## D-036 · 23/11/2026 · Pesquisa Moda em Curitiba: pergunta 4 com três notas (site)
 
 - **Origem:** dona do produto: a pergunta 4 passa a ter três notas de 0 a 10 (Qualidade, Estética e Correspondência com o que eu procurava). Ela escolheu usar a média das três nos cruzamentos e pediu que a correspondência também fosse tratada separadamente, por ser o dado que mais interessa.
 - **Decisão:** a "nota geral" de cada pessoa é a média dos três aspectos. Ela substitui a antiga nota única nos cruzamentos da Inteligência, e a correspondência aparece ao lado em cada cruzamento e num cartão próprio por canal. Respostas antigas com nota única continuam contando como nota geral.
 - **Trade-offs:** a média esconde diferenças entre os aspectos; por isso o card da pergunta 4 mostra a média de cada um.
-=======
+
 ## D-039 · 23/11/2026 · Menu lateral recolhível, perfil no cabeçalho e cabeçalho branco nos painéis (site)
 
 - **Origem:** dona do produto (mesmo padrão em construção no design system da FindLook).
@@ -465,7 +464,19 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** dona do produto (quarta rodada de ajustes dos painéis).
 - **Decisão:** o cabeçalho do card não tem faixa cinza; é separado do conteúdo por uma linha fina que some nas pontas. O hover de linha ou item dentro do card é bem claro e sutil: token `--row-hover` do DS (metade do `--graphite-50` sobre o card), decisão revista na quinta rodada. No card rosa da Início, o "não lidas" do canto sai por repetir a informação. O botão desabilitado usa o fundo `--graphite-100`. O menu lateral empurra o conteúdo, nunca o cobre (no DS e na área restrita). As mudanças de token foram feitas no DS (branch `claude/ajustes-painel`) e trazidas pela sincronização, sem editar a cópia.
 - **Trade-offs:** a área restrita fica, por enquanto, com o `theme.css` de uma branch do DS ainda não publicada; ao publicar o DS, a sincronização diária volta ao `main` e o `?v=` precisa mudar.
->>>>>>> origin/main
+
+## D-043 · 23/11/2026 · App DM | Experience Intelligence consome tokens e componentes do DS Dani Moscatelli, com atualização diária
+
+- **Origem:** dona do produto, 23/11/2026: "app EI consome tokens e componentes do DS Dani Moscatelli, com atualização diária" (escolheu "Tokens e componentes", não só os tokens).
+- **Decisão:** o app (`apps/experience-intelligence/`) deixa de ter cores e componentes visuais feitos à mão. Usa Tailwind v4 com os arquivos do DS (`index.css`, `fonts.css`, `tailwind.css` e `theme.css`, mapeamento `@theme inline`) e os componentes `ui/` do DS (botão, campo, área de texto, rótulo, caixa de seleção, campo de senha, card, alerta, badge, progresso, avatar, menu suspenso, painel lateral, título e selo). Os arquivos são cópias listadas em `design-system/arquivos.txt`, atualizadas pela mesma rotina diária do site, que agora também roda tipos, lint, testes e build do app antes de abrir o pull request.
+- **Escolhas do Claude (forma):**
+  - nenhum componente copiado importa algo exclusivo do site do DS (como o `i18n`); por isso não foi preciso nenhum módulo de compatibilidade;
+  - o Next descarta o `@import url(...)` externo do `fonts.css`; o `layout.tsx` lê o endereço das fontes da própria cópia do `fonts.css` e carrega por `<link>`, então muda junto com a sincronização;
+  - as telas seguem a casca de painel do DS: cabeçalho branco na largura toda, perfil no cabeçalho (menu suspenso do DS no lugar da barra lateral), fundo cinza claro, cards só com borda e título da página fora dos cards;
+  - seleções usam o select nativo no padrão da página Formulários do DS (o `ui/select` do Radix não aceita a opção vazia "Selecione" e troca o seletor nativo do celular);
+  - o aviso de privacidade abre no painel lateral do DS (o `ui/dialog` tem o botão fechar com o texto "Close", em inglês, para leitores de tela);
+  - o medidor de força da senha mantém as regras e os textos do app (`padroes.ts`), com as barras e os checks do campo de senha do DS.
+- **Trade-offs:** cada sincronização do DS pode mudar a aparência do app; os testes pegam erros de tipos e de build, não problemas visuais, então a dona do produto confere as telas antes de aprovar o PR. Itens que faltam no DS (rodapé sem "Preferências de cookies", select nativo como componente, "Fechar" em português no `ui/dialog`) ficam para decisão no DS, sem solução inventada no app.
 
 ## Decisões pendentes
 

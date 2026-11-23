@@ -4,3 +4,27 @@
 
 # Tokens (cores, sombras, raio, movimento, gráficos), usados pela área restrita (public/admin/)
 src/styles/theme.css     public/design-system/theme.css
+
+# App DM | Experience Intelligence (apps/experience-intelligence): tokens, fontes e Tailwind v4 (decisão de 23/11/2026, D-043)
+src/styles/index.css     apps/experience-intelligence/src/styles/index.css
+src/styles/fonts.css     apps/experience-intelligence/src/styles/fonts.css
+src/styles/tailwind.css  apps/experience-intelligence/src/styles/tailwind.css
+src/styles/theme.css     apps/experience-intelligence/src/styles/theme.css
+
+# App DM | Experience Intelligence: componentes do DS usados pelas telas
+src/app/components/ui/utils.ts           apps/experience-intelligence/src/components/ui/utils.ts
+src/app/components/ui/button.tsx         apps/experience-intelligence/src/components/ui/button.tsx
+src/app/components/ui/input.tsx          apps/experience-intelligence/src/components/ui/input.tsx
+src/app/components/ui/textarea.tsx       apps/experience-intelligence/src/components/ui/textarea.tsx
+src/app/components/ui/label.tsx          apps/experience-intelligence/src/components/ui/label.tsx
+src/app/components/ui/checkbox.tsx       apps/experience-intelligence/src/components/ui/checkbox.tsx
+src/app/components/ui/password-field.tsx apps/experience-intelligence/src/components/ui/password-field.tsx
+src/app/components/ui/card.tsx           apps/experience-intelligence/src/components/ui/card.tsx
+src/app/components/ui/alert.tsx          apps/experience-intelligence/src/components/ui/alert.tsx
+src/app/components/ui/badge.tsx          apps/experience-intelligence/src/components/ui/badge.tsx
+src/app/components/ui/progress.tsx       apps/experience-intelligence/src/components/ui/progress.tsx
+src/app/components/ui/avatar.tsx         apps/experience-intelligence/src/components/ui/avatar.tsx
+src/app/components/ui/dropdown-menu.tsx  apps/experience-intelligence/src/components/ui/dropdown-menu.tsx
+src/app/components/ui/side-panel.tsx     apps/experience-intelligence/src/components/ui/side-panel.tsx
+src/app/components/ui/heading.tsx        apps/experience-intelligence/src/components/ui/heading.tsx
+src/app/components/ui/selo.tsx           apps/experience-intelligence/src/components/ui/selo.tsx

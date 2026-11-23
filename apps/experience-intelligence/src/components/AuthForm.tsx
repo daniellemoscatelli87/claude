@@ -2,7 +2,10 @@
 // Entrar (tela C do kit de UX). O cadastro fica em /cadastro/ (D-025).
 import { useState } from "react";
 import Link from "next/link";
-import { CampoEmail, CampoSenha } from "@/design-system/campos";
+import { Ajuda, CampoEmail, CampoSenha } from "@/design-system/campos";
+import { classeLink } from "@/design-system/classes";
+import { Button } from "@/components/ui/button";
+import { Cartao, Mensagem, TituloCard } from "./Shell";
 import { EMAIL_RE, MSG } from "@/design-system/padroes";
 import { supabase } from "@/infrastructure/supabase";
 import { mensagemDeErro } from "@/application/errors";
@@ -31,15 +34,19 @@ export function AuthForm() {
   }
 
   return (
-    <form className="card stack" onSubmit={enviar} noValidate>
-      <h2>Que bom ter você por aqui.</h2>
-      <p className="hint" style={{ margin: 0 }}>Entre para continuar os desafios da sua empresa ou negócio.</p>
-      <CampoEmail label="E-mail" value={email} onChange={setEmail} required />
-      <CampoSenha value={senha} onChange={setSenha} />
-      {erro && <p className="msg err" role="alert">{erro}</p>}
-      <button className="btn btn-primary btn-block" disabled={enviando}>{enviando ? "Aguarde…" : "Entrar"}</button>
-      <p className="center" style={{ margin: 0 }}>Ainda não tem conta? <Link href="/cadastro/">Criar conta</Link></p>
-      <p className="hint center" style={{ margin: 0 }}>Acesso por convite nesta fase.</p>
-    </form>
+    <Cartao>
+      <form className="flex flex-col gap-4" onSubmit={enviar} noValidate>
+        <div className="flex flex-col gap-1">
+          <TituloCard>Que bom ter você por aqui.</TituloCard>
+          <Ajuda>Entre para continuar os desafios da sua empresa ou negócio.</Ajuda>
+        </div>
+        <CampoEmail label="E-mail" value={email} onChange={setEmail} required />
+        <CampoSenha value={senha} onChange={setSenha} />
+        {erro && <Mensagem tipo="erro">{erro}</Mensagem>}
+        <Button type="submit" className="w-full" disabled={enviando}>{enviando ? "Aguarde…" : "Entrar"}</Button>
+        <p className="m-0 text-center text-[0.9375rem]">Ainda não tem conta? <Link href="/cadastro/" className={classeLink}>Criar conta</Link></p>
+        <Ajuda className="text-center">Acesso por convite nesta fase.</Ajuda>
+      </form>
+    </Cartao>
   );
 }

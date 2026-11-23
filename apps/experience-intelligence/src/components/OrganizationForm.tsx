@@ -8,7 +8,10 @@ import { setCurrentOrganizationId, setupOrganization, updateOrganizationContext,
 import { mensagemDeErro } from "@/application/errors";
 import { AREAS, PORTES, SEGMENTOS, SEGMENTO_OUTRO, TIPOS } from "@/domain/organization/context";
 import { useSession } from "./session";
-import { CampoCnpj, TituloEtapa } from "@/design-system/campos";
+import { Ajuda, CampoCnpj, CampoSelecao, CampoTexto, TituloEtapa } from "@/design-system/campos";
+import { Button } from "@/components/ui/button";
+import { Selo } from "@/components/ui/selo";
+import { Cartao, Lead, Mensagem, Titulo } from "./Shell";
 import { maskCnpj } from "@/design-system/padroes";
 
 const NAO_INFORMAR_SEGMENTO = "Prefiro não informar";
@@ -64,66 +67,53 @@ export function OrganizationForm({ org, onSaved, etapa = false }: { org?: MyOrga
         <TituloEtapa icone={<Building2 size={22} />}>Empresa ou negócio</TituloEtapa>
       ) : (
         <>
-          <p className="eyebrow"><Building2 size={18} aria-hidden="true" /> {editando ? "Sua empresa ou negócio" : "Preparando seu espaço de trabalho"}</p>
-          <h1>{editando ? "Empresa ou negócio" : "Agora, conte sobre sua empresa ou negócio."}</h1>
+          <Selo icon={<Building2 />} tone="primary">{editando ? "Sua empresa ou negócio" : "Preparando seu espaço de trabalho"}</Selo>
+          <Titulo>{editando ? "Empresa ou negócio" : "Agora, conte sobre sua empresa ou negócio."}</Titulo>
         </>
       )}
-      <p className="lead">Essas informações ajudam a adaptar as orientações ao seu contexto. Você pode completar os detalhes depois.</p>
-      <form className="card stack" onSubmit={enviar} noValidate>
-        <label>Qual é o nome da empresa ou negócio?
-          <input value={nome} onChange={(e) => setNome(e.target.value)} maxLength={120} autoComplete="organization" required
-            disabled={!podeEditarOrg} placeholder="Ex.: Clínica Horizonte, Escola Aurora, Loja Central" aria-describedby="org-nome-ajuda" />
-          <span className="hint" id="org-nome-ajuda">Use o nome pelo qual as pessoas conhecem a empresa, o estabelecimento ou a instituição.</span>
-        </label>
+      <Lead>Essas informações ajudam a adaptar as orientações ao seu contexto. Você pode completar os detalhes depois.</Lead>
+      <Cartao>
+      <form className="flex flex-col gap-4" onSubmit={enviar} noValidate>
+        <CampoTexto label="Qual é o nome da empresa ou negócio?" value={nome} onChange={setNome} maxLength={120} autoComplete="organization" required
+          disabled={!podeEditarOrg} placeholder="Ex.: Clínica Horizonte, Escola Aurora, Loja Central"
+          hint="Use o nome pelo qual as pessoas conhecem a empresa, o estabelecimento ou a instituição." />
 
-        <fieldset className="opcionais">
-          <legend>Detalhes opcionais</legend>
-          <label>Em que área atua?
-            <select value={segmento} onChange={(e) => setSegmento(e.target.value)} disabled={!podeEditarOrg}>
-              <option value="">Selecione um segmento (opcional)</option>
-              {SEGMENTOS.map((s) => <option key={s} value={s}>{s}</option>)}
-              <option value={SEGMENTO_OUTRO}>{SEGMENTO_OUTRO}</option>
-              <option value={NAO_INFORMAR_SEGMENTO}>{NAO_INFORMAR_SEGMENTO}</option>
-            </select>
-          </label>
+        <fieldset className="m-0 flex min-w-0 flex-col gap-4 border-0 p-0">
+          <legend className="mb-2.5 p-0 text-[0.8125rem] font-bold tracking-[0.06em] text-muted-foreground uppercase">Detalhes opcionais</legend>
+          <CampoSelecao label="Em que área atua?" value={segmento} onChange={setSegmento} disabled={!podeEditarOrg}>
+            <option value="">Selecione um segmento (opcional)</option>
+            {SEGMENTOS.map((s) => <option key={s} value={s}>{s}</option>)}
+            <option value={SEGMENTO_OUTRO}>{SEGMENTO_OUTRO}</option>
+            <option value={NAO_INFORMAR_SEGMENTO}>{NAO_INFORMAR_SEGMENTO}</option>
+          </CampoSelecao>
           {segmento === SEGMENTO_OUTRO && (
-            <label>Qual?
-              <input value={segmentoOutro} onChange={(e) => setSegmentoOutro(e.target.value)} maxLength={80} disabled={!podeEditarOrg} />
-            </label>
+            <CampoTexto label="Qual?" value={segmentoOutro} onChange={setSegmentoOutro} maxLength={80} disabled={!podeEditarOrg} />
           )}
-          <label>O que a empresa ou negócio oferece?
-            <input value={oferta} onChange={(e) => setOferta(e.target.value)} maxLength={200} disabled={!podeEditarOrg}
-              placeholder="Ex.: atendimento médico, hospedagem, ensino, plataforma de serviços..." aria-describedby="org-oferta-ajuda" />
-            <span className="hint" id="org-oferta-ajuda">Pode ser um serviço, um produto, uma operação ou uma combinação.</span>
-          </label>
-          <label>Qual é o seu papel nela?
-            <select value={area} onChange={(e) => setArea(e.target.value)}>
-              <option value="">Selecione (opcional)</option>
-              {Object.entries(AREAS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-            </select>
-          </label>
-          <label>Qual é o tipo?
-            <select value={tipo} onChange={(e) => setTipo(e.target.value)} disabled={!podeEditarOrg}>
-              <option value="">Selecione (opcional)</option>
-              {Object.entries(TIPOS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-            </select>
-          </label>
-          <label>Quantas pessoas trabalham nela, aproximadamente?
-            <select value={porte} onChange={(e) => setPorte(e.target.value)} disabled={!podeEditarOrg}>
-              <option value="">Selecione (opcional)</option>
-              {Object.entries(PORTES).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-            </select>
-          </label>
+          <CampoTexto label="O que a empresa ou negócio oferece?" value={oferta} onChange={setOferta} maxLength={200} disabled={!podeEditarOrg}
+            placeholder="Ex.: atendimento médico, hospedagem, ensino, plataforma de serviços..."
+            hint="Pode ser um serviço, um produto, uma operação ou uma combinação." />
+          <CampoSelecao label="Qual é o seu papel nela?" value={area} onChange={setArea}>
+            <option value="">Selecione (opcional)</option>
+            {Object.entries(AREAS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+          </CampoSelecao>
+          <CampoSelecao label="Qual é o tipo?" value={tipo} onChange={setTipo} disabled={!podeEditarOrg}>
+            <option value="">Selecione (opcional)</option>
+            {Object.entries(TIPOS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+          </CampoSelecao>
+          <CampoSelecao label="Quantas pessoas trabalham nela, aproximadamente?" value={porte} onChange={setPorte} disabled={!podeEditarOrg}>
+            <option value="">Selecione (opcional)</option>
+            {Object.entries(PORTES).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+          </CampoSelecao>
           <CampoCnpj label="CNPJ" value={cnpj} onChange={setCnpj} disabled={!podeEditarOrg}
             hint="Opcional. Para empresas brasileiras: ajuda a evitar cadastros duplicados da mesma empresa." />
-          {!podeEditarOrg && <p className="hint" style={{ margin: 0 }}>Só quem administra a empresa ou negócio altera esses dados. Você pode atualizar o seu papel.</p>}
+          {!podeEditarOrg && <Ajuda>Só quem administra a empresa ou negócio altera esses dados. Você pode atualizar o seu papel.</Ajuda>}
         </fieldset>
 
-        {erro && <p className="msg err" role="alert">{erro}</p>}
-        {ok && <p className="msg ok" role="status">{ok}</p>}
-        <button className="btn btn-primary btn-block" disabled={enviando}>{enviando ? "Salvando…" : editando ? "Salvar" : "Continuar"}</button>
+        {erro && <Mensagem tipo="erro">{erro}</Mensagem>}
+        {ok && <Mensagem tipo="ok">{ok}</Mensagem>}
+        <Button type="submit" className="w-full" disabled={enviando}>{enviando ? "Salvando…" : editando ? "Salvar" : "Continuar"}</Button>
       </form>
+      </Cartao>
     </>
   );
 }
-
