@@ -505,6 +505,20 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Contraste:** `#935E0A` sobre o fundo de aviso dá 4,9:1 e no branco 5,5:1.
 - **Trade-offs:** o ponto decorativo do selo pendente (`.badge.pend`) continua em `--warning`, porque não é texto.
 
+## D-046 · 23/11/2026 · Contatos com abas Recebidos e Enviados; e-mail para vários destinatários, com Cc e Cco (site)
+
+- **Origem:** dona do produto. Pediu:
+  - separar enviados de recebidos em duas abas;
+  - enviar com cópia, cópia oculta e para vários destinatários;
+  - a janela no centro da tela, e não na lateral.
+- **Decisão:**
+  - A conversa guarda a lista de destinatários e as cópias. As respostas seguintes vão para os mesmos destinatários e cópias.
+  - A cópia oculta vale só para o primeiro envio, para não expor nem incluir essas pessoas na conversa.
+  - Limite de 20 endereços por envio.
+- **Trade-offs:**
+  - `contatos.email` continua com o primeiro destinatário, para não mudar a busca e a importação da caixa.
+  - Uma resposta de alguém em cópia chega pela conversa, mas a conversa continua identificada pelo primeiro destinatário.
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:

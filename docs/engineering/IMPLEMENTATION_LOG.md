@@ -595,6 +595,33 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-23 · Contatos: abas Recebidos e Enviados, vários destinatários, Cc e Cco, janela no centro (D-046), publicado (migration aplicada; função `responder-contato` v14)
+
+- `public/admin/contatos/index.html`:
+  - Abas "Recebidos" (formulário do site e e-mails que chegaram) e "Enviados" (e-mails novos), com contagem. A aba fica no endereço (`?aba=enviados`).
+  - "Novo e-mail" abre numa janela no centro da tela (`<dialog>`), com o cabeçalho da Janela do DS, entrada suave e respeito a "menos movimento". Esc, × ou toque fora fecham.
+  - Campos de vários e-mails: cada endereço vira uma etiqueta (Enter, vírgula, ponto e vírgula, espaço ou sair do campo); e-mail incompleto fica marcado.
+  - Botões "Cc" e "Cco" abrem os campos de cópia e de cópia oculta, com explicação do que é a cópia oculta.
+  - Limite de 20 endereços no total.
+  - A lista, o detalhe, a bolha do histórico e o "Para:" da resposta mostram destinatários, Cc e Cco.
+  - "← E-mails enviados" volta para a aba certa.
+- `supabase/functions/responder-contato/index.ts`:
+  - `novo.para`, `novo.cc` e `novo.cco` em lista; sem repetidos; Cc e Cco não repetem quem já está em Para.
+  - O envio vai pelo Resend com `cc` e `bcc`.
+  - As respostas seguintes da conversa vão para os mesmos destinatários e cópias, sem a cópia oculta.
+- Migration `20261123230000_contatos_destinatarios_copias.sql`: `contatos.destinatarios`, `copias` e `copias_ocultas`, e `respostas.copias` e `copias_ocultas`.
+- Testes executados:
+  - `npm run build`.
+  - Playwright com dados fictícios (computador e iPhone 13): abas e contagens, janela centralizada, erros dos campos, etiqueta inválida, Cc e Cco, envio, conversa na aba Enviados, detalhe e histórico com Para/Cc/Cco, sem erros de JS.
+  - Função em bundle com banco e Resend simulados:
+    - vários destinatários com repetidos removidos;
+    - `cc` e `bcc` no envio;
+    - resposta seguinte sem `bcc`;
+    - Cc inválido e mais de 20 endereços recusados;
+    - "para" como texto continua aceito.
+  - Nenhum e-mail real foi enviado.
+- Na publicação: aplicar a migration e reimplantar `responder-contato`.
+
 ## 2026-11-23 · Pesquisa: pergunta 4 com notas de 1 a 10 (questionário v12), publicado (função `pesquisa` v11)
 
 - Pedido da dona do produto: tirar o zero; "1 = Muito ruim".
