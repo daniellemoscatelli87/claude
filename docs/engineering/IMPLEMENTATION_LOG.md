@@ -760,6 +760,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** navegador (iPhone 13) com servidor simulado: validação do nome (Matheus e Matheus S recusados; Ana Lu e Maria da Silva aceitos), prefixo fixo (colar link inteiro, apagar tudo, host errado); página da galeria visível em 0,75 s com a IA atrasada 4 s, troca de senioridade refletida na prévia e enviada no formato do cadastro; `node --check` e `esbuild` da função; `npm run build`.
 - **Publicação (16/11):** função `galeria-autorizacao` publicada (versão 13); `ver` no ar responde em 0,8 a 1 s.
 
+## 2026-11-23 · Área restrita com as cores novas de aviso e erro do DS (D-045)
+
+- `public/design-system/theme.css` e `design-system/versao.txt`: sincronizados com o DS Dani Moscatelli `697a765` (`scripts/sincronizar-design-system.sh`); `?v=` do `theme.css` atualizado nas 8 páginas.
+- `public/admin/parceiros/index.html` e `public/admin/pesquisas/index.html`: textos e ícones de aviso passam de `--warning` para `--warning-text`.
+- Testes: suíte Playwright da área restrita (Supabase simulado, `public/` servido localmente), 130 casos passaram, sem erros de página.
+
 ## 2026-11-23 · Experience Intelligence pronto para o Cloudflare Pages (D-038)
 
 - **`apps/experience-intelligence/functions/_middleware.js`:** senha antes de qualquer página, no mesmo modelo do FindLook. Testado: sem segredo dá 503, senha errada dá 401 e senha certa dá 200 com `Cache-Control: private, no-store`.
