@@ -1,0 +1,441 @@
+/* Pesquisa pública "Moda em Curitiba" (/pesquisa/moda-curitiba/).
+   Uma pergunta por etapa, com progresso, Voltar e Continuar. As perguntas vêm do mesmo arquivo que a função
+   do servidor usa para validar (supabase/functions/pesquisa/questionario.json).
+   Q1 = "Não" ou Q2 = "Não comprei" encerram com uma mensagem cordial. Depois das 10 perguntas: pergunta aberta
+   (opcional) e convite para receber novidades (contato só com autorização). O envio usa um identificador gerado
+   aqui, então atualizar a página ou tocar de novo no botão não duplica a participação. */
+import './pesquisa-moda.css';
+import Q from '../supabase/functions/pesquisa/questionario.json';
+
+type Opcao = { id: string; texto: string; encerra?: string; exclusiva?: boolean; outro?: boolean };
+type Pergunta = {
+  id: string; tipo: 'unica' | 'multipla' | 'escala' | 'matriz'; texto: string; apoio?: string; max?: number; min?: number;
+  opcoes?: Opcao[]; linhas?: { id: string; texto: string }[]; colunas?: { id: string; texto: string }[];
+  rotulo_min?: string; rotulo_max?: string;
+};
+type Multi = { opcoes: string[]; outro?: string };
+type Estado = {
+  envio: string; contatoId: string; etapa: number;
+  r: Record<string, unknown>; relato: string;
+  nov: '' | 'sim' | 'nao'; nome: string; email: string; whats: string; aceite: boolean;
+};
+
+const PERGUNTAS = Q.perguntas as Pergunta[];
+const TOTAL = PERGUNTAS.length; // 10 perguntas principais; relato e novidades ficam fora da contagem
+const ETAPA_RELATO = TOTAL, ETAPA_NOV = TOTAL + 1;
+const API = 'https://lipfvnerohkaajegqvwr.supabase.co/functions/v1/pesquisa';
+const CHAVE_RASCUNHO = 'pq-moda-rascunho', CHAVE_FIM = 'pq-moda-concluida';
+const RELATO_MAX = 2000;
+const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
+const el = <K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, txt?: string) => {
+  const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e;
+};
+const guardar = (k: string, v: unknown, local = false) => { try { (local ? localStorage : sessionStorage).setItem(k, JSON.stringify(v)); } catch { /* sem armazenamento */ } };
+const ler = <T>(k: string, local = false): T | null => { try { const v = (local ? localStorage : sessionStorage).getItem(k); return v ? JSON.parse(v) as T : null; } catch { return null; } };
+const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => { const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); }));
+
+const novo = (): Estado => ({ envio: uuid(), contatoId: uuid(), etapa: -1, r: {}, relato: '', nov: '', nome: '', email: '', whats: '', aceite: false });
+let E: Estado = { ...novo(), ...(ler<Estado>(CHAVE_RASCUNHO) ?? {}) };
+const salvar = () => guardar(CHAVE_RASCUNHO, E);
+let enviando = false;
+
+/* ---------- Telas ---------- */
+const telas = ['pq-intro', 'pq-form', 'pq-obrigada', 'pq-encerrada', 'pq-fora-do-ar'];
+function mostrarTela(id: string) {
+  telas.forEach((t) => { $(t).hidden = t !== id; });
+  $('pq-progresso').hidden = id !== 'pq-form';
+  const t = $(id);
+  if (!reduzir) { t.classList.remove('pq-entra'); void t.offsetWidth; t.classList.add('pq-entra'); }
+  const foco = t.querySelector<HTMLElement>('h1[tabindex], legend, h2');
+  window.scrollTo({ top: 0 });
+  if (id !== 'pq-intro') (foco ?? t).focus?.({ preventScroll: true });
+}
+
+/* ---------- Perguntas ---------- */
+const etiqueta = (n: number) => `Pergunta ${n} de ${TOTAL}`;
+const rotuloCurto = (n: number) => `Pergunta ${n}`;
+function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apoio?: string) {
+  const lg = el('legend', 'pq-pergunta'); lg.tabIndex = -1;
+  lg.append(el('span', 'pq-num', eyebrow), el('span', 'pq-titulo', titulo));
+  fs.appendChild(lg);
+  if (apoio) { const a = el('p', 'pq-apoio', apoio); a.id = fs.id + '-apoio'; fs.setAttribute('aria-describedby', a.id); fs.appendChild(a); }
+}
+const erroBox = (id: string) => { const e = el('p', 'pq-erro'); e.id = id + '-erro'; e.setAttribute('role', 'alert'); e.hidden = true; return e; };
+
+function opcaoCartao(tipo: 'radio' | 'checkbox', nome: string, o: Opcao, marcado: boolean) {
+  const lab = el('label', 'pq-op' + (o.exclusiva ? ' pq-op-excl' : ''));
+  const inp = el('input'); inp.type = tipo; inp.name = nome; inp.value = o.id; inp.checked = marcado;
+  const marca = el('span', 'pq-marca-op'); marca.setAttribute('aria-hidden', 'true');
+  marca.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+  lab.append(inp, marca, el('span', 'pq-op-txt', o.texto));
+  return { lab, inp };
+}
+
+function montarPergunta(p: Pergunta, i: number) {
+  const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-' + p.id; fs.dataset.etapa = String(i);
+  cabecalho(fs, rotuloCurto(i + 1), p.texto, p.apoio);
+  const erro = erroBox(fs.id);
+  if (p.tipo === 'unica') {
+    const lista = el('div', 'pq-ops');
+    p.opcoes!.forEach((o) => {
+      const { lab, inp } = opcaoCartao('radio', p.id, o, E.r[p.id] === o.id);
+      inp.addEventListener('change', () => { E.r[p.id] = o.id; limparErro(fs); salvar(); });
+      lista.appendChild(lab);
+    });
+    fs.append(lista);
+  } else if (p.tipo === 'multipla') {
+    const atual = (): Multi => (E.r[p.id] as Multi) ?? { opcoes: [] };
+    const lista = el('div', 'pq-ops');
+    const contador = el('p', 'pq-contador'); contador.setAttribute('aria-live', 'polite');
+    const inputs: HTMLInputElement[] = [];
+    let campoOutro: HTMLInputElement | null = null, caixaOutro: HTMLElement | null = null;
+    const sincronizar = () => {
+      const sel = atual().opcoes;
+      inputs.forEach((x) => {
+        x.checked = sel.includes(x.value);
+        // no limite, as demais ficam travadas; a exclusiva continua livre (ela substitui as escolhas)
+        const cheio = !!p.max && sel.length >= p.max && !x.checked && !p.opcoes!.find((o) => o.id === x.value)?.exclusiva;
+        x.disabled = cheio; x.closest('label')!.classList.toggle('pq-op-off', cheio);
+      });
+      if (caixaOutro) caixaOutro.hidden = !sel.includes(p.opcoes!.find((o) => o.outro)!.id);
+      contador.textContent = p.max ? `${sel.length} de ${p.max} escolhidas` + (sel.length >= p.max ? '. Para trocar, desmarque uma opção.' : '') : (sel.length ? `${sel.length} ${sel.length === 1 ? 'escolhida' : 'escolhidas'}` : '');
+    };
+    p.opcoes!.forEach((o) => {
+      const { lab, inp } = opcaoCartao('checkbox', p.id, o, atual().opcoes.includes(o.id));
+      inputs.push(inp);
+      inp.addEventListener('change', () => {
+        let sel = [...atual().opcoes];
+        if (inp.checked) {
+          // opção exclusiva ("Nenhuma..."): fica sozinha; marcar outra tira a exclusiva
+          if (o.exclusiva) sel = [o.id];
+          else sel = [...sel.filter((s) => !p.opcoes!.find((x) => x.id === s)?.exclusiva), o.id];
+        } else sel = sel.filter((s) => s !== o.id);
+        const m: Multi = { opcoes: sel }; if (atual().outro && sel.some((s) => p.opcoes!.find((x) => x.id === s)?.outro)) m.outro = atual().outro;
+        E.r[p.id] = m; salvar(); limparErro(fs); sincronizar();
+        if (o.outro && inp.checked) requestAnimationFrame(() => campoOutro?.focus());
+      });
+      lista.appendChild(lab);
+      if (o.outro) {
+        caixaOutro = el('div', 'pq-outro');
+        const id = fs.id + '-outro';
+        const l = el('label', 'pq-rotulo', 'Qual?'); l.htmlFor = id;
+        campoOutro = el('input'); campoOutro.type = 'text'; campoOutro.id = id; campoOutro.maxLength = 200; campoOutro.placeholder = 'Conte para a gente';
+        campoOutro.value = atual().outro ?? '';
+        campoOutro.addEventListener('input', () => { E.r[p.id] = { ...atual(), outro: campoOutro!.value }; salvar(); limparErro(fs); });
+        caixaOutro.append(l, campoOutro);
+        lista.appendChild(caixaOutro);
+      }
+    });
+    fs.append(lista, contador);
+    sincronizar();
+  } else if (p.tipo === 'escala') {
+    const grade = el('div', 'pq-escala');
+    for (let n = p.min ?? 0; n <= (p.max ?? 10); n++) {
+      const lab = el('label', 'pq-nota');
+      const inp = el('input'); inp.type = 'radio'; inp.name = p.id; inp.value = String(n); inp.checked = E.r[p.id] === n;
+      inp.setAttribute('aria-label', n === p.min ? `${n}, ${p.rotulo_min}` : n === p.max ? `${n}, ${p.rotulo_max}` : String(n));
+      inp.addEventListener('change', () => { E.r[p.id] = n; salvar(); limparErro(fs); });
+      lab.append(inp, el('span', undefined, String(n)));
+      grade.appendChild(lab);
+    }
+    const extremos = el('div', 'pq-extremos'); extremos.setAttribute('aria-hidden', 'true');
+    extremos.append(el('span', undefined, `0 = ${p.rotulo_min}`), el('span', undefined, `10 = ${p.rotulo_max}`));
+    fs.append(grade, extremos);
+  } else {
+    const linhas = el('div', 'pq-matriz');
+    const atual = () => (E.r[p.id] as Record<string, string>) ?? {};
+    p.linhas!.forEach((l) => {
+      const sub = el('fieldset', 'pq-linha'); sub.dataset.linha = l.id;
+      sub.appendChild(el('legend', undefined, l.texto));
+      const chips = el('div', 'pq-chips');
+      p.colunas!.forEach((c) => {
+        const lab = el('label', 'pq-chip' + (c.id === 'na' ? ' pq-chip-na' : ''));
+        const inp = el('input'); inp.type = 'radio'; inp.name = `${p.id}-${l.id}`; inp.value = c.id; inp.checked = atual()[l.id] === c.id;
+        inp.addEventListener('change', () => { E.r[p.id] = { ...atual(), [l.id]: c.id }; salvar(); sub.classList.remove('pq-faltando'); if (p.linhas!.every((x) => atual()[x.id])) limparErro(fs); });
+        lab.append(inp, el('span', undefined, c.texto));
+        chips.appendChild(lab);
+      });
+      sub.appendChild(chips); linhas.appendChild(sub);
+    });
+    fs.append(linhas);
+  }
+  fs.appendChild(erro);
+  return fs;
+}
+
+function montarRelato() {
+  const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-relato'; fs.dataset.etapa = String(ETAPA_RELATO);
+  cabecalho(fs, 'Para finalizar · opcional', 'Tem alguma experiência de compra que gostaria de compartilhar?',
+    'Pode ser uma situação positiva, uma dificuldade ou algo que marcou você ao procurar ou comprar roupas e acessórios.');
+  const lab = el('label', 'pq-rotulo pq-oculto', 'Sua experiência (opcional)'); lab.htmlFor = 'pq-relato-txt';
+  const ta = el('textarea'); ta.id = 'pq-relato-txt'; ta.rows = 6; ta.maxLength = RELATO_MAX; ta.placeholder = 'Conte sua experiência, se quiser...'; ta.value = E.relato;
+  const cont = el('p', 'pq-contador pq-contador-dir'); cont.id = 'pq-relato-cont';
+  ta.setAttribute('aria-describedby', 'pq-relato-apoio pq-relato-cont');
+  const atualizar = () => { cont.textContent = `${ta.value.length.toLocaleString('pt-BR')}/${RELATO_MAX.toLocaleString('pt-BR')}`; };
+  ta.addEventListener('input', () => { E.relato = ta.value; salvar(); atualizar(); });
+  atualizar();
+  fs.append(lab, ta, cont);
+  return fs;
+}
+
+function mascaraWhats(v: string) {
+  const d = v.replace(/\D/g, '').slice(0, 11);
+  if (d.length <= 2) return d ? `(${d}` : '';
+  const dd = d.slice(0, 2), r = d.slice(2);
+  if (r.length <= 4) return `(${dd}) ${r}`;
+  if (d.length <= 10) return `(${dd}) ${r.slice(0, 4)}-${r.slice(4)}`;
+  return `(${dd}) ${r.slice(0, 5)}-${r.slice(5)}`;
+}
+const whatsValido = (v: string) => /^[1-9][1-9](9\d{8}|[2-5]\d{7})$/.test(v.replace(/\D/g, ''));
+const emailValido = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+
+function campo(id: string, rotulo: string, tipo: string, valor: string, ph: string, extra: (i: HTMLInputElement) => void) {
+  const q = el('div', 'pq-campo'); q.id = id + '-q';
+  const l = el('label', 'pq-rotulo'); l.htmlFor = id; l.append(rotulo, el('span', 'pq-obrig', ' *'));
+  const i = el('input'); i.id = id; i.type = tipo; i.value = valor; i.placeholder = ph; i.required = true;
+  const err = el('p', 'pq-erro'); err.id = id + '-erro'; err.hidden = true;
+  i.setAttribute('aria-describedby', err.id);
+  extra(i);
+  q.append(l, i, err);
+  return q;
+}
+
+function montarNovidades() {
+  const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-novidades'; fs.dataset.etapa = String(ETAPA_NOV);
+  cabecalho(fs, 'Novidades · opcional', 'Quer acompanhar o que vem por aí?',
+    'Estamos desenvolvendo uma novidade para o universo da moda em Curitiba. Gostaria de receber um aviso quando ela for lançada?');
+  const lista = el('div', 'pq-ops');
+  const contato = el('div', 'pq-contato'); contato.id = 'pq-contato';
+  const opts: [Estado['nov'], string][] = [['sim', 'Sim, quero receber novidades sobre o lançamento.'], ['nao', 'Não, obrigado(a).']];
+  opts.forEach(([v, t]) => {
+    const { lab, inp } = opcaoCartao('radio', 'novidades', { id: v, texto: t }, E.nov === v);
+    inp.addEventListener('change', () => {
+      E.nov = v;
+      // mudou de "Sim" para "Não": limpa o contato ainda não enviado
+      if (v === 'nao') { E.nome = ''; E.email = ''; E.whats = ''; E.aceite = false; contato.querySelectorAll('input').forEach((x) => { if (x.type === 'checkbox') x.checked = false; else x.value = ''; }); limparContato(); }
+      salvar(); limparErro(fs); mostrarContato(true); atualizarBotao();
+    });
+    lista.appendChild(lab);
+  });
+  contato.append(
+    el('p', 'pq-contato-intro', 'Seus dados de contato ficam guardados separados das respostas da pesquisa e só serão usados para avisar sobre o lançamento.'),
+    campo('pq-nome', 'Seu nome', 'text', E.nome, 'Como podemos chamar você?', (i) => { i.autocomplete = 'name'; i.maxLength = 120; i.addEventListener('input', () => { E.nome = i.value; salvar(); erroCampo(i, ''); }); }),
+    campo('pq-email', 'E-mail', 'email', E.email, 'seuemail@exemplo.com', (i) => { i.autocomplete = 'email'; i.inputMode = 'email'; i.maxLength = 254; i.spellcheck = false; i.addEventListener('input', () => { E.email = i.value; salvar(); erroCampo(i, ''); }); }),
+    campo('pq-whats', 'WhatsApp com DDD', 'tel', mascaraWhats(E.whats), '(41) 99999-9999', (i) => { i.autocomplete = 'tel-national'; i.inputMode = 'tel'; i.addEventListener('input', () => { i.value = mascaraWhats(i.value); E.whats = i.value; salvar(); erroCampo(i, ''); }); }),
+  );
+  const aceite = el('div', 'pq-campo pq-aceite-q'); aceite.id = 'pq-aceite-q';
+  const lab = el('label', 'pq-aceite');
+  const cb = el('input'); cb.type = 'checkbox'; cb.id = 'pq-aceite'; cb.checked = E.aceite;
+  const txt = el('span');
+  txt.append('Autorizo o Dani Moscatelli — Experience Design Studio a utilizar meus dados de contato para me enviar informações sobre o lançamento deste projeto, conforme a ');
+  const a = el('a', undefined, 'Política de Privacidade'); a.href = '/privacidade/#pesquisa-moda'; a.dataset.politica = '';
+  txt.append(a, '.');
+  lab.append(cb, el('span', 'pq-caixa'), txt);
+  const errA = el('p', 'pq-erro'); errA.id = 'pq-aceite-erro'; errA.hidden = true; cb.setAttribute('aria-describedby', errA.id);
+  cb.addEventListener('change', () => { E.aceite = cb.checked; salvar(); erroCampo(cb, ''); });
+  aceite.append(lab, errA);
+  contato.appendChild(aceite);
+  fs.append(lista, contato, erroBox(fs.id));
+  return fs;
+}
+
+function mostrarContato(animar = false) {
+  const c = $('pq-contato'); if (!c) return;
+  const abrir = E.nov === 'sim';
+  if (abrir === !c.hidden && c.dataset.pronto) return;
+  c.dataset.pronto = '1';
+  c.hidden = !abrir;
+  if (abrir && animar && !reduzir) { c.classList.remove('pq-abre'); void c.offsetWidth; c.classList.add('pq-abre'); }
+}
+function limparContato() { ['pq-nome', 'pq-email', 'pq-whats', 'pq-aceite'].forEach((id) => { const i = $<HTMLInputElement>(id); if (i) erroCampo(i, ''); }); }
+function erroCampo(i: HTMLInputElement, msg: string) {
+  const e = $(i.id + '-erro'); if (!e) return;
+  e.textContent = msg; e.hidden = !msg;
+  i.setAttribute('aria-invalid', msg ? 'true' : 'false');
+  i.closest('.pq-campo')?.classList.toggle('pq-invalido', !!msg);
+}
+
+/* ---------- Validação de cada etapa ---------- */
+function mostrarErro(fs: HTMLElement, msg: string) {
+  const e = $(fs.id + '-erro'); e.textContent = msg; e.hidden = false;
+  fs.classList.add('pq-invalido'); fs.setAttribute('aria-invalid', 'true');
+  if (!reduzir) { fs.classList.remove('pq-treme'); void fs.offsetWidth; fs.classList.add('pq-treme'); }
+}
+function limparErro(fs: HTMLElement) {
+  const e = $(fs.id + '-erro'); if (e) { e.hidden = true; e.textContent = ''; }
+  fs.classList.remove('pq-invalido'); fs.removeAttribute('aria-invalid');
+}
+function validarEtapa(i: number): boolean {
+  const fs = $('pq-etapas').querySelector<HTMLElement>(`[data-etapa="${i}"]`)!;
+  if (i < TOTAL) {
+    const p = PERGUNTAS[i], v = E.r[p.id];
+    if (p.tipo === 'unica' && typeof v !== 'string') { mostrarErro(fs, 'Escolha uma opção para continuar.'); return false; }
+    if (p.tipo === 'escala' && typeof v !== 'number') { mostrarErro(fs, 'Escolha uma nota de 0 a 10 para continuar.'); return false; }
+    if (p.tipo === 'matriz') {
+      const r = (v as Record<string, string>) ?? {};
+      const faltam = p.linhas!.filter((l) => !r[l.id]);
+      fs.querySelectorAll<HTMLElement>('.pq-linha').forEach((x) => x.classList.toggle('pq-faltando', faltam.some((l) => l.id === x.dataset.linha)));
+      if (faltam.length) { mostrarErro(fs, faltam.length === 1 ? `Falta responder: ${faltam[0].texto}.` : `Faltam ${faltam.length} características para responder.`); return false; }
+    }
+    if (p.tipo === 'multipla') {
+      const m = (v as Multi) ?? { opcoes: [] };
+      if (!m.opcoes.length) { mostrarErro(fs, 'Escolha pelo menos uma opção para continuar.'); return false; }
+      const outro = p.opcoes!.find((o) => o.outro);
+      if (outro && m.opcoes.includes(outro.id) && !(m.outro ?? '').trim()) { mostrarErro(fs, 'Conte qual é a outra opção ou desmarque "' + outro.texto.replace(/ \(especifique\)/, '') + '".'); $<HTMLInputElement>(fs.id + '-outro')?.focus(); return false; }
+    }
+    return true;
+  }
+  if (i === ETAPA_RELATO) return true;
+  // novidades
+  if (!E.nov) { mostrarErro(fs, 'Escolha uma das opções para concluir.'); return false; }
+  if (E.nov === 'nao') return true;
+  const checks: [string, string][] = [
+    ['pq-nome', E.nome.trim() ? '' : 'Informe como podemos chamar você.'],
+    ['pq-email', !E.email.trim() ? 'Informe o seu e-mail.' : emailValido(E.email) ? '' : 'Confira o e-mail. Exemplo: seuemail@exemplo.com'],
+    ['pq-whats', !E.whats.trim() ? 'Informe o seu WhatsApp com DDD.' : whatsValido(E.whats) ? '' : 'Confira o número. Use o DDD e o número, como (41) 99999-9999.'],
+    ['pq-aceite', E.aceite ? '' : 'Para receber novidades, marque a autorização.'],
+  ];
+  let primeiro: HTMLInputElement | null = null;
+  checks.forEach(([id, msg]) => { const i = $<HTMLInputElement>(id); erroCampo(i, msg); if (msg && !primeiro) primeiro = i; });
+  if (primeiro) { (primeiro as HTMLInputElement).focus(); return false; }
+  return true;
+}
+
+/* ---------- Navegação ---------- */
+const encerraEm = () => {
+  for (const p of PERGUNTAS.slice(0, 2)) { const o = p.opcoes?.find((x) => x.id === E.r[p.id]); if (o?.encerra) return p.id; }
+  return null;
+};
+function atualizarBotao() {
+  const b = $('pq-continuar'), t = b.querySelector('.pq-btn-txt')!;
+  const i = E.etapa, p = PERGUNTAS[i];
+  const enc = p && p.opcoes?.find((o) => o.id === E.r[p.id])?.encerra;
+  t.textContent = enviando ? 'Enviando…' : enc ? 'Concluir' : i === ETAPA_NOV ? 'Concluir participação' : i === ETAPA_RELATO && !E.relato.trim() ? 'Pular' : 'Continuar';
+}
+function irPara(i: number, voltando = false) {
+  E.etapa = i; salvar();
+  $('pq-erro-geral').hidden = true;
+  const etapas = [...$('pq-etapas').children] as HTMLElement[];
+  etapas.forEach((x) => { x.hidden = Number(x.dataset.etapa) !== i; });
+  const atual = etapas.find((x) => Number(x.dataset.etapa) === i)!;
+  if (!reduzir) { atual.classList.remove('pq-entra', 'pq-entra-volta'); void atual.offsetWidth; atual.classList.add(voltando ? 'pq-entra-volta' : 'pq-entra'); }
+  // progresso: as 10 perguntas enchem a barra; as etapas extras mostram a barra cheia
+  const pct = i < TOTAL ? Math.round((i / TOTAL) * 100) : 100;
+  $('pq-barra').style.width = pct + '%';
+  $('pq-barra').parentElement!.setAttribute('aria-valuenow', String(pct));
+  $('pq-etapa').textContent = i < TOTAL ? etiqueta(i + 1) : i === ETAPA_RELATO ? 'Quase lá · etapa opcional' : 'Última etapa';
+  if (i === ETAPA_NOV) mostrarContato();
+  atualizarBotao();
+  window.scrollTo({ top: 0, behavior: reduzir ? 'auto' : 'smooth' });
+  atual.querySelector<HTMLElement>('legend')?.focus({ preventScroll: true });
+}
+
+async function enviar(final: boolean) {
+  if (enviando) return;
+  enviando = true; atualizarBotao();
+  const b = $<HTMLButtonElement>('pq-continuar'); b.disabled = true; b.classList.add('pq-carregando'); $<HTMLButtonElement>('pq-voltar').disabled = true;
+  const erroGeral = $('pq-erro-geral'); erroGeral.hidden = true;
+  const enc = encerraEm();
+  const respostas: Record<string, unknown> = {};
+  for (const p of PERGUNTAS) { respostas[p.id] = E.r[p.id]; if (p.id === enc) break; }
+  const corpo: Record<string, unknown> = { acao: 'enviar', pesquisa: Q.slug, envio_id: E.envio, respostas, site: $<HTMLInputElement>('pq-site').value };
+  if (final) {
+    corpo.relato = E.relato;
+    corpo.novidades = E.nov === 'sim'
+      ? { quer: true, id: E.contatoId, nome: E.nome, email: E.email, whatsapp: E.whats, consentimento: E.aceite }
+      : { quer: false };
+  }
+  try {
+    const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpo) });
+    const out = await res.json().catch(() => ({}));
+    if (res.status === 410) { concluir('fora'); return; }
+    if (!res.ok || !out.ok) throw new Error(out.error || 'Não foi possível enviar agora.');
+    concluir(enc ? 'encerrada' : 'obrigada', E.nov === 'sim');
+  } catch (e) {
+    erroGeral.textContent = (e instanceof Error && e.message && !/fetch|network/i.test(e.message) ? e.message : 'Não foi possível enviar. Confira sua conexão.') + ' Suas respostas continuam aqui; toque no botão para tentar de novo.';
+    erroGeral.hidden = false;
+  } finally {
+    enviando = false; b.disabled = false; b.classList.remove('pq-carregando'); $<HTMLButtonElement>('pq-voltar').disabled = false; atualizarBotao();
+  }
+}
+
+function concluir(tipo: 'obrigada' | 'encerrada' | 'fora', comContato = false) {
+  // dados salvos no servidor: guarda que esta participação terminou e apaga o rascunho
+  if (tipo !== 'fora') guardar(CHAVE_FIM, { tipo, comContato, em: Date.now() }, true);
+  try { sessionStorage.removeItem(CHAVE_RASCUNHO); } catch { /* sem armazenamento */ }
+  if (tipo === 'obrigada') {
+    $('pq-obrigada-msg').textContent = comContato
+      ? 'Quando tivermos novidades sobre o lançamento, entraremos em contato pelos dados informados.'
+      : 'Obrigada por compartilhar um pouquinho da sua experiência com a gente!';
+    $('pq-obrigada-dados').hidden = !comContato;
+    mostrarTela('pq-obrigada');
+  } else mostrarTela(tipo === 'fora' ? 'pq-fora-do-ar' : 'pq-encerrada');
+}
+
+/* ---------- Política de privacidade em janela ---------- */
+function politica() {
+  const dlg = $<HTMLDialogElement>('pq-politica');
+  let carregada = false;
+  document.addEventListener('click', async (e) => {
+    const a = (e.target as Element).closest<HTMLAnchorElement>('[data-politica]');
+    if (!a || typeof dlg.showModal !== 'function') return;
+    e.preventDefault();
+    dlg.showModal();
+    if (!carregada) {
+      try {
+        const html = await fetch('/privacidade/').then((r) => { if (!r.ok) throw new Error(); return r.text(); });
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const art = doc.querySelector('article') ?? doc.querySelector('main');
+        art?.querySelectorAll('script').forEach((x) => x.remove());
+        art?.querySelectorAll('[data-preferencias-cookies]').forEach((x) => x.removeAttribute('data-preferencias-cookies'));
+        $('pq-politica-corpo').replaceChildren(...(art ? [...art.children] : [el('p', undefined, 'Não foi possível carregar.')]));
+        carregada = true;
+      } catch { $('pq-politica-corpo').replaceChildren(el('p', undefined, 'Não foi possível carregar a política agora. Ela está em danimoscatelli.com.br/privacidade.')); }
+    }
+    const sec = $('pq-politica-corpo').querySelector('#pesquisa-moda');
+    if (sec) sec.scrollIntoView({ block: 'start' }); else $('pq-politica-corpo').scrollTop = 0;
+  });
+  $('pq-politica-fechar').addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+}
+
+/* ---------- Início ---------- */
+function iniciar() {
+  politica();
+  const etapas = $('pq-etapas');
+  PERGUNTAS.forEach((p, i) => etapas.appendChild(montarPergunta(p, i)));
+  etapas.append(montarRelato(), montarNovidades());
+  [...etapas.children].forEach((x) => { (x as HTMLElement).hidden = true; });
+
+  // escolhas que encerram mudam o texto do botão
+  etapas.addEventListener('change', atualizarBotao);
+  etapas.addEventListener('input', () => { if (E.etapa === ETAPA_RELATO) atualizarBotao(); });
+
+  $('pq-comecar').addEventListener('click', () => { mostrarTela('pq-form'); irPara(E.etapa >= 0 ? E.etapa : 0); });
+  $('pq-voltar').addEventListener('click', () => {
+    if (enviando) return;
+    // da primeira pergunta, o Voltar leva só até a apresentação
+    if (E.etapa <= 0) { E.etapa = -1; salvar(); mostrarTela('pq-intro'); $('pq-comecar').focus(); return; }
+    irPara(E.etapa - 1, true);
+  });
+  $('pq-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (enviando || !validarEtapa(E.etapa)) return;
+    const p = PERGUNTAS[E.etapa];
+    if (p?.opcoes?.find((o) => o.id === E.r[p.id])?.encerra) return void enviar(false);
+    if (E.etapa === ETAPA_NOV) return void enviar(true);
+    irPara(E.etapa + 1);
+  });
+
+  // participação já concluída neste aparelho: mostra a tela final, sem novo envio
+  const fim = ler<{ tipo: 'obrigada' | 'encerrada'; comContato: boolean }>(CHAVE_FIM, true);
+  if (fim) { concluir(fim.tipo, fim.comContato); return; }
+  if (E.etapa >= 0) { mostrarTela('pq-form'); irPara(Math.min(E.etapa, ETAPA_NOV)); }
+
+  // pesquisa fora do ar
+  fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ acao: 'status', pesquisa: Q.slug }) })
+    .then((r) => r.json()).then((d) => { if (d && d.ativa === false) concluir('fora'); }).catch(() => { /* sem conexão: o envio avisa depois */ });
+}
+iniciar();

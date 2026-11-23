@@ -391,6 +391,19 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 
 ---
 
+## D-033 · 23/11/2026 · Pesquisa pública Moda em Curitiba (site)
+
+- **Origem:** dona do produto: pesquisa aberta ao público, no estilo do cadastro de parceiros, com visão analítica no painel (Projetos > Pesquisas), link para compartilhar, botão para tirar do ar e notificação a cada resposta. Especificação da experiência e questionário revisado (10 perguntas) enviados por ela.
+- **Decisão:**
+  - respostas e contatos de quem pede novidades em tabelas separadas (`pesquisa_respostas` e `pesquisa_interessados`), com identificadores diferentes e sem ligação entre si; contatos nunca aparecem nos gráficos;
+  - participações encerradas pelas perguntas 1 e 2 também são gravadas (só com as respostas até ali), para medir quem ficou fora do público; perguntas 3 a 10 analisadas só nas completas;
+  - um único arquivo de perguntas (`supabase/functions/pesquisa/questionario.json`) alimenta a página, a validação no servidor e o painel;
+  - destaques do painel calculados dos próprios números, sem IA; relato guardado exatamente como enviado;
+  - consentimento salvo com data, horário, versão e texto; exclusão e cancelamento pelo e-mail de contato e pelo botão Excluir no painel.
+- **Trade-offs:** o identificador do envio evita duplicar a mesma participação (atualizar a página, tocar duas vezes), mas não impede que a mesma pessoa responda de novo em outro aparelho; o tempo de 3 a 5 minutos ainda precisa ser validado em teste real.
+
+---
+
 ## Decisões pendentes
 
 

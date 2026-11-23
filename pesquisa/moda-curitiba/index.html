@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Vamos conversar sobre moda em Curitiba? | Dani Moscatelli</title>
+<meta name="description" content="Pesquisa sobre hábitos e experiências de compra de roupas e acessórios em Curitiba, conduzida pelo Dani Moscatelli — Experience Design Studio.">
+<link rel="canonical" href="https://www.danimoscatelli.com.br/pesquisa/moda-curitiba/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Dani Moscatelli | Experience Design Studio">
+<meta property="og:title" content="Vamos conversar sobre moda em Curitiba?">
+<meta property="og:description" content="Conte como são suas experiências ao procurar e comprar roupas e acessórios em Curitiba. Leva de 3 a 5 minutos.">
+<meta property="og:url" content="https://www.danimoscatelli.com.br/pesquisa/moda-curitiba/">
+<meta property="og:image" content="https://www.danimoscatelli.com.br/compartilhar.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Logo Dani Moscatelli | Experience Design Studio">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F6F7FA">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script type="module" src="/src/pesquisa-moda.ts"></script>
+<script src="/analytics.js" defer></script>
+</head>
+<body>
+<a class="pq-pular" href="#pq-conteudo">Pular para o conteúdo</a>
+<header class="pq-topo">
+  <div class="pq-marca">
+    <img src="/favicon-dm.png" alt="" width="36" height="36">
+    <span><strong>Dani Moscatelli</strong><small>Experience Design Studio</small></span>
+  </div>
+  <div class="pq-progresso" id="pq-progresso" hidden>
+    <div class="pq-barra" role="progressbar" aria-label="Progresso da pesquisa" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="pq-barra"></span></div>
+    <p id="pq-etapa" aria-live="polite"></p>
+  </div>
+</header>
+
+<main id="pq-conteudo" class="pq-main" tabindex="-1">
+  <noscript><p class="pq-aviso">Para responder a pesquisa, ative o JavaScript do seu navegador.</p></noscript>
+
+  <!-- Apresentação -->
+  <section class="pq-tela pq-intro" id="pq-intro" aria-labelledby="pq-intro-titulo">
+    <p class="pq-selo"><span aria-hidden="true"></span>Pesquisa</p>
+    <h1 id="pq-intro-titulo">Vamos conversar sobre <em>moda em Curitiba</em>?</h1>
+    <div class="pq-texto">
+      <p class="pq-lead">Encontrar uma roupa que combine com seu estilo nem sempre é tão simples.</p>
+      <p>Queremos conhecer suas experiências ao procurar e comprar roupas e acessórios em Curitiba.</p>
+      <p>Esta pesquisa faz parte de um projeto de inovação conduzido pelo Dani Moscatelli — Experience Design Studio.</p>
+      <p>Sua participação vai nos ajudar a compreender melhor os hábitos, as preferências e os desafios de quem consome moda na cidade.</p>
+    </div>
+    <ul class="pq-infos" aria-label="Sobre a pesquisa">
+      <li><span class="pq-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span><strong>Pesquisa rápida</strong>Aproximadamente 3 a 5 minutos.</span></li>
+      <li><span class="pq-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span><span><strong>Participação voluntária</strong>Você pode interromper quando quiser.</span></li>
+      <li><span class="pq-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><span><strong>Privacidade</strong>Suas respostas serão analisadas em conjunto, sem identificação individual nos resultados divulgados.</span></li>
+    </ul>
+    <p class="pq-fecho">Não existem respostas certas ou erradas. Queremos conhecer sua experiência!</p>
+    <div class="pq-acoes-intro">
+      <button type="button" class="pq-btn pq-btn-primario" id="pq-comecar">Começar pesquisa<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+      <p class="pq-privacidade">Saiba como tratamos os dados na <a href="/privacidade/#pesquisa-moda" data-politica>Política de Privacidade</a>.</p>
+    </div>
+  </section>
+
+  <!-- Perguntas e etapas finais (montadas pelo script) -->
+  <form class="pq-tela" id="pq-form" novalidate hidden>
+    <div id="pq-etapas"></div>
+    <label class="pq-isca" aria-hidden="true">Não preencha este campo<input type="text" name="site" id="pq-site" tabindex="-1" autocomplete="off"></label>
+    <p class="pq-erro-geral" id="pq-erro-geral" role="alert" hidden></p>
+    <div class="pq-nav" id="pq-nav">
+      <button type="button" class="pq-btn pq-btn-voltar" id="pq-voltar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Voltar</button>
+      <button type="submit" class="pq-btn pq-btn-primario" id="pq-continuar"><span class="pq-btn-txt">Continuar</span><svg class="pq-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+    </div>
+  </form>
+
+  <!-- Telas finais -->
+  <section class="pq-tela pq-fim" id="pq-obrigada" hidden aria-labelledby="pq-obrigada-titulo">
+    <div class="pq-check" aria-hidden="true"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27l7 7 15-16"/></svg></div>
+    <h1 id="pq-obrigada-titulo" tabindex="-1">Obrigada por participar! ❤️</h1>
+    <p>Sua experiência é muito importante para compreendermos melhor como as pessoas procuram e compram moda em Curitiba.</p>
+    <p>Cada resposta contribui para este projeto de inovação.</p>
+    <p class="pq-destaque" id="pq-obrigada-msg"></p>
+    <p class="pq-mini" id="pq-obrigada-dados" hidden>Para cancelar os avisos ou pedir a exclusão dos seus dados de contato, escreva para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
+    <div class="pq-assinatura"><strong>Dani Moscatelli</strong><span>Experience Design Studio</span></div>
+  </section>
+
+  <section class="pq-tela pq-fim" id="pq-encerrada" hidden aria-labelledby="pq-encerrada-titulo">
+    <h1 id="pq-encerrada-titulo" tabindex="-1">Obrigada pelo seu interesse!</h1>
+    <p>Neste momento, a pesquisa é direcionada a pessoas que moram em Curitiba e compraram roupas ou acessórios este ano.</p>
+    <p>Agradecemos por dedicar um pouquinho do seu tempo!</p>
+    <div class="pq-assinatura"><strong>Dani Moscatelli</strong><span>Experience Design Studio</span></div>
+  </section>
+
+  <section class="pq-tela pq-fim" id="pq-fora-do-ar" hidden aria-labelledby="pq-fora-titulo">
+    <h1 id="pq-fora-titulo" tabindex="-1">Esta pesquisa não está recebendo respostas</h1>
+    <p>O período de participação foi encerrado. Obrigada pelo interesse!</p>
+    <div class="pq-assinatura"><strong>Dani Moscatelli</strong><span>Experience Design Studio</span></div>
+  </section>
+</main>
+
+<footer class="pq-rodape">
+  <p>© 2026 Dani Moscatelli • Experience Design Studio · <a href="/privacidade/#pesquisa-moda" data-politica>Política de Privacidade</a></p>
+</footer>
+
+<dialog class="pq-dlg" id="pq-politica" aria-labelledby="pq-politica-titulo">
+  <div class="pq-dlg-topo"><h2 id="pq-politica-titulo">Política de Privacidade</h2><button type="button" id="pq-politica-fechar" aria-label="Fechar">×</button></div>
+  <div class="pq-dlg-corpo" id="pq-politica-corpo"><p>Carregando…</p></div>
+</dialog>
+</body>
+</html>

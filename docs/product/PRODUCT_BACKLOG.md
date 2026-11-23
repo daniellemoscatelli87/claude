@@ -146,4 +146,5 @@ Pedidos da dona do produto para o site do estúdio (área restrita), fora do pro
 
 | ID | Item | Situação |
 |---|---|---|
-| SITE-01 | **Agendar o envio da autorização da galeria** (Parceiros > Autorização da galeria): escolher os destinatários (alguns ou todos), definir data e hora, visualizar o e-mail antes, programar o envio e depois alterar ou excluir o agendamento. Pedido em 16/11/2026. | Implementado em 16/11/2026, aguardando publicação |
+| SITE-01 | **Agendar o envio da autorização da galeria** (Parceiros > Autorização da galeria): escolher os destinatários (alguns ou todos), definir data e hora, visualizar o e-mail antes, programar o envio e depois alterar ou excluir o agendamento. Pedido em 16/11/2026. | Publicado em 16/11/2026 |
+| SITE-02 | **Pesquisa pública Moda em Curitiba + Projetos > Pesquisas** (área restrita): página pública da pesquisa (apresentação, 10 perguntas do questionário revisado, pergunta aberta opcional, convite para novidades com consentimento, telas de encerramento e agradecimento) e painel com gráficos, destaques, relatos, interessados, link para copiar e botão para tirar do ar; notificação no sino a cada nova resposta. Pedido em 23/11/2026. | Implementado em 23/11/2026, aguardando publicação |
