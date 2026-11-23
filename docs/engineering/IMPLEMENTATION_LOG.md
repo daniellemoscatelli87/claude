@@ -602,7 +602,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - "Obrigada pelo seu interesse!";
   - "Neste momento, nossa pesquisa é voltada a quem comprou roupas, calçados ou acessórios neste ano.", com "comprou roupas, calçados ou acessórios neste ano" em negrito vermelho;
   - "Agradecemos por dedicar um tempinho para participar!";
-  - linha divisória e assinatura em texto, sem foto.
+  - linha divisória e assinatura com a foto da Dani, como nas outras telas finais (pedido da dona do produto: todas as telas de conclusão da pesquisa com o avatar, padronizadas).
   - Quem mora fora de Curitiba e da Região Metropolitana continua com a tela de encerramento.
   - Ao recarregar a página, a tela é mantida.
 - **Pergunta 1:** o campo de bairro aparece logo abaixo de "Curitiba" e o de cidade logo abaixo de "Região Metropolitana de Curitiba", recuados e com uma linha vermelha à esquerda.
