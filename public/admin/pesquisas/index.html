@@ -52,6 +52,78 @@
   @media (max-width: 900px) { .pa-graficos { grid-template-columns: 1fr; } }
   .pa-graficos .card { margin: 0; }
   .pa-graficos .largo { grid-column: 1 / -1; }
+  /* Resultados: card padrão por pergunta (mesma altura lado a lado; pé sempre embaixo) */
+  .pa-graficos { align-items: stretch; }
+  .pa-q { display: flex; flex-direction: column; gap: 14px; height: 100%; box-shadow: 0 4px 12px rgba(13,17,25,.04), 0 12px 36px rgba(13,17,25,.04); }
+  .pa-q-cab { display: flex; gap: 12px; align-items: flex-start; }
+  .pa-q-num { flex: none; min-width: 34px; height: 34px; padding: 0 8px; border-radius: 10px; background: var(--red-tint); color: var(--red); font-size: 13px; font-weight: 800; display: grid; place-items: center; }
+  .pa-q-cab h3 { margin: 0; font-size: 15px; line-height: 1.4; }
+  .pa-q-cab .meta { margin: 3px 0 0; font-size: 12px; color: var(--muted); }
+  .pa-leitura { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: var(--slate-tint); }
+  .pa-leitura .ic { flex: none; color: var(--slate); margin-top: 1px; }
+  .pa-leitura .ic svg { width: 18px; height: 18px; display: block; }
+  .pa-leitura p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--dark); }
+  .pa-q-pe { margin-top: auto; display: grid; gap: 4px; padding-top: 4px; border-top: 1px solid var(--track); }
+  .pa-q-pe .pa-tabela, .pa-q-pe .pa-nota, .pa-q-pe .pa-outros { margin-top: 8px; }
+  .pa-q-vazio { flex: 1; display: grid; place-content: center; gap: 4px; min-height: 120px; padding: 20px; text-align: center; border: 1px dashed var(--line); border-radius: 12px; font-size: 13px; color: var(--muted); }
+  .pa-q-vazio b { color: var(--dark); font-size: 14px; }
+  .pa-lb { display: grid; gap: 12px; }
+  .pa-lb-l { display: grid; gap: 6px; border-radius: 8px; }
+  .pa-lb-l:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
+  .pa-lb-r { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .pa-lb-n { font-size: 13.5px; line-height: 1.4; color: var(--dark); }
+  .pa-lb-v { display: inline-flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+  .pa-lb-v b { font-size: 15px; font-weight: 800; color: var(--dark); }
+  .pa-lb-v small { font-size: 12px; color: var(--muted); }
+  .pa-lb-t { position: relative; height: 8px; border-radius: 999px; background: var(--track); overflow: hidden; }
+  .pa-lb-t i { position: absolute; left: 0; top: 0; height: 100%; width: 0; border-radius: inherit; transition: width .8s cubic-bezier(.16, 1, .3, 1); }
+  .pa-lb-f { background: #8E9AB3; }
+  .pa-lb-c { background: #F3C9C9; }
+  .pa-lb-l.top .pa-lb-n { font-weight: 700; }
+  .pa-lb-l.top .pa-lb-f { background: var(--red); }
+  .pa-lb-l.fixo .pa-lb-f { background: #C9CFDB; }
+  .pa-lb-l.fixo .pa-lb-n { color: var(--muted); }
+  .pa-rosca { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 18px 24px; align-items: center; }
+  @media (max-width: 480px) { .pa-rosca { grid-template-columns: 1fr; justify-items: center; } .pa-rosca-l { width: 100%; } }
+  .pa-rosca-g { position: relative; width: 168px; height: 168px; }
+  .pa-rosca-g svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .pa-rosca-f { fill: none; stroke: var(--track); stroke-width: 18; }
+  .pa-rosca-s { fill: none; stroke-width: 18; transition: stroke-dasharray .9s cubic-bezier(.16, 1, .3, 1); }
+  @media (prefers-reduced-motion: reduce) { .pa-rosca-s { transition: none; } }
+  .pa-rosca-m { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 2px; padding: 0 34px; }
+  .pa-rosca-m b { font-size: 28px; line-height: 1; font-weight: 800; letter-spacing: -0.02em; color: var(--dark); }
+  .pa-rosca-m span { font-size: 11.5px; line-height: 1.25; color: var(--muted); }
+  .pa-rosca-l { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .pa-rosca-l li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 13.5px; color: var(--dark); border-radius: 8px; }
+  .pa-rosca-l li:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
+  .pa-rosca-l i { width: 10px; height: 10px; border-radius: 3px; }
+  .pa-rosca-l .v { display: inline-flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+  .pa-rosca-l .v b { font-size: 15px; font-weight: 800; }
+  .pa-rosca-l .v small { font-size: 12px; color: var(--muted); }
+  .pa-heroi-n { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+  .pa-heroi-n b { font-size: 34px; line-height: 1; font-weight: 800; letter-spacing: -0.02em; color: var(--dark); }
+  .pa-heroi-n span { font-size: 13px; color: var(--muted); }
+  .pa-fd { display: grid; gap: 14px; }
+  .pa-fd .pa-legenda { margin: 0; }
+  .pa-fd-l { display: grid; gap: 6px; }
+  .pa-fd-n { font-size: 13.5px; color: var(--dark); }
+  .pa-fd-b { display: flex; gap: 2px; height: 22px; border-radius: 6px; overflow: hidden; background: var(--track); }
+  .pa-fd-b i { display: flex; align-items: center; justify-content: center; flex-grow: 0; flex-basis: 0; min-width: 3px; font-style: normal; transition: flex-grow .8s cubic-bezier(.16, 1, .3, 1); }
+  .pa-fd-b i span { font-size: 11px; font-weight: 800; color: var(--dark); }
+  .pa-fd-b i span.claro { color: #fff; }
+  .pa-fd-b em { align-self: center; padding-left: 8px; font-size: 12px; color: var(--muted); }
+  .pa-fd-l small { font-size: 12px; color: var(--muted); }
+  .pa-bloco { margin-top: 16px; }
+  .pa-bloco h2 { margin: 0 0 4px; }
+  .pa-bloco > .muted { margin: 0 0 14px; font-size: 13px; }
+  .pa-etapas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 760px) { .pa-etapas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .pa-etapa { position: relative; display: grid; gap: 2px; padding: 14px; border-radius: 14px; background: var(--track); }
+  .pa-etapa b { font-size: 26px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; color: var(--dark); }
+  .pa-etapa span { font-size: 13px; font-weight: 700; color: var(--dark); }
+  .pa-etapa small { font-size: 12px; color: var(--muted); }
+  .pa-etapa.fim { background: var(--red-tint); }
+  .pa-etapa.fim b { color: var(--red); }
   .pa-q h3 { margin: 0 0 2px; font-size: 15px; line-height: 1.4; }
   .pa-q .meta { font-size: 12px; color: var(--muted); margin: 0 0 14px; }
   .pa-barras { display: grid; gap: 10px; }
@@ -639,63 +711,211 @@
     const n = contar(p, base);
     return p.opcoes.map((o) => ({ rotulo: o.texto, v: n[o.id] || 0, fixo: !!o.exclusiva || o.id === "nao_informar" }));
   }
+
+  /* ---------- Resultados: um card padrão por pergunta ----------
+     Número + pergunta + quantas responderam; "Leitura" em uma frase; o gráfico; "Ver números" e notas no pé.
+     Todos os gráficos usam a mesma linguagem: rótulo, percentual em destaque e barra fina (a resposta mais escolhida
+     em vermelho, as demais em cinza-azulado, opções como "Prefiro não informar" em cinza claro).
+     Cards lado a lado têm a mesma altura (o pé fica sempre embaixo). Sem respostas: estado vazio, sem gráfico zerado. */
+  const IC_LEITURA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>';
+  function qCard({ num, titulo, base, meta = [], leitura, corpo, rodape = [], largo = false }) {
+    const c = el("section", "card pa-q" + (largo ? " largo" : ""));
+    const cab = el("div", "pa-q-cab");
+    const info = el("div");
+    info.append(el("h3", null, titulo), el("p", "meta", [plural(base, "resposta", "respostas"), ...meta].join(" · ")));
+    cab.append(el("span", "pa-q-num", String(num)), info);
+    c.appendChild(cab);
+    if (!base) {
+      const v = el("div", "pa-q-vazio"); v.append(el("b", null, "Ainda sem respostas aqui"), el("span", null, "O gráfico aparece com a primeira resposta a esta pergunta."));
+      c.appendChild(v); return c;
+    }
+    if (leitura) { const l = el("div", "pa-leitura"); const i = el("span", "ic"); i.innerHTML = IC_LEITURA; const t = el("p"); (Array.isArray(leitura) ? leitura : [leitura]).forEach((x) => t.append(typeof x === "string" ? x : el("strong", null, x.b))); l.append(i, t); c.appendChild(l); }
+    c.appendChild(corpo);
+    const pe = el("div", "pa-q-pe"); rodape.filter(Boolean).forEach((x) => pe.appendChild(x));
+    if (pe.childNodes.length) c.appendChild(pe);
+    return c;
+  }
+  // lista de barras: rótulo, percentual e quantidade; ordem do maior para o menor (ou a ordem natural da escala)
+  function barras(itens, total, { ordem = "valor", camada } = {}) {
+    const ord = ordem === "valor" ? [...itens].sort((a, b) => (a.fixo ? 1 : 0) - (b.fixo ? 1 : 0) || b.v - a.v) : itens;
+    const max = Math.max(0, ...ord.filter((i) => !i.fixo).map((i) => i.v));
+    const lista = el("div", "pa-lb");
+    ord.forEach((it) => {
+      const topo = !it.fixo && max > 0 && it.v === max;
+      const l = el("div", "pa-lb-l" + (topo ? " top" : "") + (it.fixo ? " fixo" : ""));
+      const r = el("div", "pa-lb-r");
+      const val = el("span", "pa-lb-v"); val.append(el("b", null, pct(it.v, total) + "%"), el("small", null, String(it.v)));
+      r.append(el("span", "pa-lb-n", semOutro(it.rotulo)), val);
+      const t = el("div", "pa-lb-t");
+      if (camada && it.v2 != null) { const j = el("i", "pa-lb-c"); j.dataset.w = pct(it.v2, total) + "%"; t.appendChild(j); }
+      const i = el("i", "pa-lb-f"); i.dataset.w = pct(it.v, total) + "%"; t.appendChild(i);
+      l.append(r, t);
+      dica(l, [[`${pct(it.v, total)}%`, `${semOutro(it.rotulo)} · ${plural(it.v, "pessoa", "pessoas")}` + (camada && it.v2 != null ? ` · ${camada}: ${pct(it.v2, total)}%` : "")]]);
+      lista.appendChild(l);
+    });
+    return lista;
+  }
+  // rosca (só para resposta única com poucas opções, que somam 100%): percentual principal no centro e legenda com números
+  const CORES_ROSCA = ["#D44D4D", "#5C6986", "#EDA100", "#8E2F2F", "#A3A9B5", "#C9CFDB"];
+  function rosca(itens, total, { centro, rotCentro } = {}) {
+    const box = el("div", "pa-rosca");
+    const R0 = 52, C = 2 * Math.PI * R0;
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg"); svg.setAttribute("viewBox", "0 0 140 140"); svg.setAttribute("aria-hidden", "true");
+    const fundo = document.createElementNS(svgNS, "circle"); fundo.setAttribute("cx", "70"); fundo.setAttribute("cy", "70"); fundo.setAttribute("r", R0); fundo.setAttribute("class", "pa-rosca-f"); svg.appendChild(fundo);
+    let acum = 0;
+    const comCor = itens.map((it, k) => ({ ...it, cor: it.fixo ? "#C9CFDB" : CORES_ROSCA[k % CORES_ROSCA.length] }));
+    comCor.forEach((it) => {
+      if (!it.v || !total) return;
+      const frac = it.v / total, gap = comCor.filter((x) => x.v).length > 1 ? 2 : 0;
+      const c = document.createElementNS(svgNS, "circle");
+      c.setAttribute("cx", "70"); c.setAttribute("cy", "70"); c.setAttribute("r", R0); c.setAttribute("class", "pa-rosca-s");
+      c.style.stroke = it.cor; c.style.strokeDasharray = `0 ${C}`; c.dataset.arco = `${Math.max(0, frac * C - gap)} ${C}`;
+      c.style.strokeDashoffset = String(-acum * C); acum += frac;
+      svg.appendChild(c);
+    });
+    const meio = el("div", "pa-rosca-m"); meio.append(el("b", null, centro ?? ""), el("span", null, rotCentro ?? ""));
+    const graf = el("div", "pa-rosca-g"); graf.append(svg, meio);
+    const leg = el("ul", "pa-rosca-l");
+    comCor.forEach((it) => { const li = el("li"); const i = el("i"); i.style.background = it.cor; const v = el("span", "v"); v.append(el("b", null, pct(it.v, total) + "%"), el("small", null, String(it.v))); li.append(i, el("span", "n", semOutro(it.rotulo)), v); dica(li, [[`${pct(it.v, total)}%`, `${semOutro(it.rotulo)} · ${plural(it.v, "pessoa", "pessoas")}`]]); leg.appendChild(li); });
+    box.append(graf, leg);
+    return box;
+  }
+  const maisEscolhida = (itens) => [...itens].filter((i) => !i.fixo).sort((a, b) => b.v - a.v)[0];
+  const tabelaItens = (itens, total, cab = "Resposta") => tabela([cab, "Pessoas", "%"], itens.map((it) => [semOutro(it.rotulo), it.v, pct(it.v, total) + "%"]));
+
+  // funil em etapas: quantas pessoas chegaram a cada ponto e quanto passou da etapa anterior
+  function etapas(lista) {
+    const box = el("div", "pa-etapas");
+    lista.forEach((e, k) => {
+      const d = el("div", "pa-etapa" + (k === lista.length - 1 ? " fim" : ""));
+      d.append(el("b", null, String(e.v)), el("span", null, e.rotulo), el("small", null, k ? `${pct(e.v, lista[k - 1].v)}% da etapa anterior` : "ponto de partida"));
+      box.appendChild(d);
+    });
+    return box;
+  }
+  // fácil x difícil: barra 100% com três grupos (fácil, médio, difícil), da característica mais difícil para a mais fácil
+  const GRUPOS = [{ id: "fac", rot: "Fácil", ids: ["1", "2"], cor: "#5C6986" }, { id: "med", rot: "Médio", ids: ["3"], cor: "#D7DCE5" }, { id: "dif", rot: "Difícil", ids: ["4", "5"], cor: "#D44D4D" }];
+  function facilDificil(p, base) {
+    const linhas = p.linhas.map((l) => {
+      const vals = base.map((x) => x.respostas[p.id] && x.respostas[p.id][l.id]).filter(Boolean);
+      const ap = vals.filter((v) => v !== "na");
+      const g = Object.fromEntries(GRUPOS.map((gr) => [gr.id, ap.filter((v) => gr.ids.includes(v)).length]));
+      return { l, n: ap.length, na: vals.length - ap.length, g, cont: Object.fromEntries(["1", "2", "3", "4", "5"].map((k) => [k, ap.filter((v) => v === k).length])) };
+    }).sort((a, b) => pct(b.g.dif, b.n) - pct(a.g.dif, a.n));
+    const box = el("div", "pa-fd");
+    box.appendChild(legenda(GRUPOS.map((gr) => [gr.cor, gr.rot])));
+    linhas.forEach((x) => {
+      const l = el("div", "pa-fd-l");
+      l.appendChild(el("span", "pa-fd-n", x.l.texto));
+      const barra = el("div", "pa-fd-b");
+      GRUPOS.forEach((gr) => { const v = x.g[gr.id]; if (!v) return; const i = el("i"); i.style.background = gr.cor; i.dataset.g = String(v); const pc = pct(v, x.n); if (pc >= 14) i.appendChild(el("span", gr.id === "med" ? "" : "claro", pc + "%")); dica(i, [[`${pc}%`, `${x.l.texto}: ${gr.rot.toLowerCase()}`]]); barra.appendChild(i); });
+      if (!x.n) barra.appendChild(el("em", null, "Só “Não se aplica”"));
+      l.appendChild(barra);
+      l.appendChild(el("small", null, `${pct(x.g.dif, x.n)}% difícil · ${pct(x.g.fac, x.n)}% fácil` + (x.na ? ` · ${x.na} não se aplica` : "")));
+      box.appendChild(l);
+    });
+    box._linhas = linhas;
+    return box;
+  }
+
   function resultados() {
     const box = el("div", "pa-entra");
     if (!R.length) { box.appendChild(vazio("Ainda não há respostas", "Compartilhe o link. Cada participação aparece aqui na hora, e o sino avisa quando chegar uma nova.")); return box; }
     const comp = completasR();
     const perg = Object.fromEntries(Q.perguntas.map((p) => [p.id, p]));
     box.appendChild(cardInsights(comp));
-    const g = el("div", "pa-graficos");
-    // funil: quem entra, quem é do público e quem vai até o fim
-    const fc = el("section", "card pa-q largo");
-    fc.append(el("h3", null, "Funil de participação"), el("p", "meta", "Do envio à resposta completa e ao pedido de novidades"),
-      funil([
-        { rotulo: "Enviaram a pesquisa", v: R.length },
+
+    // funil em etapas
+    const fc = el("section", "card pa-bloco");
+    fc.append(el("h2", null, "Quem chegou até onde"), el("p", "muted", "Da entrada na pesquisa até o pedido de avisos sobre o lançamento."),
+      etapas([
+        { rotulo: "Responderam", v: R.length },
         { rotulo: "Moram em Curitiba", v: R.filter((x) => x.situacao !== "fora_de_curitiba").length },
-        { rotulo: "Compraram este ano (respostas completas)", v: comp.length },
-        { rotulo: "Pediram novidades sobre o lançamento", v: comp.filter((x) => x.quer_novidades).length },
+        { rotulo: "Responderam tudo", v: comp.length },
+        { rotulo: "Querem os avisos", v: comp.filter((x) => x.quer_novidades).length },
       ]));
-    g.appendChild(fc);
-    const b1 = respondeu("q1"), b2 = respondeu("q2");
-    const sim = b1.filter((x) => x.respostas.q1 === "sim").length;
-    g.append(cardPergunta(perg.q1, 1, b1, segmentado([{ rotulo: "Sim", v: sim, cor: COR.red, escuro: true }, { rotulo: "Não", v: b1.length - sim, cor: COR.cinza }], b1.length)));
-    g.append(cardPergunta(perg.q2, 2, b2, perg.q2.tipo === "ranking" ? rankingPilha(perg.q2, b2) : ranking(itensDe(perg.q2, b2), b2.length)));
+    box.appendChild(fc);
+
+    const g = el("div", "pa-graficos");
+    // P1
+    const b1 = respondeu("q1"), sim = b1.filter((x) => x.respostas.q1 === "sim").length;
+    const i1 = [{ rotulo: "Sim, moram em Curitiba", v: sim }, { rotulo: "Não moram em Curitiba", v: b1.length - sim }];
+    g.appendChild(qCard({ num: 1, titulo: perg.q1.texto, base: b1.length, leitura: [{ b: pct(sim, b1.length) + "%" }, " moram em Curitiba e seguiram na pesquisa."], corpo: rosca(i1, b1.length, { centro: pct(sim, b1.length) + "%", rotCentro: "moram em Curitiba" }), rodape: [tabelaItens(i1, b1.length)] }));
+    // P2 (classificação): % em 1º lugar e, mais claro, % entre as 3
+    const b2 = respondeu("q2");
+    if (perg.q2.tipo === "ranking") {
+      const enc = perg.q2.opcoes.find((o) => o.encerra);
+      const nEnc = enc ? b2.filter((x) => valores(x.respostas.q2).includes(enc.id)).length : 0;
+      const it2 = perg.q2.opcoes.filter((o) => !o.encerra).map((o) => ({ rotulo: o.texto, v: b2.filter((x) => valores(x.respostas.q2)[0] === o.id).length, v2: b2.filter((x) => valores(x.respostas.q2).includes(o.id)).length }));
+      const t2 = maisEscolhida(it2);
+      const leg = legenda([["#D44D4D", "Onde mais comprou (1º lugar)"], ["#F3C9C9", "Entre os 3 lugares"]]);
+      g.appendChild(qCard({ num: 2, titulo: perg.q2.texto, base: b2.length, meta: ["até 3 lugares, em ordem"],
+        leitura: t2 && t2.v ? [{ b: t2.rotulo }, ` é onde mais compraram: ${pct(t2.v, b2.length)}% em 1º lugar.`] : "Ninguém marcou um lugar de compra ainda.",
+        corpo: (() => { const d = el("div"); d.append(leg, barras(it2, b2.length, { camada: "entre os 3" })); return d; })(),
+        rodape: [enc && nEnc ? el("p", "pa-nota", `${enc.texto}: ${nEnc} (${pct(nEnc, b2.length)}%), encerraram aqui.`) : null,
+          tabela(["Lugar", "1º lugar", "Entre os 3"], it2.map((it) => [it.rotulo, `${it.v} (${pct(it.v, b2.length)}%)`, `${it.v2} (${pct(it.v2, b2.length)}%)`]))] }));
+    } else {
+      const it2 = itensDe(perg.q2, b2); const t2 = maisEscolhida(it2);
+      g.appendChild(qCard({ num: 2, titulo: perg.q2.texto, base: b2.length, leitura: t2 && t2.v ? [{ b: t2.rotulo }, `: ${pct(t2.v, b2.length)}%.`] : null, corpo: barras(it2, b2.length), rodape: [tabelaItens(it2, b2.length)] }));
+    }
+    // P2.1 a P10
     let num = 2;
     Q.perguntas.slice(2).forEach((p) => {
       const base = p.condicao ? comp.filter((x) => naCondicao(p, x)) : comp;
       if (!p.condicao) num++;
-      let conteudo;
-      if (p.tipo === "escala") conteudo = histograma(p, base);
-      else if (p.tipo === "matriz") conteudo = matrizDivergente(p, base);
-      else if (p.id === "q3") conteudo = escalaOrdenada(p, base, { ids: ["uma_vez", "algumas", "frequencia", "maioria"], texto: "compraram de segunda mão este ano" });
-      else if (p.id === "q7") conteudo = escalaOrdenada(p, base, { ids: ["frequentemente", "quase_sempre"], texto: "frequentemente ou quase sempre não encontram o que procuram" });
-      else conteudo = ranking(itensDe(p, base), base.length);
-      const notas = [outros(p, base)];
+      const n = base.length;
+      const meta = p.tipo === "multipla" ? [p.max ? `até ${p.max} escolhas por pessoa` : "várias escolhas por pessoa"] : [];
+      const rodape = [];
+      let corpo, leitura, largo = false;
+      if (p.tipo === "escala") {
+        const notas = base.map((x) => x.respostas[p.id]).filter((v) => typeof v === "number");
+        const med = notas.length ? notas.reduce((a, b) => a + b, 0) / notas.length : 0;
+        const faixas = [{ rotulo: "Notas de 0 a 6", v: notas.filter((v) => v <= 6).length }, { rotulo: "Notas 7 e 8", v: notas.filter((v) => v >= 7 && v <= 8).length }, { rotulo: "Notas 9 e 10", v: notas.filter((v) => v >= 9).length }];
+        corpo = el("div", "pa-nota-g");
+        const heroi = el("div", "pa-heroi-n"); heroi.append(el("b", null, fmt1(med)), el("span", null, "nota média, de 0 a 10"));
+        corpo.append(heroi, barras(faixas, notas.length, { ordem: "natural" }));
+        leitura = ["Nota média ", { b: fmt1(med) }, `; ${pct(faixas[2].v, notas.length)}% deram 9 ou 10 e ${pct(faixas[0].v, notas.length)}% deram de 0 a 6.`];
+        rodape.push(el("p", "pa-nota", `0 = ${p.rotulo_min} · 10 = ${p.rotulo_max}`), tabela(["Nota", "Pessoas", "%"], Array.from({ length: 11 }, (_, k) => [k, notas.filter((v) => v === k).length, pct(notas.filter((v) => v === k).length, notas.length) + "%"])));
+        largo = true;
+      } else if (p.tipo === "matriz") {
+        corpo = facilDificil(p, base);
+        const top = corpo._linhas.find((x) => x.n);
+        leitura = top && top.g.dif ? ["O mais difícil de encontrar: ", { b: item(top.l.texto) }, ` (${pct(top.g.dif, top.n)}% acham difícil ou muito difícil).`] : "Ninguém marcou dificuldade ainda.";
+        rodape.push(tabela(["Característica", "Muito fácil", "Fácil", "Médio", "Difícil", "Muito difícil", "Não se aplica"], corpo._linhas.map((x) => [x.l.texto, x.cont["1"], x.cont["2"], x.cont["3"], x.cont["4"], x.cont["5"], x.na])));
+      } else {
+        const its = itensDe(p, base);
+        const ordinal = p.id === "q3" || p.id === "q7";
+        corpo = barras(its, n, { ordem: ordinal ? "natural" : "valor" });
+        const t = maisEscolhida(its);
+        if (p.id === "q3") { const k = base.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; leitura = [{ b: pct(k, n) + "%" }, " compraram de segunda mão este ano."]; }
+        else if (p.id === "q7") { const k = base.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length; leitura = [{ b: pct(k, n) + "%" }, " frequentemente ou quase sempre não encontram o que procuram."]; }
+        else leitura = t && t.v ? ["A resposta mais escolhida: ", { b: semOutro(t.rotulo) }, ` (${pct(t.v, n)}%).`] : null;
+        if (p.tipo === "multipla") rodape.push(el("p", "pa-nota", "Cada pessoa pode marcar mais de uma opção, por isso a soma passa de 100%."));
+        rodape.push(outros(p, base), tabelaItens(its, n));
+      }
       if (p.condicao) {
         const ops = Q.perguntas.find((x) => x.id === p.condicao.pergunta).opcoes.filter((o) => p.condicao.opcoes.includes(o.id)).map((o) => "“" + o.texto + "”");
-        notas.unshift(el("p", "pa-nota", "Mostrada só para quem escolheu na pergunta 2, em qualquer posição: " + ops.join(" ou ") + "."));
+        rodape.unshift(el("p", "pa-nota", "Aparece só para quem marcou na pergunta 2 " + ops.join(" ou ") + "."));
       }
-      const c = cardPergunta(p, p.rotulo || num, base, conteudo, notas.filter(Boolean));
-      if (["matriz", "escala"].includes(p.tipo)) c.classList.add("largo");
-      g.appendChild(c);
+      g.appendChild(qCard({ num: p.rotulo || num, titulo: p.texto, base: n, meta, leitura, corpo, rodape, largo }));
     });
+    // perfil: um card para gênero e outro para faixa etária, lado a lado
     if (Q.perfil && Q.perfil.length) {
       const comPerfil = comp.filter((x) => x.respostas.perfil);
-      const pc = el("section", "card pa-q largo");
-      pc.append(el("h3", null, "Perfil de quem respondeu"), el("p", "meta", plural(comPerfil.length, "resposta", "respostas") + (comPerfil.length < comp.length ? ` · ${comp.length - comPerfil.length} respondidas antes desta etapa existir` : "")));
-      const duas = el("div", "pa-graficos"); duas.style.marginTop = "0";
       Q.perfil.forEach((c) => {
-        const sub = el("div"); const t = el("p", "meta", c.texto); t.style.fontWeight = "700"; t.style.color = "var(--dark)"; sub.appendChild(t);
-        const itens = c.opcoes.map((o) => ({ rotulo: semOutro(o.texto), curto: o.texto.replace(" anos", "").replace(" ou mais", "+").replace("Prefiro não informar", "Não informou"), v: comPerfil.filter((x) => x.respostas.perfil[c.id] === o.id).length, fixo: o.id === "nao_informar" }));
-        sub.appendChild(c.id === "faixa_etaria" ? colunas(itens, comPerfil.length) : ranking(itens, comPerfil.length));
+        const its = c.opcoes.map((o) => ({ rotulo: semOutro(o.texto), v: comPerfil.filter((x) => x.respostas.perfil[c.id] === o.id).length, fixo: o.id === "nao_informar" }));
+        const t = maisEscolhida(its);
         const outrosTx = comPerfil.map((x) => x.respostas.perfil[c.id + "_outro"]).filter(Boolean);
-        if (outrosTx.length) { const b = el("div", "pa-outros"); b.appendChild(el("b", null, "O que escreveram em “outro”")); const ul = el("ul"); outrosTx.slice(0, 50).forEach((tx) => ul.appendChild(el("li", null, tx))); b.appendChild(ul); sub.appendChild(b); }
-        duas.appendChild(sub);
+        let ob = null;
+        if (outrosTx.length) { ob = el("div", "pa-outros"); ob.appendChild(el("b", null, "O que escreveram em “outro”")); const ul = el("ul"); outrosTx.slice(0, 50).forEach((tx) => ul.appendChild(el("li", null, tx))); ob.appendChild(ul); }
+        g.appendChild(qCard({ num: "Perfil", titulo: c.texto, base: comPerfil.length,
+          leitura: t && t.v ? ["Maior grupo: ", { b: t.rotulo }, ` (${pct(t.v, comPerfil.length)}%).`] : null,
+          corpo: c.id === "genero" ? rosca(its, comPerfil.length, { centro: t && t.v ? pct(t.v, comPerfil.length) + "%" : "0%", rotCentro: t && t.v ? t.rotulo.toLowerCase() : "" }) : barras(its, comPerfil.length, { ordem: "natural" }), rodape: [ob, tabelaItens(its, comPerfil.length)] }));
       });
-      pc.appendChild(duas); g.appendChild(pc);
     }
     box.appendChild(g);
-    box.appendChild(el("p", "pa-nota", `As perguntas 2.1 a 10 mostram só as respostas completas (${comp.length}); a 2.1, só de quem ela foi mostrada. Quem não mora em Curitiba ou não comprou este ano encerra na pergunta 1 ou 2 e não vê as seguintes.`));
+    box.appendChild(el("p", "pa-nota", `Da pergunta 2.1 em diante, os números contam só quem respondeu tudo (${comp.length}). Quem não mora em Curitiba ou não comprou este ano encerra na pergunta 1 ou 2.`));
     return box;
   }
 
@@ -744,6 +964,7 @@
     document.querySelectorAll("#conteudo [data-w]").forEach((i) => { i.style.width = i.dataset.w; });
     document.querySelectorAll("#conteudo [data-h]").forEach((i) => { i.style.height = i.dataset.h; });
     document.querySelectorAll("#conteudo [data-g]").forEach((i) => { i.style.flexGrow = i.dataset.g; });
+    document.querySelectorAll("#conteudo [data-arco]").forEach((c) => { c.style.strokeDasharray = c.dataset.arco; });
   }
 
   /* ---------- Inteligência: cruzamentos das respostas, sem IA ----------
