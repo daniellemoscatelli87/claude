@@ -349,12 +349,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
-## 2026-11-23 · Pesquisa Moda em Curitiba: pergunta 8 como escala de 5 pontos, não publicado
+## 2026-11-23 · Pesquisa Moda em Curitiba: pergunta 8 com todas as respostas escritas e topo claro no celular, não publicado
 
-- **Pedido:** a seleção em pílulas da pergunta 8 não era intuitiva; a dona escolheu a escala de 5 pontos.
-- **O que mudou (`src/pesquisa-moda.ts`, `src/pesquisa-moda.css`):** cada característica virou uma linha com 5 bolinhas num trilho, de "Muito fácil" a "Muito difícil". O trilho se preenche até a bolinha escolhida e o rótulo da escolha aparece embaixo com um check. "Não se aplica" fica discreto no canto da linha e esmaece a escala. Botões de opção nativos (teclado e leitor de tela, com o texto de cada ponto), área de toque de 48 px, movimento desligado com "menos movimento".
-- **Dados:** mesmos valores de antes ("1" a "5" ou "na"); servidor e painel não mudam.
-- **Verificação executada:** `npm run build`; fluxo completo no celular (Playwright, iPhone 13) com o envio simulado, conferindo os valores da pergunta 8 no envio; capturas no celular e no computador; setas do teclado; sem rolagem lateral e sem erros no console.
+- **Pedido:** a escala de bolinhas também não ficou intuitiva. Todas as respostas precisam aparecer escritas e parecer clicáveis, inclusive para pessoas de mais idade. O topo do celular ficava escuro ao rolar e deve seguir o padrão claro.
+- **Pergunta 8 (`src/pesquisa-moda.ts`, `src/pesquisa-moda.css`):** um cartão por característica, com as 6 respostas ("Muito fácil" a "Muito difícil" e "Não se aplica") em cartões clicáveis com bolinha de marcação, iguais aos das outras perguntas. No celular, uma resposta por linha. No computador, as 5 lado a lado e "Não se aplica" abaixo, com borda tracejada. Os dados continuam "1" a "5" ou "na"; servidor e painel não mudam.
+- **Topo:** no celular, ao rolar, a barra fica clara e translúcida, com o texto escuro. No computador, continua como antes.
+- **Verificação executada:** `npm run build`; fluxo completo no celular (Playwright, iPhone 13) com envio simulado, conferindo os valores da pergunta 8; capturas no celular e no computador, incluindo o topo depois de rolar; setas do teclado; sem rolagem lateral e sem erros no console.
 
 ## 2026-11-23 · Painel de pesquisas: novos gráficos e aba Inteligência, não publicado
 
