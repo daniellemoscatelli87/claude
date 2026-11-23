@@ -385,7 +385,7 @@
     {
       "id": "q8",
       "tipo": "matriz",
-      "texto": "Quando você procura roupas e acessórios, qual é o grau de facilidade ou dificuldade para conseguir peças que atendam às suas expectativas?",
+      "texto": "Quando você procura por um produto, qual é o grau de facilidade ou dificuldade para conseguir peças que atendam às suas expectativas?",
       "apoio": "Marque uma resposta para cada item.",
       "linhas": [
         {
@@ -459,7 +459,10 @@
           "texto": "Muito difícil"
         }
       ],
-      "destaque": "atendam às suas expectativas"
+      "destaque": [
+        "produto",
+        "atendam às suas expectativas"
+      ]
     },
     {
       "id": "q_categorias",

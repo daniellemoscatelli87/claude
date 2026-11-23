@@ -600,6 +600,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Pedido da dona do produto: tirar o zero; "1 = Muito ruim".
 - Pergunta 5: o trecho em vermelho volta a ser "produto específico" (antes, "começar").
 - Pergunta 6 (foto de referência): "foto de referência" e "comprar algo igual ou parecido" em vermelho.
+- Pergunta 10 (matriz): novo texto "Quando você procura por um produto, qual é o grau de facilidade ou dificuldade para conseguir peças que atendam às suas expectativas?", com "produto" e "atendam às suas expectativas" em vermelho.
 - `questionario.json`:
   - `min: 1` na pergunta 4;
   - apoio "Avalie de 1 a 10…";
