@@ -349,6 +349,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
+## 2026-11-23 · Área restrita: divisor que some nas pontas, hover mais claro e DS da branch de ajustes (D-037), não publicado
+
+- **DS em prévia:** `DS_REF=claude/ajustes-painel bash scripts/sincronizar-design-system.sh` trouxe o `theme.css` do commit `85a5ddb` do DS (desabilitado `--graphite-100` com texto `--graphite-400`, 3,6:1); `versao.txt` atualizado; `?v=85a5ddb` nas páginas. Depois que o DS for publicado, a sincronização volta a seguir o `main`.
+- **Cabeçalho do card (`admin.css`, Início e Configurações):** sai a faixa cinza (`.card-faixa`); entra `.card-cab`, com divisor de 1px na largura interna do card, em gradiente transparente → `--border-strong` → transparente (some nos últimos 18% de cada lado). Texto de apoio volta ao `--muted-foreground` (5,0:1 no branco).
+- **Hover de linha ou item dentro do card:** `--graphite-50` (#EDF0F5) em todos (linhas da Início, listas e mensagens, comunicados, contatos, tabela de parceiros, respostas da pesquisa, notificações).
+- **Menu:** confirmado que empurra o conteúdo a 1280px, expandido e recolhido (o conteúdo começa onde o menu termina).
+- **Verificação executada:** `npm run build`; Playwright a 1280px e 390px, 127 verificações (inclui divisor, cor do texto do cabeçalho, hover no `--graphite-50`, botão desabilitado com `--graphite-100` e `--graphite-400`, menu empurrando o conteúdo).
+
 ## 2026-11-23 · Área restrita com a casca do site do DS, cards só com borda e faixa de cabeçalho (D-036), não publicado
 
 - **Cabeçalho (`admin.js`, `admin.css`):** faixa branca fixa na largura toda (64px, borda inferior e `--shadow-sm`, como o site do DS), acima do menu lateral; à esquerda o logo (símbolo DM + "Dani Moscatelli"; no celular, o menu sanduíche vem antes do logo), à direita notificações e perfil.

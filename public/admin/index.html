@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/design-system/theme.css?v=e334fe5">
-<link rel="stylesheet" href="/admin/admin.css?v=20261123e">
+<link rel="stylesheet" href="/design-system/theme.css?v=85a5ddb">
+<link rel="stylesheet" href="/admin/admin.css?v=20261123f">
 <style>
   .home { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
   .entry .ini svg { width: 18px; height: 18px; }
@@ -40,7 +40,7 @@
   .seeall:hover { text-decoration: underline; }
   .entry { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 2px 12px; padding: 14px 10px; border-radius: var(--radius-md); text-decoration: none; align-items: start; }
   .entry + .entry { border-top: 1px solid var(--muted); }
-  .entry:hover { background: var(--muted); }
+  .entry:hover { background: var(--graphite-50); }
   .entry .ini { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; background: var(--primary-muted); color: var(--primary-text); grid-row: span 4; }
   .entry .t { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .entry .when { text-align: right; font-size: 12px; color: var(--muted-foreground); white-space: nowrap; line-height: 1.35; }
@@ -65,7 +65,7 @@
   </div>
   <div class="home">
     <section class="card" aria-labelledby="h-contato">
-      <div class="panel-head card-faixa">
+      <div class="panel-head card-cab">
         <div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
           <div><h2 id="h-contato">Contato</h2><div class="cnt" id="cnt-contatos"></div></div></div>
         <span class="unread" id="unread-contatos"></span>
@@ -74,7 +74,7 @@
       <a class="seeall" href="/admin/contatos/">Ver todos →</a>
     </section>
     <section class="card" aria-labelledby="h-parceiros">
-      <div class="panel-head card-faixa">
+      <div class="panel-head card-cab">
         <div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></svg></span>
           <div><h2 id="h-parceiros">Parceiros</h2><div class="cnt" id="cnt-parceiros"></div></div></div>
         <span class="unread" id="unread-parceiros"></span>
@@ -83,7 +83,7 @@
       <a class="seeall" href="/admin/parceiros/?aba=candidaturas">Ver todos →</a>
     </section>
     <section class="card" aria-labelledby="h-lancamento">
-      <div class="panel-head card-faixa">
+      <div class="panel-head card-cab">
         <div class="ttl"><span class="ic" id="ic-lancamento"></span>
           <div><h2 id="h-lancamento">Lançamento</h2><div class="cnt" id="cnt-lancamento"></div></div></div>
       </div>
@@ -93,7 +93,7 @@
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="/admin/admin.js?v=20261123e"></script>
+<script src="/admin/admin.js?v=20261123f"></script>
 <script>
 const LIMIT = 15;
 const plural = (n, s, p) => n + " " + (n === 1 ? s : p);

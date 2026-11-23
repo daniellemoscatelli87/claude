@@ -425,6 +425,12 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Decisão:** o painel segue a casca do site do Design System: cabeçalho branco na largura toda, com o logo à esquerda e notificações e perfil à direita; menu lateral abaixo dele, com o botão "Menu" no topo, grupos com seta e subitens numa linha-guia, item ativo rosa claro com texto vermelho, e o trilho recolhido só com ícones. Cards sobre o fundo `--background` só com borda, sem sombra parada. Cards com cabeçalho ganham a faixa `--graphite-100`.
 - **Trade-offs:** larguras passam a ser as do site do DS (240px e 64px, antes 248px e 72px); o guia de cards do DS ainda indica "borda e sombra suave" para card sobre fundo cinza claro, o que diverge desta decisão (a mudança no DS fica com a dona do produto).
 
+## D-037 · 23/11/2026 · Divisor no cabeçalho do card, hover mais claro e desabilitado do DS (site)
+
+- **Origem:** dona do produto (quarta rodada de ajustes dos painéis).
+- **Decisão:** o cabeçalho do card não tem faixa cinza; é separado do conteúdo por uma linha fina que some nas pontas. O hover de linha ou item dentro do card usa o cinza mais claro (`--graphite-50`). O botão desabilitado usa o fundo `--graphite-100`. O menu lateral empurra o conteúdo, nunca o cobre (no DS e na área restrita). As mudanças de token foram feitas no DS (branch `claude/ajustes-painel`) e trazidas pela sincronização, sem editar a cópia.
+- **Trade-offs:** a área restrita fica, por enquanto, com o `theme.css` de uma branch do DS ainda não publicada; ao publicar o DS, a sincronização diária volta ao `main` e o `?v=` precisa mudar.
+
 ---
 
 ## Decisões pendentes
