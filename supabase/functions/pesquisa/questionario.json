@@ -1,10 +1,14 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v3-2026-11-23",
+  "versao": "moda-curitiba-v5-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
+  "identificacao": {
+    "versao": "moda-curitiba-identificacao-v1-2026-11-23",
+    "texto": "Li e concordo com o uso dos meus dados (nome, e-mail e WhatsApp) para participar desta pesquisa, conforme a Política de Privacidade."
+  },
   "consentimento": {
-    "versao": "moda-curitiba-contato-v1-2026-11-23",
-    "texto": "Autorizo o Dani Moscatelli — Experience Design Studio a utilizar meus dados de contato para me enviar informações sobre o lançamento deste projeto, conforme a Política de Privacidade."
+    "versao": "moda-curitiba-contato-v2-2026-11-23",
+    "texto": "Autorizo o Dani Moscatelli — Experience Design Studio a usar meu e-mail e WhatsApp para me avisar sobre o lançamento deste projeto e sobre as vantagens exclusivas de quem participou, conforme a Política de Privacidade."
   },
   "perguntas": [
     {
@@ -253,28 +257,28 @@
     {
       "id": "q8",
       "tipo": "matriz",
-      "texto": "Em quais características é mais fácil ou difícil encontrar o que você deseja?",
+      "texto": "Quando procura roupas e acessórios, o que é mais fácil ou difícil de encontrar?",
       "apoio": "Marque uma resposta para cada característica.",
       "linhas": [
         {
           "id": "estilo",
-          "texto": "Estilo ou modelo"
+          "texto": "Roupas que combinam com meu estilo"
         },
         {
           "id": "tamanho",
-          "texto": "Tamanho"
+          "texto": "Peças disponíveis no meu tamanho"
         },
         {
           "id": "modelagem",
-          "texto": "Modelagem e caimento"
+          "texto": "Roupas que vestem bem no meu corpo"
         },
         {
           "id": "tecido",
-          "texto": "Tecido e qualidade"
+          "texto": "Peças com o tecido e a qualidade que procuro"
         },
         {
           "id": "acessorios",
-          "texto": "Acessórios com as características desejadas"
+          "texto": "Acessórios que combinam com meu gosto"
         }
       ],
       "colunas": [
@@ -288,7 +292,7 @@
         },
         {
           "id": "3",
-          "texto": "Nem fácil nem difícil"
+          "texto": "Médio"
         },
         {
           "id": "4",

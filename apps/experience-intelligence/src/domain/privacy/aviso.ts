@@ -2,7 +2,7 @@
 // o aceite fica registrado no perfil com a versão. Requisitos em docs/legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md.
 // Não é a política definitiva: o texto jurídico final é obrigatório antes do lançamento comercial.
 
-export const AVISO_VERSAO = "testes-2026-10-21";
+export const AVISO_VERSAO = "testes-2026-11-23";
 
 export interface SecaoAviso { titulo: string; itens: string[] }
 
@@ -29,7 +29,7 @@ export const AVISO_SECOES: SecaoAviso[] = [
   ] },
   { titulo: "Quem processa os dados para nós", itens: [
     "Supabase: banco de dados, login e e-mails de confirmação. O banco de dados fica no Brasil (São Paulo).",
-    "Netlify: hospedagem do aplicativo, que pode passar por servidores fora do Brasil.",
+    "Cloudflare: hospedagem do aplicativo, que pode passar por servidores fora do Brasil.",
     "Google (Gemini): inteligência artificial que organiza o desafio, quando estiver ligada. Nesta fase usamos o plano gratuito, em que o Google pode usar o conteúdo enviado para melhorar seus produtos e pessoas podem revisá-lo. Por isso, use apenas informações fictícias nos desafios.",
     "A equipe do estúdio pode acessar os projetos da sua empresa para suporte e qualidade. Cada acesso fica registrado no histórico da empresa.",
   ] },

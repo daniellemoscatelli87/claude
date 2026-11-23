@@ -80,4 +80,4 @@ select status, count(*) from public.ai_usage where created_at > now() - interval
 
 ## Publicar
 
-O passo a passo de publicação (segundo site no Netlify e ajustes de login no Supabase) é feito com a dona do produto, um passo por vez, e fica registrado no [Implementation Log](../../docs/engineering/IMPLEMENTATION_LOG.md).
+O passo a passo de publicação (projeto próprio no Cloudflare Pages, com a pasta base `apps/experience-intelligence`, e ajustes de login no Supabase) é feito com a dona do produto, um passo por vez, e fica registrado no [Implementation Log](../../docs/engineering/IMPLEMENTATION_LOG.md).

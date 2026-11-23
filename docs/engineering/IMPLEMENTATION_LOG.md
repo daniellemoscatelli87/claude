@@ -356,7 +356,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Início, card rosa (Novas mensagens):** sai o "N não lidas" do canto; fica o "N não respondidas" embaixo. O card Novos parceiros mantém "N não vistas" (informação diferente de "nos últimos 7 dias"). A linha não lida (ex.: Ana) não tem fundo parado: o estado é o nome em negrito e o ícone vermelho; o cinza era o hover.
 - **Verificação executada:** `npm run build`; Playwright, 130 verificações.
 
-## 2026-11-23 · Área restrita: divisor que some nas pontas, hover mais claro e DS da branch de ajustes (D-037), não publicado
+## 2026-11-23 · Área restrita: divisor que some nas pontas, hover mais claro e DS da branch de ajustes (D-042), publicado
 
 - **DS em prévia:** `DS_REF=claude/ajustes-painel bash scripts/sincronizar-design-system.sh` trouxe o `theme.css` do commit `85a5ddb` do DS (desabilitado `--graphite-100` com texto `--graphite-400`, 3,6:1); `versao.txt` atualizado; `?v=85a5ddb` nas páginas. Depois que o DS for publicado, a sincronização volta a seguir o `main`.
 - **Cabeçalho do card (`admin.css`, Início e Configurações):** sai a faixa cinza (`.card-faixa`); entra `.card-cab`, com divisor de 1px na largura interna do card, em gradiente transparente → `--border-strong` → transparente (some nos últimos 18% de cada lado). Texto de apoio volta ao `--muted-foreground` (5,0:1 no branco).
@@ -364,7 +364,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Menu:** confirmado que empurra o conteúdo a 1280px, expandido e recolhido (o conteúdo começa onde o menu termina).
 - **Verificação executada:** `npm run build`; Playwright a 1280px e 390px, 127 verificações (inclui divisor, cor do texto do cabeçalho, hover no `--graphite-50`, botão desabilitado com `--graphite-100` e `--graphite-400`, menu empurrando o conteúdo).
 
-## 2026-11-23 · Área restrita com a casca do site do DS, cards só com borda e faixa de cabeçalho (D-036), não publicado
+## 2026-11-23 · Área restrita com a casca do site do DS, cards só com borda e faixa de cabeçalho (D-041), publicado
 
 - **Cabeçalho (`admin.js`, `admin.css`):** faixa branca fixa na largura toda (64px, borda inferior e `--shadow-sm`, como o site do DS), acima do menu lateral; à esquerda o logo (símbolo DM + "Dani Moscatelli"; no celular, o menu sanduíche vem antes do logo), à direita notificações e perfil.
 - **Menu lateral:** abaixo do cabeçalho, branco (`--sidebar`), borda à direita; no topo o botão "≡ Menu" (recolhe e expande; nome acessível "Recolher menu" / "Expandir menu", `aria-expanded`, `aria-controls`), no lugar do "Recolher menu" da base. Itens como a navegação do DS (ícone 16px, nome 14px, cinza; ativo com `--primary-muted` e `--primary-text`); Parceiros e Projetos viraram grupos com seta, que abrem e fecham os subitens numa linha-guia (`aria-expanded`), abertos quando a página atual é um deles. Larguras do site do DS: 240px e 64px. Recolhido: só ícones, contador vira ponto (o número continua no nome acessível), dicas e painel de subitens mantidos (o `aria-expanded` do grupo acompanha o painel; clicar no ícone do grupo leva ao primeiro subitem).
@@ -372,7 +372,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Faixa de cabeçalho do card (`.card-faixa`):** `--graphite-100` na largura toda, sem linha, cantos de cima do card; texto de apoio em `--graphite-500` (5,4:1) e destaque em `--crimson-600` (6,7:1). Aplicada nos cards Contato, Parceiros e Lançamento da Início e nas seções de Configurações. Texto de Configurações: "Nome e foto aparecem no cabeçalho da área restrita".
 - **Verificação executada:** `npm run build`; Playwright a 1280px e 390px, 118 verificações (as anteriores, mais: cabeçalho na largura toda acima do menu, logo no cabeçalho, botão no topo do menu, grupo abrindo e fechando, cards sem sombra, faixa com o token e o contraste, dicas e painel fora do menu sem deslocar os ícones). O teste visual achou e corrigiu um erro: com o menu recolhido, o painel de subitens fazia o menu rolar de lado e sumir com os ícones.
 
-## 2026-11-23 · Área restrita consome o Design System Dani Moscatelli (D-035), não publicado
+## 2026-11-23 · Área restrita consome o Design System Dani Moscatelli (D-040), publicado
 
 - **Sincronização (como na FindLook):** `design-system/README.md`, `design-system/arquivos.txt` (por enquanto só `src/styles/theme.css` → `public/design-system/theme.css`), `design-system/versao.txt` (commit `e334fe5111df7200188e2f33afcbc161783fc6f3` do DS), `scripts/sincronizar-design-system.sh` e `.github/workflows/sincronizar-design-system.yml` (todo dia e pelo botão Run workflow; copia, roda `npm run build`, abre ou atualiza o PR "Sincroniza o design system Dani Moscatelli"; em falha, abre uma issue). `design-system/.ultimas-mudancas.txt` no `.gitignore`.
 - **`theme.css` no navegador, sem Tailwind:** cada página de `public/admin/` carrega `/design-system/theme.css?v=e334fe5` antes de `admin.css`. As variáveis de `:root` valem; `@custom-variant`, `@theme inline` e os `@apply` são ignorados. A camada `@layer base` do DS também vale (tamanhos de `label`, `input`, títulos), abaixo do `admin.css`. `fonts.css` não foi copiado: a Plus Jakarta Sans já vem do Google Fonts nas páginas.
@@ -382,7 +382,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** script de sincronização rodado duas vezes (cópia idêntica ao DS, confirmada com `cmp`; a segunda rodada não muda nada); YAML do workflow lido sem erro; `npm run build`; navegador (Chromium, Playwright) com Supabase simulado só no teste, a 1280px e 390px, 101 verificações (menu recolhível e perfil; as 8 páginas sem erro de JavaScript e sem rolagem horizontal; tokens do DS aplicados; botão desabilitado com as cores do `--disabled`; 144 marcas de gráfico com `--chart`, nenhuma com cor escrita à mão; campo de 40px no login). Busca por cores hexadecimais em `admin.css`, `admin.js` e nas páginas: só sobra o traço do ícone de busca (SVG dentro de `url()`, com o valor do `--muted-foreground`).
 - **Pendente:** ver com a dona do produto; publicar. O workflow só roda depois de estar no `main`.
 
-## 2026-11-23 · Área restrita: menu lateral recolhível, perfil no cabeçalho e cabeçalho branco (D-034), não publicado
+## 2026-11-23 · Área restrita: menu lateral recolhível, perfil no cabeçalho e cabeçalho branco (D-039), publicado
 
 - **Menu lateral (`public/admin/admin.js` e `public/admin/admin.css`):** a partir de 1024px, expandido (ícone e nome, 248px) ou recolhido (só ícones, 72px), pelo botão "Recolher menu" / "Expandir menu" na base do menu (ícone de painel no estilo do menu; `aria-expanded`, `aria-controls`, anel de foco; recolhido, só ícone com `aria-label`). A largura anima em 0,3 s com a curva do site (`cubic-bezier(.16, 1, .3, 1)`); com "menos movimento", troca na hora. A escolha fica no `localStorage` (`dm-admin-menu-recolhido`, com try/catch) e é aplicada antes de o menu ser montado, sem piscar.
 - **Recolhido:** nomes escondidos só visualmente (continuam como nome acessível); dica com o nome ao passar o mouse ou focar pelo teclado; Escape esconde a dica; item ativo continua destacado (o item principal também, quando a página atual é um subitem); contador vira selo no canto do ícone; logo só com o símbolo. Subitens (Parceiros e Projetos) abrem num painel ao lado ao passar o mouse ou focar o item principal; o painel é alcançado pelo Tab e Escape fecha e devolve o foco ao item principal.
@@ -392,6 +392,35 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Cache:** `admin.js` e `admin.css` com `?v=20261123c` em todas as páginas da área restrita.
 - **Verificação executada:** `npm run build`; navegador (Chromium, Playwright) com o Supabase simulado só no teste, a 1280px e 390px: 66 verificações passaram (recolher pelo clique, por Enter e por Espaço, `aria-expanded`, escolha mantida ao recarregar já em 72px, dica e painel de subitens no mouse e no teclado, Escape, perfil abrindo e fechando, cabeçalho branco, sem rolagem horizontal, menos movimento, celular sem o botão de recolher e com os nomes visíveis mesmo com o recolhido guardado, as 8 páginas carregando sem erro). O teste encontrou e corrigiu um erro: com o recolhido guardado, o celular escondia os nomes do menu.
 - **Pendente:** ver com a dona do produto; publicar.
+## 2026-11-23 · Pesquisa Moda em Curitiba: identificação no início, uma participação por pessoa, vantagens e tela final com confete (D-034), publicado
+
+- **Banco:** `supabase/migrations/20261123180000_pesquisa_identificacao.sql` (não aplicada): `pesquisa_respostas` ganha `nome`, `email`, `whatsapp`, `identificacao_em`, `identificacao_versao` e `identificacao_texto`, com índices únicos por pesquisa para e-mail (sem diferenciar maiúsculas) e WhatsApp.
+- **Função `pesquisa` (`supabase/functions/pesquisa/index.ts`, não publicada):** nova ação `verificar` (e-mail ou WhatsApp já usado); `enviar` exige `identificacao` com `ciente: true` e devolve 409 se já houver participação; "Sim" nos avisos grava em `pesquisa_interessados` com a autorização v2. Questionário `moda-curitiba-v5-2026-11-23` com os textos `identificacao` (v1) e `consentimento` (v2).
+- **Página (`pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.ts`, `src/pesquisa-moda.css`):** etapa "Antes de começar" (nome, e-mail, WhatsApp, aviso da LGPD e confirmação), conferida no servidor antes da primeira pergunta. Abertura com o item "Vantagens exclusivas" e o item de privacidade citando a LGPD. A última etapa ficou só com Sim ou Não, com a nota da autorização. Telas finais em card branco, confete saindo do selo de sucesso para quem concluiu tudo (desligado com "menos movimento") e nova tela "Você já participou". O bloqueio por aparelho saiu.
+- **Ajustes pedidos pela dona:** "já participou" em vermelho no título; sem o coração em "Obrigada por participar!"; ícone de presente no box rosa da tela final (texto centralizado); item de privacidade da abertura mais curto ("Seus dados ficam protegidos e são usados só nesta pesquisa."), já que o detalhe aparece na identificação; textos da abertura centralizados, com os boxes de informação alinhados à esquerda.
+- **Política de Privacidade:** seção 8 reescrita (identificação, respostas ligadas à identificação com acesso restrito, avisos opcionais, base legal, exclusão).
+- **Verificação executada:** `npm run build`; função empacotada com `esbuild` e testada com banco simulado (15 casos: identificação faltando ou inválida, sem confirmação, reenvio do mesmo envio, `verificar` com e-mail em maiúsculas e WhatsApp formatado, e-mail e WhatsApp repetidos com 409, encerrada na Q1 identificada, interessados com autorização v2); migração num Postgres 16 local (duplicados barrados, WhatsApp inválido barrado, exclusão libera o e-mail); fluxo no celular com Playwright e servidor simulado (erros da identificação, "já participou", Voltar da Q1, novidades, envio com identificação, confete, recarregar sem confete, nova aba sem bloqueio, rascunho local sem dados pessoais, retorno em outra sessão volta à identificação e continua na pergunta salva, 409 no envio, encerramento na Q1); capturas no celular e no computador; sem erros no console.
+- **Publicado em 23/11/2026** (autorizado pela dona): migração aplicada, função `pesquisa` publicada e site publicado.
+
+## 2026-11-23 · Pesquisa Moda em Curitiba: pergunta 8 com todas as respostas escritas e topo claro no celular, publicado
+
+- **Pedido:** a escala de bolinhas também não ficou intuitiva. Todas as respostas precisam aparecer escritas e parecer clicáveis, inclusive para pessoas de mais idade. O topo do celular ficava escuro ao rolar e deve seguir o padrão claro.
+- **Pergunta 8 (`src/pesquisa-moda.ts`, `src/pesquisa-moda.css`):** um cartão por característica, com as 6 respostas ("Muito fácil" a "Muito difícil" e "Não se aplica") em cartões clicáveis com bolinha de marcação, iguais aos das outras perguntas. No celular, uma resposta por linha. No computador, as 5 lado a lado e "Não se aplica" abaixo, com borda tracejada. Os dados continuam "1" a "5" ou "na"; servidor e painel não mudam.
+- **Texto:** "Nem fácil nem difícil" passou a "Médio" (pedido da dona), no questionário e nos rótulos do painel; versão do questionário `moda-curitiba-v4-2026-11-23`. A função `pesquisa` precisa ser publicada de novo junto com o site.
+- **Texto da pergunta 8 (pedido da dona):** "Quando procura roupas e acessórios, o que é mais fácil ou difícil de encontrar?", com as características "Roupas que combinam com meu estilo", "Peças disponíveis no meu tamanho", "Roupas que vestem bem no meu corpo", "Peças com o tecido e a qualidade que procuro" e "Acessórios que combinam com meu gosto" (mesmos identificadores). No painel, as frases da aba Inteligência e dos destaques que citam a característica foram reescritas ("O mais difícil de encontrar: …", "O que mais pesa na satisfação: …") e passam "meu/minha" para "seu/sua".
+- **Topo:** no celular, ao rolar, a barra fica clara e translúcida, com o texto escuro. No computador, continua como antes.
+- **Verificação executada:** `npm run build`; fluxo completo no celular (Playwright, iPhone 13) com envio simulado, conferindo os valores da pergunta 8; capturas no celular e no computador, incluindo o topo depois de rolar; setas do teclado; sem rolagem lateral e sem erros no console.
+
+## 2026-11-23 · Contatos: e-mails enviados direto para contato@ no painel e aviso no Gmail (D-035), publicado
+
+- **Pedido:** os e-mails que chegam em contato@danimoscatelli.com.br devem aparecer na página Contatos, com tag que diferencie formulário do site e e-mail direto; só os que chegarem daqui pra frente; sem custo; aviso de cada e-mail novo no Gmail da dona.
+- **Banco (`supabase/migrations/20261123190000_contatos_email_direto.sql`, não aplicada):** `contatos.origem` ("site" ou "email") e `contatos.email_ref` (único); "melhores dias" obrigatório só para o formulário; o aviso "Novo contato pelo site" não dispara para e-mail direto; tabela `caixa_email_estado` (ponto de leitura da caixa, endereço do aviso e último erro; sem acesso pelo site); agendamento `importar-emails` a cada 5 minutos.
+- **Função `importar-emails` (não publicada):** lê a caixa de entrada da Hostinger por IMAP em modo só leitura (`EXAMINE`, `BODY.PEEK`: não apaga nem marca como lido), com a senha no segredo `CONTATO_IMAP_SENHA`. Na primeira execução só marca o ponto de partida. Remetente novo vira contato com origem "email"; remetente que já tem conversa recebe a mensagem no histórico, que volta a ficar não lida. Ignora remetentes @danimoscatelli.com.br (avisos do próprio site). Lê até 5 MB por e-mail; anexos ficam só na caixa, com uma nota na mensagem. Manda aviso (Resend, remetente site@) para o endereço em `caixa_email_estado.notificar_para`, com link para o painel.
+- **Painel (`public/admin/contatos/index.html`):** selo "E-mail" ou "Site" na lista (no computador, ao lado da data com um divisor; no celular, abaixo do ícone) e no cabeçalho da mensagem; cada linha em três níveis (nome; assunto; e-mail e empresa), com a data numa coluna própria que o texto não invade; ficha do e-mail direto só com nome, e-mail, assunto e mensagem; a busca também encontra por "e-mail" ou "site".
+- **Política de Privacidade:** item sobre e-mails enviados para contato@ na seção 1.
+- **Verificação executada:** `npm run build`; função empacotada com `esbuild` e testada em Node contra um servidor IMAP simulado com TLS e banco simulado (primeira execução só marca o ponto; 5 e-mails com nome e assunto codificados, aviso do próprio site ignorado, remetente existente no histórico, HTML em ISO-8859-1 com anexo, e-mail de 3 MB com linha "A9 OK" no corpo; nova execução sem novidades; reprocessamento sem duplicar nem repetir aviso; senha errada guarda o erro; sem senha não faz nada; cerca de 0,5 s); painel com dados simulados no computador e no celular (selos, busca, ficha), sem erros no console. **Não testado com a caixa real** (depende da senha cadastrada).
+- **Publicado em 23/11/2026:** função `importar-emails` (v2), migração aplicada, endereço do aviso gravado em `caixa_email_estado`, site publicado (conferido no ar). Na primeira tentativa, a caixa recusou a senha ("Authentication failed"), então o agendamento foi pausado para não bloquear a caixa. A função passou a ignorar espaços nas pontas do segredo. Depois que a dona corrigiu a senha, o login funcionou: ponto de partida gravado (sem importar e-mails antigos) e agendamento reativado.
+- **Pendente:** conferir com um e-mail de teste real enviado para contato@ (painel e aviso no Gmail).
 
 ## 2026-11-23 · Painel de pesquisas: novos gráficos e aba Inteligência, não publicado
 
@@ -461,6 +490,23 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Função `galeria-autorizacao`:** `ver` responde sem chamar a IA e informa `ia_pendente`; nova ação `ia`; `decidir` aceita `tempo` (só valores do campo 23) e atualiza `tempo_especialidade` do cadastro quando muda; o histórico da autorização guarda a senioridade exibida.
 - **Verificação executada:** navegador (iPhone 13) com servidor simulado: validação do nome (Matheus e Matheus S recusados; Ana Lu e Maria da Silva aceitos), prefixo fixo (colar link inteiro, apagar tudo, host errado); página da galeria visível em 0,75 s com a IA atrasada 4 s, troca de senioridade refletida na prévia e enviada no formato do cadastro; `node --check` e `esbuild` da função; `npm run build`.
 - **Publicação (16/11):** função `galeria-autorizacao` publicada (versão 13); `ver` no ar responde em 0,8 a 1 s.
+
+## 2026-11-23 · Experience Intelligence pronto para o Cloudflare Pages (D-038)
+
+- **`apps/experience-intelligence/functions/_middleware.js`:** senha antes de qualquer página, no mesmo modelo do FindLook. Testado: sem segredo dá 503, senha errada dá 401 e senha certa dá 200 com `Cache-Control: private, no-store`.
+- **Saem as referências ao Netlify:** `netlify.toml` removido; aviso de privacidade (`AVISO_VERSAO` = `testes-2026-11-23`), `docs/legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md`, README e comentário do `next.config.ts` atualizados.
+- **Configuração do projeto no Cloudflare Pages (feita pela dona do produto):**
+  - pasta base `apps/experience-intelligence`;
+  - build `npm ci && npm run build`;
+  - saída `out`;
+  - `NODE_VERSION=22`;
+  - variáveis `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`;
+  - segredo `SITE_SENHA`;
+  - caminhos de build `apps/experience-intelligence/*`;
+  - domínio `app.danimoscatelli.com.br`.
+- **Testes:**
+  - `npm ci`, `npm run typecheck`, `npm test` (48 testes) e `npm run build` (gera `out/`);
+  - aviso já existente do Next sobre a raiz do workspace (mais de um lockfile no repositório).
 
 ## 2026-11-16 · Agendamento do envio da autorização da galeria (SITE-01), não publicado
 
