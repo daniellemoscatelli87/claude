@@ -15,7 +15,7 @@ import modaCuritiba from "./questionario.json" with { type: "json" };
 
 type Opcao = { id: string; texto: string; encerra?: string; exclusiva?: boolean; outro?: boolean };
 type Pergunta = {
-  id: string; tipo: "unica" | "multipla" | "ranking" | "escala" | "matriz"; texto: string; max?: number; min?: number;
+  id: string; tipo: "unica" | "multipla" | "ranking" | "escala" | "escalas" | "matriz"; texto: string; max?: number; min?: number;
   condicao?: { pergunta: string; opcoes: string[] };
   opcoes?: Opcao[]; linhas?: { id: string }[]; colunas?: { id: string }[];
 };
@@ -68,6 +68,17 @@ function validar(p: Pergunta, v: unknown): unknown {
   if (p.tipo === "escala") {
     if (typeof v !== "number" || !Number.isInteger(v) || v < (p.min ?? 0) || v > (p.max ?? 10)) falha(`Nota inválida na pergunta ${p.id}.`);
     return v;
+  }
+  if (p.tipo === "escalas") {
+    // várias notas (uma por aspecto), todas inteiras entre min e max
+    if (!v || typeof v !== "object" || Array.isArray(v)) falha(`Dê uma nota para cada aspecto da pergunta ${p.id}.`);
+    const out: Record<string, number> = {};
+    for (const l of p.linhas ?? []) {
+      const n = (v as Record<string, unknown>)[l.id];
+      if (typeof n !== "number" || !Number.isInteger(n) || n < (p.min ?? 0) || n > (p.max ?? 10)) falha(`Dê uma nota para cada aspecto da pergunta ${p.id}.`);
+      out[l.id] = n as number;
+    }
+    return out;
   }
   if (p.tipo === "matriz") {
     if (!v || typeof v !== "object" || Array.isArray(v)) falha(`Responda todas as linhas da pergunta ${p.id}.`);

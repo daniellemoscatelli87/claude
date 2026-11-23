@@ -47,6 +47,108 @@
   @media (max-width: 900px) { .pa-graficos { grid-template-columns: 1fr; } }
   .pa-graficos .card { margin: 0; }
   .pa-graficos .largo { grid-column: 1 / -1; }
+  /* Resultados: card padrão por pergunta (mesma altura lado a lado; pé sempre embaixo) */
+  .pa-graficos { align-items: stretch; }
+  .pa-q { display: flex; flex-direction: column; gap: 14px; height: 100%; box-shadow: var(--shadow-xs); }
+  .pa-q-cab { display: flex; gap: 12px; align-items: flex-start; }
+  .pa-q-num { flex: none; min-width: 34px; height: 34px; padding: 0 8px; border-radius: 10px; background: var(--crimson-50); color: var(--primary); font-size: 13px; font-weight: 800; display: grid; place-items: center; }
+  .pa-q-cab h3 { margin: 0; font-size: 15px; line-height: 1.4; }
+  .pa-q-cab .meta { margin: 3px 0 0; font-size: 12px; color: var(--muted-foreground); }
+  .pa-leitura { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: var(--muted); }
+  .pa-leitura .ic { flex: none; color: var(--muted-foreground); margin-top: 1px; }
+  .pa-leitura .ic svg { width: 18px; height: 18px; display: block; }
+  .pa-leitura p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--foreground); }
+  .pa-q-pe { margin-top: auto; display: grid; gap: 4px; padding-top: 4px; border-top: 1px solid var(--muted); }
+  .pa-q-pe .pa-tabela, .pa-q-pe .pa-nota, .pa-q-pe .pa-outros { margin-top: 8px; }
+  .pa-q-vazio { flex: 1; display: grid; place-content: center; gap: 4px; min-height: 120px; padding: 20px; text-align: center; border: 1px dashed var(--border); border-radius: 12px; font-size: 13px; color: var(--muted-foreground); }
+  .pa-q-vazio b { color: var(--foreground); font-size: 14px; }
+  .pa-lb { display: grid; gap: 12px; }
+  .pa-lb-l { display: grid; gap: 6px; border-radius: 8px; }
+  .pa-lb-l:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
+  .pa-lb-r { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .pa-lb-n { font-size: 13.5px; line-height: 1.4; color: var(--foreground); }
+  .pa-lb-v { display: inline-flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+  .pa-lb-v b { font-size: 15px; font-weight: 800; color: var(--foreground); }
+  .pa-lb-v small { font-size: 12px; color: var(--muted-foreground); }
+  .pa-lb-t { position: relative; height: 8px; border-radius: 999px; background: var(--muted); overflow: hidden; }
+  .pa-lb-t i { position: absolute; left: 0; top: 0; height: 100%; width: 0; border-radius: inherit; transition: width .8s cubic-bezier(.16, 1, .3, 1); }
+  .pa-lb-f { background: var(--chart-6); }
+  .pa-lb-c { background: var(--chart-3); }
+  .pa-lb-l.top .pa-lb-n { font-weight: 700; }
+  .pa-lb-l.top .pa-lb-f { background: var(--primary); }
+  .pa-lb-l.fixo .pa-lb-f { background: var(--chart-6); }
+  .pa-lb-l.fixo .pa-lb-n { color: var(--muted-foreground); }
+  .pa-rosca { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 18px 24px; align-items: center; }
+  @media (max-width: 480px) { .pa-rosca { grid-template-columns: 1fr; justify-items: center; } .pa-rosca-l { width: 100%; } }
+  .pa-rosca-g { position: relative; width: 168px; height: 168px; }
+  .pa-rosca-g svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .pa-rosca-f { fill: none; stroke: var(--muted); stroke-width: 18; }
+  .pa-rosca-s { fill: none; stroke-width: 18; transition: stroke-dasharray .9s cubic-bezier(.16, 1, .3, 1); }
+  @media (prefers-reduced-motion: reduce) { .pa-rosca-s { transition: none; } }
+  .pa-rosca-m { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 2px; padding: 0 34px; }
+  .pa-rosca-m b { font-size: 28px; line-height: 1; font-weight: 800; letter-spacing: -0.02em; color: var(--foreground); }
+  .pa-rosca-m span { font-size: 11.5px; line-height: 1.25; color: var(--muted-foreground); }
+  .pa-rosca-l { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .pa-rosca-l li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 13.5px; color: var(--foreground); border-radius: 8px; }
+  .pa-rosca-l li:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
+  .pa-rosca-l i { width: 10px; height: 10px; border-radius: 3px; }
+  .pa-rosca-l .v { display: inline-flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+  .pa-rosca-l .v b { font-size: 15px; font-weight: 800; }
+  .pa-rosca-l .v small { font-size: 12px; color: var(--muted-foreground); }
+  .pa-heroi-n { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+  .pa-heroi-n b { font-size: 34px; line-height: 1; font-weight: 800; letter-spacing: -0.02em; color: var(--foreground); }
+  .pa-heroi-n span { font-size: 13px; color: var(--muted-foreground); }
+  .pa-fd { display: grid; gap: 14px; }
+  .pa-fd .pa-legenda { margin: 0; }
+  .pa-fd-l { display: grid; gap: 6px; }
+  .pa-fd-n { font-size: 13.5px; color: var(--foreground); }
+  .pa-fd-b { display: flex; gap: 2px; height: 22px; border-radius: 6px; overflow: hidden; background: var(--muted); }
+  .pa-fd-b i { display: flex; align-items: center; justify-content: center; flex-grow: 0; flex-basis: 0; min-width: 3px; font-style: normal; transition: flex-grow .8s cubic-bezier(.16, 1, .3, 1); }
+  .pa-fd-b i span { font-size: 11px; font-weight: 800; color: var(--foreground); }
+  .pa-fd-b i span.claro { color: #fff; }
+  .pa-fd-b em { align-self: center; padding-left: 8px; font-size: 12px; color: var(--muted-foreground); }
+  .pa-fd-l small { font-size: 12px; color: var(--muted-foreground); }
+  /* Destaques: grade de cartões com número em destaque */
+  .pa-dest-cab { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px 16px; margin-bottom: 16px; }
+  .pa-dest-cab h2 { margin: 0 0 4px; }
+  .pa-dest-cab .muted { margin: 0; font-size: 13px; }
+  .pa-dest-amostra { font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px; background: var(--warning-muted); color: var(--warning); white-space: nowrap; cursor: help; }
+  .pa-dest-grade { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 1100px) { .pa-dest-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .pa-dest-mais { margin-top: 12px; }
+  .pa-dest-mais[hidden] { display: none; }
+  .pa-dest-abre { animation: pa-dest-abre .45s cubic-bezier(.16, 1, .3, 1) both; }
+  @keyframes pa-dest-abre { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .pa-dest-abre { animation: none; } }
+  .pa-dest-bt { margin: 14px auto 0; display: flex; }
+  .pa-dest-bt .seta { display: inline-grid; transition: transform .25s; }
+  .pa-dest-bt .seta svg { width: 16px; height: 16px; }
+  .pa-dest-bt.aberto .seta { transform: rotate(180deg); }
+  .pa-dest-it { display: grid; align-content: start; gap: 6px; padding: 16px; border-radius: 14px; background: var(--muted); border: 1px solid transparent; transition: transform .2s, box-shadow .2s, border-color .2s; }
+  .pa-dest-it:hover { transform: translateY(-2px); border-color: var(--border); box-shadow: var(--shadow-md); }
+  .pa-dest-it.forte { background: var(--crimson-50); }
+  .pa-dest-tema { display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted-foreground); }
+  .pa-dest-tema .ic { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--card); color: var(--muted-foreground); }
+  .pa-dest-it.forte .pa-dest-tema .ic { color: var(--primary); }
+  .pa-dest-tema svg { width: 15px; height: 15px; }
+  .pa-dest-v { font-size: 30px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; color: var(--foreground); }
+  .pa-dest-it.forte .pa-dest-v { color: var(--primary); }
+  .pa-dest-it p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--foreground); }
+  .pa-dest-vazio { grid-column: span 2; display: grid; align-content: center; gap: 4px; padding: 16px; border-radius: 14px; border: 1px dashed var(--border); font-size: 13px; color: var(--muted-foreground); }
+  .pa-dest-vazio b { color: var(--foreground); font-size: 14px; }
+  @media (max-width: 560px) { .pa-dest-vazio { grid-column: 1 / -1; } .pa-dest-v { font-size: 26px; } .pa-dest-it { padding: 14px 12px; } .pa-dest-tema { flex-direction: column; align-items: flex-start; gap: 6px; font-size: 10.5px; letter-spacing: .02em; overflow-wrap: anywhere; } }
+  @media (max-width: 380px) { .pa-dest-grade { grid-template-columns: 1fr; } }
+  .pa-bloco { margin-top: 16px; }
+  .pa-bloco h2 { margin: 0 0 4px; }
+  .pa-bloco > .muted { margin: 0 0 14px; font-size: 13px; }
+  .pa-etapas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 760px) { .pa-etapas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .pa-etapa { position: relative; display: grid; gap: 2px; padding: 14px; border-radius: 14px; background: var(--muted); }
+  .pa-etapa b { font-size: 26px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; color: var(--foreground); }
+  .pa-etapa span { font-size: 13px; font-weight: 700; color: var(--foreground); }
+  .pa-etapa small { font-size: 12px; color: var(--muted-foreground); }
+  .pa-etapa.fim { background: var(--crimson-50); }
+  .pa-etapa.fim b { color: var(--primary); }
   .pa-q h3 { margin: 0 0 2px; font-size: 15px; line-height: 1.4; }
   .pa-q .meta { font-size: 12px; color: var(--muted-foreground); margin: 0 0 14px; }
   .pa-barras { display: grid; gap: 10px; }
@@ -426,6 +528,10 @@
   const completasR = () => R.filter((x) => x.situacao === "completa");
   // valores escolhidos numa resposta (escolha única, classificação ou múltipla escolha)
   const valores = (v) => (Array.isArray(v) ? v : v && Array.isArray(v.opcoes) ? v.opcoes : v == null ? [] : [v]);
+  // pergunta 4: nota geral = média dos aspectos (Qualidade, Estética, Correspondência); respostas antigas tinham uma nota só
+  const notaGeral = (x) => { const v = x.respostas && x.respostas.q4; if (typeof v === "number") return v; if (!v || typeof v !== "object") return null; const ns = Object.values(v).filter((n) => typeof n === "number"); return ns.length ? ns.reduce((a, b) => a + b, 0) / ns.length : null; };
+  const notaCorr = (x) => { const v = x.respostas && x.respostas.q4; return v && typeof v === "object" && typeof v.correspondencia === "number" ? v.correspondencia : null; };
+  const notas = (lista, f) => lista.map(f).filter((v) => typeof v === "number");
   const naCondicao = (p, x) => valores(x.respostas[p.condicao.pergunta]).some((v) => p.condicao.opcoes.includes(v));
   const respondeu = (pid) => R.filter((x) => x.respostas && x.respostas[pid] != null);
   function contar(p, base) {
@@ -643,104 +749,297 @@
     const n = contar(p, base);
     return p.opcoes.map((o) => ({ rotulo: o.texto, v: n[o.id] || 0, fixo: !!o.exclusiva || o.id === "nao_informar" }));
   }
+
+  /* ---------- Resultados: um card padrão por pergunta ----------
+     Número + pergunta + quantas responderam; "Leitura" em uma frase; o gráfico; "Ver números" e notas no pé.
+     Todos os gráficos usam a mesma linguagem: rótulo, percentual em destaque e barra fina (a resposta mais escolhida
+     em vermelho, as demais em cinza-azulado, opções como "Prefiro não informar" em cinza claro).
+     Cards lado a lado têm a mesma altura (o pé fica sempre embaixo). Sem respostas: estado vazio, sem gráfico zerado. */
+  const IC_LEITURA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>';
+  function qCard({ num, titulo, base, meta = [], leitura, corpo, rodape = [], largo = false }) {
+    const c = el("section", "card pa-q" + (largo ? " largo" : ""));
+    const cab = el("div", "pa-q-cab");
+    const info = el("div");
+    info.append(el("h3", null, titulo), el("p", "meta", [plural(base, "resposta", "respostas"), ...meta].join(" · ")));
+    cab.append(el("span", "pa-q-num", String(num)), info);
+    c.appendChild(cab);
+    if (!base) {
+      const v = el("div", "pa-q-vazio"); v.append(el("b", null, "Ainda sem respostas aqui"), el("span", null, "O gráfico aparece com a primeira resposta a esta pergunta."));
+      c.appendChild(v); return c;
+    }
+    if (leitura) { const l = el("div", "pa-leitura"); const i = el("span", "ic"); i.innerHTML = IC_LEITURA; const t = el("p"); (Array.isArray(leitura) ? leitura : [leitura]).forEach((x) => t.append(typeof x === "string" ? x : el("strong", null, x.b))); l.append(i, t); c.appendChild(l); }
+    c.appendChild(corpo);
+    const pe = el("div", "pa-q-pe"); rodape.filter(Boolean).forEach((x) => pe.appendChild(x));
+    if (pe.childNodes.length) c.appendChild(pe);
+    return c;
+  }
+  // lista de barras: rótulo, percentual e quantidade; ordem do maior para o menor (ou a ordem natural da escala)
+  function barras(itens, total, { ordem = "valor", camada } = {}) {
+    const ord = ordem === "valor" ? [...itens].sort((a, b) => (a.fixo ? 1 : 0) - (b.fixo ? 1 : 0) || b.v - a.v) : itens;
+    const max = Math.max(0, ...ord.filter((i) => !i.fixo).map((i) => i.v));
+    const lista = el("div", "pa-lb");
+    ord.forEach((it) => {
+      const topo = !it.fixo && max > 0 && it.v === max;
+      const l = el("div", "pa-lb-l" + (topo ? " top" : "") + (it.fixo ? " fixo" : ""));
+      const r = el("div", "pa-lb-r");
+      const val = el("span", "pa-lb-v"); val.append(el("b", null, pct(it.v, total) + "%"), el("small", null, String(it.v)));
+      r.append(el("span", "pa-lb-n", semOutro(it.rotulo)), val);
+      const t = el("div", "pa-lb-t");
+      if (camada && it.v2 != null) { const j = el("i", "pa-lb-c"); j.dataset.w = pct(it.v2, total) + "%"; t.appendChild(j); }
+      const i = el("i", "pa-lb-f"); i.dataset.w = pct(it.v, total) + "%"; t.appendChild(i);
+      l.append(r, t);
+      dica(l, [[`${pct(it.v, total)}%`, `${semOutro(it.rotulo)} · ${plural(it.v, "pessoa", "pessoas")}` + (camada && it.v2 != null ? ` · ${camada}: ${pct(it.v2, total)}%` : "")]]);
+      lista.appendChild(l);
+    });
+    return lista;
+  }
+  // rosca (só para resposta única com poucas opções, que somam 100%): percentual principal no centro e legenda com números
+  const CORES_ROSCA = ["var(--chart-1)", "var(--chart-2)", "var(--chart-4)", "var(--chart-5)", "var(--chart-3)", "var(--chart-6)"];
+  function rosca(itens, total, { centro, rotCentro } = {}) {
+    const box = el("div", "pa-rosca");
+    const R0 = 52, C = 2 * Math.PI * R0;
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg"); svg.setAttribute("viewBox", "0 0 140 140"); svg.setAttribute("aria-hidden", "true");
+    const fundo = document.createElementNS(svgNS, "circle"); fundo.setAttribute("cx", "70"); fundo.setAttribute("cy", "70"); fundo.setAttribute("r", R0); fundo.setAttribute("class", "pa-rosca-f"); svg.appendChild(fundo);
+    let acum = 0;
+    const comCor = itens.map((it, k) => ({ ...it, cor: it.fixo ? "var(--chart-6)" : CORES_ROSCA[k % CORES_ROSCA.length] }));
+    comCor.forEach((it) => {
+      if (!it.v || !total) return;
+      const frac = it.v / total, gap = comCor.filter((x) => x.v).length > 1 ? 2 : 0;
+      const c = document.createElementNS(svgNS, "circle");
+      c.setAttribute("cx", "70"); c.setAttribute("cy", "70"); c.setAttribute("r", R0); c.setAttribute("class", "pa-rosca-s");
+      c.style.stroke = it.cor; c.style.strokeDasharray = `0 ${C}`; c.dataset.arco = `${Math.max(0, frac * C - gap)} ${C}`;
+      c.style.strokeDashoffset = String(-acum * C); acum += frac;
+      svg.appendChild(c);
+    });
+    const meio = el("div", "pa-rosca-m"); meio.append(el("b", null, centro ?? ""), el("span", null, rotCentro ?? ""));
+    const graf = el("div", "pa-rosca-g"); graf.append(svg, meio);
+    const leg = el("ul", "pa-rosca-l");
+    comCor.forEach((it) => { const li = el("li"); const i = el("i"); i.style.background = it.cor; const v = el("span", "v"); v.append(el("b", null, pct(it.v, total) + "%"), el("small", null, String(it.v))); li.append(i, el("span", "n", semOutro(it.rotulo)), v); dica(li, [[`${pct(it.v, total)}%`, `${semOutro(it.rotulo)} · ${plural(it.v, "pessoa", "pessoas")}`]]); leg.appendChild(li); });
+    box.append(graf, leg);
+    return box;
+  }
+  const maisEscolhida = (itens) => [...itens].filter((i) => !i.fixo).sort((a, b) => b.v - a.v)[0];
+  const tabelaItens = (itens, total, cab = "Resposta") => tabela([cab, "Pessoas", "%"], itens.map((it) => [semOutro(it.rotulo), it.v, pct(it.v, total) + "%"]));
+
+  // funil em etapas: quantas pessoas chegaram a cada ponto e quanto passou da etapa anterior
+  function etapas(lista) {
+    const box = el("div", "pa-etapas");
+    lista.forEach((e, k) => {
+      const d = el("div", "pa-etapa" + (k === lista.length - 1 ? " fim" : ""));
+      d.append(el("b", null, String(e.v)), el("span", null, e.rotulo), el("small", null, k ? `${pct(e.v, lista[k - 1].v)}% da etapa anterior` : "ponto de partida"));
+      box.appendChild(d);
+    });
+    return box;
+  }
+  // fácil x difícil: barra 100% com três grupos (fácil, médio, difícil), da característica mais difícil para a mais fácil
+  const GRUPOS = [{ id: "fac", rot: "Fácil", ids: ["1", "2"], cor: "var(--chart-6)" }, { id: "med", rot: "Médio", ids: ["3"], cor: "var(--chart-3)" }, { id: "dif", rot: "Difícil", ids: ["4", "5"], cor: "var(--chart-1)" }];
+  function facilDificil(p, base) {
+    const linhas = p.linhas.map((l) => {
+      const vals = base.map((x) => x.respostas[p.id] && x.respostas[p.id][l.id]).filter(Boolean);
+      const ap = vals.filter((v) => v !== "na");
+      const g = Object.fromEntries(GRUPOS.map((gr) => [gr.id, ap.filter((v) => gr.ids.includes(v)).length]));
+      return { l, n: ap.length, na: vals.length - ap.length, g, cont: Object.fromEntries(["1", "2", "3", "4", "5"].map((k) => [k, ap.filter((v) => v === k).length])) };
+    }).sort((a, b) => pct(b.g.dif, b.n) - pct(a.g.dif, a.n));
+    const box = el("div", "pa-fd");
+    box.appendChild(legenda(GRUPOS.map((gr) => [gr.cor, gr.rot])));
+    linhas.forEach((x) => {
+      const l = el("div", "pa-fd-l");
+      l.appendChild(el("span", "pa-fd-n", x.l.texto));
+      const barra = el("div", "pa-fd-b");
+      GRUPOS.forEach((gr) => { const v = x.g[gr.id]; if (!v) return; const i = el("i"); i.style.background = gr.cor; i.dataset.g = String(v); const pc = pct(v, x.n); if (pc >= 14) i.appendChild(el("span", "", pc + "%")); dica(i, [[`${pc}%`, `${x.l.texto}: ${gr.rot.toLowerCase()}`]]); barra.appendChild(i); });
+      if (!x.n) barra.appendChild(el("em", null, "Só “Não se aplica”"));
+      l.appendChild(barra);
+      l.appendChild(el("small", null, `${pct(x.g.dif, x.n)}% difícil · ${pct(x.g.fac, x.n)}% fácil` + (x.na ? ` · ${x.na} não se aplica` : "")));
+      box.appendChild(l);
+    });
+    box._linhas = linhas;
+    return box;
+  }
+
   function resultados() {
     const box = el("div", "pa-entra");
     if (!R.length) { box.appendChild(vazio("Ainda não há respostas", "Compartilhe o link. Cada participação aparece aqui na hora, e o sino avisa quando chegar uma nova.")); return box; }
     const comp = completasR();
     const perg = Object.fromEntries(Q.perguntas.map((p) => [p.id, p]));
     box.appendChild(cardInsights(comp));
-    const g = el("div", "pa-graficos");
-    // funil: quem entra, quem é do público e quem vai até o fim
-    const fc = el("section", "card pa-q largo");
-    fc.append(el("h3", null, "Funil de participação"), el("p", "meta", "Do envio à resposta completa e ao pedido de novidades"),
-      funil([
-        { rotulo: "Enviaram a pesquisa", v: R.length },
+
+    // funil em etapas
+    const fc = el("section", "card pa-bloco");
+    fc.append(el("h2", null, "Quem chegou até onde"), el("p", "muted", "Da entrada na pesquisa até o pedido de avisos sobre o lançamento."),
+      etapas([
+        { rotulo: "Responderam", v: R.length },
         { rotulo: "Moram em Curitiba", v: R.filter((x) => x.situacao !== "fora_de_curitiba").length },
-        { rotulo: "Compraram este ano (respostas completas)", v: comp.length },
-        { rotulo: "Pediram novidades sobre o lançamento", v: comp.filter((x) => x.quer_novidades).length },
+        { rotulo: "Responderam tudo", v: comp.length },
+        { rotulo: "Querem os avisos", v: comp.filter((x) => x.quer_novidades).length },
       ]));
-    g.appendChild(fc);
-    const b1 = respondeu("q1"), b2 = respondeu("q2");
-    const sim = b1.filter((x) => x.respostas.q1 === "sim").length;
-    g.append(cardPergunta(perg.q1, 1, b1, segmentado([{ rotulo: "Sim", v: sim, cor: TOM(1) }, { rotulo: "Não", v: b1.length - sim, cor: TOM(6) }], b1.length)));
-    g.append(cardPergunta(perg.q2, 2, b2, perg.q2.tipo === "ranking" ? rankingPilha(perg.q2, b2) : ranking(itensDe(perg.q2, b2), b2.length)));
+    box.appendChild(fc);
+
+    const g = el("div", "pa-graficos");
+    // P1
+    const b1 = respondeu("q1"), sim = b1.filter((x) => x.respostas.q1 === "sim").length;
+    const i1 = [{ rotulo: "Sim, moram em Curitiba", v: sim }, { rotulo: "Não moram em Curitiba", v: b1.length - sim }];
+    g.appendChild(qCard({ num: 1, titulo: perg.q1.texto, base: b1.length, leitura: [{ b: pct(sim, b1.length) + "%" }, " moram em Curitiba e seguiram na pesquisa."], corpo: rosca(i1, b1.length, { centro: pct(sim, b1.length) + "%", rotCentro: "moram em Curitiba" }), rodape: [tabelaItens(i1, b1.length)] }));
+    // P2 (classificação): % em 1º lugar e, mais claro, % entre as 3
+    const b2 = respondeu("q2");
+    if (perg.q2.tipo === "ranking") {
+      const enc = perg.q2.opcoes.find((o) => o.encerra);
+      const nEnc = enc ? b2.filter((x) => valores(x.respostas.q2).includes(enc.id)).length : 0;
+      const it2 = perg.q2.opcoes.filter((o) => !o.encerra).map((o) => ({ rotulo: o.texto, v: b2.filter((x) => valores(x.respostas.q2)[0] === o.id).length, v2: b2.filter((x) => valores(x.respostas.q2).includes(o.id)).length }));
+      const t2 = maisEscolhida(it2);
+      const leg = legenda([["var(--chart-1)", "Onde mais comprou (1º lugar)"], ["var(--chart-3)", "Entre os 3 lugares"]]);
+      g.appendChild(qCard({ num: 2, titulo: perg.q2.texto, base: b2.length, meta: ["até 3 lugares, em ordem"],
+        leitura: t2 && t2.v ? [{ b: t2.rotulo }, ` é onde mais compraram: ${pct(t2.v, b2.length)}% em 1º lugar.`] : "Ninguém marcou um lugar de compra ainda.",
+        corpo: (() => { const d = el("div"); d.append(leg, barras(it2, b2.length, { camada: "entre os 3" })); return d; })(),
+        rodape: [enc && nEnc ? el("p", "pa-nota", `${enc.texto}: ${nEnc} (${pct(nEnc, b2.length)}%), encerraram aqui.`) : null,
+          tabela(["Lugar", "1º lugar", "Entre os 3"], it2.map((it) => [it.rotulo, `${it.v} (${pct(it.v, b2.length)}%)`, `${it.v2} (${pct(it.v2, b2.length)}%)`]))] }));
+    } else {
+      const it2 = itensDe(perg.q2, b2); const t2 = maisEscolhida(it2);
+      g.appendChild(qCard({ num: 2, titulo: perg.q2.texto, base: b2.length, leitura: t2 && t2.v ? [{ b: t2.rotulo }, `: ${pct(t2.v, b2.length)}%.`] : null, corpo: barras(it2, b2.length), rodape: [tabelaItens(it2, b2.length)] }));
+    }
+    // P2.1 a P10
     let num = 2;
     Q.perguntas.slice(2).forEach((p) => {
       const base = p.condicao ? comp.filter((x) => naCondicao(p, x)) : comp;
       if (!p.condicao) num++;
-      let conteudo;
-      if (p.tipo === "escala") conteudo = histograma(p, base);
-      else if (p.tipo === "matriz") conteudo = matrizDivergente(p, base);
-      else if (p.id === "q3") conteudo = escalaOrdenada(p, base, { ids: ["uma_vez", "algumas", "frequencia", "maioria"], texto: "compraram de segunda mão este ano" });
-      else if (p.id === "q7") conteudo = escalaOrdenada(p, base, { ids: ["frequentemente", "quase_sempre"], texto: "frequentemente ou quase sempre não encontram o que procuram" });
-      else conteudo = ranking(itensDe(p, base), base.length);
-      const notas = [outros(p, base)];
+      const n = base.length;
+      const meta = p.tipo === "multipla" ? [p.max ? `até ${p.max} escolhas por pessoa` : "várias escolhas por pessoa"] : [];
+      const rodape = [];
+      let corpo, leitura, largo = false;
+      if (p.tipo === "escalas" || p.tipo === "escala") {
+        // nota geral (média dos aspectos) em destaque e a média de cada aspecto; "Correspondência" fica em vermelho
+        const ger = notas(base, notaGeral), mg = ger.length ? ger.reduce((a, b) => a + b, 0) / ger.length : 0;
+        corpo = el("div", "pa-nota-g");
+        const heroi = el("div", "pa-heroi-n"); heroi.append(el("b", null, fmt1(mg)), el("span", null, "nota geral (média dos aspectos), de 0 a 10"));
+        corpo.appendChild(heroi);
+        const asp = (p.linhas || []).map((l) => { const ns = base.map((x) => x.respostas[p.id] && x.respostas[p.id][l.id]).filter((v) => typeof v === "number"); return { l, ns, m: ns.length ? ns.reduce((a, b) => a + b, 0) / ns.length : 0 }; });
+        const lista = el("div", "pa-lb");
+        asp.forEach((a2) => {
+          const linha = el("div", "pa-lb-l" + (a2.l.id === "correspondencia" ? " top" : ""));
+          const r = el("div", "pa-lb-r"); const val = el("span", "pa-lb-v"); val.append(el("b", null, fmt1(a2.m)), el("small", null, "de 10"));
+          r.append(el("span", "pa-lb-n", a2.l.texto), val);
+          const t = el("div", "pa-lb-t"); const i = el("i", "pa-lb-f"); i.dataset.w = (a2.m * 10) + "%"; t.appendChild(i);
+          linha.append(r, t); dica(linha, [[fmt1(a2.m), `${a2.l.texto}: nota média · ${pct(a2.ns.filter((v) => v >= 9).length, a2.ns.length)}% deram 9 ou 10`]]);
+          lista.appendChild(linha);
+        });
+        corpo.appendChild(lista);
+        const corr = asp.find((a2) => a2.l.id === "correspondencia");
+        leitura = corr ? ["Nota geral ", { b: fmt1(mg) }, "; correspondência com o que procuravam: ", { b: fmt1(corr.m) }, ` (${pct(corr.ns.filter((v) => v <= 6).length, corr.ns.length)}% deram de 0 a 6).`] : ["Nota média ", { b: fmt1(mg) }, "."];
+        rodape.push(el("p", "pa-nota", `0 = ${p.rotulo_min} · 10 = ${p.rotulo_max}. Nota geral = média dos ${asp.length} aspectos de cada pessoa.`),
+          tabela(["Aspecto", "Média", "0 a 6", "7 e 8", "9 e 10"], asp.map((a2) => [a2.l.texto, fmt1(a2.m), pct(a2.ns.filter((v) => v <= 6).length, a2.ns.length) + "%", pct(a2.ns.filter((v) => v >= 7 && v <= 8).length, a2.ns.length) + "%", pct(a2.ns.filter((v) => v >= 9).length, a2.ns.length) + "%"])));
+        largo = true;
+      } else if (p.tipo === "matriz") {
+        corpo = facilDificil(p, base);
+        const top = corpo._linhas.find((x) => x.n);
+        leitura = top && top.g.dif ? ["O mais difícil de encontrar: ", { b: item(top.l.texto) }, ` (${pct(top.g.dif, top.n)}% acham difícil ou muito difícil).`] : "Ninguém marcou dificuldade ainda.";
+        const temNa = corpo._linhas.some((x) => x.na) || (p.colunas || []).some((c) => c.id === "na");
+        rodape.push(tabela(["Característica", "Muito fácil", "Fácil", "Médio", "Difícil", "Muito difícil", ...(temNa ? ["Não se aplica"] : [])], corpo._linhas.map((x) => [x.l.texto, x.cont["1"], x.cont["2"], x.cont["3"], x.cont["4"], x.cont["5"], ...(temNa ? [x.na] : [])])));
+      } else {
+        const its = itensDe(p, base);
+        const ordinal = p.id === "q3" || p.id === "q7";
+        corpo = barras(its, n, { ordem: ordinal ? "natural" : "valor" });
+        const t = maisEscolhida(its);
+        if (p.id === "q3") { const k = base.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; leitura = [{ b: pct(k, n) + "%" }, " compraram de segunda mão este ano."]; }
+        else if (p.id === "q7") { const k = base.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length; leitura = [{ b: pct(k, n) + "%" }, " frequentemente ou quase sempre têm dificuldade para encontrar exatamente o que desejam."]; }
+        else leitura = t && t.v ? ["A resposta mais escolhida: ", { b: semOutro(t.rotulo) }, ` (${pct(t.v, n)}%).`] : null;
+        if (p.tipo === "multipla") rodape.push(el("p", "pa-nota", "Cada pessoa pode marcar mais de uma opção, por isso a soma passa de 100%."));
+        rodape.push(outros(p, base), tabelaItens(its, n));
+      }
       if (p.condicao) {
         const ops = Q.perguntas.find((x) => x.id === p.condicao.pergunta).opcoes.filter((o) => p.condicao.opcoes.includes(o.id)).map((o) => "“" + o.texto + "”");
-        notas.unshift(el("p", "pa-nota", "Mostrada só para quem escolheu na pergunta 2, em qualquer posição: " + ops.join(" ou ") + "."));
+        rodape.unshift(el("p", "pa-nota", "Aparece só para quem marcou na pergunta 2 " + ops.join(" ou ") + "."));
       }
-      const c = cardPergunta(p, p.rotulo || num, base, conteudo, notas.filter(Boolean));
-      if (["matriz", "escala"].includes(p.tipo)) c.classList.add("largo");
-      g.appendChild(c);
+      g.appendChild(qCard({ num: p.rotulo || num, titulo: p.texto, base: n, meta, leitura, corpo, rodape, largo }));
     });
+    // perfil: um card para gênero e outro para faixa etária, lado a lado
     if (Q.perfil && Q.perfil.length) {
       const comPerfil = comp.filter((x) => x.respostas.perfil);
-      const pc = el("section", "card pa-q largo");
-      pc.append(el("h3", null, "Perfil de quem respondeu"), el("p", "meta", plural(comPerfil.length, "resposta", "respostas") + (comPerfil.length < comp.length ? ` · ${comp.length - comPerfil.length} respondidas antes desta etapa existir` : "")));
-      const duas = el("div", "pa-graficos"); duas.style.marginTop = "0";
       Q.perfil.forEach((c) => {
-        const sub = el("div"); const t = el("p", "meta", c.texto); t.style.fontWeight = "700"; t.style.color = "var(--foreground)"; sub.appendChild(t);
-        const itens = c.opcoes.map((o) => ({ rotulo: semOutro(o.texto), curto: o.texto.replace(" anos", "").replace(" ou mais", "+").replace("Prefiro não informar", "Não informou"), v: comPerfil.filter((x) => x.respostas.perfil[c.id] === o.id).length, fixo: o.id === "nao_informar" }));
-        sub.appendChild(c.id === "faixa_etaria" ? colunas(itens, comPerfil.length) : ranking(itens, comPerfil.length));
+        const its = c.opcoes.map((o) => ({ rotulo: semOutro(o.texto), v: comPerfil.filter((x) => x.respostas.perfil[c.id] === o.id).length, fixo: o.id === "nao_informar" }));
+        const t = maisEscolhida(its);
         const outrosTx = comPerfil.map((x) => x.respostas.perfil[c.id + "_outro"]).filter(Boolean);
-        if (outrosTx.length) { const b = el("div", "pa-outros"); b.appendChild(el("b", null, "O que escreveram em “outro”")); const ul = el("ul"); outrosTx.slice(0, 50).forEach((tx) => ul.appendChild(el("li", null, tx))); b.appendChild(ul); sub.appendChild(b); }
-        duas.appendChild(sub);
+        let ob = null;
+        if (outrosTx.length) { ob = el("div", "pa-outros"); ob.appendChild(el("b", null, "O que escreveram em “outro”")); const ul = el("ul"); outrosTx.slice(0, 50).forEach((tx) => ul.appendChild(el("li", null, tx))); ob.appendChild(ul); }
+        g.appendChild(qCard({ num: "Perfil", titulo: c.texto, base: comPerfil.length,
+          leitura: t && t.v ? ["Maior grupo: ", { b: t.rotulo }, ` (${pct(t.v, comPerfil.length)}%).`] : null,
+          corpo: c.id === "genero" ? rosca(its, comPerfil.length, { centro: t && t.v ? pct(t.v, comPerfil.length) + "%" : "0%", rotCentro: t && t.v ? t.rotulo.toLowerCase() : "" }) : barras(its, comPerfil.length, { ordem: "natural" }), rodape: [ob, tabelaItens(its, comPerfil.length)] }));
       });
-      pc.appendChild(duas); g.appendChild(pc);
     }
     box.appendChild(g);
-    box.appendChild(el("p", "pa-nota", `As perguntas 2.1 a 10 mostram só as respostas completas (${comp.length}); a 2.1, só de quem ela foi mostrada. Quem não mora em Curitiba ou não comprou este ano encerra na pergunta 1 ou 2 e não vê as seguintes.`));
+    box.appendChild(el("p", "pa-nota", `Da pergunta 2.1 em diante, os números contam só quem respondeu tudo (${comp.length}). Quem não mora em Curitiba ou não comprou este ano encerra na pergunta 1 ou 2.`));
     return box;
   }
 
-  // Destaques calculados direto dos números (sem IA): a opção mais escolhida e alguns recortes
+  // Destaques calculados direto dos números (sem IA): um cartão por achado, com o número em destaque,
+  // o tema e uma frase curta. A correspondência com o que procuravam tem cartão próprio.
+  const IC_D = {
+    publico: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    compra: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+    motivo: '<path d="M12 2a10 10 0 1 0 10 10"/><path d="m22 2-10 10"/><path d="M16 2h6v6"/>',
+    busca: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    brecho: '<path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M8 16H3v5"/>',
+    nota: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+    alvo: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    alerta: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+    sair: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
+    obst: '<rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  };
   function cardInsights(comp) {
-    const card = el("section", "card");
-    card.appendChild(el("h2", null, "Destaques"));
-    const ul = el("ul", "pa-insights");
-    const add = (partes) => { const li = el("li"), t = el("span"); partes.forEach((x) => t.append(typeof x === "string" ? x : el("strong", null, x.b))); li.appendChild(t); ul.appendChild(li); };
-    const perg = Object.fromEntries(Q.perguntas.map((p) => [p.id, p]));
-    const topo = (p, base, filtro = () => true) => {
-      const n = contar(p, base); const op = p.opcoes.filter(filtro).map((o) => ({ ...o, v: n[o.id] || 0 })).sort((a, b) => b.v - a.v)[0];
-      return op && op.v ? op : null;
+    const card = el("section", "card pa-dest");
+    const cab = el("div", "pa-dest-cab");
+    const tit = el("div"); tit.append(el("h2", null, "Destaques"), el("p", "muted", "O principal de cada pergunta, em números. Passe para as abas Resultados e Inteligência para ver os detalhes."));
+    cab.appendChild(tit);
+    if (comp.length && comp.length < 30) { const av = el("span", "pa-dest-amostra", `Amostra pequena: ${plural(comp.length, "resposta completa", "respostas completas")}`); av.title = "Com poucas respostas, os percentuais ainda podem mudar bastante a cada nova participação."; cab.appendChild(av); }
+    card.appendChild(cab);
+    const grade = el("div", "pa-dest-grade");
+    const itens = [];
+    const add = ({ ic, tema, valor, partes, forte, ordem = 9 }) => {
+      const d = el("div", "pa-dest-it" + (forte ? " forte" : "")); d._ordem = ordem; d._i = itens.length; itens.push(d);
+      const t = el("span", "pa-dest-tema"); const i = el("span", "ic"); i.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC_D[ic]}</svg>`; t.append(i, tema);
+      const p = el("p"); partes.forEach((x) => p.append(typeof x === "string" ? x : el("strong", null, x.b)));
+      d.append(t, el("b", "pa-dest-v", valor), p);
     };
-    const elegiveis = R.length - R.filter((x) => x.situacao !== "completa").length;
-    add([{ b: `${pct(elegiveis, R.length)}%` }, ` das ${plural(R.length, "participação", "participações")} estão no público da pesquisa (moram em Curitiba e compraram este ano).`]);
-    if (!comp.length) { ul.appendChild((() => { const li = el("li"); li.appendChild(el("span", null, "Ainda não há respostas completas para os demais destaques.")); return li; })()); card.appendChild(ul); return card; }
+    // os 4 principais (o problema que a pesquisa investiga) na primeira linha; os demais em "Ver mais destaques"
+    const montar = () => {
+      const ord = [...itens].sort((a, b) => a._ordem - b._ordem || a._i - b._i);
+      ord.slice(0, 4).forEach((d) => grade.appendChild(d));
+      const resto = ord.slice(4);
+      card.appendChild(grade);
+      if (!resto.length) return;
+      const mais = el("div", "pa-dest-grade pa-dest-mais"); mais.id = "pa-dest-mais"; mais.hidden = true;
+      resto.forEach((d) => mais.appendChild(d));
+      const bt = el("button", "pa-btn pa-dest-bt"); bt.type = "button"; bt.setAttribute("aria-expanded", "false"); bt.setAttribute("aria-controls", mais.id);
+      const rot = () => { bt.innerHTML = ""; bt.append(mais.hidden ? `Ver mais destaques (${resto.length})` : "Ver menos"); const sv = el("span", "seta"); sv.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>'; bt.appendChild(sv); bt.classList.toggle("aberto", !mais.hidden); };
+      bt.addEventListener("click", () => { mais.hidden = !mais.hidden; bt.setAttribute("aria-expanded", String(!mais.hidden)); rot(); if (!mais.hidden) { mais.classList.remove("pa-dest-abre"); void mais.offsetWidth; mais.classList.add("pa-dest-abre"); } });
+      rot();
+      card.append(mais, bt);
+    };
+    const perg = Object.fromEntries(Q.perguntas.map((p) => [p.id, p]));
+    const topo = (p, base, filtro = () => true) => { const n = contar(p, base); const op = p.opcoes.filter(filtro).map((o) => ({ ...o, v: n[o.id] || 0 })).sort((a, b) => b.v - a.v)[0]; return op && op.v ? op : null; };
+    add({ ic: "publico", tema: "Público", valor: `${pct(comp.length, R.length)}%`, partes: [R.length === 1 ? "da única participação até agora é do público da pesquisa (mora em Curitiba e comprou este ano)." : `das ${R.length} participações são do público da pesquisa: moram em Curitiba e compraram este ano.`] });
+    if (!comp.length) {
+      grade.appendChild((() => { const d = el("div", "pa-dest-vazio"); d.append(el("b", null, "Os outros destaques aparecem com a primeira resposta completa"), el("span", null, "Quem não mora em Curitiba ou não comprou este ano encerra no começo da pesquisa.")); return d; })());
+      itens.forEach((d) => grade.prepend(d)); card.appendChild(grade); return card;
+    }
     const b2 = respondeu("q2").filter((x) => !valores(x.respostas.q2).includes("nao_comprei"));
     if (perg.q2.tipo === "ranking") {
-      const prim = perg.q2.opcoes.filter((o) => !o.encerra).map((o) => ({ ...o, v: b2.filter((x) => valores(x.respostas.q2)[0] === o.id).length })).sort((a, b) => b.v - a.v)[0];
-      if (prim && prim.v) add(["Onde mais compraram (1º lugar): ", { b: prim.texto }, ` (${pct(prim.v, b2.length)}%).`]);
-    } else { const t2 = topo(perg.q2, b2, (o) => !o.encerra); if (t2) add(["Onde a maior parte das compras acontece: ", { b: t2.texto }, ` (${pct(t2.v, b2.length)}%).`]); }
-    if (perg.q2_1) {
-      const b21 = comp.filter((x) => naCondicao(perg.q2_1, x));
-      const t21 = topo(perg.q2_1, b21, (o) => !o.outro);
-      if (t21) add(["Entre quem compra em marketplaces ou lojas online de outras cidades, o motivo mais citado: ", { b: t21.texto }, ` (${pct(t21.v, b21.length)}%).`]);
+      const p1 = perg.q2.opcoes.filter((o) => !o.encerra).map((o) => ({ ...o, v: b2.filter((x) => valores(x.respostas.q2)[0] === o.id).length })).sort((a, b) => b.v - a.v)[0];
+      if (p1 && p1.v) add({ ic: "compra", tema: "Onde mais compram", valor: `${pct(p1.v, b2.length)}%`, partes: ["escolheram em 1º lugar ", { b: semOutro(p1.texto) }, "."], forte: true, ordem: 1 });
     }
-    const t5 = topo(perg.q5, comp); if (t5) add(["Onde a procura começa: ", { b: t5.texto }, ` (${pct(t5.v, comp.length)}%).`]);
-    const sm = comp.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; add([{ b: `${pct(sm, comp.length)}%` }, " compraram de segunda mão (brechós) este ano."]);
-    const notas = comp.map((x) => x.respostas.q4).filter((v) => typeof v === "number");
-    if (notas.length) add(["Satisfação com as compras: média ", { b: (notas.reduce((a, b) => a + b, 0) / notas.length).toLocaleString("pt-BR", { maximumFractionDigits: 1 }) }, " de 10."]);
+    if (perg.q2_1) { const b21 = comp.filter((x) => naCondicao(perg.q2_1, x)); const t = topo(perg.q2_1, b21, (o) => !o.outro); if (t) add({ ic: "motivo", tema: "Por que compram fora", valor: `${pct(t.v, b21.length)}%`, partes: ["de quem compra em marketplaces ou lojas online de outras cidades citam ", { b: lc(t.texto) }, "."] }); }
+    const t5 = topo(perg.q5, comp); if (t5) add({ ic: "busca", tema: "Onde a procura começa", valor: `${pct(t5.v, comp.length)}%`, partes: [{ b: semOutro(t5.texto) }, "."] });
+    const sm = comp.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; add({ ic: "brecho", tema: "Segunda mão", valor: `${pct(sm, comp.length)}%`, partes: ["compraram de segunda mão (brechós) este ano."] });
+    const ng = notas(comp, notaGeral), nc = notas(comp, notaCorr);
+    if (ng.length) add({ ic: "nota", tema: "Nota geral das compras", valor: fmt1(ng.reduce((a, b) => a + b, 0) / ng.length), partes: ["de 0 a 10, média de qualidade, estética e correspondência."] });
+    if (nc.length) add({ ic: "alvo", tema: "Correspondência", valor: fmt1(nc.reduce((a, b) => a + b, 0) / nc.length), partes: ["de 0 a 10: o quanto as peças atenderam ao que as pessoas realmente queriam."], forte: true, ordem: 3 });
     const freq = comp.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length;
-    add([{ b: `${pct(freq, comp.length)}%` }, " frequentemente ou quase sempre não encontram a peça com as características que procuram."]);
+    add({ ic: "alerta", tema: "Dificuldade para encontrar", valor: `${pct(freq, comp.length)}%`, partes: ["frequentemente ou quase sempre têm dificuldade para encontrar exatamente o que desejam."], forte: true, ordem: 2 });
     const difs = perg.q8.linhas.map((l) => { const v = comp.map((x) => x.respostas.q8 && x.respostas.q8[l.id]).filter((y) => y && y !== "na"); return { t: l.texto, p: pct(v.filter((y) => y === "4" || y === "5").length, v.length), n: v.length }; }).filter((x) => x.n).sort((a, b) => b.p - a.p);
-    if (difs[0] && difs[0].p) add(["O mais difícil de encontrar: ", { b: item(difs[0].t) }, ` (${difs[0].p}% acham difícil ou muito difícil).`]);
+    if (difs[0] && difs[0].p) add({ ic: "alerta", tema: "O mais difícil de encontrar", valor: `${difs[0].p}%`, partes: ["acham difícil encontrar ", { b: item(difs[0].t) }, "."], forte: true, ordem: 4 });
     const viveu = comp.filter((x) => x.respostas.q9 && !x.respostas.q9.opcoes.includes("nao_passei"));
-    const des = viveu.filter((x) => x.respostas.q9.opcoes.includes("desisti")).length;
-    if (viveu.length) add(["Entre quem não encontrou uma peça este ano, ", { b: `${pct(des, viveu.length)}%` }, " desistiram da compra em algum momento."]);
-    const t10 = topo(perg.q10, comp, (o) => !o.exclusiva && !o.outro); if (t10) add(["O que mais atrapalha, além das peças: ", { b: t10.texto }, ` (${pct(t10.v, comp.length)}%).`]);
-    card.appendChild(ul);
-    if (comp.length < 30) card.appendChild(el("p", "pa-nota", `Com ${plural(comp.length, "resposta completa", "respostas completas")}, os percentuais ainda podem mudar bastante a cada nova participação.`));
+    if (viveu.length) { const des = viveu.filter((x) => x.respostas.q9.opcoes.includes("desisti")).length; add({ ic: "sair", tema: "Desistência", valor: `${pct(des, viveu.length)}%`, partes: ["de quem não encontrou uma peça desistiu da compra em algum momento."] }); }
+    const t10 = topo(perg.q10, comp, (o) => !o.exclusiva && !o.outro); if (t10) add({ ic: "obst", tema: "O que mais dificulta", valor: `${pct(t10.v, comp.length)}%`, partes: [{ b: semOutro(t10.texto) }, "."] });
+    montar();
     return card;
   }
 
@@ -748,6 +1047,7 @@
     document.querySelectorAll("#conteudo [data-w]").forEach((i) => { i.style.width = i.dataset.w; });
     document.querySelectorAll("#conteudo [data-h]").forEach((i) => { i.style.height = i.dataset.h; });
     document.querySelectorAll("#conteudo [data-g]").forEach((i) => { i.style.flexGrow = i.dataset.g; });
+    document.querySelectorAll("#conteudo [data-arco]").forEach((c) => { c.style.strokeDasharray = c.dataset.arco; });
   }
 
   /* ---------- Inteligência: cruzamentos das respostas, sem IA ----------
@@ -897,16 +1197,26 @@
 
     /* ----- Comportamento ----- */
     const canais = perg.q2.opcoes.filter((o) => !o.encerra).map((o) => {
-      const g = comp.filter((x) => prim(x) === o.id); return { rotulo: semOutro(o.texto).replace(/ \(.*\)$/, ""), n: g.length, v: media(g.map((x) => x.respostas.q4).filter((v) => typeof v === "number")) };
+      const g = comp.filter((x) => prim(x) === o.id); return { rotulo: semOutro(o.texto).replace(/ \(.*\)$/, ""), n: g.length, v: media(notas(g, notaGeral)), c: media(notas(g, notaCorr)) };
     }).filter((x) => x.n >= MIN_SEG).sort((a, b) => b.v - a.v);
     if (canais.length >= 2) add("Comportamento", {
       tag: "Satisfação", sinal: { nivel: "info", texto: "Comparação entre canais" },
-      titulo: `${canais[0].rotulo}: maior satisfação entre os canais (${fmt1(canais[0].v)})`,
-      descricao: ["Nota média de satisfação (0 a 10) conforme o lugar onde a pessoa mais comprou (1º lugar da pergunta 2)."],
+      titulo: `${canais[0].rotulo}: maior nota geral entre os canais (${fmt1(canais[0].v)})`,
+      descricao: ["Nota geral (média de qualidade, estética e correspondência, de 0 a 10) conforme o lugar onde a pessoa mais comprou (1º lugar da pergunta 2). Entre parênteses, a nota de correspondência com o que procuravam."],
       base: canais.reduce((s, c) => s + c.n, 0), recorte: `Canais com ${MIN_SEG} ou mais respostas`, escala: 10,
-      barras: canais.map((c) => ({ rotulo: c.rotulo, v: c.v, txt: fmt1(c.v), n: c.n })),
+      barras: canais.map((c) => ({ rotulo: c.rotulo, v: c.v, txt: `${fmt1(c.v)} (${fmt1(c.c)})`, n: c.n })),
       significado: [`Quem compra principalmente em ${lc(canais[canais.length - 1].rotulo)} está menos satisfeito com o que comprou (${fmt1(canais[canais.length - 1].v)}).`],
       proximo: ["Entender o que diferencia a experiência no canal mais bem avaliado."],
+    });
+    const canaisC = [...canais].sort((a, b) => b.c - a.c);
+    if (canaisC.length >= 2) add("Comportamento", {
+      tag: "Correspondência", sinal: { nivel: "atencao", texto: "Encontrou o que queria?" },
+      titulo: `Onde as peças mais correspondem ao que se procurava: ${lc(canaisC[0].rotulo)} (${fmt1(canaisC[0].c)})`,
+      descricao: ["Nota de correspondência com o que a pessoa procurava (0 a 10), conforme o lugar onde ela mais comprou (1º lugar da pergunta 2)."],
+      base: canaisC.reduce((s, c) => s + c.n, 0), recorte: `Canais com ${MIN_SEG} ou mais respostas`, escala: 10,
+      barras: canaisC.map((c) => ({ rotulo: c.rotulo, v: c.c, txt: fmt1(c.c), n: c.n })),
+      significado: [`A menor correspondência está em ${lc(canaisC[canaisC.length - 1].rotulo)} (${fmt1(canaisC[canaisC.length - 1].c)}): é onde as peças menos atenderam ao que as pessoas queriam.`],
+      proximo: ["Investigar o que faltou nas peças desse canal (tamanho, modelagem, tecido ou estilo)."],
     });
     const fluxos = {};
     comp.forEach((x) => { if (!x.respostas.q5 || x.respostas.q5 === "nao_procuro" || !prim(x)) return; const k = x.respostas.q5 + ">" + prim(x); fluxos[k] = (fluxos[k] || 0) + 1; });
@@ -930,29 +1240,29 @@
       const maior = d(freq) > d(rara);
       add("Comportamento", {
         tag: "Comportamento de compra", sinal: maior ? { nivel: "critico", texto: "Falta de opções leva à desistência" } : { nivel: "info", texto: "Sem relação clara" },
-        titulo: `Quem não encontra o que procura desiste ${maior ? "mais" : "na mesma medida"}: ${d(freq)}% × ${d(rara)}%`,
-        descricao: ["Desistência de compra (pergunta 9) conforme a frequência com que a pessoa não encontra o que procura (pergunta 7)."],
+        titulo: `Quem tem dificuldade para encontrar o que deseja desiste ${maior ? "mais" : "na mesma medida"}: ${d(freq)}% × ${d(rara)}%`,
+        descricao: ["Desistência de compra (pergunta 9) conforme a frequência com que a pessoa tem dificuldade para encontrar o que deseja (pergunta 7)."],
         base: freq.length + rara.length, recorte: "Pergunta 7 × pergunta 9",
-        barras: [{ rotulo: "Frequentemente ou quase sempre não encontram", v: d(freq), txt: `${d(freq)}%`, n: freq.length }, { rotulo: "Nunca ou raramente", v: d(rara), txt: `${d(rara)}%`, n: rara.length }],
+        barras: [{ rotulo: "Frequentemente ou quase sempre têm dificuldade", v: d(freq), txt: `${d(freq)}%`, n: freq.length }, { rotulo: "Nunca ou raramente", v: d(rara), txt: `${d(rara)}%`, n: rara.length }],
         significado: maior ? ["A dificuldade de encontrar a peça está ligada a compras que não acontecem."] : ["Nesta amostra, desistir não depende de quanto a pessoa sente falta de opções."],
         proximo: ["Acompanhar essa diferença conforme chegam novas respostas."],
       });
     }
     const atributos = perg.q8.linhas.map((l) => {
       const dif = comp.filter((x) => ["4", "5"].includes((x.respostas.q8 || {})[l.id])), fac = comp.filter((x) => ["1", "2"].includes((x.respostas.q8 || {})[l.id]));
-      const q4 = (g) => media(g.map((x) => x.respostas.q4).filter((v) => typeof v === "number"));
-      return { l, dif, fac, gap: dif.length >= MIN_SEG && fac.length >= MIN_SEG ? q4(fac) - q4(dif) : null, q4dif: q4(dif), q4fac: q4(fac) };
+      const q4 = (g) => media(notas(g, notaGeral)), cr = (g) => media(notas(g, notaCorr));
+      return { l, dif, fac, gap: dif.length >= MIN_SEG && fac.length >= MIN_SEG ? q4(fac) - q4(dif) : null, q4dif: q4(dif), q4fac: q4(fac), crdif: cr(dif), crfac: cr(fac) };
     }).filter((a) => a.gap != null).sort((a, b) => b.gap - a.gap);
     if (atributos.length && atributos[0].gap > 0) {
       const a = atributos[0];
       add("Comportamento", {
         tag: "Satisfação", sinal: { nivel: "atencao", texto: "Atributo que mais pesa" },
-        titulo: `O que mais pesa na satisfação: ${item(a.l.texto)}`,
-        descricao: ["Diferença da nota média entre quem acha fácil e quem acha difícil encontrar cada característica (pergunta 8 × pergunta 4)."],
+        titulo: `O que mais pesa na nota geral: ${item(a.l.texto)}`,
+        descricao: ["Diferença da nota geral (média de qualidade, estética e correspondência) entre quem acha fácil e quem acha difícil encontrar cada característica (pergunta 8 × pergunta 4)."],
         base: a.dif.length + a.fac.length, recorte: "Pergunta 8 × pergunta 4",
-        kpis: [{ v: fmt1(a.q4fac), t: `nota de quem acha fácil` }, { v: fmt1(a.q4dif), t: `nota de quem acha difícil` }],
+        kpis: [{ v: fmt1(a.q4fac), t: `nota geral de quem acha fácil` }, { v: fmt1(a.q4dif), t: `nota geral de quem acha difícil` }, { v: `${fmt1(a.crfac)} × ${fmt1(a.crdif)}`, t: "correspondência: fácil × difícil" }],
         barras: atributos.filter((x) => x.gap > 0).slice(0, 5).map((x) => ({ rotulo: x.l.texto, v: x.gap, txt: `${fmt1(x.gap)} ${x.gap === 1 ? "ponto" : "pontos"}` })), escala: Math.max(...atributos.map((x) => x.gap)),
-        significado: [`Quem tem dificuldade para encontrar ${item(a.l.texto)} dá, em média, ${fmt1(a.gap)} ${a.gap === 1 ? "ponto" : "pontos"} a menos para a satisfação com as compras.`],
+        significado: [`Quem tem dificuldade para encontrar ${item(a.l.texto)} dá, em média, ${fmt1(a.gap)} ${a.gap === 1 ? "ponto" : "pontos"} a menos na nota geral das compras, e ${fmt1(Math.max(0, a.crfac - a.crdif))} a menos na correspondência com o que procurava.`],
         proximo: [`Conversar com quem respondeu para entender o que falta neste item.`],
       });
     }
@@ -962,9 +1272,9 @@
       const top = perg.q6.opcoes.filter((o) => !o.exclusiva && !o.outro).map((o) => ({ rotulo: semOutro(o.texto), v: pct(c6[o.id] || 0, semSaber.length) })).sort((a, b) => b.v - a.v);
       if (top[0].v) add("Comportamento", {
         tag: "Descoberta de lojas", sinal: { nivel: "info", texto: "Como chegam às lojas" },
-        titulo: `${pct(semSaber.length, n)}% não sabem onde encontrar certas peças`,
-        descricao: ["Entre essas pessoas, a forma mais comum de conhecer lojas físicas novas é ", { b: lc(top[0].rotulo) }, ` (${top[0].v}%).`],
-        base: semSaber.length, recorte: "Quem marcou “Não saber onde encontrar” (P10)",
+        titulo: `${pct(semSaber.length, n)}% não sabem em quais lojas procurar o que querem`,
+        descricao: ["Entre essas pessoas, a forma mais comum de descobrir lojas em Curitiba é ", { b: lc(top[0].rotulo) }, ` (${top[0].v}%).`],
+        base: semSaber.length, recorte: "Quem marcou “Não saber em quais lojas procurar” (P10)",
         barras: top.slice(0, 4).map((x) => ({ rotulo: x.rotulo, v: x.v, txt: `${x.v}%` })),
         significado: ["Parte da dificuldade pode ser de descoberta (não saber onde a peça está) e não de oferta."],
         proximo: ["Verificar se as peças que essas pessoas procuram existem no comércio local."],
@@ -1030,14 +1340,14 @@
     });
     const quer = comp.filter((x) => x.quer_novidades);
     if (quer.length) {
-      const nQ4 = media(quer.map((x) => x.respostas.q4).filter((v) => typeof v === "number")), nTodos = media(comp.map((x) => x.respostas.q4).filter((v) => typeof v === "number"));
+      const nQ4 = media(notas(quer, notaGeral)), nTodos = media(notas(comp, notaGeral)), cQ = media(notas(quer, notaCorr)), cT = media(notas(comp, notaCorr));
       const fQ = pct(quer.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length, quer.length), fT = pct(freq.length, n);
       add("Estratégia", {
         tag: "Primeiros interessados", sinal: { nivel: "alta", texto: "Grupo para ouvir primeiro" },
         titulo: `${quer.length} ${quer.length === 1 ? "pessoa quer" : "pessoas querem"} acompanhar o lançamento (${pct(quer.length, n)}%)`,
         descricao: ["Perfil de quem pediu novidades, comparado com o total (sem nomes)."],
         base: quer.length, recorte: "Quem pediu novidades",
-        kpis: [{ v: `${fQ}%`, t: `não encontram o que procuram com frequência (${fT}% no total)` }, { v: fmt1(nQ4), t: `nota média de satisfação (${fmt1(nTodos)} no total)` }],
+        kpis: [{ v: `${fQ}%`, t: `têm dificuldade com frequência para encontrar o que desejam (${fT}% no total)` }, { v: fmt1(nQ4), t: `nota geral das compras (${fmt1(nTodos)} no total)` }, { v: fmt1(cQ), t: `correspondência com o que procuravam (${fmt1(cT)} no total)` }],
         significado: ["São as pessoas mais próximas do problema que a pesquisa investiga e que aceitaram receber contato."],
         proximo: ["Convidar parte desse grupo para conversas de aprofundamento, respeitando a autorização dada."],
       });
@@ -1062,6 +1372,7 @@
     if (p.tipo === "unica") return op(v);
     if (p.tipo === "ranking") return v.map((id, k) => `${k + 1}º ${op(id)}`).join(" · ");
     if (p.tipo === "escala") return String(v);
+    if (p.tipo === "escalas") return typeof v === "number" ? String(v) : (p.linhas || []).map((l) => `${l.texto}: ${v[l.id] ?? "—"}`).join("\n");
     if (p.tipo === "matriz") return p.linhas.map((l) => `${l.texto}: ${(p.colunas.find((c) => c.id === v[l.id]) || {}).texto || "—"}`).join("\n");
     return (v.opcoes || []).map((id) => op(id) + ((p.opcoes.find((o) => o.id === id) || {}).outro && v.outro ? ` (${v.outro})` : "")).join(" · ");
   }

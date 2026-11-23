@@ -11,8 +11,8 @@ import Q from '../supabase/functions/pesquisa/questionario.json';
 
 type Opcao = { id: string; texto: string; encerra?: string; exclusiva?: boolean; outro?: boolean };
 type Pergunta = {
-  id: string; tipo: 'unica' | 'multipla' | 'ranking' | 'escala' | 'matriz'; texto: string; apoio?: string; max?: number; min?: number;
-  opcoes?: Opcao[]; linhas?: { id: string; texto: string }[]; colunas?: { id: string; texto: string }[];
+  id: string; tipo: 'unica' | 'multipla' | 'ranking' | 'escala' | 'escalas' | 'matriz'; texto: string; apoio?: string; max?: number; min?: number;
+  opcoes?: Opcao[]; linhas?: { id: string; texto: string; apoio?: string }[]; colunas?: { id: string; texto: string }[];
   rotulo_min?: string; rotulo_max?: string;
   rotulo?: string; condicao?: { pergunta: string; opcoes: string[] }; // pergunta condicional (ex.: 2.1)
 };
@@ -110,6 +110,11 @@ function opcaoCartao(tipo: 'radio' | 'checkbox', nome: string, o: Opcao, marcado
   return { lab, inp };
 }
 
+// "Outro" escolhido: leva a tela até o campo (acima da barra fixa de botões) e já posiciona o cursor nele
+function abrirOutro(caixa: HTMLElement, campo: HTMLInputElement | null) {
+  setTimeout(() => { caixa.scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' }); campo?.focus({ preventScroll: true }); }, 80);
+}
+
 function montarPergunta(p: Pergunta, i: number) {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-' + p.id; fs.dataset.etapa = String(i);
   cabecalho(fs, `Pergunta ${rotulo(i)}`, p.texto, p.apoio);
@@ -174,7 +179,12 @@ function montarPergunta(p: Pergunta, i: number) {
         const cheio = !!p.max && sel.length >= p.max && !x.checked && !p.opcoes!.find((o) => o.id === x.value)?.exclusiva;
         x.disabled = cheio; x.closest('label')!.classList.toggle('pq-op-off', cheio);
       });
-      if (caixaOutro) caixaOutro.hidden = !sel.includes(p.opcoes!.find((o) => o.outro)!.id);
+      if (caixaOutro) {
+        const antes = caixaOutro.hidden;
+        caixaOutro.hidden = !sel.includes(p.opcoes!.find((o) => o.outro)!.id);
+        if (antes && !caixaOutro.hidden && caixaOutro.dataset.pronto) abrirOutro(caixaOutro, campoOutro);
+        caixaOutro.dataset.pronto = '1';
+      }
       contador.textContent = p.max ? `${sel.length} de ${p.max} escolhidas` + (sel.length >= p.max ? '. Para trocar, desmarque uma opção.' : '') : (sel.length ? `${sel.length} ${sel.length === 1 ? 'escolhida' : 'escolhidas'}` : '');
     };
     p.opcoes!.forEach((o) => {
@@ -205,6 +215,29 @@ function montarPergunta(p: Pergunta, i: number) {
     });
     fs.append(lista, contador);
     sincronizar();
+  } else if (p.tipo === 'escalas') {
+    // várias notas de 0 a 10 (um aspecto por bloco, com descrição), num card só
+    const atual = () => (E.r[p.id] as Record<string, number>) ?? {};
+    const card = el('div', 'pq-escalas');
+    p.linhas!.forEach((l) => {
+      const sub = el('fieldset', 'pq-aspecto'); sub.dataset.linha = l.id;
+      const lg = el('legend'); lg.append(el('span', 'pq-aspecto-t', l.texto), ...(l.apoio ? [el('span', 'pq-aspecto-d', l.apoio)] : []));
+      sub.appendChild(lg);
+      const grade = el('div', 'pq-escala');
+      for (let n = p.min ?? 0; n <= (p.max ?? 10); n++) {
+        const lab = el('label', 'pq-nota');
+        const inp = el('input'); inp.type = 'radio'; inp.name = `${p.id}-${l.id}`; inp.value = String(n); inp.checked = atual()[l.id] === n;
+        inp.setAttribute('aria-label', n === p.min ? `${n}, ${p.rotulo_min}` : n === p.max ? `${n}, ${p.rotulo_max}` : String(n));
+        inp.addEventListener('change', () => { E.r[p.id] = { ...atual(), [l.id]: n }; salvar(); sub.classList.remove('pq-faltando'); if (p.linhas!.every((x) => typeof atual()[x.id] === 'number')) limparErro(fs); });
+        lab.append(inp, el('span', undefined, String(n)));
+        grade.appendChild(lab);
+      }
+      const extremos = el('div', 'pq-extremos'); extremos.setAttribute('aria-hidden', 'true');
+      extremos.append(el('span', undefined, `${p.min ?? 0} = ${p.rotulo_min}`), el('span', undefined, `${p.max ?? 10} = ${p.rotulo_max}`));
+      sub.append(grade, extremos);
+      card.appendChild(sub);
+    });
+    fs.append(card);
   } else if (p.tipo === 'escala') {
     const grade = el('div', 'pq-escala');
     for (let n = p.min ?? 0; n <= (p.max ?? 10); n++) {
@@ -282,7 +315,7 @@ function montarPerfil() {
       if (!outroOp || v !== outroOp.id) delete novo[c.id + '_outro'];
       E.r.perfil = novo; salvar(); erroPerfil(c.id, '');
       radios.forEach((r) => { r.checked = r.value === v; }); sel.value = v;
-      if (caixa) { caixa.hidden = v !== outroOp!.id; if (v !== outroOp!.id && campoOutro) campoOutro.value = ''; }
+      if (caixa) { const antes = caixa.hidden; caixa.hidden = v !== outroOp!.id; if (v !== outroOp!.id && campoOutro) campoOutro.value = ''; if (antes && !caixa.hidden) abrirOutro(caixa, campoOutro); }
     };
     radios.forEach((r) => r.addEventListener('change', () => definir(r.value)));
     sel.addEventListener('change', () => definir(sel.value));
@@ -340,12 +373,22 @@ function campo(id: string, rotulo: string, tipo: string, valor: string, ph: stri
 
 function montarNovidades() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-novidades'; fs.dataset.etapa = String(ETAPA_NOV);
-  cabecalho(fs, 'Novidades · opcional', 'Quer acompanhar o que vem por aí?',
-    'Como você contribuiu com a solução que estamos desenvolvendo, terá vantagens exclusivas quando a plataforma for lançada. Quer receber os avisos pelo e-mail e WhatsApp que você informou?');
-  const lista = el('div', 'pq-ops');
+  cabecalho(fs, 'Última etapa', 'Sua contribuição vale vantagens exclusivas');
+  // destaque: a contribuição da pessoa e as vantagens no lançamento
+  const vant = el('div', 'pq-vantagem');
+  const ic = el('span', 'pq-vantagem-ic'); ic.setAttribute('aria-hidden', 'true');
+  ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>';
+  const tx = el('div');
+  tx.append(el('p', 'pq-vantagem-t', 'Obrigada por contribuir com a solução que estamos desenvolvendo!'),
+    el('p', 'pq-vantagem-d', 'Por isso, você terá vantagens exclusivas quando a plataforma for lançada.'));
+  vant.append(ic, tx);
+  const perg = el('p', 'pq-nov-perg', 'Quer receber os avisos do lançamento e das suas vantagens pelo e-mail e WhatsApp que você informou?');
+  perg.id = 'pq-novidades-perg'; fs.setAttribute('aria-describedby', perg.id);
+  const lista = el('div', 'pq-ops pq-nov-ops');
   const opts: [Estado['nov'], string][] = [['sim', 'Sim, quero receber os avisos do lançamento e das minhas vantagens.'], ['nao', 'Não, obrigado(a).']];
   opts.forEach(([v, t]) => {
     const { lab, inp } = opcaoCartao('radio', 'novidades', { id: v, texto: t }, E.nov === v);
+    if (v === 'sim') lab.classList.add('pq-op-sim');
     inp.addEventListener('change', () => { E.nov = v; salvar(); limparErro(fs); atualizarBotao(); });
     lista.appendChild(lab);
   });
@@ -353,7 +396,7 @@ function montarNovidades() {
   nota.append('Ao escolher "Sim", você autoriza o Dani Moscatelli — Experience Design Studio a usar seu e-mail e WhatsApp só para esses avisos, conforme a ');
   const a = el('a', undefined, 'Política de Privacidade'); a.href = '/privacidade/#pesquisa-moda'; a.dataset.politica = '';
   nota.append(a, '. Você pode cancelar quando quiser.');
-  fs.append(lista, nota, erroBox(fs.id));
+  fs.append(vant, perg, lista, nota, erroBox(fs.id));
   return fs;
 }
 
@@ -413,6 +456,12 @@ function validarEtapa(i: number): boolean {
     if (p.tipo === 'unica' && typeof v !== 'string') { mostrarErro(fs, 'Escolha uma opção para continuar.'); return false; }
     if (p.tipo === 'ranking' && !(Array.isArray(v) && v.length)) { mostrarErro(fs, `Escolha pelo menos uma opção, na ordem de onde você mais comprou (até ${p.max}).`); return false; }
     if (p.tipo === 'escala' && typeof v !== 'number') { mostrarErro(fs, 'Escolha uma nota de 0 a 10 para continuar.'); return false; }
+    if (p.tipo === 'escalas') {
+      const r = (v as Record<string, number>) ?? {};
+      const faltam = p.linhas!.filter((l) => typeof r[l.id] !== 'number');
+      fs.querySelectorAll<HTMLElement>('.pq-aspecto').forEach((x) => x.classList.toggle('pq-faltando', faltam.some((l) => l.id === x.dataset.linha)));
+      if (faltam.length) { mostrarErro(fs, faltam.length === 1 ? `Falta dar nota para: ${faltam[0].texto}.` : `Faltam notas para ${faltam.length} aspectos.`); return false; }
+    }
     if (p.tipo === 'matriz') {
       const r = (v as Record<string, string>) ?? {};
       const faltam = p.linhas!.filter((l) => !r[l.id]);

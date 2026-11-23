@@ -349,6 +349,54 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
+<<<<<<< HEAD
+## 2026-11-23 · Pesquisa Moda em Curitiba: abertura em card, botão sempre à vista e barra de navegação fixa, não publicado
+
+- **Pedido:** abertura dentro de um card; "Começar pesquisa" acima da dobra; botões fixos durante o formulário; "Pergunta X de 10" alinhado com o início da barra de progresso; título da pesquisa sempre visível no cabeçalho.
+- **O que mudou (`src/pesquisa-moda.css`):** abertura num card branco. No computador, o card é mais largo (920 px) e os quatro boxes de informação ficam em grade 2×2. O bloco do botão fica preso ao pé da tela, com um degradê, enquanto o resto da abertura não couber. A barra Voltar/Continuar fica presa ao pé da tela também no computador, com fundo de ponta a ponta. O texto da etapa ganhou margem automática e fica alinhado com a barra. O título da pesquisa ("Vamos conversar sobre moda em Curitiba?") fica acima da barra de progresso, sempre visível durante o formulário (`pesquisa/moda-curitiba/index.html`).
+- **Textos (pedido da dona):** pergunta 2 passa a "Onde você mais comprou roupas e acessórios este ano?" e a 2.1 a "Quais os principais motivos para você comprar roupas e acessórios em marketplaces ou lojas online de outras cidades?"; questionário `moda-curitiba-v6-2026-11-23` (a função `pesquisa` precisa ser publicada junto).
+- **Verificação executada:** `npm run build`; Playwright no celular (iPhone 13), em 1440×900 e em 1366×768: botão visível sem rolar (540/664, 743/900, 655/768), "Continuar" visível na pergunta 2, texto da etapa alinhado com a barra (mesmo x), sem erros no console.
+
+## 2026-11-23 · Pesquisa Moda em Curitiba: perguntas 4, 5 e 6 revisadas, campo "Outro" em foco e topo branco, não publicado
+
+- **Pedidos da dona:**
+  - pergunta 4 com 3 notas de 0 a 10, conforme o modelo enviado: Qualidade; Estética; Correspondência com o que eu procurava (cada uma com descrição); "0 = Muito ruim" e "10 = Excelente";
+  - pergunta 7: "Quando você procura uma roupa ou acessório específico, com que frequência tem dificuldade para encontrar exatamente o que deseja?", com "Nunca / Raramente / Às vezes / Frequentemente / Quase sempre tenho dificuldade" (mesmos ids); frases do painel ajustadas para "têm dificuldade para encontrar";
+  - pergunta 8 sem a opção "Não se aplica" (questionário `moda-curitiba-v8-2026-11-23`; o servidor deixa de aceitar "na"; o painel só mostra a coluna se houver respostas antigas com ela);
+  - pergunta 9: "Neste ano, o que você fez quando não encontrou uma roupa ou acessório que queria comprar?", com novos textos e a opção nova "Não encontrei na hora, mas deixei para procurar depois" (id `depois`);
+  - pergunta 10: "Além de encontrar a peça que você procura, o que mais dificulta suas compras de roupas e acessórios?", com novos textos (mesmos ids; "Outro motivo" passa a "Outra dificuldade");
+  - pergunta 5 e pergunta 6 com os novos textos (a 6 ganhou a opção "Por recomendações de influenciadores e criadores de conteúdo", e "Vendo anúncios…" passou a ser só anúncios);
+  - "Outro" sempre abre um campo para digitar;
+  - topo branco ao rolar, nunca escuro.
+- **Questionário (`supabase/functions/pesquisa/questionario.json`, `moda-curitiba-v7-2026-11-23`):** novo tipo `escalas` na pergunta 4, com `linhas` (id, texto e descrição); resposta gravada como `{ qualidade, estetica, correspondencia }`. Pergunta 5 com os mesmos ids e novos textos. Pergunta 6 com o id novo `influenciadores`.
+- **Página (`src/pesquisa-moda.ts`, `src/pesquisa-moda.css`):** a pergunta 4 é um card com um bloco por aspecto; a validação aponta qual aspecto falta. Ao escolher "Outro" (perguntas 2.1, 6, 10 e gênero), o campo aparece, a tela rola até ele e o cursor já fica nele. Topo ao rolar: fundo branco translúcido em todos os tamanhos.
+- **Servidor (`supabase/functions/pesquisa/index.ts`):** valida o tipo `escalas` (nota inteira de 0 a 10 para cada aspecto).
+- **Painel (`public/admin/pesquisas/index.html`) (D-036):**
+  - nota geral = média dos 3 aspectos de cada pessoa (respostas antigas com nota única continuam valendo);
+  - a correspondência com o que procuravam também aparece separada: card da pergunta 4 com a nota geral e a média de cada aspecto (correspondência destacada), destaques, cartão novo "Correspondência por canal" na Inteligência, e números próprios nos cartões "O que mais pesa na nota geral" e "Primeiros interessados";
+  - a aba Respostas mostra as 3 notas.
+- **Verificação executada:**
+  - `npm run build`;
+  - função testada com banco simulado (aspecto faltando, nota 11 e nota única antiga recusados; "outro" sem texto recusado; gravação correta);
+  - Playwright no celular: pergunta 4 com aviso do que falta; "Outro" abre o campo com foco em 2.1, 6, 10 e gênero; fluxo completo até a tela final;
+  - painel com 42 respostas fictícias: 16 cartões na Inteligência e alturas iguais;
+  - sem erros no console.
+
+## 2026-11-23 · Pesquisa e painel: vantagens em destaque e Destaques em cartões, não publicado
+
+- **Pedidos da dona:** as vantagens exclusivas e a contribuição da pessoa tinham pouco destaque, tanto no fim quanto na abertura; o bloco Destaques do painel precisava ser mais visual e intuitivo.
+- **Abertura (`pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.css`):** "Vantagens exclusivas para quem participa" saiu da lista de boxes e virou uma faixa vermelha logo abaixo do título, com ícone de presente animado e brilho (sem animação com "menos movimento"). Os outros 3 boxes ficam em 3 colunas no computador. O botão continua visível sem rolar (celular, 1366×768 e 1440×900).
+- **Última etapa (`src/pesquisa-moda.ts`):** título "Sua contribuição vale vantagens exclusivas"; card de destaque com o presente ("Obrigada por contribuir com a solução que estamos desenvolvendo!" e as vantagens no lançamento); a pergunta sobre os avisos vem em seguida, com o "Sim" em negrito.
+- **Painel, Destaques (`public/admin/pesquisas/index.html`):** grade de cartões, cada um com ícone, tema, número grande e frase curta; cartões em rosa para os achados mais importantes (onde mais compram, correspondência e dificuldade para encontrar); selo de "amostra pequena" com menos de 30 respostas completas; estado vazio quando ainda não há respostas completas. Primeira linha com os 4 principais (onde mais compram, dificuldade para encontrar, correspondência e o mais difícil de encontrar); os demais abrem em "Ver mais destaques (N)", com animação e "Ver menos" para fechar. 4 colunas no computador e 2 em telas menores.
+- **Verificação executada:** `npm run build`; fluxo completo no celular; painel com dados fictícios e com o caso sem respostas completas; capturas no computador e no celular; sem erros no console.
+
+## 2026-11-23 · Painel de pesquisas: aba Resultados redesenhada, não publicado
+
+- **Pedido:** a apresentação dos dados não estava intuitiva, didática nem no padrão do design system; cards lado a lado precisam ter a mesma altura.
+- **O que mudou (`public/admin/pesquisas/index.html`):** card padrão por pergunta, com número em selo rosa, pergunta, quantas responderam, "Leitura" em uma frase (calculada dos números), o gráfico e um pé com "Ver números" e notas, sempre no fim do card. Todos os gráficos usam a mesma lista de barras (rótulo, percentual em destaque, quantidade e barra fina; a mais escolhida em vermelho, as outras em cinza-azulado, "Prefiro não informar" e opções exclusivas em cinza claro). Na pergunta 2, uma camada clara mostra "entre os 3 lugares". Nota de 0 a 10: média em destaque e três faixas. Pergunta 8: barra 100% com fácil, médio e difícil, da característica mais difícil para a mais fácil. Funil em quatro etapas ("Quem chegou até onde"). Gênero e faixa etária em dois cards lado a lado. Pergunta 1 e gênero em rosca, com o percentual principal no centro e legenda com números (as demais seguem em barras: escolhas múltiplas, muitas opções ou escala ordenada). Pergunta sem respostas: estado vazio, sem gráfico zerado. Grade com cards da mesma altura, sem buracos.
+- **Verificação executada:** `npm run build`; Playwright com 42 respostas fictícias e com o caso real atual (1 participação, nenhuma completa), no computador e no celular: alturas iguais em todas as linhas de 2 cards, sem erros no console.
+
+=======
 ## 2026-11-23 · Área restrita: hover de linha com --row-hover e card rosa sem repetição, não publicado
 
 - **DS em prévia:** sincronizado de novo com `DS_REF=claude/ajustes-painel` (commit `085153d`), que traz o token `--row-hover` (metade do `--graphite-50` sobre o card, ≈ #F6F8FA; branco a 4% no escuro). `?v=085153d` nas páginas.
@@ -392,6 +440,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Cache:** `admin.js` e `admin.css` com `?v=20261123c` em todas as páginas da área restrita.
 - **Verificação executada:** `npm run build`; navegador (Chromium, Playwright) com o Supabase simulado só no teste, a 1280px e 390px: 66 verificações passaram (recolher pelo clique, por Enter e por Espaço, `aria-expanded`, escolha mantida ao recarregar já em 72px, dica e painel de subitens no mouse e no teclado, Escape, perfil abrindo e fechando, cabeçalho branco, sem rolagem horizontal, menos movimento, celular sem o botão de recolher e com os nomes visíveis mesmo com o recolhido guardado, as 8 páginas carregando sem erro). O teste encontrou e corrigiu um erro: com o recolhido guardado, o celular escondia os nomes do menu.
 - **Pendente:** ver com a dona do produto; publicar.
+>>>>>>> origin/main
 ## 2026-11-23 · Pesquisa Moda em Curitiba: identificação no início, uma participação por pessoa, vantagens e tela final com confete (D-034), publicado
 
 - **Banco:** `supabase/migrations/20261123180000_pesquisa_identificacao.sql` (não aplicada): `pesquisa_respostas` ganha `nome`, `email`, `whatsapp`, `identificacao_em`, `identificacao_versao` e `identificacao_texto`, com índices únicos por pesquisa para e-mail (sem diferenciar maiúsculas) e WhatsApp.
