@@ -84,6 +84,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-infos strong { font-size: 14px; color: var(--pq-ink); font-weight: 700; }
 .pq-ic { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--pq-tint); color: var(--pq-red); }
 .pq-ic svg { width: 18px; height: 18px; }
+/* Abertura: textos centralizados; os boxes de informação continuam alinhados à esquerda */
+.pq-intro { text-align: center; }
+.pq-intro .pq-infos { text-align: left; }
+.pq-intro .pq-texto p { margin-left: auto; margin-right: auto; max-width: 34rem; }
 .pq-fecho { margin: 0 0 24px; font-size: 15px; font-weight: 600; color: var(--pq-ink); }
 .pq-acoes-intro { display: grid; gap: 12px; justify-items: stretch; }
 .pq-privacidade { margin: 0; font-size: 13px; color: var(--pq-muted); text-align: center; }
