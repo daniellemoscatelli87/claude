@@ -381,6 +381,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - painel com 42 respostas fictícias: 16 cartões na Inteligência e alturas iguais;
   - sem erros no console.
 
+## 2026-11-23 · Pesquisa e painel: vantagens em destaque e Destaques em cartões, não publicado
+
+- **Pedidos da dona:** as vantagens exclusivas e a contribuição da pessoa tinham pouco destaque, tanto no fim quanto na abertura; o bloco Destaques do painel precisava ser mais visual e intuitivo.
+- **Abertura (`pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.css`):** "Vantagens exclusivas para quem participa" saiu da lista de boxes e virou uma faixa vermelha logo abaixo do título, com ícone de presente animado e brilho (sem animação com "menos movimento"). Os outros 3 boxes ficam em 3 colunas no computador. O botão continua visível sem rolar (celular, 1366×768 e 1440×900).
+- **Última etapa (`src/pesquisa-moda.ts`):** título "Sua contribuição vale vantagens exclusivas"; card de destaque com o presente ("Obrigada por contribuir com a solução que estamos desenvolvendo!" e as vantagens no lançamento); a pergunta sobre os avisos vem em seguida, com o "Sim" em negrito.
+- **Painel, Destaques (`public/admin/pesquisas/index.html`):** grade de cartões, cada um com ícone, tema, número grande e frase curta; cartões em rosa para os achados mais importantes (onde mais compram, correspondência e dificuldade para encontrar); selo de "amostra pequena" com menos de 30 respostas completas; estado vazio quando ainda não há respostas completas.
+- **Verificação executada:** `npm run build`; fluxo completo no celular; painel com dados fictícios e com o caso sem respostas completas; capturas no computador e no celular; sem erros no console.
+
 ## 2026-11-23 · Painel de pesquisas: aba Resultados redesenhada, não publicado
 
 - **Pedido:** a apresentação dos dados não estava intuitiva, didática nem no padrão do design system; cards lado a lado precisam ter a mesma altura.

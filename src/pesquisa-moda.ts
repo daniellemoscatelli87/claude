@@ -373,12 +373,22 @@ function campo(id: string, rotulo: string, tipo: string, valor: string, ph: stri
 
 function montarNovidades() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-novidades'; fs.dataset.etapa = String(ETAPA_NOV);
-  cabecalho(fs, 'Novidades · opcional', 'Quer acompanhar o que vem por aí?',
-    'Como você contribuiu com a solução que estamos desenvolvendo, terá vantagens exclusivas quando a plataforma for lançada. Quer receber os avisos pelo e-mail e WhatsApp que você informou?');
-  const lista = el('div', 'pq-ops');
+  cabecalho(fs, 'Última etapa', 'Sua contribuição vale vantagens exclusivas');
+  // destaque: a contribuição da pessoa e as vantagens no lançamento
+  const vant = el('div', 'pq-vantagem');
+  const ic = el('span', 'pq-vantagem-ic'); ic.setAttribute('aria-hidden', 'true');
+  ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>';
+  const tx = el('div');
+  tx.append(el('p', 'pq-vantagem-t', 'Obrigada por contribuir com a solução que estamos desenvolvendo!'),
+    el('p', 'pq-vantagem-d', 'Por isso, você terá vantagens exclusivas quando a plataforma for lançada.'));
+  vant.append(ic, tx);
+  const perg = el('p', 'pq-nov-perg', 'Quer receber os avisos do lançamento e das suas vantagens pelo e-mail e WhatsApp que você informou?');
+  perg.id = 'pq-novidades-perg'; fs.setAttribute('aria-describedby', perg.id);
+  const lista = el('div', 'pq-ops pq-nov-ops');
   const opts: [Estado['nov'], string][] = [['sim', 'Sim, quero receber os avisos do lançamento e das minhas vantagens.'], ['nao', 'Não, obrigado(a).']];
   opts.forEach(([v, t]) => {
     const { lab, inp } = opcaoCartao('radio', 'novidades', { id: v, texto: t }, E.nov === v);
+    if (v === 'sim') lab.classList.add('pq-op-sim');
     inp.addEventListener('change', () => { E.nov = v; salvar(); limparErro(fs); atualizarBotao(); });
     lista.appendChild(lab);
   });
@@ -386,7 +396,7 @@ function montarNovidades() {
   nota.append('Ao escolher "Sim", você autoriza o Dani Moscatelli — Experience Design Studio a usar seu e-mail e WhatsApp só para esses avisos, conforme a ');
   const a = el('a', undefined, 'Política de Privacidade'); a.href = '/privacidade/#pesquisa-moda'; a.dataset.politica = '';
   nota.append(a, '. Você pode cancelar quando quiser.');
-  fs.append(lista, nota, erroBox(fs.id));
+  fs.append(vant, perg, lista, nota, erroBox(fs.id));
   return fs;
 }
 

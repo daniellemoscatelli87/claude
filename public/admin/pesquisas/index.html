@@ -113,6 +113,26 @@
   .pa-fd-b i span.claro { color: #fff; }
   .pa-fd-b em { align-self: center; padding-left: 8px; font-size: 12px; color: var(--muted); }
   .pa-fd-l small { font-size: 12px; color: var(--muted); }
+  /* Destaques: grade de cartões com número em destaque */
+  .pa-dest-cab { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px 16px; margin-bottom: 16px; }
+  .pa-dest-cab h2 { margin: 0 0 4px; }
+  .pa-dest-cab .muted { margin: 0; font-size: 13px; }
+  .pa-dest-amostra { font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px; background: #FFF6E0; color: #8a5a00; white-space: nowrap; cursor: help; }
+  .pa-dest-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .pa-dest-it { display: grid; align-content: start; gap: 6px; padding: 16px; border-radius: 14px; background: var(--track); border: 1px solid transparent; transition: transform .2s, box-shadow .2s, border-color .2s; }
+  .pa-dest-it:hover { transform: translateY(-2px); border-color: var(--line); box-shadow: 0 4px 12px rgba(13,17,25,.06), 0 12px 36px rgba(13,17,25,.05); }
+  .pa-dest-it.forte { background: var(--red-tint); }
+  .pa-dest-tema { display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .pa-dest-tema .ic { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: #fff; color: var(--slate); }
+  .pa-dest-it.forte .pa-dest-tema .ic { color: var(--red); }
+  .pa-dest-tema svg { width: 15px; height: 15px; }
+  .pa-dest-v { font-size: 30px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; color: var(--dark); }
+  .pa-dest-it.forte .pa-dest-v { color: var(--red); }
+  .pa-dest-it p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--dark); }
+  .pa-dest-vazio { grid-column: span 2; display: grid; align-content: center; gap: 4px; padding: 16px; border-radius: 14px; border: 1px dashed var(--line); font-size: 13px; color: var(--muted); }
+  .pa-dest-vazio b { color: var(--dark); font-size: 14px; }
+  @media (max-width: 560px) { .pa-dest-vazio { grid-column: auto; } .pa-dest-grade { grid-template-columns: 1fr 1fr; } .pa-dest-v { font-size: 26px; } }
+  @media (max-width: 380px) { .pa-dest-grade { grid-template-columns: 1fr; } }
   .pa-bloco { margin-top: 16px; }
   .pa-bloco h2 { margin: 0 0 4px; }
   .pa-bloco > .muted { margin: 0 0 14px; font-size: 13px; }
@@ -936,44 +956,60 @@
     return box;
   }
 
-  // Destaques calculados direto dos números (sem IA): a opção mais escolhida e alguns recortes
+  // Destaques calculados direto dos números (sem IA): um cartão por achado, com o número em destaque,
+  // o tema e uma frase curta. A correspondência com o que procuravam tem cartão próprio.
+  const IC_D = {
+    publico: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    compra: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+    motivo: '<path d="M12 2a10 10 0 1 0 10 10"/><path d="m22 2-10 10"/><path d="M16 2h6v6"/>',
+    busca: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    brecho: '<path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M8 16H3v5"/>',
+    nota: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+    alvo: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    alerta: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+    sair: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
+    obst: '<rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  };
   function cardInsights(comp) {
-    const card = el("section", "card");
-    card.appendChild(el("h2", null, "Destaques"));
-    const ul = el("ul", "pa-insights");
-    const add = (partes) => { const li = el("li"), t = el("span"); partes.forEach((x) => t.append(typeof x === "string" ? x : el("strong", null, x.b))); li.appendChild(t); ul.appendChild(li); };
-    const perg = Object.fromEntries(Q.perguntas.map((p) => [p.id, p]));
-    const topo = (p, base, filtro = () => true) => {
-      const n = contar(p, base); const op = p.opcoes.filter(filtro).map((o) => ({ ...o, v: n[o.id] || 0 })).sort((a, b) => b.v - a.v)[0];
-      return op && op.v ? op : null;
+    const card = el("section", "card pa-dest");
+    const cab = el("div", "pa-dest-cab");
+    const tit = el("div"); tit.append(el("h2", null, "Destaques"), el("p", "muted", "O principal de cada pergunta, em números. Passe para as abas Resultados e Inteligência para ver os detalhes."));
+    cab.appendChild(tit);
+    if (comp.length && comp.length < 30) { const av = el("span", "pa-dest-amostra", `Amostra pequena: ${plural(comp.length, "resposta completa", "respostas completas")}`); av.title = "Com poucas respostas, os percentuais ainda podem mudar bastante a cada nova participação."; cab.appendChild(av); }
+    card.appendChild(cab);
+    const grade = el("div", "pa-dest-grade");
+    const add = ({ ic, tema, valor, partes, forte }) => {
+      const d = el("div", "pa-dest-it" + (forte ? " forte" : ""));
+      const t = el("span", "pa-dest-tema"); const i = el("span", "ic"); i.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC_D[ic]}</svg>`; t.append(i, tema);
+      const p = el("p"); partes.forEach((x) => p.append(typeof x === "string" ? x : el("strong", null, x.b)));
+      d.append(t, el("b", "pa-dest-v", valor), p); grade.appendChild(d);
     };
-    const elegiveis = R.length - R.filter((x) => x.situacao !== "completa").length;
-    add([{ b: `${pct(elegiveis, R.length)}%` }, ` das ${plural(R.length, "participação", "participações")} estão no público da pesquisa (moram em Curitiba e compraram este ano).`]);
-    if (!comp.length) { ul.appendChild((() => { const li = el("li"); li.appendChild(el("span", null, "Ainda não há respostas completas para os demais destaques.")); return li; })()); card.appendChild(ul); return card; }
+    const perg = Object.fromEntries(Q.perguntas.map((p) => [p.id, p]));
+    const topo = (p, base, filtro = () => true) => { const n = contar(p, base); const op = p.opcoes.filter(filtro).map((o) => ({ ...o, v: n[o.id] || 0 })).sort((a, b) => b.v - a.v)[0]; return op && op.v ? op : null; };
+    add({ ic: "publico", tema: "Público", valor: `${pct(comp.length, R.length)}%`, partes: [R.length === 1 ? "da única participação até agora é do público da pesquisa (mora em Curitiba e comprou este ano)." : `das ${R.length} participações são do público da pesquisa: moram em Curitiba e compraram este ano.`] });
+    if (!comp.length) {
+      grade.appendChild((() => { const d = el("div", "pa-dest-vazio"); d.append(el("b", null, "Os outros destaques aparecem com a primeira resposta completa"), el("span", null, "Quem não mora em Curitiba ou não comprou este ano encerra no começo da pesquisa.")); return d; })());
+      card.appendChild(grade); return card;
+    }
     const b2 = respondeu("q2").filter((x) => !valores(x.respostas.q2).includes("nao_comprei"));
     if (perg.q2.tipo === "ranking") {
-      const prim = perg.q2.opcoes.filter((o) => !o.encerra).map((o) => ({ ...o, v: b2.filter((x) => valores(x.respostas.q2)[0] === o.id).length })).sort((a, b) => b.v - a.v)[0];
-      if (prim && prim.v) add(["Onde mais compraram (1º lugar): ", { b: prim.texto }, ` (${pct(prim.v, b2.length)}%).`]);
-    } else { const t2 = topo(perg.q2, b2, (o) => !o.encerra); if (t2) add(["Onde a maior parte das compras acontece: ", { b: t2.texto }, ` (${pct(t2.v, b2.length)}%).`]); }
-    if (perg.q2_1) {
-      const b21 = comp.filter((x) => naCondicao(perg.q2_1, x));
-      const t21 = topo(perg.q2_1, b21, (o) => !o.outro);
-      if (t21) add(["Entre quem compra em marketplaces ou lojas online de outras cidades, o motivo mais citado: ", { b: t21.texto }, ` (${pct(t21.v, b21.length)}%).`]);
+      const p1 = perg.q2.opcoes.filter((o) => !o.encerra).map((o) => ({ ...o, v: b2.filter((x) => valores(x.respostas.q2)[0] === o.id).length })).sort((a, b) => b.v - a.v)[0];
+      if (p1 && p1.v) add({ ic: "compra", tema: "Onde mais compram", valor: `${pct(p1.v, b2.length)}%`, partes: ["escolheram em 1º lugar ", { b: semOutro(p1.texto) }, "."], forte: true });
     }
-    const t5 = topo(perg.q5, comp); if (t5) add(["Onde a procura começa: ", { b: t5.texto }, ` (${pct(t5.v, comp.length)}%).`]);
-    const sm = comp.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; add([{ b: `${pct(sm, comp.length)}%` }, " compraram de segunda mão (brechós) este ano."]);
+    if (perg.q2_1) { const b21 = comp.filter((x) => naCondicao(perg.q2_1, x)); const t = topo(perg.q2_1, b21, (o) => !o.outro); if (t) add({ ic: "motivo", tema: "Por que compram fora", valor: `${pct(t.v, b21.length)}%`, partes: ["de quem compra em marketplaces ou lojas online de outras cidades citam ", { b: lc(t.texto) }, "."] }); }
+    const t5 = topo(perg.q5, comp); if (t5) add({ ic: "busca", tema: "Onde a procura começa", valor: `${pct(t5.v, comp.length)}%`, partes: [{ b: semOutro(t5.texto) }, "."] });
+    const sm = comp.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; add({ ic: "brecho", tema: "Segunda mão", valor: `${pct(sm, comp.length)}%`, partes: ["compraram de segunda mão (brechós) este ano."] });
     const ng = notas(comp, notaGeral), nc = notas(comp, notaCorr);
-    if (ng.length) add(["Nota geral das compras: ", { b: fmt1(ng.reduce((a, b) => a + b, 0) / ng.length) }, " de 10" + (nc.length ? "; correspondência com o que procuravam: " : ".")].concat(nc.length ? [{ b: fmt1(nc.reduce((a, b) => a + b, 0) / nc.length) }, "."] : []));
+    if (ng.length) add({ ic: "nota", tema: "Nota geral das compras", valor: fmt1(ng.reduce((a, b) => a + b, 0) / ng.length), partes: ["de 0 a 10, média de qualidade, estética e correspondência."] });
+    if (nc.length) add({ ic: "alvo", tema: "Correspondência", valor: fmt1(nc.reduce((a, b) => a + b, 0) / nc.length), partes: ["de 0 a 10: o quanto as peças atenderam ao que as pessoas realmente queriam."], forte: true });
     const freq = comp.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length;
-    add([{ b: `${pct(freq, comp.length)}%` }, " frequentemente ou quase sempre têm dificuldade para encontrar exatamente o que desejam."]);
+    add({ ic: "alerta", tema: "Dificuldade para encontrar", valor: `${pct(freq, comp.length)}%`, partes: ["frequentemente ou quase sempre têm dificuldade para encontrar exatamente o que desejam."], forte: true });
     const difs = perg.q8.linhas.map((l) => { const v = comp.map((x) => x.respostas.q8 && x.respostas.q8[l.id]).filter((y) => y && y !== "na"); return { t: l.texto, p: pct(v.filter((y) => y === "4" || y === "5").length, v.length), n: v.length }; }).filter((x) => x.n).sort((a, b) => b.p - a.p);
-    if (difs[0] && difs[0].p) add(["O mais difícil de encontrar: ", { b: item(difs[0].t) }, ` (${difs[0].p}% acham difícil ou muito difícil).`]);
+    if (difs[0] && difs[0].p) add({ ic: "alerta", tema: "O mais difícil de encontrar", valor: `${difs[0].p}%`, partes: ["acham difícil encontrar ", { b: item(difs[0].t) }, "."] });
     const viveu = comp.filter((x) => x.respostas.q9 && !x.respostas.q9.opcoes.includes("nao_passei"));
-    const des = viveu.filter((x) => x.respostas.q9.opcoes.includes("desisti")).length;
-    if (viveu.length) add(["Entre quem não encontrou uma peça este ano, ", { b: `${pct(des, viveu.length)}%` }, " desistiram da compra em algum momento."]);
-    const t10 = topo(perg.q10, comp, (o) => !o.exclusiva && !o.outro); if (t10) add(["O que mais dificulta, além de encontrar a peça: ", { b: t10.texto }, ` (${pct(t10.v, comp.length)}%).`]);
-    card.appendChild(ul);
-    if (comp.length < 30) card.appendChild(el("p", "pa-nota", `Com ${plural(comp.length, "resposta completa", "respostas completas")}, os percentuais ainda podem mudar bastante a cada nova participação.`));
+    if (viveu.length) { const des = viveu.filter((x) => x.respostas.q9.opcoes.includes("desisti")).length; add({ ic: "sair", tema: "Desistência", valor: `${pct(des, viveu.length)}%`, partes: ["de quem não encontrou uma peça desistiu da compra em algum momento."] }); }
+    const t10 = topo(perg.q10, comp, (o) => !o.exclusiva && !o.outro); if (t10) add({ ic: "obst", tema: "O que mais dificulta", valor: `${pct(t10.v, comp.length)}%`, partes: [{ b: semOutro(t10.texto) }, "."] });
+    card.appendChild(grade);
     return card;
   }
 
