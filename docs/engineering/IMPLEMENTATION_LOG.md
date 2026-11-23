@@ -349,6 +349,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
+## 2026-11-23 · Painel de pesquisas: excluir respostas, não publicado
+
+- Nova aba **Respostas** em Projetos > Pesquisas: cada participação (número, data e hora, situação, resumo com perfil e onde mais comprou) abre todas as respostas em texto; botão **Excluir** em cada uma, com confirmação.
+- **Apagar todas as respostas:** confirmação com a palavra APAGAR; apaga as participações e os relatos da pesquisa; os contatos da aba Interessados continuam (têm exclusão própria). As duas ações ficam no log da plataforma.
+- Usa a permissão de exclusão da administradora que já existia na tabela `pesquisa_respostas` (sem migração).
+- **Verificação executada:** painel com login e dados simulados (42 respostas fictícias): detalhe, exclusão de uma (números e gráficos atualizados, continua na aba Respostas), "Apagar todas" bloqueado até digitar APAGAR e depois vazio; sem erros de JavaScript.
+
 ## 2026-11-23 · Pesquisa Moda em Curitiba: cabeçalho do design system, "Voltar para o site", rascunho guardado e avatar, publicado
 
 - **Cabeçalho:** modelo "Full-width bar" do design system: logo completo à esquerda (ícone no celular), "Voltar para o site" com ícone à direita; transparente no topo, fundo escuro translúcido ao rolar com o logo virando ícone; some ao rolar para baixo e volta ao subir; a barra de progresso continua visível.

@@ -104,6 +104,25 @@
   .pa-item .tx b { font-size: 15px; }
   .pa-item .tx span { font-size: 13px; color: var(--muted); }
   .pa-novas { font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: var(--red); color: #fff; white-space: nowrap; }
+  .pa-resp-topo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-bottom: 8px; }
+  .pa-resp-topo .muted { margin: 0; font-size: 13px; }
+  .pa-resp { border-top: 1px solid var(--track); }
+  .pa-resp:first-child { border-top: 0; }
+  .pa-resp > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 4px; cursor: pointer; list-style: none; border-radius: 12px; }
+  .pa-resp > summary::-webkit-details-marker { display: none; }
+  .pa-resp > summary:hover { background: #f8f9fb; }
+  .pa-resp > summary:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+  .pa-resp-info { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; min-width: 0; }
+  .pa-resp-info b { font-size: 14px; }
+  .pa-resp-info::before { content: ""; width: 8px; height: 8px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(-45deg); margin-right: 4px; transition: transform .2s; }
+  .pa-resp[open] .pa-resp-info::before { transform: rotate(45deg); }
+  .pa-resp-sit { font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 999px; background: rgba(79, 181, 123, 0.14); color: #1f6b3a; }
+  .pa-resp-sit.fora_de_curitiba, .pa-resp-sit.sem_compras { background: var(--track); color: var(--muted); }
+  .pa-resp-res { flex-basis: 100%; font-size: 12.5px; color: var(--muted); padding-left: 18px; }
+  .pa-resp-del { flex: none; padding: 8px 12px; }
+  .pa-resp-dl { margin: 0 4px 16px 22px; }
+  .pa-resp-dl dd { white-space: pre-wrap; }
+  @media (max-width: 560px) { .pa-resp-del span { display: none; } .pa-resp-dl { margin-left: 4px; } }
   .pa-vazio { text-align: center; padding: 28px 12px; color: var(--muted); }
   .pa-vazio b { display: block; color: var(--dark); font-size: 15px; margin-bottom: 4px; }
   .pa-esqueleto { height: 120px; border-radius: 16px; background: linear-gradient(90deg, #eef1f5 0%, #f7f8fa 50%, #eef1f5 100%); background-size: 200% 100%; animation: pa-brilho 1.4s ease-in-out infinite; }
@@ -263,12 +282,13 @@
     return wrap;
   }
 
+  let ABA_INICIAL = null; // depois de excluir, o painel é redesenhado e volta para a mesma aba
   function abas() {
     const relatos = R.filter((x) => x.relato && x.relato.trim());
     const box = el("div");
     const bar = el("div", "pa-abas"); bar.setAttribute("role", "tablist"); bar.setAttribute("aria-label", "Seções da pesquisa");
     const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
-    const defs = [["resultados", "Resultados", null], ["relatos", "Relatos", relatos.length], ["interessados", "Interessados", I.length]];
+    const defs = [["resultados", "Resultados", null], ["respostas", "Respostas", R.length], ["relatos", "Relatos", relatos.length], ["interessados", "Interessados", I.length]];
     const botoes = defs.map(([id, t, n]) => {
       const b = el("button"); b.type = "button"; b.setAttribute("role", "tab"); b.id = "aba-" + id; b.append(t);
       if (n != null) b.appendChild(el("span", "n", String(n)));
@@ -278,11 +298,11 @@
     const abrir = (id) => {
       botoes.forEach((b) => b.setAttribute("aria-selected", String(b.id === "aba-" + id)));
       corpo.setAttribute("aria-labelledby", "aba-" + id);
-      corpo.replaceChildren(id === "resultados" ? resultados() : id === "relatos" ? listaRelatos(relatos) : listaInteressados());
+      corpo.replaceChildren(id === "resultados" ? resultados() : id === "respostas" ? listaRespostas() : id === "relatos" ? listaRelatos(relatos) : listaInteressados());
       requestAnimationFrame(() => requestAnimationFrame(animarGraficos));
     };
     box.append(bar, corpo);
-    abrir("resultados");
+    abrir(ABA_INICIAL || "resultados"); ABA_INICIAL = null;
     return box;
   }
 
@@ -495,6 +515,76 @@
     document.querySelectorAll(".pa-barra .t i[data-w]").forEach((i) => { i.style.width = i.dataset.w; });
     document.querySelectorAll(".pa-escala .c i[data-h]").forEach((i) => { i.style.height = i.dataset.h; });
     document.querySelectorAll(".pa-pilha i[data-g]").forEach((i) => { i.style.flexGrow = i.dataset.g; });
+  }
+
+  /* ---------- Respostas individuais (ver e excluir) ---------- */
+  const SIT_CURTA = { completa: "Completa", fora_de_curitiba: "Não mora em Curitiba", sem_compras: "Não comprou este ano" };
+  function textoResposta(p, v) {
+    if (v == null) return "—";
+    const op = (id) => ((p.opcoes || []).find((o) => o.id === id) || {}).texto?.replace(/ \(especifique\)$/, "") || id;
+    if (p.tipo === "unica") return op(v);
+    if (p.tipo === "ranking") return v.map((id, k) => `${k + 1}º ${op(id)}`).join(" · ");
+    if (p.tipo === "escala") return String(v);
+    if (p.tipo === "matriz") return p.linhas.map((l) => `${l.texto}: ${(p.colunas.find((c) => c.id === v[l.id]) || {}).texto || "—"}`).join("\n");
+    return (v.opcoes || []).map((id) => op(id) + ((p.opcoes.find((o) => o.id === id) || {}).outro && v.outro ? ` (${v.outro})` : "")).join(" · ");
+  }
+  async function excluirRespostas(ids, todas) {
+    const q = sb.from("pesquisa_respostas").delete();
+    const { error } = await (todas ? q.eq("pesquisa", P.slug) : q.in("id", ids));
+    if (error) { toast("Não foi possível excluir: " + error.message); return false; }
+    R = todas ? [] : R.filter((x) => !ids.includes(x.id));
+    log(todas ? "Apagou todas as respostas da pesquisa" : "Excluiu uma resposta da pesquisa", P.titulo);
+    toast(todas ? "Todas as respostas foram apagadas" : "Resposta excluída");
+    ABA_INICIAL = "respostas"; desenhar(); Admin.refreshNotifications();
+    return true;
+  }
+  function listaRespostas() {
+    const card = el("section", "card pa-entra");
+    const topo = el("div", "pa-resp-topo");
+    topo.appendChild(el("p", "muted", R.length ? `${plural(R.length, "participação", "participações")}, da mais recente para a mais antiga.` : ""));
+    if (R.length) {
+      const todas = el("button", "pa-btn perigo"); todas.type = "button"; todas.innerHTML = IC.lixo + "<span>Apagar todas as respostas</span>";
+      todas.addEventListener("click", async () => {
+        const ok = await confirmDialog({ title: "Apagar todas as respostas?", message: `As ${plural(R.length, "participação", "participações")} desta pesquisa serão apagadas de vez, junto com os relatos. Os gráficos voltam a zero. Os contatos da aba Interessados não são apagados por aqui. Essa ação não pode ser desfeita.`, ok: "Apagar todas", word: "APAGAR" });
+        if (ok) { todas.disabled = true; await excluirRespostas([], true); }
+      });
+      topo.appendChild(todas);
+    }
+    card.appendChild(topo);
+    if (!R.length) { card.appendChild(vazio("Nenhuma resposta", "As participações aparecem aqui assim que alguém envia a pesquisa.")); return card; }
+    const lista = el("div", "pa-resp-lista");
+    R.forEach((x, k) => {
+      const d = el("details", "pa-resp");
+      const sum = el("summary");
+      const pf = x.respostas.perfil || {};
+      const perfilTx = Q.perfil ? Q.perfil.map((c) => (c.opcoes.find((o) => o.id === pf[c.id]) || {}).texto).filter((t) => t && t !== "Prefiro não informar").join(" · ") : "";
+      const q2 = Q.perguntas.find((p) => p.id === "q2");
+      const prim = q2 && valores(x.respostas.q2)[0];
+      const resumo = [perfilTx, prim && x.situacao === "completa" ? "Mais comprou: " + textoResposta({ ...q2, tipo: "unica" }, prim) : ""].filter(Boolean).join(" · ");
+      const info = el("span", "pa-resp-info");
+      info.append(el("b", null, `#${R.length - k} · ${fmtDate(x.created_at)}`), el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao));
+      if (resumo) info.appendChild(el("span", "pa-resp-res", resumo));
+      sum.appendChild(info);
+      const del = el("button", "pa-btn perigo pa-resp-del"); del.type = "button"; del.innerHTML = IC.lixo + "<span>Excluir</span>"; del.setAttribute("aria-label", `Excluir a resposta #${R.length - k}`);
+      del.addEventListener("click", async (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        const ok = await confirmDialog({ title: "Excluir esta resposta?", message: `A participação #${R.length - k} (${fmtDate(x.created_at)}) será apagada de vez e sai dos gráficos. Essa ação não pode ser desfeita.`, ok: "Excluir" });
+        if (ok) { del.disabled = true; await excluirRespostas([x.id], false); }
+      });
+      sum.appendChild(del);
+      d.appendChild(sum);
+      const dl = el("dl", "pa-resp-dl");
+      const linha = (t, v) => { const r = el("div", "row"); r.append(el("dt", null, t), el("dd", null, v)); dl.appendChild(r); };
+      let num = 0;
+      Q.perguntas.forEach((p) => { if (!p.condicao) num++; if (x.respostas[p.id] === undefined) return; linha(`${p.rotulo || num}. ${p.texto}`, textoResposta(p, x.respostas[p.id])); });
+      (Q.perfil || []).forEach((c) => { if (pf[c.id]) linha(c.texto, ((c.opcoes.find((o) => o.id === pf[c.id]) || {}).texto || pf[c.id]).replace(/ \(especifique\)$/, "") + (pf[c.id + "_outro"] ? ` (${pf[c.id + "_outro"]})` : "")); });
+      if (x.relato) linha("Relato", x.relato);
+      if (x.situacao === "completa") linha("Quer novidades", x.quer_novidades ? "Sim (contato na aba Interessados)" : "Não");
+      d.appendChild(dl);
+      lista.appendChild(d);
+    });
+    card.appendChild(lista);
+    return card;
   }
 
   /* ---------- Relatos ---------- */
