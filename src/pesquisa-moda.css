@@ -193,6 +193,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-contato.pq-abre { animation: pq-abre .45s var(--pq-ease) both; }
 @keyframes pq-abre { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
 .pq-contato-intro { margin: 0; font-size: 13px; color: var(--pq-muted); }
+/* Identificação: aviso da LGPD e nota da autorização de avisos */
+.pq-lgpd { display: flex; gap: 12px; align-items: flex-start; margin: 16px 0 14px; padding: 14px 16px; border-radius: 14px; background: var(--pq-card); border: 1px solid var(--pq-linha); }
+.pq-lgpd p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--pq-texto); }
+.pq-lgpd strong { color: var(--pq-ink); }
+#pq-id .pq-aceite-q { padding: 2px 2px 0; }
+.pq-nota-consent { margin: 14px 2px 0; font-size: 13px; line-height: 1.55; color: var(--pq-muted); }
+/* Abertura: destaque das vantagens */
+.pq-infos .pq-info-destaque { background: var(--pq-tint); border-color: rgba(212, 77, 77, 0.22); }
+.pq-infos .pq-info-destaque .pq-ic { background: #fff; }
 .pq-campo { display: grid; gap: 6px; }
 .pq-campo.pq-invalido input[type=text], .pq-campo.pq-invalido input[type=email], .pq-campo.pq-invalido input[type=tel] { border-color: var(--pq-erro); }
 .pq-aceite { position: relative; display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: 14px; line-height: 1.55; color: var(--pq-texto); }
@@ -227,10 +236,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 /* Telas finais */
-.pq-fim { text-align: center; padding-top: 24px; }
+/* Telas finais dentro de um card branco do design system */
+.pq-fim { text-align: center; margin-top: 16px; padding: 36px 22px 30px; border-radius: 24px; background: var(--pq-card); border: 1px solid var(--pq-linha); box-shadow: var(--pq-sombra); }
+@media (min-width: 640px) { .pq-fim { padding: 48px 40px 40px; } }
 .pq-fim h1 { margin: 0 0 16px; font-size: clamp(1.625rem, 6.4vw, 2.125rem); line-height: 1.2; letter-spacing: -0.02em; font-weight: 800; color: var(--pq-ink); outline: none; text-wrap: balance; }
 .pq-fim p { margin: 0 auto 12px; max-width: 30rem; font-size: 15px; }
-.pq-fim .pq-destaque { margin-top: 18px; padding: 14px 16px; border-radius: 14px; background: #fff; border: 1px solid var(--pq-linha); color: var(--pq-ink); font-weight: 600; }
+.pq-fim .pq-destaque { margin-top: 18px; padding: 14px 16px; border-radius: 14px; background: var(--pq-tint); border: 1px solid rgba(212, 77, 77, 0.18); color: var(--pq-ink); font-weight: 600; }
 .pq-mini { font-size: 13px !important; color: var(--pq-muted); }
 .pq-assinatura { display: grid; gap: 2px; margin-top: 28px; font-size: 14px; color: var(--pq-muted); }
 .pq-assinatura strong { color: var(--pq-ink); font-size: 15px; }

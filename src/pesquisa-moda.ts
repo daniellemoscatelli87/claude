@@ -1,9 +1,10 @@
 /* Pesquisa pública "Moda em Curitiba" (/pesquisa/moda-curitiba/).
    Uma pergunta por etapa, com progresso, Voltar e Continuar. As perguntas vêm do mesmo arquivo que a função
    do servidor usa para validar (supabase/functions/pesquisa/questionario.json).
-   Q1 = "Não" ou Q2 = "Não comprei" encerram com uma mensagem cordial. A 2.1 só aparece para quem compra mais em
+   Antes das perguntas, a pessoa se identifica (nome, e-mail e WhatsApp, com aviso da LGPD); o servidor aceita uma
+   participação por e-mail e uma por WhatsApp. Q1 = "Não" ou Q2 = "Não comprei" encerram com uma mensagem cordial. A 2.1 só aparece para quem compra mais em
    marketplaces ou lojas online de outras cidades (fora da contagem das 10). Depois das 10 perguntas: pergunta aberta
-   (opcional) e convite para receber novidades (contato só com autorização). O envio usa um identificador gerado
+   (opcional) e convite para receber novidades (avisos só com autorização). O envio usa um identificador gerado
    aqui, então atualizar a página ou tocar de novo no botão não duplica a participação. */
 import './pesquisa-moda.css';
 import Q from '../supabase/functions/pesquisa/questionario.json';
@@ -17,15 +18,16 @@ type Pergunta = {
 };
 type Multi = { opcoes: string[]; outro?: string };
 type Estado = {
-  envio: string; contatoId: string; etapa: number;
+  envio: string; etapa: number;
   r: Record<string, unknown>; relato: string;
-  nov: '' | 'sim' | 'nao'; nome: string; email: string; whats: string; aceite: boolean;
+  nov: '' | 'sim' | 'nao'; nome: string; email: string; whats: string; ciente: boolean;
 };
 
 const PERGUNTAS = Q.perguntas as Pergunta[];
 const TOTAL = PERGUNTAS.length; // etapas de perguntas, contando a condicional 2.1
 const PRINCIPAIS = PERGUNTAS.filter((p) => !p.condicao).length; // as 10 perguntas principais; 2.1, relato e novidades ficam fora
 const ETAPA_PERFIL = TOTAL, ETAPA_RELATO = TOTAL + 1, ETAPA_NOV = TOTAL + 2; // perfil, relato e novidades depois das perguntas
+const ETAPA_ID = TOTAL + 3; // identificação, antes da primeira pergunta
 type CampoPerfil = { id: string; texto: string; opcoes: Opcao[] };
 const PERFIL = ((Q as { perfil?: CampoPerfil[] }).perfil ?? []);
 type Perfil = Record<string, string>;
@@ -54,11 +56,11 @@ const guardar = (k: string, v: unknown, local = false) => { try { (local ? local
 const ler = <T>(k: string, local = false): T | null => { try { const v = (local ? localStorage : sessionStorage).getItem(k); return v ? JSON.parse(v) as T : null; } catch { return null; } };
 const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => { const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); }));
 
-const novo = (): Estado => ({ envio: uuid(), contatoId: uuid(), etapa: -1, r: {}, relato: '', nov: '', nome: '', email: '', whats: '', aceite: false });
+const novo = (): Estado => ({ envio: uuid(), etapa: -1, r: {}, relato: '', nov: '', nome: '', email: '', whats: '', ciente: false });
 /* Rascunho: as respostas ficam guardadas neste aparelho (localStorage) a cada toque, então fechar a aba, sair pelo
    "Voltar para o site" ou perder a conexão não apaga nada; ao voltar pelo link, a pessoa continua de onde parou.
-   Os dados de contato (nome, e-mail e WhatsApp) ficam só nesta sessão do navegador, por privacidade em aparelhos
-   compartilhados. O rascunho vale por 30 dias e é apagado quando a participação é enviada. */
+   A identificação (nome, e-mail e WhatsApp) fica só nesta sessão do navegador, por privacidade em aparelhos
+   compartilhados; ao voltar outro dia, a pessoa se identifica de novo e continua de onde parou. O rascunho vale por 30 dias e é apagado quando a participação é enviada. */
 const RASCUNHO_DIAS = 30;
 type Rascunho = Partial<Estado> & { salvoEm?: number };
 const lerRascunho = (): Partial<Estado> => {
@@ -69,14 +71,16 @@ const lerRascunho = (): Partial<Estado> => {
 };
 let E: Estado = { ...novo(), ...lerRascunho() };
 const salvar = () => {
-  const { nome, email, whats, aceite, ...resto } = E;
+  const { nome, email, whats, ciente, ...resto } = E;
   guardar(CHAVE_RASCUNHO, { ...resto, salvoEm: Date.now() }, true);
-  guardar(CHAVE_RASCUNHO + '-contato', { nome, email, whats, aceite });
+  guardar(CHAVE_RASCUNHO + '-contato', { nome, email, whats, ciente });
 };
 let enviando = false;
+let retomar = -1; // etapa salva para continuar depois da identificação
+const identificado = () => !!(E.nome.trim() && emailValido(E.email) && whatsValido(E.whats) && E.ciente);
 
 /* ---------- Telas ---------- */
-const telas = ['pq-intro', 'pq-form', 'pq-obrigada', 'pq-encerrada', 'pq-fora-do-ar'];
+const telas = ['pq-intro', 'pq-form', 'pq-obrigada', 'pq-encerrada', 'pq-ja', 'pq-fora-do-ar'];
 function mostrarTela(id: string) {
   telas.forEach((t) => { $(t).hidden = t !== id; });
   $('pq-progresso').hidden = id !== 'pq-form';
@@ -337,51 +341,54 @@ function campo(id: string, rotulo: string, tipo: string, valor: string, ph: stri
 function montarNovidades() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-novidades'; fs.dataset.etapa = String(ETAPA_NOV);
   cabecalho(fs, 'Novidades · opcional', 'Quer acompanhar o que vem por aí?',
-    'Estamos desenvolvendo uma novidade para o universo da moda em Curitiba. Gostaria de receber um aviso quando ela for lançada?');
+    'Como você contribuiu com a solução que estamos desenvolvendo, terá vantagens exclusivas quando a plataforma for lançada. Quer receber os avisos pelo e-mail e WhatsApp que você informou?');
   const lista = el('div', 'pq-ops');
-  const contato = el('div', 'pq-contato'); contato.id = 'pq-contato';
-  const opts: [Estado['nov'], string][] = [['sim', 'Sim, quero receber novidades sobre o lançamento.'], ['nao', 'Não, obrigado(a).']];
+  const opts: [Estado['nov'], string][] = [['sim', 'Sim, quero receber os avisos do lançamento e das minhas vantagens.'], ['nao', 'Não, obrigado(a).']];
   opts.forEach(([v, t]) => {
     const { lab, inp } = opcaoCartao('radio', 'novidades', { id: v, texto: t }, E.nov === v);
-    inp.addEventListener('change', () => {
-      E.nov = v;
-      // mudou de "Sim" para "Não": limpa o contato ainda não enviado
-      if (v === 'nao') { E.nome = ''; E.email = ''; E.whats = ''; E.aceite = false; contato.querySelectorAll('input').forEach((x) => { if (x.type === 'checkbox') x.checked = false; else x.value = ''; }); limparContato(); }
-      salvar(); limparErro(fs); mostrarContato(true); atualizarBotao();
-    });
+    inp.addEventListener('change', () => { E.nov = v; salvar(); limparErro(fs); atualizarBotao(); });
     lista.appendChild(lab);
   });
-  contato.append(
-    el('p', 'pq-contato-intro', 'Seus dados de contato ficam guardados separados das respostas da pesquisa e só serão usados para avisar sobre o lançamento.'),
-    campo('pq-nome', 'Seu nome', 'text', E.nome, 'Como podemos chamar você?', (i) => { i.autocomplete = 'name'; i.maxLength = 120; i.addEventListener('input', () => { E.nome = i.value; salvar(); erroCampo(i, ''); }); }),
-    campo('pq-email', 'E-mail', 'email', E.email, 'seuemail@exemplo.com', (i) => { i.autocomplete = 'email'; i.inputMode = 'email'; i.maxLength = 254; i.spellcheck = false; i.addEventListener('input', () => { E.email = i.value; salvar(); erroCampo(i, ''); }); }),
-    campo('pq-whats', 'WhatsApp com DDD', 'tel', mascaraWhats(E.whats), '(41) 99999-9999', (i) => { i.autocomplete = 'tel-national'; i.inputMode = 'tel'; i.addEventListener('input', () => { i.value = mascaraWhats(i.value); E.whats = i.value; salvar(); erroCampo(i, ''); }); }),
-  );
-  const aceite = el('div', 'pq-campo pq-aceite-q'); aceite.id = 'pq-aceite-q';
-  const lab = el('label', 'pq-aceite');
-  const cb = el('input'); cb.type = 'checkbox'; cb.id = 'pq-aceite'; cb.checked = E.aceite;
-  const txt = el('span');
-  txt.append('Autorizo o Dani Moscatelli — Experience Design Studio a utilizar meus dados de contato para me enviar informações sobre o lançamento deste projeto, conforme a ');
+  const nota = el('p', 'pq-nota-consent');
+  nota.append('Ao escolher "Sim", você autoriza o Dani Moscatelli — Experience Design Studio a usar seu e-mail e WhatsApp só para esses avisos, conforme a ');
   const a = el('a', undefined, 'Política de Privacidade'); a.href = '/privacidade/#pesquisa-moda'; a.dataset.politica = '';
-  txt.append(a, '.');
-  lab.append(cb, el('span', 'pq-caixa'), txt);
-  const errA = el('p', 'pq-erro'); errA.id = 'pq-aceite-erro'; errA.hidden = true; cb.setAttribute('aria-describedby', errA.id);
-  cb.addEventListener('change', () => { E.aceite = cb.checked; salvar(); erroCampo(cb, ''); });
-  aceite.append(lab, errA);
-  contato.appendChild(aceite);
-  fs.append(lista, contato, erroBox(fs.id));
+  nota.append(a, '. Você pode cancelar quando quiser.');
+  fs.append(lista, nota, erroBox(fs.id));
   return fs;
 }
 
-function mostrarContato(animar = false) {
-  const c = $('pq-contato'); if (!c) return;
-  const abrir = E.nov === 'sim';
-  if (abrir === !c.hidden && c.dataset.pronto) return;
-  c.dataset.pronto = '1';
-  c.hidden = !abrir;
-  if (abrir && animar && !reduzir) { c.classList.remove('pq-abre'); void c.offsetWidth; c.classList.add('pq-abre'); }
+/* Identificação: antes da primeira pergunta. Garante uma participação por pessoa e explica o uso dos dados (LGPD). */
+function montarIdentificacao() {
+  const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-id'; fs.dataset.etapa = String(ETAPA_ID);
+  cabecalho(fs, 'Antes de começar', 'Conte quem é você',
+    'Pedimos seus dados para garantir uma participação por pessoa e para entregar as suas vantagens no lançamento.');
+  const campos = el('div', 'pq-contato');
+  campos.append(
+    campo('pq-nome', 'Seu nome', 'text', E.nome, 'Como podemos chamar você?', (i) => { i.autocomplete = 'name'; i.maxLength = 120; i.addEventListener('input', () => { E.nome = i.value; salvar(); erroCampo(i, ''); limparErro(fs); }); }),
+    campo('pq-email', 'E-mail', 'email', E.email, 'seuemail@exemplo.com', (i) => { i.autocomplete = 'email'; i.inputMode = 'email'; i.maxLength = 254; i.spellcheck = false; i.addEventListener('input', () => { E.email = i.value; salvar(); erroCampo(i, ''); limparErro(fs); }); }),
+    campo('pq-whats', 'WhatsApp com DDD', 'tel', mascaraWhats(E.whats), '(41) 99999-9999', (i) => { i.autocomplete = 'tel-national'; i.inputMode = 'tel'; i.addEventListener('input', () => { i.value = mascaraWhats(i.value); E.whats = i.value; salvar(); erroCampo(i, ''); limparErro(fs); }); }),
+  );
+  const lgpd = el('div', 'pq-lgpd');
+  const ic = el('span', 'pq-ic'); ic.setAttribute('aria-hidden', 'true');
+  ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+  const tx = el('p');
+  tx.append(el('strong', undefined, 'Seus dados estão protegidos pela LGPD. '), 'Usamos seu nome, e-mail e WhatsApp só para esta pesquisa. As respostas são analisadas em conjunto e nunca divulgadas com seu nome.');
+  lgpd.append(ic, tx);
+  const aceite = el('div', 'pq-campo pq-aceite-q'); aceite.id = 'pq-ciente-q';
+  const lab = el('label', 'pq-aceite');
+  const cb = el('input'); cb.type = 'checkbox'; cb.id = 'pq-ciente'; cb.checked = E.ciente;
+  const txt = el('span');
+  txt.append((Q as { identificacao: { texto: string } }).identificacao.texto.replace(/conforme a Política de Privacidade\.$/, 'conforme a '));
+  const a = el('a', undefined, 'Política de Privacidade'); a.href = '/privacidade/#pesquisa-moda'; a.dataset.politica = '';
+  txt.append(a, '.');
+  lab.append(cb, el('span', 'pq-caixa'), txt);
+  const errA = el('p', 'pq-erro'); errA.id = 'pq-ciente-erro'; errA.hidden = true; cb.setAttribute('aria-describedby', errA.id);
+  cb.addEventListener('change', () => { E.ciente = cb.checked; salvar(); erroCampo(cb, ''); });
+  aceite.append(lab, errA);
+  fs.append(campos, lgpd, aceite, erroBox(fs.id));
+  return fs;
 }
-function limparContato() { ['pq-nome', 'pq-email', 'pq-whats', 'pq-aceite'].forEach((id) => { const i = $<HTMLInputElement>(id); if (i) erroCampo(i, ''); }); }
+
 function erroCampo(i: HTMLInputElement, msg: string) {
   const e = $(i.id + '-erro'); if (!e) return;
   e.textContent = msg; e.hidden = !msg;
@@ -433,18 +440,20 @@ function validarEtapa(i: number): boolean {
     if (primeiro) { (primeiro as HTMLElement).scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' }); return false; }
     return true;
   }
+  if (i === ETAPA_ID) {
+    const checks: [string, string][] = [
+      ['pq-nome', E.nome.trim() ? '' : 'Informe como podemos chamar você.'],
+      ['pq-email', !E.email.trim() ? 'Informe o seu e-mail.' : emailValido(E.email) ? '' : 'Confira o e-mail. Exemplo: seuemail@exemplo.com'],
+      ['pq-whats', !E.whats.trim() ? 'Informe o seu WhatsApp com DDD.' : whatsValido(E.whats) ? '' : 'Confira o número. Use o DDD e o número, como (41) 99999-9999.'],
+      ['pq-ciente', E.ciente ? '' : 'Para participar, marque que você leu e concorda.'],
+    ];
+    let primeiro: HTMLInputElement | null = null;
+    checks.forEach(([id, msg]) => { const inp = $<HTMLInputElement>(id); erroCampo(inp, msg); if (msg && !primeiro) primeiro = inp; });
+    if (primeiro) { (primeiro as HTMLInputElement).focus(); return false; }
+    return true;
+  }
   // novidades
   if (!E.nov) { mostrarErro(fs, 'Escolha uma das opções para concluir.'); return false; }
-  if (E.nov === 'nao') return true;
-  const checks: [string, string][] = [
-    ['pq-nome', E.nome.trim() ? '' : 'Informe como podemos chamar você.'],
-    ['pq-email', !E.email.trim() ? 'Informe o seu e-mail.' : emailValido(E.email) ? '' : 'Confira o e-mail. Exemplo: seuemail@exemplo.com'],
-    ['pq-whats', !E.whats.trim() ? 'Informe o seu WhatsApp com DDD.' : whatsValido(E.whats) ? '' : 'Confira o número. Use o DDD e o número, como (41) 99999-9999.'],
-    ['pq-aceite', E.aceite ? '' : 'Para receber novidades, marque a autorização.'],
-  ];
-  let primeiro: HTMLInputElement | null = null;
-  checks.forEach(([id, msg]) => { const i = $<HTMLInputElement>(id); erroCampo(i, msg); if (msg && !primeiro) primeiro = i; });
-  if (primeiro) { (primeiro as HTMLInputElement).focus(); return false; }
   return true;
 }
 
@@ -457,7 +466,7 @@ function atualizarBotao() {
   const b = $('pq-continuar'), t = b.querySelector('.pq-btn-txt')!;
   const i = E.etapa, p = PERGUNTAS[i];
   const enc = opcaoQueEncerra(p);
-  t.textContent = enviando ? 'Enviando…' : enc ? 'Concluir' : i === ETAPA_NOV ? 'Concluir participação' : i === ETAPA_RELATO && !E.relato.trim() ? 'Pular' : 'Continuar';
+  t.textContent = enviando ? (i === ETAPA_ID ? 'Conferindo…' : 'Enviando…') : enc ? 'Concluir' : i === ETAPA_NOV ? 'Concluir participação' : i === ETAPA_ID ? 'Começar as perguntas' : i === ETAPA_RELATO && !E.relato.trim() ? 'Pular' : 'Continuar';
 }
 function irPara(i: number, voltando = false) {
   E.etapa = i; salvar();
@@ -467,11 +476,10 @@ function irPara(i: number, voltando = false) {
   const atual = etapas.find((x) => Number(x.dataset.etapa) === i)!;
   if (!reduzir) { atual.classList.remove('pq-entra', 'pq-entra-volta'); void atual.offsetWidth; atual.classList.add(voltando ? 'pq-entra-volta' : 'pq-entra'); }
   // progresso: as 10 perguntas enchem a barra; as etapas extras mostram a barra cheia
-  const pct = i < TOTAL ? Math.round(((PERGUNTAS[i].condicao ? numero(i) : numero(i) - 1) / PRINCIPAIS) * 100) : 100;
+  const pct = i === ETAPA_ID ? 0 : i < TOTAL ? Math.round(((PERGUNTAS[i].condicao ? numero(i) : numero(i) - 1) / PRINCIPAIS) * 100) : 100;
   $('pq-barra').style.width = pct + '%';
   $('pq-barra').parentElement!.setAttribute('aria-valuenow', String(pct));
-  $('pq-etapa').textContent = i < TOTAL ? etiqueta(i) : i === ETAPA_PERFIL ? 'Quase lá · sobre você' : i === ETAPA_RELATO ? 'Quase lá · etapa opcional' : 'Última etapa';
-  if (i === ETAPA_NOV) mostrarContato();
+  $('pq-etapa').textContent = i < TOTAL ? etiqueta(i) : i === ETAPA_ID ? 'Antes de começar' : i === ETAPA_PERFIL ? 'Quase lá · sobre você' : i === ETAPA_RELATO ? 'Quase lá · etapa opcional' : 'Última etapa';
   atualizarBotao();
   window.scrollTo({ top: 0, behavior: reduzir ? 'auto' : 'smooth' });
   atual.querySelector<HTMLElement>('legend')?.focus({ preventScroll: true });
@@ -485,18 +493,20 @@ async function enviar(final: boolean) {
   const enc = encerraEm();
   const respostas: Record<string, unknown> = {};
   for (const p of PERGUNTAS) { if (aplica(p)) respostas[p.id] = E.r[p.id]; if (p.id === enc) break; }
-  const corpo: Record<string, unknown> = { acao: 'enviar', pesquisa: Q.slug, envio_id: E.envio, respostas, site: $<HTMLInputElement>('pq-site').value };
+  const corpo: Record<string, unknown> = {
+    acao: 'enviar', pesquisa: Q.slug, envio_id: E.envio, respostas, site: $<HTMLInputElement>('pq-site').value,
+    identificacao: { nome: E.nome, email: E.email, whatsapp: E.whats, ciente: E.ciente },
+  };
   if (final) {
     corpo.perfil = perfilAtual();
     corpo.relato = E.relato;
-    corpo.novidades = E.nov === 'sim'
-      ? { quer: true, id: E.contatoId, nome: E.nome, email: E.email, whatsapp: E.whats, consentimento: E.aceite }
-      : { quer: false };
+    corpo.novidades = { quer: E.nov === 'sim' };
   }
   try {
     const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpo) });
     const out = await res.json().catch(() => ({}));
     if (res.status === 410) { concluir('fora'); return; }
+    if (res.status === 409 && out.ja_respondeu) { concluir('ja'); return; }
     if (!res.ok || !out.ok) throw new Error(out.error || 'Não foi possível enviar agora.');
     concluir(enc ? 'encerrada' : 'obrigada', E.nov === 'sim');
   } catch (e) {
@@ -507,17 +517,72 @@ async function enviar(final: boolean) {
   }
 }
 
-function concluir(tipo: 'obrigada' | 'encerrada' | 'fora', comContato = false) {
-  // dados salvos no servidor: guarda que esta participação terminou e apaga o rascunho
-  if (tipo !== 'fora') guardar(CHAVE_FIM, { tipo, comContato, em: Date.now() }, true);
-  try { localStorage.removeItem(CHAVE_RASCUNHO); sessionStorage.removeItem(CHAVE_RASCUNHO + '-contato'); } catch { /* sem armazenamento */ }
+function concluir(tipo: 'obrigada' | 'encerrada' | 'fora' | 'ja', comContato = false, animar = true) {
+  // dados salvos no servidor: guarda nesta sessão que a participação terminou e apaga o rascunho.
+  // (O limite de uma participação por pessoa é feito no servidor, pelo e-mail e WhatsApp.)
+  if (tipo === 'obrigada' || tipo === 'encerrada') guardar(CHAVE_FIM, { tipo, comContato, em: Date.now() });
+  if (tipo !== 'fora') { try { localStorage.removeItem(CHAVE_RASCUNHO); sessionStorage.removeItem(CHAVE_RASCUNHO + '-contato'); } catch { /* sem armazenamento */ } }
   if (tipo === 'obrigada') {
     $('pq-obrigada-msg').textContent = comContato
-      ? 'Quando tivermos novidades sobre o lançamento, entraremos em contato pelos dados informados.'
+      ? 'Quando a plataforma for lançada, vamos avisar você pelo e-mail e WhatsApp informados, com as suas vantagens exclusivas.'
       : 'Obrigada por compartilhar um pouquinho da sua experiência com a gente!';
     $('pq-obrigada-dados').hidden = !comContato;
     mostrarTela('pq-obrigada');
-  } else mostrarTela(tipo === 'fora' ? 'pq-fora-do-ar' : 'pq-encerrada');
+    if (animar) confete();
+  } else mostrarTela(tipo === 'fora' ? 'pq-fora-do-ar' : tipo === 'ja' ? 'pq-ja' : 'pq-encerrada');
+}
+
+/* Confete explodindo a partir do selo de sucesso (só para quem concluiu tudo; respeita "menos movimento"). */
+function confete() {
+  if (reduzir) return;
+  const cv = el('canvas'); cv.setAttribute('aria-hidden', 'true');
+  cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50';
+  document.body.appendChild(cv);
+  const ctx = cv.getContext('2d'); if (!ctx) { cv.remove(); return; }
+  const dpr = window.devicePixelRatio || 1, W = innerWidth, H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+  const alvo = document.querySelector('#pq-obrigada .pq-check')?.getBoundingClientRect();
+  const ox = alvo ? alvo.left + alvo.width / 2 : W / 2, oy = alvo ? alvo.top + alvo.height / 2 : H * 0.3;
+  const cores = ['#D44D4D', '#D44D4D', '#FFB3AE', '#5C6986', '#A8AFBD', '#FFD166'];
+  const ps = Array.from({ length: 170 }, () => {
+    const ang = Math.random() * Math.PI * 2, vel = 4 + Math.random() * 9;
+    return { x: ox, y: oy, vx: Math.cos(ang) * vel, vy: Math.sin(ang) * vel - 4, w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
+      r: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.35, c: cores[Math.floor(Math.random() * cores.length)] };
+  });
+  const t0 = performance.now();
+  const quadro = (t: number) => {
+    const dt = t - t0;
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalAlpha = dt > 2600 ? Math.max(0, 1 - (dt - 2600) / 900) : 1;
+    ps.forEach((p) => {
+      p.vx *= 0.985; p.vy = p.vy * 0.985 + 0.22; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r))); ctx.restore();
+    });
+    if (dt < 3500) requestAnimationFrame(quadro); else cv.remove();
+  };
+  setTimeout(() => requestAnimationFrame(quadro), 350); // depois que o card aparece
+}
+
+/* Confere no servidor se este e-mail ou WhatsApp já participou, antes de abrir as perguntas. */
+async function conferirId() {
+  if (enviando) return;
+  enviando = true; atualizarBotao();
+  const b = $<HTMLButtonElement>('pq-continuar'); b.disabled = true; b.classList.add('pq-carregando');
+  const fs = $('pq-id');
+  try {
+    const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ acao: 'verificar', pesquisa: Q.slug, email: E.email, whatsapp: E.whats }) });
+    const out = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(out.error || '');
+    if (out.ja_respondeu) { mostrarErro(fs, 'Este e-mail ou WhatsApp já participou da pesquisa. Cada pessoa participa uma vez. Obrigada!'); return; }
+    enviando = false;
+    const destino = retomar >= 0 && retomar !== ETAPA_ID ? retomar : 0; retomar = -1;
+    irPara(destino);
+  } catch (e) {
+    mostrarErro(fs, (e instanceof Error && e.message && !/fetch|network/i.test(e.message) ? e.message : 'Não foi possível conferir agora. Confira sua conexão e tente de novo.'));
+  } finally {
+    enviando = false; b.disabled = false; b.classList.remove('pq-carregando'); atualizarBotao();
+  }
 }
 
 /* ---------- Política de privacidade em janela ---------- */
@@ -570,7 +635,7 @@ function topo() {
 function sair() {
   const dlg = $<HTMLDialogElement>('pq-sair-dlg');
   let destino = '/';
-  const emAndamento = () => !$('pq-form').hidden && !ler(CHAVE_FIM, true);
+  const emAndamento = () => !$('pq-form').hidden && !ler(CHAVE_FIM);
   document.addEventListener('click', (e) => {
     const a = (e.target as Element).closest<HTMLAnchorElement>('[data-sair]');
     if (!a || !emAndamento() || typeof dlg.showModal !== 'function') return; // fora da pesquisa (apresentação ou fim): vai direto
@@ -588,18 +653,24 @@ function iniciar() {
   politica(); topo(); sair();
   const etapas = $('pq-etapas');
   PERGUNTAS.forEach((p, i) => etapas.appendChild(montarPergunta(p, i)));
-  etapas.append(montarPerfil(), montarRelato(), montarNovidades());
+  etapas.append(montarIdentificacao(), montarPerfil(), montarRelato(), montarNovidades());
   [...etapas.children].forEach((x) => { (x as HTMLElement).hidden = true; });
 
   // escolhas que encerram mudam o texto do botão
   etapas.addEventListener('change', atualizarBotao);
   etapas.addEventListener('input', () => { if (E.etapa === ETAPA_RELATO) atualizarBotao(); });
 
-  $('pq-comecar').addEventListener('click', () => { mostrarTela('pq-form'); irPara(E.etapa >= 0 ? E.etapa : 0); });
+  // Começar: primeiro a identificação; quem já se identificou nesta sessão segue de onde parou
+  $('pq-comecar').addEventListener('click', () => {
+    mostrarTela('pq-form');
+    if (identificado() && E.etapa >= 0) irPara(E.etapa);
+    else { retomar = E.etapa >= 0 && E.etapa !== ETAPA_ID ? E.etapa : -1; irPara(ETAPA_ID); }
+  });
   $('pq-voltar').addEventListener('click', () => {
     if (enviando) return;
-    // da primeira pergunta, o Voltar leva só até a apresentação
-    if (E.etapa <= 0) { E.etapa = -1; salvar(); mostrarTela('pq-intro'); $('pq-comecar').focus(); return; }
+    // da identificação, o Voltar leva à apresentação; da primeira pergunta, à identificação
+    if (E.etapa === ETAPA_ID) { E.etapa = -1; salvar(); mostrarTela('pq-intro'); $('pq-comecar').focus(); return; }
+    if (E.etapa <= 0) { irPara(ETAPA_ID, true); return; }
     irPara(anterior(E.etapa), true);
   });
   $('pq-form').addEventListener('submit', (e) => {
@@ -608,13 +679,18 @@ function iniciar() {
     const p = PERGUNTAS[E.etapa];
     if (opcaoQueEncerra(p)) return void enviar(false);
     if (E.etapa === ETAPA_NOV) return void enviar(true);
+    if (E.etapa === ETAPA_ID) return void conferirId();
     irPara(proxima(E.etapa));
   });
 
   // participação já concluída neste aparelho: mostra a tela final, sem novo envio
-  const fim = ler<{ tipo: 'obrigada' | 'encerrada'; comContato: boolean }>(CHAVE_FIM, true);
-  if (fim) { concluir(fim.tipo, fim.comContato); return; }
-  if (E.etapa >= 0) { mostrarTela('pq-form'); irPara(Math.min(E.etapa, ETAPA_NOV)); }
+  const fim = ler<{ tipo: 'obrigada' | 'encerrada'; comContato: boolean }>(CHAVE_FIM);
+  if (fim) { concluir(fim.tipo, fim.comContato, false); return; }
+  if (E.etapa >= 0) {
+    mostrarTela('pq-form');
+    if (identificado() || E.etapa === ETAPA_ID) irPara(E.etapa);
+    else { retomar = E.etapa; irPara(ETAPA_ID); } // voltou outro dia: identifica de novo e continua de onde parou
+  }
 
   // pesquisa fora do ar
   fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ acao: 'status', pesquisa: Q.slug }) })

@@ -402,6 +402,19 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - consentimento salvo com data, horário, versão e texto; exclusão e cancelamento pelo e-mail de contato e pelo botão Excluir no painel.
 - **Trade-offs:** o identificador do envio evita duplicar a mesma participação (atualizar a página, tocar duas vezes), mas não impede que a mesma pessoa responda de novo em outro aparelho; o tempo de 3 a 5 minutos ainda precisa ser validado em teste real.
 
+
+## D-034 · 23/11/2026 · Pesquisa Moda em Curitiba: identificação no início e uma participação por pessoa (site)
+
+- **Origem:** dona do produto: a pesquisa deve aceitar uma resposta por pessoa. Ela pediu identificação no início com aviso da LGPD, a mesma identificação usada para os avisos do lançamento, e vantagens exclusivas para quem participa. Escolhas dela: nome, e-mail e WhatsApp obrigatórios; bloqueio por e-mail ou WhatsApp repetido; texto "vantagens exclusivas" (sem prometer desconto).
+- **Decisão:**
+  - nome, e-mail e WhatsApp são pedidos antes da primeira pergunta, com aviso da LGPD e confirmação de leitura (data, versão e texto guardados); o servidor confere antes das perguntas e de novo no envio;
+  - os dados ficam na própria resposta (`pesquisa_respostas`), com índices únicos por pesquisa para e-mail e WhatsApp; isso substitui a separação entre respostas e contatos de D-033;
+  - excluir a resposta no painel libera o e-mail e o WhatsApp para responder de novo;
+  - o bloqueio por aparelho sai: o aviso de "já concluída" vale só para a sessão do navegador;
+  - no fim, "Sim" para os avisos é a autorização (texto e versão próprios) e copia o contato para `pesquisa_interessados`, que continua alimentando a aba Interessados;
+  - a identificação fica só na sessão do navegador; no rascunho local de 30 dias ficam apenas as respostas.
+- **Trade-offs:** a participação deixa de ser anônima para a equipe (os resultados continuam sendo analisados e divulgados em conjunto). Uma pessoa com outro e-mail e outro WhatsApp ainda consegue responder de novo. A conferência antes das perguntas revela se um e-mail ou WhatsApp já participou.
+
 ---
 
 ## Decisões pendentes
