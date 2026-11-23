@@ -595,7 +595,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-23 · Contatos: abas Recebidos e Enviados, vários destinatários, Cc e Cco, janela no centro (D-045), não publicado
+## 2026-11-23 · Contatos: abas Recebidos e Enviados, vários destinatários, Cc e Cco, janela no centro (D-045), publicado (migration aplicada; função `responder-contato` v14)
 
 - `public/admin/contatos/index.html`:
   - Abas "Recebidos" (formulário do site e e-mails que chegaram) e "Enviados" (e-mails novos), com contagem. A aba fica no endereço (`?aba=enviados`).
@@ -786,6 +786,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Função `galeria-autorizacao`:** `ver` responde sem chamar a IA e informa `ia_pendente`; nova ação `ia`; `decidir` aceita `tempo` (só valores do campo 23) e atualiza `tempo_especialidade` do cadastro quando muda; o histórico da autorização guarda a senioridade exibida.
 - **Verificação executada:** navegador (iPhone 13) com servidor simulado: validação do nome (Matheus e Matheus S recusados; Ana Lu e Maria da Silva aceitos), prefixo fixo (colar link inteiro, apagar tudo, host errado); página da galeria visível em 0,75 s com a IA atrasada 4 s, troca de senioridade refletida na prévia e enviada no formato do cadastro; `node --check` e `esbuild` da função; `npm run build`.
 - **Publicação (16/11):** função `galeria-autorizacao` publicada (versão 13); `ver` no ar responde em 0,8 a 1 s.
+
+## 2026-11-23 · Área restrita com as cores novas de aviso e erro do DS (D-045)
+
+- `public/design-system/theme.css` e `design-system/versao.txt`: sincronizados com o DS Dani Moscatelli `697a765` (`scripts/sincronizar-design-system.sh`); `?v=` do `theme.css` atualizado nas 8 páginas.
+- `public/admin/parceiros/index.html` e `public/admin/pesquisas/index.html`: textos e ícones de aviso passam de `--warning` para `--warning-text`.
+- Testes: suíte Playwright da área restrita (Supabase simulado, `public/` servido localmente), 130 casos passaram, sem erros de página.
 
 ## 2026-11-23 · Experience Intelligence pronto para o Cloudflare Pages (D-038)
 
