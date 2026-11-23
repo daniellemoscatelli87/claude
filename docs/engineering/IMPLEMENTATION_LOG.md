@@ -602,9 +602,9 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - Imagem `public/email/dani-assinatura.png`, de 220 × 280 exibida em 110 × 140, com 18 KB.
   - Gerada a partir da foto enviada pela dona do produto (WEBP com fundo transparente, que o Outlook não mostra), com a autorização dela.
   - A `dani-foto.jpg` antiga continua no site para os e-mails já enviados.
-- O `comunicado-parceiros` tem uma cópia da mesma assinatura e não foi mudado.
+- `supabase/functions/comunicado-parceiros/index.ts` passa a usar a mesma assinatura e a mesma imagem, por pedido da dona do produto. A função no ar (v5) estava igual ao repositório antes da mudança. Teste: prévia do comunicado gerada pela função em bundle (status 200, link do WhatsApp e imagem nova) e conferida em imagem.
 - Teste executado: a assinatura foi gerada a partir do código da função e conferida em imagem, com os três links (WhatsApp, `mailto:` e site).
-- Na publicação: publicar o site antes (para a imagem existir) e depois reimplantar `responder-contato`.
+- Na publicação: publicar o site antes (para a imagem existir) e depois reimplantar `responder-contato` e `comunicado-parceiros`.
 
 ## 2026-11-23 · Contatos: abas Recebidos e Enviados, vários destinatários, Cc e Cco, janela no centro (D-046), publicado (migration aplicada; função `responder-contato` v14)
 
