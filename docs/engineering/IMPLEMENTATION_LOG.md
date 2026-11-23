@@ -600,7 +600,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Tela de quem não comprou este ano (`#pq-semcompras`), na estrutura do modelo enviado pela dona do produto:**
   - check em contorno;
   - "Obrigada pelo seu interesse!";
-  - "Neste momento, nossa pesquisa é voltada a quem comprou roupas, calçados ou acessórios neste ano.";
+  - "Neste momento, nossa pesquisa é voltada a quem comprou roupas, calçados ou acessórios neste ano.", com "comprou roupas, calçados ou acessórios neste ano" em negrito vermelho;
   - "Agradecemos por dedicar um tempinho para participar!";
   - linha divisória e assinatura em texto, sem foto.
   - Quem mora fora de Curitiba e da Região Metropolitana continua com a tela de encerramento.
