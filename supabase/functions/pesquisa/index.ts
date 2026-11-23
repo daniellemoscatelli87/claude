@@ -3,6 +3,7 @@
 // { acao: "enviar", pesquisa, envio_id, respostas, relato?, novidades? }
 //     Grava a participação uma única vez por envio_id (reenvio ou atualização da página não duplica).
 //     situacao vem das próprias respostas: Q1 = "Não" encerra (fora_de_curitiba); Q2 = "Não comprei" encerra (sem_compras).
+//     Perguntas com condicao (ex.: 2.1) só são exigidas e gravadas para quem escolheu uma das opções indicadas.
 //     novidades: { quer: boolean, id, nome, email, whatsapp, consentimento: true } só para participações completas.
 //     O contato vai para outra tabela, com outro identificador, sem ligação com as respostas.
 //     O relato (pergunta aberta) é guardado exatamente como foi enviado.
@@ -12,6 +13,7 @@ import modaCuritiba from "./questionario.json" with { type: "json" };
 type Opcao = { id: string; texto: string; encerra?: string; exclusiva?: boolean; outro?: boolean };
 type Pergunta = {
   id: string; tipo: "unica" | "multipla" | "escala" | "matriz"; texto: string; max?: number; min?: number;
+  condicao?: { pergunta: string; opcoes: string[] };
   opcoes?: Opcao[]; linhas?: { id: string }[]; colunas?: { id: string }[];
 };
 type Questionario = { slug: string; versao: string; consentimento: { versao: string; texto: string }; perguntas: Pergunta[] };
@@ -99,6 +101,8 @@ Deno.serve(async (req) => {
     const respostas: Record<string, unknown> = {};
     let situacao = "completa";
     for (const per of q.perguntas) {
+      // pergunta condicional (ex.: 2.1): só vale para quem escolheu uma das opções indicadas; para os demais, é ignorada
+      if (per.condicao && !per.condicao.opcoes.includes(String(respostas[per.condicao.pergunta] ?? ""))) continue;
       respostas[per.id] = validar(per, r[per.id]);
       const enc = per.opcoes?.find((o) => o.id === respostas[per.id])?.encerra;
       if (enc) { situacao = enc; break; }

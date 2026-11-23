@@ -1,7 +1,8 @@
 /* Pesquisa pública "Moda em Curitiba" (/pesquisa/moda-curitiba/).
    Uma pergunta por etapa, com progresso, Voltar e Continuar. As perguntas vêm do mesmo arquivo que a função
    do servidor usa para validar (supabase/functions/pesquisa/questionario.json).
-   Q1 = "Não" ou Q2 = "Não comprei" encerram com uma mensagem cordial. Depois das 10 perguntas: pergunta aberta
+   Q1 = "Não" ou Q2 = "Não comprei" encerram com uma mensagem cordial. A 2.1 só aparece para quem compra mais em
+   marketplaces ou lojas online de outras cidades (fora da contagem das 10). Depois das 10 perguntas: pergunta aberta
    (opcional) e convite para receber novidades (contato só com autorização). O envio usa um identificador gerado
    aqui, então atualizar a página ou tocar de novo no botão não duplica a participação. */
 import './pesquisa-moda.css';
@@ -12,6 +13,7 @@ type Pergunta = {
   id: string; tipo: 'unica' | 'multipla' | 'escala' | 'matriz'; texto: string; apoio?: string; max?: number; min?: number;
   opcoes?: Opcao[]; linhas?: { id: string; texto: string }[]; colunas?: { id: string; texto: string }[];
   rotulo_min?: string; rotulo_max?: string;
+  rotulo?: string; condicao?: { pergunta: string; opcoes: string[] }; // pergunta condicional (ex.: 2.1)
 };
 type Multi = { opcoes: string[]; outro?: string };
 type Estado = {
@@ -21,10 +23,18 @@ type Estado = {
 };
 
 const PERGUNTAS = Q.perguntas as Pergunta[];
-const TOTAL = PERGUNTAS.length; // 10 perguntas principais; relato e novidades ficam fora da contagem
+const TOTAL = PERGUNTAS.length; // etapas de perguntas, contando a condicional 2.1
+const PRINCIPAIS = PERGUNTAS.filter((p) => !p.condicao).length; // as 10 perguntas principais; 2.1, relato e novidades ficam fora
 const ETAPA_RELATO = TOTAL, ETAPA_NOV = TOTAL + 1;
+// número da pergunta principal (1 a 10) na etapa i; a condicional leva o número da principal anterior
+const numero = (i: number) => PERGUNTAS.slice(0, i + 1).filter((p) => !p.condicao).length;
+const rotulo = (i: number) => PERGUNTAS[i].rotulo ?? String(numero(i));
+// a pergunta aparece? (as condicionais só para quem escolheu uma das opções indicadas)
+const aplica = (p: Pergunta) => !p.condicao || p.condicao.opcoes.includes(String(E.r[p.condicao.pergunta] ?? ''));
+const proxima = (i: number) => { let j = i + 1; while (j < TOTAL && !aplica(PERGUNTAS[j])) j++; return j; };
+const anterior = (i: number) => { let j = i - 1; while (j >= 0 && j < TOTAL && !aplica(PERGUNTAS[j])) j--; return j; };
 const API = 'https://lipfvnerohkaajegqvwr.supabase.co/functions/v1/pesquisa';
-const CHAVE_RASCUNHO = 'pq-moda-rascunho', CHAVE_FIM = 'pq-moda-concluida';
+const CHAVE_RASCUNHO = 'pq-moda-rascunho-v2', CHAVE_FIM = 'pq-moda-concluida';
 const RELATO_MAX = 2000;
 const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -54,8 +64,7 @@ function mostrarTela(id: string) {
 }
 
 /* ---------- Perguntas ---------- */
-const etiqueta = (n: number) => `Pergunta ${n} de ${TOTAL}`;
-const rotuloCurto = (n: number) => `Pergunta ${n}`;
+const etiqueta = (i: number) => (PERGUNTAS[i].condicao ? `Pergunta ${rotulo(i)}` : `Pergunta ${numero(i)} de ${PRINCIPAIS}`);
 function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apoio?: string) {
   const lg = el('legend', 'pq-pergunta'); lg.tabIndex = -1;
   lg.append(el('span', 'pq-num', eyebrow), el('span', 'pq-titulo', titulo));
@@ -75,7 +84,7 @@ function opcaoCartao(tipo: 'radio' | 'checkbox', nome: string, o: Opcao, marcado
 
 function montarPergunta(p: Pergunta, i: number) {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-' + p.id; fs.dataset.etapa = String(i);
-  cabecalho(fs, rotuloCurto(i + 1), p.texto, p.apoio);
+  cabecalho(fs, `Pergunta ${rotulo(i)}`, p.texto, p.apoio);
   const erro = erroBox(fs.id);
   if (p.tipo === 'unica') {
     const lista = el('div', 'pq-ops');
@@ -322,10 +331,10 @@ function irPara(i: number, voltando = false) {
   const atual = etapas.find((x) => Number(x.dataset.etapa) === i)!;
   if (!reduzir) { atual.classList.remove('pq-entra', 'pq-entra-volta'); void atual.offsetWidth; atual.classList.add(voltando ? 'pq-entra-volta' : 'pq-entra'); }
   // progresso: as 10 perguntas enchem a barra; as etapas extras mostram a barra cheia
-  const pct = i < TOTAL ? Math.round((i / TOTAL) * 100) : 100;
+  const pct = i < TOTAL ? Math.round(((PERGUNTAS[i].condicao ? numero(i) : numero(i) - 1) / PRINCIPAIS) * 100) : 100;
   $('pq-barra').style.width = pct + '%';
   $('pq-barra').parentElement!.setAttribute('aria-valuenow', String(pct));
-  $('pq-etapa').textContent = i < TOTAL ? etiqueta(i + 1) : i === ETAPA_RELATO ? 'Quase lá · etapa opcional' : 'Última etapa';
+  $('pq-etapa').textContent = i < TOTAL ? etiqueta(i) : i === ETAPA_RELATO ? 'Quase lá · etapa opcional' : 'Última etapa';
   if (i === ETAPA_NOV) mostrarContato();
   atualizarBotao();
   window.scrollTo({ top: 0, behavior: reduzir ? 'auto' : 'smooth' });
@@ -339,7 +348,7 @@ async function enviar(final: boolean) {
   const erroGeral = $('pq-erro-geral'); erroGeral.hidden = true;
   const enc = encerraEm();
   const respostas: Record<string, unknown> = {};
-  for (const p of PERGUNTAS) { respostas[p.id] = E.r[p.id]; if (p.id === enc) break; }
+  for (const p of PERGUNTAS) { if (aplica(p)) respostas[p.id] = E.r[p.id]; if (p.id === enc) break; }
   const corpo: Record<string, unknown> = { acao: 'enviar', pesquisa: Q.slug, envio_id: E.envio, respostas, site: $<HTMLInputElement>('pq-site').value };
   if (final) {
     corpo.relato = E.relato;
@@ -418,7 +427,7 @@ function iniciar() {
     if (enviando) return;
     // da primeira pergunta, o Voltar leva só até a apresentação
     if (E.etapa <= 0) { E.etapa = -1; salvar(); mostrarTela('pq-intro'); $('pq-comecar').focus(); return; }
-    irPara(E.etapa - 1, true);
+    irPara(anterior(E.etapa), true);
   });
   $('pq-form').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -426,7 +435,7 @@ function iniciar() {
     const p = PERGUNTAS[E.etapa];
     if (p?.opcoes?.find((o) => o.id === E.r[p.id])?.encerra) return void enviar(false);
     if (E.etapa === ETAPA_NOV) return void enviar(true);
-    irPara(E.etapa + 1);
+    irPara(proxima(E.etapa));
   });
 
   // participação já concluída neste aparelho: mostra a tela final, sem novo envio

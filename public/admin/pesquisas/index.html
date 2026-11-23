@@ -337,18 +337,26 @@
     const b1 = respondeu("q1"), b2 = respondeu("q2");
     g.append(cardPergunta(perg[0], 1, b1, graficoBarras(perg[0], b1)));
     g.append(cardPergunta(perg[1], 2, b2, graficoBarras(perg[1], b2, { menor: (o) => !!o.encerra })));
-    perg.slice(2).forEach((p, k) => {
-      const num = k + 3;
+    let num = 2;
+    perg.slice(2).forEach((p) => {
+      // perguntas condicionais (ex.: 2.1): só entre quem a pergunta foi mostrada
+      const base = p.condicao ? comp.filter((x) => p.condicao.opcoes.includes(x.respostas[p.condicao.pergunta])) : comp;
+      if (!p.condicao) num++;
       let conteudo;
-      if (p.tipo === "escala") conteudo = graficoEscala(p, comp);
-      else if (p.tipo === "matriz") conteudo = graficoMatriz(p, comp);
-      else conteudo = graficoBarras(p, comp, { menor: (o) => !!o.exclusiva });
-      const c = cardPergunta(p, num, comp, conteudo, [outros(p, comp)].filter(Boolean));
+      if (p.tipo === "escala") conteudo = graficoEscala(p, base);
+      else if (p.tipo === "matriz") conteudo = graficoMatriz(p, base);
+      else conteudo = graficoBarras(p, base, { menor: (o) => !!o.exclusiva });
+      const notas = [outros(p, base)];
+      if (p.condicao) {
+        const ops = perg.find((x) => x.id === p.condicao.pergunta).opcoes.filter((o) => p.condicao.opcoes.includes(o.id)).map((o) => "“" + o.texto + "”");
+        notas.unshift(el("p", "pa-nota", "Mostrada só para quem respondeu na pergunta 2: " + ops.join(" ou ") + "."));
+      }
+      const c = cardPergunta(p, p.rotulo || num, base, conteudo, notas.filter(Boolean));
       if (p.tipo === "matriz" || p.tipo === "escala") c.classList.add("largo");
       g.appendChild(c);
     });
     box.appendChild(g);
-    const n = el("p", "pa-nota", `As perguntas 3 a 10 mostram só as respostas completas (${comp.length}). Quem não mora em Curitiba ou não comprou este ano encerra na pergunta 1 ou 2 e não vê as seguintes.`);
+    const n = el("p", "pa-nota", `As perguntas 2.1 a 10 mostram só as respostas completas (${comp.length}); a 2.1, só de quem ela foi mostrada. Quem não mora em Curitiba ou não comprou este ano encerra na pergunta 1 ou 2 e não vê as seguintes.`);
     box.appendChild(n);
     return box;
   }
@@ -412,6 +420,11 @@
     if (!comp.length) { ul.appendChild((() => { const li = el("li"); li.appendChild(el("span", null, "Ainda não há respostas completas para os demais destaques.")); return li; })()); card.appendChild(ul); return card; }
     const b2 = respondeu("q2").filter((x) => x.respostas.q2 !== "nao_comprei");
     const t2 = topo(perg.q2, b2, (o) => !o.encerra); if (t2) add(["Onde a maior parte das compras acontece: ", { b: t2.texto }, ` (${pct(t2.v, b2.length)}%).`]);
+    if (perg.q2_1) {
+      const b21 = comp.filter((x) => perg.q2_1.condicao.opcoes.includes(x.respostas.q2));
+      const t21 = topo(perg.q2_1, b21, (o) => !o.outro);
+      if (t21) add(["Entre quem compra mais em marketplaces ou lojas online de outras cidades, o motivo mais citado: ", { b: t21.texto }, ` (${pct(t21.v, b21.length)}%).`]);
+    }
     const t5 = topo(perg.q5, comp); if (t5) add(["Onde a procura começa: ", { b: t5.texto }, ` (${pct(t5.v, comp.length)}%).`]);
     const sm = comp.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; add([{ b: `${pct(sm, comp.length)}%` }, " compraram de segunda mão (brechós) este ano."]);
     const notas = comp.map((x) => x.respostas.q4).filter((v) => typeof v === "number");

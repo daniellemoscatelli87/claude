@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v1-2026-11-23",
+  "versao": "moda-curitiba-v2-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "consentimento": {
     "versao": "moda-curitiba-contato-v1-2026-11-23",
@@ -8,127 +8,374 @@
   },
   "perguntas": [
     {
-      "id": "q1", "tipo": "unica",
+      "id": "q1",
+      "tipo": "unica",
       "texto": "Você mora atualmente em Curitiba?",
       "opcoes": [
-        { "id": "sim", "texto": "Sim" },
-        { "id": "nao", "texto": "Não", "encerra": "fora_de_curitiba" }
+        {
+          "id": "sim",
+          "texto": "Sim"
+        },
+        {
+          "id": "nao",
+          "texto": "Não",
+          "encerra": "fora_de_curitiba"
+        }
       ]
     },
     {
-      "id": "q2", "tipo": "unica",
+      "id": "q2",
+      "tipo": "unica",
       "texto": "Em quais tipos de lojas você realizou a maior parte das suas compras de roupas e acessórios este ano?",
       "apoio": "Selecione a opção que melhor representa a maior parte das suas compras.",
       "opcoes": [
-        { "id": "fisicas_cwb", "texto": "Lojas físicas de Curitiba" },
-        { "id": "online_cwb", "texto": "Lojas online de Curitiba (sites, redes sociais ou WhatsApp)" },
-        { "id": "marketplaces", "texto": "Marketplaces (Shein, Shopee, Mercado Livre etc.)" },
-        { "id": "online_outras", "texto": "Lojas online de outras cidades (sites e aplicativos próprios)" },
-        { "id": "fisicas_outras", "texto": "Lojas físicas de outras cidades" },
-        { "id": "nao_comprei", "texto": "Não comprei roupas ou acessórios este ano", "encerra": "sem_compras" }
+        {
+          "id": "fisicas_cwb",
+          "texto": "Lojas físicas de Curitiba"
+        },
+        {
+          "id": "online_cwb",
+          "texto": "Lojas online de Curitiba (sites, redes sociais ou WhatsApp)"
+        },
+        {
+          "id": "marketplaces",
+          "texto": "Marketplaces (Shein, Shopee, Mercado Livre etc.)"
+        },
+        {
+          "id": "online_outras",
+          "texto": "Lojas online de outras cidades (sites e aplicativos próprios)"
+        },
+        {
+          "id": "fisicas_outras",
+          "texto": "Lojas físicas de outras cidades"
+        },
+        {
+          "id": "nao_comprei",
+          "texto": "Não comprei roupas ou acessórios este ano",
+          "encerra": "sem_compras"
+        }
       ]
     },
     {
-      "id": "q3", "tipo": "unica",
+      "id": "q2_1",
+      "rotulo": "2.1",
+      "tipo": "multipla",
+      "max": 3,
+      "condicao": {
+        "pergunta": "q2",
+        "opcoes": [
+          "marketplaces",
+          "online_outras"
+        ]
+      },
+      "texto": "O que mais leva você a comprar roupas e acessórios em marketplaces ou lojas online de outras cidades?",
+      "apoio": "Selecione até 3 opções.",
+      "opcoes": [
+        {
+          "id": "precos",
+          "texto": "Preços mais atrativos"
+        },
+        {
+          "id": "variedade",
+          "texto": "Maior variedade de estilos e modelos"
+        },
+        {
+          "id": "tamanhos",
+          "texto": "Mais opções de tamanhos"
+        },
+        {
+          "id": "pecas_especificas",
+          "texto": "Facilidade para encontrar peças específicas"
+        },
+        {
+          "id": "comodidade",
+          "texto": "Comodidade de comprar sem sair de casa"
+        },
+        {
+          "id": "promocoes",
+          "texto": "Promoções e condições de pagamento"
+        },
+        {
+          "id": "dificuldade_cwb",
+          "texto": "Dificuldade para encontrar o que procuro em Curitiba"
+        },
+        {
+          "id": "outro",
+          "texto": "Outro motivo (especifique)",
+          "outro": true
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "tipo": "unica",
       "texto": "Você comprou roupas ou acessórios de segunda mão (brechós) este ano?",
       "opcoes": [
-        { "id": "nao", "texto": "Não comprei" },
-        { "id": "uma_vez", "texto": "Sim, uma vez" },
-        { "id": "algumas", "texto": "Sim, algumas vezes" },
-        { "id": "frequencia", "texto": "Sim, com frequência" },
-        { "id": "maioria", "texto": "Sim, a maior parte das minhas compras foi de segunda mão" }
+        {
+          "id": "nao",
+          "texto": "Não comprei"
+        },
+        {
+          "id": "uma_vez",
+          "texto": "Sim, uma vez"
+        },
+        {
+          "id": "algumas",
+          "texto": "Sim, algumas vezes"
+        },
+        {
+          "id": "frequencia",
+          "texto": "Sim, com frequência"
+        },
+        {
+          "id": "maioria",
+          "texto": "Sim, a maior parte das minhas compras foi de segunda mão"
+        }
       ]
     },
     {
-      "id": "q4", "tipo": "escala", "min": 0, "max": 10,
+      "id": "q4",
+      "tipo": "escala",
+      "min": 0,
+      "max": 10,
       "texto": "De 0 a 10, que nota você daria para sua satisfação com as roupas e acessórios que comprou este ano?",
-      "rotulo_min": "Nada satisfeita(o)", "rotulo_max": "Totalmente satisfeita(o)"
+      "rotulo_min": "Nada satisfeita(o)",
+      "rotulo_max": "Totalmente satisfeita(o)"
     },
     {
-      "id": "q5", "tipo": "unica",
+      "id": "q5",
+      "tipo": "unica",
       "texto": "Quando você tem uma peça específica em mente, por onde costuma começar a procurar?",
       "opcoes": [
-        { "id": "fisicas_cwb", "texto": "Visitando lojas físicas de Curitiba" },
-        { "id": "online_cwb", "texto": "Consultando lojas de Curitiba pelo Instagram, site ou WhatsApp" },
-        { "id": "marketplaces", "texto": "Pesquisando em marketplaces (Shein, Shopee, Mercado Livre etc.)" },
-        { "id": "outras_cidades", "texto": "Consultando sites ou aplicativos de lojas de outras cidades" },
-        { "id": "google", "texto": "Pesquisando no Google" },
-        { "id": "redes", "texto": "Buscando referências ou indicações nas redes sociais" },
-        { "id": "nao_procuro", "texto": "Não costumo procurar peças específicas" }
+        {
+          "id": "fisicas_cwb",
+          "texto": "Visitando lojas físicas de Curitiba"
+        },
+        {
+          "id": "online_cwb",
+          "texto": "Consultando lojas de Curitiba pelo Instagram, site ou WhatsApp"
+        },
+        {
+          "id": "marketplaces",
+          "texto": "Pesquisando em marketplaces (Shein, Shopee, Mercado Livre etc.)"
+        },
+        {
+          "id": "outras_cidades",
+          "texto": "Consultando sites ou aplicativos de lojas de outras cidades"
+        },
+        {
+          "id": "google",
+          "texto": "Pesquisando no Google"
+        },
+        {
+          "id": "redes",
+          "texto": "Buscando referências ou indicações nas redes sociais"
+        },
+        {
+          "id": "nao_procuro",
+          "texto": "Não costumo procurar peças específicas"
+        }
       ]
     },
     {
-      "id": "q6", "tipo": "multipla", "max": 3,
+      "id": "q6",
+      "tipo": "multipla",
+      "max": 3,
       "texto": "Como você costuma conhecer novas lojas físicas de roupas e acessórios em Curitiba?",
       "apoio": "Escolha até 3 respostas.",
       "opcoes": [
-        { "id": "passando", "texto": "Ao passar em frente a uma loja na rua ou no shopping" },
-        { "id": "redes", "texto": "Por publicações nas redes sociais" },
-        { "id": "indicacao", "texto": "Por indicação de amigos ou familiares" },
-        { "id": "google", "texto": "Por buscas no Google ou Google Maps" },
-        { "id": "anuncios", "texto": "Por anúncios ou influenciadores" },
-        { "id": "raramente", "texto": "Raramente procuro lojas novas; frequento as que já conheço", "exclusiva": true },
-        { "id": "nao_conheco", "texto": "Não conheço lojas físicas de roupas ou acessórios em Curitiba", "exclusiva": true },
-        { "id": "outro", "texto": "Outro meio (especifique)", "outro": true }
+        {
+          "id": "passando",
+          "texto": "Ao passar em frente a uma loja na rua ou no shopping"
+        },
+        {
+          "id": "redes",
+          "texto": "Por publicações nas redes sociais"
+        },
+        {
+          "id": "indicacao",
+          "texto": "Por indicação de amigos ou familiares"
+        },
+        {
+          "id": "google",
+          "texto": "Por buscas no Google ou Google Maps"
+        },
+        {
+          "id": "anuncios",
+          "texto": "Por anúncios ou influenciadores"
+        },
+        {
+          "id": "raramente",
+          "texto": "Raramente procuro lojas novas; frequento as que já conheço",
+          "exclusiva": true
+        },
+        {
+          "id": "nao_conheco",
+          "texto": "Não conheço lojas físicas de roupas ou acessórios em Curitiba",
+          "exclusiva": true
+        },
+        {
+          "id": "outro",
+          "texto": "Outro meio (especifique)",
+          "outro": true
+        }
       ]
     },
     {
-      "id": "q7", "tipo": "unica",
+      "id": "q7",
+      "tipo": "unica",
       "texto": "Com que frequência você não encontra uma roupa ou acessório com as características que procura?",
       "opcoes": [
-        { "id": "nunca", "texto": "Nunca" },
-        { "id": "raramente", "texto": "Raramente" },
-        { "id": "as_vezes", "texto": "Às vezes" },
-        { "id": "frequentemente", "texto": "Frequentemente" },
-        { "id": "quase_sempre", "texto": "Quase sempre" }
+        {
+          "id": "nunca",
+          "texto": "Nunca"
+        },
+        {
+          "id": "raramente",
+          "texto": "Raramente"
+        },
+        {
+          "id": "as_vezes",
+          "texto": "Às vezes"
+        },
+        {
+          "id": "frequentemente",
+          "texto": "Frequentemente"
+        },
+        {
+          "id": "quase_sempre",
+          "texto": "Quase sempre"
+        }
       ]
     },
     {
-      "id": "q8", "tipo": "matriz",
+      "id": "q8",
+      "tipo": "matriz",
       "texto": "Em quais características é mais fácil ou difícil encontrar o que você deseja?",
       "apoio": "Marque uma resposta para cada característica.",
       "linhas": [
-        { "id": "estilo", "texto": "Estilo ou modelo" },
-        { "id": "tamanho", "texto": "Tamanho" },
-        { "id": "modelagem", "texto": "Modelagem e caimento" },
-        { "id": "tecido", "texto": "Tecido e qualidade" },
-        { "id": "acessorios", "texto": "Acessórios com as características desejadas" }
+        {
+          "id": "estilo",
+          "texto": "Estilo ou modelo"
+        },
+        {
+          "id": "tamanho",
+          "texto": "Tamanho"
+        },
+        {
+          "id": "modelagem",
+          "texto": "Modelagem e caimento"
+        },
+        {
+          "id": "tecido",
+          "texto": "Tecido e qualidade"
+        },
+        {
+          "id": "acessorios",
+          "texto": "Acessórios com as características desejadas"
+        }
       ],
       "colunas": [
-        { "id": "1", "texto": "Muito fácil" },
-        { "id": "2", "texto": "Fácil" },
-        { "id": "3", "texto": "Nem fácil nem difícil" },
-        { "id": "4", "texto": "Difícil" },
-        { "id": "5", "texto": "Muito difícil" },
-        { "id": "na", "texto": "Não se aplica" }
+        {
+          "id": "1",
+          "texto": "Muito fácil"
+        },
+        {
+          "id": "2",
+          "texto": "Fácil"
+        },
+        {
+          "id": "3",
+          "texto": "Nem fácil nem difícil"
+        },
+        {
+          "id": "4",
+          "texto": "Difícil"
+        },
+        {
+          "id": "5",
+          "texto": "Muito difícil"
+        },
+        {
+          "id": "na",
+          "texto": "Não se aplica"
+        }
       ]
     },
     {
-      "id": "q9", "tipo": "multipla",
+      "id": "q9",
+      "tipo": "multipla",
       "texto": "Este ano, o que você fez quando não encontrou uma peça que queria comprar?",
       "apoio": "Selecione todas as situações que você viveu.",
       "opcoes": [
-        { "id": "outra_diferente", "texto": "Comprei outra peça bem diferente da que queria" },
-        { "id": "parecida", "texto": "Escolhi uma peça parecida, mas abri mão de alguma preferência" },
-        { "id": "desisti", "texto": "Desisti da compra" },
-        { "id": "continuei", "texto": "Continuei procurando até encontrar o que queria" },
-        { "id": "nao_passei", "texto": "Não passei por essa situação", "exclusiva": true }
+        {
+          "id": "outra_diferente",
+          "texto": "Comprei outra peça bem diferente da que queria"
+        },
+        {
+          "id": "parecida",
+          "texto": "Escolhi uma peça parecida, mas abri mão de alguma preferência"
+        },
+        {
+          "id": "desisti",
+          "texto": "Desisti da compra"
+        },
+        {
+          "id": "continuei",
+          "texto": "Continuei procurando até encontrar o que queria"
+        },
+        {
+          "id": "nao_passei",
+          "texto": "Não passei por essa situação",
+          "exclusiva": true
+        }
       ]
     },
     {
-      "id": "q10", "tipo": "multipla", "max": 3,
+      "id": "q10",
+      "tipo": "multipla",
+      "max": 3,
       "texto": "Além das características das peças, o que mais atrapalha suas compras de roupas e acessórios?",
       "apoio": "Escolha até 3 respostas.",
       "opcoes": [
-        { "id": "precos", "texto": "Preços acima do que pretendo pagar" },
-        { "id": "onde_encontrar", "texto": "Não saber onde encontrar determinadas peças" },
-        { "id": "muitas_lojas", "texto": "Precisar visitar muitas lojas ou consultar muitos sites" },
-        { "id": "esgotada", "texto": "Encontrar uma peça, mas ela estar esgotada" },
-        { "id": "tempo", "texto": "Falta de tempo para pesquisar" },
-        { "id": "distancia", "texto": "Distância ou dificuldade para ir até as lojas" },
-        { "id": "avaliar_online", "texto": "Dificuldade para avaliar a peça antes de comprar online" },
-        { "id": "nada", "texto": "Nada disso costuma atrapalhar minhas compras", "exclusiva": true },
-        { "id": "outro", "texto": "Outro motivo (especifique)", "outro": true }
+        {
+          "id": "precos",
+          "texto": "Preços acima do que pretendo pagar"
+        },
+        {
+          "id": "onde_encontrar",
+          "texto": "Não saber onde encontrar determinadas peças"
+        },
+        {
+          "id": "muitas_lojas",
+          "texto": "Precisar visitar muitas lojas ou consultar muitos sites"
+        },
+        {
+          "id": "esgotada",
+          "texto": "Encontrar uma peça, mas ela estar esgotada"
+        },
+        {
+          "id": "tempo",
+          "texto": "Falta de tempo para pesquisar"
+        },
+        {
+          "id": "distancia",
+          "texto": "Distância ou dificuldade para ir até as lojas"
+        },
+        {
+          "id": "avaliar_online",
+          "texto": "Dificuldade para avaliar a peça antes de comprar online"
+        },
+        {
+          "id": "nada",
+          "texto": "Nada disso costuma atrapalhar minhas compras",
+          "exclusiva": true
+        },
+        {
+          "id": "outro",
+          "texto": "Outro motivo (especifique)",
+          "outro": true
+        }
       ]
     }
   ]

@@ -349,7 +349,16 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
-## 2026-11-23 · Pesquisa pública Moda em Curitiba e Projetos > Pesquisas (SITE-02), não publicado
+## 2026-11-23 · Pesquisa Moda em Curitiba: pergunta 2.1 (motivos para comprar fora de Curitiba), não publicado
+
+- **Questionário (`supabase/functions/pesquisa/questionario.json`, versão `moda-curitiba-v2-2026-11-23`):** pergunta 2.1, múltipla escolha com até 3 opções e "Outro motivo" com texto, mostrada só para quem escolheu na pergunta 2 "Marketplaces" ou "Lojas online de outras cidades"; fora da contagem das 10 perguntas.
+- **Função `pesquisa`:** pergunta condicional exigida e gravada só para quem se aplica; enviada por quem não se aplica, é ignorada.
+- **Página:** a 2.1 aparece depois da 2 só quando se aplica (Continuar e Voltar pulam a etapa para os demais); rótulo "Pergunta 2.1"; progresso continua contando as 10.
+- **Painel:** gráfico da 2.1 calculado só entre quem viu a pergunta, com nota explicando quem a recebeu; destaque com o motivo mais citado.
+- **Verificação executada:** função no Node com banco simulado (2.1 exigida, limite de 3, "outro" sem texto, válida, ignorada para quem não se aplica); página no iPhone 13 simulado (aparece com marketplaces e lojas online de outras cidades, pula com lojas físicas, Voltar, limite, envio com a 2.1); painel com respostas fictícias, sem erros de JavaScript.
+- **Ordem de publicação:** primeiro o site, depois a função (a função nova exige a 2.1; a página antiga não a envia).
+
+## 2026-11-23 · Pesquisa pública Moda em Curitiba e Projetos > Pesquisas (SITE-02), publicado
 
 - **Banco:** migração `supabase/migrations/20261123120000_pesquisas.sql` (aplicada no Supabase em 23/11): tabelas `pesquisas` (liga e desliga), `pesquisa_respostas` (situação, respostas em JSON, relato, interesse, visto em) e `pesquisa_interessados` (nome, e-mail, WhatsApp, consentimento com data, versão e texto). RLS: o público não acessa as tabelas; a administradora lê, marca como visto, exclui e liga ou desliga a pesquisa.
 - **Função `pesquisa` (pública, publicada em 23/11, versão 1):** `status` devolve se está no ar e o questionário; `enviar` valida tudo no servidor (opções, limite de 3, exclusivas, "outro" com texto, matriz completa, nota de 0 a 10, relato até 2.000 caracteres, e-mail, WhatsApp brasileiro, consentimento), define a situação pelas regras de encerramento e grava uma vez por envio.
@@ -357,7 +366,8 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Área restrita:** menu Projetos > Pesquisas (`public/admin/pesquisas/`): lista; painel com status, link para copiar, ver a pesquisa, tirar do ar e colocar no ar; números, destaques, gráfico de cada pergunta, relatos e interessados (com exclusão). Sino e contador do menu com respostas novas, marcadas como vistas ao abrir o painel.
 - **Política de Privacidade:** seção 8 sobre a pesquisa (finalidade, separação dos contatos, prazo, cancelamento e exclusão).
 - **Verificação executada:** função no Node com banco simulado (21 casos: encerramentos, duplicidade, limites, exclusivas, contato inválido, fora do ar, robô); migração num Postgres 16 local (RLS: público sem acesso, administradora lê e liga ou desliga, não altera respostas); página e painel no navegador (iPhone 13 e computador) com servidor simulado: fluxo completo, encerramentos, Voltar, máscara do WhatsApp, troca de Sim para Não limpa o contato, envio único; painel com 42 respostas fictícias, sem erros de JavaScript. Nenhuma resposta real foi enviada.
-- **Pendente:** publicar o site; teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
+- **Publicação (23/11):** site publicado; página e painel conferidos no ar.
+- **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
 ## 2026-11-16 · Cadastro de parceiros e página da galeria (site), publicado
 
