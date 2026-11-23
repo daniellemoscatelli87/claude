@@ -595,6 +595,15 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-23 · Pesquisa: correção da tela final de quem marca "Não comprei nenhuma peça este ano", não publicado
+
+- **Defeito (no ar desde a v11):** `encerraEm()` em `src/pesquisa-moda.ts` olhava só as duas primeiras perguntas. Com a 1.1 entre a 1 e a 2, quem marcava "Não comprei" na pergunta 2 via a tela de agradecimento com confete em vez da tela de encerramento.
+  - O servidor gravava certo (`sem_compras`); só a tela estava errada.
+- **Correção:** olha todas as perguntas que valem para a pessoa.
+- Testes executados: Playwright no iPhone 13, sem erros de JS:
+  - "Não comprei", em Curitiba e na Região Metropolitana: tela de encerramento, sem confete;
+  - fluxo completo nos três caminhos.
+
 ## 2026-11-23 · Pesquisa: pergunta 5 classificada em 1º, 2º e 3º (questionário v13), não publicado
 
 - Pedido da dona do produto: a pergunta 5 segue o padrão da 2.

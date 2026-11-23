@@ -598,8 +598,10 @@ function validarEtapa(i: number): boolean {
 }
 
 /* ---------- Navegação ---------- */
+// pergunta em que a pesquisa encerrou (ex.: "Outra cidade" na 1, "Não comprei" na 2); olha todas as que valem
+// para a pessoa, não só as primeiras (a 1.1 condicional fica no meio)
 const encerraEm = () => {
-  for (const p of PERGUNTAS.slice(0, 2)) { if (opcaoQueEncerra(p)) return p.id; }
+  for (const p of PERGUNTAS) { if (aplica(p) && opcaoQueEncerra(p)) return p.id; }
   return null;
 };
 function atualizarBotao() {
