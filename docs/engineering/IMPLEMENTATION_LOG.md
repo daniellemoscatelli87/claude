@@ -350,6 +350,23 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
 <<<<<<< HEAD
+## 2026-11-23 · Pesquisa Moda em Curitiba: abertura no modelo enviado pela dona ("Por que vale participar"), não publicado
+
+- **Pedido:** refazer a abertura seguindo o modelo enviado (imagem), com os textos dele.
+- **O que mudou (`pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.css`):**
+  - textos novos: "Queremos entender como é procurar e comprar roupas e acessórios na cidade." e o parágrafo do projeto e do que as respostas vão ajudar a identificar;
+  - bloco "Por que vale participar", em tom rosa claro, depois da explicação: presente vermelho animado, divisor, título e "Ao final, você poderá escolher receber novidades do projeto e benefícios de lançamento.", mais 3 selos ("Novidades em primeira mão", "Benefícios no lançamento", "Ajude a construir a solução"), com ícones e um leve movimento no hover;
+  - boxes de informação: "Leva de 3 a 5 minutos", "Participação voluntária" e "Privacidade protegida";
+  - fechamento e link da política com os textos do modelo.
+  - No celular, os selos ficam um embaixo do outro. A faixa de vantagens anterior saiu.
+- **Verificação executada:** `npm run build`; Playwright no celular, em 1366×768 e em 1440×900 (botão visível sem rolar, selos em uma linha, sem erros no console); capturas.
+
+## 2026-11-23 · Pesquisa Moda em Curitiba: faixa de vantagens mais suave e depois da explicação, não publicado
+
+- **Pedido:** a faixa vermelha das vantagens competia com o botão "Começar pesquisa" e aparecia antes da explicação da pesquisa.
+- **O que mudou (`src/pesquisa-moda.css`):** a faixa passou a fundo rosa claro (`--pq-tint`) com borda vermelha suave e textos escuros. O ícone de presente continua num quadrado vermelho animado, e o brilho que passa continua (sem animação com "menos movimento"). O vermelho cheio fica só no botão. Depois, a pedido da dona ("ruim falar da vantagem antes de explicar a pesquisa"), a faixa foi para depois dos textos que explicam a pesquisa, antes dos boxes de informação (`pesquisa/moda-curitiba/index.html`).
+- **Verificação executada:** `npm run build`; Playwright no celular e em 1440×900 (botão visível sem rolar, sem erros no console); capturas.
+
 ## 2026-11-23 · Painel de pesquisas: "Leitura" no Alerta do DS e pergunta 8 sem números dentro das barras, não publicado
 
 - **Pedido:** a dona perguntou se a caixa "Leitura" seguia o DS. Não seguia: foi feita à mão, com fundo cinza, sem borda e ícone cinza. Conferido no repositório do DS (`alert.tsx`), junto com a regra de gráficos de 19/11/2026: barras sem número dentro.
