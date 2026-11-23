@@ -595,7 +595,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-23 · Pesquisa: tela própria para quem não comprou, campos subordinados abaixo da opção, perguntas 11 e 12 revisadas e faixa etária em cartões, não publicado
+## 2026-11-23 · Pesquisa: tela própria para quem não comprou, campos subordinados abaixo da opção, perguntas 11 e 12 revisadas e faixa etária em cartões, publicado (função `pesquisa` v12, questionário v13)
 
 - **Tela de quem não comprou este ano (`#pq-semcompras`), na estrutura do modelo enviado pela dona do produto:**
   - check em contorno;
@@ -617,7 +617,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - Playwright no computador: "Sobre você" em cartões.
   - Sem erros de JS.
 
-## 2026-11-23 · Pesquisa: correção da tela final de quem marca "Não comprei nenhuma peça este ano", não publicado
+## 2026-11-23 · Pesquisa: correção da tela final de quem marca "Não comprei nenhuma peça este ano", publicado (função `pesquisa` v12, questionário v13)
 
 - **Defeito (no ar desde a v11):** `encerraEm()` em `src/pesquisa-moda.ts` olhava só as duas primeiras perguntas. Com a 1.1 entre a 1 e a 2, quem marcava "Não comprei" na pergunta 2 via a tela de agradecimento com confete em vez da tela de encerramento.
   - O servidor gravava certo (`sem_compras`); só a tela estava errada.
@@ -626,7 +626,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - "Não comprei", em Curitiba e na Região Metropolitana: tela de encerramento, sem confete;
   - fluxo completo nos três caminhos.
 
-## 2026-11-23 · Pesquisa: pergunta 5 classificada em 1º, 2º e 3º (questionário v13), não publicado
+## 2026-11-23 · Pesquisa: pergunta 5 classificada em 1º, 2º e 3º (questionário v13), publicado (função `pesquisa` v12, questionário v13)
 
 - Pedido da dona do produto: a pergunta 5 segue o padrão da 2.
   - Até 3 escolhas, na ordem.
@@ -643,11 +643,22 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - Painel com dados mistos (antigos e novos), sem erros de JS.
 - Na publicação: reimplantar a função `pesquisa`.
 
-## 2026-11-23 · Pesquisa: pergunta 3 com "peças de segunda mão" em vermelho, não publicado
+## 2026-11-23 · Pesquisa: pergunta 3 com "peças de segunda mão" em vermelho, publicado (função `pesquisa` v12, questionário v13)
 
 - `questionario.json`: o destaque da pergunta 3 passa de "brechós" para "peças de segunda mão"; "(brechós)" fica no texto normal.
 - O destaque só é usado pela página. O JSON da função `pesquisa` fica igual ao repositório na próxima publicação dela.
 - Teste executado: Playwright no iPhone 13 (trecho em vermelho na pergunta 3), sem erros de JS.
+
+## 2026-11-23 · Assinatura dos e-mails da página de contatos: telefone, e-mail e site, publicado (PR #211; `responder-contato` v15; `comunicado-parceiros` v6)
+
+- `supabase/functions/responder-contato/index.ts`: a assinatura passa a ter, nesta ordem, o telefone (link para o WhatsApp, `https://wa.me/5541997485414`), contato@danimoscatelli.com.br (link `mailto:`) e o site (link para o site). Sai o Instagram (@danimoscatellistudio). A versão em texto simples segue a mesma ordem.
+- Visual novo (opção B, escolhida pela dona do produto): retrato de meio corpo com cantos arredondados e fundo graphite-50, linha vermelha e os dados ao lado.
+  - Imagem `public/email/dani-assinatura.png`, de 220 × 280 exibida em 110 × 140, com 18 KB.
+  - Gerada a partir da foto enviada pela dona do produto (WEBP com fundo transparente, que o Outlook não mostra), com a autorização dela.
+  - A `dani-foto.jpg` antiga continua no site para os e-mails já enviados.
+- `supabase/functions/comunicado-parceiros/index.ts` passa a usar a mesma assinatura e a mesma imagem, por pedido da dona do produto. A função no ar (v5) estava igual ao repositório antes da mudança. Teste: prévia do comunicado gerada pela função em bundle (status 200, link do WhatsApp e imagem nova) e conferida em imagem.
+- Teste executado: a assinatura foi gerada a partir do código da função e conferida em imagem, com os três links (WhatsApp, `mailto:` e site).
+- Na publicação: publicar o site antes (para a imagem existir) e depois reimplantar `responder-contato` e `comunicado-parceiros`.
 
 ## 2026-11-23 · Contatos: abas Recebidos e Enviados, vários destinatários, Cc e Cco, janela no centro (D-046), publicado (migration aplicada; função `responder-contato` v14)
 
