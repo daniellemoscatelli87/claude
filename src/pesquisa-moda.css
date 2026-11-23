@@ -17,21 +17,45 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-pular:focus { top: 12px; }
 .pq-oculto { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* Topo: pílula branca centralizada com a marca, no mesmo estilo do menu da Home (sem links, para não tirar a pessoa da
-   pesquisa); durante a pesquisa, a barra de progresso fica logo abaixo */
-.pq-topo { position: sticky; top: 0; z-index: 20; padding: 16px 20px 10px;
-  background: linear-gradient(to bottom, rgba(246, 247, 250, 1) 0%, rgba(246, 247, 250, 0.94) 75%, rgba(246, 247, 250, 0) 100%); }
-@media (min-width: 768px) { .pq-topo { padding-top: 28px; } }
-.pq-marca { width: fit-content; max-width: 100%; margin: 0 auto; display: flex; align-items: center; gap: 12px; padding: 8px 26px 8px 10px; border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.96); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 8px 24px -12px rgba(13, 17, 25, 0.35);
-  animation: pq-marca-entra .7s var(--pq-ease) both; }
-@keyframes pq-marca-entra { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
-.pq-marca img { width: 40px; height: 40px; display: block; }
-.pq-marca span { display: grid; line-height: 1.2; }
-.pq-marca strong { font-size: 15px; font-weight: 700; color: var(--pq-ink); letter-spacing: -0.01em; }
-.pq-marca small { font-size: 12px; color: var(--pq-muted); }
-@media (max-width: 380px) { .pq-marca { padding-right: 18px; } .pq-marca img { width: 34px; height: 34px; } .pq-marca strong { font-size: 14px; } }
-.pq-progresso { max-width: 640px; margin: 14px auto 0; }
+/* Topo: barra de largura total do design system (modelo "Full-width bar"): transparente no topo da página; ao rolar,
+   ganha fundo escuro translúcido e o logo vira o ícone; some ao rolar para baixo e volta ao rolar para cima.
+   A barra de progresso fica sempre visível logo abaixo. */
+.pq-topo { position: sticky; top: 0; z-index: 20; --pq-barra-h: 72px; transition: transform .35s var(--pq-ease); }
+.pq-barra-topo { position: relative; z-index: 1; height: var(--pq-barra-h); display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 0 max(16px, calc((100% - 1280px) / 2 + 40px)); transition: background .3s ease, box-shadow .3s ease; }
+@media (max-width: 639px) { .pq-barra-topo { padding: 0 16px; } .pq-topo { --pq-barra-h: 64px; } }
+.pq-logo { display: flex; align-items: center; height: 48px; border-radius: 10px; }
+.pq-logo-completo { height: 48px; width: auto; display: block; }
+.pq-logo-icone { height: 40px; width: 40px; display: none; }
+@media (max-width: 639px) { .pq-logo-completo { display: none; } .pq-logo-icone { display: block; } }
+.pq-sair { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 4px; font-size: 14px; font-weight: 600; color: var(--pq-ink); text-decoration: none;
+  border-radius: 10px; transition: color .2s ease; }
+.pq-sair svg { width: 18px; height: 18px; transition: transform .25s var(--pq-ease); }
+.pq-sair:hover { color: var(--pq-red); }
+.pq-sair:hover svg { transform: translateX(-3px); }
+.pq-topo.is-scrolled .pq-barra-topo { background: rgba(19, 26, 39, 0.92); -webkit-backdrop-filter: blur(20px) saturate(140%); backdrop-filter: blur(20px) saturate(140%); box-shadow: 0 8px 24px -16px rgba(0, 0, 0, 0.45); }
+.pq-topo.is-scrolled .pq-logo-completo { display: none; }
+.pq-topo.is-scrolled .pq-logo-icone { display: block; animation: pq-logo-icone .3s ease-out; }
+@keyframes pq-logo-icone { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+.pq-topo.is-scrolled .pq-sair { color: #fff; }
+.pq-topo.is-scrolled .pq-sair:hover { color: #FBCACA; }
+.pq-topo.is-hidden { transform: translateY(calc(-1 * var(--pq-barra-h))); }
+.pq-progresso { position: relative; padding: 8px 20px 10px; background: rgba(246, 247, 250, 0.94); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid var(--pq-linha); }
+.pq-progresso > * { max-width: 640px; margin-left: auto; margin-right: auto; }
+
+/* Janela "Quer mesmo interromper a pesquisa?" */
+.pq-confirma { width: min(440px, calc(100vw - 32px)); border: 0; border-radius: 20px; padding: 28px 24px 22px; text-align: center; color: var(--pq-texto);
+  box-shadow: 0 24px 60px -12px rgba(13, 17, 25, 0.4); }
+.pq-confirma::backdrop { background: rgba(13, 17, 25, 0.5); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+.pq-confirma[open] { animation: pq-confirma .35s var(--pq-ease) both; }
+@keyframes pq-confirma { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }
+.pq-confirma-ic { width: 52px; height: 52px; margin: 0 auto 14px; border-radius: 16px; display: grid; place-items: center; background: var(--pq-tint); color: var(--pq-red); }
+.pq-confirma-ic svg { width: 24px; height: 24px; }
+.pq-confirma h2 { margin: 0 0 8px; font-size: 19px; line-height: 1.3; color: var(--pq-ink); }
+.pq-confirma p { margin: 0 0 22px; font-size: 14px; line-height: 1.6; }
+.pq-confirma-acoes { display: grid; gap: 8px; }
+.pq-btn-sec { background: transparent; color: var(--pq-muted); min-height: 48px; }
+.pq-btn-sec:hover { color: var(--pq-ink); }
 .pq-barra { height: 4px; border-radius: 999px; background: rgba(19, 26, 39, 0.08); overflow: hidden; }
 .pq-barra span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--pq-red); transition: width .5s var(--pq-ease); }
 .pq-progresso p { margin: 6px 0 0; font-size: 12px; font-weight: 600; color: var(--pq-muted); letter-spacing: .02em; }
@@ -245,3 +269,9 @@ body:has(#pq-form:not([hidden])) .pq-rodape { display: none; }
 .pq-rank:has(input:checked) { border-color: var(--pq-red); background: var(--pq-tint); }
 .pq-pop { animation: pq-pop .4s var(--pq-ease) both; }
 @keyframes pq-pop { 0% { transform: scale(.6); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
+
+/* Assinatura das telas finais com o avatar da Dani */
+.pq-assinatura { justify-items: center; }
+.pq-avatar { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; box-shadow: 0 0 0 4px #fff, 0 12px 28px -14px rgba(13, 17, 25, 0.45);
+  animation: pq-avatar .6s var(--pq-ease) .25s both; }
+@keyframes pq-avatar { from { opacity: 0; transform: translateY(8px) scale(.94); } to { opacity: 1; transform: none; } }

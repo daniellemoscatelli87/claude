@@ -27,10 +27,13 @@
 </head>
 <body>
 <a class="pq-pular" href="#pq-conteudo">Pular para o conteúdo</a>
-<header class="pq-topo">
-  <div class="pq-marca">
-    <img src="/favicon-dm.png" alt="" width="36" height="36">
-    <span><strong>Dani Moscatelli</strong><small>Experience Design Studio</small></span>
+<header class="pq-topo" id="pq-topo">
+  <div class="pq-barra-topo">
+    <a href="/" class="pq-logo" data-sair aria-label="Dani Moscatelli | Experience Design Studio: voltar para o site">
+      <img class="pq-logo-completo" src="/logo-dm.png" alt="" width="1216" height="314">
+      <img class="pq-logo-icone" src="/favicon-dm.png" alt="" width="40" height="40">
+    </a>
+    <a href="/" class="pq-sair" data-sair><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Voltar para o site</a>
   </div>
   <div class="pq-progresso" id="pq-progresso" hidden>
     <div class="pq-barra" role="progressbar" aria-label="Progresso da pesquisa" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="pq-barra"></span></div>
@@ -82,26 +85,36 @@
     <p>Cada resposta contribui para este projeto de inovação.</p>
     <p class="pq-destaque" id="pq-obrigada-msg"></p>
     <p class="pq-mini" id="pq-obrigada-dados" hidden>Para cancelar os avisos ou pedir a exclusão dos seus dados de contato, escreva para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
-    <div class="pq-assinatura"><strong>Dani Moscatelli</strong><span>Experience Design Studio</span></div>
+    <div class="pq-assinatura"><img class="pq-avatar" src="/dani-assinatura.webp" alt="Dani Moscatelli" width="88" height="88" loading="lazy"><strong>Dani Moscatelli</strong><span>Experience Design Studio</span></div>
   </section>
 
   <section class="pq-tela pq-fim" id="pq-encerrada" hidden aria-labelledby="pq-encerrada-titulo">
     <h1 id="pq-encerrada-titulo" tabindex="-1">Obrigada pelo seu interesse!</h1>
     <p>Neste momento, a pesquisa é direcionada a pessoas que moram em Curitiba e compraram roupas ou acessórios este ano.</p>
     <p>Agradecemos por dedicar um pouquinho do seu tempo!</p>
-    <div class="pq-assinatura"><strong>Dani Moscatelli</strong><span>Experience Design Studio</span></div>
+    <div class="pq-assinatura"><img class="pq-avatar" src="/dani-assinatura.webp" alt="Dani Moscatelli" width="88" height="88" loading="lazy"><strong>Dani Moscatelli</strong><span>Experience Design Studio</span></div>
   </section>
 
   <section class="pq-tela pq-fim" id="pq-fora-do-ar" hidden aria-labelledby="pq-fora-titulo">
     <h1 id="pq-fora-titulo" tabindex="-1">Esta pesquisa não está recebendo respostas</h1>
     <p>O período de participação foi encerrado. Obrigada pelo interesse!</p>
-    <div class="pq-assinatura"><strong>Dani Moscatelli</strong><span>Experience Design Studio</span></div>
+    <div class="pq-assinatura"><img class="pq-avatar" src="/dani-assinatura.webp" alt="Dani Moscatelli" width="88" height="88" loading="lazy"><strong>Dani Moscatelli</strong><span>Experience Design Studio</span></div>
   </section>
 </main>
 
 <footer class="pq-rodape">
   <p>© 2026 Dani Moscatelli • Experience Design Studio · <a href="/privacidade/#pesquisa-moda" data-politica>Política de Privacidade</a></p>
 </footer>
+
+<dialog class="pq-confirma" id="pq-sair-dlg" aria-labelledby="pq-sair-titulo" aria-describedby="pq-sair-texto">
+  <div class="pq-confirma-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg></div>
+  <h2 id="pq-sair-titulo">Quer mesmo interromper a pesquisa?</h2>
+  <p id="pq-sair-texto">Suas respostas ficam guardadas neste aparelho. Quando voltar por este mesmo link, você continua de onde parou.</p>
+  <div class="pq-confirma-acoes">
+    <button type="button" class="pq-btn pq-btn-primario" id="pq-sair-ficar">Continuar respondendo</button>
+    <button type="button" class="pq-btn pq-btn-sec" id="pq-sair-ir">Sair e voltar para o site</button>
+  </div>
+</dialog>
 
 <dialog class="pq-dlg" id="pq-politica" aria-labelledby="pq-politica-titulo">
   <div class="pq-dlg-topo"><h2 id="pq-politica-titulo">Política de Privacidade</h2><button type="button" id="pq-politica-fechar" aria-label="Fechar">×</button></div>
