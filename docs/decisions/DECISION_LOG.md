@@ -402,7 +402,6 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - consentimento salvo com data, horário, versão e texto; exclusão e cancelamento pelo e-mail de contato e pelo botão Excluir no painel.
 - **Trade-offs:** o identificador do envio evita duplicar a mesma participação (atualizar a página, tocar duas vezes), mas não impede que a mesma pessoa responda de novo em outro aparelho; o tempo de 3 a 5 minutos ainda precisa ser validado em teste real.
 
-
 ## D-034 · 23/11/2026 · Pesquisa Moda em Curitiba: identificação no início e uma participação por pessoa (site)
 
 - **Origem:** dona do produto: a pesquisa deve aceitar uma resposta por pessoa. Ela pediu identificação no início com aviso da LGPD, a mesma identificação usada para os avisos do lançamento, e vantagens exclusivas para quem participa. Escolhas dela: nome, e-mail e WhatsApp obrigatórios; bloqueio por e-mail ou WhatsApp repetido; texto "vantagens exclusivas" (sem prometer desconto).
@@ -430,6 +429,35 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Acesso:** continua fechado. Antes de qualquer página, o app pede usuário e senha (`apps/experience-intelligence/functions/_middleware.js`, segredo `SITE_SENHA` no Cloudflare; usuário `dani` ou `SITE_USUARIO`). Depois vem o login por convite do próprio app. Sem o segredo, o app fica fechado.
 - **Aviso de privacidade:** onde dizia "Netlify: hospedagem do aplicativo", agora diz "Cloudflare". Por isso a versão passa a `testes-2026-11-23`, e quem já aceitou recebe o pedido de novo aceite.
 - **Desligamento do Netlify:** só depois que o app estiver funcionando no Cloudflare. O projeto antigo do FindLook no Netlify (`helpful-meerkat-e4c2aa`) também é desligado.
+## D-039 · 23/11/2026 · Menu lateral recolhível, perfil no cabeçalho e cabeçalho branco nos painéis (site)
+
+- **Origem:** dona do produto (mesmo padrão em construção no design system da FindLook).
+- **Decisão:**
+  - nos painéis, o menu lateral pode ficar expandido (ícone e nome) ou recolhido (só ícones, 72px), a partir de 1024px; abaixo disso, continua o menu que abre pela esquerda;
+  - o perfil (foto, nome, Configurações e Sair) fica sempre no cabeçalho, à direita do sino, nunca no menu lateral;
+  - o cabeçalho do painel é branco, como o menu lateral, com borda inferior fina; o conteúdo continua no cinza claro.
+- **Escolha do Claude (forma):** com o menu recolhido, os subitens abrem num painel ao lado do ícone principal (mouse e foco), em vez de virarem ícones próprios: os subitens não têm ícone no design system e criar ícones novos fugiria dele; o painel mostra o nome do grupo, mantém a ordem do Tab e fecha com Escape.
+- **Trade-offs:** o painel some ao tirar o mouse ou o foco; quem só usa o toque não recolhe o menu (recolher existe só a partir de 1024px).
+
+## D-040 · 23/11/2026 · A área restrita consome o Design System Dani Moscatelli (site)
+
+- **Origem:** dona do produto: "tudo deve consumir o Design System".
+- **Decisão:** a área restrita (`public/admin/`) deixa de ter cores e padrões escritos à mão e usa os tokens do DS a partir de uma cópia do `theme.css`, sincronizada com aprovação (mesma rotina da FindLook: cópia diária, build, pull request para a dona do produto aprovar, issue em caso de falha).
+- **Escolhas do Claude (forma):** o arquivo do DS é usado como está, sem Tailwind (o navegador ignora os blocos do Tailwind); botões, campos, abas e selos seguem os componentes do DS; nos gráficos, o lado "fácil" da matriz fácil × difícil usa os tons 5 e 6 e o neutro, e o lado "difícil" (o foco) os tons 1 e 2, porque o DS não tem paleta divergente; escalas com 5 passos começam no tom 7.
+- **Trade-offs:** o `?v=` do `theme.css` precisa mudar a cada sincronização (o PR lembra); o anel de foco do DS (`--ring`, vermelho a 35%) e o hover do botão principal (`--primary-hover` igual ao `--primary` no tema claro) vêm do DS como estão; se precisarem de mais contraste, a mudança é feita no DS.
+
+## D-041 · 23/11/2026 · Painel com a casca do site do DS, cards só com borda e faixa de cabeçalho (site)
+
+- **Origem:** dona do produto (terceira rodada de ajustes da área restrita).
+- **Decisão:** o painel segue a casca do site do Design System: cabeçalho branco na largura toda, com o logo à esquerda e notificações e perfil à direita; menu lateral abaixo dele, com o botão "Menu" no topo, grupos com seta e subitens numa linha-guia, item ativo rosa claro com texto vermelho, e o trilho recolhido só com ícones. Cards sobre o fundo `--background` só com borda, sem sombra parada. Cards com cabeçalho ganham a faixa `--graphite-100`.
+- **Trade-offs:** larguras passam a ser as do site do DS (240px e 64px, antes 248px e 72px); o guia de cards do DS ainda indica "borda e sombra suave" para card sobre fundo cinza claro, o que diverge desta decisão (a mudança no DS fica com a dona do produto).
+
+## D-042 · 23/11/2026 · Divisor no cabeçalho do card, hover mais claro e desabilitado do DS (site)
+
+- **Origem:** dona do produto (quarta rodada de ajustes dos painéis).
+- **Decisão:** o cabeçalho do card não tem faixa cinza; é separado do conteúdo por uma linha fina que some nas pontas. O hover de linha ou item dentro do card é bem claro e sutil: token `--row-hover` do DS (metade do `--graphite-50` sobre o card), decisão revista na quinta rodada. No card rosa da Início, o "não lidas" do canto sai por repetir a informação. O botão desabilitado usa o fundo `--graphite-100`. O menu lateral empurra o conteúdo, nunca o cobre (no DS e na área restrita). As mudanças de token foram feitas no DS (branch `claude/ajustes-painel`) e trazidas pela sincronização, sem editar a cópia.
+- **Trade-offs:** a área restrita fica, por enquanto, com o `theme.css` de uma branch do DS ainda não publicada; ao publicar o DS, a sincronização diária volta ao `main` e o `?v=` precisa mudar.
+
 ## Decisões pendentes
 
 
