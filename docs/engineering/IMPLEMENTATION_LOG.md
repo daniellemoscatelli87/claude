@@ -601,7 +601,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 
 - Tela "Obrigada pelo seu interesse!" (`pq-encerrada`): "moram em Curitiba" em negrito vermelho (`.pq-realce` em `src/pesquisa-moda.css`).
 - Pergunta 2: "toque primeiro onde você mais comprou" em negrito (campo novo `apoio_negrito` no `questionario.json`, lido por `cabecalho()` em `src/pesquisa-moda.ts`).
-- Pergunta 4: trecho em vermelho passa a ser "que nota você daria". Pergunta 5: "começar".
+- Pergunta 4: trecho em vermelho passa a ser "que nota você daria". Pergunta 5: "começar". Pergunta 8: "atendam às suas expectativas".
 - Pergunta 6: novo texto "De que forma você descobre lojas de roupas e acessórios em Curitiba?", com "descobre lojas" em vermelho.
 - Pergunta 6: "Costumo comprar nas mesmas lojas…" e "Não conheço lojas físicas…" deixam de desmarcar as outras opções (sem `exclusiva`). Com o campo novo `anula`, a função `pesquisa` grava só essas respostas negativas quando uma delas é marcada, e descarta as demais e o texto de "Outro".
 - Versão do questionário: `moda-curitiba-v10-2026-11-23`. Na publicação, reimplantar a função `pesquisa`.
