@@ -595,7 +595,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-23 · Contatos: abas Recebidos e Enviados, vários destinatários, Cc e Cco, janela no centro (D-045), publicado (migration aplicada; função `responder-contato` v14)
+## 2026-11-23 · Contatos: abas Recebidos e Enviados, vários destinatários, Cc e Cco, janela no centro (D-046), publicado (migration aplicada; função `responder-contato` v14)
 
 - `public/admin/contatos/index.html`:
   - Abas "Recebidos" (formulário do site e e-mails que chegaram) e "Enviados" (e-mails novos), com contagem. A aba fica no endereço (`?aba=enviados`).
