@@ -595,6 +595,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-23 · Pesquisa: destaques das perguntas 1 e 1.1 e tela de encerramento com a Região Metropolitana, não publicado
+
+- Pergunta 1: "Onde você mora" em vermelho. Pergunta 1.1: "fazer compras" e "Curitiba" em vermelho (campo `destaque` do `questionario.json`).
+- Tela de encerramento: "moram em Curitiba e Região Metropolitana", em negrito vermelho.
+- "Leva de 3 a 5 minutos" continua igual: a dona do produto não pediu mudança.
+- O `destaque` só é usado pela página, que lê o questionário do próprio site. A função `pesquisa` não precisa ser reimplantada para isso; o JSON publicado nela difere do repositório só nesses dois destaques até a próxima publicação da função.
+- Testes executados: `npm run build`; Playwright no iPhone 13 (trechos em vermelho nas perguntas 1 e 1.1 e texto da tela de encerramento), sem erros de JS.
+
 ## 2026-11-23 · Pesquisa: Região Metropolitana, quatro perguntas novas, cidade e bairro, e exportação do relatório (questionário v11, D-044), publicado (função `pesquisa` v10; questionário publicado em JSON compacto, igual ao do repositório)
 
 - `supabase/functions/pesquisa/questionario.json` (v11):

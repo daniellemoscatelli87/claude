@@ -29,7 +29,8 @@
           "texto": "Outra cidade",
           "encerra": "fora_de_curitiba"
         }
-      ]
+      ],
+      "destaque": "Onde você mora"
     },
     {
       "id": "q1_1",
@@ -59,6 +60,10 @@
           "id": "nunca",
           "texto": "Nunca"
         }
+      ],
+      "destaque": [
+        "fazer compras",
+        "Curitiba"
       ]
     },
     {
