@@ -83,6 +83,23 @@
   .pa-lb-l.top .pa-lb-f { background: var(--red); }
   .pa-lb-l.fixo .pa-lb-f { background: #C9CFDB; }
   .pa-lb-l.fixo .pa-lb-n { color: var(--muted); }
+  .pa-rosca { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 18px 24px; align-items: center; }
+  @media (max-width: 480px) { .pa-rosca { grid-template-columns: 1fr; justify-items: center; } .pa-rosca-l { width: 100%; } }
+  .pa-rosca-g { position: relative; width: 168px; height: 168px; }
+  .pa-rosca-g svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .pa-rosca-f { fill: none; stroke: var(--track); stroke-width: 18; }
+  .pa-rosca-s { fill: none; stroke-width: 18; transition: stroke-dasharray .9s cubic-bezier(.16, 1, .3, 1); }
+  @media (prefers-reduced-motion: reduce) { .pa-rosca-s { transition: none; } }
+  .pa-rosca-m { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 2px; padding: 0 34px; }
+  .pa-rosca-m b { font-size: 28px; line-height: 1; font-weight: 800; letter-spacing: -0.02em; color: var(--dark); }
+  .pa-rosca-m span { font-size: 11.5px; line-height: 1.25; color: var(--muted); }
+  .pa-rosca-l { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .pa-rosca-l li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 13.5px; color: var(--dark); border-radius: 8px; }
+  .pa-rosca-l li:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
+  .pa-rosca-l i { width: 10px; height: 10px; border-radius: 3px; }
+  .pa-rosca-l .v { display: inline-flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+  .pa-rosca-l .v b { font-size: 15px; font-weight: 800; }
+  .pa-rosca-l .v small { font-size: 12px; color: var(--muted); }
   .pa-heroi-n { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
   .pa-heroi-n b { font-size: 34px; line-height: 1; font-weight: 800; letter-spacing: -0.02em; color: var(--dark); }
   .pa-heroi-n span { font-size: 13px; color: var(--muted); }
@@ -738,6 +755,32 @@
     });
     return lista;
   }
+  // rosca (só para resposta única com poucas opções, que somam 100%): percentual principal no centro e legenda com números
+  const CORES_ROSCA = ["#D44D4D", "#5C6986", "#EDA100", "#8E2F2F", "#A3A9B5", "#C9CFDB"];
+  function rosca(itens, total, { centro, rotCentro } = {}) {
+    const box = el("div", "pa-rosca");
+    const R0 = 52, C = 2 * Math.PI * R0;
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg"); svg.setAttribute("viewBox", "0 0 140 140"); svg.setAttribute("aria-hidden", "true");
+    const fundo = document.createElementNS(svgNS, "circle"); fundo.setAttribute("cx", "70"); fundo.setAttribute("cy", "70"); fundo.setAttribute("r", R0); fundo.setAttribute("class", "pa-rosca-f"); svg.appendChild(fundo);
+    let acum = 0;
+    const comCor = itens.map((it, k) => ({ ...it, cor: it.fixo ? "#C9CFDB" : CORES_ROSCA[k % CORES_ROSCA.length] }));
+    comCor.forEach((it) => {
+      if (!it.v || !total) return;
+      const frac = it.v / total, gap = comCor.filter((x) => x.v).length > 1 ? 2 : 0;
+      const c = document.createElementNS(svgNS, "circle");
+      c.setAttribute("cx", "70"); c.setAttribute("cy", "70"); c.setAttribute("r", R0); c.setAttribute("class", "pa-rosca-s");
+      c.style.stroke = it.cor; c.style.strokeDasharray = `0 ${C}`; c.dataset.arco = `${Math.max(0, frac * C - gap)} ${C}`;
+      c.style.strokeDashoffset = String(-acum * C); acum += frac;
+      svg.appendChild(c);
+    });
+    const meio = el("div", "pa-rosca-m"); meio.append(el("b", null, centro ?? ""), el("span", null, rotCentro ?? ""));
+    const graf = el("div", "pa-rosca-g"); graf.append(svg, meio);
+    const leg = el("ul", "pa-rosca-l");
+    comCor.forEach((it) => { const li = el("li"); const i = el("i"); i.style.background = it.cor; const v = el("span", "v"); v.append(el("b", null, pct(it.v, total) + "%"), el("small", null, String(it.v))); li.append(i, el("span", "n", semOutro(it.rotulo)), v); dica(li, [[`${pct(it.v, total)}%`, `${semOutro(it.rotulo)} · ${plural(it.v, "pessoa", "pessoas")}`]]); leg.appendChild(li); });
+    box.append(graf, leg);
+    return box;
+  }
   const maisEscolhida = (itens) => [...itens].filter((i) => !i.fixo).sort((a, b) => b.v - a.v)[0];
   const tabelaItens = (itens, total, cab = "Resposta") => tabela([cab, "Pessoas", "%"], itens.map((it) => [semOutro(it.rotulo), it.v, pct(it.v, total) + "%"]));
 
@@ -798,7 +841,7 @@
     // P1
     const b1 = respondeu("q1"), sim = b1.filter((x) => x.respostas.q1 === "sim").length;
     const i1 = [{ rotulo: "Sim, moram em Curitiba", v: sim }, { rotulo: "Não moram em Curitiba", v: b1.length - sim }];
-    g.appendChild(qCard({ num: 1, titulo: perg.q1.texto, base: b1.length, leitura: [{ b: pct(sim, b1.length) + "%" }, " moram em Curitiba e seguiram na pesquisa."], corpo: barras(i1, b1.length, { ordem: "natural" }), rodape: [tabelaItens(i1, b1.length)] }));
+    g.appendChild(qCard({ num: 1, titulo: perg.q1.texto, base: b1.length, leitura: [{ b: pct(sim, b1.length) + "%" }, " moram em Curitiba e seguiram na pesquisa."], corpo: rosca(i1, b1.length, { centro: pct(sim, b1.length) + "%", rotCentro: "moram em Curitiba" }), rodape: [tabelaItens(i1, b1.length)] }));
     // P2 (classificação): % em 1º lugar e, mais claro, % entre as 3
     const b2 = respondeu("q2");
     if (perg.q2.tipo === "ranking") {
@@ -868,7 +911,7 @@
         if (outrosTx.length) { ob = el("div", "pa-outros"); ob.appendChild(el("b", null, "O que escreveram em “outro”")); const ul = el("ul"); outrosTx.slice(0, 50).forEach((tx) => ul.appendChild(el("li", null, tx))); ob.appendChild(ul); }
         g.appendChild(qCard({ num: "Perfil", titulo: c.texto, base: comPerfil.length,
           leitura: t && t.v ? ["Maior grupo: ", { b: t.rotulo }, ` (${pct(t.v, comPerfil.length)}%).`] : null,
-          corpo: barras(its, comPerfil.length, { ordem: c.id === "faixa_etaria" ? "natural" : "valor" }), rodape: [ob, tabelaItens(its, comPerfil.length)] }));
+          corpo: c.id === "genero" ? rosca(its, comPerfil.length, { centro: t && t.v ? pct(t.v, comPerfil.length) + "%" : "0%", rotCentro: t && t.v ? t.rotulo.toLowerCase() : "" }) : barras(its, comPerfil.length, { ordem: "natural" }), rodape: [ob, tabelaItens(its, comPerfil.length)] }));
       });
     }
     box.appendChild(g);
@@ -921,6 +964,7 @@
     document.querySelectorAll("#conteudo [data-w]").forEach((i) => { i.style.width = i.dataset.w; });
     document.querySelectorAll("#conteudo [data-h]").forEach((i) => { i.style.height = i.dataset.h; });
     document.querySelectorAll("#conteudo [data-g]").forEach((i) => { i.style.flexGrow = i.dataset.g; });
+    document.querySelectorAll("#conteudo [data-arco]").forEach((c) => { c.style.strokeDasharray = c.dataset.arco; });
   }
 
   /* ---------- Inteligência: cruzamentos das respostas, sem IA ----------
