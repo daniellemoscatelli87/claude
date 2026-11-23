@@ -361,6 +361,9 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Pedidos da dona:**
   - pergunta 4 com 3 notas de 0 a 10, conforme o modelo enviado: Qualidade; Estética; Correspondência com o que eu procurava (cada uma com descrição); "0 = Muito ruim" e "10 = Excelente";
   - pergunta 7: "Quando você procura uma roupa ou acessório específico, com que frequência tem dificuldade para encontrar exatamente o que deseja?", com "Nunca / Raramente / Às vezes / Frequentemente / Quase sempre tenho dificuldade" (mesmos ids); frases do painel ajustadas para "têm dificuldade para encontrar";
+  - pergunta 8 sem a opção "Não se aplica" (questionário `moda-curitiba-v8-2026-11-23`; o servidor deixa de aceitar "na"; o painel só mostra a coluna se houver respostas antigas com ela);
+  - pergunta 9: "Neste ano, o que você fez quando não encontrou uma roupa ou acessório que queria comprar?", com novos textos e a opção nova "Não encontrei na hora, mas deixei para procurar depois" (id `depois`);
+  - pergunta 10: "Além de encontrar a peça que você procura, o que mais dificulta suas compras de roupas e acessórios?", com novos textos (mesmos ids; "Outro motivo" passa a "Outra dificuldade");
   - pergunta 5 e pergunta 6 com os novos textos (a 6 ganhou a opção "Por recomendações de influenciadores e criadores de conteúdo", e "Vendo anúncios…" passou a ser só anúncios);
   - "Outro" sempre abre um campo para digitar;
   - topo branco ao rolar, nunca escuro.

@@ -898,7 +898,8 @@
         corpo = facilDificil(p, base);
         const top = corpo._linhas.find((x) => x.n);
         leitura = top && top.g.dif ? ["O mais difícil de encontrar: ", { b: item(top.l.texto) }, ` (${pct(top.g.dif, top.n)}% acham difícil ou muito difícil).`] : "Ninguém marcou dificuldade ainda.";
-        rodape.push(tabela(["Característica", "Muito fácil", "Fácil", "Médio", "Difícil", "Muito difícil", "Não se aplica"], corpo._linhas.map((x) => [x.l.texto, x.cont["1"], x.cont["2"], x.cont["3"], x.cont["4"], x.cont["5"], x.na])));
+        const temNa = corpo._linhas.some((x) => x.na) || (p.colunas || []).some((c) => c.id === "na");
+        rodape.push(tabela(["Característica", "Muito fácil", "Fácil", "Médio", "Difícil", "Muito difícil", ...(temNa ? ["Não se aplica"] : [])], corpo._linhas.map((x) => [x.l.texto, x.cont["1"], x.cont["2"], x.cont["3"], x.cont["4"], x.cont["5"], ...(temNa ? [x.na] : [])])));
       } else {
         const its = itensDe(p, base);
         const ordinal = p.id === "q3" || p.id === "q7";
@@ -970,7 +971,7 @@
     const viveu = comp.filter((x) => x.respostas.q9 && !x.respostas.q9.opcoes.includes("nao_passei"));
     const des = viveu.filter((x) => x.respostas.q9.opcoes.includes("desisti")).length;
     if (viveu.length) add(["Entre quem não encontrou uma peça este ano, ", { b: `${pct(des, viveu.length)}%` }, " desistiram da compra em algum momento."]);
-    const t10 = topo(perg.q10, comp, (o) => !o.exclusiva && !o.outro); if (t10) add(["O que mais atrapalha, além das peças: ", { b: t10.texto }, ` (${pct(t10.v, comp.length)}%).`]);
+    const t10 = topo(perg.q10, comp, (o) => !o.exclusiva && !o.outro); if (t10) add(["O que mais dificulta, além de encontrar a peça: ", { b: t10.texto }, ` (${pct(t10.v, comp.length)}%).`]);
     card.appendChild(ul);
     if (comp.length < 30) card.appendChild(el("p", "pa-nota", `Com ${plural(comp.length, "resposta completa", "respostas completas")}, os percentuais ainda podem mudar bastante a cada nova participação.`));
     return card;
@@ -1205,9 +1206,9 @@
       const top = perg.q6.opcoes.filter((o) => !o.exclusiva && !o.outro).map((o) => ({ rotulo: semOutro(o.texto), v: pct(c6[o.id] || 0, semSaber.length) })).sort((a, b) => b.v - a.v);
       if (top[0].v) add("Comportamento", {
         tag: "Descoberta de lojas", sinal: { nivel: "info", texto: "Como chegam às lojas" },
-        titulo: `${pct(semSaber.length, n)}% não sabem onde encontrar certas peças`,
-        descricao: ["Entre essas pessoas, a forma mais comum de conhecer lojas físicas novas é ", { b: lc(top[0].rotulo) }, ` (${top[0].v}%).`],
-        base: semSaber.length, recorte: "Quem marcou “Não saber onde encontrar” (P10)",
+        titulo: `${pct(semSaber.length, n)}% não sabem em quais lojas procurar o que querem`,
+        descricao: ["Entre essas pessoas, a forma mais comum de descobrir lojas em Curitiba é ", { b: lc(top[0].rotulo) }, ` (${top[0].v}%).`],
+        base: semSaber.length, recorte: "Quem marcou “Não saber em quais lojas procurar” (P10)",
         barras: top.slice(0, 4).map((x) => ({ rotulo: x.rotulo, v: x.v, txt: `${x.v}%` })),
         significado: ["Parte da dificuldade pode ser de descoberta (não saber onde a peça está) e não de oferta."],
         proximo: ["Verificar se as peças que essas pessoas procuram existem no comércio local."],

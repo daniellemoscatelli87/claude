@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v7-2026-11-23",
+  "versao": "moda-curitiba-v8-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "identificacao": {
     "versao": "moda-curitiba-identificacao-v1-2026-11-23",
@@ -323,38 +323,38 @@
         {
           "id": "5",
           "texto": "Muito difícil"
-        },
-        {
-          "id": "na",
-          "texto": "Não se aplica"
         }
       ]
     },
     {
       "id": "q9",
       "tipo": "multipla",
-      "texto": "Este ano, o que você fez quando não encontrou uma peça que queria comprar?",
-      "apoio": "Selecione todas as situações que você viveu.",
+      "texto": "Neste ano, o que você fez quando não encontrou uma roupa ou acessório que queria comprar?",
+      "apoio": "Selecione todas as situações que você já viveu.",
       "opcoes": [
         {
           "id": "outra_diferente",
-          "texto": "Comprei outra peça bem diferente da que queria"
+          "texto": "Acabei comprando algo diferente do que procurava"
         },
         {
           "id": "parecida",
-          "texto": "Escolhi uma peça parecida, mas abri mão de alguma preferência"
+          "texto": "Comprei uma peça parecida, mesmo não sendo exatamente como eu queria"
         },
         {
           "id": "desisti",
-          "texto": "Desisti da compra"
+          "texto": "Desisti da compra porque não encontrei o que queria"
         },
         {
           "id": "continuei",
-          "texto": "Continuei procurando até encontrar o que queria"
+          "texto": "Continuei procurando até encontrar a peça que queria"
+        },
+        {
+          "id": "depois",
+          "texto": "Não encontrei na hora, mas deixei para procurar depois"
         },
         {
           "id": "nao_passei",
-          "texto": "Não passei por essa situação",
+          "texto": "Não passei por essa situação neste ano",
           "exclusiva": true
         }
       ]
@@ -363,45 +363,45 @@
       "id": "q10",
       "tipo": "multipla",
       "max": 3,
-      "texto": "Além das características das peças, o que mais atrapalha suas compras de roupas e acessórios?",
-      "apoio": "Escolha até 3 respostas.",
+      "texto": "Além de encontrar a peça que você procura, o que mais dificulta suas compras de roupas e acessórios?",
+      "apoio": "Selecione até 3 opções.",
       "opcoes": [
         {
           "id": "precos",
-          "texto": "Preços acima do que pretendo pagar"
+          "texto": "Encontrar preços acima do que estou disposto(a) a pagar"
         },
         {
           "id": "onde_encontrar",
-          "texto": "Não saber onde encontrar determinadas peças"
+          "texto": "Não saber em quais lojas procurar o que quero"
         },
         {
           "id": "muitas_lojas",
-          "texto": "Precisar visitar muitas lojas ou consultar muitos sites"
+          "texto": "Ter que pesquisar em vários sites ou visitar muitas lojas"
         },
         {
           "id": "esgotada",
-          "texto": "Encontrar uma peça, mas ela estar esgotada"
+          "texto": "Encontrar o produto que quero, mas ele já estar esgotado"
         },
         {
           "id": "tempo",
-          "texto": "Falta de tempo para pesquisar"
+          "texto": "Não ter tempo suficiente para procurar e comparar opções"
         },
         {
           "id": "distancia",
-          "texto": "Distância ou dificuldade para ir até as lojas"
+          "texto": "Ter que me deslocar para lojas distantes ou de difícil acesso"
         },
         {
           "id": "avaliar_online",
-          "texto": "Dificuldade para avaliar a peça antes de comprar online"
+          "texto": "Não conseguir avaliar bem a qualidade, o tecido ou o caimento pelas fotos"
         },
         {
           "id": "nada",
-          "texto": "Nada disso costuma atrapalhar minhas compras",
+          "texto": "Nenhuma dessas situações costuma dificultar minhas compras",
           "exclusiva": true
         },
         {
           "id": "outro",
-          "texto": "Outro motivo (especifique)",
+          "texto": "Outra dificuldade",
           "outro": true
         }
       ]
