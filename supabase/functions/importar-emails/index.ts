@@ -62,7 +62,7 @@ const bytesDe = (s: string) => Uint8Array.from(s, (ch) => ch.charCodeAt(0));
 const semHtml = (h: string) => h.replace(/<style[\s\S]*?<\/style>/gi, "").replace(/<br\s*\/?>/gi, "\n").replace(/<\/(p|div|li|tr)>/gi, "\n").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/\n{3,}/g, "\n\n").trim();
 
 async function importar() {
-  const senha = Deno.env.get("CONTATO_IMAP_SENHA");
+  const senha = Deno.env.get("CONTATO_IMAP_SENHA")?.replace(/[\s\u200b]+$/, "").replace(/^[\s\u200b]+/, ""); // tira espaço ou quebra de linha colados por engano
   if (!senha) return { ok: false, motivo: "senha não configurada" };
   const { data: est } = await db.from("caixa_email_estado").select("*").eq("caixa", CAIXA).maybeSingle();
   const conn = await Deno.connectTls({ hostname: HOST, port: 993 });

@@ -15,10 +15,18 @@
   .origem { flex: none; display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; line-height: 1; }
   .origem.site { background: #eef1f6; color: #4b5873; }
   .origem.email { background: var(--red-tint); color: var(--red); }
-  /* Lista: no computador, o selo fica ao lado da data (com um divisor); no celular, abaixo do ícone */
+  /* Lista: 3 níveis (nome, assunto, e-mail e empresa) numa coluna; a data fica na coluna da direita, sem ser invadida.
+     No computador, o selo fica ao lado da data (com um divisor); no celular, abaixo do ícone. */
+  .rowlink.ctt { grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto auto; align-items: start; row-gap: 2px; }
+  .rowlink.ctt .t { grid-column: 2; grid-row: 1; }
+  .rowlink.ctt .d { grid-column: 3; grid-row: 1; align-self: center; }
+  .rowlink.ctt .s { grid-column: 2; grid-row: 2; color: var(--dark); font-size: 13px; }
+  .rowlink.ctt .s2 { grid-column: 2; grid-row: 3; font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rowlink.ctt.seen .s { color: var(--muted); }
+  .rowlink.ctt.seen .s2 { color: #94a3b8; }
   .rowlink .d.com-origem { display: inline-flex; align-items: center; gap: 10px; }
   .rowlink .d.com-origem .div { width: 1px; height: 14px; background: var(--line, #dfe4ec); }
-  .rowlink .ini-col { grid-row: span 2; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .rowlink .ini-col { grid-row: 1 / span 3; display: flex; flex-direction: column; align-items: center; gap: 6px; }
   .rowlink .ini-col .ini { grid-row: auto; }
   .rowlink .ini-col .origem { display: none; height: 18px; padding: 0 6px; font-size: 9px; }
   @media (max-width: 767px) {
@@ -704,7 +712,9 @@ Admin.init({ page: "contatos", onReady: async () => {
     const list = document.getElementById("list"); list.replaceChildren();
     if (!rows.length) return list.appendChild(Admin.el("div", "empty", data.length ? "Nenhuma mensagem encontrada." : "Nenhuma mensagem ainda."));
     rows.forEach((r) => {
-      const a = Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at, Admin.mailState(r), true);
+      const a = Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, r.assunto || "Sem assunto", r.created_at, Admin.mailState(r), true);
+      a.classList.add("ctt");
+      a.appendChild(Admin.el("span", "s2", [r.email, r.empresa].filter(Boolean).join(" · ")));
       // selo de origem: ao lado da data (computador) e abaixo do ícone (celular); só um aparece por vez
       const d = a.querySelector(".d"); d.classList.add("com-origem");
       const div = Admin.el("span", "div"); div.setAttribute("aria-hidden", "true");
