@@ -13,7 +13,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 import modaCuritiba from "./questionario.json" with { type: "json" };
 
-type Opcao = { id: string; texto: string; encerra?: string; exclusiva?: boolean; outro?: boolean };
+type Opcao = { id: string; texto: string; encerra?: string; exclusiva?: boolean; outro?: boolean; anula?: boolean };
 type Pergunta = {
   id: string; tipo: "unica" | "multipla" | "ranking" | "escala" | "escalas" | "matriz"; texto: string; max?: number; min?: number;
   condicao?: { pergunta: string; opcoes: string[] };
@@ -108,6 +108,9 @@ function validar(p: Pergunta, v: unknown): unknown {
   if (p.max && sel.length > p.max) falha(`Escolha no máximo ${p.max} opções na pergunta ${p.id}.`);
   const exclusivas = (p.opcoes ?? []).filter((x) => x.exclusiva).map((x) => x.id);
   if (sel.some((s) => exclusivas.includes(s)) && sel.length > 1) falha(`A opção escolhida na pergunta ${p.id} não pode ser combinada com outras.`);
+  // respostas negativas (anula): a pessoa pode marcar junto com outras, mas no banco ficam só as negativas
+  const anulam = (p.opcoes ?? []).filter((x) => x.anula).map((x) => x.id);
+  if (sel.some((s) => anulam.includes(s))) return { opcoes: sel.filter((s) => anulam.includes(s)) };
   const opOutro = (p.opcoes ?? []).find((x) => x.outro);
   const res: { opcoes: string[]; outro?: string } = { opcoes: sel };
   if (opOutro && sel.includes(opOutro.id)) {

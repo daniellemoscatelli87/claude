@@ -16,6 +16,7 @@ type Pergunta = {
   rotulo_min?: string; rotulo_max?: string;
   rotulo?: string; condicao?: { pergunta: string; opcoes: string[] }; // pergunta condicional (ex.: 2.1)
   destaque?: string; // trecho do título em vermelho
+  apoio_negrito?: string; // trecho do texto de apoio em negrito
 };
 type Multi = { opcoes: string[]; outro?: string };
 type Estado = {
@@ -95,7 +96,7 @@ function mostrarTela(id: string) {
 /* ---------- Perguntas ---------- */
 const etiqueta = (i: number) => (PERGUNTAS[i].condicao ? `Pergunta ${rotulo(i)}` : `Pergunta ${numero(i)} de ${PRINCIPAIS}`);
 // destaque: trecho do título em vermelho (a primeira ocorrência), para orientar a leitura
-function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apoio?: string, destaque?: string) {
+function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apoio?: string, destaque?: string, negrito?: string) {
   const lg = el('legend', 'pq-pergunta'); lg.tabIndex = -1;
   const t = el('span', 'pq-titulo');
   const k = destaque ? titulo.indexOf(destaque) : -1;
@@ -103,7 +104,10 @@ function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apo
   else t.textContent = titulo;
   lg.append(el('span', 'pq-num', eyebrow), t);
   fs.appendChild(lg);
-  if (apoio) { const a = el('p', 'pq-apoio', apoio); a.id = fs.id + '-apoio'; fs.setAttribute('aria-describedby', a.id); fs.appendChild(a); }
+  if (apoio) {
+    const a = el('p', 'pq-apoio'); const n = negrito ? apoio.indexOf(negrito) : -1;
+    if (n >= 0) a.append(apoio.slice(0, n), el('strong', undefined, negrito!), apoio.slice(n + negrito!.length)); else a.textContent = apoio;
+    a.id = fs.id + '-apoio'; fs.setAttribute('aria-describedby', a.id); fs.appendChild(a); }
 }
 const erroBox = (id: string) => { const e = el('p', 'pq-erro'); e.id = id + '-erro'; e.setAttribute('role', 'alert'); e.hidden = true; return e; };
 
@@ -123,7 +127,7 @@ function abrirOutro(caixa: HTMLElement, campo: HTMLInputElement | null) {
 
 function montarPergunta(p: Pergunta, i: number) {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-' + p.id; fs.dataset.etapa = String(i);
-  cabecalho(fs, `Pergunta ${rotulo(i)}`, p.texto, p.apoio, p.destaque);
+  cabecalho(fs, `Pergunta ${rotulo(i)}`, p.texto, p.apoio, p.destaque, p.apoio_negrito);
   const erro = erroBox(fs.id);
   if (p.tipo === 'unica') {
     const lista = el('div', 'pq-ops');
