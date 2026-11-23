@@ -595,7 +595,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-23 · Pesquisa: pergunta 4 com notas de 1 a 10 (questionário v12), não publicado
+## 2026-11-23 · Pesquisa: pergunta 4 com notas de 1 a 10 (questionário v12), publicado (função `pesquisa` v11)
 
 - Pedido da dona do produto: tirar o zero; "1 = Muito ruim".
 - Pergunta 5: o trecho em vermelho volta a ser "produto específico" (antes, "começar").
@@ -644,12 +644,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - Playwright no iPhone 13: botões de 1 a 10, rótulos e apoio, e a pesquisa segue para a pergunta 5;
   - função em bundle com banco simulado: nota 0 recusada, nota 1 aceita.
 
-## 2026-11-23 · Pesquisa: destaques das perguntas 1 e 1.1 e tela de encerramento com a Região Metropolitana, não publicado
+## 2026-11-23 · Pesquisa: destaques das perguntas 1 e 1.1 e tela de encerramento com a Região Metropolitana, publicado
 
 - Pergunta 1: "Onde você mora" em vermelho. Pergunta 1.1: "fazer compras" e "Curitiba" em vermelho (campo `destaque` do `questionario.json`).
 - Tela de encerramento: "moram em Curitiba e Região Metropolitana", em negrito vermelho.
 - "Leva de 3 a 5 minutos" continua igual: a dona do produto não pediu mudança.
-- O `destaque` só é usado pela página, que lê o questionário do próprio site. A função `pesquisa` não precisa ser reimplantada para isso; o JSON publicado nela difere do repositório só nesses dois destaques até a próxima publicação da função.
+- O `destaque` só é usado pela página, que lê o questionário do próprio site. A função `pesquisa` não precisa ser reimplantada para isso; o JSON publicado ficou igual ao do repositório na publicação da v12.
 - Testes executados: `npm run build`; Playwright no iPhone 13 (trechos em vermelho nas perguntas 1 e 1.1 e texto da tela de encerramento), sem erros de JS.
 
 ## 2026-11-23 · Pesquisa: Região Metropolitana, quatro perguntas novas, cidade e bairro, e exportação do relatório (questionário v11, D-044), publicado (função `pesquisa` v10; questionário publicado em JSON compacto, igual ao do repositório)
