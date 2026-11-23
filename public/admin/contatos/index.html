@@ -15,8 +15,17 @@
   .origem { flex: none; display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; line-height: 1; }
   .origem.site { background: #eef1f6; color: #4b5873; }
   .origem.email { background: var(--red-tint); color: var(--red); }
-  .rowlink .t.com-origem { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .rowlink .t.com-origem .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  /* Lista: no computador, o selo fica ao lado da data (com um divisor); no celular, abaixo do ícone */
+  .rowlink .d.com-origem { display: inline-flex; align-items: center; gap: 10px; }
+  .rowlink .d.com-origem .div { width: 1px; height: 14px; background: var(--line, #dfe4ec); }
+  .rowlink .ini-col { grid-row: span 2; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .rowlink .ini-col .ini { grid-row: auto; }
+  .rowlink .ini-col .origem { display: none; height: 18px; padding: 0 6px; font-size: 9px; }
+  @media (max-width: 767px) {
+    .rowlink .d.com-origem .origem, .rowlink .d.com-origem .div { display: none; }
+    .rowlink .ini-col { width: 50px; }
+    .rowlink .ini-col .origem { display: inline-flex; letter-spacing: .04em; padding: 0 5px; }
+  }
   .ch-name.com-origem { display: inline-flex; align-items: center; gap: 8px; }
   .toolbar { display: flex; gap: 10px; align-items: center; margin: 20px 0 12px; }
   .toolbar input { flex: 1 1 auto; min-width: 0; max-width: 420px; }
@@ -696,8 +705,12 @@ Admin.init({ page: "contatos", onReady: async () => {
     if (!rows.length) return list.appendChild(Admin.el("div", "empty", data.length ? "Nenhuma mensagem encontrada." : "Nenhuma mensagem ainda."));
     rows.forEach((r) => {
       const a = Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at, Admin.mailState(r), true);
-      const t = a.querySelector(".t"); const nm = Admin.el("span", "nm", t.textContent);
-      t.classList.add("com-origem"); t.replaceChildren(nm, origemTag(r));
+      // selo de origem: ao lado da data (computador) e abaixo do ícone (celular); só um aparece por vez
+      const d = a.querySelector(".d"); d.classList.add("com-origem");
+      const div = Admin.el("span", "div"); div.setAttribute("aria-hidden", "true");
+      d.prepend(origemTag(r), div);
+      const ic = a.querySelector(".ini"); const col = Admin.el("span", "ini-col");
+      ic.replaceWith(col); col.append(ic, origemTag(r));
       list.appendChild(a);
     });
   };
