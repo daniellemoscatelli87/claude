@@ -252,27 +252,27 @@
     {
       "id": "q7",
       "tipo": "unica",
-      "texto": "Com que frequência você não encontra uma roupa ou acessório com as características que procura?",
+      "texto": "Quando você procura uma roupa ou acessório específico, com que frequência tem dificuldade para encontrar exatamente o que deseja?",
       "opcoes": [
         {
           "id": "nunca",
-          "texto": "Nunca"
+          "texto": "Nunca tenho dificuldade"
         },
         {
           "id": "raramente",
-          "texto": "Raramente"
+          "texto": "Raramente tenho dificuldade"
         },
         {
           "id": "as_vezes",
-          "texto": "Às vezes"
+          "texto": "Às vezes tenho dificuldade"
         },
         {
           "id": "frequentemente",
-          "texto": "Frequentemente"
+          "texto": "Frequentemente tenho dificuldade"
         },
         {
           "id": "quase_sempre",
-          "texto": "Quase sempre"
+          "texto": "Quase sempre tenho dificuldade"
         }
       ]
     },

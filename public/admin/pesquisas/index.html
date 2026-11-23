@@ -905,7 +905,7 @@
         corpo = barras(its, n, { ordem: ordinal ? "natural" : "valor" });
         const t = maisEscolhida(its);
         if (p.id === "q3") { const k = base.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; leitura = [{ b: pct(k, n) + "%" }, " compraram de segunda mão este ano."]; }
-        else if (p.id === "q7") { const k = base.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length; leitura = [{ b: pct(k, n) + "%" }, " frequentemente ou quase sempre não encontram o que procuram."]; }
+        else if (p.id === "q7") { const k = base.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length; leitura = [{ b: pct(k, n) + "%" }, " frequentemente ou quase sempre têm dificuldade para encontrar exatamente o que desejam."]; }
         else leitura = t && t.v ? ["A resposta mais escolhida: ", { b: semOutro(t.rotulo) }, ` (${pct(t.v, n)}%).`] : null;
         if (p.tipo === "multipla") rodape.push(el("p", "pa-nota", "Cada pessoa pode marcar mais de uma opção, por isso a soma passa de 100%."));
         rodape.push(outros(p, base), tabelaItens(its, n));
@@ -964,7 +964,7 @@
     const ng = notas(comp, notaGeral), nc = notas(comp, notaCorr);
     if (ng.length) add(["Nota geral das compras: ", { b: fmt1(ng.reduce((a, b) => a + b, 0) / ng.length) }, " de 10" + (nc.length ? "; correspondência com o que procuravam: " : ".")].concat(nc.length ? [{ b: fmt1(nc.reduce((a, b) => a + b, 0) / nc.length) }, "."] : []));
     const freq = comp.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length;
-    add([{ b: `${pct(freq, comp.length)}%` }, " frequentemente ou quase sempre não encontram a peça com as características que procuram."]);
+    add([{ b: `${pct(freq, comp.length)}%` }, " frequentemente ou quase sempre têm dificuldade para encontrar exatamente o que desejam."]);
     const difs = perg.q8.linhas.map((l) => { const v = comp.map((x) => x.respostas.q8 && x.respostas.q8[l.id]).filter((y) => y && y !== "na"); return { t: l.texto, p: pct(v.filter((y) => y === "4" || y === "5").length, v.length), n: v.length }; }).filter((x) => x.n).sort((a, b) => b.p - a.p);
     if (difs[0] && difs[0].p) add(["O mais difícil de encontrar: ", { b: item(difs[0].t) }, ` (${difs[0].p}% acham difícil ou muito difícil).`]);
     const viveu = comp.filter((x) => x.respostas.q9 && !x.respostas.q9.opcoes.includes("nao_passei"));
@@ -1173,10 +1173,10 @@
       const maior = d(freq) > d(rara);
       add("Comportamento", {
         tag: "Comportamento de compra", sinal: maior ? { nivel: "critico", texto: "Falta de opções leva à desistência" } : { nivel: "info", texto: "Sem relação clara" },
-        titulo: `Quem não encontra o que procura desiste ${maior ? "mais" : "na mesma medida"}: ${d(freq)}% × ${d(rara)}%`,
-        descricao: ["Desistência de compra (pergunta 9) conforme a frequência com que a pessoa não encontra o que procura (pergunta 7)."],
+        titulo: `Quem tem dificuldade para encontrar o que deseja desiste ${maior ? "mais" : "na mesma medida"}: ${d(freq)}% × ${d(rara)}%`,
+        descricao: ["Desistência de compra (pergunta 9) conforme a frequência com que a pessoa tem dificuldade para encontrar o que deseja (pergunta 7)."],
         base: freq.length + rara.length, recorte: "Pergunta 7 × pergunta 9",
-        barras: [{ rotulo: "Frequentemente ou quase sempre não encontram", v: d(freq), txt: `${d(freq)}%`, n: freq.length }, { rotulo: "Nunca ou raramente", v: d(rara), txt: `${d(rara)}%`, n: rara.length }],
+        barras: [{ rotulo: "Frequentemente ou quase sempre têm dificuldade", v: d(freq), txt: `${d(freq)}%`, n: freq.length }, { rotulo: "Nunca ou raramente", v: d(rara), txt: `${d(rara)}%`, n: rara.length }],
         significado: maior ? ["A dificuldade de encontrar a peça está ligada a compras que não acontecem."] : ["Nesta amostra, desistir não depende de quanto a pessoa sente falta de opções."],
         proximo: ["Acompanhar essa diferença conforme chegam novas respostas."],
       });
@@ -1280,7 +1280,7 @@
         titulo: `${quer.length} ${quer.length === 1 ? "pessoa quer" : "pessoas querem"} acompanhar o lançamento (${pct(quer.length, n)}%)`,
         descricao: ["Perfil de quem pediu novidades, comparado com o total (sem nomes)."],
         base: quer.length, recorte: "Quem pediu novidades",
-        kpis: [{ v: `${fQ}%`, t: `não encontram o que procuram com frequência (${fT}% no total)` }, { v: fmt1(nQ4), t: `nota geral das compras (${fmt1(nTodos)} no total)` }, { v: fmt1(cQ), t: `correspondência com o que procuravam (${fmt1(cT)} no total)` }],
+        kpis: [{ v: `${fQ}%`, t: `têm dificuldade com frequência para encontrar o que desejam (${fT}% no total)` }, { v: fmt1(nQ4), t: `nota geral das compras (${fmt1(nTodos)} no total)` }, { v: fmt1(cQ), t: `correspondência com o que procuravam (${fmt1(cT)} no total)` }],
         significado: ["São as pessoas mais próximas do problema que a pesquisa investiga e que aceitaram receber contato."],
         proximo: ["Convidar parte desse grupo para conversas de aprofundamento, respeitando a autorização dada."],
       });
