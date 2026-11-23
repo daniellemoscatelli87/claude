@@ -467,6 +467,21 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Trade-offs:** a área restrita fica, por enquanto, com o `theme.css` de uma branch do DS ainda não publicada; ao publicar o DS, a sincronização diária volta ao `main` e o `?v=` precisa mudar.
 >>>>>>> origin/main
 
+## D-044 · 23/11/2026 · Pesquisa de moda inclui a Região Metropolitana; cidade e bairro no perfil (site)
+
+- **Origem:** dona do produto.
+- **Decisão:**
+  - Quem mora em Curitiba ou na Região Metropolitana participa; só "Outra cidade" encerra.
+  - Quem é da Região Metropolitana responde a 1.1, sobre comprar em Curitiba.
+  - No perfil, a cidade é sempre perguntada e o bairro só para Curitiba ("não preciso saber o bairro da região metropolitana").
+- **Fontes:**
+  - 29 municípios da Região Metropolitana: AMEP, página "Municípios da Região Metropolitana de Curitiba", consultada em 23/11/2026.
+  - 75 bairros e 10 regionais: "Administrações Regionais de Curitiba" (Prefeitura, 2017), conferido com "Curitiba: caminhos que educam" (SME, 2022).
+  - O site da Prefeitura bloqueou a leitura automática; não foi possível conferir uma versão de 2025/2026.
+- **Trade-offs:**
+  - O Campo Comprido fica em Santa Felicidade, mas a parte sul pertence à regional Portão. O agrupamento por regional é aproximado nesse bairro.
+  - O código `fora_de_curitiba` continua nos dados e passa a significar "fora de Curitiba e da Região Metropolitana".
+
 ## Decisões pendentes
 
 

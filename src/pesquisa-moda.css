@@ -363,6 +363,11 @@ body:has(#pq-form:not([hidden])) .pq-rodape { display: none; }
 .pq-select:focus { outline: none; border-color: var(--pq-red); box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.14); }
 .pq-select:invalid, .pq-select:has(option[value=""]:checked) { color: #8A94A6; }
 .pq-perfil-outro { padding: 10px 0 0; }
+label.pq-perfil-titulo { display: block; }
+.pq-perfil-nota { margin: 8px 0 0; font-size: 14px; color: var(--pq-muted); }
+.pq-select:disabled { cursor: default; background-color: #F4F6F9; color: var(--pq-ink); opacity: 1; }
+label.pq-perfil-titulo em { font-style: normal; color: var(--pq-red); }
+.pq-perfil-campo[hidden] { display: none; }
 .pq-perfil-campo.pq-invalido .pq-select { border-color: var(--pq-erro); }
 .pq-perfil-campo.pq-invalido .pq-op:not(:has(input:checked)), .pq-perfil-campo.pq-invalido .pq-chip span { border-color: rgba(198, 40, 40, 0.45); }
 

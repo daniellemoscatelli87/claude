@@ -408,7 +408,7 @@
   };
   const pct = (n, d) => (d ? Math.round((n / d) * 100) : 0);
   const plural = (n, um, varios) => `${n.toLocaleString("pt-BR")} ${n === 1 ? um : varios}`;
-  const SITUACAO = { completa: "Completas", fora_de_curitiba: "Não moram em Curitiba", sem_compras: "Não compraram este ano" };
+  const SITUACAO = { completa: "Completas", fora_de_curitiba: "Fora de Curitiba e Região Metropolitana", sem_compras: "Não compraram este ano" };
   const slug = new URLSearchParams(location.search).get("p");
 
   Admin.init({ page: "pesquisas", onReady: () => (slug ? painel(slug) : lista()) });
@@ -527,7 +527,7 @@
     wrap.append(
       k(R.length.toLocaleString("pt-BR"), "participações", R.length ? "todas as pessoas que enviaram" : ""),
       k(completas.toLocaleString("pt-BR"), "respostas completas", R.length ? pct(completas, R.length) + "% das participações" : ""),
-      k(encerradas.toLocaleString("pt-BR"), "fora do público", encerradas ? `${R.filter((x) => x.situacao === "fora_de_curitiba").length} fora de Curitiba · ${R.filter((x) => x.situacao === "sem_compras").length} sem compras` : ""),
+      k(encerradas.toLocaleString("pt-BR"), "fora do público", encerradas ? `${R.filter((x) => x.situacao === "fora_de_curitiba").length} fora de Curitiba e RMC · ${R.filter((x) => x.situacao === "sem_compras").length} sem compras` : ""),
       (() => { const q = R.filter((x) => x.quer_novidades).length; return k(q.toLocaleString("pt-BR"), "querem novidades", completas ? `${pct(q, completas)}% das completas · ${plural(I.length, "contato guardado", "contatos guardados")}` : ""); })(),
     );
     return wrap;
@@ -914,9 +914,11 @@
 
     const g = el("div", "pa-graficos");
     // P1
-    const b1 = respondeu("q1"), sim = b1.filter((x) => x.respostas.q1 === "sim").length;
-    const i1 = [{ rotulo: "Sim, moram em Curitiba", v: sim }, { rotulo: "Não moram em Curitiba", v: b1.length - sim }];
-    g.appendChild(qCard({ num: 1, titulo: perg.q1.texto, base: b1.length, leitura: [{ b: pct(sim, b1.length) + "%" }, " moram em Curitiba e seguiram na pesquisa."], corpo: rosca(i1, b1.length, { centro: pct(sim, b1.length) + "%", rotCentro: "moram em Curitiba" }), rodape: [tabelaItens(i1, b1.length)] }));
+    // P1: Curitiba, Região Metropolitana ou outra cidade (só "Outra cidade" encerra)
+    const b1 = respondeu("q1"), sim = b1.filter((x) => ["sim", "rmc"].includes(x.respostas.q1)).length;
+    const i1 = perg.q1.opcoes.map((o) => ({ rotulo: o.texto, v: b1.filter((x) => x.respostas.q1 === o.id).length }));
+    g.appendChild(qCard({ num: 1, titulo: perg.q1.texto, base: b1.length, leitura: [{ b: pct(sim, b1.length) + "%" }, " moram em Curitiba ou na Região Metropolitana e seguiram na pesquisa."], corpo: rosca(i1, b1.length, { centro: pct(sim, b1.length) + "%", rotCentro: "Curitiba e RMC" }), rodape: [tabelaItens(i1, b1.length)] }));
+    const depoisQ1 = g.lastChild; // a 1.1 (condicional da pergunta 1) entra logo depois deste card
     // P2 (classificação): % em 1º lugar e, mais claro, % entre as 3
     const b2 = respondeu("q2");
     if (perg.q2.tipo === "ranking") {
@@ -936,7 +938,7 @@
     }
     // P2.1 a P10
     let num = 2;
-    Q.perguntas.slice(2).forEach((p) => {
+    Q.perguntas.filter((p) => p.id !== "q1" && p.id !== "q2").forEach((p) => {
       const base = p.condicao ? comp.filter((x) => naCondicao(p, x)) : comp;
       if (!p.condicao) num++;
       const n = base.length;
@@ -973,7 +975,7 @@
         rodape.push(tabela(["Característica", "Muito fácil", "Fácil", "Médio", "Difícil", "Muito difícil", ...(temNa ? ["Não se aplica"] : [])], corpo._linhas.map((x) => [x.l.texto, x.cont["1"], x.cont["2"], x.cont["3"], x.cont["4"], x.cont["5"], ...(temNa ? [x.na] : [])])));
       } else {
         const its = itensDe(p, base);
-        const ordinal = p.id === "q3" || p.id === "q7";
+        const ordinal = ["q1_1", "q3", "q7", "q_foto", "q_disponibilidade"].includes(p.id);
         corpo = barras(its, n, { ordem: ordinal ? "natural" : "valor" });
         const t = maisEscolhida(its);
         if (p.id === "q3") { const k = base.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; leitura = [{ b: pct(k, n) + "%" }, " compraram de segunda mão este ano."]; }
@@ -984,14 +986,33 @@
       }
       if (p.condicao) {
         const ops = Q.perguntas.find((x) => x.id === p.condicao.pergunta).opcoes.filter((o) => p.condicao.opcoes.includes(o.id)).map((o) => "“" + o.texto + "”");
-        rodape.unshift(el("p", "pa-nota", "Aparece só para quem marcou na pergunta 2 " + ops.join(" ou ") + "."));
+        const mae = Q.perguntas.filter((x) => !x.condicao).findIndex((x) => x.id === p.condicao.pergunta) + 1;
+        rodape.unshift(el("p", "pa-nota", `Aparece só para quem marcou na pergunta ${mae} ` + ops.join(" ou ") + "."));
       }
-      g.appendChild(qCard({ num: p.rotulo || num, titulo: p.texto, base: n, meta, leitura, corpo, rodape, largo }));
+      const card = qCard({ num: p.rotulo || num, titulo: p.texto, base: n, meta, leitura, corpo, rodape, largo });
+      if (p.condicao && p.condicao.pergunta === "q1") depoisQ1.after(card); else g.appendChild(card);
     });
     // perfil: um card para gênero e outro para faixa etária, lado a lado
     if (Q.perfil && Q.perfil.length) {
       const comPerfil = comp.filter((x) => x.respostas.perfil);
       Q.perfil.forEach((c) => {
+        // cidade: as cidades com respostas; bairro (só Curitiba): por regional, com a tabela dos bairros
+        if (c.id === "cidade" || c.id === "bairro") {
+          const base = c.condicao ? comPerfil.filter((x) => c.condicao.opcoes.includes(x.respostas.perfil[c.condicao.campo])) : comPerfil;
+          const conta = (id) => base.filter((x) => x.respostas.perfil[c.id] === id).length;
+          const porOp = c.opcoes.map((o) => ({ rotulo: o.texto, v: conta(o.id), fixo: o.id === "nao_informar", o }));
+          let its = porOp.filter((it) => it.v), rod = [];
+          if (c.id === "bairro") {
+            const regs = [...new Set(c.opcoes.map((o) => o.regional).filter(Boolean))];
+            its = [...regs.map((r) => ({ rotulo: "Regional " + r, v: porOp.filter((it) => it.o.regional === r).reduce((t, it) => t + it.v, 0) })), ...porOp.filter((it) => it.fixo)];
+            rod.push(el("p", "pa-nota", "Agrupado pelas Administrações Regionais da Prefeitura de Curitiba."), tabelaItens(porOp.filter((it) => it.v).map(({ rotulo, v, fixo }) => ({ rotulo, v, fixo })), base.length));
+          } else rod.push(tabelaItens(its, base.length));
+          const t = maisEscolhida(its);
+          g.appendChild(qCard({ num: "Perfil", titulo: c.texto, base: base.length,
+            leitura: t && t.v ? [c.id === "bairro" ? "Região com mais respostas: " : "Cidade com mais respostas: ", { b: t.rotulo }, ` (${pct(t.v, base.length)}%).`] : null,
+            corpo: barras(its, base.length), rodape: rod }));
+          return;
+        }
         const its = c.opcoes.map((o) => ({ rotulo: semOutro(o.texto), v: comPerfil.filter((x) => x.respostas.perfil[c.id] === o.id).length, fixo: o.id === "nao_informar" }));
         const t = maisEscolhida(its);
         const outrosTx = comPerfil.map((x) => x.respostas.perfil[c.id + "_outro"]).filter(Boolean);
@@ -1003,7 +1024,7 @@
       });
     }
     box.appendChild(g);
-    box.appendChild(el("p", "pa-nota", `Da pergunta 2.1 em diante, os números contam só quem respondeu tudo (${comp.length}). Quem não mora em Curitiba ou não comprou este ano encerra na pergunta 1 ou 2.`));
+    box.appendChild(el("p", "pa-nota", `Da pergunta 2.1 em diante, os números contam só quem respondeu tudo (${comp.length}). Quem não mora em Curitiba ou na Região Metropolitana, ou não comprou este ano, encerra na pergunta 1 ou 2.`));
     return box;
   }
 
@@ -1053,9 +1074,9 @@
     };
     const perg = Object.fromEntries(Q.perguntas.map((p) => [p.id, p]));
     const topo = (p, base, filtro = () => true) => { const n = contar(p, base); const op = p.opcoes.filter(filtro).map((o) => ({ ...o, v: n[o.id] || 0 })).sort((a, b) => b.v - a.v)[0]; return op && op.v ? op : null; };
-    add({ ic: "publico", tema: "Público", valor: `${pct(comp.length, R.length)}%`, partes: [R.length === 1 ? "da única participação até agora é do público da pesquisa (mora em Curitiba e comprou este ano)." : `das ${R.length} participações são do público da pesquisa: moram em Curitiba e compraram este ano.`] });
+    add({ ic: "publico", tema: "Público", valor: `${pct(comp.length, R.length)}%`, partes: [R.length === 1 ? "da única participação até agora é do público da pesquisa (mora em Curitiba ou na Região Metropolitana e comprou este ano)." : `das ${R.length} participações são do público da pesquisa: moram em Curitiba ou na Região Metropolitana e compraram este ano.`] });
     if (!comp.length) {
-      grade.appendChild((() => { const d = el("div", "pa-dest-vazio"); d.append(el("b", null, "Os outros destaques aparecem com a primeira resposta completa"), el("span", null, "Quem não mora em Curitiba ou não comprou este ano encerra no começo da pesquisa.")); return d; })());
+      grade.appendChild((() => { const d = el("div", "pa-dest-vazio"); d.append(el("b", null, "Os outros destaques aparecem com a primeira resposta completa"), el("span", null, "Quem não mora em Curitiba ou na Região Metropolitana, ou não comprou este ano, encerra no começo da pesquisa.")); return d; })());
       itens.forEach((d) => grade.prepend(d)); card.appendChild(grade); return card;
     }
     const b2 = respondeu("q2").filter((x) => !valores(x.respostas.q2).includes("nao_comprei"));
@@ -1491,7 +1512,7 @@
   }
 
   /* ---------- Respostas individuais (ver e excluir) ---------- */
-  const SIT_CURTA = { completa: "Completa", fora_de_curitiba: "Não mora em Curitiba", sem_compras: "Não comprou este ano" };
+  const SIT_CURTA = { completa: "Completa", fora_de_curitiba: "Fora de Curitiba e RMC", sem_compras: "Não comprou este ano" };
   function textoResposta(p, v) {
     if (v == null) return "—";
     const op = (id) => ((p.opcoes || []).find((o) => o.id === id) || {}).texto?.replace(/ \(especifique\)$/, "") || id;
