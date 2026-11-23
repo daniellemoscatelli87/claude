@@ -349,7 +349,15 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
-## 2026-11-23 · Store tirada do ar, não publicado
+## 2026-11-23 · Pesquisa Moda em Curitiba: cabeçalho do design system, "Voltar para o site", rascunho guardado e avatar, publicado
+
+- **Cabeçalho:** modelo "Full-width bar" do design system: logo completo à esquerda (ícone no celular), "Voltar para o site" com ícone à direita; transparente no topo, fundo escuro translúcido ao rolar com o logo virando ícone; some ao rolar para baixo e volta ao subir; a barra de progresso continua visível.
+- **Sair da pesquisa:** com a pesquisa em andamento, o "Voltar para o site" (e o logo) abre a janela "Quer mesmo interromper a pesquisa?" com "Continuar respondendo" e "Sair e voltar para o site"; na apresentação e nas telas finais, vai direto para a página inicial.
+- **Rascunho:** as respostas ficam guardadas neste aparelho (localStorage) a cada toque, por 30 dias; ao voltar pelo link, a pessoa continua de onde parou. Nome, e-mail e WhatsApp ficam só na sessão do navegador. O rascunho é apagado ao enviar.
+- **Telas finais:** assinatura com o avatar da Dani (`/dani-assinatura.webp`, a mesma foto já usada no site).
+- **Verificação executada:** computador e iPhone 13 simulados: estados do cabeçalho, janela de confirmação, "Continuar respondendo", saída para a página inicial, retomada numa aba nova com as respostas marcadas, contato fora do localStorage, avatar nas telas finais; sem erros de JavaScript.
+
+## 2026-11-23 · Store tirada do ar, publicado
 
 - Pedido da dona do produto: a Store sai do site e do painel.
 - Removidos `public/store/` (página e imagens) e `public/admin/store/`; item "Store" fora do menu da área restrita.

@@ -42,7 +42,7 @@ const aplica = (p: Pergunta) => !p.condicao || valores(E.r[p.condicao.pergunta])
 const proxima = (i: number) => { let j = i + 1; while (j < TOTAL && !aplica(PERGUNTAS[j])) j++; return j; };
 const anterior = (i: number) => { let j = i - 1; while (j >= 0 && j < TOTAL && !aplica(PERGUNTAS[j])) j--; return j; };
 const API = 'https://lipfvnerohkaajegqvwr.supabase.co/functions/v1/pesquisa';
-const CHAVE_RASCUNHO = 'pq-moda-rascunho-v4', CHAVE_FIM = 'pq-moda-concluida';
+const CHAVE_RASCUNHO = 'pq-moda-rascunho-v5', CHAVE_FIM = 'pq-moda-concluida';
 const RELATO_MAX = 2000;
 const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -55,8 +55,24 @@ const ler = <T>(k: string, local = false): T | null => { try { const v = (local 
 const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => { const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); }));
 
 const novo = (): Estado => ({ envio: uuid(), contatoId: uuid(), etapa: -1, r: {}, relato: '', nov: '', nome: '', email: '', whats: '', aceite: false });
-let E: Estado = { ...novo(), ...(ler<Estado>(CHAVE_RASCUNHO) ?? {}) };
-const salvar = () => guardar(CHAVE_RASCUNHO, E);
+/* Rascunho: as respostas ficam guardadas neste aparelho (localStorage) a cada toque, então fechar a aba, sair pelo
+   "Voltar para o site" ou perder a conexão não apaga nada; ao voltar pelo link, a pessoa continua de onde parou.
+   Os dados de contato (nome, e-mail e WhatsApp) ficam só nesta sessão do navegador, por privacidade em aparelhos
+   compartilhados. O rascunho vale por 30 dias e é apagado quando a participação é enviada. */
+const RASCUNHO_DIAS = 30;
+type Rascunho = Partial<Estado> & { salvoEm?: number };
+const lerRascunho = (): Partial<Estado> => {
+  const r = ler<Rascunho>(CHAVE_RASCUNHO, true);
+  if (!r || !r.salvoEm || Date.now() - r.salvoEm > RASCUNHO_DIAS * 864e5) return {};
+  const contato = ler<Partial<Estado>>(CHAVE_RASCUNHO + '-contato') ?? {};
+  return { ...r, ...contato };
+};
+let E: Estado = { ...novo(), ...lerRascunho() };
+const salvar = () => {
+  const { nome, email, whats, aceite, ...resto } = E;
+  guardar(CHAVE_RASCUNHO, { ...resto, salvoEm: Date.now() }, true);
+  guardar(CHAVE_RASCUNHO + '-contato', { nome, email, whats, aceite });
+};
 let enviando = false;
 
 /* ---------- Telas ---------- */
@@ -493,7 +509,7 @@ async function enviar(final: boolean) {
 function concluir(tipo: 'obrigada' | 'encerrada' | 'fora', comContato = false) {
   // dados salvos no servidor: guarda que esta participação terminou e apaga o rascunho
   if (tipo !== 'fora') guardar(CHAVE_FIM, { tipo, comContato, em: Date.now() }, true);
-  try { sessionStorage.removeItem(CHAVE_RASCUNHO); } catch { /* sem armazenamento */ }
+  try { localStorage.removeItem(CHAVE_RASCUNHO); sessionStorage.removeItem(CHAVE_RASCUNHO + '-contato'); } catch { /* sem armazenamento */ }
   if (tipo === 'obrigada') {
     $('pq-obrigada-msg').textContent = comContato
       ? 'Quando tivermos novidades sobre o lançamento, entraremos em contato pelos dados informados.'
@@ -530,9 +546,45 @@ function politica() {
   dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
 }
 
+/* ---------- Topo: barra do design system (transparente no topo; escura ao rolar; some ao descer) ---------- */
+function topo() {
+  const t = $('pq-topo');
+  let ultimo = window.scrollY, agendado = false;
+  const atualizar = () => {
+    agendado = false;
+    const y = window.scrollY, barra = t.querySelector<HTMLElement>('.pq-barra-topo')!.offsetHeight;
+    t.classList.toggle('is-scrolled', y > 8);
+    const d = y - ultimo;
+    if (y < barra) t.classList.remove('is-hidden');
+    else if (d > 6) t.classList.add('is-hidden');
+    else if (d < -6) t.classList.remove('is-hidden');
+    if (Math.abs(d) > 6) ultimo = y;
+  };
+  window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(atualizar); } }, { passive: true });
+  t.addEventListener('focusin', () => t.classList.remove('is-hidden'));
+  atualizar();
+}
+
+/* ---------- "Voltar para o site": pergunta antes de interromper a pesquisa em andamento ---------- */
+function sair() {
+  const dlg = $<HTMLDialogElement>('pq-sair-dlg');
+  let destino = '/';
+  const emAndamento = () => !$('pq-form').hidden && !ler(CHAVE_FIM, true);
+  document.addEventListener('click', (e) => {
+    const a = (e.target as Element).closest<HTMLAnchorElement>('[data-sair]');
+    if (!a || !emAndamento() || typeof dlg.showModal !== 'function') return; // fora da pesquisa (apresentação ou fim): vai direto
+    e.preventDefault();
+    destino = a.href; salvar();
+    dlg.showModal(); $('pq-sair-ficar').focus();
+  });
+  $('pq-sair-ficar').addEventListener('click', () => dlg.close());
+  $('pq-sair-ir').addEventListener('click', () => { salvar(); location.href = destino; });
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+}
+
 /* ---------- Início ---------- */
 function iniciar() {
-  politica();
+  politica(); topo(); sair();
   const etapas = $('pq-etapas');
   PERGUNTAS.forEach((p, i) => etapas.appendChild(montarPergunta(p, i)));
   etapas.append(montarPerfil(), montarRelato(), montarNovidades());
