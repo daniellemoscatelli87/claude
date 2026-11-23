@@ -6,7 +6,7 @@
 //     Grava a participação uma única vez por envio_id (reenvio ou atualização da página não duplica).
 //     situacao vem das próprias respostas: Q1 = "Outra cidade" encerra (fora_de_curitiba, fora de Curitiba e Região Metropolitana); Q2 = "Não comprei" encerra (sem_compras).
 //     Perguntas com condicao (ex.: 2.1) só são exigidas e gravadas para quem escolheu uma das opções indicadas.
-//     perfil: { cidade, bairro? (só Curitiba), genero, genero_outro?, faixa_etaria }, obrigatório nas participações completas; gravado em respostas.perfil.
+//     perfil: { cidade, bairro? (só Curitiba), genero, genero_outro?, faixa_etaria, estado_civil } (cidade e bairro são perguntados na pergunta 1), obrigatório nas participações completas; gravado em respostas.perfil.
 //     novidades: { quer: boolean } só para participações completas; "sim" é a autorização para receber avisos.
 //     Quem quer novidades também entra em pesquisa_interessados (lista do painel), com o texto da autorização.
 //     O relato (pergunta aberta) é guardado exatamente como foi enviado.
@@ -179,7 +179,7 @@ Deno.serve(async (req) => {
     if (completa && q.perfil?.length) {
       const pf = (p.perfil && typeof p.perfil === "object" ? p.perfil : {}) as Record<string, unknown>;
       const out: Record<string, string> = {};
-      const MSG: Record<string, string> = { cidade: "Escolha a cidade onde você mora.", bairro: "Escolha o seu bairro ou marque \"Prefiro não informar\".", genero: "Escolha uma opção de gênero.", faixa_etaria: "Escolha uma faixa etária." };
+      const MSG: Record<string, string> = { cidade: "Escolha a cidade onde você mora.", bairro: "Escolha o seu bairro ou marque \"Prefiro não informar\".", genero: "Escolha uma opção de gênero.", faixa_etaria: "Escolha uma faixa etária.", estado_civil: "Escolha seu estado civil." };
       for (const per of q.perfil) {
         if (per.condicao && !per.condicao.opcoes.includes(out[per.condicao.campo])) continue; // ex.: bairro só para Curitiba
         const v = String(pf[per.id] ?? "");

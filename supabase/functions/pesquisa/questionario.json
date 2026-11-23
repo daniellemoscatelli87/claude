@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v11-2026-11-23",
+  "versao": "moda-curitiba-v12-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "identificacao": {
     "versao": "moda-curitiba-identificacao-v1-2026-11-23",
@@ -29,7 +29,8 @@
           "texto": "Outra cidade",
           "encerra": "fora_de_curitiba"
         }
-      ]
+      ],
+      "destaque": "Onde você mora"
     },
     {
       "id": "q1_1",
@@ -59,6 +60,10 @@
           "id": "nunca",
           "texto": "Nunca"
         }
+      ],
+      "destaque": [
+        "fazer compras",
+        "Curitiba"
       ]
     },
     {
@@ -91,7 +96,7 @@
         },
         {
           "id": "nao_comprei",
-          "texto": "Não comprei roupas ou acessórios este ano",
+          "texto": "Não comprei nenhuma peça este ano",
           "encerra": "sem_compras",
           "exclusiva": true
         }
@@ -110,7 +115,7 @@
           "online_outras"
         ]
       },
-      "texto": "Quais os principais motivos para você comprar roupas e acessórios em marketplaces ou lojas online de outras cidades?",
+      "texto": "Quais os principais motivos para você comprar em marketplaces ou lojas online de outras cidades?",
       "apoio": "Selecione até 3 opções.",
       "opcoes": [
         {
@@ -152,7 +157,7 @@
     {
       "id": "q3",
       "tipo": "unica",
-      "texto": "Você tem comprado roupas e acessórios de segunda mão (brechós) nos últimos tempos?",
+      "texto": "Você tem comprado peças de segunda mão (brechós) nos últimos tempos?",
       "opcoes": [
         {
           "id": "nao",
@@ -180,10 +185,10 @@
     {
       "id": "q4",
       "tipo": "escalas",
-      "min": 0,
+      "min": 1,
       "max": 10,
-      "texto": "Pensando nas roupas e acessórios que comprou recentemente, que nota você daria para cada um dos aspectos abaixo?",
-      "apoio": "Avalie de 0 a 10, considerando sua experiência geral.",
+      "texto": "Pensando nas roupas, calçados e acessórios que comprou recentemente, que nota você daria para cada um dos aspectos abaixo?",
+      "apoio": "Avalie de 1 a 10, considerando sua experiência geral.",
       "rotulo_min": "Muito ruim",
       "rotulo_max": "Excelente",
       "linhas": [
@@ -236,10 +241,10 @@
         },
         {
           "id": "nao_procuro",
-          "texto": "Não costumo procurar roupas ou acessórios específicos"
+          "texto": "Não costumo procurar produtos específicos"
         }
       ],
-      "destaque": "começar"
+      "destaque": "produto específico"
     },
     {
       "id": "q_foto",
@@ -263,7 +268,10 @@
           "texto": "Nunca fiz isso"
         }
       ],
-      "destaque": "foto de referência"
+      "destaque": [
+        "foto de referência",
+        "comprar algo igual ou parecido"
+      ]
     },
     {
       "id": "q6",
@@ -303,7 +311,7 @@
         },
         {
           "id": "nao_conheco",
-          "texto": "Não conheço lojas físicas de roupas ou acessórios em Curitiba",
+          "texto": "Não conheço lojas físicas desse tipo em Curitiba",
           "anula": true
         },
         {
@@ -377,7 +385,7 @@
     {
       "id": "q8",
       "tipo": "matriz",
-      "texto": "Quando você procura roupas e acessórios, qual é o grau de facilidade ou dificuldade para conseguir peças que atendam às suas expectativas?",
+      "texto": "Quando você procura por um produto, qual é o grau de facilidade ou dificuldade para conseguir peças que atendam às suas expectativas?",
       "apoio": "Marque uma resposta para cada item.",
       "linhas": [
         {
@@ -451,7 +459,10 @@
           "texto": "Muito difícil"
         }
       ],
-      "destaque": "atendam às suas expectativas"
+      "destaque": [
+        "produto",
+        "atendam às suas expectativas"
+      ]
     },
     {
       "id": "q_categorias",
@@ -512,7 +523,7 @@
     {
       "id": "q9",
       "tipo": "multipla",
-      "texto": "O que você tem feito quando não encontra uma roupa ou acessório que gostaria de comprar?",
+      "texto": "O que você tem feito quando não encontra um produto que gostaria de comprar?",
       "apoio": "Selecione todas as situações que você já viveu.",
       "opcoes": [
         {
@@ -667,7 +678,10 @@
           "id": "tunas_do_parana",
           "texto": "Tunas do Paraná"
         }
-      ]
+      ],
+      "inicio": true,
+      "texto_inicio": "Em qual cidade da Região Metropolitana você mora?",
+      "destaque_inicio": "cidade da Região Metropolitana"
     },
     {
       "id": "bairro",
@@ -1061,7 +1075,8 @@
           "id": "nao_informar",
           "texto": "Prefiro não informar"
         }
-      ]
+      ],
+      "inicio": true
     },
     {
       "id": "genero",
@@ -1117,6 +1132,36 @@
         {
           "id": "65_mais",
           "texto": "65 anos ou mais"
+        },
+        {
+          "id": "nao_informar",
+          "texto": "Prefiro não informar"
+        }
+      ]
+    },
+    {
+      "id": "estado_civil",
+      "texto": "Qual é o seu estado civil?",
+      "opcoes": [
+        {
+          "id": "solteiro",
+          "texto": "Solteiro(a)"
+        },
+        {
+          "id": "casado",
+          "texto": "Casado(a)"
+        },
+        {
+          "id": "uniao_estavel",
+          "texto": "União estável"
+        },
+        {
+          "id": "divorciado",
+          "texto": "Divorciado(a) ou separado(a)"
+        },
+        {
+          "id": "viuvo",
+          "texto": "Viúvo(a)"
         },
         {
           "id": "nao_informar",

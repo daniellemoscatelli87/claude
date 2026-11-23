@@ -595,6 +595,63 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-23 · Pesquisa: pergunta 4 com notas de 1 a 10 (questionário v12), publicado (função `pesquisa` v11)
+
+- Pedido da dona do produto: tirar o zero; "1 = Muito ruim".
+- Pergunta 5: o trecho em vermelho volta a ser "produto específico" (antes, "começar").
+- Pergunta 6 (foto de referência): "foto de referência" e "comprar algo igual ou parecido" em vermelho.
+- Pergunta 10 (matriz): novo texto "Quando você procura por um produto, qual é o grau de facilidade ou dificuldade para conseguir peças que atendam às suas expectativas?", com "produto" e "atendam às suas expectativas" em vermelho.
+- "Roupas, calçados e acessórios" aparece em 4 perguntas espaçadas (2, 4, 7 e 11), além da 1.1. Nenhuma pergunta diz mais "roupas e acessórios":
+  - 2.1: "…comprar em marketplaces ou lojas online de outras cidades?";
+  - 3: "Você tem comprado peças de segunda mão (brechós)…";
+  - 4: "Pensando nas roupas, calçados e acessórios que comprou recentemente…";
+  - 12: "…quando não encontra um produto que gostaria de comprar?".
+- Opções ajustadas (os ids não mudam; respostas antigas continuam valendo):
+  - "Não comprei nenhuma peça este ano";
+  - "Não costumo procurar produtos específicos";
+  - "Não conheço lojas físicas desse tipo em Curitiba".
+- Outros textos ajustados:
+  - tela de encerramento: "compraram roupas, calçados ou acessórios este ano";
+  - apoio do relato: "ao procurar ou comprar peças".
+- Cidade e bairro saem do "Sobre você" e passam para a pergunta 1, logo abaixo da escolha:
+  - Curitiba mostra o bairro;
+  - Região Metropolitana mostra "Em qual cidade da Região Metropolitana você mora?", com as 28 cidades;
+  - Outra cidade não mostra nada.
+  - O campo aparece com movimento suave (respeita "menos movimento"), é obrigatório para continuar e mostra o erro junto ao campo.
+  - Os dados continuam gravados em `respostas.perfil`, que o servidor valida como antes.
+- Estado civil no "Sobre você":
+  - opções Solteiro(a), Casado(a), União estável, Divorciado(a) ou separado(a), Viúvo(a) e Prefiro não informar;
+  - obrigatório, validado também no servidor;
+  - card no painel.
+- Testes executados:
+  - Playwright no iPhone 13, nos três caminhos:
+    - a pergunta 1 não segue sem a cidade (Região Metropolitana) ou sem o bairro (Curitiba);
+    - "Sobre você" mostra só gênero, faixa etária e estado civil;
+    - o envio leva cidade, bairro e estado civil;
+    - Outra cidade encerra.
+  - Função em bundle: sem estado civil é recusado; com estado civil, gravado.
+  - Painel com o card novo, sem erros de JS.
+- `questionario.json`:
+  - `min: 1` na pergunta 4;
+  - apoio "Avalie de 1 a 10…";
+  - versão `moda-curitiba-v12-2026-11-23`.
+- A página já monta os botões e os rótulos a partir de `min` e `max`.
+- Painel: textos "de 1 a 10", "1 = Muito ruim · 10 = Excelente" e faixa "1 a 6".
+- Respostas antigas com nota 0 continuam contando na faixa mais baixa.
+- Na publicação: reimplantar a função `pesquisa`, que passa a recusar nota 0.
+- Testes executados:
+  - `npm run build`;
+  - Playwright no iPhone 13: botões de 1 a 10, rótulos e apoio, e a pesquisa segue para a pergunta 5;
+  - função em bundle com banco simulado: nota 0 recusada, nota 1 aceita.
+
+## 2026-11-23 · Pesquisa: destaques das perguntas 1 e 1.1 e tela de encerramento com a Região Metropolitana, publicado
+
+- Pergunta 1: "Onde você mora" em vermelho. Pergunta 1.1: "fazer compras" e "Curitiba" em vermelho (campo `destaque` do `questionario.json`).
+- Tela de encerramento: "moram em Curitiba e Região Metropolitana", em negrito vermelho.
+- "Leva de 3 a 5 minutos" continua igual: a dona do produto não pediu mudança.
+- O `destaque` só é usado pela página, que lê o questionário do próprio site. A função `pesquisa` não precisa ser reimplantada para isso; o JSON publicado ficou igual ao do repositório na publicação da v12.
+- Testes executados: `npm run build`; Playwright no iPhone 13 (trechos em vermelho nas perguntas 1 e 1.1 e texto da tela de encerramento), sem erros de JS.
+
 ## 2026-11-23 · Pesquisa: Região Metropolitana, quatro perguntas novas, cidade e bairro, e exportação do relatório (questionário v11, D-044), publicado (função `pesquisa` v10; questionário publicado em JSON compacto, igual ao do repositório)
 
 - `supabase/functions/pesquisa/questionario.json` (v11):

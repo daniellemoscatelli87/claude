@@ -597,7 +597,7 @@
   /* ---------- Gráficos (cores do design system; cada um com dica ao passar o mouse ou focar e "Ver números") ----------
      Escolha da forma pelo que o dado precisa mostrar: parte de um todo (barra segmentada), ranking (barras ordenadas
      com destaque na primeira), ordem de preferência (barras empilhadas 1º/2º/3º), escala ordenada (barra segmentada
-     em tons), nota de 0 a 10 (colunas por faixa), fácil x difícil (barras divergentes a partir do neutro),
+     em tons), nota de 1 a 10 (colunas por faixa), fácil x difícil (barras divergentes a partir do neutro),
      faixa etária (colunas na ordem natural) e funil de participação. */
   // Paleta dos gráficos do DS Dani Moscatelli (theme.css): 7 tons em ordem de importância (1–2 destaque, 3–5 apoio,
   // 6–7 contexto). Um gráfico = um foco: o destaque no tom 1 e o restante no tom 6; "Outros" e respostas sem destaque
@@ -701,7 +701,7 @@
     return box;
   }
   function numeroHeroi(valor, texto) { const d = el("div", "pa-heroi"); d.append(el("b", null, valor), el("span", null, texto)); return d; }
-  // nota de 0 a 10: colunas coloridas por faixa (0 a 6, 7 e 8, 9 e 10) e a média em destaque
+  // nota de 1 a 10: colunas coloridas por faixa (1 a 6, 7 e 8, 9 e 10) e a média em destaque
   function histograma(p, base) {
     const notas = base.map((x) => x.respostas[p.id]).filter((v) => typeof v === "number");
     const cont = Array.from({ length: 11 }, (_, n) => notas.filter((v) => v === n).length);
@@ -712,11 +712,11 @@
     const ord = [...notas].sort((a, b) => a - b);
     const mediana = notas.length ? (ord.length % 2 ? ord[(ord.length - 1) / 2] : (ord[ord.length / 2 - 1] + ord[ord.length / 2]) / 2) : 0;
     const cab = el("div", "pa-heroi-linha");
-    cab.append(numeroHeroi(fmt1(media), "nota média de 0 a 10"), numeroHeroi(fmt1(mediana), "mediana"), numeroHeroi(pct(notas.filter((v) => v >= 9).length, notas.length) + "%", "deram 9 ou 10"), numeroHeroi(pct(notas.filter((v) => v <= 6).length, notas.length) + "%", "deram de 0 a 6"));
+    cab.append(numeroHeroi(fmt1(media), "nota média de 1 a 10"), numeroHeroi(fmt1(mediana), "mediana"), numeroHeroi(pct(notas.filter((v) => v >= 9).length, notas.length) + "%", "deram 9 ou 10"), numeroHeroi(pct(notas.filter((v) => v <= 6).length, notas.length) + "%", "deram de 0 a 6"));
     const g = el("div", "pa-escala");
     cont.forEach((c, n) => { const col = el("div", "c"); const i = el("i"); i.style.background = faixa(n); i.dataset.h = Math.max(2, Math.round((c / max) * 120)) + "px"; col.append(el("b", null, c ? String(c) : ""), i); dica(col, [[`${c}`, `${c === 1 ? "pessoa deu" : "pessoas deram"} nota ${n} (${pct(c, notas.length)}%)`]]); g.appendChild(col); });
     const eixo = el("div", "pa-escala-eixo"); eixo.setAttribute("aria-hidden", "true"); cont.forEach((_, n) => eixo.appendChild(el("span", null, String(n))));
-    box.append(cab, g, eixo, legenda([[SEQ[0], "0 a 6"], [SEQ[2], "7 e 8"], [SEQ[3], "9 e 10"]]), el("p", "pa-nota", `0 = ${p.rotulo_min} · 10 = ${p.rotulo_max}`), tabela(["Nota", "Pessoas", "%"], cont.map((c, n) => [n, c, pct(c, notas.length) + "%"])));
+    box.append(cab, g, eixo, legenda([[SEQ[0], "1 a 6"], [SEQ[2], "7 e 8"], [SEQ[3], "9 e 10"]]), el("p", "pa-nota", `${p.min ?? 0} = ${p.rotulo_min} · ${p.max ?? 10} = ${p.rotulo_max}`), tabela(["Nota", "Pessoas", "%"], cont.map((c, n) => [n, c, pct(c, notas.length) + "%"])));
     return box;
   }
   // fácil x difícil: barras divergentes a partir do neutro. Difícil (o foco) à direita nos tons de destaque 1 e 2;
@@ -949,7 +949,7 @@
         // nota geral (média dos aspectos) em destaque e a média de cada aspecto; "Correspondência" fica em vermelho
         const ger = notas(base, notaGeral), mg = ger.length ? ger.reduce((a, b) => a + b, 0) / ger.length : 0;
         corpo = el("div", "pa-nota-g");
-        const heroi = el("div", "pa-heroi-n"); heroi.append(el("b", null, fmt1(mg)), el("span", null, "nota geral (média dos aspectos), de 0 a 10"));
+        const heroi = el("div", "pa-heroi-n"); heroi.append(el("b", null, fmt1(mg)), el("span", null, "nota geral (média dos aspectos), de 1 a 10"));
         corpo.appendChild(heroi);
         const asp = (p.linhas || []).map((l) => { const ns = base.map((x) => x.respostas[p.id] && x.respostas[p.id][l.id]).filter((v) => typeof v === "number"); return { l, ns, m: ns.length ? ns.reduce((a, b) => a + b, 0) / ns.length : 0 }; });
         const lista = el("div", "pa-lb");
@@ -963,9 +963,9 @@
         });
         corpo.appendChild(lista);
         const corr = asp.find((a2) => a2.l.id === "correspondencia");
-        leitura = corr ? ["Nota geral ", { b: fmt1(mg) }, "; correspondência com o que procuravam: ", { b: fmt1(corr.m) }, ` (${pct(corr.ns.filter((v) => v <= 6).length, corr.ns.length)}% deram de 0 a 6).`] : ["Nota média ", { b: fmt1(mg) }, "."];
-        rodape.push(el("p", "pa-nota", `0 = ${p.rotulo_min} · 10 = ${p.rotulo_max}. Nota geral = média dos ${asp.length} aspectos de cada pessoa.`),
-          tabela(["Aspecto", "Média", "0 a 6", "7 e 8", "9 e 10"], asp.map((a2) => [a2.l.texto, fmt1(a2.m), pct(a2.ns.filter((v) => v <= 6).length, a2.ns.length) + "%", pct(a2.ns.filter((v) => v >= 7 && v <= 8).length, a2.ns.length) + "%", pct(a2.ns.filter((v) => v >= 9).length, a2.ns.length) + "%"])));
+        leitura = corr ? ["Nota geral ", { b: fmt1(mg) }, "; correspondência com o que procuravam: ", { b: fmt1(corr.m) }, ` (${pct(corr.ns.filter((v) => v <= 6).length, corr.ns.length)}% deram de 1 a 6).`] : ["Nota média ", { b: fmt1(mg) }, "."];
+        rodape.push(el("p", "pa-nota", `${p.min ?? 0} = ${p.rotulo_min} · ${p.max ?? 10} = ${p.rotulo_max}. Nota geral = média dos ${asp.length} aspectos de cada pessoa.`),
+          tabela(["Aspecto", "Média", "1 a 6", "7 e 8", "9 e 10"], asp.map((a2) => [a2.l.texto, fmt1(a2.m), pct(a2.ns.filter((v) => v <= 6).length, a2.ns.length) + "%", pct(a2.ns.filter((v) => v >= 7 && v <= 8).length, a2.ns.length) + "%", pct(a2.ns.filter((v) => v >= 9).length, a2.ns.length) + "%"])));
         largo = true;
       } else if (p.tipo === "matriz") {
         corpo = facilDificil(p, base); largo = (p.linhas || []).length > 6;
@@ -1088,8 +1088,8 @@
     const t5 = topo(perg.q5, comp); if (t5) add({ ic: "busca", tema: "Onde a procura começa", valor: `${pct(t5.v, comp.length)}%`, partes: [{ b: semOutro(t5.texto) }, "."] });
     const sm = comp.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; add({ ic: "brecho", tema: "Segunda mão", valor: `${pct(sm, comp.length)}%`, partes: ["compraram de segunda mão (brechós) este ano."] });
     const ng = notas(comp, notaGeral), nc = notas(comp, notaCorr);
-    if (ng.length) add({ ic: "nota", tema: "Nota geral das compras", valor: fmt1(ng.reduce((a, b) => a + b, 0) / ng.length), partes: ["de 0 a 10, média de qualidade, estética e correspondência."] });
-    if (nc.length) add({ ic: "alvo", tema: "Correspondência", valor: fmt1(nc.reduce((a, b) => a + b, 0) / nc.length), partes: ["de 0 a 10: o quanto as peças atenderam ao que as pessoas realmente queriam."], forte: true, ordem: 3 });
+    if (ng.length) add({ ic: "nota", tema: "Nota geral das compras", valor: fmt1(ng.reduce((a, b) => a + b, 0) / ng.length), partes: ["de 1 a 10, média de qualidade, estética e correspondência."] });
+    if (nc.length) add({ ic: "alvo", tema: "Correspondência", valor: fmt1(nc.reduce((a, b) => a + b, 0) / nc.length), partes: ["de 1 a 10: o quanto as peças atenderam ao que as pessoas realmente queriam."], forte: true, ordem: 3 });
     const freq = comp.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length;
     add({ ic: "alerta", tema: "Dificuldade para encontrar", valor: `${pct(freq, comp.length)}%`, partes: ["frequentemente ou quase sempre têm dificuldade para encontrar exatamente o que desejam."], forte: true, ordem: 2 });
     const difs = perg.q8.linhas.map((l) => { const v = comp.map((x) => x.respostas.q8 && x.respostas.q8[l.id]).filter((y) => y && y !== "na"); return { t: l.texto, p: pct(v.filter((y) => y === "4" || y === "5").length, v.length), n: v.length }; }).filter((x) => x.n).sort((a, b) => b.p - a.p);
@@ -1349,7 +1349,7 @@
     if (canais.length >= 2) add("Comportamento", {
       tag: "Satisfação", sinal: { nivel: "info", texto: "Comparação entre canais" },
       titulo: `${canais[0].rotulo}: maior nota geral entre os canais (${fmt1(canais[0].v)})`,
-      descricao: ["Nota geral (média de qualidade, estética e correspondência, de 0 a 10) conforme o lugar onde a pessoa mais comprou (1º lugar da pergunta 2). Entre parênteses, a nota de correspondência com o que procuravam."],
+      descricao: ["Nota geral (média de qualidade, estética e correspondência, de 1 a 10) conforme o lugar onde a pessoa mais comprou (1º lugar da pergunta 2). Entre parênteses, a nota de correspondência com o que procuravam."],
       base: canais.reduce((s, c) => s + c.n, 0), recorte: `Canais com ${MIN_SEG} ou mais respostas`, escala: 10,
       barras: canais.map((c) => ({ rotulo: c.rotulo, v: c.v, txt: `${fmt1(c.v)} (${fmt1(c.c)})`, n: c.n })),
       significado: [`Quem compra principalmente em ${lc(canais[canais.length - 1].rotulo)} está menos satisfeito com o que comprou (${fmt1(canais[canais.length - 1].v)}).`],
@@ -1359,7 +1359,7 @@
     if (canaisC.length >= 2) add("Comportamento", {
       tag: "Correspondência", sinal: { nivel: "atencao", texto: "Encontrou o que queria?" },
       titulo: `Onde as peças mais correspondem ao que se procurava: ${lc(canaisC[0].rotulo)} (${fmt1(canaisC[0].c)})`,
-      descricao: ["Nota de correspondência com o que a pessoa procurava (0 a 10), conforme o lugar onde ela mais comprou (1º lugar da pergunta 2)."],
+      descricao: ["Nota de correspondência com o que a pessoa procurava (1 a 10), conforme o lugar onde ela mais comprou (1º lugar da pergunta 2)."],
       base: canaisC.reduce((s, c) => s + c.n, 0), recorte: `Canais com ${MIN_SEG} ou mais respostas`, escala: 10,
       barras: canaisC.map((c) => ({ rotulo: c.rotulo, v: c.c, txt: fmt1(c.c), n: c.n })),
       significado: [`A menor correspondência está em ${lc(canaisC[canaisC.length - 1].rotulo)} (${fmt1(canaisC[canaisC.length - 1].c)}): é onde as peças menos atenderam ao que as pessoas queriam.`],
