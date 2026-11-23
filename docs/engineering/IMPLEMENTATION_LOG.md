@@ -595,7 +595,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-23 · Pesquisa: Região Metropolitana, quatro perguntas novas, cidade e bairro, e exportação do relatório (questionário v11, D-044), não publicado
+## 2026-11-23 · Pesquisa: Região Metropolitana, quatro perguntas novas, cidade e bairro, e exportação do relatório (questionário v11, D-044), publicado (função `pesquisa` v10; questionário publicado em JSON compacto, igual ao do repositório)
 
 - `supabase/functions/pesquisa/questionario.json` (v11):
   - Pergunta 1: "Onde você mora atualmente?", com Curitiba (`sim`), Região Metropolitana de Curitiba (`rmc`) e Outra cidade (`nao`, que encerra).
