@@ -1,0 +1,6 @@
+# Arquivos copiados do Design System Dani Moscatelli para o site.
+# Formato: <caminho no design system> <caminho no site>
+# Arquivos desta lista são sobrescritos pela sincronização: nunca edite a cópia no site.
+
+# Tokens (cores, sombras, raio, movimento, gráficos), usados pela área restrita (public/admin/)
+src/styles/theme.css     public/design-system/theme.css

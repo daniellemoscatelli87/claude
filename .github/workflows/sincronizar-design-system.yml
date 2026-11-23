@@ -1,0 +1,104 @@
+name: Sincronizar design system
+
+on:
+  schedule:
+    - cron: "17 10 * * *" # todo dia, 07:17 em Brasília
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: sincronizar-design-system
+  cancel-in-progress: false
+
+jobs:
+  sincronizar:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RAMO: sincronizar-design-system
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Copiar a versão mais recente do design system
+        run: bash scripts/sincronizar-design-system.sh
+
+      - name: Verificar se houve mudança
+        id: mudanca
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Nada mudou no design system."
+            echo "houve=nao" >> "$GITHUB_OUTPUT"
+          else
+            git status --short
+            echo "houve=sim" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Testar o site (build)
+        if: steps.mudanca.outputs.houve == 'sim'
+        run: |
+          npm ci
+          npm run build
+
+      - name: Abrir ou atualizar o pull request
+        if: steps.mudanca.outputs.houve == 'sim'
+        run: |
+          VERSAO="$(cat design-system/versao.txt)"
+          CURTA="${VERSAO:0:7}"
+          ARQUIVOS="$(git status --short | sed 's/^/    /')"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$RAMO"
+          git add -A
+          git commit -q -m "Sincroniza o design system Dani Moscatelli ($CURTA)"
+          git push --force origin "$RAMO"
+          {
+            echo "## O que mudou no design system"
+            echo
+            cat design-system/.ultimas-mudancas.txt
+            echo
+            echo "Versão: https://github.com/daniellemoscatelli87/DaniMoscatelli-DesignSystem/commit/$VERSAO"
+            echo
+            echo "## Arquivos atualizados no site"
+            echo
+            echo '```'
+            echo "$ARQUIVOS"
+            echo '```'
+            echo
+            echo "## Teste automático"
+            echo
+            echo "Build aprovado. O teste não avalia a aparência: confira a área restrita se a mudança for visual."
+            echo
+            echo "Lembrete: troque o ?v= do theme.css nas páginas de public/admin/ para o navegador não usar a cópia antiga."
+            echo
+            echo "Ao aprovar (merge), o site publica a versão atualizada."
+          } > "$RUNNER_TEMP/corpo.md"
+          TITULO="Sincroniza o design system Dani Moscatelli ($CURTA)"
+          ABERTO="$(gh pr list --head "$RAMO" --state open --json number --jq '.[0].number // empty')"
+          if [ -z "$ABERTO" ]; then
+            gh pr create --base main --head "$RAMO" --title "$TITULO" --body-file "$RUNNER_TEMP/corpo.md"
+          else
+            gh pr edit "$ABERTO" --title "$TITULO" --body-file "$RUNNER_TEMP/corpo.md"
+          fi
+
+      - name: Avisar falha
+        if: failure()
+        run: |
+          TITULO="Sincronização do design system falhou"
+          ABERTA="$(gh issue list --state open --search "\"$TITULO\" in:title" --json number --jq '.[0].number // empty')"
+          LINK="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          if [ -z "$ABERTA" ]; then
+            gh issue create --title "$TITULO" --body "A sincronização automática não foi aplicada. Detalhes da execução: $LINK
+
+          Causas mais comuns: um arquivo listado em design-system/arquivos.txt foi renomeado ou removido no design system, ou a mudança quebrou o build do site."
+          else
+            gh issue comment "$ABERTA" --body "Nova falha: $LINK"
+          fi

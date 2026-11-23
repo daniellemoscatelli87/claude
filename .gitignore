@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Notas geradas pela sincronização do design system (vão para a descrição do pull request)
+design-system/.ultimas-mudancas.txt

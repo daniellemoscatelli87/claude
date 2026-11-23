@@ -3,7 +3,7 @@
 // página ou arquivo. Depois vem o login por convite do próprio app.
 // Roda no Cloudflare Pages (Functions), antes do conteúdo: sem a senha certa, nada do site é enviado.
 //
-// Configuração no painel do Cloudflare (Workers & Pages › dm-experience-intelligence › Settings › Variables and Secrets):
+// Configuração no painel do Cloudflare (Workers & Pages › claude (endereço claude-664.pages.dev) › Settings › Variables and Secrets):
 //   SITE_SENHA   (tipo Secret) senha de acesso. Sem ela, o site fica fechado para todos.
 //   SITE_USUARIO (opcional)    nome de usuário; se não existir, vale "dani".
 // Para abrir o site ao público no lançamento, basta apagar este arquivo.
