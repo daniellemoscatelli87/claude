@@ -402,6 +402,12 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - consentimento salvo com data, horário, versão e texto; exclusão e cancelamento pelo e-mail de contato e pelo botão Excluir no painel.
 - **Trade-offs:** o identificador do envio evita duplicar a mesma participação (atualizar a página, tocar duas vezes), mas não impede que a mesma pessoa responda de novo em outro aparelho; o tempo de 3 a 5 minutos ainda precisa ser validado em teste real.
 
+
+## D-035 · 23/11/2026 · E-mails enviados direto para contato@ no painel (site)
+
+- **Origem:** dona do produto: ver na página Contatos, com tag, as mensagens do formulário e os e-mails enviados direto para contato@danimoscatelli.com.br; só os que chegarem daqui pra frente; sem custo; aviso no Gmail dela.
+- **Decisão:** ler a caixa da Hostinger por IMAP a cada 5 minutos (gratuito, sem mudar o MX nem a caixa), em modo só leitura, com a senha guardada como segredo do Supabase e cadastrada pela própria dona. E-mail de remetente sem conversa vira contato com origem "email"; de remetente com conversa entra no histórico dela. Avisos do próprio site são ignorados para não duplicar. O aviso de e-mail novo usa o Resend que o site já usa, e o endereço dele fica só no banco.
+- **Trade-offs:** até 5 minutos de atraso; anexos não são copiados (ficam na caixa, com aviso na mensagem); newsletters e outros e-mails automáticos que caírem na caixa de entrada também aparecem; se a senha da caixa mudar, o segredo precisa ser atualizado (o erro fica registrado em `caixa_email_estado`). Alternativa descartada: encaminhar a caixa para o recebimento do Resend, que dependeria da cota do plano.
 ---
 
 ## Decisões pendentes

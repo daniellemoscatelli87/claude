@@ -11,6 +11,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/admin/admin.css?v=20261115d">
 <style>
+  /* Origem da mensagem: formulário do site ou e-mail direto para contato@ */
+  .origem { flex: none; display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; line-height: 1; }
+  .origem.site { background: #eef1f6; color: #4b5873; }
+  .origem.email { background: var(--red-tint); color: var(--red); }
+  .rowlink .t.com-origem { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .rowlink .t.com-origem .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .ch-name.com-origem { display: inline-flex; align-items: center; gap: 8px; }
   .toolbar { display: flex; gap: 10px; align-items: center; margin: 20px 0 12px; }
   .toolbar input { flex: 1 1 auto; min-width: 0; max-width: 420px; }
   .toolbar select { flex: 0 1 auto; width: auto; max-width: 58%; }
@@ -475,16 +482,26 @@ function renderMeeting(r) {
 
 // Cabeçalho da mensagem em acordeão: fechado mostra nome, e-mail, data/hora e assunto;
 // aberto mostra todos os dados enviados pelo formulário.
+// Selo de origem: "Site" (formulário) ou "E-mail" (enviado direto para contato@danimoscatelli.com.br)
+const origemTag = (r) => {
+  const email = r.origem === "email";
+  const t = Admin.el("span", "origem " + (email ? "email" : "site"), email ? "E-mail" : "Site");
+  t.title = email ? "Enviado direto para contato@danimoscatelli.com.br" : "Enviado pelo formulário do site";
+  return t;
+};
+const SECOES_EMAIL = [{ title: "E-mail", fields: [["nome", "Nome"], ["email", "E-mail"], ["assunto", "Assunto"], ["mensagem", "Mensagem"]] }];
+
 function contactHeader(r) {
   const card = Admin.el("section", "card ch");
   const head = Admin.el("button", "ch-head"); head.type = "button"; head.setAttribute("aria-expanded", "false"); head.setAttribute("aria-controls", "ch-body");
   const info = Admin.el("span", "ch-info");
-  const top = Admin.el("span", "ch-top"); top.append(Admin.el("span", "ch-name", r.nome || "Sem nome"), Admin.el("span", "ch-when", Admin.fmtDate(r.created_at)));
+  const nome = Admin.el("span", "ch-name com-origem"); nome.append(Admin.el("span", null, r.nome || "Sem nome"), origemTag(r));
+  const top = Admin.el("span", "ch-top"); top.append(nome, Admin.el("span", "ch-when", Admin.fmtDate(r.created_at)));
   info.append(top, Admin.el("span", "ch-mail", r.email || "Sem e-mail"), Admin.el("span", "ch-subj", r.assunto || "Sem assunto"));
   const chev = Admin.el("span", "ch-chev"); chev.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
   head.append(Admin.el("span", "ini", Admin.initials(r.nome)), info, chev);
   const body = Admin.el("div", "ch-body hidden"); body.id = "ch-body";
-  const full = Admin.detail(r, Admin.CONTATO_SECOES, "");
+  const full = Admin.detail(r, r.origem === "email" ? SECOES_EMAIL : Admin.CONTATO_SECOES, "");
   full.classList.remove("card"); full.querySelector(".detail-head")?.remove();
   body.appendChild(full);
   head.addEventListener("click", () => {
@@ -673,11 +690,16 @@ Admin.init({ page: "contatos", onReady: async () => {
     const q = norm(document.getElementById("busca").value.trim());
     const sit = sel.value;
     const match = (r) => !sit || (sit === "reunioes" ? !!r.reuniao_em : (sit === "respondidas") === !!r.respondido_em);
-    const rows = data.filter((r) => match(r) && (!q || ["nome", "email", "empresa", "assunto", "mensagem"].some((k) => norm(r[k]).includes(q))));
+    const rows = data.filter((r) => match(r) && (!q || ["nome", "email", "empresa", "assunto", "mensagem"].some((k) => norm(r[k]).includes(q)) || norm(r.origem === "email" ? "e-mail email" : "site").includes(q)));
     document.getElementById("count").textContent = (q || sit ? rows.length + " de " : "") + data.length + (data.length === 1 ? " mensagem recebida" : " mensagens recebidas");
     const list = document.getElementById("list"); list.replaceChildren();
     if (!rows.length) return list.appendChild(Admin.el("div", "empty", data.length ? "Nenhuma mensagem encontrada." : "Nenhuma mensagem ainda."));
-    rows.forEach((r) => list.appendChild(Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at, Admin.mailState(r), true)));
+    rows.forEach((r) => {
+      const a = Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, [r.assunto, r.empresa, r.email].filter(Boolean).join(" · "), r.created_at, Admin.mailState(r), true);
+      const t = a.querySelector(".t"); const nm = Admin.el("span", "nm", t.textContent);
+      t.classList.add("com-origem"); t.replaceChildren(nm, origemTag(r));
+      list.appendChild(a);
+    });
   };
   document.getElementById("busca").addEventListener("input", render);
   // Busca expandida enquanto está em uso (com foco ou com texto); o filtro vira ícone.
