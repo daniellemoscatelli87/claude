@@ -351,8 +351,8 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 
 ## 2026-11-23 · Pesquisa Moda em Curitiba: abertura em card, botão sempre à vista e barra de navegação fixa, não publicado
 
-- **Pedido:** abertura dentro de um card; "Começar pesquisa" acima da dobra; botões fixos durante o formulário; "Pergunta X de 10" alinhado com o início da barra de progresso.
-- **O que mudou (`src/pesquisa-moda.css`):** abertura num card branco. No computador, o card é mais largo (920 px) e os quatro boxes de informação ficam em grade 2×2. O bloco do botão fica preso ao pé da tela, com um degradê, enquanto o resto da abertura não couber. A barra Voltar/Continuar fica presa ao pé da tela também no computador, com fundo de ponta a ponta. O texto da etapa ganhou margem automática e fica alinhado com a barra.
+- **Pedido:** abertura dentro de um card; "Começar pesquisa" acima da dobra; botões fixos durante o formulário; "Pergunta X de 10" alinhado com o início da barra de progresso; título da pesquisa sempre visível no cabeçalho.
+- **O que mudou (`src/pesquisa-moda.css`):** abertura num card branco. No computador, o card é mais largo (920 px) e os quatro boxes de informação ficam em grade 2×2. O bloco do botão fica preso ao pé da tela, com um degradê, enquanto o resto da abertura não couber. A barra Voltar/Continuar fica presa ao pé da tela também no computador, com fundo de ponta a ponta. O texto da etapa ganhou margem automática e fica alinhado com a barra. O título da pesquisa ("Vamos conversar sobre moda em Curitiba?") fica acima da barra de progresso, sempre visível durante o formulário (`pesquisa/moda-curitiba/index.html`).
 - **Verificação executada:** `npm run build`; Playwright no celular (iPhone 13), em 1440×900 e em 1366×768: botão visível sem rolar (540/664, 743/900, 655/768), "Continuar" visível na pergunta 2, texto da etapa alinhado com a barra (mesmo x), sem erros no console.
 
 ## 2026-11-23 · Pesquisa Moda em Curitiba: identificação no início, uma participação por pessoa, vantagens e tela final com confete (D-034), publicado

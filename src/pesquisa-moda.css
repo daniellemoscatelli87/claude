@@ -64,6 +64,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-btn-sec:hover { color: var(--pq-ink); }
 .pq-barra { height: 4px; border-radius: 999px; background: rgba(19, 26, 39, 0.08); overflow: hidden; }
 .pq-barra span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--pq-red); transition: width .5s var(--pq-ease); }
+.pq-progresso .pq-prog-titulo { margin: 2px auto 8px; font-size: 14px; font-weight: 700; color: var(--pq-ink); letter-spacing: -0.005em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pq-prog-titulo em { font-style: normal; color: var(--pq-red); }
 .pq-progresso p { margin: 6px auto 0; font-size: 12px; font-weight: 600; color: var(--pq-muted); letter-spacing: .02em; }
 
 .pq-main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 28px 20px 40px; outline: none; }
