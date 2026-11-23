@@ -17,16 +17,21 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-pular:focus { top: 12px; }
 .pq-oculto { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* Topo: marca discreta e, durante a pesquisa, a barra de progresso */
-.pq-topo { position: sticky; top: 0; z-index: 20; background: rgba(246, 247, 250, 0.92); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  padding: 14px 20px 10px; border-bottom: 1px solid transparent; transition: border-color .3s ease; }
-.pq-topo:has(.pq-progresso:not([hidden])) { border-bottom-color: var(--pq-linha); }
-.pq-marca { max-width: 640px; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
-.pq-marca img { width: 32px; height: 32px; display: block; }
+/* Topo: pílula branca centralizada com a marca, no mesmo estilo do menu da Home (sem links, para não tirar a pessoa da
+   pesquisa); durante a pesquisa, a barra de progresso fica logo abaixo */
+.pq-topo { position: sticky; top: 0; z-index: 20; padding: 16px 20px 10px;
+  background: linear-gradient(to bottom, rgba(246, 247, 250, 1) 0%, rgba(246, 247, 250, 0.94) 75%, rgba(246, 247, 250, 0) 100%); }
+@media (min-width: 768px) { .pq-topo { padding-top: 28px; } }
+.pq-marca { width: fit-content; max-width: 100%; margin: 0 auto; display: flex; align-items: center; gap: 12px; padding: 8px 26px 8px 10px; border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.96); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 8px 24px -12px rgba(13, 17, 25, 0.35);
+  animation: pq-marca-entra .7s var(--pq-ease) both; }
+@keyframes pq-marca-entra { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+.pq-marca img { width: 40px; height: 40px; display: block; }
 .pq-marca span { display: grid; line-height: 1.2; }
-.pq-marca strong { font-size: 14px; font-weight: 700; color: var(--pq-ink); letter-spacing: -0.01em; }
+.pq-marca strong { font-size: 15px; font-weight: 700; color: var(--pq-ink); letter-spacing: -0.01em; }
 .pq-marca small { font-size: 12px; color: var(--pq-muted); }
-.pq-progresso { max-width: 640px; margin: 12px auto 0; }
+@media (max-width: 380px) { .pq-marca { padding-right: 18px; } .pq-marca img { width: 34px; height: 34px; } .pq-marca strong { font-size: 14px; } }
+.pq-progresso { max-width: 640px; margin: 14px auto 0; }
 .pq-barra { height: 4px; border-radius: 999px; background: rgba(19, 26, 39, 0.08); overflow: hidden; }
 .pq-barra span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--pq-red); transition: width .5s var(--pq-ease); }
 .pq-progresso p { margin: 6px 0 0; font-size: 12px; font-weight: 600; color: var(--pq-muted); letter-spacing: .02em; }
@@ -212,3 +217,31 @@ body:has(#pq-form:not([hidden])) .pq-rodape { display: none; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .pq-check circle, .pq-check path { stroke-dashoffset: 0; }
 }
+
+/* Sobre você (gênero e faixa etária): cartões e pílulas no computador; lista suspensa no celular */
+.pq-perfil-campo { margin-top: 24px; padding: 0; border-radius: 16px; }
+.pq-perfil-campo + .pq-perfil-campo { margin-top: 28px; }
+.pq-perfil-titulo { margin: 0 0 12px; font-size: 16px; font-weight: 700; color: var(--pq-ink); }
+.pq-ops-2 { margin-top: 0; }
+.pq-perfil-chips { flex-wrap: wrap; gap: 8px; }
+.pq-chip-g span { min-height: 44px; padding: 8px 16px; font-size: 14px; background: #fff; }
+.pq-so-desk { display: none !important; }
+.pq-so-movel { display: block; }
+@media (min-width: 640px) { .pq-so-desk.pq-ops { display: grid !important; } .pq-so-desk.pq-perfil-chips { display: flex !important; } .pq-so-movel { display: none !important; } }
+.pq-select { width: 100%; height: 54px; font: inherit; font-size: 16px; color: var(--pq-ink); padding: 0 44px 0 16px; border-radius: 14px; border: 1.5px solid var(--pq-linha);
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23627288' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center / 20px;
+  -webkit-appearance: none; appearance: none; cursor: pointer; transition: border-color .2s ease, box-shadow .2s ease; }
+.pq-select:focus { outline: none; border-color: var(--pq-red); box-shadow: 0 0 0 4px rgba(212, 77, 77, 0.14); }
+.pq-select:invalid, .pq-select:has(option[value=""]:checked) { color: #8A94A6; }
+.pq-perfil-outro { padding: 10px 0 0; }
+.pq-perfil-campo.pq-invalido .pq-select { border-color: var(--pq-erro); }
+.pq-perfil-campo.pq-invalido .pq-op:not(:has(input:checked)), .pq-perfil-campo.pq-invalido .pq-chip span { border-color: rgba(198, 40, 40, 0.45); }
+
+/* Classificação (pergunta 2): selo com a posição (1º, 2º, 3º) no lugar da caixinha */
+.pq-rank-selo { flex: none; width: 30px; height: 30px; border-radius: 999px; border: 1.5px solid #B3BDD0; background: #fff; display: grid; place-items: center;
+  font-size: 13px; font-weight: 800; color: #fff; transition: background .2s ease, border-color .2s ease; }
+.pq-rank-on .pq-rank-selo { background: var(--pq-red); border-color: var(--pq-red); }
+.pq-rank.pq-op-excl.pq-rank-on .pq-rank-selo::after { content: "✓"; }
+.pq-rank:has(input:checked) { border-color: var(--pq-red); background: var(--pq-tint); }
+.pq-pop { animation: pq-pop .4s var(--pq-ease) both; }
+@keyframes pq-pop { 0% { transform: scale(.6); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }

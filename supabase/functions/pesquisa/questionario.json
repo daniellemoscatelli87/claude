@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v2-2026-11-23",
+  "versao": "moda-curitiba-v3-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "consentimento": {
     "versao": "moda-curitiba-contato-v1-2026-11-23",
@@ -25,9 +25,10 @@
     },
     {
       "id": "q2",
-      "tipo": "unica",
-      "texto": "Em quais tipos de lojas você realizou a maior parte das suas compras de roupas e acessórios este ano?",
-      "apoio": "Selecione a opção que melhor representa a maior parte das suas compras.",
+      "tipo": "ranking",
+      "max": 3,
+      "texto": "Onde você realizou a maior parte das suas compras de roupas e acessórios este ano?",
+      "apoio": "Escolha até 3, na ordem: toque primeiro onde você mais comprou.",
       "opcoes": [
         {
           "id": "fisicas_cwb",
@@ -52,7 +53,8 @@
         {
           "id": "nao_comprei",
           "texto": "Não comprei roupas ou acessórios este ano",
-          "encerra": "sem_compras"
+          "encerra": "sem_compras",
+          "exclusiva": true
         }
       ]
     },
@@ -375,6 +377,69 @@
           "id": "outro",
           "texto": "Outro motivo (especifique)",
           "outro": true
+        }
+      ]
+    }
+  ],
+  "perfil": [
+    {
+      "id": "genero",
+      "texto": "Com qual gênero você se identifica?",
+      "opcoes": [
+        {
+          "id": "feminino",
+          "texto": "Feminino"
+        },
+        {
+          "id": "masculino",
+          "texto": "Masculino"
+        },
+        {
+          "id": "nao_binario",
+          "texto": "Não binário"
+        },
+        {
+          "id": "outro",
+          "texto": "Outro (especifique)",
+          "outro": true
+        },
+        {
+          "id": "nao_informar",
+          "texto": "Prefiro não informar"
+        }
+      ]
+    },
+    {
+      "id": "faixa_etaria",
+      "texto": "Qual é a sua faixa etária?",
+      "opcoes": [
+        {
+          "id": "18_24",
+          "texto": "18 a 24 anos"
+        },
+        {
+          "id": "25_34",
+          "texto": "25 a 34 anos"
+        },
+        {
+          "id": "35_44",
+          "texto": "35 a 44 anos"
+        },
+        {
+          "id": "45_54",
+          "texto": "45 a 54 anos"
+        },
+        {
+          "id": "55_64",
+          "texto": "55 a 64 anos"
+        },
+        {
+          "id": "65_mais",
+          "texto": "65 anos ou mais"
+        },
+        {
+          "id": "nao_informar",
+          "texto": "Prefiro não informar"
         }
       ]
     }

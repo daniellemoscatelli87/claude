@@ -349,7 +349,18 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
-## 2026-11-23 · Pesquisa Moda em Curitiba: pergunta 2.1 (motivos para comprar fora de Curitiba), não publicado
+## 2026-11-23 · Pesquisa Moda em Curitiba: cabeçalho, pergunta 2 classificada e perfil (gênero e faixa etária), não publicado
+
+- **Cabeçalho:** pílula branca centralizada com o logo e o nome do estúdio, no estilo do menu da Home, sem links (pedido da dona do produto).
+- **Pergunta 2:** novo texto ("Onde você realizou a maior parte...") e formato de classificação: de 1 a 3 escolhas, na ordem dos toques (1º é onde mais comprou); "Não comprei" fica sozinha e encerra. A 2.1 aparece se marketplaces ou lojas online de outras cidades estiver em qualquer posição. Gravada como lista ordenada.
+- **Perfil (fora da contagem das 10):** etapa "Sobre você" depois da pergunta 10 e antes do relato: gênero (Feminino, Masculino, Não binário, Outro com texto, Prefiro não informar) e faixa etária (18 a 24 ... 65 ou mais, Prefiro não informar); obrigatória, com "Prefiro não informar"; no celular, listas suspensas; no computador, cartões e pílulas. Gravado em `respostas.perfil`.
+- **Questionário:** versão `moda-curitiba-v3-2026-11-23`. **Função `pesquisa`:** tipo `ranking`, condição pela lista, perfil obrigatório nas completas.
+- **Painel:** gráfico da pergunta 2 com 1º lugar e "entre as 3"; card "Perfil de quem respondeu"; destaque "onde mais compraram (1º lugar)".
+- **Política de Privacidade:** a seção 8 menciona gênero e faixa etária.
+- **Verificação executada:** função no Node com banco simulado (33 casos); página no iPhone 13 e no computador (classificação, limite, exclusiva, 2.1 com a opção em 2º lugar, perfil com lista suspensa e com cartões, "Outro" com texto, Voltar, envio); painel com respostas fictícias, sem erros de JavaScript.
+- **Ordem de publicação:** primeiro o site, depois a função.
+
+## 2026-11-23 · Pesquisa Moda em Curitiba: pergunta 2.1 (motivos para comprar fora de Curitiba), publicado
 
 - **Questionário (`supabase/functions/pesquisa/questionario.json`, versão `moda-curitiba-v2-2026-11-23`):** pergunta 2.1, múltipla escolha com até 3 opções e "Outro motivo" com texto, mostrada só para quem escolheu na pergunta 2 "Marketplaces" ou "Lojas online de outras cidades"; fora da contagem das 10 perguntas.
 - **Função `pesquisa`:** pergunta condicional exigida e gravada só para quem se aplica; enviada por quem não se aplica, é ignorada.

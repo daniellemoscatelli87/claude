@@ -61,6 +61,9 @@
   .pa-barra .t { height: 10px; border-radius: 999px; background: var(--track); overflow: hidden; }
   .pa-barra .t i { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--red); transition: width .8s cubic-bezier(.16, 1, .3, 1); }
   .pa-barra.top .r span:first-child { font-weight: 700; }
+  .pa-rank .t { position: relative; }
+  .pa-rank .t i { position: absolute; left: 0; top: 0; }
+  .pa-rank .t i.pa-rank-entre { background: #f1b4b4; }
   .pa-barra.menor .t i { background: #c9cfdb; }
   .pa-escala { display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 4px; align-items: end; height: 150px; }
   .pa-escala .c { display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; height: 100%; text-align: center; font-size: 11px; color: var(--muted); }
@@ -285,6 +288,9 @@
 
   /* ---------- Resultados ---------- */
   const completasR = () => R.filter((x) => x.situacao === "completa");
+  // valores escolhidos numa resposta (escolha única, classificação ou múltipla escolha)
+  const valores = (v) => (Array.isArray(v) ? v : v && Array.isArray(v.opcoes) ? v.opcoes : v == null ? [] : [v]);
+  const naCondicao = (p, x) => valores(x.respostas[p.condicao.pergunta]).some((v) => p.condicao.opcoes.includes(v));
   const respondeu = (pid) => R.filter((x) => x.respostas && x.respostas[pid] != null);
   function contar(p, base) {
     const n = {}; (p.opcoes || []).forEach((o) => { n[o.id] = 0; });
@@ -309,10 +315,34 @@
     });
     return wrap;
   }
+  // classificação (pergunta 2): barra cheia = onde mais compraram (1º lugar); barra clara = entre as escolhidas (1º a 3º)
+  function graficoRanking(p, base) {
+    const total = base.length;
+    const wrap = el("div", "pa-barras");
+    const linhas = p.opcoes.map((o) => {
+      const primeiro = base.filter((x) => (x.respostas[p.id] || [])[0] === o.id).length;
+      const entre = base.filter((x) => (x.respostas[p.id] || []).includes(o.id)).length;
+      const pos = [0, 1, 2].map((k) => base.filter((x) => (x.respostas[p.id] || [])[k] === o.id).length);
+      return { ...o, primeiro, entre, pos };
+    });
+    const maxP = Math.max(...linhas.map((l) => l.primeiro));
+    linhas.forEach((l) => {
+      const linha = el("div", "pa-barra pa-rank" + (l.primeiro && l.primeiro === maxP ? " top" : "") + (l.exclusiva ? " menor" : ""));
+      const r = el("div", "r"); r.append(el("span", null, l.texto), el("span", null, l.exclusiva ? `${pct(l.primeiro, total)}% · ${l.primeiro}` : `${pct(l.primeiro, total)}% em 1º · ${pct(l.entre, total)}% entre as 3`));
+      const t = el("div", "t"); const fundo = el("i", "pa-rank-entre"); fundo.dataset.w = pct(l.entre, total) + "%"; const frente = el("i"); frente.dataset.w = pct(l.primeiro, total) + "%"; t.append(fundo, frente);
+      linha.setAttribute("aria-label", `${l.texto}: ${pct(l.primeiro, total)}% em primeiro lugar; ${pct(l.entre, total)}% entre as escolhidas (1º: ${l.pos[0]}, 2º: ${l.pos[1]}, 3º: ${l.pos[2]})`);
+      linha.title = `1º lugar: ${l.pos[0]} · 2º: ${l.pos[1]} · 3º: ${l.pos[2]}`;
+      linha.append(r, t); wrap.appendChild(linha);
+    });
+    const leg = el("div", "pa-legenda"); leg.setAttribute("aria-hidden", "true");
+    [["var(--red)", "Onde mais compraram (1º lugar)"], ["#f1b4b4", "Entre as escolhidas (1º a 3º)"]].forEach(([c, t]) => { const s = el("span"); const i = el("i"); i.style.background = c; s.append(i, t); leg.appendChild(s); });
+    const box = el("div"); box.append(wrap, leg); return box;
+  }
   function cardPergunta(p, num, base, conteudo, notas = []) {
     const c = el("section", "card pa-q");
     c.append(el("h3", null, `${num}. ${p.texto}`));
     const meta = [`${plural(base.length, "resposta", "respostas")}`];
+    if (p.tipo === "ranking") meta.push(`até ${p.max} escolhas, em ordem de onde mais compraram`);
     if (p.tipo === "multipla") meta.push(p.max ? `até ${p.max} escolhas por pessoa; a soma passa de 100%` : "várias escolhas por pessoa; a soma passa de 100%");
     c.append(el("p", "meta", meta.join(" · ")), conteudo);
     notas.forEach((x) => c.appendChild(x));
@@ -336,11 +366,11 @@
     // Q1 e Q2: todas as pessoas que chegaram até a pergunta
     const b1 = respondeu("q1"), b2 = respondeu("q2");
     g.append(cardPergunta(perg[0], 1, b1, graficoBarras(perg[0], b1)));
-    g.append(cardPergunta(perg[1], 2, b2, graficoBarras(perg[1], b2, { menor: (o) => !!o.encerra })));
+    g.append(cardPergunta(perg[1], 2, b2, perg[1].tipo === "ranking" ? graficoRanking(perg[1], b2) : graficoBarras(perg[1], b2, { menor: (o) => !!o.encerra })));
     let num = 2;
     perg.slice(2).forEach((p) => {
       // perguntas condicionais (ex.: 2.1): só entre quem a pergunta foi mostrada
-      const base = p.condicao ? comp.filter((x) => p.condicao.opcoes.includes(x.respostas[p.condicao.pergunta])) : comp;
+      const base = p.condicao ? comp.filter((x) => naCondicao(p, x)) : comp;
       if (!p.condicao) num++;
       let conteudo;
       if (p.tipo === "escala") conteudo = graficoEscala(p, base);
@@ -349,12 +379,28 @@
       const notas = [outros(p, base)];
       if (p.condicao) {
         const ops = perg.find((x) => x.id === p.condicao.pergunta).opcoes.filter((o) => p.condicao.opcoes.includes(o.id)).map((o) => "“" + o.texto + "”");
-        notas.unshift(el("p", "pa-nota", "Mostrada só para quem respondeu na pergunta 2: " + ops.join(" ou ") + "."));
+        notas.unshift(el("p", "pa-nota", "Mostrada só para quem escolheu na pergunta 2, em qualquer posição: " + ops.join(" ou ") + "."));
       }
       const c = cardPergunta(p, p.rotulo || num, base, conteudo, notas.filter(Boolean));
       if (p.tipo === "matriz" || p.tipo === "escala") c.classList.add("largo");
       g.appendChild(c);
     });
+    // perfil (gênero e faixa etária), respondido no fim por quem completou
+    if (Q.perfil && Q.perfil.length) {
+      const comPerfil = comp.filter((x) => x.respostas.perfil);
+      const pc = el("section", "card pa-q largo");
+      pc.append(el("h3", null, "Perfil de quem respondeu"), el("p", "meta", plural(comPerfil.length, "resposta", "respostas") + (comPerfil.length < comp.length ? ` · ${comp.length - comPerfil.length} respondidas antes desta etapa existir` : "")));
+      const duas = el("div", "pa-graficos"); duas.style.marginTop = "0";
+      Q.perfil.forEach((c) => {
+        const base = comPerfil.map((x) => ({ respostas: { [c.id]: x.respostas.perfil[c.id], outro: x.respostas.perfil[c.id + "_outro"] } }));
+        const sub = el("div"); sub.appendChild(el("p", "meta", c.texto)); sub.lastChild.style.fontWeight = "700"; sub.lastChild.style.color = "var(--dark)";
+        sub.appendChild(graficoBarras({ id: c.id, tipo: "unica", opcoes: c.opcoes }, base, { menor: (o) => o.id === "nao_informar" }));
+        const outrosTx = base.map((x) => x.respostas.outro).filter(Boolean);
+        if (outrosTx.length) { const b2 = el("div", "pa-outros"); b2.appendChild(el("b", null, "O que escreveram em “outro”")); const ul = el("ul"); outrosTx.slice(0, 50).forEach((t) => ul.appendChild(el("li", null, t))); b2.appendChild(ul); sub.appendChild(b2); }
+        duas.appendChild(sub);
+      });
+      pc.appendChild(duas); g.appendChild(pc);
+    }
     box.appendChild(g);
     const n = el("p", "pa-nota", `As perguntas 2.1 a 10 mostram só as respostas completas (${comp.length}); a 2.1, só de quem ela foi mostrada. Quem não mora em Curitiba ou não comprou este ano encerra na pergunta 1 ou 2 e não vê as seguintes.`);
     box.appendChild(n);
@@ -418,12 +464,15 @@
     const elegiveis = R.length - R.filter((x) => x.situacao !== "completa").length;
     add([{ b: `${pct(elegiveis, R.length)}%` }, ` das ${plural(R.length, "participação", "participações")} estão no público da pesquisa (moram em Curitiba e compraram este ano).`]);
     if (!comp.length) { ul.appendChild((() => { const li = el("li"); li.appendChild(el("span", null, "Ainda não há respostas completas para os demais destaques.")); return li; })()); card.appendChild(ul); return card; }
-    const b2 = respondeu("q2").filter((x) => x.respostas.q2 !== "nao_comprei");
-    const t2 = topo(perg.q2, b2, (o) => !o.encerra); if (t2) add(["Onde a maior parte das compras acontece: ", { b: t2.texto }, ` (${pct(t2.v, b2.length)}%).`]);
+    const b2 = respondeu("q2").filter((x) => !valores(x.respostas.q2).includes("nao_comprei"));
+    if (perg.q2.tipo === "ranking") {
+      const prim = perg.q2.opcoes.filter((o) => !o.encerra).map((o) => ({ ...o, v: b2.filter((x) => valores(x.respostas.q2)[0] === o.id).length })).sort((a, b) => b.v - a.v)[0];
+      if (prim && prim.v) add(["Onde mais compraram (1º lugar): ", { b: prim.texto }, ` (${pct(prim.v, b2.length)}%).`]);
+    } else { const t2 = topo(perg.q2, b2, (o) => !o.encerra); if (t2) add(["Onde a maior parte das compras acontece: ", { b: t2.texto }, ` (${pct(t2.v, b2.length)}%).`]); }
     if (perg.q2_1) {
-      const b21 = comp.filter((x) => perg.q2_1.condicao.opcoes.includes(x.respostas.q2));
+      const b21 = comp.filter((x) => naCondicao(perg.q2_1, x));
       const t21 = topo(perg.q2_1, b21, (o) => !o.outro);
-      if (t21) add(["Entre quem compra mais em marketplaces ou lojas online de outras cidades, o motivo mais citado: ", { b: t21.texto }, ` (${pct(t21.v, b21.length)}%).`]);
+      if (t21) add(["Entre quem compra em marketplaces ou lojas online de outras cidades, o motivo mais citado: ", { b: t21.texto }, ` (${pct(t21.v, b21.length)}%).`]);
     }
     const t5 = topo(perg.q5, comp); if (t5) add(["Onde a procura começa: ", { b: t5.texto }, ` (${pct(t5.v, comp.length)}%).`]);
     const sm = comp.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; add([{ b: `${pct(sm, comp.length)}%` }, " compraram de segunda mão (brechós) este ano."]);
