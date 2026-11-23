@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v12-2026-11-23",
+  "versao": "moda-curitiba-v13-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "identificacao": {
     "versao": "moda-curitiba-identificacao-v1-2026-11-23",
@@ -212,8 +212,11 @@
     },
     {
       "id": "q5",
-      "tipo": "unica",
+      "tipo": "ranking",
+      "max": 3,
       "texto": "Quando você procura um produto específico, por onde costuma começar?",
+      "apoio": "Escolha até 3, na ordem: toque primeiro por onde você mais começa.",
+      "apoio_negrito": "toque primeiro por onde você mais começa",
       "opcoes": [
         {
           "id": "fisicas_cwb",
@@ -241,7 +244,8 @@
         },
         {
           "id": "nao_procuro",
-          "texto": "Não costumo procurar produtos específicos"
+          "texto": "Não costumo procurar produtos específicos",
+          "exclusiva": true
         }
       ],
       "destaque": "produto específico"

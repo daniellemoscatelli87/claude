@@ -595,6 +595,23 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-23 · Pesquisa: pergunta 5 classificada em 1º, 2º e 3º (questionário v13), não publicado
+
+- Pedido da dona do produto: a pergunta 5 segue o padrão da 2.
+  - Até 3 escolhas, na ordem.
+  - Apoio "Escolha até 3, na ordem: toque primeiro por onde você mais começa." (trecho em negrito).
+  - "Não costumo procurar produtos específicos" fica exclusiva.
+- O servidor passa a exigir a lista em ordem e recusa o formato antigo de uma só escolha (`ranking` com `max: 3`).
+- Painel:
+  - Card no formato da pergunta 2: 1º lugar em destaque, "entre os 3" mais claro, tabela.
+  - Destaques e cruzamentos da Inteligência usam o 1º lugar.
+  - Respostas antigas (texto único) contam como 1º lugar.
+- Testes executados:
+  - Playwright no iPhone 13: selos 1º, 2º e 3º e exclusiva; fluxo completo nos três caminhos, sem erros de JS.
+  - Função em bundle: formato antigo recusado, exclusiva com outra recusada, 4 opções recusadas, 3 em ordem gravadas.
+  - Painel com dados mistos (antigos e novos), sem erros de JS.
+- Na publicação: reimplantar a função `pesquisa`.
+
 ## 2026-11-23 · Pesquisa: pergunta 3 com "peças de segunda mão" em vermelho, não publicado
 
 - `questionario.json`: o destaque da pergunta 3 passa de "brechós" para "peças de segunda mão"; "(brechós)" fica no texto normal.

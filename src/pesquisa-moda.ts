@@ -537,7 +537,7 @@ function validarEtapa(i: number): boolean {
       if (v === 'rmc' && !pf.cidade) { erroPerfil('cidade', 'Escolha a cidade onde você mora.'); $('pq-perfil-cidade').scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' }); return false; }
       if (v === 'sim' && !pf.bairro) { erroPerfil('bairro', 'Escolha o seu bairro. Se preferir, marque "Prefiro não informar" no fim da lista.'); $('pq-perfil-bairro').scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' }); return false; }
     }
-    if (p.tipo === 'ranking' && !(Array.isArray(v) && v.length)) { mostrarErro(fs, `Escolha pelo menos uma opção, na ordem de onde você mais comprou (até ${p.max}).`); return false; }
+    if (p.tipo === 'ranking' && !(Array.isArray(v) && v.length)) { mostrarErro(fs, p.id === 'q2' ? `Escolha pelo menos uma opção, na ordem de onde você mais comprou (até ${p.max}).` : `Escolha pelo menos uma opção, na ordem do que vem primeiro para você (até ${p.max}).`); return false; }
     if (p.tipo === 'escala' && typeof v !== 'number') { mostrarErro(fs, 'Escolha uma nota de 0 a 10 para continuar.'); return false; }
     if (p.tipo === 'escalas') {
       const r = (v as Record<string, number>) ?? {};
