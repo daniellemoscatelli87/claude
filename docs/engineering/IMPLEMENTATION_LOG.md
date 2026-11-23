@@ -595,7 +595,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-23 · Contatos: "Novo e-mail" para qualquer endereço, com anexos de qualquer tipo (D-043), não publicado
+## 2026-11-23 · Contatos: "Novo e-mail" para qualquer endereço, com anexos de qualquer tipo (D-043), publicado (migration aplicada; função `responder-contato` v13)
 
 - `public/admin/contatos/index.html`:
   - botão "Novo e-mail" no topo da lista, que abre um painel lateral com Para, Nome (opcional), Assunto, Mensagem e anexos;
