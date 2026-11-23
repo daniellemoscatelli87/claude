@@ -9,56 +9,54 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/admin/admin.css?v=20261123c">
+<link rel="stylesheet" href="/design-system/theme.css?v=e334fe5">
+<link rel="stylesheet" href="/admin/admin.css?v=20261123d">
 <style>
   .cm-filtros { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin: 20px 0 12px; }
-  .cm-filtros label { display: grid; gap: 6px; font-size: 12px; font-weight: 600; color: var(--muted); }
+  .cm-filtros label { display: grid; gap: 6px; font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
   @media (max-width: 760px) { .cm-filtros { grid-template-columns: 1fr; } }
-  .cm-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 4px 4px 14px; margin-bottom: 4px; border-bottom: 1px solid var(--track); }
+  .cm-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 4px 4px 14px; margin-bottom: 4px; border-bottom: 1px solid var(--muted); }
   .cm-todos { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
-  .cm-bar .t { font-size: 14px; color: var(--muted); }
+  .cm-bar .t { font-size: 14px; color: var(--muted-foreground); }
   .cm-esq { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
-  input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--red); flex: none; cursor: pointer; }
-  .cm-row { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px 10px; border-radius: 12px; cursor: pointer; }
-  .cm-row + .cm-row { border-top: 1px solid var(--track); }
-  .cm-row:hover { background: #f8f9fb; }
+  input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--primary); flex: none; cursor: pointer; }
+  .cm-row { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px 10px; border-radius: var(--radius-md); cursor: pointer; }
+  .cm-row + .cm-row { border-top: 1px solid var(--muted); }
+  .cm-row:hover { background: var(--muted); }
   .cm-row.off { cursor: default; opacity: .65; }
-  .cm-row .ini { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; background: var(--red-tint); color: var(--red); }
+  .cm-row .ini { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; background: var(--primary-muted); color: var(--primary-text); }
   .cm-row .tx { min-width: 0; display: grid; gap: 2px; }
-  .cm-row .n { font-weight: 600; color: var(--dark); overflow-wrap: anywhere; }
-  .cm-row .d { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
-  .cm-row .sem { justify-self: start; margin-top: 2px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #EDF0F5; color: #495669; }
-  .btn-send { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 9px 16px; cursor: pointer; }
-  .btn-send svg { width: 16px; height: 16px; }
-  .btn-send:disabled { opacity: .5; cursor: not-allowed; }
+  .cm-row .n { font-weight: 600; color: var(--foreground); overflow-wrap: anywhere; }
+  .cm-row .d { font-size: 12px; color: var(--muted-foreground); overflow-wrap: anywhere; }
+  .cm-row .sem { justify-self: start; margin-top: 2px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-full); background: var(--background); color: var(--graphite-500); }
   .cm-hist h2 { margin: 28px 0 10px; font-size: 18px; }
-  .cm-row .gal { justify-self: start; margin-top: 2px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #EDF0F5; color: #495669; }
-  .cm-row .gal.ok { background: rgba(79, 181, 123, 0.14); color: #1f6b3a; }
+  .cm-row .gal { justify-self: start; margin-top: 2px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-full); background: var(--background); color: var(--graphite-500); }
+  .cm-row .gal.ok { background: var(--success-muted); color: var(--success); }
   .cm-h { padding: 14px 4px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 16px; }
-  .cm-h + .cm-h { border-top: 1px solid var(--track); }
+  .cm-h + .cm-h { border-top: 1px solid var(--muted); }
   .cm-h .cm-h-tx { display: grid; gap: 3px; min-width: 0; }
   .cm-h strong { font-size: 14px; overflow-wrap: anywhere; }
-  .cm-h .cm-h-tit { font-size: 13px; color: var(--dark); overflow-wrap: anywhere; }
-  .cm-h .cm-h-para, .cm-h .cm-h-quando { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
-  .cm-h .cm-h-para b { font-weight: 600; color: #495669; }
+  .cm-h .cm-h-tit { font-size: 13px; color: var(--foreground); overflow-wrap: anywhere; }
+  .cm-h .cm-h-para, .cm-h .cm-h-quando { font-size: 12px; color: var(--muted-foreground); overflow-wrap: anywhere; }
+  .cm-h .cm-h-para b { font-weight: 600; color: var(--graphite-500); }
   .cm-h .btn-ghost { white-space: nowrap; }
   @media (max-width: 560px) { .cm-h { grid-template-columns: 1fr; } .cm-h .btn-ghost { justify-self: start; margin-top: 6px; } }
   .cm-ver-meta { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; margin: 0; font-size: 14px; }
-  .cm-ver-meta dt { color: var(--muted); }
+  .cm-ver-meta dt { color: var(--muted-foreground); }
   .cm-ver-meta dd { margin: 0; overflow-wrap: anywhere; }
-  .cm-dlg { width: min(640px, 94vw); max-height: 92vh; border: 0; border-radius: 18px; padding: 0; box-shadow: 0 20px 60px -10px rgb(15 23 42 / .35); }
-  .cm-dlg::backdrop { background: rgb(15 23 42 / .45); }
+  .cm-dlg { width: min(640px, 94vw); max-height: 92vh; border: 0; border-radius: var(--radius-xl); padding: 0; box-shadow: 0 20px 60px -10px var(--sobreposicao); }
+  .cm-dlg::backdrop { background: var(--sobreposicao); }
   .cm-in { position: relative; padding: 22px; display: grid; gap: 14px; }
   .cm-in h2 { margin: 0; font-size: 20px; padding-right: 40px; }
   .cm-in label { display: grid; gap: 6px; font-size: 13px; font-weight: 600; }
-  .cm-in input, .cm-in textarea { width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--dark); }
+  .cm-in input, .cm-in textarea { width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--card); color: var(--foreground); }
   .cm-in textarea { resize: vertical; min-height: 160px; }
-  .cm-in .hint { font-size: 12px; color: var(--muted); font-weight: 400; }
-  .cm-prev { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #f4f5f8; }
+  .cm-in .hint { font-size: 12px; color: var(--muted-foreground); font-weight: 400; }
+  .cm-prev { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--muted); }
   .cm-prev iframe { display: block; width: 100%; height: 520px; border: 0; }
   .cm-acts { display: flex; flex-wrap: wrap-reverse; gap: 8px; justify-content: space-between; align-items: center; }
   .cm-acts .btn-send { margin-left: auto; }
-  .cm-x { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; background: none; border-radius: 10px; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
+  .cm-x { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; background: none; border-radius: var(--radius-sm); color: var(--muted-foreground); cursor: pointer; display: grid; place-items: center; }
   .cm-x svg { width: 22px; height: 22px; }
 </style>
 </head>
@@ -109,7 +107,7 @@
   </div>
 </dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="/admin/admin.js?v=20261123c"></script>
+<script src="/admin/admin.js?v=20261123d"></script>
 <script>
 // Comunicados em massa para os parceiros (tabela cadastros). O envio é feito pela função comunicado-parceiros.
 const el = Admin.el;
@@ -187,7 +185,7 @@ async function verEmail(c) {
   const item = (r, v) => meta.append(el("dt", null, r), el("dd", null, v));
   item("Para", paraTexto(c.destinatarios, 1000)); item("Enviado em", quando(c.created_at)); item("Assunto", c.assunto); item("Título", c.titulo);
   if (c.falhas) item("Não enviados", String(c.falhas));
-  frame.srcdoc = "<p style='font-family:Arial,sans-serif;color:#64748b;padding:24px'>Carregando o e-mail…</p>";
+  frame.srcdoc = "<p style='font-family:Arial,sans-serif;color:var(--muted-foreground);padding:24px'>Carregando o e-mail…</p>";
   dlg.showModal();
   // o mesmo modelo do envio, com o assunto, o título e a mensagem gravados no histórico
   const res = await chamar({ acao: "preview", assunto: c.assunto, titulo: c.titulo, mensagem: c.mensagem });

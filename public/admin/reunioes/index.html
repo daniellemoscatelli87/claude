@@ -9,45 +9,46 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/admin/admin.css?v=20261123c">
+<link rel="stylesheet" href="/design-system/theme.css?v=e334fe5">
+<link rel="stylesheet" href="/admin/admin.css?v=20261123d">
 <style>
   .layout { display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 16px; margin-top: 20px; align-items: start; }
   @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
   /* Calendário do mês */
   .cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .cal-nav { display: flex; gap: 6px; }
-  .cal-nav button { width: 36px; height: 36px; padding: 0; border-radius: 10px; border: 1px solid var(--line); background: #fff; color: var(--red); font-size: 18px; line-height: 1; }
-  .cal-nav button:hover { border-color: var(--red); }
+  .cal-nav button { width: 36px; height: 36px; padding: 0; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--card); color: var(--primary-text); font-size: 18px; line-height: 1; }
+  .cal-nav button:hover { border-color: var(--primary); }
   .cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
-  .cal .wd { font-size: 11px; font-weight: 700; color: var(--muted); text-align: center; text-transform: uppercase; letter-spacing: .04em; padding-bottom: 4px; }
-  .cal .day { aspect-ratio: 1; border: 0; border-radius: 10px; background: none; padding: 0; font-size: 14px; font-weight: 600; color: var(--dark); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; position: relative; }
-  .cal .day.out { color: #cbd5e1; }
-  .cal .day.today { box-shadow: inset 0 0 0 1.5px var(--red); }
-  .cal .day.has { background: #e8f0fe; color: #1a56c4; cursor: pointer; }
-  .cal .day.has:hover { background: #d6e4fc; }
-  .cal .day.has.past { background: var(--track); color: var(--muted); }
-  .cal .day.sel, .cal .day.sel:hover, .cal .day.has.past.sel { background: #1a56c4; color: #fff; }
+  .cal .wd { font-size: 11px; font-weight: 700; color: var(--muted-foreground); text-align: center; text-transform: uppercase; letter-spacing: .04em; padding-bottom: 4px; }
+  .cal .day { aspect-ratio: 1; border: 0; border-radius: var(--radius-sm); background: none; padding: 0; font-size: 14px; font-weight: 600; color: var(--foreground); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; position: relative; }
+  .cal .day.out { color: var(--graphite-200); }
+  .cal .day.today { box-shadow: inset 0 0 0 1.5px var(--primary); }
+  .cal .day.has { background: var(--info-muted); color: var(--info); cursor: pointer; }
+  .cal .day.has:hover { background: var(--info-muted); }
+  .cal .day.has.past { background: var(--muted); color: var(--muted-foreground); }
+  .cal .day.sel, .cal .day.sel:hover, .cal .day.has.past.sel { background: var(--info); color: var(--primary-foreground); }
   .cal .day .dots { display: flex; gap: 2px; height: 5px; }
   .cal .day .dots i { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
   .cal .day:not(.has) { cursor: default; }
-  .cal-foot { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); }
-  .link-btn { background: none; border: 0; padding: 0; color: var(--red); font-size: 13px; font-weight: 700; }
+  .cal-foot { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted-foreground); }
+  .link-btn { background: none; border: 0; padding: 0; color: var(--primary-text); font-size: 13px; font-weight: 700; }
   /* Lista de reuniões */
   .sec-title { display: flex; align-items: baseline; gap: 8px; margin: 0 0 8px; }
-  .sec-title .n { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .sec-title .n { font-size: 13px; color: var(--muted-foreground); font-weight: 600; }
   .meet { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 4px 14px; padding: 14px 4px; }
-  .meet + .meet { border-top: 1px solid var(--track); }
-  .meet .date { grid-row: span 3; text-align: center; border-radius: 12px; background: #e8f0fe; color: #1a56c4; padding: 8px 4px; align-self: start; }
-  .meet.past .date { background: var(--track); color: var(--muted); }
+  .meet + .meet { border-top: 1px solid var(--muted); }
+  .meet .date { grid-row: span 3; text-align: center; border-radius: var(--radius-md); background: var(--info-muted); color: var(--info); padding: 8px 4px; align-self: start; }
+  .meet.past .date { background: var(--muted); color: var(--muted-foreground); }
   .meet .date b { display: block; font-size: 22px; line-height: 1.1; }
   .meet .date span { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
   .meet .date small { display: block; font-size: 12px; font-weight: 700; margin-top: 4px; }
   .meet .t { font-weight: 700; }
-  .meet .s { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+  .meet .s { font-size: 13px; color: var(--muted-foreground); overflow-wrap: anywhere; }
   .meet > :not(.date) { grid-column: 2; }
   .meet .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-  .meet .acts a { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; text-decoration: none; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--dark); background: #fff; }
-  .meet .acts a:hover { border-color: var(--red); color: var(--red); }
+  .meet .acts a { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; text-decoration: none; padding: 6px 12px; border-radius: var(--radius-full); border: 1px solid var(--border); color: var(--foreground); background: var(--card); }
+  .meet .acts a:hover { border-color: var(--primary); color: var(--primary-text); }
   .meet .acts svg { width: 15px; height: 15px; }
   .past-toggle { margin-top: 16px; }
   .g-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
@@ -81,7 +82,7 @@
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="/admin/admin.js?v=20261123c"></script>
+<script src="/admin/admin.js?v=20261123d"></script>
 <script>
 const el = Admin.el;
 const dayKey = (d) => d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();

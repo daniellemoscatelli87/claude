@@ -9,39 +9,38 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/admin/admin.css?v=20261123c">
+<link rel="stylesheet" href="/design-system/theme.css?v=e334fe5">
+<link rel="stylesheet" href="/admin/admin.css?v=20261123d">
 <style>
   .cf-card { margin-top: 20px; }
   .cf-card > h2 { margin-bottom: 4px; }
   .cf-card > .muted { margin: 0 0 8px; font-size: 14px; }
-  .cf-sub { font-size: 15px; font-weight: 700; margin: 22px 0 0; padding-top: 18px; border-top: 1px solid var(--track); }
-  .cf-card input[type=text] { width: 100%; font: inherit; font-size: 14px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; color: var(--dark); outline: none; }
-  .cf-card input[type=text]:focus { border-color: var(--red); background: #fff; box-shadow: 0 0 0 3px rgb(212 77 77 / .15); }
+  .cf-sub { font-size: 15px; font-weight: 700; margin: 22px 0 0; padding-top: 18px; border-top: 1px solid var(--muted); }
+  .cf-card input[type=text] { width: 100%; font: inherit; font-size: 14px; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--input-background); color: var(--foreground); outline: none; }
+  .cf-card input[type=text]:focus { border-color: var(--primary); background: var(--card); outline: 2px solid var(--ring); outline-offset: 2px; }
   .cf-acts { display: flex; justify-content: flex-end; margin-top: 14px; }
-  .cf-msg { margin-top: 10px; font-size: 13px; color: #1f6b3a; }
-  .cf-msg.err { color: var(--red); }
-  .cf-hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
+  .cf-msg { margin-top: 10px; font-size: 13px; color: var(--success); }
+  .cf-msg.err { color: var(--primary-text); }
+  .cf-hint { font-size: 12px; color: var(--muted-foreground); margin: 6px 0 0; }
   .av-row { display: flex; align-items: center; gap: 16px; margin-top: 14px; }
-  .av-row img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; background: var(--track); flex: none; }
+  .av-row img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; background: var(--muted); flex: none; }
   .av-row .bt { display: flex; flex-wrap: wrap; gap: 8px; }
-  .link-btn { background: none; border: 0; padding: 8px 4px; font: inherit; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-  .link-btn:hover { color: var(--red); }
+  .link-btn { background: none; border: 0; padding: 8px 4px; font: inherit; font-size: 13px; font-weight: 600; color: var(--muted-foreground); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .link-btn:hover { color: var(--primary-text); }
   .dt-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; }
-  .dt-row + .dt-row { border-top: 1px solid var(--track); }
+  .dt-row + .dt-row { border-top: 1px solid var(--muted); }
   .dt-row b { display: block; font-size: 15px; }
-  .dt-row span { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
-  .btn-danger { flex: none; background: #fff; color: var(--red); border: 1px solid var(--red); border-radius: 999px; padding: 9px 16px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
-  .btn-danger:hover { background: var(--red-tint); }
-  .btn-danger:disabled { opacity: .45; cursor: not-allowed; }
+  .dt-row span { display: block; font-size: 13px; color: var(--muted-foreground); margin-top: 2px; }
+  .btn-danger { flex: none; }
   .lg-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; padding: 12px 0; }
-  .lg-row + .lg-row { border-top: 1px solid var(--track); }
-  .lg-row .ic { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--slate-tint); color: var(--slate); }
+  .lg-row + .lg-row { border-top: 1px solid var(--muted); }
+  .lg-row .ic { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--muted); color: var(--muted-foreground); }
   .lg-row .ic svg { width: 16px; height: 16px; }
-  .lg-row.del .ic { background: var(--red-tint); color: var(--red); }
+  .lg-row.del .ic { background: var(--primary-muted); color: var(--primary-text); }
   .lg-row .tx { min-width: 0; display: grid; gap: 2px; }
   .lg-row b { font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
-  .lg-row .dt { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
-  .lg-row small { font-size: 12px; color: var(--muted); }
+  .lg-row .dt { font-size: 13px; color: var(--muted-foreground); overflow-wrap: anywhere; }
+  .lg-row small { font-size: 12px; color: var(--muted-foreground); }
   .lg-more { display: flex; justify-content: center; margin-top: 8px; }
   @media (max-width: 520px) {
     .dt-row { flex-direction: column; align-items: stretch; }
@@ -116,7 +115,7 @@
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="/admin/admin.js?v=20261123c"></script>
+<script src="/admin/admin.js?v=20261123d"></script>
 <script>
 const $ = (id) => document.getElementById(id);
 const el = Admin.el, sb = Admin.sb;

@@ -412,6 +412,13 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Escolha do Claude (forma):** com o menu recolhido, os subitens abrem num painel ao lado do ícone principal (mouse e foco), em vez de virarem ícones próprios: os subitens não têm ícone no design system e criar ícones novos fugiria dele; o painel mostra o nome do grupo, mantém a ordem do Tab e fecha com Escape.
 - **Trade-offs:** o painel some ao tirar o mouse ou o foco; quem só usa o toque não recolhe o menu (recolher existe só a partir de 1024px).
 
+## D-035 · 23/11/2026 · A área restrita consome o Design System Dani Moscatelli (site)
+
+- **Origem:** dona do produto: "tudo deve consumir o Design System".
+- **Decisão:** a área restrita (`public/admin/`) deixa de ter cores e padrões escritos à mão e usa os tokens do DS a partir de uma cópia do `theme.css`, sincronizada com aprovação (mesma rotina da FindLook: cópia diária, build, pull request para a dona do produto aprovar, issue em caso de falha).
+- **Escolhas do Claude (forma):** o arquivo do DS é usado como está, sem Tailwind (o navegador ignora os blocos do Tailwind); botões, campos, abas e selos seguem os componentes do DS; nos gráficos, o lado "fácil" da matriz fácil × difícil usa os tons 5 e 6 e o neutro, e o lado "difícil" (o foco) os tons 1 e 2, porque o DS não tem paleta divergente; escalas com 5 passos começam no tom 7.
+- **Trade-offs:** o `?v=` do `theme.css` precisa mudar a cada sincronização (o PR lembra); o anel de foco do DS (`--ring`, vermelho a 35%) e o hover do botão principal (`--primary-hover` igual ao `--primary` no tema claro) vêm do DS como estão; se precisarem de mais contraste, a mudança é feita no DS.
+
 ---
 
 ## Decisões pendentes

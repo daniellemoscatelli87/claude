@@ -9,47 +9,45 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/admin/admin.css?v=20261123c">
+<link rel="stylesheet" href="/design-system/theme.css?v=e334fe5">
+<link rel="stylesheet" href="/admin/admin.css?v=20261123d">
 <style>
   .toolbar { display: flex; gap: 10px; align-items: center; margin: 20px 0 12px; }
   .toolbar input { flex: 1 1 auto; min-width: 0; max-width: 420px; }
-  .lc-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px 10px; border-radius: 12px; }
-  .lc-row + .lc-row { border-top: 1px solid var(--track); }
-  .lc-row .ic { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--red-tint); color: var(--red); }
+  .lc-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px 10px; border-radius: var(--radius-md); }
+  .lc-row + .lc-row { border-top: 1px solid var(--muted); }
+  .lc-row .ic { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--primary-muted); color: var(--primary-text); }
   .lc-row .ic svg { width: 18px; height: 18px; }
   .lc-row .tx { min-width: 0; display: grid; gap: 2px; }
-  .lc-row a { color: var(--dark); font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
-  .lc-row a:hover { color: var(--red); }
-  .lc-row .d { font-size: 12px; color: var(--muted); }
-  .lc-row .ok { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: #1f6b3a; }
+  .lc-row a { color: var(--foreground); font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
+  .lc-row a:hover { color: var(--primary-text); }
+  .lc-row .d { font-size: 12px; color: var(--muted-foreground); }
+  .lc-row .ok { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--success); }
   .lc-row .ok svg { width: 14px; height: 14px; }
-  .lc-row.done .ic { background: #e7f5ec; color: #1f9d55; }
-  .tabs { display: flex; width: 100%; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--line); border-radius: 999px; margin: 20px 0 0; }
-  .tab { flex: 1; background: none; border: 0; border-radius: 999px; padding: 9px 14px; color: var(--muted); font-size: 14px; font-weight: 600; cursor: pointer; }
-  .tab[aria-selected=true] { background: var(--red); color: #fff; }
-  .tab .n { display: inline-block; margin-left: 6px; padding: 0 7px; border-radius: 999px; background: rgb(148 163 184 / .25); font-size: 12px; }
-  .tab[aria-selected=true] .n { background: rgb(255 255 255 / .25); }
-  .lc-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 4px 4px 14px; margin-bottom: 4px; border-bottom: 1px solid var(--track); }
+  .lc-row.done .ic { background: var(--success-muted); color: var(--success); }
+  .tabs { display: flex; flex-wrap: wrap; width: 100%; gap: 4px; padding: 4px; background: var(--muted); border-radius: var(--radius-md); margin: 20px 0 0; }
+  .tab { flex: 1; background: none; border: 0; border-radius: var(--radius-sm); padding: 7px 14px; color: var(--muted-foreground); font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .tab:hover { color: var(--foreground); }
+  .tab[aria-selected=true] { background: var(--card); color: var(--foreground); box-shadow: var(--shadow-sm); }
+  .tab .n { display: inline-block; margin-left: 6px; padding: 0 7px; border-radius: var(--radius-full); background: var(--card); font-size: 12px; }
+  .tab[aria-selected=true] .n { background: var(--primary-muted); color: var(--primary-text); }
+  .lc-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 4px 4px 14px; margin-bottom: 4px; border-bottom: 1px solid var(--muted); }
   .lc-bar .btn-launch { order: 2; width: auto; padding: 9px 16px; font-size: 13px; }
-  .lc-bar .t { order: 1; font-size: 14px; color: var(--muted); text-align: left; }
-  .btn-launch .bi { display: inline-flex; color: #fff; }
-  .btn-launch .bi svg { stroke: #fff; }
-  .btn-launch { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 14px; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 10px 18px; cursor: pointer; }
-  .btn-launch svg { width: 18px; height: 18px; }
-  .btn-launch:disabled { opacity: .5; cursor: not-allowed; }
-  .lc-dlg { width: min(640px, 94vw); max-height: 92vh; border: 0; border-radius: 18px; padding: 0; box-shadow: 0 20px 60px -10px rgb(15 23 42 / .35); }
-  .lc-dlg::backdrop { background: rgb(15 23 42 / .45); }
+  .lc-bar .t { order: 1; font-size: 14px; color: var(--muted-foreground); text-align: left; }
+  .btn-launch .bi { display: inline-flex; }
+  .lc-dlg { width: min(640px, 94vw); max-height: 92vh; border: 0; border-radius: var(--radius-xl); padding: 0; box-shadow: 0 20px 60px -10px var(--sobreposicao); }
+  .lc-dlg::backdrop { background: var(--sobreposicao); }
   .lc-in { position: relative; padding: 22px; display: grid; gap: 14px; }
   .lc-in h2 { margin: 0; font-size: 20px; padding-right: 40px; }
   .lc-in label { display: grid; gap: 6px; font-size: 13px; font-weight: 600; }
-  .lc-in input, .lc-in textarea { width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--dark); }
+  .lc-in input, .lc-in textarea { width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--card); color: var(--foreground); }
   .lc-in textarea { resize: vertical; min-height: 160px; }
-  .lc-in .hint { font-size: 12px; color: var(--muted); font-weight: 400; }
-  .lc-prev { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #f4f5f8; }
+  .lc-in .hint { font-size: 12px; color: var(--muted-foreground); font-weight: 400; }
+  .lc-prev { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--muted); }
   .lc-prev iframe { display: block; width: 100%; height: 520px; border: 0; }
   .lc-acts { display: flex; flex-wrap: wrap-reverse; gap: 8px; justify-content: space-between; align-items: center; }
   .lc-acts .btn-launch { margin-left: auto; }
-  .lc-x { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; background: none; border-radius: 10px; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
+  .lc-x { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; background: none; border-radius: var(--radius-sm); color: var(--muted-foreground); cursor: pointer; display: grid; place-items: center; }
   .lc-x svg { width: 22px; height: 22px; }
 </style>
 </head>
@@ -86,7 +84,7 @@
   </div>
 </dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="/admin/admin.js?v=20261123c"></script>
+<script src="/admin/admin.js?v=20261123d"></script>
 <script>
 // Pessoas que cadastraram o e-mail para receber o aviso de lançamento do novo site (formulário da home).
 const el = Admin.el;
