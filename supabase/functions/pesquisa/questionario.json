@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v8-2026-11-23",
+  "versao": "moda-curitiba-v9-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "identificacao": {
     "versao": "moda-curitiba-identificacao-v1-2026-11-23",
@@ -25,7 +25,8 @@
           "texto": "Não",
           "encerra": "fora_de_curitiba"
         }
-      ]
+      ],
+      "destaque": "Curitiba"
     },
     {
       "id": "q2",
@@ -60,7 +61,8 @@
           "encerra": "sem_compras",
           "exclusiva": true
         }
-      ]
+      ],
+      "destaque": "roupas e acessórios"
     },
     {
       "id": "q2_1",
@@ -110,12 +112,13 @@
           "texto": "Outro motivo (especifique)",
           "outro": true
         }
-      ]
+      ],
+      "destaque": "marketplaces ou lojas online de outras cidades"
     },
     {
       "id": "q3",
       "tipo": "unica",
-      "texto": "Você comprou roupas ou acessórios de segunda mão (brechós) este ano?",
+      "texto": "Você tem comprado roupas e acessórios de segunda mão (brechós) nos últimos tempos?",
       "opcoes": [
         {
           "id": "nao",
@@ -137,14 +140,15 @@
           "id": "maioria",
           "texto": "Sim, a maior parte das minhas compras foi de segunda mão"
         }
-      ]
+      ],
+      "destaque": "brechós"
     },
     {
       "id": "q4",
       "tipo": "escalas",
       "min": 0,
       "max": 10,
-      "texto": "Pensando nas roupas e acessórios que comprou este ano, que nota você daria para cada um dos aspectos abaixo?",
+      "texto": "Pensando nas roupas e acessórios que comprou recentemente, que nota você daria para cada um dos aspectos abaixo?",
       "apoio": "Avalie de 0 a 10, considerando sua experiência geral.",
       "rotulo_min": "Muito ruim",
       "rotulo_max": "Excelente",
@@ -164,12 +168,13 @@
           "texto": "Correspondência com o que eu procurava",
           "apoio": "O quanto as peças atenderam ao que você realmente queria"
         }
-      ]
+      ],
+      "destaque": "nota"
     },
     {
       "id": "q5",
       "tipo": "unica",
-      "texto": "Quando você procura uma roupa ou acessório específico, por onde costuma começar?",
+      "texto": "Quando você procura um produto específico, por onde costuma começar?",
       "opcoes": [
         {
           "id": "fisicas_cwb",
@@ -199,7 +204,8 @@
           "id": "nao_procuro",
           "texto": "Não costumo procurar roupas ou acessórios específicos"
         }
-      ]
+      ],
+      "destaque": "produto específico"
     },
     {
       "id": "q6",
@@ -247,12 +253,13 @@
           "texto": "Outro meio",
           "outro": true
         }
-      ]
+      ],
+      "destaque": "descobrir lojas"
     },
     {
       "id": "q7",
       "tipo": "unica",
-      "texto": "Quando você procura uma roupa ou acessório específico, com que frequência tem dificuldade para encontrar exatamente o que deseja?",
+      "texto": "Com que frequência você tem dificuldade para encontrar um produto específico?",
       "opcoes": [
         {
           "id": "nunca",
@@ -274,13 +281,14 @@
           "id": "quase_sempre",
           "texto": "Quase sempre tenho dificuldade"
         }
-      ]
+      ],
+      "destaque": "dificuldade para encontrar"
     },
     {
       "id": "q8",
       "tipo": "matriz",
-      "texto": "Quando procura roupas e acessórios, o que é mais fácil ou difícil de encontrar?",
-      "apoio": "Marque uma resposta para cada característica.",
+      "texto": "Quando você procura roupas e acessórios, qual é o grau de facilidade ou dificuldade para conseguir peças que atendam às suas expectativas?",
+      "apoio": "Marque uma resposta para cada item.",
       "linhas": [
         {
           "id": "estilo",
@@ -301,6 +309,34 @@
         {
           "id": "acessorios",
           "texto": "Acessórios que combinam com meu gosto"
+        },
+        {
+          "id": "precos",
+          "texto": "Encontrar preços dentro do que estou disposto(a) a pagar"
+        },
+        {
+          "id": "onde_encontrar",
+          "texto": "Saber em quais lojas procurar o que quero"
+        },
+        {
+          "id": "muitas_lojas",
+          "texto": "Achar o que quero sem pesquisar em vários sites ou visitar muitas lojas"
+        },
+        {
+          "id": "esgotada",
+          "texto": "Encontrar o produto que quero disponível, sem estar esgotado"
+        },
+        {
+          "id": "tempo",
+          "texto": "Ter tempo suficiente para procurar e comparar opções"
+        },
+        {
+          "id": "distancia",
+          "texto": "Chegar até as lojas, sem distância ou dificuldade de acesso"
+        },
+        {
+          "id": "avaliar_online",
+          "texto": "Avaliar bem a qualidade, o tecido e o caimento pelas fotos"
         }
       ],
       "colunas": [
@@ -324,12 +360,13 @@
           "id": "5",
           "texto": "Muito difícil"
         }
-      ]
+      ],
+      "destaque": "grau de facilidade ou dificuldade"
     },
     {
       "id": "q9",
       "tipo": "multipla",
-      "texto": "Neste ano, o que você fez quando não encontrou uma roupa ou acessório que queria comprar?",
+      "texto": "O que você tem feito quando não encontra uma roupa ou acessório que gostaria de comprar?",
       "apoio": "Selecione todas as situações que você já viveu.",
       "opcoes": [
         {
@@ -357,54 +394,8 @@
           "texto": "Não passei por essa situação neste ano",
           "exclusiva": true
         }
-      ]
-    },
-    {
-      "id": "q10",
-      "tipo": "multipla",
-      "max": 3,
-      "texto": "Além de encontrar a peça que você procura, o que mais dificulta suas compras de roupas e acessórios?",
-      "apoio": "Selecione até 3 opções.",
-      "opcoes": [
-        {
-          "id": "precos",
-          "texto": "Encontrar preços acima do que estou disposto(a) a pagar"
-        },
-        {
-          "id": "onde_encontrar",
-          "texto": "Não saber em quais lojas procurar o que quero"
-        },
-        {
-          "id": "muitas_lojas",
-          "texto": "Ter que pesquisar em vários sites ou visitar muitas lojas"
-        },
-        {
-          "id": "esgotada",
-          "texto": "Encontrar o produto que quero, mas ele já estar esgotado"
-        },
-        {
-          "id": "tempo",
-          "texto": "Não ter tempo suficiente para procurar e comparar opções"
-        },
-        {
-          "id": "distancia",
-          "texto": "Ter que me deslocar para lojas distantes ou de difícil acesso"
-        },
-        {
-          "id": "avaliar_online",
-          "texto": "Não conseguir avaliar bem a qualidade, o tecido ou o caimento pelas fotos"
-        },
-        {
-          "id": "nada",
-          "texto": "Nenhuma dessas situações costuma dificultar minhas compras",
-          "exclusiva": true
-        },
-        {
-          "id": "outro",
-          "texto": "Outra dificuldade",
-          "outro": true
-        }
-      ]
+      ],
+      "destaque": "quando não encontra"
     }
   ],
   "perfil": [
