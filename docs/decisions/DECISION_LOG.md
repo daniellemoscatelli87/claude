@@ -410,6 +410,13 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Trade-offs:** até 5 minutos de atraso; anexos não são copiados (ficam na caixa, com aviso na mensagem); newsletters e outros e-mails automáticos que caírem na caixa de entrada também aparecem; se a senha da caixa mudar, o segredo precisa ser atualizado (o erro fica registrado em `caixa_email_estado`). Alternativa descartada: encaminhar a caixa para o recebimento do Resend, que dependeria da cota do plano.
 ---
 
+
+## D-038 · 23/11/2026 · DM | Experience Intelligence sai do Netlify para o Cloudflare Pages
+
+- **Decisão da dona do produto:** levar o app (app.danimoscatelli.com.br) para o Cloudflare, onde já ficam o site do estúdio e o FindLook. A conta do Netlify está com pagamento atrasado e com as publicações pausadas.
+- **Acesso:** continua fechado. Antes de qualquer página, o app pede usuário e senha (`apps/experience-intelligence/functions/_middleware.js`, segredo `SITE_SENHA` no Cloudflare; usuário `dani` ou `SITE_USUARIO`). Depois vem o login por convite do próprio app. Sem o segredo, o app fica fechado.
+- **Aviso de privacidade:** onde dizia "Netlify: hospedagem do aplicativo", agora diz "Cloudflare". Por isso a versão passa a `testes-2026-11-23`, e quem já aceitou recebe o pedido de novo aceite.
+- **Desligamento do Netlify:** só depois que o app estiver funcionando no Cloudflare. O projeto antigo do FindLook no Netlify (`helpful-meerkat-e4c2aa`) também é desligado.
 ## Decisões pendentes
 
 

@@ -428,6 +428,23 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** navegador (iPhone 13) com servidor simulado: validação do nome (Matheus e Matheus S recusados; Ana Lu e Maria da Silva aceitos), prefixo fixo (colar link inteiro, apagar tudo, host errado); página da galeria visível em 0,75 s com a IA atrasada 4 s, troca de senioridade refletida na prévia e enviada no formato do cadastro; `node --check` e `esbuild` da função; `npm run build`.
 - **Publicação (16/11):** função `galeria-autorizacao` publicada (versão 13); `ver` no ar responde em 0,8 a 1 s.
 
+## 2026-11-23 · Experience Intelligence pronto para o Cloudflare Pages (D-038)
+
+- **`apps/experience-intelligence/functions/_middleware.js`:** senha antes de qualquer página, no mesmo modelo do FindLook. Testado: sem segredo dá 503, senha errada dá 401 e senha certa dá 200 com `Cache-Control: private, no-store`.
+- **Saem as referências ao Netlify:** `netlify.toml` removido; aviso de privacidade (`AVISO_VERSAO` = `testes-2026-11-23`), `docs/legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md`, README e comentário do `next.config.ts` atualizados.
+- **Configuração do projeto no Cloudflare Pages (feita pela dona do produto):**
+  - pasta base `apps/experience-intelligence`;
+  - build `npm ci && npm run build`;
+  - saída `out`;
+  - `NODE_VERSION=22`;
+  - variáveis `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`;
+  - segredo `SITE_SENHA`;
+  - caminhos de build `apps/experience-intelligence/*`;
+  - domínio `app.danimoscatelli.com.br`.
+- **Testes:**
+  - `npm ci`, `npm run typecheck`, `npm test` (48 testes) e `npm run build` (gera `out/`);
+  - aviso já existente do Next sobre a raiz do workspace (mais de um lockfile no repositório).
+
 ## 2026-11-16 · Agendamento do envio da autorização da galeria (SITE-01), não publicado
 
 - **Banco:** migração `supabase/migrations/20261116150000_galeria_agendamentos.sql`: liga o `pg_cron`; tabela `galeria_agendamentos` (RLS: só a administradora; criar, alterar e excluir só com situação `agendado`; o que foi enviado fica como histórico); tabela `agendador_chave` (chave interna, ninguém de fora lê); função `disparar_agendamentos_galeria` (só chama a função de envio quando há agendamento vencido); tarefa do `pg_cron` a cada minuto.
