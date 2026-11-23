@@ -613,6 +613,24 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Outros textos ajustados:
   - tela de encerramento: "compraram roupas, calçados ou acessórios este ano";
   - apoio do relato: "ao procurar ou comprar peças".
+- Cidade e bairro saem do "Sobre você" e passam para a pergunta 1, logo abaixo da escolha:
+  - Curitiba mostra o bairro;
+  - Região Metropolitana mostra "Em qual cidade da Região Metropolitana você mora?", com as 28 cidades;
+  - Outra cidade não mostra nada.
+  - O campo aparece com movimento suave (respeita "menos movimento"), é obrigatório para continuar e mostra o erro junto ao campo.
+  - Os dados continuam gravados em `respostas.perfil`, que o servidor valida como antes.
+- Estado civil no "Sobre você":
+  - opções Solteiro(a), Casado(a), União estável, Divorciado(a) ou separado(a), Viúvo(a) e Prefiro não informar;
+  - obrigatório, validado também no servidor;
+  - card no painel.
+- Testes executados:
+  - Playwright no iPhone 13, nos três caminhos:
+    - a pergunta 1 não segue sem a cidade (Região Metropolitana) ou sem o bairro (Curitiba);
+    - "Sobre você" mostra só gênero, faixa etária e estado civil;
+    - o envio leva cidade, bairro e estado civil;
+    - Outra cidade encerra.
+  - Função em bundle: sem estado civil é recusado; com estado civil, gravado.
+  - Painel com o card novo, sem erros de JS.
 - `questionario.json`:
   - `min: 1` na pergunta 4;
   - apoio "Avalie de 1 a 10…";

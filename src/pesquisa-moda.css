@@ -368,6 +368,7 @@ label.pq-perfil-titulo { display: block; }
 .pq-select:disabled { cursor: default; background-color: #F4F6F9; color: var(--pq-ink); opacity: 1; }
 label.pq-perfil-titulo em { font-style: normal; color: var(--pq-red); }
 .pq-perfil-campo[hidden] { display: none; }
+.pq-local { margin-top: 20px; }
 .pq-perfil-campo.pq-invalido .pq-select { border-color: var(--pq-erro); }
 .pq-perfil-campo.pq-invalido .pq-op:not(:has(input:checked)), .pq-perfil-campo.pq-invalido .pq-chip span { border-color: rgba(198, 40, 40, 0.45); }
 

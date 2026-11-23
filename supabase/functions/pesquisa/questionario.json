@@ -678,7 +678,10 @@
           "id": "tunas_do_parana",
           "texto": "Tunas do Paraná"
         }
-      ]
+      ],
+      "inicio": true,
+      "texto_inicio": "Em qual cidade da Região Metropolitana você mora?",
+      "destaque_inicio": "cidade da Região Metropolitana"
     },
     {
       "id": "bairro",
@@ -1072,7 +1075,8 @@
           "id": "nao_informar",
           "texto": "Prefiro não informar"
         }
-      ]
+      ],
+      "inicio": true
     },
     {
       "id": "genero",
@@ -1128,6 +1132,36 @@
         {
           "id": "65_mais",
           "texto": "65 anos ou mais"
+        },
+        {
+          "id": "nao_informar",
+          "texto": "Prefiro não informar"
+        }
+      ]
+    },
+    {
+      "id": "estado_civil",
+      "texto": "Qual é o seu estado civil?",
+      "opcoes": [
+        {
+          "id": "solteiro",
+          "texto": "Solteiro(a)"
+        },
+        {
+          "id": "casado",
+          "texto": "Casado(a)"
+        },
+        {
+          "id": "uniao_estavel",
+          "texto": "União estável"
+        },
+        {
+          "id": "divorciado",
+          "texto": "Divorciado(a) ou separado(a)"
+        },
+        {
+          "id": "viuvo",
+          "texto": "Viúvo(a)"
         },
         {
           "id": "nao_informar",
