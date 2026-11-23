@@ -39,6 +39,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @keyframes pq-logo-icone { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
 .pq-topo.is-scrolled .pq-sair { color: #fff; }
 .pq-topo.is-scrolled .pq-sair:hover { color: #FBCACA; }
+@media (max-width: 639px) {
+  /* celular: a barra segue o padrão claro ao rolar */
+  .pq-topo.is-scrolled .pq-barra-topo { background: rgba(246, 247, 250, 0.94); box-shadow: none; }
+  .pq-topo.is-scrolled .pq-sair { color: var(--pq-ink); }
+  .pq-topo.is-scrolled .pq-sair:hover { color: var(--pq-red); }
+}
 .pq-topo.is-hidden { transform: translateY(calc(-1 * var(--pq-barra-h))); }
 .pq-progresso { position: relative; padding: 8px 20px 10px; background: rgba(246, 247, 250, 0.94); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid var(--pq-linha); }
 .pq-progresso > * { max-width: 640px; margin-left: auto; margin-right: auto; }
@@ -78,6 +84,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-infos strong { font-size: 14px; color: var(--pq-ink); font-weight: 700; }
 .pq-ic { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--pq-tint); color: var(--pq-red); }
 .pq-ic svg { width: 18px; height: 18px; }
+/* Abertura: textos centralizados; os boxes de informação continuam alinhados à esquerda */
+.pq-intro { text-align: center; }
+.pq-intro .pq-infos { text-align: left; }
+.pq-intro .pq-texto p { margin-left: auto; margin-right: auto; max-width: 34rem; }
 .pq-fecho { margin: 0 0 24px; font-size: 15px; font-weight: 600; color: var(--pq-ink); }
 .pq-acoes-intro { display: grid; gap: 12px; justify-items: stretch; }
 .pq-privacidade { margin: 0; font-size: 13px; color: var(--pq-muted); text-align: center; }
@@ -152,12 +162,26 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-nota input:focus-visible + span { outline: 3px solid rgba(212, 77, 77, 0.45); outline-offset: 2px; }
 .pq-extremos { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; font-size: 13px; color: var(--pq-muted); }
 
-/* Matriz: uma linha por característica, com as respostas em pílulas */
-.pq-matriz { display: grid; gap: 12px; margin-top: 20px; }
-.pq-linha { border: 1.5px solid var(--pq-linha); border-radius: 14px; background: #fff; margin: 0; padding: 14px 14px 12px; min-width: 0; transition: border-color .2s ease; }
-.pq-linha legend { float: left; width: 100%; padding: 0; margin: 0 0 10px; font-weight: 700; font-size: 15px; color: var(--pq-ink); }
+/* Matriz: um cartão por característica, com todas as respostas escritas em cartões clicáveis.
+   Celular: uma resposta por linha. Computador: as 5 respostas lado a lado e "Não se aplica" abaixo. */
+.pq-matriz { display: grid; gap: 16px; margin-top: 20px; }
+.pq-linha { border: 1.5px solid var(--pq-linha); border-radius: 16px; background: #fff; margin: 0; padding: 16px 14px 14px; min-width: 0; transition: border-color .2s ease; }
+.pq-linha legend { float: left; width: 100%; padding: 0; margin: 0 0 12px; font-weight: 700; font-size: 16px; line-height: 1.4; color: var(--pq-ink); }
 .pq-linha legend + * { clear: both; }
 .pq-linha:has(input:checked) { border-color: rgba(212, 77, 77, 0.35); }
+.pq-linha-ops { display: grid; gap: 8px; }
+.pq-linha-ops .pq-op { min-height: 50px; padding: 11px 14px; background: var(--pq-fundo); }
+.pq-linha-ops .pq-op:has(input:checked) { background: var(--pq-tint); }
+.pq-linha-ops .pq-op-na { background: #fff; border-style: dashed; color: var(--pq-texto); }
+@media (min-width: 640px) {
+  .pq-linha { padding: 18px 18px 16px; }
+  .pq-linha-ops { grid-template-columns: repeat(5, 1fr); }
+  .pq-linha-ops .pq-op:not(.pq-op-na) { flex-direction: column; justify-content: center; gap: 8px; min-height: 92px; padding: 12px 8px; text-align: center; font-size: 14px; line-height: 1.3; }
+  .pq-linha-ops .pq-op-na { grid-column: 1 / -1; justify-self: start; min-height: 44px; padding: 8px 16px; font-size: 14px; }
+}
+.pq-linha.pq-faltando { border-color: var(--pq-erro); }
+
+/* Pílulas (usadas no perfil) */
 .pq-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .pq-chip { position: relative; cursor: pointer; }
 .pq-chip input { position: absolute; opacity: 0; pointer-events: none; }
@@ -166,14 +190,22 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-chip:hover span { border-color: rgba(212, 77, 77, 0.45); }
 .pq-chip input:checked + span { background: var(--pq-red); border-color: var(--pq-red); color: #fff; }
 .pq-chip input:focus-visible + span { outline: 3px solid rgba(212, 77, 77, 0.45); outline-offset: 2px; }
-.pq-chip-na span { background: #fff; border-style: dashed; }
-.pq-linha.pq-faltando { border-color: var(--pq-erro); }
+
 
 /* Novidades: contato que aparece abaixo da resposta */
 .pq-contato { display: grid; gap: 16px; margin-top: 18px; padding: 18px 16px; border-radius: 16px; background: #fff; border: 1.5px solid var(--pq-linha); }
 .pq-contato.pq-abre { animation: pq-abre .45s var(--pq-ease) both; }
 @keyframes pq-abre { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
 .pq-contato-intro { margin: 0; font-size: 13px; color: var(--pq-muted); }
+/* Identificação: aviso da LGPD e nota da autorização de avisos */
+.pq-lgpd { display: flex; gap: 12px; align-items: flex-start; margin: 16px 0 14px; padding: 14px 16px; border-radius: 14px; background: var(--pq-card); border: 1px solid var(--pq-linha); }
+.pq-lgpd p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--pq-texto); }
+.pq-lgpd strong { color: var(--pq-ink); }
+#pq-id .pq-aceite-q { padding: 2px 2px 0; }
+.pq-nota-consent { margin: 14px 2px 0; font-size: 13px; line-height: 1.55; color: var(--pq-muted); }
+/* Abertura: destaque das vantagens */
+.pq-infos .pq-info-destaque { background: var(--pq-tint); border-color: rgba(212, 77, 77, 0.22); }
+.pq-infos .pq-info-destaque .pq-ic { background: #fff; }
 .pq-campo { display: grid; gap: 6px; }
 .pq-campo.pq-invalido input[type=text], .pq-campo.pq-invalido input[type=email], .pq-campo.pq-invalido input[type=tel] { border-color: var(--pq-erro); }
 .pq-aceite { position: relative; display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: 14px; line-height: 1.55; color: var(--pq-texto); }
@@ -208,10 +240,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 /* Telas finais */
-.pq-fim { text-align: center; padding-top: 24px; }
+/* Telas finais dentro de um card branco do design system */
+.pq-fim { text-align: center; margin-top: 16px; padding: 36px 22px 30px; border-radius: 24px; background: var(--pq-card); border: 1px solid var(--pq-linha); box-shadow: var(--pq-sombra); }
+@media (min-width: 640px) { .pq-fim { padding: 48px 40px 40px; } }
 .pq-fim h1 { margin: 0 0 16px; font-size: clamp(1.625rem, 6.4vw, 2.125rem); line-height: 1.2; letter-spacing: -0.02em; font-weight: 800; color: var(--pq-ink); outline: none; text-wrap: balance; }
 .pq-fim p { margin: 0 auto 12px; max-width: 30rem; font-size: 15px; }
-.pq-fim .pq-destaque { margin-top: 18px; padding: 14px 16px; border-radius: 14px; background: #fff; border: 1px solid var(--pq-linha); color: var(--pq-ink); font-weight: 600; }
+.pq-fim .pq-destaque { display: grid; justify-items: center; gap: 10px; max-width: 30rem; margin: 18px auto 12px; padding: 18px 16px; border-radius: 16px; background: var(--pq-tint); border: 1px solid rgba(212, 77, 77, 0.18); text-align: center; }
+.pq-fim .pq-destaque .pq-ic { background: #fff; width: 40px; height: 40px; }
+.pq-fim .pq-destaque .pq-ic svg { width: 20px; height: 20px; }
+.pq-fim .pq-destaque p { margin: 0; color: var(--pq-ink); font-weight: 600; }
+.pq-fim h1 em { font-style: normal; color: var(--pq-red); }
 .pq-mini { font-size: 13px !important; color: var(--pq-muted); }
 .pq-assinatura { display: grid; gap: 2px; margin-top: 28px; font-size: 14px; color: var(--pq-muted); }
 .pq-assinatura strong { color: var(--pq-ink); font-size: 15px; }

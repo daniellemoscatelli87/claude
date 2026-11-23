@@ -599,15 +599,15 @@
       const esq = el("div", "pa-div-esq"), dir = el("div", "pa-div-dir");
       const seg = (cor, v, rot, onde) => { if (!v) return; const i = el("i"); i.style.background = cor; i.dataset.w = (v / x.tot / escala) * 100 + "%"; dica(i, [[`${pct(v, x.tot)}%`, `${x.l.texto}: ${rot}`]]); onde.appendChild(i); };
       // a ordem visual a partir do centro: neutro (metade de cada lado), depois fácil/difícil, depois muito
-      seg(CORES_MATRIZ["1"], x.v[1], "Muito fácil", esq); seg(CORES_MATRIZ["2"], x.v[2], "Fácil", esq); seg(CORES_MATRIZ["3"], x.v[3] / 2, "Nem fácil nem difícil (metade)", esq);
-      seg(CORES_MATRIZ["3"], x.v[3] / 2, "Nem fácil nem difícil (metade)", dir); seg(CORES_MATRIZ["4"], x.v[4], "Difícil", dir); seg(CORES_MATRIZ["5"], x.v[5], "Muito difícil", dir);
+      seg(CORES_MATRIZ["1"], x.v[1], "Muito fácil", esq); seg(CORES_MATRIZ["2"], x.v[2], "Fácil", esq); seg(CORES_MATRIZ["3"], x.v[3] / 2, "Médio (metade)", esq);
+      seg(CORES_MATRIZ["3"], x.v[3] / 2, "Médio (metade)", dir); seg(CORES_MATRIZ["4"], x.v[4], "Difícil", dir); seg(CORES_MATRIZ["5"], x.v[5], "Muito difícil", dir);
       const barra = el("div", "pa-div-barra"); barra.append(esq, el("span", "pa-div-eixo"), dir);
       linha.append(nome, el("span", "pa-div-f", `${x.fac}% fácil`), barra, el("span", "pa-div-d", `${x.dif}% difícil`));
       g.appendChild(linha);
     });
     box.append(g, legenda(p.colunas.filter((c) => c.id !== "na").map((c) => [CORES_MATRIZ[c.id], c.texto])),
-      el("p", "pa-nota", "Fácil à esquerda e difícil à direita, a partir do neutro (dividido ao meio). Ordenado da característica mais difícil para a mais fácil; sem contar quem marcou Não se aplica."),
-      tabela(["Característica", "Muito fácil", "Fácil", "Neutro", "Difícil", "Muito difícil", "Não se aplica"], linhas.map((x) => [x.l.texto, x.v[1], x.v[2], x.v[3], x.v[4], x.v[5], x.na])));
+      el("p", "pa-nota", "Fácil à esquerda e difícil à direita, a partir do Médio (dividido ao meio). Ordenado da característica mais difícil para a mais fácil; sem contar quem marcou Não se aplica."),
+      tabela(["Característica", "Muito fácil", "Fácil", "Médio", "Difícil", "Muito difícil", "Não se aplica"], linhas.map((x) => [x.l.texto, x.v[1], x.v[2], x.v[3], x.v[4], x.v[5], x.na])));
     return box;
   }
   // colunas na ordem natural (faixa etária)
@@ -730,7 +730,7 @@
     const freq = comp.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length;
     add([{ b: `${pct(freq, comp.length)}%` }, " frequentemente ou quase sempre não encontram a peça com as características que procuram."]);
     const difs = perg.q8.linhas.map((l) => { const v = comp.map((x) => x.respostas.q8 && x.respostas.q8[l.id]).filter((y) => y && y !== "na"); return { t: l.texto, p: pct(v.filter((y) => y === "4" || y === "5").length, v.length), n: v.length }; }).filter((x) => x.n).sort((a, b) => b.p - a.p);
-    if (difs[0] && difs[0].p) add(["Característica mais difícil de encontrar: ", { b: difs[0].t }, ` (${difs[0].p}% acham difícil ou muito difícil).`]);
+    if (difs[0] && difs[0].p) add(["O mais difícil de encontrar: ", { b: item(difs[0].t) }, ` (${difs[0].p}% acham difícil ou muito difícil).`]);
     const viveu = comp.filter((x) => x.respostas.q9 && !x.respostas.q9.opcoes.includes("nao_passei"));
     const des = viveu.filter((x) => x.respostas.q9.opcoes.includes("desisti")).length;
     if (viveu.length) add(["Entre quem não encontrou uma peça este ano, ", { b: `${pct(des, viveu.length)}%` }, " desistiram da compra em algum momento."]);
@@ -753,6 +753,8 @@
      Interpretações e próximos passos são hipóteses para investigar, não conclusões. */
   const MIN_SEG = 5, POUCA = 30;
   const lc = (t) => String(t || "").charAt(0).toLowerCase() + String(t || "").slice(1);
+  // texto de resposta em primeira pessoa ("meu tamanho") lido pelo painel: "seu tamanho"
+  const item = (t) => lc(t).replace(/\bmeu\b/g, "seu").replace(/\bminha\b/g, "sua").replace(/\bmeus\b/g, "seus").replace(/\bminhas\b/g, "suas");
   const LOCAL = ["fisicas_cwb", "online_cwb"], FORA = ["marketplaces", "online_outras", "fisicas_outras"];
   const media = (a) => (a.length ? a.reduce((s, v) => s + v, 0) / a.length : 0);
   const prim = (x) => valores(x.respostas.q2)[0];
@@ -941,13 +943,13 @@
       const a = atributos[0];
       add("Comportamento", {
         tag: "Satisfação", sinal: { nivel: "atencao", texto: "Atributo que mais pesa" },
-        titulo: `${a.l.texto}: a característica que mais pesa na satisfação`,
+        titulo: `O que mais pesa na satisfação: ${item(a.l.texto)}`,
         descricao: ["Diferença da nota média entre quem acha fácil e quem acha difícil encontrar cada característica (pergunta 8 × pergunta 4)."],
         base: a.dif.length + a.fac.length, recorte: "Pergunta 8 × pergunta 4",
         kpis: [{ v: fmt1(a.q4fac), t: `nota de quem acha fácil` }, { v: fmt1(a.q4dif), t: `nota de quem acha difícil` }],
         barras: atributos.filter((x) => x.gap > 0).slice(0, 5).map((x) => ({ rotulo: x.l.texto, v: x.gap, txt: `${fmt1(x.gap)} ${x.gap === 1 ? "ponto" : "pontos"}` })), escala: Math.max(...atributos.map((x) => x.gap)),
-        significado: [`Quando ${lc(a.l.texto)} é difícil de encontrar, a satisfação com as compras cai ${fmt1(a.gap)} ${a.gap === 1 ? "ponto" : "pontos"} em média.`],
-        proximo: [`Detalhar com quem respondeu o que falta em ${lc(a.l.texto)}.`],
+        significado: [`Quem tem dificuldade para encontrar ${item(a.l.texto)} dá, em média, ${fmt1(a.gap)} ${a.gap === 1 ? "ponto" : "pontos"} a menos para a satisfação com as compras.`],
+        proximo: [`Conversar com quem respondeu para entender o que falta neste item.`],
       });
     }
     const semSaber = comp.filter((x) => valores(x.respostas.q10).includes("onde_encontrar"));
@@ -992,7 +994,7 @@
     const difs = perg.q8.linhas.map((l) => { const v = comp.map((x) => (x.respostas.q8 || {})[l.id]).filter((y) => y && y !== "na"); return { rotulo: l.texto, v: pct(v.filter((y) => y === "4" || y === "5").length, v.length), n: v.length }; }).filter((x) => x.n).sort((a, b) => b.v - a.v);
     if (difs.length) add("Estratégia", {
       tag: "Oportunidade identificada", sinal: { nivel: "alta", texto: "Prioridade de investigação" },
-      titulo: `${difs[0].rotulo} é a característica mais difícil de encontrar (${difs[0].v}%)`,
+      titulo: `O mais difícil de encontrar: ${item(difs[0].rotulo)} (${difs[0].v}%)`,
       descricao: ["Percentual de quem acha difícil ou muito difícil encontrar cada característica (pergunta 8, sem contar Não se aplica)."],
       base: n, barras: difs.map((d) => ({ rotulo: d.rotulo, v: d.v, txt: `${d.v}%` })),
       significado: ["Existe uma possível oportunidade para quem conseguir oferecer e mostrar melhor essa característica."],

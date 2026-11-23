@@ -403,11 +403,24 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Trade-offs:** o identificador do envio evita duplicar a mesma participação (atualizar a página, tocar duas vezes), mas não impede que a mesma pessoa responda de novo em outro aparelho; o tempo de 3 a 5 minutos ainda precisa ser validado em teste real.
 
 
+## D-034 · 23/11/2026 · Pesquisa Moda em Curitiba: identificação no início e uma participação por pessoa (site)
+
+- **Origem:** dona do produto: a pesquisa deve aceitar uma resposta por pessoa. Ela pediu identificação no início com aviso da LGPD, a mesma identificação usada para os avisos do lançamento, e vantagens exclusivas para quem participa. Escolhas dela: nome, e-mail e WhatsApp obrigatórios; bloqueio por e-mail ou WhatsApp repetido; texto "vantagens exclusivas" (sem prometer desconto).
+- **Decisão:**
+  - nome, e-mail e WhatsApp são pedidos antes da primeira pergunta, com aviso da LGPD e confirmação de leitura (data, versão e texto guardados); o servidor confere antes das perguntas e de novo no envio;
+  - os dados ficam na própria resposta (`pesquisa_respostas`), com índices únicos por pesquisa para e-mail e WhatsApp; isso substitui a separação entre respostas e contatos de D-033;
+  - excluir a resposta no painel libera o e-mail e o WhatsApp para responder de novo;
+  - o bloqueio por aparelho sai: o aviso de "já concluída" vale só para a sessão do navegador;
+  - no fim, "Sim" para os avisos é a autorização (texto e versão próprios) e copia o contato para `pesquisa_interessados`, que continua alimentando a aba Interessados;
+  - a identificação fica só na sessão do navegador; no rascunho local de 30 dias ficam apenas as respostas.
+- **Trade-offs:** a participação deixa de ser anônima para a equipe (os resultados continuam sendo analisados e divulgados em conjunto). Uma pessoa com outro e-mail e outro WhatsApp ainda consegue responder de novo. A conferência antes das perguntas revela se um e-mail ou WhatsApp já participou.
+
 ## D-035 · 23/11/2026 · E-mails enviados direto para contato@ no painel (site)
 
 - **Origem:** dona do produto: ver na página Contatos, com tag, as mensagens do formulário e os e-mails enviados direto para contato@danimoscatelli.com.br; só os que chegarem daqui pra frente; sem custo; aviso no Gmail dela.
 - **Decisão:** ler a caixa da Hostinger por IMAP a cada 5 minutos (gratuito, sem mudar o MX nem a caixa), em modo só leitura, com a senha guardada como segredo do Supabase e cadastrada pela própria dona. E-mail de remetente sem conversa vira contato com origem "email"; de remetente com conversa entra no histórico dela. Avisos do próprio site são ignorados para não duplicar. O aviso de e-mail novo usa o Resend que o site já usa, e o endereço dele fica só no banco.
 - **Trade-offs:** até 5 minutos de atraso; anexos não são copiados (ficam na caixa, com aviso na mensagem); newsletters e outros e-mails automáticos que caírem na caixa de entrada também aparecem; se a senha da caixa mudar, o segredo precisa ser atualizado (o erro fica registrado em `caixa_email_estado`). Alternativa descartada: encaminhar a caixa para o recebimento do Resend, que dependeria da cota do plano.
+
 ---
 
 
