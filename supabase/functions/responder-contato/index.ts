@@ -15,11 +15,14 @@ import { encodeBase64 } from "jsr:@std/encoding@1/base64";
 
 const REMETENTE = "Dani Moscatelli <contato@danimoscatelli.com.br>";
 const DOMINIO_RESPOSTA = "resposta.danimoscatelli.com.br";
-const FOTO = "https://www.danimoscatelli.com.br/email/dani-foto.jpg";
-// Assinatura em texto (legível e clicável no celular), com a foto da Dani.
+const FOTO = "https://www.danimoscatelli.com.br/email/dani-assinatura.png";
+// Assinatura em texto (legível e clicável no celular): retrato com cantos arredondados, linha vermelha e os dados.
+// A imagem tem o dobro do tamanho exibido (220 × 280), para ficar nítida em telas de alta resolução.
 const ASSINATURA_HTML = `<table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse"><tr>
-<td valign="top" style="padding:0 16px 0 0"><img src="${FOTO}" width="80" height="80" alt="Dani Moscatelli" style="display:block;width:80px;height:80px;border-radius:50%;border:0"></td>
-<td valign="top" style="font-family:Arial,Helvetica,sans-serif">
+<td valign="middle" style="padding:0 18px 0 0"><img src="${FOTO}" width="110" height="140" alt="Dani Moscatelli" style="display:block;width:110px;height:140px;border:0"></td>
+<td width="3" style="width:3px;background:#d44d4d;font-size:0;line-height:0">&nbsp;</td>
+<td width="18" style="width:18px;font-size:0;line-height:0">&nbsp;</td>
+<td valign="middle" style="font-family:Arial,Helvetica,sans-serif">
 <p style="margin:0;font-size:18px;line-height:1.3;font-weight:bold;color:#0f172a">Dani Moscatelli</p>
 <p style="margin:2px 0 10px;font-size:14px;line-height:1.4;color:#64748b">CEO | Experience Design <span style="color:#d44d4d;font-weight:bold">Studio</span></p>
 <p style="margin:0;font-size:15px;line-height:1.8"><a href="https://wa.me/5541997485414" style="color:#0f172a;text-decoration:none">+55 (41) 99748-5414</a><br><a href="mailto:contato@danimoscatelli.com.br" style="color:#0f172a;text-decoration:none">contato@danimoscatelli.com.br</a><br><a href="https://www.danimoscatelli.com.br" style="color:#0f172a;text-decoration:none">www.danimoscatelli.com.br</a></p>
