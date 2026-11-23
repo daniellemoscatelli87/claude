@@ -356,6 +356,27 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Textos (pedido da dona):** pergunta 2 passa a "Onde você mais comprou roupas e acessórios este ano?" e a 2.1 a "Quais os principais motivos para você comprar roupas e acessórios em marketplaces ou lojas online de outras cidades?"; questionário `moda-curitiba-v6-2026-11-23` (a função `pesquisa` precisa ser publicada junto).
 - **Verificação executada:** `npm run build`; Playwright no celular (iPhone 13), em 1440×900 e em 1366×768: botão visível sem rolar (540/664, 743/900, 655/768), "Continuar" visível na pergunta 2, texto da etapa alinhado com a barra (mesmo x), sem erros no console.
 
+## 2026-11-23 · Pesquisa Moda em Curitiba: perguntas 4, 5 e 6 revisadas, campo "Outro" em foco e topo branco, não publicado
+
+- **Pedidos da dona:**
+  - pergunta 4 com 3 notas de 0 a 10, conforme o modelo enviado: Qualidade; Estética; Correspondência com o que eu procurava (cada uma com descrição); "0 = Muito ruim" e "10 = Excelente";
+  - pergunta 5 e pergunta 6 com os novos textos (a 6 ganhou a opção "Por recomendações de influenciadores e criadores de conteúdo", e "Vendo anúncios…" passou a ser só anúncios);
+  - "Outro" sempre abre um campo para digitar;
+  - topo branco ao rolar, nunca escuro.
+- **Questionário (`supabase/functions/pesquisa/questionario.json`, `moda-curitiba-v7-2026-11-23`):** novo tipo `escalas` na pergunta 4, com `linhas` (id, texto e descrição); resposta gravada como `{ qualidade, estetica, correspondencia }`. Pergunta 5 com os mesmos ids e novos textos. Pergunta 6 com o id novo `influenciadores`.
+- **Página (`src/pesquisa-moda.ts`, `src/pesquisa-moda.css`):** a pergunta 4 é um card com um bloco por aspecto; a validação aponta qual aspecto falta. Ao escolher "Outro" (perguntas 2.1, 6, 10 e gênero), o campo aparece, a tela rola até ele e o cursor já fica nele. Topo ao rolar: fundo branco translúcido em todos os tamanhos.
+- **Servidor (`supabase/functions/pesquisa/index.ts`):** valida o tipo `escalas` (nota inteira de 0 a 10 para cada aspecto).
+- **Painel (`public/admin/pesquisas/index.html`) (D-036):**
+  - nota geral = média dos 3 aspectos de cada pessoa (respostas antigas com nota única continuam valendo);
+  - a correspondência com o que procuravam também aparece separada: card da pergunta 4 com a nota geral e a média de cada aspecto (correspondência destacada), destaques, cartão novo "Correspondência por canal" na Inteligência, e números próprios nos cartões "O que mais pesa na nota geral" e "Primeiros interessados";
+  - a aba Respostas mostra as 3 notas.
+- **Verificação executada:**
+  - `npm run build`;
+  - função testada com banco simulado (aspecto faltando, nota 11 e nota única antiga recusados; "outro" sem texto recusado; gravação correta);
+  - Playwright no celular: pergunta 4 com aviso do que falta; "Outro" abre o campo com foco em 2.1, 6, 10 e gênero; fluxo completo até a tela final;
+  - painel com 42 respostas fictícias: 16 cartões na Inteligência e alturas iguais;
+  - sem erros no console.
+
 ## 2026-11-23 · Painel de pesquisas: aba Resultados redesenhada, não publicado
 
 - **Pedido:** a apresentação dos dados não estava intuitiva, didática nem no padrão do design system; cards lado a lado precisam ter a mesma altura.

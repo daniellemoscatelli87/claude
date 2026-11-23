@@ -506,6 +506,10 @@
   const completasR = () => R.filter((x) => x.situacao === "completa");
   // valores escolhidos numa resposta (escolha única, classificação ou múltipla escolha)
   const valores = (v) => (Array.isArray(v) ? v : v && Array.isArray(v.opcoes) ? v.opcoes : v == null ? [] : [v]);
+  // pergunta 4: nota geral = média dos aspectos (Qualidade, Estética, Correspondência); respostas antigas tinham uma nota só
+  const notaGeral = (x) => { const v = x.respostas && x.respostas.q4; if (typeof v === "number") return v; if (!v || typeof v !== "object") return null; const ns = Object.values(v).filter((n) => typeof n === "number"); return ns.length ? ns.reduce((a, b) => a + b, 0) / ns.length : null; };
+  const notaCorr = (x) => { const v = x.respostas && x.respostas.q4; return v && typeof v === "object" && typeof v.correspondencia === "number" ? v.correspondencia : null; };
+  const notas = (lista, f) => lista.map(f).filter((v) => typeof v === "number");
   const naCondicao = (p, x) => valores(x.respostas[p.condicao.pergunta]).some((v) => p.condicao.opcoes.includes(v));
   const respondeu = (pid) => R.filter((x) => x.respostas && x.respostas[pid] != null);
   function contar(p, base) {
@@ -868,15 +872,27 @@
       const meta = p.tipo === "multipla" ? [p.max ? `até ${p.max} escolhas por pessoa` : "várias escolhas por pessoa"] : [];
       const rodape = [];
       let corpo, leitura, largo = false;
-      if (p.tipo === "escala") {
-        const notas = base.map((x) => x.respostas[p.id]).filter((v) => typeof v === "number");
-        const med = notas.length ? notas.reduce((a, b) => a + b, 0) / notas.length : 0;
-        const faixas = [{ rotulo: "Notas de 0 a 6", v: notas.filter((v) => v <= 6).length }, { rotulo: "Notas 7 e 8", v: notas.filter((v) => v >= 7 && v <= 8).length }, { rotulo: "Notas 9 e 10", v: notas.filter((v) => v >= 9).length }];
+      if (p.tipo === "escalas" || p.tipo === "escala") {
+        // nota geral (média dos aspectos) em destaque e a média de cada aspecto; "Correspondência" fica em vermelho
+        const ger = notas(base, notaGeral), mg = ger.length ? ger.reduce((a, b) => a + b, 0) / ger.length : 0;
         corpo = el("div", "pa-nota-g");
-        const heroi = el("div", "pa-heroi-n"); heroi.append(el("b", null, fmt1(med)), el("span", null, "nota média, de 0 a 10"));
-        corpo.append(heroi, barras(faixas, notas.length, { ordem: "natural" }));
-        leitura = ["Nota média ", { b: fmt1(med) }, `; ${pct(faixas[2].v, notas.length)}% deram 9 ou 10 e ${pct(faixas[0].v, notas.length)}% deram de 0 a 6.`];
-        rodape.push(el("p", "pa-nota", `0 = ${p.rotulo_min} · 10 = ${p.rotulo_max}`), tabela(["Nota", "Pessoas", "%"], Array.from({ length: 11 }, (_, k) => [k, notas.filter((v) => v === k).length, pct(notas.filter((v) => v === k).length, notas.length) + "%"])));
+        const heroi = el("div", "pa-heroi-n"); heroi.append(el("b", null, fmt1(mg)), el("span", null, "nota geral (média dos aspectos), de 0 a 10"));
+        corpo.appendChild(heroi);
+        const asp = (p.linhas || []).map((l) => { const ns = base.map((x) => x.respostas[p.id] && x.respostas[p.id][l.id]).filter((v) => typeof v === "number"); return { l, ns, m: ns.length ? ns.reduce((a, b) => a + b, 0) / ns.length : 0 }; });
+        const lista = el("div", "pa-lb");
+        asp.forEach((a2) => {
+          const linha = el("div", "pa-lb-l" + (a2.l.id === "correspondencia" ? " top" : ""));
+          const r = el("div", "pa-lb-r"); const val = el("span", "pa-lb-v"); val.append(el("b", null, fmt1(a2.m)), el("small", null, "de 10"));
+          r.append(el("span", "pa-lb-n", a2.l.texto), val);
+          const t = el("div", "pa-lb-t"); const i = el("i", "pa-lb-f"); i.dataset.w = (a2.m * 10) + "%"; t.appendChild(i);
+          linha.append(r, t); dica(linha, [[fmt1(a2.m), `${a2.l.texto}: nota média · ${pct(a2.ns.filter((v) => v >= 9).length, a2.ns.length)}% deram 9 ou 10`]]);
+          lista.appendChild(linha);
+        });
+        corpo.appendChild(lista);
+        const corr = asp.find((a2) => a2.l.id === "correspondencia");
+        leitura = corr ? ["Nota geral ", { b: fmt1(mg) }, "; correspondência com o que procuravam: ", { b: fmt1(corr.m) }, ` (${pct(corr.ns.filter((v) => v <= 6).length, corr.ns.length)}% deram de 0 a 6).`] : ["Nota média ", { b: fmt1(mg) }, "."];
+        rodape.push(el("p", "pa-nota", `0 = ${p.rotulo_min} · 10 = ${p.rotulo_max}. Nota geral = média dos ${asp.length} aspectos de cada pessoa.`),
+          tabela(["Aspecto", "Média", "0 a 6", "7 e 8", "9 e 10"], asp.map((a2) => [a2.l.texto, fmt1(a2.m), pct(a2.ns.filter((v) => v <= 6).length, a2.ns.length) + "%", pct(a2.ns.filter((v) => v >= 7 && v <= 8).length, a2.ns.length) + "%", pct(a2.ns.filter((v) => v >= 9).length, a2.ns.length) + "%"])));
         largo = true;
       } else if (p.tipo === "matriz") {
         corpo = facilDificil(p, base);
@@ -945,8 +961,8 @@
     }
     const t5 = topo(perg.q5, comp); if (t5) add(["Onde a procura começa: ", { b: t5.texto }, ` (${pct(t5.v, comp.length)}%).`]);
     const sm = comp.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; add([{ b: `${pct(sm, comp.length)}%` }, " compraram de segunda mão (brechós) este ano."]);
-    const notas = comp.map((x) => x.respostas.q4).filter((v) => typeof v === "number");
-    if (notas.length) add(["Satisfação com as compras: média ", { b: (notas.reduce((a, b) => a + b, 0) / notas.length).toLocaleString("pt-BR", { maximumFractionDigits: 1 }) }, " de 10."]);
+    const ng = notas(comp, notaGeral), nc = notas(comp, notaCorr);
+    if (ng.length) add(["Nota geral das compras: ", { b: fmt1(ng.reduce((a, b) => a + b, 0) / ng.length) }, " de 10" + (nc.length ? "; correspondência com o que procuravam: " : ".")].concat(nc.length ? [{ b: fmt1(nc.reduce((a, b) => a + b, 0) / nc.length) }, "."] : []));
     const freq = comp.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length;
     add([{ b: `${pct(freq, comp.length)}%` }, " frequentemente ou quase sempre não encontram a peça com as características que procuram."]);
     const difs = perg.q8.linhas.map((l) => { const v = comp.map((x) => x.respostas.q8 && x.respostas.q8[l.id]).filter((y) => y && y !== "na"); return { t: l.texto, p: pct(v.filter((y) => y === "4" || y === "5").length, v.length), n: v.length }; }).filter((x) => x.n).sort((a, b) => b.p - a.p);
@@ -1114,16 +1130,26 @@
 
     /* ----- Comportamento ----- */
     const canais = perg.q2.opcoes.filter((o) => !o.encerra).map((o) => {
-      const g = comp.filter((x) => prim(x) === o.id); return { rotulo: semOutro(o.texto).replace(/ \(.*\)$/, ""), n: g.length, v: media(g.map((x) => x.respostas.q4).filter((v) => typeof v === "number")) };
+      const g = comp.filter((x) => prim(x) === o.id); return { rotulo: semOutro(o.texto).replace(/ \(.*\)$/, ""), n: g.length, v: media(notas(g, notaGeral)), c: media(notas(g, notaCorr)) };
     }).filter((x) => x.n >= MIN_SEG).sort((a, b) => b.v - a.v);
     if (canais.length >= 2) add("Comportamento", {
       tag: "Satisfação", sinal: { nivel: "info", texto: "Comparação entre canais" },
-      titulo: `${canais[0].rotulo}: maior satisfação entre os canais (${fmt1(canais[0].v)})`,
-      descricao: ["Nota média de satisfação (0 a 10) conforme o lugar onde a pessoa mais comprou (1º lugar da pergunta 2)."],
+      titulo: `${canais[0].rotulo}: maior nota geral entre os canais (${fmt1(canais[0].v)})`,
+      descricao: ["Nota geral (média de qualidade, estética e correspondência, de 0 a 10) conforme o lugar onde a pessoa mais comprou (1º lugar da pergunta 2). Entre parênteses, a nota de correspondência com o que procuravam."],
       base: canais.reduce((s, c) => s + c.n, 0), recorte: `Canais com ${MIN_SEG} ou mais respostas`, escala: 10,
-      barras: canais.map((c) => ({ rotulo: c.rotulo, v: c.v, txt: fmt1(c.v), n: c.n })),
+      barras: canais.map((c) => ({ rotulo: c.rotulo, v: c.v, txt: `${fmt1(c.v)} (${fmt1(c.c)})`, n: c.n })),
       significado: [`Quem compra principalmente em ${lc(canais[canais.length - 1].rotulo)} está menos satisfeito com o que comprou (${fmt1(canais[canais.length - 1].v)}).`],
       proximo: ["Entender o que diferencia a experiência no canal mais bem avaliado."],
+    });
+    const canaisC = [...canais].sort((a, b) => b.c - a.c);
+    if (canaisC.length >= 2) add("Comportamento", {
+      tag: "Correspondência", sinal: { nivel: "atencao", texto: "Encontrou o que queria?" },
+      titulo: `Onde as peças mais correspondem ao que se procurava: ${lc(canaisC[0].rotulo)} (${fmt1(canaisC[0].c)})`,
+      descricao: ["Nota de correspondência com o que a pessoa procurava (0 a 10), conforme o lugar onde ela mais comprou (1º lugar da pergunta 2)."],
+      base: canaisC.reduce((s, c) => s + c.n, 0), recorte: `Canais com ${MIN_SEG} ou mais respostas`, escala: 10,
+      barras: canaisC.map((c) => ({ rotulo: c.rotulo, v: c.c, txt: fmt1(c.c), n: c.n })),
+      significado: [`A menor correspondência está em ${lc(canaisC[canaisC.length - 1].rotulo)} (${fmt1(canaisC[canaisC.length - 1].c)}): é onde as peças menos atenderam ao que as pessoas queriam.`],
+      proximo: ["Investigar o que faltou nas peças desse canal (tamanho, modelagem, tecido ou estilo)."],
     });
     const fluxos = {};
     comp.forEach((x) => { if (!x.respostas.q5 || x.respostas.q5 === "nao_procuro" || !prim(x)) return; const k = x.respostas.q5 + ">" + prim(x); fluxos[k] = (fluxos[k] || 0) + 1; });
@@ -1157,19 +1183,19 @@
     }
     const atributos = perg.q8.linhas.map((l) => {
       const dif = comp.filter((x) => ["4", "5"].includes((x.respostas.q8 || {})[l.id])), fac = comp.filter((x) => ["1", "2"].includes((x.respostas.q8 || {})[l.id]));
-      const q4 = (g) => media(g.map((x) => x.respostas.q4).filter((v) => typeof v === "number"));
-      return { l, dif, fac, gap: dif.length >= MIN_SEG && fac.length >= MIN_SEG ? q4(fac) - q4(dif) : null, q4dif: q4(dif), q4fac: q4(fac) };
+      const q4 = (g) => media(notas(g, notaGeral)), cr = (g) => media(notas(g, notaCorr));
+      return { l, dif, fac, gap: dif.length >= MIN_SEG && fac.length >= MIN_SEG ? q4(fac) - q4(dif) : null, q4dif: q4(dif), q4fac: q4(fac), crdif: cr(dif), crfac: cr(fac) };
     }).filter((a) => a.gap != null).sort((a, b) => b.gap - a.gap);
     if (atributos.length && atributos[0].gap > 0) {
       const a = atributos[0];
       add("Comportamento", {
         tag: "Satisfação", sinal: { nivel: "atencao", texto: "Atributo que mais pesa" },
-        titulo: `O que mais pesa na satisfação: ${item(a.l.texto)}`,
-        descricao: ["Diferença da nota média entre quem acha fácil e quem acha difícil encontrar cada característica (pergunta 8 × pergunta 4)."],
+        titulo: `O que mais pesa na nota geral: ${item(a.l.texto)}`,
+        descricao: ["Diferença da nota geral (média de qualidade, estética e correspondência) entre quem acha fácil e quem acha difícil encontrar cada característica (pergunta 8 × pergunta 4)."],
         base: a.dif.length + a.fac.length, recorte: "Pergunta 8 × pergunta 4",
-        kpis: [{ v: fmt1(a.q4fac), t: `nota de quem acha fácil` }, { v: fmt1(a.q4dif), t: `nota de quem acha difícil` }],
+        kpis: [{ v: fmt1(a.q4fac), t: `nota geral de quem acha fácil` }, { v: fmt1(a.q4dif), t: `nota geral de quem acha difícil` }, { v: `${fmt1(a.crfac)} × ${fmt1(a.crdif)}`, t: "correspondência: fácil × difícil" }],
         barras: atributos.filter((x) => x.gap > 0).slice(0, 5).map((x) => ({ rotulo: x.l.texto, v: x.gap, txt: `${fmt1(x.gap)} ${x.gap === 1 ? "ponto" : "pontos"}` })), escala: Math.max(...atributos.map((x) => x.gap)),
-        significado: [`Quem tem dificuldade para encontrar ${item(a.l.texto)} dá, em média, ${fmt1(a.gap)} ${a.gap === 1 ? "ponto" : "pontos"} a menos para a satisfação com as compras.`],
+        significado: [`Quem tem dificuldade para encontrar ${item(a.l.texto)} dá, em média, ${fmt1(a.gap)} ${a.gap === 1 ? "ponto" : "pontos"} a menos na nota geral das compras, e ${fmt1(Math.max(0, a.crfac - a.crdif))} a menos na correspondência com o que procurava.`],
         proximo: [`Conversar com quem respondeu para entender o que falta neste item.`],
       });
     }
@@ -1247,14 +1273,14 @@
     });
     const quer = comp.filter((x) => x.quer_novidades);
     if (quer.length) {
-      const nQ4 = media(quer.map((x) => x.respostas.q4).filter((v) => typeof v === "number")), nTodos = media(comp.map((x) => x.respostas.q4).filter((v) => typeof v === "number"));
+      const nQ4 = media(notas(quer, notaGeral)), nTodos = media(notas(comp, notaGeral)), cQ = media(notas(quer, notaCorr)), cT = media(notas(comp, notaCorr));
       const fQ = pct(quer.filter((x) => ["frequentemente", "quase_sempre"].includes(x.respostas.q7)).length, quer.length), fT = pct(freq.length, n);
       add("Estratégia", {
         tag: "Primeiros interessados", sinal: { nivel: "alta", texto: "Grupo para ouvir primeiro" },
         titulo: `${quer.length} ${quer.length === 1 ? "pessoa quer" : "pessoas querem"} acompanhar o lançamento (${pct(quer.length, n)}%)`,
         descricao: ["Perfil de quem pediu novidades, comparado com o total (sem nomes)."],
         base: quer.length, recorte: "Quem pediu novidades",
-        kpis: [{ v: `${fQ}%`, t: `não encontram o que procuram com frequência (${fT}% no total)` }, { v: fmt1(nQ4), t: `nota média de satisfação (${fmt1(nTodos)} no total)` }],
+        kpis: [{ v: `${fQ}%`, t: `não encontram o que procuram com frequência (${fT}% no total)` }, { v: fmt1(nQ4), t: `nota geral das compras (${fmt1(nTodos)} no total)` }, { v: fmt1(cQ), t: `correspondência com o que procuravam (${fmt1(cT)} no total)` }],
         significado: ["São as pessoas mais próximas do problema que a pesquisa investiga e que aceitaram receber contato."],
         proximo: ["Convidar parte desse grupo para conversas de aprofundamento, respeitando a autorização dada."],
       });
@@ -1279,6 +1305,7 @@
     if (p.tipo === "unica") return op(v);
     if (p.tipo === "ranking") return v.map((id, k) => `${k + 1}º ${op(id)}`).join(" · ");
     if (p.tipo === "escala") return String(v);
+    if (p.tipo === "escalas") return typeof v === "number" ? String(v) : (p.linhas || []).map((l) => `${l.texto}: ${v[l.id] ?? "—"}`).join("\n");
     if (p.tipo === "matriz") return p.linhas.map((l) => `${l.texto}: ${(p.colunas.find((c) => c.id === v[l.id]) || {}).texto || "—"}`).join("\n");
     return (v.opcoes || []).map((id) => op(id) + ((p.opcoes.find((o) => o.id === id) || {}).outro && v.outro ? ` (${v.outro})` : "")).join(" · ");
   }

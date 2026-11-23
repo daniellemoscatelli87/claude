@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v6-2026-11-23",
+  "versao": "moda-curitiba-v7-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "identificacao": {
     "versao": "moda-curitiba-identificacao-v1-2026-11-23",
@@ -141,45 +141,63 @@
     },
     {
       "id": "q4",
-      "tipo": "escala",
+      "tipo": "escalas",
       "min": 0,
       "max": 10,
-      "texto": "De 0 a 10, que nota você daria para sua satisfação com as roupas e acessórios que comprou este ano?",
-      "rotulo_min": "Nada satisfeita(o)",
-      "rotulo_max": "Totalmente satisfeita(o)"
+      "texto": "Pensando nas roupas e acessórios que comprou este ano, que nota você daria para cada um dos aspectos abaixo?",
+      "apoio": "Avalie de 0 a 10, considerando sua experiência geral.",
+      "rotulo_min": "Muito ruim",
+      "rotulo_max": "Excelente",
+      "linhas": [
+        {
+          "id": "qualidade",
+          "texto": "Qualidade",
+          "apoio": "Qualidade dos materiais, tecidos e acabamentos"
+        },
+        {
+          "id": "estetica",
+          "texto": "Estética",
+          "apoio": "Aparência, estilo e beleza das peças"
+        },
+        {
+          "id": "correspondencia",
+          "texto": "Correspondência com o que eu procurava",
+          "apoio": "O quanto as peças atenderam ao que você realmente queria"
+        }
+      ]
     },
     {
       "id": "q5",
       "tipo": "unica",
-      "texto": "Quando você tem uma peça específica em mente, por onde costuma começar a procurar?",
+      "texto": "Quando você procura uma roupa ou acessório específico, por onde costuma começar?",
       "opcoes": [
         {
           "id": "fisicas_cwb",
-          "texto": "Visitando lojas físicas de Curitiba"
+          "texto": "Vou pessoalmente às lojas de Curitiba"
         },
         {
           "id": "online_cwb",
-          "texto": "Consultando lojas de Curitiba pelo Instagram, site ou WhatsApp"
+          "texto": "Procuro lojas de Curitiba pelo Instagram, site ou WhatsApp"
         },
         {
           "id": "marketplaces",
-          "texto": "Pesquisando em marketplaces (Shein, Shopee, Mercado Livre etc.)"
+          "texto": "Pesquiso em marketplaces, como Shein, Shopee ou Mercado Livre"
         },
         {
           "id": "outras_cidades",
-          "texto": "Consultando sites ou aplicativos de lojas de outras cidades"
+          "texto": "Procuro em sites ou aplicativos de lojas de outras cidades"
         },
         {
           "id": "google",
-          "texto": "Pesquisando no Google"
+          "texto": "Pesquiso no Google para descobrir onde encontrar"
         },
         {
           "id": "redes",
-          "texto": "Buscando referências ou indicações nas redes sociais"
+          "texto": "Busco inspirações ou peço indicações nas redes sociais"
         },
         {
           "id": "nao_procuro",
-          "texto": "Não costumo procurar peças específicas"
+          "texto": "Não costumo procurar roupas ou acessórios específicos"
         }
       ]
     },
@@ -187,32 +205,36 @@
       "id": "q6",
       "tipo": "multipla",
       "max": 3,
-      "texto": "Como você costuma conhecer novas lojas físicas de roupas e acessórios em Curitiba?",
-      "apoio": "Escolha até 3 respostas.",
+      "texto": "Como você costuma descobrir lojas de roupas e acessórios em Curitiba?",
+      "apoio": "Selecione até 3 opções.",
       "opcoes": [
         {
           "id": "passando",
-          "texto": "Ao passar em frente a uma loja na rua ou no shopping"
+          "texto": "Passando em frente a lojas na rua ou no shopping"
         },
         {
           "id": "redes",
-          "texto": "Por publicações nas redes sociais"
+          "texto": "Vendo publicações de lojas no Instagram, TikTok ou outras redes sociais"
         },
         {
           "id": "indicacao",
-          "texto": "Por indicação de amigos ou familiares"
+          "texto": "Por indicação de amigos, familiares ou conhecidos"
         },
         {
           "id": "google",
-          "texto": "Por buscas no Google ou Google Maps"
+          "texto": "Pesquisando lojas no Google ou Google Maps"
         },
         {
           "id": "anuncios",
-          "texto": "Por anúncios ou influenciadores"
+          "texto": "Vendo anúncios de lojas na internet ou nas redes sociais"
+        },
+        {
+          "id": "influenciadores",
+          "texto": "Por recomendações de influenciadores e criadores de conteúdo"
         },
         {
           "id": "raramente",
-          "texto": "Raramente procuro lojas novas; frequento as que já conheço",
+          "texto": "Costumo comprar nas mesmas lojas e raramente procuro novas",
           "exclusiva": true
         },
         {
@@ -222,7 +244,7 @@
         },
         {
           "id": "outro",
-          "texto": "Outro meio (especifique)",
+          "texto": "Outro meio",
           "outro": true
         }
       ]

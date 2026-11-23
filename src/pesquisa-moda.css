@@ -18,7 +18,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-oculto { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* Topo: barra de largura total do design system (modelo "Full-width bar"): transparente no topo da página; ao rolar,
-   ganha fundo escuro translúcido e o logo vira o ícone; some ao rolar para baixo e volta ao rolar para cima.
+   ganha fundo branco translúcido e o logo vira o ícone; some ao rolar para baixo e volta ao rolar para cima.
    A barra de progresso fica sempre visível logo abaixo. */
 .pq-topo { position: sticky; top: 0; z-index: 20; --pq-barra-h: 72px; transition: transform .35s var(--pq-ease); }
 .pq-barra-topo { position: relative; z-index: 1; height: var(--pq-barra-h); display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -33,18 +33,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-sair svg { width: 18px; height: 18px; transition: transform .25s var(--pq-ease); }
 .pq-sair:hover { color: var(--pq-red); }
 .pq-sair:hover svg { transform: translateX(-3px); }
-.pq-topo.is-scrolled .pq-barra-topo { background: rgba(19, 26, 39, 0.92); -webkit-backdrop-filter: blur(20px) saturate(140%); backdrop-filter: blur(20px) saturate(140%); box-shadow: 0 8px 24px -16px rgba(0, 0, 0, 0.45); }
+.pq-topo.is-scrolled .pq-barra-topo { background: rgba(255, 255, 255, 0.94); -webkit-backdrop-filter: blur(20px) saturate(140%); backdrop-filter: blur(20px) saturate(140%); box-shadow: 0 1px 0 var(--pq-linha), 0 8px 24px -18px rgba(13, 17, 25, 0.25); }
 .pq-topo.is-scrolled .pq-logo-completo { display: none; }
 .pq-topo.is-scrolled .pq-logo-icone { display: block; animation: pq-logo-icone .3s ease-out; }
 @keyframes pq-logo-icone { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
-.pq-topo.is-scrolled .pq-sair { color: #fff; }
-.pq-topo.is-scrolled .pq-sair:hover { color: #FBCACA; }
-@media (max-width: 639px) {
-  /* celular: a barra segue o padrão claro ao rolar */
-  .pq-topo.is-scrolled .pq-barra-topo { background: rgba(246, 247, 250, 0.94); box-shadow: none; }
-  .pq-topo.is-scrolled .pq-sair { color: var(--pq-ink); }
-  .pq-topo.is-scrolled .pq-sair:hover { color: var(--pq-red); }
-}
+.pq-topo.is-scrolled .pq-sair { color: var(--pq-ink); }
+.pq-topo.is-scrolled .pq-sair:hover { color: var(--pq-red); }
 .pq-topo.is-hidden { transform: translateY(calc(-1 * var(--pq-barra-h))); }
 .pq-progresso { position: relative; padding: 8px 20px 10px; background: rgba(246, 247, 250, 0.94); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid var(--pq-linha); }
 .pq-progresso > * { max-width: 640px; margin-left: auto; margin-right: auto; }
@@ -164,6 +158,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-main input::placeholder, .pq-main textarea::placeholder { color: #8A94A6; }
 
 /* Escala de 0 a 10 */
+/* Várias notas (pergunta 4): um card com um bloco por aspecto */
+.pq-escalas { margin-top: 20px; padding: 6px 18px; border-radius: 16px; background: #fff; border: 1.5px solid var(--pq-linha); }
+.pq-aspecto { margin: 0; padding: 18px 0; border: 0; min-width: 0; }
+.pq-aspecto + .pq-aspecto { border-top: 1px solid var(--pq-linha); border-radius: 0; }
+.pq-aspecto legend { float: left; width: 100%; display: grid; gap: 2px; padding: 0; }
+.pq-aspecto legend + * { clear: both; }
+.pq-aspecto-t { font-size: 16px; font-weight: 700; color: var(--pq-ink); }
+.pq-aspecto-d { font-size: 13.5px; color: var(--pq-muted); }
+.pq-aspecto .pq-escala { margin-top: 12px; }
+.pq-aspecto .pq-nota span { height: 46px; font-size: 16px; background: var(--pq-fundo); }
+.pq-aspecto.pq-faltando .pq-aspecto-t { color: var(--pq-erro); }
+.pq-aspecto.pq-faltando .pq-nota span { border-color: rgba(198, 40, 40, 0.45); }
 .pq-escala { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 22px; }
 @media (min-width: 560px) { .pq-escala { grid-template-columns: repeat(11, minmax(0, 1fr)); } }
 .pq-nota { position: relative; cursor: pointer; }

@@ -430,6 +430,13 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Acesso:** continua fechado. Antes de qualquer página, o app pede usuário e senha (`apps/experience-intelligence/functions/_middleware.js`, segredo `SITE_SENHA` no Cloudflare; usuário `dani` ou `SITE_USUARIO`). Depois vem o login por convite do próprio app. Sem o segredo, o app fica fechado.
 - **Aviso de privacidade:** onde dizia "Netlify: hospedagem do aplicativo", agora diz "Cloudflare". Por isso a versão passa a `testes-2026-11-23`, e quem já aceitou recebe o pedido de novo aceite.
 - **Desligamento do Netlify:** só depois que o app estiver funcionando no Cloudflare. O projeto antigo do FindLook no Netlify (`helpful-meerkat-e4c2aa`) também é desligado.
+
+## D-036 · 23/11/2026 · Pesquisa Moda em Curitiba: pergunta 4 com três notas (site)
+
+- **Origem:** dona do produto: a pergunta 4 passa a ter três notas de 0 a 10 (Qualidade, Estética e Correspondência com o que eu procurava). Ela escolheu usar a média das três nos cruzamentos e pediu que a correspondência também fosse tratada separadamente, por ser o dado que mais interessa.
+- **Decisão:** a "nota geral" de cada pessoa é a média dos três aspectos. Ela substitui a antiga nota única nos cruzamentos da Inteligência, e a correspondência aparece ao lado em cada cruzamento e num cartão próprio por canal. Respostas antigas com nota única continuam contando como nota geral.
+- **Trade-offs:** a média esconde diferenças entre os aspectos; por isso o card da pergunta 4 mostra a média de cada um.
+
 ## Decisões pendentes
 
 
