@@ -349,7 +349,6 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
-<<<<<<< HEAD
 ## 2026-11-23 · Pesquisa Moda em Curitiba: mensagem da tela final no Alerta do DS, não publicado
 
 - **Pedido:** a mensagem do fim ("Assim que a plataforma for lançada…") não seguia o padrão do DS.
@@ -461,7 +460,6 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **O que mudou (`public/admin/pesquisas/index.html`):** card padrão por pergunta, com número em selo rosa, pergunta, quantas responderam, "Leitura" em uma frase (calculada dos números), o gráfico e um pé com "Ver números" e notas, sempre no fim do card. Todos os gráficos usam a mesma lista de barras (rótulo, percentual em destaque, quantidade e barra fina; a mais escolhida em vermelho, as outras em cinza-azulado, "Prefiro não informar" e opções exclusivas em cinza claro). Na pergunta 2, uma camada clara mostra "entre os 3 lugares". Nota de 0 a 10: média em destaque e três faixas. Pergunta 8: barra 100% com fácil, médio e difícil, da característica mais difícil para a mais fácil. Funil em quatro etapas ("Quem chegou até onde"). Gênero e faixa etária em dois cards lado a lado. Pergunta 1 e gênero em rosca, com o percentual principal no centro e legenda com números (as demais seguem em barras: escolhas múltiplas, muitas opções ou escala ordenada). Pergunta sem respostas: estado vazio, sem gráfico zerado. Grade com cards da mesma altura, sem buracos.
 - **Verificação executada:** `npm run build`; Playwright com 42 respostas fictícias e com o caso real atual (1 participação, nenhuma completa), no computador e no celular: alturas iguais em todas as linhas de 2 cards, sem erros no console.
 
-=======
 ## 2026-11-23 · Área restrita: hover de linha com --row-hover e card rosa sem repetição, não publicado
 
 - **DS em prévia:** sincronizado de novo com `DS_REF=claude/ajustes-painel` (commit `085153d`), que traz o token `--row-hover` (metade do `--graphite-50` sobre o card, ≈ #F6F8FA; branco a 4% no escuro). `?v=085153d` nas páginas.
@@ -505,7 +503,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Cache:** `admin.js` e `admin.css` com `?v=20261123c` em todas as páginas da área restrita.
 - **Verificação executada:** `npm run build`; navegador (Chromium, Playwright) com o Supabase simulado só no teste, a 1280px e 390px: 66 verificações passaram (recolher pelo clique, por Enter e por Espaço, `aria-expanded`, escolha mantida ao recarregar já em 72px, dica e painel de subitens no mouse e no teclado, Escape, perfil abrindo e fechando, cabeçalho branco, sem rolagem horizontal, menos movimento, celular sem o botão de recolher e com os nomes visíveis mesmo com o recolhido guardado, as 8 páginas carregando sem erro). O teste encontrou e corrigiu um erro: com o recolhido guardado, o celular escondia os nomes do menu.
 - **Pendente:** ver com a dona do produto; publicar.
->>>>>>> origin/main
+
 ## 2026-11-23 · Pesquisa Moda em Curitiba: identificação no início, uma participação por pessoa, vantagens e tela final com confete (D-034), publicado
 
 - **Banco:** `supabase/migrations/20261123180000_pesquisa_identificacao.sql` (não aplicada): `pesquisa_respostas` ganha `nome`, `email`, `whatsapp`, `identificacao_em`, `identificacao_versao` e `identificacao_texto`, com índices únicos por pesquisa para e-mail (sem diferenciar maiúsculas) e WhatsApp.
@@ -646,7 +644,44 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - PDF com todas as abas, 86 páginas.
 - Na publicação: reimplantar a função `pesquisa`. O painel lê o questionário da função.
 
-## 2026-11-23 · Pesquisa Moda em Curitiba: destaques de texto e regra da pergunta 6 (questionário v10), não publicado
+## 2026-11-23 · Contatos: "Novo e-mail" para qualquer endereço, com anexos de qualquer tipo (D-043), publicado (migration aplicada; função `responder-contato` v13)
+
+- `public/admin/contatos/index.html`:
+  - botão "Novo e-mail" no topo da lista, que abre um painel lateral com Para, Nome (opcional), Assunto, Mensagem e anexos;
+  - validação junto a cada campo; estados "Enviando arquivo X de N…" e "Enviando…";
+  - tela de sucesso com check animado (respeita "menos movimento"), "Ver conversa" e "Escrever outro".
+- O e-mail novo vira uma conversa na lista, com o selo "Enviado" (azul). Na conversa:
+  - a primeira etapa se chama "Enviado";
+  - o histórico começa pelo seu envio;
+  - as respostas da pessoa chegam por `conversa-<id>@resposta…` e pela importação da caixa contato@, como nas demais conversas.
+- Anexos de qualquer tipo de arquivo (antes, só imagens), até 10 por e-mail e 20 MB no total, também na resposta a um contato. Arquivos que não são imagem aparecem com a extensão.
+- A contagem da lista passa a dizer "conversas".
+- `supabase/functions/responder-contato/index.ts`:
+  - código da função agora no repositório (antes só no Supabase, v12);
+  - modo `novo` cria a conversa (`origem = 'enviado'`) e envia sem citação, com o assunto escrito; se o envio falhar, desfaz a conversa;
+  - um envio repetido com o mesmo id não envia de novo;
+  - mantém a mesma assinatura.
+- Migration `20261123210000_contatos_email_enviado.sql`:
+  - `origem` aceita `enviado`;
+  - "melhores dias" é exigido só para `site`;
+  - o aviso de novo contato vale só para `site`;
+  - o bucket `anexos` (privado) passa a aceitar qualquer tipo de arquivo, até 20 MB cada.
+- Testes executados:
+  - `npm run build` passou;
+  - Playwright com dados fictícios (computador e iPhone 13): erros dos campos, PDF e XLSX anexados e enviados para a pasta da conversa, sucesso, selo "Enviado" na lista, conversa com a primeira etapa "Enviado" e "Anexar arquivo", sem erros de JS;
+  - função em bundle com banco e Resend simulados:
+    - sem conta de administradora, 403;
+    - e-mail inválido e falta de assunto recusados;
+    - falha no Resend desfaz a conversa;
+    - envio novo sem citação e com assinatura;
+    - envio repetido não reenvia;
+    - resposta em conversa enviada usa "Re:";
+    - resposta a contato do site com .docx;
+    - anexo de outra pasta recusado.
+  - Nenhum e-mail real foi enviado.
+- Na publicação: aplicar a migration e reimplantar `responder-contato`.
+
+## 2026-11-23 · Pesquisa Moda em Curitiba: destaques de texto e regra da pergunta 6 (questionário v10), publicado (PR #204; função `pesquisa` v9)
 
 - Tela "Obrigada pelo seu interesse!" (`pq-encerrada`): "moram em Curitiba" em negrito vermelho (`.pq-realce` em `src/pesquisa-moda.css`).
 - Pergunta 2: "toque primeiro onde você mais comprou" em negrito (campo novo `apoio_negrito` no `questionario.json`, lido por `cabecalho()` em `src/pesquisa-moda.ts`).

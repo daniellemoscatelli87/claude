@@ -422,21 +422,19 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 
 ---
 
-
 ## D-038 · 23/11/2026 · DM | Experience Intelligence sai do Netlify para o Cloudflare Pages
 
 - **Decisão da dona do produto:** levar o app (app.danimoscatelli.com.br) para o Cloudflare, onde já ficam o site do estúdio e o FindLook. A conta do Netlify está com pagamento atrasado e com as publicações pausadas.
 - **Acesso:** continua fechado. Antes de qualquer página, o app pede usuário e senha (`apps/experience-intelligence/functions/_middleware.js`, segredo `SITE_SENHA` no Cloudflare; usuário `dani` ou `SITE_USUARIO`). Depois vem o login por convite do próprio app. Sem o segredo, o app fica fechado.
 - **Aviso de privacidade:** onde dizia "Netlify: hospedagem do aplicativo", agora diz "Cloudflare". Por isso a versão passa a `testes-2026-11-23`, e quem já aceitou recebe o pedido de novo aceite.
 - **Desligamento do Netlify:** só depois que o app estiver funcionando no Cloudflare. O projeto antigo do FindLook no Netlify (`helpful-meerkat-e4c2aa`) também é desligado.
-<<<<<<< HEAD
 
 ## D-036 · 23/11/2026 · Pesquisa Moda em Curitiba: pergunta 4 com três notas (site)
 
 - **Origem:** dona do produto: a pergunta 4 passa a ter três notas de 0 a 10 (Qualidade, Estética e Correspondência com o que eu procurava). Ela escolheu usar a média das três nos cruzamentos e pediu que a correspondência também fosse tratada separadamente, por ser o dado que mais interessa.
 - **Decisão:** a "nota geral" de cada pessoa é a média dos três aspectos. Ela substitui a antiga nota única nos cruzamentos da Inteligência, e a correspondência aparece ao lado em cada cruzamento e num cartão próprio por canal. Respostas antigas com nota única continuam contando como nota geral.
 - **Trade-offs:** a média esconde diferenças entre os aspectos; por isso o card da pergunta 4 mostra a média de cada um.
-=======
+
 ## D-039 · 23/11/2026 · Menu lateral recolhível, perfil no cabeçalho e cabeçalho branco nos painéis (site)
 
 - **Origem:** dona do produto (mesmo padrão em construção no design system da FindLook).
@@ -465,7 +463,21 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** dona do produto (quarta rodada de ajustes dos painéis).
 - **Decisão:** o cabeçalho do card não tem faixa cinza; é separado do conteúdo por uma linha fina que some nas pontas. O hover de linha ou item dentro do card é bem claro e sutil: token `--row-hover` do DS (metade do `--graphite-50` sobre o card), decisão revista na quinta rodada. No card rosa da Início, o "não lidas" do canto sai por repetir a informação. O botão desabilitado usa o fundo `--graphite-100`. O menu lateral empurra o conteúdo, nunca o cobre (no DS e na área restrita). As mudanças de token foram feitas no DS (branch `claude/ajustes-painel`) e trazidas pela sincronização, sem editar a cópia.
 - **Trade-offs:** a área restrita fica, por enquanto, com o `theme.css` de uma branch do DS ainda não publicada; ao publicar o DS, a sincronização diária volta ao `main` e o `?v=` precisa mudar.
->>>>>>> origin/main
+
+## D-043 · 23/11/2026 · "Novo e-mail" na área de contatos, para qualquer endereço e com anexos de qualquer tipo (site)
+
+- **Origem:** dona do produto. Escolheu:
+  - o botão "Novo e-mail";
+  - qualquer tipo de arquivo;
+  - manter a assinatura atual;
+  - as respostas da pessoa aparecem como conversa.
+- **Decisão:**
+  - O e-mail novo é gravado em `contatos` com `origem = 'enviado'` e o selo "Enviado". Assim, o histórico, as respostas recebidas e a reunião funcionam como nas outras conversas.
+  - O envio usa a mesma função e a mesma assinatura das respostas, pelo remetente contato@danimoscatelli.com.br.
+  - Anexos de qualquer tipo, até 10 por e-mail e 20 MB no total, no bucket privado `anexos`, que só a administradora lê.
+- **Trade-offs:**
+  - Aceitar qualquer tipo de arquivo amplia o que fica guardado no bucket. Ele continua privado e restrito à administradora.
+  - Os e-mails enviados contam como conversas na lista, que passa a dizer "conversas" em vez de "mensagens recebidas".
 
 ## D-044 · 23/11/2026 · Pesquisa de moda inclui a Região Metropolitana; cidade e bairro no perfil (site)
 
@@ -483,7 +495,6 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - O código `fora_de_curitiba` continua nos dados e passa a significar "fora de Curitiba e da Região Metropolitana".
 
 ## Decisões pendentes
-
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
   - cruzar pelo e-mail confirmado, no servidor;
