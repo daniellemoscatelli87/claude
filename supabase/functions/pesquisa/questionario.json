@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v9-2026-11-23",
+  "versao": "moda-curitiba-v10-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "identificacao": {
     "versao": "moda-curitiba-identificacao-v1-2026-11-23",
@@ -34,6 +34,7 @@
       "max": 3,
       "texto": "Onde você mais comprou roupas e acessórios este ano?",
       "apoio": "Escolha até 3, na ordem: toque primeiro onde você mais comprou.",
+      "apoio_negrito": "toque primeiro onde você mais comprou",
       "opcoes": [
         {
           "id": "fisicas_cwb",
@@ -169,7 +170,7 @@
           "apoio": "O quanto as peças atenderam ao que você realmente queria"
         }
       ],
-      "destaque": "nota"
+      "destaque": "que nota você daria"
     },
     {
       "id": "q5",
@@ -205,13 +206,13 @@
           "texto": "Não costumo procurar roupas ou acessórios específicos"
         }
       ],
-      "destaque": "produto específico"
+      "destaque": "começar"
     },
     {
       "id": "q6",
       "tipo": "multipla",
       "max": 3,
-      "texto": "Como você costuma descobrir lojas de roupas e acessórios em Curitiba?",
+      "texto": "De que forma você descobre lojas de roupas e acessórios em Curitiba?",
       "apoio": "Selecione até 3 opções.",
       "opcoes": [
         {
@@ -241,12 +242,12 @@
         {
           "id": "raramente",
           "texto": "Costumo comprar nas mesmas lojas e raramente procuro novas",
-          "exclusiva": true
+          "anula": true
         },
         {
           "id": "nao_conheco",
           "texto": "Não conheço lojas físicas de roupas ou acessórios em Curitiba",
-          "exclusiva": true
+          "anula": true
         },
         {
           "id": "outro",
@@ -254,7 +255,7 @@
           "outro": true
         }
       ],
-      "destaque": "descobrir lojas"
+      "destaque": "descobre lojas"
     },
     {
       "id": "q7",
