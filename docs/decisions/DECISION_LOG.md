@@ -409,6 +409,32 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-061 · 23/11/2026 · Painéis e sites dos DS na mesma estrutura; Experience Intelligence no Cloudflare (FindLook v92, DM v62)
+
+- **Decisões dela, nesta rodada:**
+  - O menu lateral expande e recua, em trilho só de ícones.
+  - O perfil fica sempre no cabeçalho, à direita.
+  - O cabeçalho dos painéis é branco.
+  - Os painéis seguem a casca do próprio site do DS: cabeçalho de ponta a ponta, "≡ MENU" no topo, grupos com seta e linha guia.
+  - O menu aberto empurra o conteúdo; no celular continua a gaveta.
+  - Fundo #F6F6F7 no FindLook e #EDF0F5 no Dani Moscatelli.
+  - Card direto no fundo é só borda (a sombra fica para o que abre por cima da tela).
+  - O cabeçalho do card ganha um divisor suave, que some nas laterais. A faixa cinza foi testada e recusada.
+  - O hover de linha dentro do card é bem claro (token `--row-hover`).
+  - O botão desabilitado ganha fundo #E9E9EC no FindLook e #D6DCE6 no Dani Moscatelli.
+  - A Opção A vale nos templates do painel: título fora do card, abas só com sublinhado, cards com cabeçalho de ícone.
+  - Regra "um botão principal por área visível".
+  - O site do DS FindLook passa a ter a mesma estrutura do site do DS Dani Moscatelli, mudando só as cores.
+- **Publicação aprovada por ela:**
+  - menu com 240 px aberto e 64 px recolhido;
+  - item ativo sem a barrinha vermelha, como no site do DS;
+  - card "Seu plano" mantido no pé do menu.
+- **Área restrita do estúdio:** passa a consumir o DS Dani Moscatelli, com sincronização diária com aprovação (pull request daniellemoscatelli87/claude#196; D-039 a D-042 no registro do site).
+- **Experience Intelligence:** sai do Netlify e vai para o Cloudflare Pages, com senha antes do app (pull request daniellemoscatelli87/claude#193; D-038 no registro do site).
+  - O Netlify foi desligado: os projetos `dm-experience-intelligence` e `helpful-meerkat-e4c2aa` estão desativados.
+- **Produto FindLook:** a sincronização foi destravada com o `graficos-paleta.ts` na lista (pull request daniellemoscatelli87/FindLook#76). A sincronização #107 foi publicada, com os gráficos e botões novos.
+- **Ainda falta no produto:** o painel do produto FindLook (`PainelAdmin`, `MolduraLojista` e "Meu perfil") ainda precisa adotar a nova casca e a Opção A depois da próxima sincronização.
+
 ## D-060 · 21/11/2026 · Gráficos publicados: catálogo completo, paletas de 7 tons e regras de uso (FindLook v90, DM v61)
 
 - **Catálogo:** os 25 gráficos do documento dela entram nos dois DS, menos o sunburst e a cascata, que ela tirou porque o caso de uso não fazia sentido e o visual não agradou.
