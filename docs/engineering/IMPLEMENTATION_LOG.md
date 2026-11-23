@@ -349,7 +349,6 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
-<<<<<<< HEAD
 ## 2026-11-23 · Pesquisa Moda em Curitiba: mensagem da tela final no Alerta do DS, não publicado
 
 - **Pedido:** a mensagem do fim ("Assim que a plataforma for lançada…") não seguia o padrão do DS.
@@ -461,7 +460,6 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **O que mudou (`public/admin/pesquisas/index.html`):** card padrão por pergunta, com número em selo rosa, pergunta, quantas responderam, "Leitura" em uma frase (calculada dos números), o gráfico e um pé com "Ver números" e notas, sempre no fim do card. Todos os gráficos usam a mesma lista de barras (rótulo, percentual em destaque, quantidade e barra fina; a mais escolhida em vermelho, as outras em cinza-azulado, "Prefiro não informar" e opções exclusivas em cinza claro). Na pergunta 2, uma camada clara mostra "entre os 3 lugares". Nota de 0 a 10: média em destaque e três faixas. Pergunta 8: barra 100% com fácil, médio e difícil, da característica mais difícil para a mais fácil. Funil em quatro etapas ("Quem chegou até onde"). Gênero e faixa etária em dois cards lado a lado. Pergunta 1 e gênero em rosca, com o percentual principal no centro e legenda com números (as demais seguem em barras: escolhas múltiplas, muitas opções ou escala ordenada). Pergunta sem respostas: estado vazio, sem gráfico zerado. Grade com cards da mesma altura, sem buracos.
 - **Verificação executada:** `npm run build`; Playwright com 42 respostas fictícias e com o caso real atual (1 participação, nenhuma completa), no computador e no celular: alturas iguais em todas as linhas de 2 cards, sem erros no console.
 
-=======
 ## 2026-11-23 · Área restrita: hover de linha com --row-hover e card rosa sem repetição, não publicado
 
 - **DS em prévia:** sincronizado de novo com `DS_REF=claude/ajustes-painel` (commit `085153d`), que traz o token `--row-hover` (metade do `--graphite-50` sobre o card, ≈ #F6F8FA; branco a 4% no escuro). `?v=085153d` nas páginas.
@@ -505,7 +503,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Cache:** `admin.js` e `admin.css` com `?v=20261123c` em todas as páginas da área restrita.
 - **Verificação executada:** `npm run build`; navegador (Chromium, Playwright) com o Supabase simulado só no teste, a 1280px e 390px: 66 verificações passaram (recolher pelo clique, por Enter e por Espaço, `aria-expanded`, escolha mantida ao recarregar já em 72px, dica e painel de subitens no mouse e no teclado, Escape, perfil abrindo e fechando, cabeçalho branco, sem rolagem horizontal, menos movimento, celular sem o botão de recolher e com os nomes visíveis mesmo com o recolhido guardado, as 8 páginas carregando sem erro). O teste encontrou e corrigiu um erro: com o recolhido guardado, o celular escondia os nomes do menu.
 - **Pendente:** ver com a dona do produto; publicar.
->>>>>>> origin/main
+
 ## 2026-11-23 · Pesquisa Moda em Curitiba: identificação no início, uma participação por pessoa, vantagens e tela final com confete (D-034), publicado
 
 - **Banco:** `supabase/migrations/20261123180000_pesquisa_identificacao.sql` (não aplicada): `pesquisa_respostas` ganha `nome`, `email`, `whatsapp`, `identificacao_em`, `identificacao_versao` e `identificacao_texto`, com índices únicos por pesquisa para e-mail (sem diferenciar maiúsculas) e WhatsApp.
