@@ -10,11 +10,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/design-system/theme.css?v=e334fe5">
-<link rel="stylesheet" href="/admin/admin.css?v=20261123d">
+<link rel="stylesheet" href="/admin/admin.css?v=20261123e">
 <style>
   .cf-card { margin-top: 20px; }
-  .cf-card > h2 { margin-bottom: 4px; }
-  .cf-card > .muted { margin: 0 0 8px; font-size: 14px; }
+  .cf-card .card-faixa h2 { margin-bottom: 4px; }
+  .cf-card .card-faixa .muted { margin: 0; font-size: 14px; }
   .cf-sub { font-size: 15px; font-weight: 700; margin: 22px 0 0; padding-top: 18px; border-top: 1px solid var(--muted); }
   .cf-card input[type=text] { width: 100%; font: inherit; font-size: 14px; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--input-background); color: var(--foreground); outline: none; }
   .cf-card input[type=text]:focus { border-color: var(--primary); background: var(--card); outline: 2px solid var(--ring); outline-offset: 2px; }
@@ -54,8 +54,8 @@
   <p class="muted">Seus dados, a gestão dos dados da plataforma e o log de ações.</p>
 
   <section class="card cf-card" id="perfil">
-    <h2>Dados pessoais</h2>
-    <p class="muted">Nome e foto aparecem no menu da área restrita.</p>
+    <div class="card-faixa"><h2>Dados pessoais</h2>
+      <p class="muted">Nome e foto aparecem no cabeçalho da área restrita.</p></div>
     <div class="av-row">
       <img id="av-img" alt="">
       <div class="bt">
@@ -101,21 +101,21 @@
   </section>
 
   <section class="card cf-card" id="dados">
-    <h2>Gestão de dados</h2>
-    <p class="muted">Apaga definitivamente todos os registros de uma área, sem precisar entrar no banco de dados.</p>
+    <div class="card-faixa"><h2>Gestão de dados</h2>
+      <p class="muted">Apaga definitivamente todos os registros de uma área, sem precisar entrar no banco de dados.</p></div>
     <div id="dt-list"></div>
     <p class="cf-msg hidden" id="dt-msg"></p>
   </section>
 
   <section class="card cf-card" id="log">
-    <h2>Log da plataforma</h2>
-    <p class="muted">Ações feitas na área restrita, da mais recente para a mais antiga.</p>
+    <div class="card-faixa"><h2>Log da plataforma</h2>
+      <p class="muted">Ações feitas na área restrita, da mais recente para a mais antiga.</p></div>
     <div id="lg-list"></div>
     <div class="lg-more hidden" id="lg-more"><button type="button" class="btn-ghost" id="lg-more-btn">Carregar mais</button></div>
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="/admin/admin.js?v=20261123d"></script>
+<script src="/admin/admin.js?v=20261123e"></script>
 <script>
 const $ = (id) => document.getElementById(id);
 const el = Admin.el, sb = Admin.sb;

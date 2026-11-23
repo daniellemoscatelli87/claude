@@ -23,12 +23,20 @@ a { color: inherit; }
 :where(a, button, summary, input, select, textarea, [tabindex]):focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 
 /* Cabeçalho (branco, borda inferior fina) e menu sanduíche */
-.topbar { position: sticky; top: 0; z-index: 20; background: var(--card); border-bottom: 1px solid var(--border); margin-bottom: 24px; }
-.topbar .in { max-width: 1160px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.topbar img { height: 40px; width: auto; display: block; }
-.burger { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: var(--radius-md); border: 0; background: none; color: var(--primary-text); cursor: pointer; padding: 0; position: relative; transition: background-color var(--duration-fast) var(--ease-out); }
-.burger:hover { background: var(--accent); }
-.burger svg { width: 22px; height: 22px; }
+.topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 35; height: 64px; background: var(--card); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+.topbar .in { height: 100%; padding: 0 16px; display: flex; align-items: center; gap: 12px; }
+body:has(#app:not(.hidden)) { padding-top: 64px; }
+#app { padding-top: 28px; }
+/* Logo do cabeçalho, como no site do DS: símbolo DM e "Dani Moscatelli" */
+.marca, #drawer .side-logo { display: inline-flex; align-items: center; gap: 10px; min-width: 0; text-decoration: none; color: var(--graphite-900); border-radius: var(--radius-sm); }
+.marca img, #drawer .side-logo img { width: 34px; height: 34px; object-fit: contain; flex-shrink: 0; display: block; }
+.marca span, #drawer .side-logo span { font-size: 17px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; }
+.top-actions { margin-left: auto; }
+
+.burger { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius-sm); border: 0; background: none; color: var(--muted-foreground); cursor: pointer; padding: 0; position: relative; flex-shrink: 0; transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); }
+.burger:hover { background: var(--accent); color: var(--foreground); }
+#bell { color: var(--primary-text); }
+.burger svg { width: 20px; height: 20px; }
 .burger-dot { position: absolute; top: 0; right: 0; min-width: 20px; height: 20px; padding: 0 5px; border-radius: var(--radius-full); background: var(--primary); color: var(--primary-foreground); font-size: 11px; font-weight: 800; display: grid; place-items: center; border: 2px solid var(--card); }
 .nav-count { margin-left: auto; min-width: 22px; height: 22px; padding: 0 7px; border-radius: var(--radius-full); background: var(--primary); color: var(--primary-foreground); font-size: 12px; font-weight: 800; display: grid; place-items: center; }
 .top-actions { display: flex; gap: 8px; align-items: center; }
@@ -65,15 +73,31 @@ a { color: inherit; }
 .drawer.open { transform: none; visibility: visible; }
 .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); display: grid; place-items: center; font-weight: 800; flex-shrink: 0; }
 img.avatar { object-fit: cover; background: var(--muted); }
-.drawer nav { padding: 12px; display: grid; gap: 4px; flex: 1; align-content: start; }
-.drawer nav a, .drawer .recolher { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-md); text-decoration: none; font-weight: 600; color: var(--sidebar-foreground); transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); }
-.drawer nav a:hover { background: var(--sidebar-accent); }
-.drawer nav a[aria-current=page] { background: var(--primary-muted); color: var(--primary-text); }
-.drawer svg { width: 20px; height: 20px; flex-shrink: 0; }
-.drawer .foot { padding: 12px; border-top: 1px solid var(--sidebar-border); }
-.drawer .recolher { width: 100%; height: auto; background: none; border: 0; cursor: pointer; font: inherit; font-weight: 600; color: var(--muted-foreground); }
+.drawer nav { padding: 12px; display: grid; gap: 2px; flex: 1; align-content: start; overflow-y: auto; overflow-x: hidden; }
+/* Itens do menu (como a navegação do site do DS): ícone 16px, nome 14px médio, texto cinza; hover --accent;
+   ativo com fundo rosa claro (--primary-muted) e texto vermelho (--primary-text). */
+#drawer-nav > a, #drawer-nav .nav-pai { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 8px 12px; border: 0; border-radius: var(--radius-sm); background: none; font: inherit; font-size: 14px; font-weight: 500; line-height: 1.3; color: var(--muted-foreground); text-decoration: none; text-align: left; cursor: pointer; position: relative; transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); }
+#drawer-nav > a:hover, #drawer-nav .nav-pai:hover { background: var(--sidebar-accent); color: var(--foreground); }
+#drawer-nav > a[aria-current=page], .nav-grupo:not(.aberto) > .nav-pai.pai-ativo { background: var(--primary-muted); color: var(--primary-text); }
+.nav-grupo.aberto > .nav-pai.pai-ativo { color: var(--foreground); }
+.drawer svg { width: 16px; height: 16px; flex-shrink: 0; }
+.nav-seta { margin-left: auto; display: inline-flex; color: var(--muted-foreground); }
+.nav-seta svg { width: 14px; height: 14px; transition: transform var(--duration-fast) var(--ease-out); }
+.nav-grupo.aberto .nav-seta svg { transform: rotate(90deg); }
+.nav-count + .nav-seta { margin-left: 8px; }
+/* Subitens numa linha-guia à esquerda */
+.nav-sub { display: none; gap: 2px; margin: 2px 0 4px 12px; padding-left: 8px; border-left: 1px solid var(--sidebar-border); }
+.nav-grupo.aberto > .nav-sub { display: grid; }
+.nav-sub a { display: block; padding: 6px 12px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 400; color: var(--muted-foreground); text-decoration: none; transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); }
+.nav-sub a:hover { color: var(--foreground); background: var(--sidebar-accent); }
+.nav-sub a[aria-current=page] { background: var(--primary-muted); color: var(--primary-text); font-weight: 500; }
+/* Botão "Menu" no topo do menu lateral (recolhe e expande; só no computador) */
+.menu-topo { display: none; }
+.drawer .recolher { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 8px 0 0; border: 0; border-radius: var(--radius-sm); background: none; cursor: pointer; font: inherit; color: var(--muted-foreground); position: relative; }
+.drawer .recolher > svg { width: 36px; height: 18px; flex-shrink: 0; stroke-width: 1.5; }
 .drawer .recolher:hover { background: var(--sidebar-accent); color: var(--foreground); }
-.drawer .close { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; padding: 0; border: 0; background: none; border-radius: var(--radius-sm); cursor: pointer; color: var(--muted-foreground); }
+.menu-rotulo { font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.drawer .close { position: absolute; top: 14px; right: 12px; width: 36px; height: 36px; padding: 0; border: 0; background: none; border-radius: var(--radius-sm); cursor: pointer; color: var(--muted-foreground); display: grid; place-items: center; }
 .drawer .close:hover { background: var(--accent); color: var(--foreground); }
 #drawer { background: var(--sidebar); }
 
@@ -83,7 +107,13 @@ img.avatar { object-fit: cover; background: var(--muted); }
 h1 { font-size: 28px; font-weight: 800; letter-spacing: -.02em; margin: 10px 0 4px; line-height: 1.2; }
 h2 { font-size: 18px; font-weight: 800; letter-spacing: -.01em; margin: 0; line-height: 1.3; }
 h3 { font-size: 14px; font-weight: 700; margin: 0 0 12px; line-height: 1.4; letter-spacing: 0; }
-.card { background: var(--card); color: var(--card-foreground); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 20px; box-shadow: var(--shadow-xs); }
+.card { background: var(--card); color: var(--card-foreground); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 20px; }
+/* Faixa de cabeçalho do card: --graphite-100 na largura toda, sem linha, cantos de cima do card; o conteúdo fica no branco.
+   Texto de apoio na faixa em --graphite-500 (5,4:1) e destaque em --crimson-600 (6,7:1); ícone sobre o card. */
+.card > .card-faixa:first-child { margin: -20px -20px 16px; padding: 16px 20px; background: var(--graphite-100); border-radius: calc(var(--radius-xl) - 1px) calc(var(--radius-xl) - 1px) 0 0; }
+.card-faixa .muted, .card-faixa .cnt { color: var(--graphite-500) !important; }
+.card-faixa .unread { color: var(--crimson-600) !important; }
+.card-faixa .ic { background: var(--card) !important; color: var(--primary-text) !important; }
 .back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--muted-foreground); text-decoration: none; margin-bottom: 8px; }
 .back:hover { color: var(--primary-text); }
 .msg { font-size: 13px; margin-top: 12px; }
@@ -227,70 +257,59 @@ input[type=search] { padding-left: 40px; background: var(--input-background) url
 @media (prefers-reduced-motion: reduce) { .det-sec > summary::after { transition: none; } }
 
 /* =========================================================================
-   Menu lateral à esquerda (template Dashboard do Design System): logo no topo, itens com ícone,
-   item ativo em vermelho sobre fundo rosa claro e, na base, o botão de recolher.
-   Computador: fixo e sempre visível, expandido (ícone e nome) ou recolhido (só ícones, 72px);
-   celular e tablet: abre pela esquerda com o botão do menu. O perfil fica sempre no cabeçalho.
+   Menu lateral (como no site do DS): abaixo do cabeçalho, branco, borda à direita.
+   Computador: fixo, expandido (240px) ou recolhido (64px, só ícones), pelo botão "Menu" no topo.
+   Celular e tablet: abre pela esquerda com o botão do menu, por cima do cabeçalho, com o logo e o botão de fechar.
    ========================================================================= */
 .drawer { left: 0; right: auto; transform: translateX(-100%); box-shadow: var(--shadow-xl); }
 .drawer.notif-drawer { left: auto; right: 0; transform: translateX(100%); box-shadow: var(--shadow-xl); }
 .drawer.open, .drawer.notif-drawer.open { transform: none; }
-#drawer .side-logo { display: block; padding: 18px 20px 4px; }
-#drawer .side-logo img { height: 40px; width: auto; display: block; }
-#drawer .side-logo .logo-simbolo { display: none; }
-#drawer .foot { display: none; }
+#drawer .side-logo { margin: 15px 16px 6px; align-self: flex-start; }
 .nav-tip, .nav-sub-tit { display: none; }
-.drawer nav a { position: relative; }
-.drawer nav a.pai-ativo { color: var(--primary-text); }
-.nav-label { white-space: nowrap; }
-.nav-sub { display: grid; gap: 2px; margin: 0 0 4px 30px; padding-left: 14px; border-left: 1px solid var(--sidebar-border); }
-.nav-sub a { padding: 8px 12px !important; border-radius: var(--radius-sm) !important; font-size: 14px; font-weight: 500 !important; color: var(--muted-foreground) !important; }
-.nav-sub a:hover { color: var(--foreground) !important; background: var(--sidebar-accent); }
-.nav-sub a[aria-current=page] { background: var(--primary-muted); color: var(--primary-text) !important; font-weight: 600 !important; }
+.nav-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 @media (min-width: 1024px) {
-  :root { --side-w: 248px; --side-mov: var(--duration-normal) var(--ease-snappy); }
-  html.menu-recolhido { --side-w: 72px; }
+  :root { --side-w: 240px; --side-mov: var(--duration-normal) var(--ease-snappy); }
+  html.menu-recolhido { --side-w: 64px; }
   body:has(#app:not(.hidden)) { padding-left: var(--side-w); transition: padding-left var(--side-mov); }
-  #drawer { transform: none !important; visibility: visible !important; width: var(--side-w); box-shadow: none; border-right: 1px solid var(--sidebar-border); z-index: 30; transition: width var(--side-mov); }
+  #drawer { top: 64px; transform: none !important; visibility: visible !important; width: var(--side-w); box-shadow: none; border-right: 1px solid var(--sidebar-border); z-index: 30; transition: width var(--side-mov); }
   html.menu-animando #drawer { overflow: hidden; }
   body:has(#app.hidden) #drawer { display: none; }
-  #drawer .close { display: none; }
-  #drawer .side-logo { padding: 20px 20px 8px; height: 80px; }
-  #drawer .side-logo img { height: 52px; }
-  #drawer nav { padding: 12px; order: 2; }
-  #drawer nav a { padding: 10px 14px; font-size: 14px; }
-  #drawer .side-logo { order: 1; }
-  #drawer .foot { display: block; order: 4; border-top: 1px solid var(--sidebar-border); padding: 12px; }
-  #drawer .recolher { padding: 10px 14px; font-size: 14px; position: relative; }
-  #burger { display: none !important; }
-  .topbar .in > a { visibility: hidden; }
+  #drawer .close, #drawer .side-logo, #burger { display: none !important; }
+  .menu-topo { display: flex; align-items: center; height: 48px; flex-shrink: 0; padding: 0 12px; }
+  #drawer nav { padding: 8px 12px 16px; }
   body.scroll-lock:has(#drawer) .backdrop { display: none; }
 
-  /* Menu recolhido: só ícones; o símbolo no lugar do logo; nomes em dicas; subitens em painel ao lado */
-  /* nome escondido só visualmente (continua sendo o nome acessível) */
-  html.menu-recolhido #drawer .nav-label { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-  html.menu-recolhido #drawer .side-logo { padding: 20px 0 8px; display: flex; justify-content: center; align-items: center; }
-  html.menu-recolhido #drawer .side-logo .logo-completo { display: none; }
-  html.menu-recolhido #drawer .side-logo .logo-simbolo { display: block; height: 40px; }
-  html.menu-recolhido #drawer nav > a, html.menu-recolhido #drawer .nav-grupo > a, html.menu-recolhido #drawer .recolher { width: 48px; gap: 0; }
-  html.menu-recolhido #drawer nav a.pai-ativo { background: var(--primary-muted); }
-  html.menu-recolhido #drawer .nav-count { position: absolute; top: 2px; right: 0; min-width: 18px; height: 18px; padding: 0 5px; font-size: 10.5px; border: 2px solid var(--sidebar); margin: 0; }
-  html.menu-recolhido .nav-tip { display: block; position: absolute; left: calc(100% + 12px); top: 50%; transform: translate(-4px, -50%); z-index: 60; background: var(--popover); color: var(--popover-foreground); border: 1px solid var(--border); font-size: 13px; font-weight: 500; line-height: 1.3; white-space: nowrap; padding: 6px 12px; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-snappy), visibility 0s var(--duration-fast); }
+  /* Recolhido: só ícones, centralizados; nomes em dicas; grupos em painel ao lado */
+  html.menu-recolhido #drawer .nav-label, html.menu-recolhido .menu-rotulo { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  html.menu-recolhido .menu-topo { justify-content: center; padding: 0; }
+  html.menu-recolhido .drawer .recolher { padding: 0; }
+  /* recolhido, o menu não corta nem rola: as dicas e os painéis passam da borda */
+  html.menu-recolhido #drawer nav { padding: 8px; overflow: visible; }
+  html.menu-recolhido #drawer-nav > a, html.menu-recolhido #drawer-nav .nav-pai { justify-content: center; padding: 8px 0; gap: 0; }
+  html.menu-recolhido .nav-seta { display: none; }
+  html.menu-recolhido #drawer-nav .nav-pai.pai-ativo { background: var(--primary-muted); color: var(--primary-text); }
+  /* recolhido, o contador vira um ponto no canto do ícone (o número continua no nome acessível do item) */
+  html.menu-recolhido #drawer .nav-count { position: absolute; top: 7px; left: calc(50% + 3px); min-width: 0; width: 12px; height: 12px; padding: 0; font-size: 0; border: 2px solid var(--sidebar); margin: 0; }
+  /* dica (Tooltip do DS: popover, borda, sombra média, cantos pequenos, 13px médio) */
+  html.menu-recolhido .nav-tip { display: block; position: absolute; left: calc(100% + 12px); top: 50%; transform: translate(-4px, -50%); z-index: 60; background: var(--popover); color: var(--popover-foreground); border: 1px solid var(--border); font-size: 13px; font-weight: 500; line-height: 1.3; letter-spacing: 0; text-transform: none; white-space: nowrap; padding: 6px 12px; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-snappy), visibility 0s var(--duration-fast); }
   html.menu-recolhido .nav-tip::before { content: ""; position: absolute; right: 100%; top: -8px; bottom: -8px; width: 14px; }
   html.menu-recolhido #drawer a:hover > .nav-tip, html.menu-recolhido #drawer a:focus-visible > .nav-tip,
   html.menu-recolhido #drawer .recolher:hover > .nav-tip, html.menu-recolhido #drawer .recolher:focus-visible > .nav-tip { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(0, -50%); transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-snappy), visibility 0s; }
   html.menu-recolhido #drawer .dica-fechada > .nav-tip { opacity: 0 !important; visibility: hidden !important; }
+  /* painel dos subitens (popover do DS) */
   html.menu-recolhido .nav-grupo { position: relative; }
-  html.menu-recolhido .nav-sub { position: absolute; left: calc(100% + 12px); top: -6px; z-index: 60; margin: 0; min-width: 210px; padding: 6px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--popover); color: var(--popover-foreground); box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; transform: translateX(-4px); transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-snappy), visibility 0s var(--duration-fast); }
+  html.menu-recolhido .nav-sub { display: grid; position: absolute; left: calc(100% + 12px); top: -6px; z-index: 60; margin: 0; min-width: 210px; padding: 4px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--popover); color: var(--popover-foreground); box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; transform: translateX(-4px); transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-snappy), visibility 0s var(--duration-fast); }
   html.menu-recolhido .nav-sub::before { content: ""; position: absolute; right: 100%; top: 0; bottom: 0; width: 14px; }
-  html.menu-recolhido .nav-sub-tit { display: block; padding: 6px 12px 4px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-foreground); }
+  html.menu-recolhido .nav-sub-tit { display: block; padding: 6px 12px 4px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-foreground); }
   html.menu-recolhido .nav-grupo:hover > .nav-sub, html.menu-recolhido .nav-grupo:focus-within > .nav-sub { opacity: 1; visibility: visible; transform: none; transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-snappy), visibility 0s; }
   html.menu-recolhido .nav-grupo.dica-fechada > .nav-sub { opacity: 0 !important; visibility: hidden !important; }
-  html.menu-animando .nav-tip, html.menu-animando .nav-sub { display: none; }
+  html.menu-animando .nav-tip, html.menu-animando .nav-sub { display: none !important; }
 }
+@media (max-width: 479px) { .marca span { display: none; } }
 @media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
   body:has(#app:not(.hidden)), #drawer, .nav-tip, .nav-sub, .perfil-menu { transition: none !important; }
 }
+@media (prefers-reduced-motion: reduce) { .nav-seta svg { transition: none; } }
 
 /* Perfil no cabeçalho, à direita do sino: foto, nome e seta; abre um menu com Configurações e Sair. */
 .perfil { position: relative; }

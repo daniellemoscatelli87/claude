@@ -419,6 +419,12 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Escolhas do Claude (forma):** o arquivo do DS é usado como está, sem Tailwind (o navegador ignora os blocos do Tailwind); botões, campos, abas e selos seguem os componentes do DS; nos gráficos, o lado "fácil" da matriz fácil × difícil usa os tons 5 e 6 e o neutro, e o lado "difícil" (o foco) os tons 1 e 2, porque o DS não tem paleta divergente; escalas com 5 passos começam no tom 7.
 - **Trade-offs:** o `?v=` do `theme.css` precisa mudar a cada sincronização (o PR lembra); o anel de foco do DS (`--ring`, vermelho a 35%) e o hover do botão principal (`--primary-hover` igual ao `--primary` no tema claro) vêm do DS como estão; se precisarem de mais contraste, a mudança é feita no DS.
 
+## D-036 · 23/11/2026 · Painel com a casca do site do DS, cards só com borda e faixa de cabeçalho (site)
+
+- **Origem:** dona do produto (terceira rodada de ajustes da área restrita).
+- **Decisão:** o painel segue a casca do site do Design System: cabeçalho branco na largura toda, com o logo à esquerda e notificações e perfil à direita; menu lateral abaixo dele, com o botão "Menu" no topo, grupos com seta e subitens numa linha-guia, item ativo rosa claro com texto vermelho, e o trilho recolhido só com ícones. Cards sobre o fundo `--background` só com borda, sem sombra parada. Cards com cabeçalho ganham a faixa `--graphite-100`.
+- **Trade-offs:** larguras passam a ser as do site do DS (240px e 64px, antes 248px e 72px); o guia de cards do DS ainda indica "borda e sombra suave" para card sobre fundo cinza claro, o que diverge desta decisão (a mudança no DS fica com a dona do produto).
+
 ---
 
 ## Decisões pendentes

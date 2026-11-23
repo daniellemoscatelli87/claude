@@ -49,6 +49,7 @@
     chevronDown: '<path d="m6 9 6 6 6-6"/>',
     panelClose: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/>',
     panelOpen: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/>',
+    chevronRight: '<path d="m9 18 6-6-6-6"/>',
   };
   const icon = (name) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
 
@@ -179,8 +180,11 @@
   function buildShell(page) {
     const top = el("div", "topbar hidden");
     top.id = "topbar";
-    // Cabeçalho: logo (celular e tablet), notificações, perfil (foto, nome e menu com Configurações e Sair) e menu sanduíche.
-    top.innerHTML = `<div class="in"><a href="/admin/"><img src="/favicon-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
+    // Cabeçalho do DS: faixa branca na largura toda, acima do menu lateral. À esquerda, o menu sanduíche (celular e tablet)
+    // e o logo (símbolo DM + "Dani Moscatelli"); à direita, notificações e perfil (foto, nome e menu com Configurações e Sair).
+    top.innerHTML = `<div class="in">
+      <button type="button" class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">${icon("menu")}</button>
+      <a class="marca" href="/admin/" aria-label="Dani Moscatelli, ir para o Início"><img src="/favicon-dm.png" alt="" width="34" height="34"><span>Dani Moscatelli</span></a>
       <div class="top-actions">
         <button type="button" class="burger" id="bell" aria-label="Notificações" aria-expanded="false" aria-controls="notif-drawer">${icon("bell")}<span class="burger-dot hidden" id="bell-dot"></span></button>
         <div class="perfil" id="perfil">
@@ -191,24 +195,25 @@
             <button type="button" id="logout">${icon("logout")}Sair</button>
           </div>
         </div>
-        <button type="button" class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">${icon("menu")}</button>
       </div></div>`;
     const backdrop = el("div", "backdrop"); backdrop.id = "backdrop";
     const drawer = el("aside", "drawer"); drawer.id = "drawer";
     drawer.setAttribute("aria-label", "Menu");
-    // Cada item tem o nome (escondido só visualmente quando o menu está recolhido) e uma dica que aparece
-    // ao passar o mouse ou focar com o teclado. Itens com subitens abrem um painel ao lado (flyout).
+    // Menu do DS: no topo, o botão "Menu" que recolhe e expande; itens com ícone e nome; grupos (Parceiros, Projetos)
+    // com seta e subitens numa linha-guia à esquerda. Recolhido: só ícones, com dica no mouse e no foco; os grupos
+    // abrem um painel ao lado (flyout). O nome fica escondido só visualmente, para continuar sendo o nome acessível.
     const tip = (t) => `<span class="nav-tip" aria-hidden="true">${t}</span>`;
     drawer.innerHTML = `<button type="button" class="close" id="drawer-close" aria-label="Fechar menu">${icon("close")}</button>
-      <a class="side-logo" href="/admin/"><img class="logo-completo" src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"><img class="logo-simbolo" src="/favicon-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
-      <nav id="drawer-nav">${PAGES.map((p) => {
+      <a class="side-logo" href="/admin/" aria-label="Dani Moscatelli, ir para o Início"><img src="/favicon-dm.png" alt="" width="34" height="34"><span>Dani Moscatelli</span></a>
+      <div class="menu-topo"><button type="button" class="recolher" id="menu-recolher" aria-controls="drawer-nav">${icon("menu")}<span class="menu-rotulo" aria-hidden="true">Menu</span></button></div>
+      <nav id="drawer-nav" aria-label="Menu principal">${PAGES.map((p) => {
         const ativo = p.id === page || (p.sub || []).some((x) => x.id === page);
-        const item = `<a href="${p.href}"${ativo ? (p.sub ? ' class="pai-ativo"' : ' aria-current="page"') : ""}>${icon(p.icon)}<span class="nav-label">${p.label}</span><span class="nav-count hidden" data-count="${p.id}"></span>${p.sub ? "" : tip(p.label)}</a>`;
-        if (!p.sub) return item;
-        // subitens (Parceiros: perfis e candidaturas, comunicados); com o menu recolhido, viram o painel ao lado
-        return `<div class="nav-grupo">${item}<div class="nav-sub"><span class="nav-sub-tit" aria-hidden="true">${p.label}</span>${p.sub.map((x) => `<a href="${x.href}"${x.id === page ? ' aria-current="page"' : ""}>${x.label}</a>`).join("")}</div></div>`;
-      }).join("")}</nav>
-      <div class="foot"><button type="button" class="recolher" id="menu-recolher" aria-controls="drawer"></button></div>`;
+        if (!p.sub) return `<a href="${p.href}"${ativo ? ' aria-current="page"' : ""}>${icon(p.icon)}<span class="nav-label">${p.label}</span><span class="nav-count hidden" data-count="${p.id}"></span>${tip(p.label)}</a>`;
+        // grupo: abre e fecha os subitens; começa aberto quando a página atual é um deles
+        return `<div class="nav-grupo${ativo ? " aberto" : ""}" data-primeiro="${p.sub[0].href}">
+          <button type="button" class="nav-pai${ativo ? " pai-ativo" : ""}" aria-expanded="${ativo}" aria-controls="sub-${p.id}">${icon(p.icon)}<span class="nav-label">${p.label}</span><span class="nav-count hidden" data-count="${p.id}"></span><span class="nav-seta">${icon("chevronRight")}</span></button>
+          <div class="nav-sub" id="sub-${p.id}"><span class="nav-sub-tit" aria-hidden="true">${p.label}</span>${p.sub.map((x) => `<a href="${x.href}"${x.id === page ? ' aria-current="page"' : ""}>${x.label}</a>`).join("")}</div></div>`;
+      }).join("")}</nav>`;
 
     const wrap = el("div", "wrap"); wrap.id = "gate";
     wrap.innerHTML = `<section class="card login hidden" id="login">
@@ -321,12 +326,34 @@
     // Recolher e expandir o menu lateral (computador). A escolha fica guardada no aparelho.
     const recolher = $("menu-recolher");
     const html = document.documentElement;
+    const desktop = matchMedia("(min-width: 1024px)");
+    const recolhido = () => desktop.matches && html.classList.contains("menu-recolhido");
+    // Grupos: expandido, o botão abre e fecha os subitens; recolhido, os subitens aparecem no painel ao lado e o
+    // aria-expanded acompanha o painel (aberto com o mouse ou o foco dentro do grupo).
+    const grupos = [...drawer.querySelectorAll(".nav-grupo")];
+    function sincronizarGrupos() {
+      grupos.forEach((g) => {
+        const aberto = recolhido() ? (g.matches(":hover") || g.matches(":focus-within")) && !g.classList.contains("dica-fechada") : g.classList.contains("aberto");
+        g.querySelector(".nav-pai").setAttribute("aria-expanded", String(aberto));
+      });
+    }
+    grupos.forEach((g) => {
+      g.querySelector(".nav-pai").addEventListener("click", () => {
+        if (recolhido()) { location.href = g.dataset.primeiro; return; }
+        g.classList.toggle("aberto");
+        sincronizarGrupos();
+      });
+      ["mouseenter", "mouseleave", "focusin", "focusout"].forEach((ev) => g.addEventListener(ev, () => setTimeout(sincronizarGrupos)));
+    });
+    desktop.addEventListener("change", sincronizarGrupos);
     const aplicarRecolher = () => {
       const r = html.classList.contains("menu-recolhido");
       const nome = r ? "Expandir menu" : "Recolher menu";
-      recolher.innerHTML = `${icon(r ? "panelOpen" : "panelClose")}<span class="nav-label">${nome}</span>${tip(nome)}`;
+      recolher.querySelector(".nav-tip")?.remove();
+      recolher.insertAdjacentHTML("beforeend", tip(nome));
       recolher.setAttribute("aria-expanded", String(!r));
-      if (r) recolher.setAttribute("aria-label", nome); else recolher.removeAttribute("aria-label");
+      recolher.setAttribute("aria-label", nome);
+      sincronizarGrupos();
     };
     aplicarRecolher();
     let animando;
@@ -344,15 +371,17 @@
     const nav = $("drawer-nav");
     document.addEventListener("keydown", (e) => {
       if (e.key !== "Escape" || !html.classList.contains("menu-recolhido")) return;
-      let alvo = document.activeElement?.closest?.("#drawer-nav a, .nav-grupo, #menu-recolher");
+      const SEL = "#drawer-nav a, #drawer-nav .nav-pai, .nav-grupo, #menu-recolher";
+      let alvo = document.activeElement?.closest?.(SEL);
       // Foco num subitem: volta para o item principal antes de esconder o painel.
-      if (alvo?.closest(".nav-sub")) { alvo = alvo.closest(".nav-grupo").querySelector("a"); alvo.focus(); }
-      const sobre = [...drawer.querySelectorAll("#drawer-nav a, .nav-grupo, #menu-recolher")].filter((x) => x.matches(":hover"));
+      if (alvo?.closest(".nav-sub")) { alvo = alvo.closest(".nav-grupo").querySelector(".nav-pai"); alvo.focus(); }
+      const sobre = [...drawer.querySelectorAll(SEL)].filter((x) => x.matches(":hover"));
       [alvo, ...sobre].forEach((x) => { if (!x) return; x.classList.add("dica-fechada"); x.closest(".nav-grupo")?.classList.add("dica-fechada"); });
+      sincronizarGrupos();
     });
-    const reabrir = (e) => { const x = e.target.closest?.("#drawer-nav a, .nav-grupo, #menu-recolher"); if (x) { x.classList.remove("dica-fechada"); x.closest(".nav-grupo")?.classList.remove("dica-fechada"); } };
+    const reabrir = (e) => { const x = e.target.closest?.("#drawer-nav a, #drawer-nav .nav-pai, .nav-grupo, #menu-recolher"); if (x) { x.classList.remove("dica-fechada"); x.closest(".nav-grupo")?.classList.remove("dica-fechada"); } };
     nav.addEventListener("mouseover", reabrir);
-    drawer.querySelector(".foot").addEventListener("mouseover", reabrir);
+    drawer.querySelector(".menu-topo").addEventListener("mouseover", reabrir);
     drawer.addEventListener("focusin", reabrir);
     drawer.addEventListener("mouseleave", () => drawer.querySelectorAll(".dica-fechada").forEach((x) => x.classList.remove("dica-fechada")));
   }
