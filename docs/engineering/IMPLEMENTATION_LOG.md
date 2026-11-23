@@ -595,6 +595,28 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-23 · Pesquisa: tela própria para quem não comprou, campos subordinados abaixo da opção, perguntas 11 e 12 revisadas e faixa etária em cartões, não publicado
+
+- **Tela de quem não comprou este ano (`#pq-semcompras`), na estrutura do modelo enviado pela dona do produto:**
+  - check em contorno;
+  - "Obrigada pelo seu interesse!";
+  - "Neste momento, nossa pesquisa é voltada a quem comprou roupas, calçados ou acessórios neste ano.";
+  - "Agradecemos por dedicar um tempinho para participar!";
+  - linha divisória e assinatura em texto, sem foto.
+  - Quem mora fora de Curitiba e da Região Metropolitana continua com a tela de encerramento.
+  - Ao recarregar a página, a tela é mantida.
+- **Pergunta 1:** o campo de bairro aparece logo abaixo de "Curitiba" e o de cidade logo abaixo de "Região Metropolitana de Curitiba", recuados e com uma linha vermelha à esquerda.
+- **Pergunta 11:** 14 opções novas, na ordem enviada. Ids mantidos onde o sentido é o mesmo; novas: `casuais`, `basicas` e `intimas`.
+- **Pergunta 12:**
+  - texto "Quando você não encontrou uma roupa, calçado ou acessório que queria comprar, o que acabou fazendo?", com "não encontrou" em vermelho;
+  - apoio "Selecione todas as situações que você viveu neste ano.";
+  - opções revisadas, sem ponto final, como as demais (ids mantidos).
+- **"Sobre você" no computador:** a faixa etária deixa as pílulas e usa os mesmos cartões de gênero e estado civil. No celular continua a lista suspensa.
+- Testes executados:
+  - Playwright no iPhone 13: fluxo completo nos três caminhos; "Não comprei", em Curitiba e na Região Metropolitana, mostra a tela nova sem confete e a mantém ao recarregar; ordem dos campos na pergunta 1; 15 itens na pergunta 11, com a exclusiva.
+  - Playwright no computador: "Sobre você" em cartões.
+  - Sem erros de JS.
+
 ## 2026-11-23 · Pesquisa: correção da tela final de quem marca "Não comprei nenhuma peça este ano", não publicado
 
 - **Defeito (no ar desde a v11):** `encerraEm()` em `src/pesquisa-moda.ts` olhava só as duas primeiras perguntas. Com a 1.1 entre a 1 e a 2, quem marcava "Não comprei" na pergunta 2 via a tela de agradecimento com confete em vez da tela de encerramento.

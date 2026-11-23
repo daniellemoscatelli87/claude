@@ -86,7 +86,7 @@ let retomar = -1; // etapa salva para continuar depois da identificação
 const identificado = () => !!(E.nome.trim() && emailValido(E.email) && whatsValido(E.whats) && E.ciente);
 
 /* ---------- Telas ---------- */
-const telas = ['pq-intro', 'pq-form', 'pq-obrigada', 'pq-encerrada', 'pq-ja', 'pq-fora-do-ar'];
+const telas = ['pq-intro', 'pq-form', 'pq-obrigada', 'pq-encerrada', 'pq-semcompras', 'pq-ja', 'pq-fora-do-ar'];
 function mostrarTela(id: string) {
   telas.forEach((t) => { $(t).hidden = t !== id; });
   $('pq-progresso').hidden = id !== 'pq-form';
@@ -148,8 +148,16 @@ function montarPergunta(p: Pergunta, i: number) {
       lista.appendChild(lab);
     });
     fs.append(lista);
-    // pergunta 1: a cidade (Região Metropolitana) ou o bairro (Curitiba) aparece logo abaixo da escolha
-    if (p.id === 'q1') PERFIL.filter((c) => c.inicio).forEach((c) => { const b = montarLista(c); b.classList.add('pq-local'); b.hidden = true; fs.appendChild(b); });
+    // pergunta 1: o campo subordinado aparece logo abaixo da opção a que pertence
+    // (bairro abaixo de "Curitiba"; cidade abaixo de "Região Metropolitana de Curitiba")
+    if (p.id === 'q1') {
+      const dono: Record<string, string> = { bairro: 'sim', cidade: 'rmc' };
+      PERFIL.filter((c) => c.inicio).forEach((c) => {
+        const b = montarLista(c); b.classList.add('pq-local'); b.hidden = true;
+        const op = lista.querySelector<HTMLInputElement>(`input[value="${dono[c.id]}"]`)?.closest('label');
+        if (op) op.after(b); else fs.appendChild(b);
+      });
+    }
   } else if (p.tipo === 'ranking') {
     // classificação: a ordem dos toques define 1º, 2º e 3º; tocar de novo tira e as demais sobem
     const atual = (): string[] => (Array.isArray(E.r[p.id]) ? E.r[p.id] as string[] : []);
@@ -306,19 +314,13 @@ function montarPerfil() {
     const bloco = el('div', 'pq-perfil-campo'); bloco.id = 'pq-perfil-' + c.id;
     const tituloId = bloco.id + '-titulo';
     const t = el('p', 'pq-perfil-titulo'); t.id = tituloId; t.append(c.texto, el('span', 'pq-obrig', ' *'));
-    // computador: opções em cartões (gênero) ou pílulas (faixa etária); celular: lista suspensa (dropdown)
-    const grupo = el('div', 'pq-so-desk ' + (c.id === 'faixa_etaria' ? 'pq-perfil-chips' : 'pq-ops pq-ops-2'));
+    // computador: cartões em 2 colunas iguais (gênero, faixa etária e estado civil, no mesmo padrão); celular: lista suspensa
+    const grupo = el('div', 'pq-so-desk pq-ops pq-ops-2');
     grupo.setAttribute('role', 'radiogroup'); grupo.setAttribute('aria-labelledby', tituloId);
     const radios: HTMLInputElement[] = [];
     c.opcoes.forEach((o) => {
-      if (c.id === 'faixa_etaria') {
-        const lab = el('label', 'pq-chip pq-chip-g');
-        const inp = el('input'); inp.type = 'radio'; inp.name = 'perfil-' + c.id; inp.value = o.id; inp.checked = perfilAtual()[c.id] === o.id;
-        lab.append(inp, el('span', undefined, o.texto)); grupo.appendChild(lab); radios.push(inp);
-      } else {
-        const { lab, inp } = opcaoCartao('radio', 'perfil-' + c.id, o, perfilAtual()[c.id] === o.id);
-        grupo.appendChild(lab); radios.push(inp);
-      }
+      const { lab, inp } = opcaoCartao('radio', 'perfil-' + c.id, o, perfilAtual()[c.id] === o.id);
+      grupo.appendChild(lab); radios.push(inp);
     });
     const sel = el('select', 'pq-so-movel pq-select'); sel.id = bloco.id + '-sel'; sel.setAttribute('aria-labelledby', tituloId);
     const vazio = el('option', undefined, 'Selecione'); vazio.value = ''; vazio.disabled = true; sel.appendChild(vazio);
@@ -651,7 +653,8 @@ async function enviar(final: boolean) {
     if (res.status === 410) { concluir('fora'); return; }
     if (res.status === 409 && out.ja_respondeu) { concluir('ja'); return; }
     if (!res.ok || !out.ok) throw new Error(out.error || 'Não foi possível enviar agora.');
-    concluir(enc ? 'encerrada' : 'obrigada', E.nov === 'sim');
+    // não comprou este ano (pergunta 2) tem tela própria; fora de Curitiba e Região Metropolitana, a de encerramento
+    concluir(enc === 'q2' ? 'semcompras' : enc ? 'encerrada' : 'obrigada', E.nov === 'sim');
   } catch (e) {
     erroGeral.textContent = (e instanceof Error && e.message && !/fetch|network/i.test(e.message) ? e.message : 'Não foi possível enviar. Confira sua conexão.') + ' Suas respostas continuam aqui; toque no botão para tentar de novo.';
     erroGeral.hidden = false;
@@ -660,10 +663,10 @@ async function enviar(final: boolean) {
   }
 }
 
-function concluir(tipo: 'obrigada' | 'encerrada' | 'fora' | 'ja', comContato = false, animar = true) {
+function concluir(tipo: 'obrigada' | 'encerrada' | 'semcompras' | 'fora' | 'ja', comContato = false, animar = true) {
   // dados salvos no servidor: guarda nesta sessão que a participação terminou e apaga o rascunho.
   // (O limite de uma participação por pessoa é feito no servidor, pelo e-mail e WhatsApp.)
-  if (tipo === 'obrigada' || tipo === 'encerrada') guardar(CHAVE_FIM, { tipo, comContato, em: Date.now() });
+  if (tipo === 'obrigada' || tipo === 'encerrada' || tipo === 'semcompras') guardar(CHAVE_FIM, { tipo, comContato, em: Date.now() });
   if (tipo !== 'fora') { try { localStorage.removeItem(CHAVE_RASCUNHO); sessionStorage.removeItem(CHAVE_RASCUNHO + '-contato'); } catch { /* sem armazenamento */ } }
   if (tipo === 'obrigada') {
     $('pq-obrigada-msg').textContent = comContato
@@ -672,7 +675,7 @@ function concluir(tipo: 'obrigada' | 'encerrada' | 'fora' | 'ja', comContato = f
     $('pq-obrigada-dados').hidden = !comContato;
     mostrarTela('pq-obrigada');
     if (animar) confete();
-  } else mostrarTela(tipo === 'fora' ? 'pq-fora-do-ar' : tipo === 'ja' ? 'pq-ja' : 'pq-encerrada');
+  } else mostrarTela(tipo === 'fora' ? 'pq-fora-do-ar' : tipo === 'ja' ? 'pq-ja' : tipo === 'semcompras' ? 'pq-semcompras' : 'pq-encerrada');
 }
 
 /* Confete explodindo a partir do selo de sucesso (só para quem concluiu tudo; respeita "menos movimento"). */
@@ -827,7 +830,7 @@ function iniciar() {
   });
 
   // participação já concluída neste aparelho: mostra a tela final, sem novo envio
-  const fim = ler<{ tipo: 'obrigada' | 'encerrada'; comContato: boolean }>(CHAVE_FIM);
+  const fim = ler<{ tipo: 'obrigada' | 'encerrada' | 'semcompras'; comContato: boolean }>(CHAVE_FIM);
   if (fim) { concluir(fim.tipo, fim.comContato, false); return; }
   if (E.etapa >= 0) {
     mostrarTela('pq-form');
