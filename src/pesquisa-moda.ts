@@ -577,7 +577,7 @@ function concluir(tipo: 'obrigada' | 'encerrada' | 'fora' | 'ja', comContato = f
   if (tipo !== 'fora') { try { localStorage.removeItem(CHAVE_RASCUNHO); sessionStorage.removeItem(CHAVE_RASCUNHO + '-contato'); } catch { /* sem armazenamento */ } }
   if (tipo === 'obrigada') {
     $('pq-obrigada-msg').textContent = comContato
-      ? 'Assim que a plataforma for lançada, avisaremos você por e-mail e WhatsApp para que fique por dentro de todas as novidades!'
+      ? 'Assim que a plataforma for lançada, avisaremos você por e\u2011mail e WhatsApp para que fique por dentro de todas as novidades!'
       : 'Obrigada por compartilhar um pouquinho da sua experiência com a gente!';
     $('pq-obrigada-dados').hidden = !comContato;
     mostrarTela('pq-obrigada');

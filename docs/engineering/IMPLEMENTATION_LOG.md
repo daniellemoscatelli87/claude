@@ -350,6 +350,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
 <<<<<<< HEAD
+## 2026-11-23 · Pesquisa Moda em Curitiba: mensagem da tela final no Alerta do DS, não publicado
+
+- **Pedido:** a mensagem do fim ("Assim que a plataforma for lançada…") não seguia o padrão do DS.
+- **O que mudou (`pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.css`, `src/pesquisa-moda.ts`):** a caixa rosa centralizada com o presente virou o Alerta do DS, variante info (`alert.tsx`): ícone de sino de 20 px em `#3D7CAA` (`--info`) à esquerda, texto de 14 px alinhado à esquerda, fundo `--info-muted`, borda `--info` a 20% e raio de 12 px; `role="status"`. "E-mail" com hífen que não quebra (U+2011).
+- **Verificação executada:** `npm run build`; fluxo completo no celular até a tela final; captura da mensagem; sem erros no console.
+
 ## 2026-11-23 · Pesquisa Moda em Curitiba: títulos com destaque, textos revisados e perguntas 8 e 10 unidas, publicado
 
 - **Pedidos da dona:**

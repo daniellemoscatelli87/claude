@@ -307,10 +307,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @media (min-width: 640px) { .pq-fim { padding: 48px 40px 40px; } }
 .pq-fim h1 { margin: 0 0 16px; font-size: clamp(1.625rem, 6.4vw, 2.125rem); line-height: 1.2; letter-spacing: -0.02em; font-weight: 800; color: var(--pq-ink); outline: none; text-wrap: balance; }
 .pq-fim p { margin: 0 auto 12px; max-width: 30rem; font-size: 15px; }
-.pq-fim .pq-destaque { display: grid; justify-items: center; gap: 10px; max-width: 30rem; margin: 18px auto 12px; padding: 18px 16px; border-radius: 16px; background: var(--pq-tint); border: 1px solid rgba(212, 77, 77, 0.18); text-align: center; }
-.pq-fim .pq-destaque .pq-ic { background: #fff; width: 40px; height: 40px; }
-.pq-fim .pq-destaque .pq-ic svg { width: 20px; height: 20px; }
-.pq-fim .pq-destaque p { margin: 0; color: var(--pq-ink); font-weight: 600; }
+/* Mensagem da tela final: Alerta do Design System, variante info (alert.tsx): fundo info suave, borda na cor do estado a 20%,
+   ícone de 20px na cor do estado, texto de 14px alinhado à esquerda */
+.pq-fim .pq-destaque { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 2px 12px; align-items: start; max-width: 30rem; margin: 18px auto 12px;
+  padding: 14px 16px; border-radius: 12px; text-align: left; background: rgba(61, 124, 170, 0.1); border: 1px solid rgba(61, 124, 170, 0.2); }
+.pq-alerta-ic { color: #3D7CAA; display: grid; }
+.pq-alerta-ic svg { width: 20px; height: 20px; }
+.pq-fim .pq-destaque p { margin: 0; max-width: none; font-size: 14px; line-height: 1.55; font-weight: 500; color: var(--pq-ink); }
 .pq-fim h1 em { font-style: normal; color: var(--pq-red); }
 .pq-mini { font-size: 13px !important; color: var(--pq-muted); }
 .pq-assinatura { display: grid; gap: 2px; margin-top: 28px; font-size: 14px; color: var(--pq-muted); }
