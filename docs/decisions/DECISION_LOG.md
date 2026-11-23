@@ -464,6 +464,21 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Decisão:** o cabeçalho do card não tem faixa cinza; é separado do conteúdo por uma linha fina que some nas pontas. O hover de linha ou item dentro do card é bem claro e sutil: token `--row-hover` do DS (metade do `--graphite-50` sobre o card), decisão revista na quinta rodada. No card rosa da Início, o "não lidas" do canto sai por repetir a informação. O botão desabilitado usa o fundo `--graphite-100`. O menu lateral empurra o conteúdo, nunca o cobre (no DS e na área restrita). As mudanças de token foram feitas no DS (branch `claude/ajustes-painel`) e trazidas pela sincronização, sem editar a cópia.
 - **Trade-offs:** a área restrita fica, por enquanto, com o `theme.css` de uma branch do DS ainda não publicada; ao publicar o DS, a sincronização diária volta ao `main` e o `?v=` precisa mudar.
 
+## D-043 · 23/11/2026 · "Novo e-mail" na área de contatos, para qualquer endereço e com anexos de qualquer tipo (site)
+
+- **Origem:** dona do produto. Escolheu:
+  - o botão "Novo e-mail";
+  - qualquer tipo de arquivo;
+  - manter a assinatura atual;
+  - as respostas da pessoa aparecem como conversa.
+- **Decisão:**
+  - O e-mail novo é gravado em `contatos` com `origem = 'enviado'` e o selo "Enviado". Assim, o histórico, as respostas recebidas e a reunião funcionam como nas outras conversas.
+  - O envio usa a mesma função e a mesma assinatura das respostas, pelo remetente contato@danimoscatelli.com.br.
+  - Anexos de qualquer tipo, até 10 por e-mail e 20 MB no total, no bucket privado `anexos`, que só a administradora lê.
+- **Trade-offs:**
+  - Aceitar qualquer tipo de arquivo amplia o que fica guardado no bucket. Ele continua privado e restrito à administradora.
+  - Os e-mails enviados contam como conversas na lista, que passa a dizer "conversas" em vez de "mensagens recebidas".
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
