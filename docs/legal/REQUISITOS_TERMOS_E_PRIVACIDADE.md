@@ -6,7 +6,7 @@
 - **Controladora:** Dani Moscatelli | Experience Design Studio, com contato do encarregado (DPO) ou canal equivalente. Hoje: contato@danimoscatelli.com.br.
 - **Operadores e suboperadores a declarar:**
   - Supabase: banco, autenticação, funções e e-mails de confirmação;
-  - Netlify: hospedagem do app;
+  - Cloudflare: hospedagem do app (desde 23/11/2026; antes, Netlify);
   - Google: Gemini, quando a IA estiver ligada;
   - provedor de e-mail, se for configurado.
 - Informar a **transferência internacional** de dados, onde houver servidores fora do Brasil (verificar a região de cada serviço).
@@ -39,5 +39,5 @@
 
 ## 4. Aviso resumido para a fase de testes (requisito imediato, aguarda aprovação)
 - **Onde aparece:** na tela de cadastro, antes de "Criar conta", com o link "Como usamos seus dados".
-- **O que diz:** o que coletamos, para quê, quem processa (Supabase, Netlify e Google, quando a IA estiver ligada), que a equipe do estúdio pode acessar os projetos com registro, e como pedir correção ou exclusão.
+- **O que diz:** o que coletamos, para quê, quem processa (Supabase, Cloudflare e Google, quando a IA estiver ligada), que a equipe do estúdio pode acessar os projetos com registro, e como pedir correção ou exclusão.
 - **Aceite:** caixa obrigatória, registrada com data, hora e versão do aviso.

@@ -415,8 +415,21 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - a identificação fica só na sessão do navegador; no rascunho local de 30 dias ficam apenas as respostas.
 - **Trade-offs:** a participação deixa de ser anônima para a equipe (os resultados continuam sendo analisados e divulgados em conjunto). Uma pessoa com outro e-mail e outro WhatsApp ainda consegue responder de novo. A conferência antes das perguntas revela se um e-mail ou WhatsApp já participou.
 
+## D-035 · 23/11/2026 · E-mails enviados direto para contato@ no painel (site)
+
+- **Origem:** dona do produto: ver na página Contatos, com tag, as mensagens do formulário e os e-mails enviados direto para contato@danimoscatelli.com.br; só os que chegarem daqui pra frente; sem custo; aviso no Gmail dela.
+- **Decisão:** ler a caixa da Hostinger por IMAP a cada 5 minutos (gratuito, sem mudar o MX nem a caixa), em modo só leitura, com a senha guardada como segredo do Supabase e cadastrada pela própria dona. E-mail de remetente sem conversa vira contato com origem "email"; de remetente com conversa entra no histórico dela. Avisos do próprio site são ignorados para não duplicar. O aviso de e-mail novo usa o Resend que o site já usa, e o endereço dele fica só no banco.
+- **Trade-offs:** até 5 minutos de atraso; anexos não são copiados (ficam na caixa, com aviso na mensagem); newsletters e outros e-mails automáticos que caírem na caixa de entrada também aparecem; se a senha da caixa mudar, o segredo precisa ser atualizado (o erro fica registrado em `caixa_email_estado`). Alternativa descartada: encaminhar a caixa para o recebimento do Resend, que dependeria da cota do plano.
+
 ---
 
+
+## D-038 · 23/11/2026 · DM | Experience Intelligence sai do Netlify para o Cloudflare Pages
+
+- **Decisão da dona do produto:** levar o app (app.danimoscatelli.com.br) para o Cloudflare, onde já ficam o site do estúdio e o FindLook. A conta do Netlify está com pagamento atrasado e com as publicações pausadas.
+- **Acesso:** continua fechado. Antes de qualquer página, o app pede usuário e senha (`apps/experience-intelligence/functions/_middleware.js`, segredo `SITE_SENHA` no Cloudflare; usuário `dani` ou `SITE_USUARIO`). Depois vem o login por convite do próprio app. Sem o segredo, o app fica fechado.
+- **Aviso de privacidade:** onde dizia "Netlify: hospedagem do aplicativo", agora diz "Cloudflare". Por isso a versão passa a `testes-2026-11-23`, e quem já aceitou recebe o pedido de novo aceite.
+- **Desligamento do Netlify:** só depois que o app estiver funcionando no Cloudflare. O projeto antigo do FindLook no Netlify (`helpful-meerkat-e4c2aa`) também é desligado.
 ## Decisões pendentes
 
 
