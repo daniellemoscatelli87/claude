@@ -10,7 +10,7 @@ import Q from '../supabase/functions/pesquisa/questionario.json';
 
 type Opcao = { id: string; texto: string; encerra?: string; exclusiva?: boolean; outro?: boolean };
 type Pergunta = {
-  id: string; tipo: 'unica' | 'multipla' | 'escala' | 'matriz'; texto: string; apoio?: string; max?: number; min?: number;
+  id: string; tipo: 'unica' | 'multipla' | 'ranking' | 'escala' | 'matriz'; texto: string; apoio?: string; max?: number; min?: number;
   opcoes?: Opcao[]; linhas?: { id: string; texto: string }[]; colunas?: { id: string; texto: string }[];
   rotulo_min?: string; rotulo_max?: string;
   rotulo?: string; condicao?: { pergunta: string; opcoes: string[] }; // pergunta condicional (ex.: 2.1)
@@ -25,16 +25,24 @@ type Estado = {
 const PERGUNTAS = Q.perguntas as Pergunta[];
 const TOTAL = PERGUNTAS.length; // etapas de perguntas, contando a condicional 2.1
 const PRINCIPAIS = PERGUNTAS.filter((p) => !p.condicao).length; // as 10 perguntas principais; 2.1, relato e novidades ficam fora
-const ETAPA_RELATO = TOTAL, ETAPA_NOV = TOTAL + 1;
+const ETAPA_PERFIL = TOTAL, ETAPA_RELATO = TOTAL + 1, ETAPA_NOV = TOTAL + 2; // perfil, relato e novidades depois das perguntas
+type CampoPerfil = { id: string; texto: string; opcoes: Opcao[] };
+const PERFIL = ((Q as { perfil?: CampoPerfil[] }).perfil ?? []);
+type Perfil = Record<string, string>;
+const perfilAtual = (): Perfil => (E.r.perfil as Perfil) ?? {};
 // número da pergunta principal (1 a 10) na etapa i; a condicional leva o número da principal anterior
 const numero = (i: number) => PERGUNTAS.slice(0, i + 1).filter((p) => !p.condicao).length;
 const rotulo = (i: number) => PERGUNTAS[i].rotulo ?? String(numero(i));
 // a pergunta aparece? (as condicionais só para quem escolheu uma das opções indicadas)
-const aplica = (p: Pergunta) => !p.condicao || p.condicao.opcoes.includes(String(E.r[p.condicao.pergunta] ?? ''));
+// valores escolhidos numa resposta (escolha única, classificação ou múltipla escolha)
+const valores = (v: unknown): string[] =>
+  Array.isArray(v) ? v.map(String) : v && typeof v === 'object' && Array.isArray((v as Multi).opcoes) ? (v as Multi).opcoes : v == null ? [] : [String(v)];
+const opcaoQueEncerra = (p: Pergunta | undefined) => (p ? p.opcoes?.find((o) => o.encerra && valores(E.r[p.id]).includes(o.id)) : undefined);
+const aplica = (p: Pergunta) => !p.condicao || valores(E.r[p.condicao.pergunta]).some((x) => p.condicao!.opcoes.includes(x));
 const proxima = (i: number) => { let j = i + 1; while (j < TOTAL && !aplica(PERGUNTAS[j])) j++; return j; };
 const anterior = (i: number) => { let j = i - 1; while (j >= 0 && j < TOTAL && !aplica(PERGUNTAS[j])) j--; return j; };
 const API = 'https://lipfvnerohkaajegqvwr.supabase.co/functions/v1/pesquisa';
-const CHAVE_RASCUNHO = 'pq-moda-rascunho-v2', CHAVE_FIM = 'pq-moda-concluida';
+const CHAVE_RASCUNHO = 'pq-moda-rascunho-v4', CHAVE_FIM = 'pq-moda-concluida';
 const RELATO_MAX = 2000;
 const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -94,6 +102,44 @@ function montarPergunta(p: Pergunta, i: number) {
       lista.appendChild(lab);
     });
     fs.append(lista);
+  } else if (p.tipo === 'ranking') {
+    // classificação: a ordem dos toques define 1º, 2º e 3º; tocar de novo tira e as demais sobem
+    const atual = (): string[] => (Array.isArray(E.r[p.id]) ? E.r[p.id] as string[] : []);
+    const lista = el('div', 'pq-ops pq-ranking');
+    const contador = el('p', 'pq-contador'); contador.setAttribute('aria-live', 'polite');
+    const itens: { o: Opcao; inp: HTMLInputElement; selo: HTMLElement; lab: HTMLLabelElement }[] = [];
+    const sincronizar = (anunciar?: string) => {
+      const sel = atual();
+      itens.forEach(({ o, inp, selo, lab }) => {
+        const pos = sel.indexOf(o.id);
+        inp.checked = pos >= 0;
+        selo.textContent = pos >= 0 && !o.exclusiva ? `${pos + 1}º` : '';
+        lab.classList.toggle('pq-rank-on', pos >= 0);
+        inp.setAttribute('aria-label', o.texto + (pos >= 0 ? `, ${pos + 1}º lugar` : ''));
+        const cheio = !!p.max && sel.length >= p.max && pos < 0 && !o.exclusiva;
+        inp.disabled = cheio; lab.classList.toggle('pq-op-off', cheio);
+      });
+      const ex = sel.length === 1 && p.opcoes!.find((x) => x.id === sel[0])?.exclusiva;
+      contador.textContent = anunciar ?? (ex ? '' : sel.length ? `${sel.length} de até ${p.max} escolhidas · toque de novo para tirar` : `Toque em até ${p.max} opções, na ordem.`);
+    };
+    p.opcoes!.forEach((o) => {
+      const lab = el('label', 'pq-op pq-rank' + (o.exclusiva ? ' pq-op-excl' : ''));
+      const inp = el('input'); inp.type = 'checkbox'; inp.name = p.id; inp.value = o.id;
+      const selo = el('span', 'pq-rank-selo'); selo.setAttribute('aria-hidden', 'true');
+      lab.append(inp, selo, el('span', 'pq-op-txt', o.texto));
+      inp.addEventListener('change', () => {
+        let sel = atual();
+        if (inp.checked) sel = o.exclusiva ? [o.id] : [...sel.filter((x) => !p.opcoes!.find((y) => y.id === x)?.exclusiva), o.id];
+        else sel = sel.filter((x) => x !== o.id);
+        E.r[p.id] = sel; salvar(); limparErro(fs);
+        const pos = sel.indexOf(o.id);
+        sincronizar(pos >= 0 && !o.exclusiva ? `${o.texto}: ${pos + 1}º lugar.` : undefined);
+        if (!reduzir && pos >= 0) { selo.classList.remove('pq-pop'); void selo.offsetWidth; selo.classList.add('pq-pop'); }
+      });
+      itens.push({ o, inp, selo, lab }); lista.appendChild(lab);
+    });
+    fs.append(lista, contador);
+    sincronizar();
   } else if (p.tipo === 'multipla') {
     const atual = (): Multi => (E.r[p.id] as Multi) ?? { opcoes: [] };
     const lista = el('div', 'pq-ops');
@@ -172,6 +218,66 @@ function montarPergunta(p: Pergunta, i: number) {
   }
   fs.appendChild(erro);
   return fs;
+}
+
+function montarPerfil() {
+  const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-perfil'; fs.dataset.etapa = String(ETAPA_PERFIL);
+  cabecalho(fs, 'Sobre você', 'Para terminar, conte um pouco sobre você',
+    'Usamos estas informações só para analisar os resultados em conjunto, sem identificar ninguém.');
+  PERFIL.forEach((c) => {
+    const bloco = el('div', 'pq-perfil-campo'); bloco.id = 'pq-perfil-' + c.id;
+    const tituloId = bloco.id + '-titulo';
+    const t = el('p', 'pq-perfil-titulo'); t.id = tituloId; t.append(c.texto, el('span', 'pq-obrig', ' *'));
+    // computador: opções em cartões (gênero) ou pílulas (faixa etária); celular: lista suspensa (dropdown)
+    const grupo = el('div', 'pq-so-desk ' + (c.id === 'faixa_etaria' ? 'pq-perfil-chips' : 'pq-ops pq-ops-2'));
+    grupo.setAttribute('role', 'radiogroup'); grupo.setAttribute('aria-labelledby', tituloId);
+    const radios: HTMLInputElement[] = [];
+    c.opcoes.forEach((o) => {
+      if (c.id === 'faixa_etaria') {
+        const lab = el('label', 'pq-chip pq-chip-g');
+        const inp = el('input'); inp.type = 'radio'; inp.name = 'perfil-' + c.id; inp.value = o.id; inp.checked = perfilAtual()[c.id] === o.id;
+        lab.append(inp, el('span', undefined, o.texto)); grupo.appendChild(lab); radios.push(inp);
+      } else {
+        const { lab, inp } = opcaoCartao('radio', 'perfil-' + c.id, o, perfilAtual()[c.id] === o.id);
+        grupo.appendChild(lab); radios.push(inp);
+      }
+    });
+    const sel = el('select', 'pq-so-movel pq-select'); sel.id = bloco.id + '-sel'; sel.setAttribute('aria-labelledby', tituloId);
+    const vazio = el('option', undefined, 'Selecione'); vazio.value = ''; vazio.disabled = true; sel.appendChild(vazio);
+    c.opcoes.forEach((o) => { const op = el('option', undefined, o.texto.replace(/ \(especifique\)$/, '')); op.value = o.id; sel.appendChild(op); });
+    sel.value = perfilAtual()[c.id] ?? '';
+    const outroOp = c.opcoes.find((o) => o.outro);
+    let caixa: HTMLElement | null = null, campoOutro: HTMLInputElement | null = null;
+    if (outroOp) {
+      caixa = el('div', 'pq-outro pq-perfil-outro'); const id = bloco.id + '-outro';
+      const l = el('label', 'pq-rotulo', 'Qual?'); l.htmlFor = id;
+      campoOutro = el('input'); campoOutro.type = 'text'; campoOutro.id = id; campoOutro.maxLength = 100; campoOutro.placeholder = 'Como você se identifica';
+      campoOutro.value = perfilAtual()[c.id + '_outro'] ?? '';
+      campoOutro.addEventListener('input', () => { E.r.perfil = { ...perfilAtual(), [c.id + '_outro']: campoOutro!.value }; salvar(); erroPerfil(c.id, ''); });
+      caixa.append(l, campoOutro);
+    }
+    const definir = (v: string) => {
+      const novo: Perfil = { ...perfilAtual(), [c.id]: v };
+      if (!outroOp || v !== outroOp.id) delete novo[c.id + '_outro'];
+      E.r.perfil = novo; salvar(); erroPerfil(c.id, '');
+      radios.forEach((r) => { r.checked = r.value === v; }); sel.value = v;
+      if (caixa) { caixa.hidden = v !== outroOp!.id; if (v !== outroOp!.id && campoOutro) campoOutro.value = ''; }
+    };
+    radios.forEach((r) => r.addEventListener('change', () => definir(r.value)));
+    sel.addEventListener('change', () => definir(sel.value));
+    if (caixa) caixa.hidden = perfilAtual()[c.id] !== outroOp!.id;
+    const err = el('p', 'pq-erro'); err.id = bloco.id + '-erro'; err.hidden = true; err.setAttribute('role', 'alert');
+    bloco.append(t, grupo, sel);
+    if (caixa) bloco.appendChild(caixa);
+    bloco.appendChild(err);
+    fs.appendChild(bloco);
+  });
+  fs.appendChild(erroBox(fs.id));
+  return fs;
+}
+function erroPerfil(id: string, msg: string) {
+  const e = $('pq-perfil-' + id + '-erro'); if (!e) return;
+  e.textContent = msg; e.hidden = !msg; $('pq-perfil-' + id).classList.toggle('pq-invalido', !!msg);
 }
 
 function montarRelato() {
@@ -281,6 +387,7 @@ function validarEtapa(i: number): boolean {
   if (i < TOTAL) {
     const p = PERGUNTAS[i], v = E.r[p.id];
     if (p.tipo === 'unica' && typeof v !== 'string') { mostrarErro(fs, 'Escolha uma opção para continuar.'); return false; }
+    if (p.tipo === 'ranking' && !(Array.isArray(v) && v.length)) { mostrarErro(fs, `Escolha pelo menos uma opção, na ordem de onde você mais comprou (até ${p.max}).`); return false; }
     if (p.tipo === 'escala' && typeof v !== 'number') { mostrarErro(fs, 'Escolha uma nota de 0 a 10 para continuar.'); return false; }
     if (p.tipo === 'matriz') {
       const r = (v as Record<string, string>) ?? {};
@@ -297,6 +404,18 @@ function validarEtapa(i: number): boolean {
     return true;
   }
   if (i === ETAPA_RELATO) return true;
+  if (i === ETAPA_PERFIL) {
+    const pf = perfilAtual(); let primeiro: HTMLElement | null = null;
+    PERFIL.forEach((c) => {
+      const outro = c.opcoes.find((o) => o.outro);
+      const msg = !pf[c.id] ? (c.id === 'genero' ? 'Escolha uma opção. Se preferir, marque "Prefiro não informar".' : 'Escolha sua faixa etária. Se preferir, marque "Prefiro não informar".')
+        : outro && pf[c.id] === outro.id && !(pf[c.id + '_outro'] ?? '').trim() ? 'Conte como você se identifica ou escolha outra opção.' : '';
+      erroPerfil(c.id, msg);
+      if (msg && !primeiro) primeiro = $('pq-perfil-' + c.id);
+    });
+    if (primeiro) { (primeiro as HTMLElement).scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' }); return false; }
+    return true;
+  }
   // novidades
   if (!E.nov) { mostrarErro(fs, 'Escolha uma das opções para concluir.'); return false; }
   if (E.nov === 'nao') return true;
@@ -314,13 +433,13 @@ function validarEtapa(i: number): boolean {
 
 /* ---------- Navegação ---------- */
 const encerraEm = () => {
-  for (const p of PERGUNTAS.slice(0, 2)) { const o = p.opcoes?.find((x) => x.id === E.r[p.id]); if (o?.encerra) return p.id; }
+  for (const p of PERGUNTAS.slice(0, 2)) { if (opcaoQueEncerra(p)) return p.id; }
   return null;
 };
 function atualizarBotao() {
   const b = $('pq-continuar'), t = b.querySelector('.pq-btn-txt')!;
   const i = E.etapa, p = PERGUNTAS[i];
-  const enc = p && p.opcoes?.find((o) => o.id === E.r[p.id])?.encerra;
+  const enc = opcaoQueEncerra(p);
   t.textContent = enviando ? 'Enviando…' : enc ? 'Concluir' : i === ETAPA_NOV ? 'Concluir participação' : i === ETAPA_RELATO && !E.relato.trim() ? 'Pular' : 'Continuar';
 }
 function irPara(i: number, voltando = false) {
@@ -334,7 +453,7 @@ function irPara(i: number, voltando = false) {
   const pct = i < TOTAL ? Math.round(((PERGUNTAS[i].condicao ? numero(i) : numero(i) - 1) / PRINCIPAIS) * 100) : 100;
   $('pq-barra').style.width = pct + '%';
   $('pq-barra').parentElement!.setAttribute('aria-valuenow', String(pct));
-  $('pq-etapa').textContent = i < TOTAL ? etiqueta(i) : i === ETAPA_RELATO ? 'Quase lá · etapa opcional' : 'Última etapa';
+  $('pq-etapa').textContent = i < TOTAL ? etiqueta(i) : i === ETAPA_PERFIL ? 'Quase lá · sobre você' : i === ETAPA_RELATO ? 'Quase lá · etapa opcional' : 'Última etapa';
   if (i === ETAPA_NOV) mostrarContato();
   atualizarBotao();
   window.scrollTo({ top: 0, behavior: reduzir ? 'auto' : 'smooth' });
@@ -351,6 +470,7 @@ async function enviar(final: boolean) {
   for (const p of PERGUNTAS) { if (aplica(p)) respostas[p.id] = E.r[p.id]; if (p.id === enc) break; }
   const corpo: Record<string, unknown> = { acao: 'enviar', pesquisa: Q.slug, envio_id: E.envio, respostas, site: $<HTMLInputElement>('pq-site').value };
   if (final) {
+    corpo.perfil = perfilAtual();
     corpo.relato = E.relato;
     corpo.novidades = E.nov === 'sim'
       ? { quer: true, id: E.contatoId, nome: E.nome, email: E.email, whatsapp: E.whats, consentimento: E.aceite }
@@ -415,7 +535,7 @@ function iniciar() {
   politica();
   const etapas = $('pq-etapas');
   PERGUNTAS.forEach((p, i) => etapas.appendChild(montarPergunta(p, i)));
-  etapas.append(montarRelato(), montarNovidades());
+  etapas.append(montarPerfil(), montarRelato(), montarNovidades());
   [...etapas.children].forEach((x) => { (x as HTMLElement).hidden = true; });
 
   // escolhas que encerram mudam o texto do botão
@@ -433,7 +553,7 @@ function iniciar() {
     e.preventDefault();
     if (enviando || !validarEtapa(E.etapa)) return;
     const p = PERGUNTAS[E.etapa];
-    if (p?.opcoes?.find((o) => o.id === E.r[p.id])?.encerra) return void enviar(false);
+    if (opcaoQueEncerra(p)) return void enviar(false);
     if (E.etapa === ETAPA_NOV) return void enviar(true);
     irPara(proxima(E.etapa));
   });

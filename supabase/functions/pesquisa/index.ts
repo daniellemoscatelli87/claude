@@ -4,6 +4,7 @@
 //     Grava a participação uma única vez por envio_id (reenvio ou atualização da página não duplica).
 //     situacao vem das próprias respostas: Q1 = "Não" encerra (fora_de_curitiba); Q2 = "Não comprei" encerra (sem_compras).
 //     Perguntas com condicao (ex.: 2.1) só são exigidas e gravadas para quem escolheu uma das opções indicadas.
+//     perfil: { genero, genero_outro?, faixa_etaria }, obrigatório nas participações completas; gravado em respostas.perfil.
 //     novidades: { quer: boolean, id, nome, email, whatsapp, consentimento: true } só para participações completas.
 //     O contato vai para outra tabela, com outro identificador, sem ligação com as respostas.
 //     O relato (pergunta aberta) é guardado exatamente como foi enviado.
@@ -12,11 +13,14 @@ import modaCuritiba from "./questionario.json" with { type: "json" };
 
 type Opcao = { id: string; texto: string; encerra?: string; exclusiva?: boolean; outro?: boolean };
 type Pergunta = {
-  id: string; tipo: "unica" | "multipla" | "escala" | "matriz"; texto: string; max?: number; min?: number;
+  id: string; tipo: "unica" | "multipla" | "ranking" | "escala" | "matriz"; texto: string; max?: number; min?: number;
   condicao?: { pergunta: string; opcoes: string[] };
   opcoes?: Opcao[]; linhas?: { id: string }[]; colunas?: { id: string }[];
 };
-type Questionario = { slug: string; versao: string; consentimento: { versao: string; texto: string }; perguntas: Pergunta[] };
+type Questionario = {
+  slug: string; versao: string; consentimento: { versao: string; texto: string }; perguntas: Pergunta[];
+  perfil?: { id: string; opcoes: Opcao[] }[]; // perguntas de perfil (gênero e faixa etária), fora da contagem
+};
 const QUESTIONARIOS: Record<string, Questionario> = { [modaCuritiba.slug]: modaCuritiba as Questionario };
 
 const CORS = {
@@ -30,6 +34,10 @@ const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SE
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const OUTRO_MAX = 200;
+
+// valores escolhidos numa resposta (escolha única, classificação ou múltipla escolha)
+const valores = (v: unknown): string[] =>
+  Array.isArray(v) ? v.map(String) : v && typeof v === "object" && Array.isArray((v as { opcoes?: unknown }).opcoes) ? (v as { opcoes: unknown[] }).opcoes.map(String) : v == null ? [] : [String(v)];
 
 class Invalido extends Error {}
 const falha = (msg: string): never => { throw new Invalido(msg); };
@@ -55,6 +63,15 @@ function validar(p: Pergunta, v: unknown): unknown {
       out[l.id] = r as string;
     }
     return out;
+  }
+  if (p.tipo === "ranking") {
+    // classificação: lista de opções na ordem escolhida (1º, 2º, 3º); a exclusiva ("Não comprei") fica sozinha
+    const lista = Array.isArray(v) ? v.map(String) : [];
+    if (!lista.length) falha(`Escolha pelo menos uma opção na pergunta ${p.id}.`);
+    if (new Set(lista).size !== lista.length || lista.some((s) => !ids.has(s))) falha(`Opção inválida na pergunta ${p.id}.`);
+    if (p.max && lista.length > p.max) falha(`Escolha no máximo ${p.max} opções na pergunta ${p.id}.`);
+    if (lista.some((s) => p.opcoes!.find((x) => x.id === s)?.exclusiva) && lista.length > 1) falha(`A opção escolhida na pergunta ${p.id} não pode ser combinada com outras.`);
+    return lista;
   }
   // múltipla escolha: { opcoes: string[], outro?: string }
   const o = v as { opcoes?: unknown; outro?: unknown };
@@ -102,12 +119,31 @@ Deno.serve(async (req) => {
     let situacao = "completa";
     for (const per of q.perguntas) {
       // pergunta condicional (ex.: 2.1): só vale para quem escolheu uma das opções indicadas; para os demais, é ignorada
-      if (per.condicao && !per.condicao.opcoes.includes(String(respostas[per.condicao.pergunta] ?? ""))) continue;
+      if (per.condicao && !valores(respostas[per.condicao.pergunta]).some((x) => per.condicao!.opcoes.includes(x))) continue;
       respostas[per.id] = validar(per, r[per.id]);
-      const enc = per.opcoes?.find((o) => o.id === respostas[per.id])?.encerra;
+      const escolhidas = valores(respostas[per.id]);
+      const enc = per.opcoes?.find((o) => o.encerra && escolhidas.includes(o.id))?.encerra;
       if (enc) { situacao = enc; break; }
     }
     const completa = situacao === "completa";
+
+    // perfil (gênero e faixa etária): obrigatório para quem completou; cada um tem "Prefiro não informar"
+    if (completa && q.perfil?.length) {
+      const pf = (p.perfil && typeof p.perfil === "object" ? p.perfil : {}) as Record<string, unknown>;
+      const out: Record<string, string> = {};
+      for (const per of q.perfil) {
+        const v = String(pf[per.id] ?? "");
+        const op = per.opcoes.find((o) => o.id === v);
+        if (!op) falha(per.id === "genero" ? "Escolha uma opção de gênero." : "Escolha uma faixa etária.");
+        out[per.id] = v;
+        if (op!.outro) {
+          const t = String(pf[per.id + "_outro"] ?? "").trim();
+          if (!t) falha("Conte com qual gênero você se identifica ou escolha outra opção.");
+          out[per.id + "_outro"] = t.slice(0, 100);
+        }
+      }
+      respostas.perfil = out;
+    }
 
     // pergunta aberta (opcional), exatamente como enviada
     let relato: string | null = null;
