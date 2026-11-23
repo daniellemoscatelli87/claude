@@ -350,6 +350,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
 <<<<<<< HEAD
+## 2026-11-23 · Pesquisa Moda em Curitiba: faixa de vantagens mais suave na abertura, não publicado
+
+- **Pedido:** a faixa vermelha das vantagens competia com o botão "Começar pesquisa".
+- **O que mudou (`src/pesquisa-moda.css`):** a faixa passou a fundo rosa claro (`--pq-tint`) com borda vermelha suave e textos escuros. O ícone de presente continua num quadrado vermelho animado, e o brilho que passa continua (sem animação com "menos movimento"). O vermelho cheio fica só no botão.
+- **Verificação executada:** `npm run build`; Playwright no celular e em 1440×900 (botão visível sem rolar, sem erros no console); capturas.
+
 ## 2026-11-23 · Painel de pesquisas: "Leitura" no Alerta do DS e pergunta 8 sem números dentro das barras, não publicado
 
 - **Pedido:** a dona perguntou se a caixa "Leitura" seguia o DS. Não seguia: foi feita à mão, com fundo cinza, sem borda e ícone cinza. Conferido no repositório do DS (`alert.tsx`), junto com a regra de gráficos de 19/11/2026: barras sem número dentro.
