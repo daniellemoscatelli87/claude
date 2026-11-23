@@ -353,6 +353,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 
 - **Pedido:** a escala de bolinhas também não ficou intuitiva. Todas as respostas precisam aparecer escritas e parecer clicáveis, inclusive para pessoas de mais idade. O topo do celular ficava escuro ao rolar e deve seguir o padrão claro.
 - **Pergunta 8 (`src/pesquisa-moda.ts`, `src/pesquisa-moda.css`):** um cartão por característica, com as 6 respostas ("Muito fácil" a "Muito difícil" e "Não se aplica") em cartões clicáveis com bolinha de marcação, iguais aos das outras perguntas. No celular, uma resposta por linha. No computador, as 5 lado a lado e "Não se aplica" abaixo, com borda tracejada. Os dados continuam "1" a "5" ou "na"; servidor e painel não mudam.
+- **Texto:** "Nem fácil nem difícil" passou a "Médio" (pedido da dona), no questionário e nos rótulos do painel; versão do questionário `moda-curitiba-v4-2026-11-23`. A função `pesquisa` precisa ser publicada de novo junto com o site.
 - **Topo:** no celular, ao rolar, a barra fica clara e translúcida, com o texto escuro. No computador, continua como antes.
 - **Verificação executada:** `npm run build`; fluxo completo no celular (Playwright, iPhone 13) com envio simulado, conferindo os valores da pergunta 8; capturas no celular e no computador, incluindo o topo depois de rolar; setas do teclado; sem rolagem lateral e sem erros no console.
 

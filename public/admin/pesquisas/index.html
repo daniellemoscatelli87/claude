@@ -599,15 +599,15 @@
       const esq = el("div", "pa-div-esq"), dir = el("div", "pa-div-dir");
       const seg = (cor, v, rot, onde) => { if (!v) return; const i = el("i"); i.style.background = cor; i.dataset.w = (v / x.tot / escala) * 100 + "%"; dica(i, [[`${pct(v, x.tot)}%`, `${x.l.texto}: ${rot}`]]); onde.appendChild(i); };
       // a ordem visual a partir do centro: neutro (metade de cada lado), depois fácil/difícil, depois muito
-      seg(CORES_MATRIZ["1"], x.v[1], "Muito fácil", esq); seg(CORES_MATRIZ["2"], x.v[2], "Fácil", esq); seg(CORES_MATRIZ["3"], x.v[3] / 2, "Nem fácil nem difícil (metade)", esq);
-      seg(CORES_MATRIZ["3"], x.v[3] / 2, "Nem fácil nem difícil (metade)", dir); seg(CORES_MATRIZ["4"], x.v[4], "Difícil", dir); seg(CORES_MATRIZ["5"], x.v[5], "Muito difícil", dir);
+      seg(CORES_MATRIZ["1"], x.v[1], "Muito fácil", esq); seg(CORES_MATRIZ["2"], x.v[2], "Fácil", esq); seg(CORES_MATRIZ["3"], x.v[3] / 2, "Médio (metade)", esq);
+      seg(CORES_MATRIZ["3"], x.v[3] / 2, "Médio (metade)", dir); seg(CORES_MATRIZ["4"], x.v[4], "Difícil", dir); seg(CORES_MATRIZ["5"], x.v[5], "Muito difícil", dir);
       const barra = el("div", "pa-div-barra"); barra.append(esq, el("span", "pa-div-eixo"), dir);
       linha.append(nome, el("span", "pa-div-f", `${x.fac}% fácil`), barra, el("span", "pa-div-d", `${x.dif}% difícil`));
       g.appendChild(linha);
     });
     box.append(g, legenda(p.colunas.filter((c) => c.id !== "na").map((c) => [CORES_MATRIZ[c.id], c.texto])),
-      el("p", "pa-nota", "Fácil à esquerda e difícil à direita, a partir do neutro (dividido ao meio). Ordenado da característica mais difícil para a mais fácil; sem contar quem marcou Não se aplica."),
-      tabela(["Característica", "Muito fácil", "Fácil", "Neutro", "Difícil", "Muito difícil", "Não se aplica"], linhas.map((x) => [x.l.texto, x.v[1], x.v[2], x.v[3], x.v[4], x.v[5], x.na])));
+      el("p", "pa-nota", "Fácil à esquerda e difícil à direita, a partir do Médio (dividido ao meio). Ordenado da característica mais difícil para a mais fácil; sem contar quem marcou Não se aplica."),
+      tabela(["Característica", "Muito fácil", "Fácil", "Médio", "Difícil", "Muito difícil", "Não se aplica"], linhas.map((x) => [x.l.texto, x.v[1], x.v[2], x.v[3], x.v[4], x.v[5], x.na])));
     return box;
   }
   // colunas na ordem natural (faixa etária)

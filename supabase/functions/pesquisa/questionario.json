@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v3-2026-11-23",
+  "versao": "moda-curitiba-v4-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "consentimento": {
     "versao": "moda-curitiba-contato-v1-2026-11-23",
@@ -288,7 +288,7 @@
         },
         {
           "id": "3",
-          "texto": "Nem fácil nem difícil"
+          "texto": "Médio"
         },
         {
           "id": "4",
