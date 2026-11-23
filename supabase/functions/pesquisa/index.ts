@@ -4,16 +4,16 @@
 // { acao: "enviar", pesquisa, envio_id, identificacao, respostas, relato?, novidades? }
 //     identificacao: { nome, email, whatsapp, ciente: true }, obrigatória. Uma participação por e-mail e uma por WhatsApp.
 //     Grava a participação uma única vez por envio_id (reenvio ou atualização da página não duplica).
-//     situacao vem das próprias respostas: Q1 = "Não" encerra (fora_de_curitiba); Q2 = "Não comprei" encerra (sem_compras).
+//     situacao vem das próprias respostas: Q1 = "Outra cidade" encerra (fora_de_curitiba, fora de Curitiba e Região Metropolitana); Q2 = "Não comprei" encerra (sem_compras).
 //     Perguntas com condicao (ex.: 2.1) só são exigidas e gravadas para quem escolheu uma das opções indicadas.
-//     perfil: { genero, genero_outro?, faixa_etaria }, obrigatório nas participações completas; gravado em respostas.perfil.
+//     perfil: { cidade, bairro? (só Curitiba), genero, genero_outro?, faixa_etaria, estado_civil } (cidade e bairro são perguntados na pergunta 1), obrigatório nas participações completas; gravado em respostas.perfil.
 //     novidades: { quer: boolean } só para participações completas; "sim" é a autorização para receber avisos.
 //     Quem quer novidades também entra em pesquisa_interessados (lista do painel), com o texto da autorização.
 //     O relato (pergunta aberta) é guardado exatamente como foi enviado.
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 import modaCuritiba from "./questionario.json" with { type: "json" };
 
-type Opcao = { id: string; texto: string; encerra?: string; exclusiva?: boolean; outro?: boolean };
+type Opcao = { id: string; texto: string; encerra?: string; exclusiva?: boolean; outro?: boolean; anula?: boolean };
 type Pergunta = {
   id: string; tipo: "unica" | "multipla" | "ranking" | "escala" | "escalas" | "matriz"; texto: string; max?: number; min?: number;
   condicao?: { pergunta: string; opcoes: string[] };
@@ -21,7 +21,8 @@ type Pergunta = {
 };
 type Questionario = {
   slug: string; versao: string; identificacao: { versao: string; texto: string }; consentimento: { versao: string; texto: string }; perguntas: Pergunta[];
-  perfil?: { id: string; opcoes: Opcao[] }[]; // perguntas de perfil (gênero e faixa etária), fora da contagem
+  // perguntas de perfil (cidade, bairro, gênero e faixa etária), fora da contagem; o bairro só vale para quem mora em Curitiba
+  perfil?: { id: string; opcoes: Opcao[]; condicao?: { campo: string; opcoes: string[] } }[];
 };
 const QUESTIONARIOS: Record<string, Questionario> = { [modaCuritiba.slug]: modaCuritiba as Questionario };
 
@@ -108,6 +109,9 @@ function validar(p: Pergunta, v: unknown): unknown {
   if (p.max && sel.length > p.max) falha(`Escolha no máximo ${p.max} opções na pergunta ${p.id}.`);
   const exclusivas = (p.opcoes ?? []).filter((x) => x.exclusiva).map((x) => x.id);
   if (sel.some((s) => exclusivas.includes(s)) && sel.length > 1) falha(`A opção escolhida na pergunta ${p.id} não pode ser combinada com outras.`);
+  // respostas negativas (anula): a pessoa pode marcar junto com outras, mas no banco ficam só as negativas
+  const anulam = (p.opcoes ?? []).filter((x) => x.anula).map((x) => x.id);
+  if (sel.some((s) => anulam.includes(s))) return { opcoes: sel.filter((s) => anulam.includes(s)) };
   const opOutro = (p.opcoes ?? []).find((x) => x.outro);
   const res: { opcoes: string[]; outro?: string } = { opcoes: sel };
   if (opOutro && sel.includes(opOutro.id)) {
@@ -175,10 +179,14 @@ Deno.serve(async (req) => {
     if (completa && q.perfil?.length) {
       const pf = (p.perfil && typeof p.perfil === "object" ? p.perfil : {}) as Record<string, unknown>;
       const out: Record<string, string> = {};
+      const MSG: Record<string, string> = { cidade: "Escolha a cidade onde você mora.", bairro: "Escolha o seu bairro ou marque \"Prefiro não informar\".", genero: "Escolha uma opção de gênero.", faixa_etaria: "Escolha uma faixa etária.", estado_civil: "Escolha seu estado civil." };
       for (const per of q.perfil) {
+        if (per.condicao && !per.condicao.opcoes.includes(out[per.condicao.campo])) continue; // ex.: bairro só para Curitiba
         const v = String(pf[per.id] ?? "");
         const op = per.opcoes.find((o) => o.id === v);
-        if (!op) falha(per.id === "genero" ? "Escolha uma opção de gênero." : "Escolha uma faixa etária.");
+        if (!op) falha(MSG[per.id] ?? "Responda as perguntas sobre você.");
+        // a cidade precisa combinar com a pergunta 1 (Curitiba ou Região Metropolitana)
+        if (per.id === "cidade" && ((respostas.q1 === "sim" && v !== "curitiba") || (respostas.q1 === "rmc" && v === "curitiba"))) falha("A cidade não combina com a resposta da pergunta 1.");
         out[per.id] = v;
         if (op!.outro) {
           const t = String(pf[per.id + "_outro"] ?? "").trim();

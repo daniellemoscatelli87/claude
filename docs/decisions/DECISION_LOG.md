@@ -422,7 +422,6 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 
 ---
 
-
 ## D-038 · 23/11/2026 · DM | Experience Intelligence sai do Netlify para o Cloudflare Pages
 
 - **Decisão da dona do produto:** levar o app (app.danimoscatelli.com.br) para o Cloudflare, onde já ficam o site do estúdio e o FindLook. A conta do Netlify está com pagamento atrasado e com as publicações pausadas.
@@ -465,7 +464,48 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Decisão:** o cabeçalho do card não tem faixa cinza; é separado do conteúdo por uma linha fina que some nas pontas. O hover de linha ou item dentro do card é bem claro e sutil: token `--row-hover` do DS (metade do `--graphite-50` sobre o card), decisão revista na quinta rodada. No card rosa da Início, o "não lidas" do canto sai por repetir a informação. O botão desabilitado usa o fundo `--graphite-100`. O menu lateral empurra o conteúdo, nunca o cobre (no DS e na área restrita). As mudanças de token foram feitas no DS (branch `claude/ajustes-painel`) e trazidas pela sincronização, sem editar a cópia.
 - **Trade-offs:** a área restrita fica, por enquanto, com o `theme.css` de uma branch do DS ainda não publicada; ao publicar o DS, a sincronização diária volta ao `main` e o `?v=` precisa mudar.
 
-## D-043 · 23/11/2026 · App DM | Experience Intelligence consome tokens e componentes do DS Dani Moscatelli, com atualização diária
+## D-043 · 23/11/2026 · "Novo e-mail" na área de contatos, para qualquer endereço e com anexos de qualquer tipo (site)
+
+- **Origem:** dona do produto. Escolheu:
+  - o botão "Novo e-mail";
+  - qualquer tipo de arquivo;
+  - manter a assinatura atual;
+  - as respostas da pessoa aparecem como conversa.
+- **Decisão:**
+  - O e-mail novo é gravado em `contatos` com `origem = 'enviado'` e o selo "Enviado". Assim, o histórico, as respostas recebidas e a reunião funcionam como nas outras conversas.
+  - O envio usa a mesma função e a mesma assinatura das respostas, pelo remetente contato@danimoscatelli.com.br.
+  - Anexos de qualquer tipo, até 10 por e-mail e 20 MB no total, no bucket privado `anexos`, que só a administradora lê.
+- **Trade-offs:**
+  - Aceitar qualquer tipo de arquivo amplia o que fica guardado no bucket. Ele continua privado e restrito à administradora.
+  - Os e-mails enviados contam como conversas na lista, que passa a dizer "conversas" em vez de "mensagens recebidas".
+
+## D-044 · 23/11/2026 · Pesquisa de moda inclui a Região Metropolitana; cidade e bairro no perfil (site)
+
+- **Origem:** dona do produto.
+- **Decisão:**
+  - Quem mora em Curitiba ou na Região Metropolitana participa; só "Outra cidade" encerra.
+  - Quem é da Região Metropolitana responde a 1.1, sobre comprar em Curitiba.
+  - No perfil, a cidade é sempre perguntada e o bairro só para Curitiba ("não preciso saber o bairro da região metropolitana").
+- **Fontes:**
+  - 29 municípios da Região Metropolitana: AMEP, página "Municípios da Região Metropolitana de Curitiba", consultada em 23/11/2026.
+  - 75 bairros e 10 regionais: "Administrações Regionais de Curitiba" (Prefeitura, 2017), conferido com "Curitiba: caminhos que educam" (SME, 2022).
+  - O site da Prefeitura bloqueou a leitura automática; não foi possível conferir uma versão de 2025/2026.
+- **Trade-offs:**
+  - O Campo Comprido fica em Santa Felicidade, mas a parte sul pertence à regional Portão. O agrupamento por regional é aproximado nesse bairro.
+  - O código `fora_de_curitiba` continua nos dados e passa a significar "fora de Curitiba e da Região Metropolitana".
+
+## D-045 · 23/11/2026 · Alertas no padrão novo e cores de aviso e erro do DS Dani Moscatelli (site)
+
+- **Origem:** dona do produto, ao aprovar o "Alerta com ação" e a opção B de cores no DS Dani Moscatelli (`697a765`).
+- **Decisão:**
+  - A área restrita recebe o `theme.css` do DS na versão `697a765`: o aviso passa a laranja amarelado (`#F0A020`) e o erro fica mais rosa (`#D9416E`); entram os tokens de texto `--warning-text`, `--success-text`, `--info-text` e `--error-text`.
+  - Onde a área restrita usava `--warning` como cor de texto ou ícone, passa a usar `--warning-text`, porque o laranja amarelado não dá leitura sobre fundo claro:
+    - Parceiros: `.tp-gal.wait`, `.ai-stale`, lacunas da IA (`--ai-av`), `.pcs-fit`, `.pc-fit` e o número da linha do tempo (`.tl-mark span`, com `--c-texto`);
+    - Pesquisas: `.pa-dest-amostra` e o ícone de atenção.
+- **Contraste:** `#935E0A` sobre o fundo de aviso dá 4,9:1 e no branco 5,5:1.
+- **Trade-offs:** o ponto decorativo do selo pendente (`.badge.pend`) continua em `--warning`, porque não é texto.
+
+## D-046 · 23/11/2026 · App DM | Experience Intelligence consome tokens e componentes do DS Dani Moscatelli, com atualização diária
 
 - **Origem:** dona do produto, 23/11/2026: "app EI consome tokens e componentes do DS Dani Moscatelli, com atualização diária" (escolheu "Tokens e componentes", não só os tokens).
 - **Decisão:** o app (`apps/experience-intelligence/`) deixa de ter cores e componentes visuais feitos à mão. Usa Tailwind v4 com os arquivos do DS (`index.css`, `fonts.css`, `tailwind.css` e `theme.css`, mapeamento `@theme inline`) e os componentes `ui/` do DS (botão, campo, área de texto, rótulo, caixa de seleção, campo de senha, card, alerta, badge, progresso, avatar, menu suspenso, painel lateral, título e selo). Os arquivos são cópias listadas em `design-system/arquivos.txt`, atualizadas pela mesma rotina diária do site, que agora também roda tipos, lint, testes e build do app antes de abrir o pull request.
@@ -479,7 +519,6 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Trade-offs:** cada sincronização do DS pode mudar a aparência do app; os testes pegam erros de tipos e de build, não problemas visuais, então a dona do produto confere as telas antes de aprovar o PR. Itens que faltam no DS (rodapé sem "Preferências de cookies", select nativo como componente, "Fechar" em português no `ui/dialog`) ficam para decisão no DS, sem solução inventada no app.
 
 ## Decisões pendentes
-
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
   - cruzar pelo e-mail confirmado, no servidor;

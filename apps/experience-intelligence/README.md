@@ -39,7 +39,7 @@ tests/              testes automatizados das regras
 
 ## Visual: Design System Dani Moscatelli
 
-Todo o visual vem do [Design System Dani Moscatelli](https://designsystem.danimoscatelli.com.br) (D-043): Tailwind v4 com os tokens do DS em `src/styles/` e os componentes do DS em `src/components/ui/`. Esses arquivos são cópias atualizadas todo dia pela rotina do site (`design-system/arquivos.txt` e `design-system/README.md`, na raiz do repositório): **nunca edite as cópias**; mudanças são feitas no repositório do DS. Não crie cores, fontes ou componentes visuais fora dele. `src/design-system/` guarda só a lógica dos campos (`padroes.ts`) e a montagem deles com os componentes do DS (`campos.tsx`).
+Todo o visual vem do [Design System Dani Moscatelli](https://designsystem.danimoscatelli.com.br) (D-046): Tailwind v4 com os tokens do DS em `src/styles/` e os componentes do DS em `src/components/ui/`. Esses arquivos são cópias atualizadas todo dia pela rotina do site (`design-system/arquivos.txt` e `design-system/README.md`, na raiz do repositório): **nunca edite as cópias**; mudanças são feitas no repositório do DS. Não crie cores, fontes ou componentes visuais fora dele. `src/design-system/` guarda só a lógica dos campos (`padroes.ts`) e a montagem deles com os componentes do DS (`campos.tsx`).
 
 Pressupostos registrados no [Decision Log](../../docs/decisions/DECISION_LOG.md): mesmo projeto Supabase do site (D-006), IA desde o primeiro incremento (D-007) e site estático com escrita apenas por funções do banco (D-008).
 

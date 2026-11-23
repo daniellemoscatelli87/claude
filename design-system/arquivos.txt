@@ -5,7 +5,7 @@
 # Tokens (cores, sombras, raio, movimento, gráficos), usados pela área restrita (public/admin/)
 src/styles/theme.css     public/design-system/theme.css
 
-# App DM | Experience Intelligence (apps/experience-intelligence): tokens, fontes e Tailwind v4 (decisão de 23/11/2026, D-043)
+# App DM | Experience Intelligence (apps/experience-intelligence): tokens, fontes e Tailwind v4 (decisão de 23/11/2026, D-046)
 src/styles/index.css     apps/experience-intelligence/src/styles/index.css
 src/styles/fonts.css     apps/experience-intelligence/src/styles/fonts.css
 src/styles/tailwind.css  apps/experience-intelligence/src/styles/tailwind.css

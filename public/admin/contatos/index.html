@@ -9,13 +9,32 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/design-system/theme.css?v=085153d">
+<link rel="stylesheet" href="/design-system/theme.css?v=697a765">
 <link rel="stylesheet" href="/admin/admin.css?v=20261123g">
 <style>
   /* Origem da mensagem: formulário do site ou e-mail direto para contato@ */
   .origem { flex: none; display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; line-height: 1; }
   .origem.site { background: var(--muted); color: var(--muted-foreground); }
   .origem.email { background: var(--primary-muted); color: var(--primary-text); }
+  .origem.enviado { background: var(--info-muted); color: var(--info); }
+  .head-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .head-row h1 { margin: 0; }
+  .head-row .btn-ok svg { width: 16px; height: 16px; }
+  /* Novo e-mail (painel lateral) */
+  .ne-drawer { width: min(520px, 100vw); }
+  .ne-body { gap: 16px; }
+  .ne-body textarea { min-height: 180px; }
+  .ne-body .fld span.opt { display: inline; margin: 0; font-weight: 500; color: var(--muted-foreground); }
+  .ne-sig { margin: 0; font-size: 13px; color: var(--muted-foreground); }
+  .ne-acts { display: flex; gap: 10px; justify-content: flex-end; align-items: center; flex-wrap: wrap; }
+  .ne-ok { display: grid; justify-items: center; text-align: center; gap: 10px; padding: 40px 8px; }
+  .ne-ok .chk { width: 56px; height: 56px; border-radius: 50%; background: var(--success); color: #fff; display: grid; place-items: center; animation: ne-pop .35s var(--ease-out, ease-out) both; }
+  .ne-ok .chk svg { width: 28px; height: 28px; }
+  .ne-ok h2 { padding: 0; }
+  .ne-ok p { margin: 0; font-size: 14px; color: var(--muted-foreground); overflow-wrap: anywhere; }
+  @keyframes ne-pop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .ne-ok .chk { animation: none; } }
+  .chip .fi { width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--muted); color: var(--muted-foreground); display: grid; place-items: center; flex-shrink: 0; font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
   /* Lista: 3 níveis (nome, assunto, e-mail e empresa) numa coluna; a data fica na coluna da direita, sem ser invadida.
      No computador, o selo fica ao lado da data (com um divisor); no celular, abaixo do ícone. */
   .rowlink.ctt { grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto auto; align-items: start; row-gap: 2px; }
@@ -170,7 +189,7 @@
 <body>
 <main class="wrap hidden" id="app">
   <div id="view-list">
-    <h1>Contato</h1>
+    <div class="head-row"><h1>Contato</h1><button type="button" class="btn-ok" id="novo-email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.4 3.6a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>Novo e-mail</button></div>
     <p class="muted" id="count"></p>
     <div class="toolbar"><input type="search" id="busca" placeholder="Buscar" title="Buscar por nome, e-mail, empresa, assunto ou mensagem" aria-label="Buscar por nome, e-mail, empresa, assunto ou mensagem">
       <select id="situacao" aria-label="Situação"><option value="">Todas as mensagens</option><option value="pendentes">Não respondidas</option><option value="respondidas">Respondidas</option><option value="reunioes">Reuniões agendadas</option></select></div>
@@ -188,6 +207,11 @@
 <aside class="drawer mt-drawer" id="mt-drawer" aria-label="Reunião">
   <button type="button" class="close" id="mt-close" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   <div class="mt-body" id="mt-body"></div>
+</aside>
+<div class="backdrop" id="ne-backdrop"></div>
+<aside class="drawer ne-drawer" id="ne-drawer" role="dialog" aria-modal="true" aria-labelledby="ne-title">
+  <button type="button" class="close" id="ne-close" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  <div class="mt-body ne-body" id="ne-body"></div>
 </aside>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/admin/admin.js?v=20261123g"></script>
@@ -216,7 +240,7 @@ function statusBar(r) {
     const li = Admin.el("li", "step " + st.cls + (done ? " done" : ""));
     const dot = Admin.el("span", "dot"); dot.innerHTML = done ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>' : "";
     const when = done ? (st.key === "reuniao_em" ? new Date(r.reuniao_em).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }) : new Date(r[st.key]).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })) : "";
-    li.append(dot, Admin.el("span", "lbl", st.label), Admin.el("span", "dt", when));
+    li.append(dot, Admin.el("span", "lbl", st.key === "created_at" && r.origem === "enviado" ? "Enviado" : st.label), Admin.el("span", "dt", when));
     steps.appendChild(li);
   });
   bar.appendChild(steps);
@@ -491,13 +515,20 @@ function renderMeeting(r) {
 // Cabeçalho da mensagem em acordeão: fechado mostra nome, e-mail, data/hora e assunto;
 // aberto mostra todos os dados enviados pelo formulário.
 // Selo de origem: "Site" (formulário) ou "E-mail" (enviado direto para contato@danimoscatelli.com.br)
+// ou "Enviado" (e-mail novo escrito por você em "Novo e-mail")
+const ORIGENS = {
+  site: ["Site", "Enviado pelo formulário do site"],
+  email: ["E-mail", "Enviado direto para contato@danimoscatelli.com.br"],
+  enviado: ["Enviado", "E-mail novo enviado por você"],
+};
 const origemTag = (r) => {
-  const email = r.origem === "email";
-  const t = Admin.el("span", "origem " + (email ? "email" : "site"), email ? "E-mail" : "Site");
-  t.title = email ? "Enviado direto para contato@danimoscatelli.com.br" : "Enviado pelo formulário do site";
+  const k = ORIGENS[r.origem] ? r.origem : "site";
+  const t = Admin.el("span", "origem " + k, ORIGENS[k][0]);
+  t.title = ORIGENS[k][1];
   return t;
 };
 const SECOES_EMAIL = [{ title: "E-mail", fields: [["nome", "Nome"], ["email", "E-mail"], ["assunto", "Assunto"], ["mensagem", "Mensagem"]] }];
+const SECOES_ENVIADO = [{ title: "E-mail enviado", fields: [["nome", "Para"], ["email", "E-mail"], ["assunto", "Assunto"]] }];
 
 function contactHeader(r) {
   const card = Admin.el("section", "card ch");
@@ -509,7 +540,7 @@ function contactHeader(r) {
   const chev = Admin.el("span", "ch-chev"); chev.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
   head.append(Admin.el("span", "ini", Admin.initials(r.nome)), info, chev);
   const body = Admin.el("div", "ch-body hidden"); body.id = "ch-body";
-  const full = Admin.detail(r, r.origem === "email" ? SECOES_EMAIL : Admin.CONTATO_SECOES, "");
+  const full = Admin.detail(r, r.origem === "email" ? SECOES_EMAIL : r.origem === "enviado" ? SECOES_ENVIADO : Admin.CONTATO_SECOES, "");
   full.classList.remove("card"); full.querySelector(".detail-head")?.remove();
   body.appendChild(full);
   head.addEventListener("click", () => {
@@ -531,9 +562,56 @@ const EVENTOS = {
   reuniao_alterada: (d) => "Reunião remarcada para " + fmtMeeting(d),
   reuniao_cancelada: () => "Reunião cancelada",
 };
-const MAX_ANEXOS = 10, MAX_MB = 10;
+const MAX_ANEXOS = 10, MAX_MB = 20; // 20 MB no total por e-mail
 const fmtSize = (n) => (n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB");
 const safeName = (n) => n.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^\w.-]+/g, "-").slice(-80);
+const qtdAnexos = (l) => (l.length ? l.length + (l.length === 1 ? " arquivo anexado" : " arquivos anexados") : "");
+// Seleção de anexos (qualquer tipo de arquivo): botão, lista com nome e tamanho, e remoção.
+function anexador(id) {
+  const files = [];
+  const picker = Admin.el("input"); picker.type = "file"; picker.multiple = true; picker.id = id; picker.className = "hidden";
+  const attach = Admin.el("label", "btn-line attach"); attach.htmlFor = id;
+  attach.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>Anexar arquivo';
+  const chips = Admin.el("div", "chips");
+  const msg = Admin.el("p", "msg"); msg.setAttribute("aria-live", "polite");
+  const render = () => {
+    chips.replaceChildren();
+    files.forEach((f, i) => {
+      const c = Admin.el("div", "chip");
+      let thumb;
+      if (f.type.startsWith("image/")) { thumb = Admin.el("img"); thumb.src = URL.createObjectURL(f); thumb.alt = ""; }
+      else thumb = Admin.el("span", "fi", (f.name.split(".").pop() || "").slice(0, 4) || "arq");
+      const rm = Admin.el("button", null, "×"); rm.type = "button"; rm.setAttribute("aria-label", "Remover " + f.name);
+      rm.addEventListener("click", () => { files.splice(i, 1); render(); });
+      c.append(thumb, Admin.el("span", "nm", f.name), Admin.el("span", "sz", fmtSize(f.size)), rm);
+      chips.appendChild(c);
+    });
+  };
+  picker.addEventListener("change", () => {
+    msg.className = "msg"; msg.textContent = "";
+    for (const f of picker.files) {
+      if (files.length >= MAX_ANEXOS) { msg.className = "msg err"; msg.textContent = "Máximo de " + MAX_ANEXOS + " arquivos por e-mail."; break; }
+      const total = files.reduce((t, x) => t + x.size, 0) + f.size;
+      if (total > MAX_MB * 1048576) { msg.className = "msg err"; msg.textContent = "Os anexos passam de " + MAX_MB + " MB no total. " + f.name + " não foi incluído."; continue; }
+      files.push(f);
+    }
+    picker.value = "";
+    render();
+  });
+  return { files, picker, attach, chips, msg, render };
+}
+// Envia os anexos ao armazenamento privado (pasta da conversa). Devolve a lista ou a mensagem de erro.
+async function subirAnexos(files, pasta, progresso) {
+  const anexos = [];
+  for (const [i, f] of files.entries()) {
+    progresso("Enviando arquivo " + (i + 1) + " de " + files.length + "…");
+    const path = "respostas/" + pasta + "/" + Date.now() + "-" + i + "-" + safeName(f.name);
+    const { error } = await Admin.sb.storage.from("anexos").upload(path, f, { contentType: f.type || "application/octet-stream", upsert: false });
+    if (error) return "Não foi possível enviar o arquivo " + f.name + ". Tente novamente.";
+    anexos.push({ path, name: f.name, type: f.type || "application/octet-stream", size: f.size });
+  }
+  return anexos;
+}
 
 async function historico(r) {
   const box = document.getElementById("historico");
@@ -554,7 +632,7 @@ async function historico(r) {
   }
 
   const items = [
-    { at: r.created_at, kind: "in" },
+    ...(r.origem === "enviado" ? [] : [{ at: r.created_at, kind: "in" }]), // e-mail novo: a conversa começa pelo seu envio
     ...respostas.map((x) => ({ at: x.created_at, kind: "out", x })),
     ...recebidas.map((x) => ({ at: x.created_at, kind: "in", x })),
     ...eventos.map((x) => ({ at: x.created_at, kind: "ev", x })),
@@ -601,33 +679,7 @@ async function historico(r) {
   const form = Admin.el("form", "reply");
   const label = Admin.el("label", "l", "Responder"); label.htmlFor = "resposta";
   const ta = Admin.el("textarea"); ta.id = "resposta"; ta.placeholder = "Escreva sua resposta…";
-  const files = [];
-  const picker = Admin.el("input"); picker.type = "file"; picker.accept = "image/*"; picker.multiple = true; picker.id = "anexos"; picker.className = "hidden";
-  const attach = Admin.el("label", "btn-line attach"); attach.htmlFor = "anexos"; attach.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>Anexar imagem';
-  const chips = Admin.el("div", "chips");
-  const msg = Admin.el("p", "msg"); msg.setAttribute("aria-live", "polite");
-  const renderChips = () => {
-    chips.replaceChildren();
-    files.forEach((f, i) => {
-      const c = Admin.el("div", "chip");
-      const im = Admin.el("img"); im.src = URL.createObjectURL(f); im.alt = "";
-      const rm = Admin.el("button", null, "×"); rm.type = "button"; rm.setAttribute("aria-label", "Remover " + f.name);
-      rm.addEventListener("click", () => { files.splice(i, 1); renderChips(); });
-      c.append(im, Admin.el("span", "nm", f.name), Admin.el("span", "sz", fmtSize(f.size)), rm);
-      chips.appendChild(c);
-    });
-  };
-  picker.addEventListener("change", () => {
-    msg.className = "msg"; msg.textContent = "";
-    for (const f of picker.files) {
-      if (!f.type.startsWith("image/")) { msg.className = "msg err"; msg.textContent = "Só é possível anexar imagens."; continue; }
-      if (f.size > MAX_MB * 1048576) { msg.className = "msg err"; msg.textContent = f.name + " passa de " + MAX_MB + " MB."; continue; }
-      if (files.length >= MAX_ANEXOS) { msg.className = "msg err"; msg.textContent = "Máximo de " + MAX_ANEXOS + " imagens por resposta."; break; }
-      files.push(f);
-    }
-    picker.value = "";
-    renderChips();
-  });
+  const { files, picker, attach, chips, msg } = anexador("anexos");
   const to = Admin.el("span", "to", r.email ? "Para: " + r.email + " · Sua assinatura é incluída automaticamente no final do e-mail." : "Este contato não informou e-mail.");
   const btn = Admin.el("button", "btn-ok", "Enviar resposta"); btn.type = "submit"; btn.disabled = !r.email;
   const tools = Admin.el("div", "row-end"); tools.append(attach, btn);
@@ -636,17 +688,11 @@ async function historico(r) {
     e.preventDefault();
     const texto = ta.value.trim();
     msg.className = "msg";
-    if (!texto && !files.length) { msg.className = "msg err"; msg.textContent = "Escreva a resposta ou anexe uma imagem."; return; }
+    if (!texto && !files.length) { msg.className = "msg err"; msg.textContent = "Escreva a resposta ou anexe um arquivo."; return; }
     btn.disabled = true;
     const fail = (t) => { btn.disabled = false; btn.textContent = "Enviar resposta"; msg.className = "msg err"; msg.textContent = t; };
-    const anexos = [];
-    for (const [i, f] of files.entries()) {
-      btn.textContent = "Enviando imagem " + (i + 1) + " de " + files.length + "…";
-      const path = "respostas/" + r.id + "/" + Date.now() + "-" + i + "-" + safeName(f.name);
-      const { error } = await Admin.sb.storage.from("anexos").upload(path, f, { contentType: f.type, upsert: false });
-      if (error) return fail("Não foi possível enviar a imagem " + f.name + ". Tente novamente.");
-      anexos.push({ path, name: f.name, type: f.type, size: f.size });
-    }
+    const anexos = await subirAnexos(files, r.id, (t) => (btn.textContent = t));
+    if (typeof anexos === "string") return fail(anexos);
     btn.textContent = "Enviando…";
     const { data, error } = await Admin.sb.functions.invoke("responder-contato", { body: { contato_id: r.id, mensagem: texto, anexos } });
     if (error || !data?.resposta) {
@@ -654,7 +700,7 @@ async function historico(r) {
       try { detail = (await error?.context?.json())?.error || ""; } catch {}
       return fail("Não foi possível enviar a resposta." + (detail ? " " + detail : " Tente novamente."));
     }
-    Admin.log("Respondeu a mensagem de " + (r.nome || r.email || "contato"), anexos.length ? anexos.length + (anexos.length === 1 ? " imagem anexada" : " imagens anexadas") : "");
+    Admin.log("Respondeu a mensagem de " + (r.nome || r.email || "contato"), qtdAnexos(anexos));
     if (!r.respondido_em) { r.respondido_em = data.respondido_em; statusBar(r); }
     await historico(r);
     const m = document.querySelector("#historico .reply .msg"); if (m) m.textContent = "Resposta enviada para " + r.email + ".";
@@ -663,6 +709,88 @@ async function historico(r) {
   box.replaceChildren(Admin.el("h2", null, "Histórico"), thread);
   if (resp.error || evs.error || rec.error) box.appendChild(Admin.el("p", "msg err", "Parte do histórico não pôde ser carregada."));
   box.appendChild(form);
+}
+
+// Novo e-mail: escrever para qualquer endereço, com anexos e a assinatura. Vira uma conversa na lista
+// (selo "Enviado"); as respostas da pessoa aparecem no histórico.
+const EMAIL_OK = /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]{2,}$/;
+let neY = 0, neAberto = false;
+function closeNovo() {
+  if (!neAberto) return; neAberto = false;
+  document.getElementById("ne-drawer").classList.remove("open"); document.getElementById("ne-backdrop").classList.remove("open");
+  document.body.classList.remove("scroll-lock"); document.body.style.top = ""; window.scrollTo(0, neY);
+  document.getElementById("novo-email")?.focus();
+}
+function openNovo() {
+  neAberto = true;
+  neY = window.scrollY; document.body.style.top = -neY + "px"; document.body.classList.add("scroll-lock");
+  document.getElementById("ne-drawer").classList.add("open"); document.getElementById("ne-backdrop").classList.add("open");
+  renderNovo();
+}
+function renderNovo() {
+  const body = document.getElementById("ne-body");
+  const id = crypto.randomUUID(); // id da conversa e da pasta dos anexos
+  const form = Admin.el("form"); form.noValidate = true; form.style.display = "contents";
+  const h = Admin.el("h2", null, "Novo e-mail"); h.id = "ne-title";
+  const campo = (rot, el, opcional) => {
+    const w = Admin.el("label", "fld"); const t = Admin.el("span", null, rot);
+    if (opcional) t.appendChild(Admin.el("span", "opt", " (opcional)"));
+    const e = Admin.el("p", "fld-err hidden"); e.id = el.id + "-err"; el.setAttribute("aria-describedby", e.id);
+    w.append(t, el, e); return w;
+  };
+  const para = Admin.el("input"); para.type = "email"; para.id = "ne-para"; para.autocomplete = "email"; para.placeholder = "nome@exemplo.com"; para.inputMode = "email";
+  const nome = Admin.el("input"); nome.id = "ne-nome"; nome.placeholder = "Como a conversa aparece na lista";
+  const assunto = Admin.el("input"); assunto.id = "ne-assunto";
+  const texto = Admin.el("textarea"); texto.id = "ne-texto"; texto.placeholder = "Escreva sua mensagem…";
+  const { files, picker, attach, chips, msg } = anexador("ne-anexos");
+  const sig = Admin.el("p", "ne-sig", "Enviado por contato@danimoscatelli.com.br. Sua assinatura é incluída automaticamente no final do e-mail.");
+  const cancelar = Admin.el("button", "btn-line", "Cancelar"); cancelar.type = "button"; cancelar.addEventListener("click", closeNovo);
+  const btn = Admin.el("button", "btn-ok", "Enviar e-mail"); btn.type = "submit";
+  const acts = Admin.el("div", "ne-acts"); acts.append(cancelar, btn);
+  const anexos = Admin.el("div"); anexos.append(attach, picker, chips);
+  form.append(h, campo("Para", para), campo("Nome", nome, true), campo("Assunto", assunto), campo("Mensagem", texto), anexos, sig, msg, acts);
+  body.replaceChildren(form);
+  setTimeout(() => para.focus(), 50);
+
+  const erro = (el, t) => {
+    const e = document.getElementById(el.id + "-err");
+    el.classList.toggle("invalid", !!t); el.setAttribute("aria-invalid", t ? "true" : "false");
+    e.textContent = t || ""; e.classList.toggle("hidden", !t);
+  };
+  [para, assunto, texto].forEach((el) => el.addEventListener("input", () => erro(el, "")));
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    msg.className = "msg"; msg.textContent = "";
+    const v = { para: para.value.trim().toLowerCase(), nome: nome.value.trim(), assunto: assunto.value.trim(), texto: texto.value.trim() };
+    const falhas = [
+      [para, !v.para ? "Informe o e-mail do destinatário." : !EMAIL_OK.test(v.para) ? "Confira o e-mail: ele parece incompleto." : ""],
+      [assunto, v.assunto ? "" : "Informe o assunto."],
+      [texto, v.texto ? "" : "Escreva a mensagem."],
+    ];
+    falhas.forEach(([el, t]) => erro(el, t));
+    const primeiro = falhas.find(([, t]) => t);
+    if (primeiro) return primeiro[0].focus();
+    btn.disabled = cancelar.disabled = true;
+    const fail = (t) => { btn.disabled = cancelar.disabled = false; btn.textContent = "Enviar e-mail"; msg.className = "msg err"; msg.textContent = t; };
+    const lista = await subirAnexos(files, id, (t) => (btn.textContent = t));
+    if (typeof lista === "string") return fail(lista);
+    btn.textContent = "Enviando…";
+    const { data, error } = await Admin.sb.functions.invoke("responder-contato", { body: { novo: { id, para: v.para, nome: v.nome, assunto: v.assunto }, mensagem: v.texto, anexos: lista } });
+    if (error || !data?.resposta) {
+      let detail = "";
+      try { detail = (await error?.context?.json())?.error || ""; } catch {}
+      return fail("Não foi possível enviar o e-mail." + (detail ? " " + detail : " Tente novamente."));
+    }
+    Admin.log("Enviou um e-mail para " + v.para, qtdAnexos(lista));
+    const ok = Admin.el("div", "ne-ok"); ok.setAttribute("role", "status");
+    const chk = Admin.el("span", "chk"); chk.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>';
+    const ver = Admin.el("a", "btn-ok", "Ver conversa"); ver.href = "/admin/contatos/?id=" + data.contato_id;
+    const outro = Admin.el("button", "btn-line", "Escrever outro"); outro.type = "button"; outro.addEventListener("click", renderNovo);
+    const a2 = Admin.el("div", "ne-acts"); a2.style.justifyContent = "center"; a2.append(outro, ver);
+    ok.append(chk, Admin.el("h2", null, "E-mail enviado"), Admin.el("p", null, "Enviado para " + v.para + ". A conversa já está na sua lista."), a2);
+    body.replaceChildren(ok);
+    window.__novoEnviado?.(data.contato_id);
+  });
 }
 
 Admin.init({ page: "contatos", onReady: async () => {
@@ -698,8 +826,8 @@ Admin.init({ page: "contatos", onReady: async () => {
     const q = norm(document.getElementById("busca").value.trim());
     const sit = sel.value;
     const match = (r) => !sit || (sit === "reunioes" ? !!r.reuniao_em : (sit === "respondidas") === !!r.respondido_em);
-    const rows = data.filter((r) => match(r) && (!q || ["nome", "email", "empresa", "assunto", "mensagem"].some((k) => norm(r[k]).includes(q)) || norm(r.origem === "email" ? "e-mail email" : "site").includes(q)));
-    document.getElementById("count").textContent = (q || sit ? rows.length + " de " : "") + data.length + (data.length === 1 ? " mensagem recebida" : " mensagens recebidas");
+    const rows = data.filter((r) => match(r) && (!q || ["nome", "email", "empresa", "assunto", "mensagem"].some((k) => norm(r[k]).includes(q)) || norm(r.origem === "email" ? "e-mail email" : r.origem === "enviado" ? "enviado" : "site").includes(q)));
+    document.getElementById("count").textContent = (q || sit ? rows.length + " de " : "") + data.length + (data.length === 1 ? " conversa" : " conversas");
     const list = document.getElementById("list"); list.replaceChildren();
     if (!rows.length) return list.appendChild(Admin.el("div", "empty", data.length ? "Nenhuma mensagem encontrada." : "Nenhuma mensagem ainda."));
     rows.forEach((r) => {
@@ -729,6 +857,15 @@ Admin.init({ page: "contatos", onReady: async () => {
   }
   sel.addEventListener("change", render);
   render();
+  // Novo e-mail: abre o painel; ao enviar, a conversa entra no topo da lista
+  document.getElementById("novo-email").addEventListener("click", openNovo);
+  document.getElementById("ne-close").addEventListener("click", closeNovo);
+  document.getElementById("ne-backdrop").addEventListener("click", closeNovo);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeNovo(); });
+  window.__novoEnviado = async (cid) => {
+    const { data: novo } = await Admin.sb.from("contatos").select("*").eq("id", cid).maybeSingle();
+    if (novo && !data.some((x) => x.id === novo.id)) { data.unshift(novo); render(); }
+  };
 }});
 </script>
 </body>

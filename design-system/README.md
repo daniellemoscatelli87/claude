@@ -1,6 +1,6 @@
 # Design System Dani Moscatelli no site
 
-A área restrita do site (`public/admin/`) e o app DM | Experience Intelligence (`apps/experience-intelligence/`) usam cópias de arquivos do Design System Dani Moscatelli (decisões da dona do produto, 23/11/2026: "tudo deve consumir o Design System" e "app EI consome tokens e componentes do DS Dani Moscatelli, com atualização diária", D-043):
+A área restrita do site (`public/admin/`) e o app DM | Experience Intelligence (`apps/experience-intelligence/`) usam cópias de arquivos do Design System Dani Moscatelli (decisões da dona do produto, 23/11/2026: "tudo deve consumir o Design System" e "app EI consome tokens e componentes do DS Dani Moscatelli, com atualização diária", D-046):
 
 - Repositório: https://github.com/daniellemoscatelli87/DaniMoscatelli-DesignSystem
 - Publicado: https://designsystem.danimoscatelli.com.br

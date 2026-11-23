@@ -350,6 +350,63 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
+## 2026-11-23 · Pesquisa Moda em Curitiba: mensagem da tela final no Alerta do DS, não publicado
+
+- **Pedido:** a mensagem do fim ("Assim que a plataforma for lançada…") não seguia o padrão do DS.
+- **O que mudou (`pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.css`, `src/pesquisa-moda.ts`):** a caixa rosa centralizada com o presente virou o Alerta do DS, variante info (`alert.tsx`): ícone de sino de 20 px em `#3D7CAA` (`--info`) à esquerda, texto de 14 px alinhado à esquerda, fundo `--info-muted`, borda `--info` a 20% e raio de 12 px; `role="status"`. "E-mail" com hífen que não quebra (U+2011).
+- **Verificação executada:** `npm run build`; fluxo completo no celular até a tela final; captura da mensagem; sem erros no console.
+
+## 2026-11-23 · Pesquisa Moda em Curitiba: títulos com destaque, textos revisados e perguntas 8 e 10 unidas, publicado
+
+- **Pedidos da dona:**
+  - trecho de cada título em vermelho;
+  - novos textos para as perguntas 3, 4, 5, 7, 8 e 9 e para a mensagem final;
+  - "fusão da pergunta 8 com a 10": ela escolheu "Tudo na escala da 8".
+- **Questionário (`moda-curitiba-v9-2026-11-23`):**
+  - campo `destaque` em cada pergunta (o trecho em vermelho);
+  - textos novos nas perguntas 3, 4, 5, 7, 8 e 9;
+  - a pergunta 8 ganhou 7 linhas com os itens da antiga 10, escritos para a escala de facilidade e dificuldade (mesmos ids: `precos`, `onde_encontrar`, `muitas_lojas`, `esgotada`, `tempo`, `distancia`, `avaliar_online`);
+  - a pergunta 10 saiu, e a pesquisa passa a ter 9 perguntas.
+- **Página (`src/pesquisa-moda.ts`, `src/pesquisa-moda.css`):** `cabecalho` pinta o trecho de destaque, também em "sobre você" e "experiência de compra". Nova mensagem final: "Assim que a plataforma for lançada, avisaremos você por e-mail e WhatsApp para que fique por dentro de todas as novidades!"
+- **Painel (`public/admin/pesquisas/index.html`):**
+  - pergunta 8 em largura cheia, com a grade preenchendo os espaços livres (`grid-auto-flow: dense`);
+  - frases "O que mais dificulta" no lugar de "O mais difícil de encontrar";
+  - o destaque da antiga 10 saiu;
+  - o cartão "não sabem em quais lojas procurar" passa a usar a linha `onde_encontrar` da 8 (difícil ou muito difícil), e as respostas antigas da 10 continuam contando.
+- **Verificação executada:**
+  - `npm run build`;
+  - função com banco simulado (8 completa com 12 linhas aceita; só as 5 antigas recusada; 10 ignorada);
+  - fluxo completo no celular ("Pergunta 8 de 9", 12 linhas, 12 títulos com destaque, nova mensagem final);
+  - painel com dados fictícios (alturas iguais, 16 cartões, sem erros no console).
+
+## 2026-11-23 · Política de Privacidade revisada (pesquisa, Hostinger e e-mail visível), publicado
+
+- **Pedido:** a dona pediu a revisão do texto e perguntou o que era "[email protected]". É a proteção de e-mails da Cloudflare, que esconde contato@danimoscatelli.com.br de robôs: aparece certo no navegador, mas não ao copiar o texto.
+- **O que mudou (`public/privacidade/index.html`), com os 5 pontos aprovados pela dona:**
+  1. seção 1: a pesquisa passa a dizer que nome, e-mail e WhatsApp são pedidos no início para garantir uma participação por pessoa (antes dizia "só se pedir novidades");
+  2. seção 2: finalidades da pesquisa com "garantir uma participação por pessoa" e "entregar os benefícios de lançamento";
+  3. seção 4: Hostinger (caixa de e-mail contato@) entre os fornecedores;
+  4. seção 8: "vantagens de quem participou" trocado por "benefícios de lançamento" e "novidades do projeto", os mesmos termos da pesquisa;
+  5. os 4 endereços de e-mail da página entre `<!--email_off-->` e `<!--/email_off-->`, para a Cloudflare não escondê-los.
+- **Verificação executada:** `npm run build`; página conferida no ar depois da publicação.
+
+## 2026-11-23 · Pesquisa Moda em Curitiba: abertura no modelo enviado pela dona ("Por que vale participar"), publicado
+
+- **Pedido:** refazer a abertura seguindo o modelo enviado (imagem), com os textos dele.
+- **O que mudou (`pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.css`):**
+  - textos novos: "Queremos entender como é procurar e comprar roupas e acessórios na cidade." e o parágrafo do projeto e do que as respostas vão ajudar a identificar;
+  - bloco "Por que vale participar", em tom rosa claro, depois da explicação: presente vermelho animado, divisor, título e "Ao final, você poderá escolher receber novidades do projeto e benefícios de lançamento.", mais 3 selos ("Novidades em primeira mão", "Benefícios no lançamento", "Ajude a construir a solução"), com ícones e um leve movimento no hover;
+  - boxes de informação: "Leva de 3 a 5 minutos", "Participação voluntária" e "Privacidade protegida";
+  - fechamento e link da política com os textos do modelo.
+  - No celular, os selos ficam um embaixo do outro. A faixa de vantagens anterior saiu.
+- **Verificação executada:** `npm run build`; Playwright no celular, em 1366×768 e em 1440×900 (botão visível sem rolar, selos em uma linha, sem erros no console); capturas.
+
+## 2026-11-23 · Pesquisa Moda em Curitiba: faixa de vantagens mais suave e depois da explicação, publicado
+
+- **Pedido:** a faixa vermelha das vantagens competia com o botão "Começar pesquisa" e aparecia antes da explicação da pesquisa.
+- **O que mudou (`src/pesquisa-moda.css`):** a faixa passou a fundo rosa claro (`--pq-tint`) com borda vermelha suave e textos escuros. O ícone de presente continua num quadrado vermelho animado, e o brilho que passa continua (sem animação com "menos movimento"). O vermelho cheio fica só no botão. Depois, a pedido da dona ("ruim falar da vantagem antes de explicar a pesquisa"), a faixa foi para depois dos textos que explicam a pesquisa, antes dos boxes de informação (`pesquisa/moda-curitiba/index.html`).
+- **Verificação executada:** `npm run build`; Playwright no celular e em 1440×900 (botão visível sem rolar, sem erros no console); capturas.
+
 ## 2026-11-23 · Painel de pesquisas: "Leitura" no Alerta do DS e pergunta 8 sem números dentro das barras, não publicado
 
 - **Pedido:** a dona perguntou se a caixa "Leitura" seguia o DS. Não seguia: foi feita à mão, com fundo cinza, sem borda e ícone cinza. Conferido no repositório do DS (`alert.tsx`), junto com a regra de gráficos de 19/11/2026: barras sem número dentro.
@@ -539,6 +596,163 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-23 · Pesquisa: pergunta 4 com notas de 1 a 10 (questionário v12), publicado (função `pesquisa` v11)
+
+- Pedido da dona do produto: tirar o zero; "1 = Muito ruim".
+- Pergunta 5: o trecho em vermelho volta a ser "produto específico" (antes, "começar").
+- Pergunta 6 (foto de referência): "foto de referência" e "comprar algo igual ou parecido" em vermelho.
+- Pergunta 10 (matriz): novo texto "Quando você procura por um produto, qual é o grau de facilidade ou dificuldade para conseguir peças que atendam às suas expectativas?", com "produto" e "atendam às suas expectativas" em vermelho.
+- "Roupas, calçados e acessórios" aparece em 4 perguntas espaçadas (2, 4, 7 e 11), além da 1.1. Nenhuma pergunta diz mais "roupas e acessórios":
+  - 2.1: "…comprar em marketplaces ou lojas online de outras cidades?";
+  - 3: "Você tem comprado peças de segunda mão (brechós)…";
+  - 4: "Pensando nas roupas, calçados e acessórios que comprou recentemente…";
+  - 12: "…quando não encontra um produto que gostaria de comprar?".
+- Opções ajustadas (os ids não mudam; respostas antigas continuam valendo):
+  - "Não comprei nenhuma peça este ano";
+  - "Não costumo procurar produtos específicos";
+  - "Não conheço lojas físicas desse tipo em Curitiba".
+- Outros textos ajustados:
+  - tela de encerramento: "compraram roupas, calçados ou acessórios este ano";
+  - apoio do relato: "ao procurar ou comprar peças".
+- Cidade e bairro saem do "Sobre você" e passam para a pergunta 1, logo abaixo da escolha:
+  - Curitiba mostra o bairro;
+  - Região Metropolitana mostra "Em qual cidade da Região Metropolitana você mora?", com as 28 cidades;
+  - Outra cidade não mostra nada.
+  - O campo aparece com movimento suave (respeita "menos movimento"), é obrigatório para continuar e mostra o erro junto ao campo.
+  - Os dados continuam gravados em `respostas.perfil`, que o servidor valida como antes.
+- Estado civil no "Sobre você":
+  - opções Solteiro(a), Casado(a), União estável, Divorciado(a) ou separado(a), Viúvo(a) e Prefiro não informar;
+  - obrigatório, validado também no servidor;
+  - card no painel.
+- Testes executados:
+  - Playwright no iPhone 13, nos três caminhos:
+    - a pergunta 1 não segue sem a cidade (Região Metropolitana) ou sem o bairro (Curitiba);
+    - "Sobre você" mostra só gênero, faixa etária e estado civil;
+    - o envio leva cidade, bairro e estado civil;
+    - Outra cidade encerra.
+  - Função em bundle: sem estado civil é recusado; com estado civil, gravado.
+  - Painel com o card novo, sem erros de JS.
+- `questionario.json`:
+  - `min: 1` na pergunta 4;
+  - apoio "Avalie de 1 a 10…";
+  - versão `moda-curitiba-v12-2026-11-23`.
+- A página já monta os botões e os rótulos a partir de `min` e `max`.
+- Painel: textos "de 1 a 10", "1 = Muito ruim · 10 = Excelente" e faixa "1 a 6".
+- Respostas antigas com nota 0 continuam contando na faixa mais baixa.
+- Na publicação: reimplantar a função `pesquisa`, que passa a recusar nota 0.
+- Testes executados:
+  - `npm run build`;
+  - Playwright no iPhone 13: botões de 1 a 10, rótulos e apoio, e a pesquisa segue para a pergunta 5;
+  - função em bundle com banco simulado: nota 0 recusada, nota 1 aceita.
+
+## 2026-11-23 · Pesquisa: destaques das perguntas 1 e 1.1 e tela de encerramento com a Região Metropolitana, publicado
+
+- Pergunta 1: "Onde você mora" em vermelho. Pergunta 1.1: "fazer compras" e "Curitiba" em vermelho (campo `destaque` do `questionario.json`).
+- Tela de encerramento: "moram em Curitiba e Região Metropolitana", em negrito vermelho.
+- "Leva de 3 a 5 minutos" continua igual: a dona do produto não pediu mudança.
+- O `destaque` só é usado pela página, que lê o questionário do próprio site. A função `pesquisa` não precisa ser reimplantada para isso; o JSON publicado ficou igual ao do repositório na publicação da v12.
+- Testes executados: `npm run build`; Playwright no iPhone 13 (trechos em vermelho nas perguntas 1 e 1.1 e texto da tela de encerramento), sem erros de JS.
+
+## 2026-11-23 · Pesquisa: Região Metropolitana, quatro perguntas novas, cidade e bairro, e exportação do relatório (questionário v11, D-044), publicado (função `pesquisa` v10; questionário publicado em JSON compacto, igual ao do repositório)
+
+- `supabase/functions/pesquisa/questionario.json` (v11):
+  - Pergunta 1: "Onde você mora atualmente?", com Curitiba (`sim`), Região Metropolitana de Curitiba (`rmc`) e Outra cidade (`nao`, que encerra).
+  - Pergunta 1.1, condicional para quem marcou `rmc`: "Você costuma fazer compras de roupas, calçados e acessórios em Curitiba?", na escala da pergunta de disponibilidade.
+  - Perguntas novas, nas posições recomendadas:
+    - foto de referência (6);
+    - disponibilidade (8), com dois trechos em vermelho;
+    - categorias (11): até 3 opções, "Não tive dificuldade" exclusiva, "Outro" com campo.
+  - "Calçados" na abertura (em negrito) e nas perguntas 2, 7 e 11.
+  - Perfil:
+    - Cidade: Curitiba e as 28 cidades da Região Metropolitana, segundo a AMEP.
+    - Bairro: só para Curitiba, com os 75 bairros agrupados pelas 10 regionais, segundo o PDF da Prefeitura de 2017 conferido com o material da SME de 2022, e "Prefiro não informar".
+- `src/pesquisa-moda.ts`:
+  - Vários trechos em vermelho por título (`destaque` aceita uma lista).
+  - Cidade e bairro em listas suspensas:
+    - para quem mora em Curitiba, a cidade fica preenchida e travada ("Conforme sua resposta na pergunta 1");
+    - para a Região Metropolitana, a lista mostra as 28 cidades e não há bairro.
+- `supabase/functions/pesquisa/index.ts`:
+  - O bairro só é exigido para Curitiba e é descartado nas outras cidades.
+  - A cidade precisa combinar com a pergunta 1.
+  - A pergunta 1.1 é ignorada para quem não é da Região Metropolitana.
+- Abertura: "em Curitiba e Região Metropolitana" no texto principal, no parágrafo do projeto e nas descrições do link. O título continua "moda em Curitiba".
+- `public/admin/pesquisas/index.html`:
+  - Pergunta 1 com as 3 respostas; a 1.1 aparece logo depois dela.
+  - Cards novos de Cidade e de Bairro (por regional, com a tabela dos bairros).
+  - Textos "fora de Curitiba e RMC".
+  - A nota da pergunta condicional cita o número certo da pergunta.
+  - Botões "Exportar Excel" e "Exportar PDF":
+    - Excel: abas Resumo, Resultados, Inteligência, Respostas, Relatos e Interessados, com SheetJS 0.18.5 carregado do cdnjs só ao clicar.
+    - PDF: todas as abas numa página, pela janela de impressão ("Salvar como PDF").
+- Testes executados:
+  - `npm run build` passou.
+  - Playwright no iPhone 13, sem erros de JS, nos três caminhos:
+    - Região Metropolitana: 1.1, perguntas novas, exclusiva das categorias, Colombo, sem bairro;
+    - Curitiba: cidade travada, 10 grupos de regionais, Batel;
+    - Outra cidade: encerra.
+  - Função em bundle com banco simulado:
+    - Região Metropolitana sem a 1.1 é recusada;
+    - cidade que não combina com a pergunta 1 é recusada;
+    - Curitiba sem bairro é recusada;
+    - a 1.1 é ignorada para Curitiba;
+    - exclusiva e máximo de 3 nas categorias.
+  - Painel com 42 respostas fictícias:
+    - os cards novos aparecem na ordem;
+    - Excel com as 6 abas, lido com openpyxl;
+    - PDF com todas as abas, 86 páginas.
+- Na publicação: reimplantar a função `pesquisa`. O painel lê o questionário da função.
+
+## 2026-11-23 · Contatos: "Novo e-mail" para qualquer endereço, com anexos de qualquer tipo (D-043), publicado (migration aplicada; função `responder-contato` v13)
+
+- `public/admin/contatos/index.html`:
+  - botão "Novo e-mail" no topo da lista, que abre um painel lateral com Para, Nome (opcional), Assunto, Mensagem e anexos;
+  - validação junto a cada campo; estados "Enviando arquivo X de N…" e "Enviando…";
+  - tela de sucesso com check animado (respeita "menos movimento"), "Ver conversa" e "Escrever outro".
+- O e-mail novo vira uma conversa na lista, com o selo "Enviado" (azul). Na conversa:
+  - a primeira etapa se chama "Enviado";
+  - o histórico começa pelo seu envio;
+  - as respostas da pessoa chegam por `conversa-<id>@resposta…` e pela importação da caixa contato@, como nas demais conversas.
+- Anexos de qualquer tipo de arquivo (antes, só imagens), até 10 por e-mail e 20 MB no total, também na resposta a um contato. Arquivos que não são imagem aparecem com a extensão.
+- A contagem da lista passa a dizer "conversas".
+- `supabase/functions/responder-contato/index.ts`:
+  - código da função agora no repositório (antes só no Supabase, v12);
+  - modo `novo` cria a conversa (`origem = 'enviado'`) e envia sem citação, com o assunto escrito; se o envio falhar, desfaz a conversa;
+  - um envio repetido com o mesmo id não envia de novo;
+  - mantém a mesma assinatura.
+- Migration `20261123210000_contatos_email_enviado.sql`:
+  - `origem` aceita `enviado`;
+  - "melhores dias" é exigido só para `site`;
+  - o aviso de novo contato vale só para `site`;
+  - o bucket `anexos` (privado) passa a aceitar qualquer tipo de arquivo, até 20 MB cada.
+- Testes executados:
+  - `npm run build` passou;
+  - Playwright com dados fictícios (computador e iPhone 13): erros dos campos, PDF e XLSX anexados e enviados para a pasta da conversa, sucesso, selo "Enviado" na lista, conversa com a primeira etapa "Enviado" e "Anexar arquivo", sem erros de JS;
+  - função em bundle com banco e Resend simulados:
+    - sem conta de administradora, 403;
+    - e-mail inválido e falta de assunto recusados;
+    - falha no Resend desfaz a conversa;
+    - envio novo sem citação e com assinatura;
+    - envio repetido não reenvia;
+    - resposta em conversa enviada usa "Re:";
+    - resposta a contato do site com .docx;
+    - anexo de outra pasta recusado.
+  - Nenhum e-mail real foi enviado.
+- Na publicação: aplicar a migration e reimplantar `responder-contato`.
+
+## 2026-11-23 · Pesquisa Moda em Curitiba: destaques de texto e regra da pergunta 6 (questionário v10), publicado (PR #204; função `pesquisa` v9)
+
+- Tela "Obrigada pelo seu interesse!" (`pq-encerrada`): "moram em Curitiba" em negrito vermelho (`.pq-realce` em `src/pesquisa-moda.css`).
+- Pergunta 2: "toque primeiro onde você mais comprou" em negrito (campo novo `apoio_negrito` no `questionario.json`, lido por `cabecalho()` em `src/pesquisa-moda.ts`).
+- Pergunta 4: trecho em vermelho passa a ser "que nota você daria". Pergunta 5: "começar". Pergunta 8: "atendam às suas expectativas".
+- Pergunta 6: novo texto "De que forma você descobre lojas de roupas e acessórios em Curitiba?", com "descobre lojas" em vermelho.
+- Pergunta 6: "Costumo comprar nas mesmas lojas…" e "Não conheço lojas físicas…" deixam de desmarcar as outras opções (sem `exclusiva`). Com o campo novo `anula`, a função `pesquisa` grava só essas respostas negativas quando uma delas é marcada, e descarta as demais e o texto de "Outro".
+- Versão do questionário: `moda-curitiba-v10-2026-11-23`. Na publicação, reimplantar a função `pesquisa`.
+- Testes executados:
+  - `npm run build` passou;
+  - Playwright (iPhone 13): destaques das perguntas 2, 4, 5 e 6 e da tela de encerramento; 3 opções marcadas juntas na pergunta 6;
+  - fluxo completo (`idt.js`) sem erros de JS;
+  - função `pesquisa` em bundle com banco simulado: o envio de ["raramente", "nao_conheco", "indicacao"] grava ["raramente", "nao_conheco"]; os outros casos continuam iguais.
+
 ## 2026-11-16 · Cadastro de parceiros e página da galeria (site), publicado
 
 - **Cadastro (`rede-parceiros/cadastro/index.html`):** nome completo obrigatório (pelo menos duas palavras com duas letras ou mais; espaços extras removidos ao salvar); campos de link com "https://" fixo antes do campo (a pessoa digita só o restante; se colar o link inteiro, o https:// sai do campo).
@@ -546,6 +760,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Função `galeria-autorizacao`:** `ver` responde sem chamar a IA e informa `ia_pendente`; nova ação `ia`; `decidir` aceita `tempo` (só valores do campo 23) e atualiza `tempo_especialidade` do cadastro quando muda; o histórico da autorização guarda a senioridade exibida.
 - **Verificação executada:** navegador (iPhone 13) com servidor simulado: validação do nome (Matheus e Matheus S recusados; Ana Lu e Maria da Silva aceitos), prefixo fixo (colar link inteiro, apagar tudo, host errado); página da galeria visível em 0,75 s com a IA atrasada 4 s, troca de senioridade refletida na prévia e enviada no formato do cadastro; `node --check` e `esbuild` da função; `npm run build`.
 - **Publicação (16/11):** função `galeria-autorizacao` publicada (versão 13); `ver` no ar responde em 0,8 a 1 s.
+
+## 2026-11-23 · Área restrita com as cores novas de aviso e erro do DS (D-045)
+
+- `public/design-system/theme.css` e `design-system/versao.txt`: sincronizados com o DS Dani Moscatelli `697a765` (`scripts/sincronizar-design-system.sh`); `?v=` do `theme.css` atualizado nas 8 páginas.
+- `public/admin/parceiros/index.html` e `public/admin/pesquisas/index.html`: textos e ícones de aviso passam de `--warning` para `--warning-text`.
+- Testes: suíte Playwright da área restrita (Supabase simulado, `public/` servido localmente), 130 casos passaram, sem erros de página.
 
 ## 2026-11-23 · Experience Intelligence pronto para o Cloudflare Pages (D-038)
 
@@ -564,7 +784,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - `npm ci`, `npm run typecheck`, `npm test` (48 testes) e `npm run build` (gera `out/`);
   - aviso já existente do Next sobre a raiz do workspace (mais de um lockfile no repositório).
 
-## 2026-11-23 · App Experience Intelligence consome tokens e componentes do Design System Dani Moscatelli (D-043), não publicado
+## 2026-11-23 · App Experience Intelligence consome tokens e componentes do Design System Dani Moscatelli (D-046), não publicado
 
 - **Sincronização:** `design-system/arquivos.txt` ganhou 4 arquivos de estilo (`src/styles/`) e 16 componentes (`src/components/ui/`) do DS, copiados para `apps/experience-intelligence/`. Cópias nunca editadas. Versão do DS: `085153d`.
 - **Rotina diária** (`.github/workflows/sincronizar-design-system.yml`): além do build do site, roda no app `npm ci`, `npm run typecheck`, `npm run lint`, `npm test` e `npm run build`; o PR só abre se tudo passar.
@@ -580,7 +800,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - site: `npm ci`, `npm run build` e `npm run lint` (só avisos);
   - sincronização: `DS_REF=085153d bash scripts/sincronizar-design-system.sh` reproduz as cópias byte a byte (sem diferença no git e `cmp` com o DS);
   - navegador (Playwright, 1280 e 390 px, escala 2, Supabase simulado com dados fictícios): entrar, cadastro (vazio, com erros e com o aviso aberto), meus dados, seus desafios, menu de perfil, empresa ou negócio e novo desafio; sem rolagem horizontal, sem erros no console e com a fonte Plus Jakarta Sans carregada.
-- **Pendente:** a dona do produto ver as capturas; publicar; decidir no DS os itens que faltam (D-043).
+- **Pendente:** a dona do produto ver as capturas; publicar; decidir no DS os itens que faltam (D-046).
 
 ## 2026-11-16 · Agendamento do envio da autorização da galeria (SITE-01), não publicado
 
