@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v5-2026-11-23",
+  "versao": "moda-curitiba-v6-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "identificacao": {
     "versao": "moda-curitiba-identificacao-v1-2026-11-23",
@@ -31,7 +31,7 @@
       "id": "q2",
       "tipo": "ranking",
       "max": 3,
-      "texto": "Onde você realizou a maior parte das suas compras de roupas e acessórios este ano?",
+      "texto": "Onde você mais comprou roupas e acessórios este ano?",
       "apoio": "Escolha até 3, na ordem: toque primeiro onde você mais comprou.",
       "opcoes": [
         {
@@ -74,7 +74,7 @@
           "online_outras"
         ]
       },
-      "texto": "O que mais leva você a comprar roupas e acessórios em marketplaces ou lojas online de outras cidades?",
+      "texto": "Quais os principais motivos para você comprar roupas e acessórios em marketplaces ou lojas online de outras cidades?",
       "apoio": "Selecione até 3 opções.",
       "opcoes": [
         {
