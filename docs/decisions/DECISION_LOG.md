@@ -467,6 +467,21 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Trade-offs:** a área restrita fica, por enquanto, com o `theme.css` de uma branch do DS ainda não publicada; ao publicar o DS, a sincronização diária volta ao `main` e o `?v=` precisa mudar.
 >>>>>>> origin/main
 
+## D-043 · 23/11/2026 · "Novo e-mail" na área de contatos, para qualquer endereço e com anexos de qualquer tipo (site)
+
+- **Origem:** dona do produto. Escolheu:
+  - o botão "Novo e-mail";
+  - qualquer tipo de arquivo;
+  - manter a assinatura atual;
+  - as respostas da pessoa aparecem como conversa.
+- **Decisão:**
+  - O e-mail novo é gravado em `contatos` com `origem = 'enviado'` e o selo "Enviado". Assim, o histórico, as respostas recebidas e a reunião funcionam como nas outras conversas.
+  - O envio usa a mesma função e a mesma assinatura das respostas, pelo remetente contato@danimoscatelli.com.br.
+  - Anexos de qualquer tipo, até 10 por e-mail e 20 MB no total, no bucket privado `anexos`, que só a administradora lê.
+- **Trade-offs:**
+  - Aceitar qualquer tipo de arquivo amplia o que fica guardado no bucket. Ele continua privado e restrito à administradora.
+  - Os e-mails enviados contam como conversas na lista, que passa a dizer "conversas" em vez de "mensagens recebidas".
+
 ## Decisões pendentes
 
 

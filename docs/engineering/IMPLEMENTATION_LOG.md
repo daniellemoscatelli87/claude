@@ -597,7 +597,44 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-23 · Pesquisa Moda em Curitiba: destaques de texto e regra da pergunta 6 (questionário v10), não publicado
+## 2026-11-23 · Contatos: "Novo e-mail" para qualquer endereço, com anexos de qualquer tipo (D-043), não publicado
+
+- `public/admin/contatos/index.html`:
+  - botão "Novo e-mail" no topo da lista, que abre um painel lateral com Para, Nome (opcional), Assunto, Mensagem e anexos;
+  - validação junto a cada campo; estados "Enviando arquivo X de N…" e "Enviando…";
+  - tela de sucesso com check animado (respeita "menos movimento"), "Ver conversa" e "Escrever outro".
+- O e-mail novo vira uma conversa na lista, com o selo "Enviado" (azul). Na conversa:
+  - a primeira etapa se chama "Enviado";
+  - o histórico começa pelo seu envio;
+  - as respostas da pessoa chegam por `conversa-<id>@resposta…` e pela importação da caixa contato@, como nas demais conversas.
+- Anexos de qualquer tipo de arquivo (antes, só imagens), até 10 por e-mail e 20 MB no total, também na resposta a um contato. Arquivos que não são imagem aparecem com a extensão.
+- A contagem da lista passa a dizer "conversas".
+- `supabase/functions/responder-contato/index.ts`:
+  - código da função agora no repositório (antes só no Supabase, v12);
+  - modo `novo` cria a conversa (`origem = 'enviado'`) e envia sem citação, com o assunto escrito; se o envio falhar, desfaz a conversa;
+  - um envio repetido com o mesmo id não envia de novo;
+  - mantém a mesma assinatura.
+- Migration `20261123210000_contatos_email_enviado.sql`:
+  - `origem` aceita `enviado`;
+  - "melhores dias" é exigido só para `site`;
+  - o aviso de novo contato vale só para `site`;
+  - o bucket `anexos` (privado) passa a aceitar qualquer tipo de arquivo, até 20 MB cada.
+- Testes executados:
+  - `npm run build` passou;
+  - Playwright com dados fictícios (computador e iPhone 13): erros dos campos, PDF e XLSX anexados e enviados para a pasta da conversa, sucesso, selo "Enviado" na lista, conversa com a primeira etapa "Enviado" e "Anexar arquivo", sem erros de JS;
+  - função em bundle com banco e Resend simulados:
+    - sem conta de administradora, 403;
+    - e-mail inválido e falta de assunto recusados;
+    - falha no Resend desfaz a conversa;
+    - envio novo sem citação e com assinatura;
+    - envio repetido não reenvia;
+    - resposta em conversa enviada usa "Re:";
+    - resposta a contato do site com .docx;
+    - anexo de outra pasta recusado.
+  - Nenhum e-mail real foi enviado.
+- Na publicação: aplicar a migration e reimplantar `responder-contato`.
+
+## 2026-11-23 · Pesquisa Moda em Curitiba: destaques de texto e regra da pergunta 6 (questionário v10), publicado (PR #204; função `pesquisa` v9)
 
 - Tela "Obrigada pelo seu interesse!" (`pq-encerrada`): "moram em Curitiba" em negrito vermelho (`.pq-realce` em `src/pesquisa-moda.css`).
 - Pergunta 2: "toque primeiro onde você mais comprou" em negrito (campo novo `apoio_negrito` no `questionario.json`, lido por `cabecalho()` em `src/pesquisa-moda.ts`).
