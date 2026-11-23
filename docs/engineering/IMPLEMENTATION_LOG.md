@@ -599,6 +599,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 
 - Pedido da dona do produto: tirar o zero; "1 = Muito ruim".
 - Pergunta 5: o trecho em vermelho volta a ser "produto específico" (antes, "começar").
+- Pergunta 6 (foto de referência): o trecho em vermelho passa a ser "comprar algo igual ou parecido" (antes, "foto de referência").
 - `questionario.json`:
   - `min: 1` na pergunta 4;
   - apoio "Avalie de 1 a 10…";
