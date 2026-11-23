@@ -352,6 +352,29 @@
   .pa-entra { animation: pa-entra .5s var(--ease-snappy) both; }
   @keyframes pa-entra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) { .pa-entra, .pa-esqueleto, .pa-status::before { animation: none; } .pa-barra .t i, .pa-escala .c i, .pa-pilha i { transition: none; } }
+  .pa-spin { width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: pa-gira .7s linear infinite; flex-shrink: 0; }
+  @keyframes pa-gira { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .pa-spin { animation-duration: 2s; } }
+  #pa-print { display: none; }
+  @media print {
+    body.pa-imprimindo > *:not(#pa-print) { display: none !important; }
+    body.pa-imprimindo { background: #fff !important; }
+    body.pa-imprimindo #pa-print { display: block; }
+    #pa-print { color: #000; }
+    #pa-print .pa-print-cab { margin-bottom: 16px; }
+    #pa-print .pa-print-cab h1 { margin: 0 0 4px; font-size: 22px; }
+    #pa-print .pa-print-aba { break-before: page; }
+    #pa-print .pa-print-tit { font-size: 20px; margin: 0 0 12px; }
+    #pa-print .card { box-shadow: none !important; break-inside: avoid; }
+    /* no papel, os cards ficam um embaixo do outro (a grade de 2 colunas quebrava uma página por card) */
+    #pa-print .pa-graficos { display: block !important; }
+    #pa-print .pa-graficos > .card { margin: 0 0 12px; }
+    #pa-print .pa-q.largo, #pa-print .pa-graficos > .card { break-inside: auto; }
+    #pa-print .pa-q-cab, #pa-print .pa-leitura { break-after: avoid; }
+    #pa-print button, #pa-print .pa-btn, #pa-print summary { display: none !important; }
+    #pa-print .pa-entra { animation: none !important; opacity: 1 !important; transform: none !important; }
+    #pa-print * { transition: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -385,7 +408,7 @@
   };
   const pct = (n, d) => (d ? Math.round((n / d) * 100) : 0);
   const plural = (n, um, varios) => `${n.toLocaleString("pt-BR")} ${n === 1 ? um : varios}`;
-  const SITUACAO = { completa: "Completas", fora_de_curitiba: "Não moram em Curitiba", sem_compras: "Não compraram este ano" };
+  const SITUACAO = { completa: "Completas", fora_de_curitiba: "Fora de Curitiba e Região Metropolitana", sem_compras: "Não compraram este ano" };
   const slug = new URLSearchParams(location.search).get("p");
 
   Admin.init({ page: "pesquisas", onReady: () => (slug ? painel(slug) : lista()) });
@@ -469,7 +492,13 @@
     const tog = el("button", "pa-btn " + (P.ativa ? "perigo" : "liga")); tog.type = "button";
     tog.innerHTML = P.ativa ? IC.pausa + "<span>Tirar do ar</span>" : IC.play + "<span>Colocar no ar</span>";
     tog.addEventListener("click", () => alternar(tog));
-    acoes.append(ver, tog);
+    const xls = el("button", "pa-btn"); xls.type = "button"; xls.innerHTML = IC_BAIXAR + "<span>Exportar Excel</span>";
+    xls.title = "Planilha com todas as abas: Resumo, Resultados, Inteligência, Respostas, Relatos e Interessados";
+    xls.addEventListener("click", () => exportarExcel(xls));
+    const pdf = el("button", "pa-btn"); pdf.type = "button"; pdf.innerHTML = IC_BAIXAR + "<span>Exportar PDF</span>";
+    pdf.title = "Relatório com todas as abas. Na janela que abrir, escolha Salvar como PDF.";
+    pdf.addEventListener("click", exportarPdf);
+    acoes.append(ver, xls, pdf, tog);
     card.append(cab, link, acoes);
     return card;
   }
@@ -498,7 +527,7 @@
     wrap.append(
       k(R.length.toLocaleString("pt-BR"), "participações", R.length ? "todas as pessoas que enviaram" : ""),
       k(completas.toLocaleString("pt-BR"), "respostas completas", R.length ? pct(completas, R.length) + "% das participações" : ""),
-      k(encerradas.toLocaleString("pt-BR"), "fora do público", encerradas ? `${R.filter((x) => x.situacao === "fora_de_curitiba").length} fora de Curitiba · ${R.filter((x) => x.situacao === "sem_compras").length} sem compras` : ""),
+      k(encerradas.toLocaleString("pt-BR"), "fora do público", encerradas ? `${R.filter((x) => x.situacao === "fora_de_curitiba").length} fora de Curitiba e RMC · ${R.filter((x) => x.situacao === "sem_compras").length} sem compras` : ""),
       (() => { const q = R.filter((x) => x.quer_novidades).length; return k(q.toLocaleString("pt-BR"), "querem novidades", completas ? `${pct(q, completas)}% das completas · ${plural(I.length, "contato guardado", "contatos guardados")}` : ""); })(),
     );
     return wrap;
@@ -885,9 +914,11 @@
 
     const g = el("div", "pa-graficos");
     // P1
-    const b1 = respondeu("q1"), sim = b1.filter((x) => x.respostas.q1 === "sim").length;
-    const i1 = [{ rotulo: "Sim, moram em Curitiba", v: sim }, { rotulo: "Não moram em Curitiba", v: b1.length - sim }];
-    g.appendChild(qCard({ num: 1, titulo: perg.q1.texto, base: b1.length, leitura: [{ b: pct(sim, b1.length) + "%" }, " moram em Curitiba e seguiram na pesquisa."], corpo: rosca(i1, b1.length, { centro: pct(sim, b1.length) + "%", rotCentro: "moram em Curitiba" }), rodape: [tabelaItens(i1, b1.length)] }));
+    // P1: Curitiba, Região Metropolitana ou outra cidade (só "Outra cidade" encerra)
+    const b1 = respondeu("q1"), sim = b1.filter((x) => ["sim", "rmc"].includes(x.respostas.q1)).length;
+    const i1 = perg.q1.opcoes.map((o) => ({ rotulo: o.texto, v: b1.filter((x) => x.respostas.q1 === o.id).length }));
+    g.appendChild(qCard({ num: 1, titulo: perg.q1.texto, base: b1.length, leitura: [{ b: pct(sim, b1.length) + "%" }, " moram em Curitiba ou na Região Metropolitana e seguiram na pesquisa."], corpo: rosca(i1, b1.length, { centro: pct(sim, b1.length) + "%", rotCentro: "Curitiba e RMC" }), rodape: [tabelaItens(i1, b1.length)] }));
+    const depoisQ1 = g.lastChild; // a 1.1 (condicional da pergunta 1) entra logo depois deste card
     // P2 (classificação): % em 1º lugar e, mais claro, % entre as 3
     const b2 = respondeu("q2");
     if (perg.q2.tipo === "ranking") {
@@ -907,7 +938,7 @@
     }
     // P2.1 a P10
     let num = 2;
-    Q.perguntas.slice(2).forEach((p) => {
+    Q.perguntas.filter((p) => p.id !== "q1" && p.id !== "q2").forEach((p) => {
       const base = p.condicao ? comp.filter((x) => naCondicao(p, x)) : comp;
       if (!p.condicao) num++;
       const n = base.length;
@@ -944,7 +975,7 @@
         rodape.push(tabela(["Característica", "Muito fácil", "Fácil", "Médio", "Difícil", "Muito difícil", ...(temNa ? ["Não se aplica"] : [])], corpo._linhas.map((x) => [x.l.texto, x.cont["1"], x.cont["2"], x.cont["3"], x.cont["4"], x.cont["5"], ...(temNa ? [x.na] : [])])));
       } else {
         const its = itensDe(p, base);
-        const ordinal = p.id === "q3" || p.id === "q7";
+        const ordinal = ["q1_1", "q3", "q7", "q_foto", "q_disponibilidade"].includes(p.id);
         corpo = barras(its, n, { ordem: ordinal ? "natural" : "valor" });
         const t = maisEscolhida(its);
         if (p.id === "q3") { const k = base.filter((x) => x.respostas.q3 && x.respostas.q3 !== "nao").length; leitura = [{ b: pct(k, n) + "%" }, " compraram de segunda mão este ano."]; }
@@ -955,14 +986,33 @@
       }
       if (p.condicao) {
         const ops = Q.perguntas.find((x) => x.id === p.condicao.pergunta).opcoes.filter((o) => p.condicao.opcoes.includes(o.id)).map((o) => "“" + o.texto + "”");
-        rodape.unshift(el("p", "pa-nota", "Aparece só para quem marcou na pergunta 2 " + ops.join(" ou ") + "."));
+        const mae = Q.perguntas.filter((x) => !x.condicao).findIndex((x) => x.id === p.condicao.pergunta) + 1;
+        rodape.unshift(el("p", "pa-nota", `Aparece só para quem marcou na pergunta ${mae} ` + ops.join(" ou ") + "."));
       }
-      g.appendChild(qCard({ num: p.rotulo || num, titulo: p.texto, base: n, meta, leitura, corpo, rodape, largo }));
+      const card = qCard({ num: p.rotulo || num, titulo: p.texto, base: n, meta, leitura, corpo, rodape, largo });
+      if (p.condicao && p.condicao.pergunta === "q1") depoisQ1.after(card); else g.appendChild(card);
     });
     // perfil: um card para gênero e outro para faixa etária, lado a lado
     if (Q.perfil && Q.perfil.length) {
       const comPerfil = comp.filter((x) => x.respostas.perfil);
       Q.perfil.forEach((c) => {
+        // cidade: as cidades com respostas; bairro (só Curitiba): por regional, com a tabela dos bairros
+        if (c.id === "cidade" || c.id === "bairro") {
+          const base = c.condicao ? comPerfil.filter((x) => c.condicao.opcoes.includes(x.respostas.perfil[c.condicao.campo])) : comPerfil;
+          const conta = (id) => base.filter((x) => x.respostas.perfil[c.id] === id).length;
+          const porOp = c.opcoes.map((o) => ({ rotulo: o.texto, v: conta(o.id), fixo: o.id === "nao_informar", o }));
+          let its = porOp.filter((it) => it.v), rod = [];
+          if (c.id === "bairro") {
+            const regs = [...new Set(c.opcoes.map((o) => o.regional).filter(Boolean))];
+            its = [...regs.map((r) => ({ rotulo: "Regional " + r, v: porOp.filter((it) => it.o.regional === r).reduce((t, it) => t + it.v, 0) })), ...porOp.filter((it) => it.fixo)];
+            rod.push(el("p", "pa-nota", "Agrupado pelas Administrações Regionais da Prefeitura de Curitiba."), tabelaItens(porOp.filter((it) => it.v).map(({ rotulo, v, fixo }) => ({ rotulo, v, fixo })), base.length));
+          } else rod.push(tabelaItens(its, base.length));
+          const t = maisEscolhida(its);
+          g.appendChild(qCard({ num: "Perfil", titulo: c.texto, base: base.length,
+            leitura: t && t.v ? [c.id === "bairro" ? "Região com mais respostas: " : "Cidade com mais respostas: ", { b: t.rotulo }, ` (${pct(t.v, base.length)}%).`] : null,
+            corpo: barras(its, base.length), rodape: rod }));
+          return;
+        }
         const its = c.opcoes.map((o) => ({ rotulo: semOutro(o.texto), v: comPerfil.filter((x) => x.respostas.perfil[c.id] === o.id).length, fixo: o.id === "nao_informar" }));
         const t = maisEscolhida(its);
         const outrosTx = comPerfil.map((x) => x.respostas.perfil[c.id + "_outro"]).filter(Boolean);
@@ -974,7 +1024,7 @@
       });
     }
     box.appendChild(g);
-    box.appendChild(el("p", "pa-nota", `Da pergunta 2.1 em diante, os números contam só quem respondeu tudo (${comp.length}). Quem não mora em Curitiba ou não comprou este ano encerra na pergunta 1 ou 2.`));
+    box.appendChild(el("p", "pa-nota", `Da pergunta 2.1 em diante, os números contam só quem respondeu tudo (${comp.length}). Quem não mora em Curitiba ou na Região Metropolitana, ou não comprou este ano, encerra na pergunta 1 ou 2.`));
     return box;
   }
 
@@ -1024,9 +1074,9 @@
     };
     const perg = Object.fromEntries(Q.perguntas.map((p) => [p.id, p]));
     const topo = (p, base, filtro = () => true) => { const n = contar(p, base); const op = p.opcoes.filter(filtro).map((o) => ({ ...o, v: n[o.id] || 0 })).sort((a, b) => b.v - a.v)[0]; return op && op.v ? op : null; };
-    add({ ic: "publico", tema: "Público", valor: `${pct(comp.length, R.length)}%`, partes: [R.length === 1 ? "da única participação até agora é do público da pesquisa (mora em Curitiba e comprou este ano)." : `das ${R.length} participações são do público da pesquisa: moram em Curitiba e compraram este ano.`] });
+    add({ ic: "publico", tema: "Público", valor: `${pct(comp.length, R.length)}%`, partes: [R.length === 1 ? "da única participação até agora é do público da pesquisa (mora em Curitiba ou na Região Metropolitana e comprou este ano)." : `das ${R.length} participações são do público da pesquisa: moram em Curitiba ou na Região Metropolitana e compraram este ano.`] });
     if (!comp.length) {
-      grade.appendChild((() => { const d = el("div", "pa-dest-vazio"); d.append(el("b", null, "Os outros destaques aparecem com a primeira resposta completa"), el("span", null, "Quem não mora em Curitiba ou não comprou este ano encerra no começo da pesquisa.")); return d; })());
+      grade.appendChild((() => { const d = el("div", "pa-dest-vazio"); d.append(el("b", null, "Os outros destaques aparecem com a primeira resposta completa"), el("span", null, "Quem não mora em Curitiba ou na Região Metropolitana, ou não comprou este ano, encerra no começo da pesquisa.")); return d; })());
       itens.forEach((d) => grade.prepend(d)); card.appendChild(grade); return card;
     }
     const b2 = respondeu("q2").filter((x) => !valores(x.respostas.q2).includes("nao_comprei"));
@@ -1050,6 +1100,96 @@
     return card;
   }
 
+
+  /* ---------- Exportar: relatório completo com todas as abas ----------
+     Excel: uma aba da planilha para cada aba do painel (mais o Resumo). Resultados e Inteligência saem do que o
+     painel mostra (títulos, leituras e tabelas de números); Respostas, Relatos e Interessados saem direto dos dados.
+     PDF: monta todas as abas numa página só e abre a janela de impressão ("Salvar como PDF"). */
+  const IC_BAIXAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>';
+  const ABAS_EXP = [["resultados", "Resultados"], ["inteligencia", "Inteligência"], ["respostas", "Respostas"], ["relatos", "Relatos"], ["interessados", "Interessados"]];
+  const relatosR = () => R.filter((x) => x.relato && x.relato.trim());
+  const montarAba = (id) => id === "resultados" ? resultados() : id === "inteligencia" ? inteligencia() : id === "respostas" ? listaRespostas() : id === "relatos" ? listaRelatos(relatosR()) : listaInteressados();
+  const limpo = (t) => String(t ?? "").replace(/\s+/g, " ").trim();
+  // texto do painel em linhas de planilha: títulos, parágrafos, listas, tabelas e pares rótulo/valor
+  function linhasDoPainel(no) {
+    const rows = [];
+    no.querySelectorAll("h2, h3, h4, p, li, table, dl, .pa-kpi, .pa-dest-it").forEach((e) => {
+      if (e.closest("button, summary, .pa-dica, .pa-rosca-l") || e.parentElement.closest("table, dl, li, p, .pa-kpi, .pa-dest-it")) return;
+      // destaque: tema, número e frase na mesma linha
+      if (e.classList.contains("pa-dest-it")) { rows.push([...e.children].map((x) => limpo(x.textContent)).filter(Boolean)); return; }
+      if (e.tagName === "TABLE") { rows.push(...[...e.rows].map((tr) => [...tr.cells].map((c) => { const t = limpo(c.textContent); return /^-?\d+([.,]\d+)?$/.test(t) ? Number(t.replace(",", ".")) : t; }))); rows.push([]); return; }
+      if (e.tagName === "DL") { e.querySelectorAll(":scope > div, :scope > .row").forEach((r) => rows.push([limpo(r.querySelector("dt")?.textContent), limpo(r.querySelector("dd")?.textContent)])); return; }
+      // itens com partes separadas (ex.: caminho "começa → compra"): mantém um espaço entre elas
+      const t = limpo(e.tagName === "LI" && e.children.length ? [...e.childNodes].map((x) => x.textContent).join(" ") : e.textContent); if (!t) return;
+      if (/^H[234]$/.test(e.tagName) && rows.length && rows[rows.length - 1].length) rows.push([]);
+      rows.push([t]);
+    });
+    return rows;
+  }
+  function dadosRespostas() {
+    let num = 0;
+    const cols = Q.perguntas.map((p) => { if (!p.condicao) num++; return [p, `${p.rotulo || num}. ${p.texto}`]; });
+    const cab = ["#", "Data", "Situação", ...cols.map((c) => c[1]), ...(Q.perfil || []).map((c) => c.texto), "Relato", "Quer novidades"];
+    const linhas = R.map((x, k) => {
+      const pf = x.respostas.perfil || {};
+      return [R.length - k, fmtDate(x.created_at), SIT_CURTA[x.situacao] || x.situacao,
+        ...cols.map(([p]) => x.respostas[p.id] === undefined ? "" : textoResposta(p, x.respostas[p.id])),
+        ...(Q.perfil || []).map((c) => pf[c.id] ? ((c.opcoes.find((o) => o.id === pf[c.id]) || {}).texto || pf[c.id]).replace(/ \(especifique\)$/, "") + (pf[c.id + "_outro"] ? ` (${pf[c.id + "_outro"]})` : "") : ""),
+        x.relato || "", x.situacao === "completa" ? (x.quer_novidades ? "Sim" : "Não") : ""];
+    });
+    return [cab, ...linhas];
+  }
+  function resumoLinhas() {
+    const completas = completasR().length;
+    return [[P.titulo], ["Relatório gerado em " + fmtDate(new Date().toISOString())], [],
+      ["Participações", R.length], ["Respostas completas", completas], ["Fora do público", R.length - completas],
+      ["Querem novidades", R.filter((x) => x.quer_novidades).length], ["Contatos guardados", I.length],
+      ["Situação", P.ativa ? "No ar, recebendo respostas" : "Fora do ar"]];
+  }
+  let XLSX_P = null;
+  const carregarXlsx = () => XLSX_P || (XLSX_P = new Promise((ok, falha) => {
+    const sc = document.createElement("script"); sc.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+    sc.onload = () => ok(window.XLSX); sc.onerror = () => { XLSX_P = null; falha(new Error("xlsx")); }; document.head.appendChild(sc);
+  }));
+  const nomeArquivo = (ext) => `${P.slug}-relatorio-${new Date().toISOString().slice(0, 10)}.${ext}`;
+  async function exportarExcel(btn) {
+    const orig = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="pa-spin" aria-hidden="true"></span><span>Gerando planilha…</span>';
+    try {
+      const X = await carregarXlsx();
+      const wb = X.utils.book_new();
+      const add = (nome, rows, larg) => { const ws = X.utils.aoa_to_sheet(rows.length ? rows : [["Sem dados"]]); ws["!cols"] = larg; X.utils.book_append_sheet(wb, ws, nome); };
+      add("Resumo", resumoLinhas(), [{ wch: 28 }, { wch: 40 }]);
+      add("Resultados", linhasDoPainel(resultados()), [{ wch: 60 }, ...Array(8).fill({ wch: 14 })]);
+      add("Inteligência", linhasDoPainel(inteligencia()), [{ wch: 60 }, ...Array(8).fill({ wch: 14 })]);
+      const resp = dadosRespostas(); add("Respostas", resp, resp[0].map((_, k) => ({ wch: k < 3 ? 14 : 36 })));
+      add("Relatos", [["Data", "Relato"], ...relatosR().map((x) => [fmtDate(x.created_at), x.relato])], [{ wch: 18 }, { wch: 100 }]);
+      add("Interessados", [["Nome", "E-mail", "WhatsApp", "Autorizou em", "Versão da autorização"], ...I.map((x) => [x.nome, x.email, x.whatsapp, fmtDate(x.consentimento_em), x.consentimento_versao])], [{ wch: 28 }, { wch: 32 }, { wch: 16 }, { wch: 18 }, { wch: 34 }]);
+      X.writeFile(wb, nomeArquivo("xlsx"));
+      log("Exportou o relatório da pesquisa em Excel", P.titulo);
+      btn.classList.add("ok"); btn.innerHTML = IC.ok + "<span>Planilha baixada</span>";
+      setTimeout(() => { btn.classList.remove("ok"); btn.innerHTML = orig; btn.disabled = false; }, 2200);
+    } catch (e) {
+      btn.innerHTML = orig; btn.disabled = false;
+      toast("Não foi possível gerar a planilha. Confira a conexão e tente de novo.");
+    }
+  }
+  function exportarPdf() {
+    const box = el("div"); box.id = "pa-print";
+    const cab = el("header", "pa-print-cab"); cab.append(el("h1", null, P.titulo), el("p", "muted", "Relatório completo · gerado em " + fmtDate(new Date().toISOString())));
+    box.append(cab, kpis());
+    ABAS_EXP.forEach(([id, t]) => { const sec = el("section", "pa-print-aba"); sec.append(el("h2", "pa-print-tit", t), montarAba(id)); box.appendChild(sec); });
+    box.querySelectorAll("details").forEach((d) => { d.open = true; });
+    box.querySelectorAll("[data-w]").forEach((i) => { i.style.width = i.dataset.w; });
+    box.querySelectorAll("[data-h]").forEach((i) => { i.style.height = i.dataset.h; });
+    box.querySelectorAll("[data-g]").forEach((i) => { i.style.flexGrow = i.dataset.g; });
+    box.querySelectorAll("[data-arco]").forEach((c) => { c.style.strokeDasharray = c.dataset.arco; });
+    document.getElementById("pa-print")?.remove();
+    document.body.appendChild(box); document.body.classList.add("pa-imprimindo");
+    const fim = () => { document.body.classList.remove("pa-imprimindo"); box.remove(); removeEventListener("afterprint", fim); };
+    addEventListener("afterprint", fim);
+    log("Exportou o relatório da pesquisa em PDF", P.titulo);
+    setTimeout(() => window.print(), 60);
+  }
   function animarGraficos() {
     document.querySelectorAll("#conteudo [data-w]").forEach((i) => { i.style.width = i.dataset.w; });
     document.querySelectorAll("#conteudo [data-h]").forEach((i) => { i.style.height = i.dataset.h; });
@@ -1372,7 +1512,7 @@
   }
 
   /* ---------- Respostas individuais (ver e excluir) ---------- */
-  const SIT_CURTA = { completa: "Completa", fora_de_curitiba: "Não mora em Curitiba", sem_compras: "Não comprou este ano" };
+  const SIT_CURTA = { completa: "Completa", fora_de_curitiba: "Fora de Curitiba e RMC", sem_compras: "Não comprou este ano" };
   function textoResposta(p, v) {
     if (v == null) return "—";
     const op = (id) => ((p.opcoes || []).find((o) => o.id === id) || {}).texto?.replace(/ \(especifique\)$/, "") || id;

@@ -15,7 +15,7 @@ type Pergunta = {
   opcoes?: Opcao[]; linhas?: { id: string; texto: string; apoio?: string }[]; colunas?: { id: string; texto: string }[];
   rotulo_min?: string; rotulo_max?: string;
   rotulo?: string; condicao?: { pergunta: string; opcoes: string[] }; // pergunta condicional (ex.: 2.1)
-  destaque?: string; // trecho do título em vermelho
+  destaque?: string | string[]; // trecho(s) do título em vermelho
   apoio_negrito?: string; // trecho do texto de apoio em negrito
 };
 type Multi = { opcoes: string[]; outro?: string };
@@ -30,7 +30,10 @@ const TOTAL = PERGUNTAS.length; // etapas de perguntas, contando a condicional 2
 const PRINCIPAIS = PERGUNTAS.filter((p) => !p.condicao).length; // as 10 perguntas principais; 2.1, relato e novidades ficam fora
 const ETAPA_PERFIL = TOTAL, ETAPA_RELATO = TOTAL + 1, ETAPA_NOV = TOTAL + 2; // perfil, relato e novidades depois das perguntas
 const ETAPA_ID = TOTAL + 3; // identificação, antes da primeira pergunta
-type CampoPerfil = { id: string; texto: string; opcoes: Opcao[] };
+type OpcaoLista = Opcao & { regional?: string };
+type CampoPerfil = { id: string; texto: string; opcoes: OpcaoLista[]; tipo?: 'lista'; destaque?: string; condicao?: { campo: string; opcoes: string[] } };
+// campo de perfil que vale para esta pessoa (o bairro só aparece para quem mora em Curitiba)
+const perfilAplica = (c: CampoPerfil) => !c.condicao || c.condicao.opcoes.includes(perfilAtual()[c.condicao.campo] ?? '');
 const PERFIL = ((Q as { perfil?: CampoPerfil[] }).perfil ?? []);
 type Perfil = Record<string, string>;
 const perfilAtual = (): Perfil => (E.r.perfil as Perfil) ?? {};
@@ -96,12 +99,19 @@ function mostrarTela(id: string) {
 /* ---------- Perguntas ---------- */
 const etiqueta = (i: number) => (PERGUNTAS[i].condicao ? `Pergunta ${rotulo(i)}` : `Pergunta ${numero(i)} de ${PRINCIPAIS}`);
 // destaque: trecho do título em vermelho (a primeira ocorrência), para orientar a leitura
-function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apoio?: string, destaque?: string, negrito?: string) {
+// realcar: divide o texto e põe em <em> (vermelho) a primeira ocorrência de cada trecho, na ordem do texto
+function realcar(texto: string, trechos?: string | string[]): (string | HTMLElement)[] {
+  const lista = (Array.isArray(trechos) ? trechos : trechos ? [trechos] : [])
+    .map((x) => ({ x, k: texto.indexOf(x) })).filter((p) => p.k >= 0).sort((a, b) => a.k - b.k);
+  const out: (string | HTMLElement)[] = []; let pos = 0;
+  for (const { x, k } of lista) { if (k < pos) continue; out.push(texto.slice(pos, k), el('em', undefined, x)); pos = k + x.length; }
+  out.push(texto.slice(pos));
+  return out.filter((p) => p !== '');
+}
+function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apoio?: string, destaque?: string | string[], negrito?: string) {
   const lg = el('legend', 'pq-pergunta'); lg.tabIndex = -1;
   const t = el('span', 'pq-titulo');
-  const k = destaque ? titulo.indexOf(destaque) : -1;
-  if (k >= 0) t.append(titulo.slice(0, k), el('em', undefined, destaque!), titulo.slice(k + destaque!.length));
-  else t.textContent = titulo;
+  t.append(...realcar(titulo, destaque));
   lg.append(el('span', 'pq-num', eyebrow), t);
   fs.appendChild(lg);
   if (apoio) {
@@ -288,6 +298,7 @@ function montarPerfil() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-perfil'; fs.dataset.etapa = String(ETAPA_PERFIL);
   cabecalho(fs, 'Sobre você', 'Para terminar, conte um pouco sobre você',    'Usamos estas informações só para analisar os resultados em conjunto, sem identificar ninguém.', 'sobre você');
   PERFIL.forEach((c) => {
+    if (c.tipo === 'lista') { fs.appendChild(montarLista(c)); return; }
     const bloco = el('div', 'pq-perfil-campo'); bloco.id = 'pq-perfil-' + c.id;
     const tituloId = bloco.id + '-titulo';
     const t = el('p', 'pq-perfil-titulo'); t.id = tituloId; t.append(c.texto, el('span', 'pq-obrig', ' *'));
@@ -337,6 +348,62 @@ function montarPerfil() {
   });
   fs.appendChild(erroBox(fs.id));
   return fs;
+}
+// Cidade e bairro: listas longas, então sempre em lista suspensa. A cidade segue a pergunta 1
+// (Curitiba fica preenchida; Região Metropolitana escolhe entre as 28 cidades); o bairro, agrupado
+// pelas regionais da Prefeitura, só aparece para Curitiba.
+function montarLista(c: CampoPerfil) {
+  const bloco = el('div', 'pq-perfil-campo'); bloco.id = 'pq-perfil-' + c.id;
+  const sel = el('select', 'pq-select'); sel.id = bloco.id + '-sel';
+  const t = el('label', 'pq-perfil-titulo'); t.htmlFor = sel.id; t.append(...realcar(c.texto, c.destaque), el('span', 'pq-obrig', ' *'));
+  const nota = el('p', 'pq-perfil-nota'); nota.id = bloco.id + '-nota'; nota.hidden = true;
+  const err = el('p', 'pq-erro'); err.id = bloco.id + '-erro'; err.hidden = true; err.setAttribute('role', 'alert');
+  sel.setAttribute('aria-describedby', nota.id + ' ' + err.id);
+  sel.addEventListener('change', () => {
+    E.r.perfil = { ...perfilAtual(), [c.id]: sel.value }; salvar(); erroPerfil(c.id, '');
+    if (c.id === 'cidade') sincronizarLocal();
+  });
+  bloco.append(t, sel, nota, err);
+  return bloco;
+}
+function opcoesLista(sel: HTMLSelectElement, c: CampoPerfil, ops: OpcaoLista[]) {
+  const vazio = el('option', undefined, 'Selecione'); vazio.value = ''; vazio.disabled = true;
+  sel.replaceChildren(vazio);
+  const grupos = new Map<string, HTMLOptGroupElement>();
+  ops.forEach((o) => {
+    const op = el('option', undefined, o.texto); op.value = o.id;
+    if (!o.regional) { sel.appendChild(op); return; }
+    let g = grupos.get(o.regional);
+    if (!g) { g = el('optgroup'); g.label = 'Regional ' + o.regional; grupos.set(o.regional, g); sel.appendChild(g); }
+    g.appendChild(op);
+  });
+  // "Prefiro não informar" no fim, depois dos grupos
+  const ni = sel.querySelector('option[value="nao_informar"]'); if (ni) sel.appendChild(ni);
+  sel.value = perfilAtual()[c.id] ?? '';
+}
+function sincronizarLocal() {
+  const cidade = PERFIL.find((c) => c.id === 'cidade'), bairro = PERFIL.find((c) => c.id === 'bairro');
+  if (!cidade) return;
+  const pf = { ...perfilAtual() };
+  const selC = $<HTMLSelectElement>('pq-perfil-cidade-sel'), notaC = $('pq-perfil-cidade-nota');
+  if (E.r.q1 === 'sim') {
+    pf.cidade = 'curitiba'; E.r.perfil = pf;
+    opcoesLista(selC, cidade, cidade.opcoes.filter((o) => o.id === 'curitiba'));
+    selC.disabled = true; notaC.textContent = 'Conforme sua resposta na pergunta 1.'; notaC.hidden = false;
+  } else {
+    if (pf.cidade === 'curitiba') delete pf.cidade;
+    selC.disabled = false; notaC.hidden = true;
+    E.r.perfil = pf;
+    opcoesLista(selC, cidade, cidade.opcoes.filter((o) => o.id !== 'curitiba'));
+  }
+  if (bairro) {
+    const mostra = pf.cidade === 'curitiba';
+    if (!mostra) delete pf.bairro;
+    E.r.perfil = pf;
+    $('pq-perfil-bairro').hidden = !mostra;
+    if (mostra) opcoesLista($<HTMLSelectElement>('pq-perfil-bairro-sel'), bairro, bairro.opcoes);
+  }
+  E.r.perfil = pf; salvar();
 }
 function erroPerfil(id: string, msg: string) {
   const e = $('pq-perfil-' + id + '-erro'); if (!e) return;
@@ -487,9 +554,16 @@ function validarEtapa(i: number): boolean {
   if (i === ETAPA_RELATO) return true;
   if (i === ETAPA_PERFIL) {
     const pf = perfilAtual(); let primeiro: HTMLElement | null = null;
+    const FALTA: Record<string, string> = {
+      cidade: 'Escolha a cidade onde você mora.',
+      bairro: 'Escolha o seu bairro. Se preferir, marque "Prefiro não informar" no fim da lista.',
+      genero: 'Escolha uma opção. Se preferir, marque "Prefiro não informar".',
+      faixa_etaria: 'Escolha sua faixa etária. Se preferir, marque "Prefiro não informar".',
+    };
     PERFIL.forEach((c) => {
+      if (!perfilAplica(c)) { erroPerfil(c.id, ''); return; }
       const outro = c.opcoes.find((o) => o.outro);
-      const msg = !pf[c.id] ? (c.id === 'genero' ? 'Escolha uma opção. Se preferir, marque "Prefiro não informar".' : 'Escolha sua faixa etária. Se preferir, marque "Prefiro não informar".')
+      const msg = !pf[c.id] ? FALTA[c.id] ?? 'Responda esta pergunta.'
         : outro && pf[c.id] === outro.id && !(pf[c.id + '_outro'] ?? '').trim() ? 'Conte como você se identifica ou escolha outra opção.' : '';
       erroPerfil(c.id, msg);
       if (msg && !primeiro) primeiro = $('pq-perfil-' + c.id);
@@ -537,6 +611,7 @@ function irPara(i: number, voltando = false) {
   $('pq-barra').style.width = pct + '%';
   $('pq-barra').parentElement!.setAttribute('aria-valuenow', String(pct));
   $('pq-etapa').textContent = i < TOTAL ? etiqueta(i) : i === ETAPA_ID ? 'Antes de começar' : i === ETAPA_PERFIL ? 'Quase lá · sobre você' : i === ETAPA_RELATO ? 'Quase lá · etapa opcional' : 'Última etapa';
+  if (i === ETAPA_PERFIL) sincronizarLocal();
   atualizarBotao();
   window.scrollTo({ top: 0, behavior: reduzir ? 'auto' : 'smooth' });
   atual.querySelector<HTMLElement>('legend')?.focus({ preventScroll: true });

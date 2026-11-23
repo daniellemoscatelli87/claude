@@ -595,6 +595,55 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-23 · Pesquisa: Região Metropolitana, quatro perguntas novas, cidade e bairro, e exportação do relatório (questionário v11, D-044), publicado (função `pesquisa` v10; questionário publicado em JSON compacto, igual ao do repositório)
+
+- `supabase/functions/pesquisa/questionario.json` (v11):
+  - Pergunta 1: "Onde você mora atualmente?", com Curitiba (`sim`), Região Metropolitana de Curitiba (`rmc`) e Outra cidade (`nao`, que encerra).
+  - Pergunta 1.1, condicional para quem marcou `rmc`: "Você costuma fazer compras de roupas, calçados e acessórios em Curitiba?", na escala da pergunta de disponibilidade.
+  - Perguntas novas, nas posições recomendadas:
+    - foto de referência (6);
+    - disponibilidade (8), com dois trechos em vermelho;
+    - categorias (11): até 3 opções, "Não tive dificuldade" exclusiva, "Outro" com campo.
+  - "Calçados" na abertura (em negrito) e nas perguntas 2, 7 e 11.
+  - Perfil:
+    - Cidade: Curitiba e as 28 cidades da Região Metropolitana, segundo a AMEP.
+    - Bairro: só para Curitiba, com os 75 bairros agrupados pelas 10 regionais, segundo o PDF da Prefeitura de 2017 conferido com o material da SME de 2022, e "Prefiro não informar".
+- `src/pesquisa-moda.ts`:
+  - Vários trechos em vermelho por título (`destaque` aceita uma lista).
+  - Cidade e bairro em listas suspensas:
+    - para quem mora em Curitiba, a cidade fica preenchida e travada ("Conforme sua resposta na pergunta 1");
+    - para a Região Metropolitana, a lista mostra as 28 cidades e não há bairro.
+- `supabase/functions/pesquisa/index.ts`:
+  - O bairro só é exigido para Curitiba e é descartado nas outras cidades.
+  - A cidade precisa combinar com a pergunta 1.
+  - A pergunta 1.1 é ignorada para quem não é da Região Metropolitana.
+- Abertura: "em Curitiba e Região Metropolitana" no texto principal, no parágrafo do projeto e nas descrições do link. O título continua "moda em Curitiba".
+- `public/admin/pesquisas/index.html`:
+  - Pergunta 1 com as 3 respostas; a 1.1 aparece logo depois dela.
+  - Cards novos de Cidade e de Bairro (por regional, com a tabela dos bairros).
+  - Textos "fora de Curitiba e RMC".
+  - A nota da pergunta condicional cita o número certo da pergunta.
+  - Botões "Exportar Excel" e "Exportar PDF":
+    - Excel: abas Resumo, Resultados, Inteligência, Respostas, Relatos e Interessados, com SheetJS 0.18.5 carregado do cdnjs só ao clicar.
+    - PDF: todas as abas numa página, pela janela de impressão ("Salvar como PDF").
+- Testes executados:
+  - `npm run build` passou.
+  - Playwright no iPhone 13, sem erros de JS, nos três caminhos:
+    - Região Metropolitana: 1.1, perguntas novas, exclusiva das categorias, Colombo, sem bairro;
+    - Curitiba: cidade travada, 10 grupos de regionais, Batel;
+    - Outra cidade: encerra.
+  - Função em bundle com banco simulado:
+    - Região Metropolitana sem a 1.1 é recusada;
+    - cidade que não combina com a pergunta 1 é recusada;
+    - Curitiba sem bairro é recusada;
+    - a 1.1 é ignorada para Curitiba;
+    - exclusiva e máximo de 3 nas categorias.
+  - Painel com 42 respostas fictícias:
+    - os cards novos aparecem na ordem;
+    - Excel com as 6 abas, lido com openpyxl;
+    - PDF com todas as abas, 86 páginas.
+- Na publicação: reimplantar a função `pesquisa`. O painel lê o questionário da função.
+
 ## 2026-11-23 · Contatos: "Novo e-mail" para qualquer endereço, com anexos de qualquer tipo (D-043), publicado (migration aplicada; função `responder-contato` v13)
 
 - `public/admin/contatos/index.html`:

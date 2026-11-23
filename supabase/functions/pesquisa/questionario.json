@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v10-2026-11-23",
+  "versao": "moda-curitiba-v11-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "identificacao": {
     "versao": "moda-curitiba-identificacao-v1-2026-11-23",
@@ -14,25 +14,58 @@
     {
       "id": "q1",
       "tipo": "unica",
-      "texto": "Você mora atualmente em Curitiba?",
+      "texto": "Onde você mora atualmente?",
       "opcoes": [
         {
           "id": "sim",
-          "texto": "Sim"
+          "texto": "Curitiba"
+        },
+        {
+          "id": "rmc",
+          "texto": "Região Metropolitana de Curitiba"
         },
         {
           "id": "nao",
-          "texto": "Não",
+          "texto": "Outra cidade",
           "encerra": "fora_de_curitiba"
         }
-      ],
-      "destaque": "Curitiba"
+      ]
+    },
+    {
+      "id": "q1_1",
+      "rotulo": "1.1",
+      "tipo": "unica",
+      "condicao": {
+        "pergunta": "q1",
+        "opcoes": [
+          "rmc"
+        ]
+      },
+      "texto": "Você costuma fazer compras de roupas, calçados e acessórios em Curitiba?",
+      "opcoes": [
+        {
+          "id": "sempre",
+          "texto": "Sempre ou quase sempre"
+        },
+        {
+          "id": "as_vezes",
+          "texto": "Às vezes"
+        },
+        {
+          "id": "raramente",
+          "texto": "Raramente"
+        },
+        {
+          "id": "nunca",
+          "texto": "Nunca"
+        }
+      ]
     },
     {
       "id": "q2",
       "tipo": "ranking",
       "max": 3,
-      "texto": "Onde você mais comprou roupas e acessórios este ano?",
+      "texto": "Onde você mais comprou roupas, calçados e acessórios este ano?",
       "apoio": "Escolha até 3, na ordem: toque primeiro onde você mais comprou.",
       "apoio_negrito": "toque primeiro onde você mais comprou",
       "opcoes": [
@@ -63,7 +96,7 @@
           "exclusiva": true
         }
       ],
-      "destaque": "roupas e acessórios"
+      "destaque": "roupas, calçados e acessórios"
     },
     {
       "id": "q2_1",
@@ -209,10 +242,34 @@
       "destaque": "começar"
     },
     {
+      "id": "q_foto",
+      "tipo": "unica",
+      "texto": "Você já enviou uma foto de referência para alguma loja perguntando onde poderia comprar algo igual ou parecido?",
+      "opcoes": [
+        {
+          "id": "varias",
+          "texto": "Sim, várias vezes"
+        },
+        {
+          "id": "algumas",
+          "texto": "Sim, algumas vezes"
+        },
+        {
+          "id": "uma",
+          "texto": "Sim, uma vez"
+        },
+        {
+          "id": "nunca",
+          "texto": "Nunca fiz isso"
+        }
+      ],
+      "destaque": "foto de referência"
+    },
+    {
       "id": "q6",
       "tipo": "multipla",
       "max": 3,
-      "texto": "De que forma você descobre lojas de roupas e acessórios em Curitiba?",
+      "texto": "De que forma você descobre lojas de roupas, calçados e acessórios em Curitiba?",
       "apoio": "Selecione até 3 opções.",
       "opcoes": [
         {
@@ -256,6 +313,38 @@
         }
       ],
       "destaque": "descobre lojas"
+    },
+    {
+      "id": "q_disponibilidade",
+      "tipo": "unica",
+      "texto": "Antes de ir a uma loja, você tem o hábito de entrar em contato para perguntar sobre a disponibilidade das peças?",
+      "apoio": "Considere contatos por WhatsApp, Instagram ou telefone.",
+      "opcoes": [
+        {
+          "id": "sempre",
+          "texto": "Sempre ou quase sempre"
+        },
+        {
+          "id": "as_vezes",
+          "texto": "Às vezes"
+        },
+        {
+          "id": "raramente",
+          "texto": "Raramente"
+        },
+        {
+          "id": "nunca",
+          "texto": "Nunca, prefiro ir direto à loja"
+        },
+        {
+          "id": "nao_fisicas",
+          "texto": "Não costumo comprar em lojas físicas"
+        }
+      ],
+      "destaque": [
+        "entrar em contato",
+        "disponibilidade das peças"
+      ]
     },
     {
       "id": "q7",
@@ -365,6 +454,62 @@
       "destaque": "atendam às suas expectativas"
     },
     {
+      "id": "q_categorias",
+      "tipo": "multipla",
+      "max": 3,
+      "texto": "Quais tipos de roupas, calçados ou acessórios você teve mais dificuldade para encontrar em Curitiba este ano?",
+      "apoio": "Selecione até 3 opções.",
+      "opcoes": [
+        {
+          "id": "festas",
+          "texto": "Roupas para festas e ocasiões especiais"
+        },
+        {
+          "id": "trabalho",
+          "texto": "Roupas para trabalhar"
+        },
+        {
+          "id": "jeans",
+          "texto": "Calças, shorts e outras peças jeans"
+        },
+        {
+          "id": "praia",
+          "texto": "Roupas de praia e piscina"
+        },
+        {
+          "id": "academia",
+          "texto": "Roupas para academia e atividades físicas"
+        },
+        {
+          "id": "plus_size",
+          "texto": "Roupas em tamanhos grandes (plus size)"
+        },
+        {
+          "id": "masculinas",
+          "texto": "Roupas masculinas"
+        },
+        {
+          "id": "calcados",
+          "texto": "Calçados"
+        },
+        {
+          "id": "bolsas",
+          "texto": "Bolsas e acessórios"
+        },
+        {
+          "id": "nenhuma",
+          "texto": "Não tive dificuldade com nenhuma dessas categorias",
+          "exclusiva": true
+        },
+        {
+          "id": "outro",
+          "texto": "Outro tipo de produto",
+          "outro": true
+        }
+      ],
+      "destaque": "mais dificuldade para encontrar"
+    },
+    {
       "id": "q9",
       "tipo": "multipla",
       "texto": "O que você tem feito quando não encontra uma roupa ou acessório que gostaria de comprar?",
@@ -400,6 +545,524 @@
     }
   ],
   "perfil": [
+    {
+      "id": "cidade",
+      "texto": "Em qual cidade você mora?",
+      "tipo": "lista",
+      "fonte": "Municípios da Região Metropolitana de Curitiba segundo a AMEP (29 municípios, consultado em 23/11/2026).",
+      "opcoes": [
+        {
+          "id": "curitiba",
+          "texto": "Curitiba"
+        },
+        {
+          "id": "adrianopolis",
+          "texto": "Adrianópolis"
+        },
+        {
+          "id": "agudos_do_sul",
+          "texto": "Agudos do Sul"
+        },
+        {
+          "id": "almirante_tamandare",
+          "texto": "Almirante Tamandaré"
+        },
+        {
+          "id": "araucaria",
+          "texto": "Araucária"
+        },
+        {
+          "id": "balsa_nova",
+          "texto": "Balsa Nova"
+        },
+        {
+          "id": "bocaiuva_do_sul",
+          "texto": "Bocaiúva do Sul"
+        },
+        {
+          "id": "campina_grande_do_sul",
+          "texto": "Campina Grande do Sul"
+        },
+        {
+          "id": "campo_do_tenente",
+          "texto": "Campo do Tenente"
+        },
+        {
+          "id": "campo_largo",
+          "texto": "Campo Largo"
+        },
+        {
+          "id": "campo_magro",
+          "texto": "Campo Magro"
+        },
+        {
+          "id": "cerro_azul",
+          "texto": "Cerro Azul"
+        },
+        {
+          "id": "colombo",
+          "texto": "Colombo"
+        },
+        {
+          "id": "contenda",
+          "texto": "Contenda"
+        },
+        {
+          "id": "doutor_ulysses",
+          "texto": "Doutor Ulysses"
+        },
+        {
+          "id": "fazenda_rio_grande",
+          "texto": "Fazenda Rio Grande"
+        },
+        {
+          "id": "itaperucu",
+          "texto": "Itaperuçu"
+        },
+        {
+          "id": "lapa",
+          "texto": "Lapa"
+        },
+        {
+          "id": "mandirituba",
+          "texto": "Mandirituba"
+        },
+        {
+          "id": "pien",
+          "texto": "Piên"
+        },
+        {
+          "id": "pinhais",
+          "texto": "Pinhais"
+        },
+        {
+          "id": "piraquara",
+          "texto": "Piraquara"
+        },
+        {
+          "id": "quatro_barras",
+          "texto": "Quatro Barras"
+        },
+        {
+          "id": "quitandinha",
+          "texto": "Quitandinha"
+        },
+        {
+          "id": "rio_branco_do_sul",
+          "texto": "Rio Branco do Sul"
+        },
+        {
+          "id": "rio_negro",
+          "texto": "Rio Negro"
+        },
+        {
+          "id": "sao_jose_dos_pinhais",
+          "texto": "São José dos Pinhais"
+        },
+        {
+          "id": "tijucas_do_sul",
+          "texto": "Tijucas do Sul"
+        },
+        {
+          "id": "tunas_do_parana",
+          "texto": "Tunas do Paraná"
+        }
+      ]
+    },
+    {
+      "id": "bairro",
+      "texto": "Em qual bairro de Curitiba você mora?",
+      "tipo": "lista",
+      "destaque": "bairro de Curitiba",
+      "condicao": {
+        "campo": "cidade",
+        "opcoes": [
+          "curitiba"
+        ]
+      },
+      "fonte": "75 bairros e 10 Administrações Regionais da Prefeitura de Curitiba (Administrações Regionais de Curitiba, 2017, conferido com o material da SME de 2022). O Campo Comprido fica em Santa Felicidade, com a parte sul na regional Portão.",
+      "opcoes": [
+        {
+          "id": "ganchinho",
+          "texto": "Ganchinho",
+          "regional": "Bairro Novo"
+        },
+        {
+          "id": "sitio_cercado",
+          "texto": "Sítio Cercado",
+          "regional": "Bairro Novo"
+        },
+        {
+          "id": "umbara",
+          "texto": "Umbará",
+          "regional": "Bairro Novo"
+        },
+        {
+          "id": "abranches",
+          "texto": "Abranches",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "atuba",
+          "texto": "Atuba",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "bacacheri",
+          "texto": "Bacacheri",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "bairro_alto",
+          "texto": "Bairro Alto",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "barreirinha",
+          "texto": "Barreirinha",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "boa_vista",
+          "texto": "Boa Vista",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "cachoeira",
+          "texto": "Cachoeira",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "pilarzinho",
+          "texto": "Pilarzinho",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "santa_candida",
+          "texto": "Santa Cândida",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "sao_lourenco",
+          "texto": "São Lourenço",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "taboao",
+          "texto": "Taboão",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "taruma",
+          "texto": "Tarumã",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "tingui",
+          "texto": "Tingui",
+          "regional": "Boa Vista"
+        },
+        {
+          "id": "alto_boqueirao",
+          "texto": "Alto Boqueirão",
+          "regional": "Boqueirão"
+        },
+        {
+          "id": "boqueirao",
+          "texto": "Boqueirão",
+          "regional": "Boqueirão"
+        },
+        {
+          "id": "hauer",
+          "texto": "Hauer",
+          "regional": "Boqueirão"
+        },
+        {
+          "id": "xaxim",
+          "texto": "Xaxim",
+          "regional": "Boqueirão"
+        },
+        {
+          "id": "cajuru",
+          "texto": "Cajuru",
+          "regional": "Cajuru"
+        },
+        {
+          "id": "capao_da_imbuia",
+          "texto": "Capão da Imbuia",
+          "regional": "Cajuru"
+        },
+        {
+          "id": "guabirotuba",
+          "texto": "Guabirotuba",
+          "regional": "Cajuru"
+        },
+        {
+          "id": "jardim_das_americas",
+          "texto": "Jardim das Américas",
+          "regional": "Cajuru"
+        },
+        {
+          "id": "uberaba",
+          "texto": "Uberaba",
+          "regional": "Cajuru"
+        },
+        {
+          "id": "augusta",
+          "texto": "Augusta",
+          "regional": "CIC"
+        },
+        {
+          "id": "cidade_industrial_cic",
+          "texto": "Cidade Industrial (CIC)",
+          "regional": "CIC"
+        },
+        {
+          "id": "riviera",
+          "texto": "Riviera",
+          "regional": "CIC"
+        },
+        {
+          "id": "sao_miguel",
+          "texto": "São Miguel",
+          "regional": "CIC"
+        },
+        {
+          "id": "ahu",
+          "texto": "Ahú",
+          "regional": "Matriz"
+        },
+        {
+          "id": "alto_da_gloria",
+          "texto": "Alto da Glória",
+          "regional": "Matriz"
+        },
+        {
+          "id": "alto_da_xv",
+          "texto": "Alto da XV",
+          "regional": "Matriz"
+        },
+        {
+          "id": "batel",
+          "texto": "Batel",
+          "regional": "Matriz"
+        },
+        {
+          "id": "bigorrilho",
+          "texto": "Bigorrilho",
+          "regional": "Matriz"
+        },
+        {
+          "id": "bom_retiro",
+          "texto": "Bom Retiro",
+          "regional": "Matriz"
+        },
+        {
+          "id": "cabral",
+          "texto": "Cabral",
+          "regional": "Matriz"
+        },
+        {
+          "id": "centro",
+          "texto": "Centro",
+          "regional": "Matriz"
+        },
+        {
+          "id": "centro_civico",
+          "texto": "Centro Cívico",
+          "regional": "Matriz"
+        },
+        {
+          "id": "cristo_rei",
+          "texto": "Cristo Rei",
+          "regional": "Matriz"
+        },
+        {
+          "id": "hugo_lange",
+          "texto": "Hugo Lange",
+          "regional": "Matriz"
+        },
+        {
+          "id": "jardim_botanico",
+          "texto": "Jardim Botânico",
+          "regional": "Matriz"
+        },
+        {
+          "id": "jardim_social",
+          "texto": "Jardim Social",
+          "regional": "Matriz"
+        },
+        {
+          "id": "juveve",
+          "texto": "Juvevê",
+          "regional": "Matriz"
+        },
+        {
+          "id": "merces",
+          "texto": "Mercês",
+          "regional": "Matriz"
+        },
+        {
+          "id": "prado_velho",
+          "texto": "Prado Velho",
+          "regional": "Matriz"
+        },
+        {
+          "id": "reboucas",
+          "texto": "Rebouças",
+          "regional": "Matriz"
+        },
+        {
+          "id": "sao_francisco",
+          "texto": "São Francisco",
+          "regional": "Matriz"
+        },
+        {
+          "id": "capao_raso",
+          "texto": "Capão Raso",
+          "regional": "Pinheirinho"
+        },
+        {
+          "id": "fanny",
+          "texto": "Fanny",
+          "regional": "Pinheirinho"
+        },
+        {
+          "id": "lindoia",
+          "texto": "Lindóia",
+          "regional": "Pinheirinho"
+        },
+        {
+          "id": "novo_mundo",
+          "texto": "Novo Mundo",
+          "regional": "Pinheirinho"
+        },
+        {
+          "id": "pinheirinho",
+          "texto": "Pinheirinho",
+          "regional": "Pinheirinho"
+        },
+        {
+          "id": "agua_verde",
+          "texto": "Água Verde",
+          "regional": "Portão"
+        },
+        {
+          "id": "fazendinha",
+          "texto": "Fazendinha",
+          "regional": "Portão"
+        },
+        {
+          "id": "guaira",
+          "texto": "Guaíra",
+          "regional": "Portão"
+        },
+        {
+          "id": "parolin",
+          "texto": "Parolin",
+          "regional": "Portão"
+        },
+        {
+          "id": "portao",
+          "texto": "Portão",
+          "regional": "Portão"
+        },
+        {
+          "id": "santa_quiteria",
+          "texto": "Santa Quitéria",
+          "regional": "Portão"
+        },
+        {
+          "id": "seminario",
+          "texto": "Seminário",
+          "regional": "Portão"
+        },
+        {
+          "id": "vila_izabel",
+          "texto": "Vila Izabel",
+          "regional": "Portão"
+        },
+        {
+          "id": "butiatuvinha",
+          "texto": "Butiatuvinha",
+          "regional": "Santa Felicidade"
+        },
+        {
+          "id": "campina_do_siqueira",
+          "texto": "Campina do Siqueira",
+          "regional": "Santa Felicidade"
+        },
+        {
+          "id": "campo_comprido",
+          "texto": "Campo Comprido",
+          "regional": "Santa Felicidade"
+        },
+        {
+          "id": "cascatinha",
+          "texto": "Cascatinha",
+          "regional": "Santa Felicidade"
+        },
+        {
+          "id": "lamenha_pequena",
+          "texto": "Lamenha Pequena",
+          "regional": "Santa Felicidade"
+        },
+        {
+          "id": "mossungue",
+          "texto": "Mossunguê",
+          "regional": "Santa Felicidade"
+        },
+        {
+          "id": "orleans",
+          "texto": "Orleans",
+          "regional": "Santa Felicidade"
+        },
+        {
+          "id": "santa_felicidade",
+          "texto": "Santa Felicidade",
+          "regional": "Santa Felicidade"
+        },
+        {
+          "id": "santo_inacio",
+          "texto": "Santo Inácio",
+          "regional": "Santa Felicidade"
+        },
+        {
+          "id": "sao_braz",
+          "texto": "São Braz",
+          "regional": "Santa Felicidade"
+        },
+        {
+          "id": "sao_joao",
+          "texto": "São João",
+          "regional": "Santa Felicidade"
+        },
+        {
+          "id": "vista_alegre",
+          "texto": "Vista Alegre",
+          "regional": "Santa Felicidade"
+        },
+        {
+          "id": "campo_de_santana",
+          "texto": "Campo de Santana",
+          "regional": "Tatuquara"
+        },
+        {
+          "id": "caximba",
+          "texto": "Caximba",
+          "regional": "Tatuquara"
+        },
+        {
+          "id": "tatuquara",
+          "texto": "Tatuquara",
+          "regional": "Tatuquara"
+        },
+        {
+          "id": "nao_informar",
+          "texto": "Prefiro não informar"
+        }
+      ]
+    },
     {
       "id": "genero",
       "texto": "Com qual gênero você se identifica?",

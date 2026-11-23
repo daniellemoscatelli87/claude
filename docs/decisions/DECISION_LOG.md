@@ -479,6 +479,21 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - Aceitar qualquer tipo de arquivo amplia o que fica guardado no bucket. Ele continua privado e restrito à administradora.
   - Os e-mails enviados contam como conversas na lista, que passa a dizer "conversas" em vez de "mensagens recebidas".
 
+## D-044 · 23/11/2026 · Pesquisa de moda inclui a Região Metropolitana; cidade e bairro no perfil (site)
+
+- **Origem:** dona do produto.
+- **Decisão:**
+  - Quem mora em Curitiba ou na Região Metropolitana participa; só "Outra cidade" encerra.
+  - Quem é da Região Metropolitana responde a 1.1, sobre comprar em Curitiba.
+  - No perfil, a cidade é sempre perguntada e o bairro só para Curitiba ("não preciso saber o bairro da região metropolitana").
+- **Fontes:**
+  - 29 municípios da Região Metropolitana: AMEP, página "Municípios da Região Metropolitana de Curitiba", consultada em 23/11/2026.
+  - 75 bairros e 10 regionais: "Administrações Regionais de Curitiba" (Prefeitura, 2017), conferido com "Curitiba: caminhos que educam" (SME, 2022).
+  - O site da Prefeitura bloqueou a leitura automática; não foi possível conferir uma versão de 2025/2026.
+- **Trade-offs:**
+  - O Campo Comprido fica em Santa Felicidade, mas a parte sul pertence à regional Portão. O agrupamento por regional é aproximado nesse bairro.
+  - O código `fora_de_curitiba` continua nos dados e passa a significar "fora de Curitiba e da Região Metropolitana".
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
