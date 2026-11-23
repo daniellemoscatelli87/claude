@@ -15,7 +15,7 @@ type Pergunta = {
   opcoes?: Opcao[]; linhas?: { id: string; texto: string; apoio?: string }[]; colunas?: { id: string; texto: string }[];
   rotulo_min?: string; rotulo_max?: string;
   rotulo?: string; condicao?: { pergunta: string; opcoes: string[] }; // pergunta condicional (ex.: 2.1)
-  destaque?: string; // trecho do título em vermelho
+  destaque?: string | string[]; // trecho(s) do título em vermelho
   apoio_negrito?: string; // trecho do texto de apoio em negrito
 };
 type Multi = { opcoes: string[]; outro?: string };
@@ -96,12 +96,19 @@ function mostrarTela(id: string) {
 /* ---------- Perguntas ---------- */
 const etiqueta = (i: number) => (PERGUNTAS[i].condicao ? `Pergunta ${rotulo(i)}` : `Pergunta ${numero(i)} de ${PRINCIPAIS}`);
 // destaque: trecho do título em vermelho (a primeira ocorrência), para orientar a leitura
-function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apoio?: string, destaque?: string, negrito?: string) {
+// realcar: divide o texto e põe em <em> (vermelho) a primeira ocorrência de cada trecho, na ordem do texto
+function realcar(texto: string, trechos?: string | string[]): (string | HTMLElement)[] {
+  const lista = (Array.isArray(trechos) ? trechos : trechos ? [trechos] : [])
+    .map((x) => ({ x, k: texto.indexOf(x) })).filter((p) => p.k >= 0).sort((a, b) => a.k - b.k);
+  const out: (string | HTMLElement)[] = []; let pos = 0;
+  for (const { x, k } of lista) { if (k < pos) continue; out.push(texto.slice(pos, k), el('em', undefined, x)); pos = k + x.length; }
+  out.push(texto.slice(pos));
+  return out.filter((p) => p !== '');
+}
+function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apoio?: string, destaque?: string | string[], negrito?: string) {
   const lg = el('legend', 'pq-pergunta'); lg.tabIndex = -1;
   const t = el('span', 'pq-titulo');
-  const k = destaque ? titulo.indexOf(destaque) : -1;
-  if (k >= 0) t.append(titulo.slice(0, k), el('em', undefined, destaque!), titulo.slice(k + destaque!.length));
-  else t.textContent = titulo;
+  t.append(...realcar(titulo, destaque));
   lg.append(el('span', 'pq-num', eyebrow), t);
   fs.appendChild(lg);
   if (apoio) {

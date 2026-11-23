@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v10-2026-11-23",
+  "versao": "moda-curitiba-v11-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "identificacao": {
     "versao": "moda-curitiba-identificacao-v1-2026-11-23",
@@ -32,7 +32,7 @@
       "id": "q2",
       "tipo": "ranking",
       "max": 3,
-      "texto": "Onde você mais comprou roupas e acessórios este ano?",
+      "texto": "Onde você mais comprou roupas, calçados e acessórios este ano?",
       "apoio": "Escolha até 3, na ordem: toque primeiro onde você mais comprou.",
       "apoio_negrito": "toque primeiro onde você mais comprou",
       "opcoes": [
@@ -63,7 +63,7 @@
           "exclusiva": true
         }
       ],
-      "destaque": "roupas e acessórios"
+      "destaque": "roupas, calçados e acessórios"
     },
     {
       "id": "q2_1",
@@ -209,10 +209,34 @@
       "destaque": "começar"
     },
     {
+      "id": "q_foto",
+      "tipo": "unica",
+      "texto": "Você já enviou uma foto de referência para alguma loja perguntando onde poderia comprar algo igual ou parecido?",
+      "opcoes": [
+        {
+          "id": "varias",
+          "texto": "Sim, várias vezes"
+        },
+        {
+          "id": "algumas",
+          "texto": "Sim, algumas vezes"
+        },
+        {
+          "id": "uma",
+          "texto": "Sim, uma vez"
+        },
+        {
+          "id": "nunca",
+          "texto": "Nunca fiz isso"
+        }
+      ],
+      "destaque": "foto de referência"
+    },
+    {
       "id": "q6",
       "tipo": "multipla",
       "max": 3,
-      "texto": "De que forma você descobre lojas de roupas e acessórios em Curitiba?",
+      "texto": "De que forma você descobre lojas de roupas, calçados e acessórios em Curitiba?",
       "apoio": "Selecione até 3 opções.",
       "opcoes": [
         {
@@ -256,6 +280,38 @@
         }
       ],
       "destaque": "descobre lojas"
+    },
+    {
+      "id": "q_disponibilidade",
+      "tipo": "unica",
+      "texto": "Antes de ir a uma loja, você tem o hábito de entrar em contato para perguntar sobre a disponibilidade das peças?",
+      "apoio": "Considere contatos por WhatsApp, Instagram ou telefone.",
+      "opcoes": [
+        {
+          "id": "sempre",
+          "texto": "Sempre ou quase sempre"
+        },
+        {
+          "id": "as_vezes",
+          "texto": "Às vezes"
+        },
+        {
+          "id": "raramente",
+          "texto": "Raramente"
+        },
+        {
+          "id": "nunca",
+          "texto": "Nunca, prefiro ir direto à loja"
+        },
+        {
+          "id": "nao_fisicas",
+          "texto": "Não costumo comprar em lojas físicas"
+        }
+      ],
+      "destaque": [
+        "entrar em contato",
+        "disponibilidade das peças"
+      ]
     },
     {
       "id": "q7",
@@ -363,6 +419,62 @@
         }
       ],
       "destaque": "atendam às suas expectativas"
+    },
+    {
+      "id": "q_categorias",
+      "tipo": "multipla",
+      "max": 3,
+      "texto": "Quais tipos de roupas, calçados ou acessórios você teve mais dificuldade para encontrar em Curitiba este ano?",
+      "apoio": "Selecione até 3 opções.",
+      "opcoes": [
+        {
+          "id": "festas",
+          "texto": "Roupas para festas e ocasiões especiais"
+        },
+        {
+          "id": "trabalho",
+          "texto": "Roupas para trabalhar"
+        },
+        {
+          "id": "jeans",
+          "texto": "Calças, shorts e outras peças jeans"
+        },
+        {
+          "id": "praia",
+          "texto": "Roupas de praia e piscina"
+        },
+        {
+          "id": "academia",
+          "texto": "Roupas para academia e atividades físicas"
+        },
+        {
+          "id": "plus_size",
+          "texto": "Roupas em tamanhos grandes (plus size)"
+        },
+        {
+          "id": "masculinas",
+          "texto": "Roupas masculinas"
+        },
+        {
+          "id": "calcados",
+          "texto": "Calçados"
+        },
+        {
+          "id": "bolsas",
+          "texto": "Bolsas e acessórios"
+        },
+        {
+          "id": "nenhuma",
+          "texto": "Não tive dificuldade com nenhuma dessas categorias",
+          "exclusiva": true
+        },
+        {
+          "id": "outro",
+          "texto": "Outro tipo de produto",
+          "outro": true
+        }
+      ],
+      "destaque": "mais dificuldade para encontrar"
     },
     {
       "id": "q9",
