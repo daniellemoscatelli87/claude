@@ -350,7 +350,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
 <<<<<<< HEAD
-## 2026-11-23 · Pesquisa Moda em Curitiba: títulos com destaque, textos revisados e perguntas 8 e 10 unidas, não publicado
+## 2026-11-23 · Pesquisa Moda em Curitiba: títulos com destaque, textos revisados e perguntas 8 e 10 unidas, publicado
 
 - **Pedidos da dona:**
   - trecho de cada título em vermelho;
@@ -384,7 +384,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   5. os 4 endereços de e-mail da página entre `<!--email_off-->` e `<!--/email_off-->`, para a Cloudflare não escondê-los.
 - **Verificação executada:** `npm run build`; página conferida no ar depois da publicação.
 
-## 2026-11-23 · Pesquisa Moda em Curitiba: abertura no modelo enviado pela dona ("Por que vale participar"), não publicado
+## 2026-11-23 · Pesquisa Moda em Curitiba: abertura no modelo enviado pela dona ("Por que vale participar"), publicado
 
 - **Pedido:** refazer a abertura seguindo o modelo enviado (imagem), com os textos dele.
 - **O que mudou (`pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.css`):**
@@ -395,7 +395,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - No celular, os selos ficam um embaixo do outro. A faixa de vantagens anterior saiu.
 - **Verificação executada:** `npm run build`; Playwright no celular, em 1366×768 e em 1440×900 (botão visível sem rolar, selos em uma linha, sem erros no console); capturas.
 
-## 2026-11-23 · Pesquisa Moda em Curitiba: faixa de vantagens mais suave e depois da explicação, não publicado
+## 2026-11-23 · Pesquisa Moda em Curitiba: faixa de vantagens mais suave e depois da explicação, publicado
 
 - **Pedido:** a faixa vermelha das vantagens competia com o botão "Começar pesquisa" e aparecia antes da explicação da pesquisa.
 - **O que mudou (`src/pesquisa-moda.css`):** a faixa passou a fundo rosa claro (`--pq-tint`) com borda vermelha suave e textos escuros. O ícone de presente continua num quadrado vermelho animado, e o brilho que passa continua (sem animação com "menos movimento"). O vermelho cheio fica só no botão. Depois, a pedido da dona ("ruim falar da vantagem antes de explicar a pesquisa"), a faixa foi para depois dos textos que explicam a pesquisa, antes dos boxes de informação (`pesquisa/moda-curitiba/index.html`).
