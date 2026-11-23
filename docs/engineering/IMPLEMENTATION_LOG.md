@@ -595,6 +595,17 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-23 · Assinatura dos e-mails da página de contatos: telefone, e-mail e site, não publicado
+
+- `supabase/functions/responder-contato/index.ts`: a assinatura passa a ter, nesta ordem, o telefone (link para o WhatsApp, `https://wa.me/5541997485414`), contato@danimoscatelli.com.br (link `mailto:`) e o site (link para o site). Sai o Instagram (@danimoscatellistudio). A versão em texto simples segue a mesma ordem.
+- Visual novo (opção B, escolhida pela dona do produto): retrato de meio corpo com cantos arredondados e fundo graphite-50, linha vermelha e os dados ao lado.
+  - Imagem `public/email/dani-assinatura.png`, de 220 × 280 exibida em 110 × 140, com 18 KB.
+  - Gerada a partir da foto enviada pela dona do produto (WEBP com fundo transparente, que o Outlook não mostra), com a autorização dela.
+  - A `dani-foto.jpg` antiga continua no site para os e-mails já enviados.
+- `supabase/functions/comunicado-parceiros/index.ts` passa a usar a mesma assinatura e a mesma imagem, por pedido da dona do produto. A função no ar (v5) estava igual ao repositório antes da mudança. Teste: prévia do comunicado gerada pela função em bundle (status 200, link do WhatsApp e imagem nova) e conferida em imagem.
+- Teste executado: a assinatura foi gerada a partir do código da função e conferida em imagem, com os três links (WhatsApp, `mailto:` e site).
+- Na publicação: publicar o site antes (para a imagem existir) e depois reimplantar `responder-contato` e `comunicado-parceiros`.
+
 ## 2026-11-23 · Contatos: abas Recebidos e Enviados, vários destinatários, Cc e Cco, janela no centro (D-046), publicado (migration aplicada; função `responder-contato` v14)
 
 - `public/admin/contatos/index.html`:
