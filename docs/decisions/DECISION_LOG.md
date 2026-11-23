@@ -402,6 +402,16 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - consentimento salvo com data, horário, versão e texto; exclusão e cancelamento pelo e-mail de contato e pelo botão Excluir no painel.
 - **Trade-offs:** o identificador do envio evita duplicar a mesma participação (atualizar a página, tocar duas vezes), mas não impede que a mesma pessoa responda de novo em outro aparelho; o tempo de 3 a 5 minutos ainda precisa ser validado em teste real.
 
+## D-034 · 23/11/2026 · Menu lateral recolhível, perfil no cabeçalho e cabeçalho branco nos painéis (site)
+
+- **Origem:** dona do produto (mesmo padrão em construção no design system da FindLook).
+- **Decisão:**
+  - nos painéis, o menu lateral pode ficar expandido (ícone e nome) ou recolhido (só ícones, 72px), a partir de 1024px; abaixo disso, continua o menu que abre pela esquerda;
+  - o perfil (foto, nome, Configurações e Sair) fica sempre no cabeçalho, à direita do sino, nunca no menu lateral;
+  - o cabeçalho do painel é branco, como o menu lateral, com borda inferior fina; o conteúdo continua no cinza claro.
+- **Escolha do Claude (forma):** com o menu recolhido, os subitens abrem num painel ao lado do ícone principal (mouse e foco), em vez de virarem ícones próprios: os subitens não têm ícone no design system e criar ícones novos fugiria dele; o painel mostra o nome do grupo, mantém a ordem do Tab e fecha com Escape.
+- **Trade-offs:** o painel some ao tirar o mouse ou o foco; quem só usa o toque não recolhe o menu (recolher existe só a partir de 1024px).
+
 ---
 
 ## Decisões pendentes

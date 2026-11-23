@@ -21,6 +21,11 @@
   };
   // Chegou pelo link de "definir senha": mostra o formulário de nova senha em vez da área logada.
   let recovering = /type=recovery/.test(location.hash);
+  // Menu lateral recolhido (só a partir de 1024px): a escolha fica no aparelho e é aplicada antes de o
+  // menu ser montado, para ele já aparecer na largura certa (sem piscar).
+  const MENU_KEY = "dm-admin-menu-recolhido";
+  const menuRecolhido = () => safe(() => localStorage.getItem(MENU_KEY) === "1", false);
+  document.documentElement.classList.toggle("menu-recolhido", menuRecolhido());
   const sb = supabase.createClient("https://lipfvnerohkaajegqvwr.supabase.co", "sb_publishable_vOvysMZ0LE2qpKIzLlcM6A_tckkDIej", {
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: "dm-admin-auth", storage },
   });
@@ -41,6 +46,9 @@
     settings: '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
     clipboard: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/>',
     logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
+    chevronDown: '<path d="m6 9 6 6 6-6"/>',
+    panelClose: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/>',
+    panelOpen: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/>',
   };
   const icon = (name) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
 
@@ -171,25 +179,36 @@
   function buildShell(page) {
     const top = el("div", "topbar hidden");
     top.id = "topbar";
+    // Cabeçalho: logo (celular e tablet), notificações, perfil (foto, nome e menu com Configurações e Sair) e menu sanduíche.
     top.innerHTML = `<div class="in"><a href="/admin/"><img src="/favicon-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
       <div class="top-actions">
         <button type="button" class="burger" id="bell" aria-label="Notificações" aria-expanded="false" aria-controls="notif-drawer">${icon("bell")}<span class="burger-dot hidden" id="bell-dot"></span></button>
+        <div class="perfil" id="perfil">
+          <button type="button" class="perfil-btn" id="perfil-btn" aria-expanded="false" aria-controls="perfil-menu"><img class="perfil-foto" id="who-avatar" src="${ADMIN_AVATAR}" alt="" width="32" height="32"><span class="perfil-nome" id="who-name">${ADMIN_NAME}</span>${icon("chevronDown")}</button>
+          <div class="perfil-menu" id="perfil-menu" hidden>
+            <div class="perfil-quem"><b id="perfil-menu-nome">${ADMIN_NAME}</b><span id="who-email"></span></div>
+            <a href="/admin/configuracoes/"${page === "configuracoes" ? ' aria-current="page"' : ""}>${icon("settings")}Configurações</a>
+            <button type="button" id="logout">${icon("logout")}Sair</button>
+          </div>
+        </div>
         <button type="button" class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">${icon("menu")}</button>
       </div></div>`;
     const backdrop = el("div", "backdrop"); backdrop.id = "backdrop";
     const drawer = el("aside", "drawer"); drawer.id = "drawer";
     drawer.setAttribute("aria-label", "Menu");
+    // Cada item tem o nome (escondido só visualmente quando o menu está recolhido) e uma dica que aparece
+    // ao passar o mouse ou focar com o teclado. Itens com subitens abrem um painel ao lado (flyout).
+    const tip = (t) => `<span class="nav-tip" aria-hidden="true">${t}</span>`;
     drawer.innerHTML = `<button type="button" class="close" id="drawer-close" aria-label="Fechar menu">${icon("close")}</button>
-      <a class="side-logo" href="/admin/"><img src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
-      <div class="who"><img class="avatar" id="who-avatar" src="${ADMIN_AVATAR}" alt="${ADMIN_NAME}" width="44" height="44"><div><div class="n" id="who-name">${ADMIN_NAME}</div><a class="e who-config" id="who-email" href="/admin/configuracoes/"${page === "configuracoes" ? ' aria-current="page"' : ""}>${icon("settings")}Configurações</a></div></div>
-      <nav>${PAGES.map((p) => {
+      <a class="side-logo" href="/admin/"><img class="logo-completo" src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"><img class="logo-simbolo" src="/favicon-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
+      <nav id="drawer-nav">${PAGES.map((p) => {
         const ativo = p.id === page || (p.sub || []).some((x) => x.id === page);
-        const item = `<a href="${p.href}"${ativo ? (p.sub ? ' class="pai-ativo"' : ' aria-current="page"') : ""}>${icon(p.icon)}${p.label}<span class="nav-count hidden" data-count="${p.id}"></span></a>`;
+        const item = `<a href="${p.href}"${ativo ? (p.sub ? ' class="pai-ativo"' : ' aria-current="page"') : ""}>${icon(p.icon)}<span class="nav-label">${p.label}</span><span class="nav-count hidden" data-count="${p.id}"></span>${p.sub ? "" : tip(p.label)}</a>`;
         if (!p.sub) return item;
-        // subitens (Parceiros: perfis e candidaturas, comunicados)
-        return item + `<div class="nav-sub">${p.sub.map((x) => `<a href="${x.href}"${x.id === page ? ' aria-current="page"' : ""}>${x.label}</a>`).join("")}</div>`;
+        // subitens (Parceiros: perfis e candidaturas, comunicados); com o menu recolhido, viram o painel ao lado
+        return `<div class="nav-grupo">${item}<div class="nav-sub"><span class="nav-sub-tit" aria-hidden="true">${p.label}</span>${p.sub.map((x) => `<a href="${x.href}"${x.id === page ? ' aria-current="page"' : ""}>${x.label}</a>`).join("")}</div></div>`;
       }).join("")}</nav>
-      <div class="foot"><button type="button" class="logout" id="logout">${icon("logout")}Sair</button></div>`;
+      <div class="foot"><button type="button" class="recolher" id="menu-recolher" aria-controls="drawer"></button></div>`;
 
     const wrap = el("div", "wrap"); wrap.id = "gate";
     wrap.innerHTML = `<section class="card login hidden" id="login">
@@ -276,6 +295,66 @@
     $("notif-close").addEventListener("click", () => notif(false));
     backdrop.addEventListener("click", () => openPanel?.close());
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && openPanel) openPanel.close(); });
+
+    // Menu do perfil no cabeçalho: abre pelo botão; Escape, clique fora ou foco fora fecham.
+    const perfil = $("perfil"), perfilBtn = $("perfil-btn"), perfilMenu = $("perfil-menu");
+    const perfilAberto = () => !perfilMenu.hidden;
+    const perfilSet = (open, devolverFoco) => {
+      perfilMenu.hidden = !open;
+      perfilBtn.setAttribute("aria-expanded", String(open));
+      perfil.classList.toggle("aberto", open);
+      if (devolverFoco) perfilBtn.focus();
+    };
+    perfilBtn.addEventListener("click", () => perfilSet(!perfilAberto()));
+    perfilBtn.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown" && !perfilAberto()) { e.preventDefault(); perfilSet(true); perfilMenu.querySelector("a, button").focus(); }
+    });
+    perfilMenu.addEventListener("keydown", (e) => {
+      const itens = [...perfilMenu.querySelectorAll("a, button")];
+      const i = itens.indexOf(document.activeElement);
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); itens[(i + (e.key === "ArrowDown" ? 1 : -1) + itens.length) % itens.length].focus(); }
+    });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && perfilAberto()) { e.stopPropagation(); perfilSet(false, true); } }, true);
+    document.addEventListener("click", (e) => { if (perfilAberto() && !perfil.contains(e.target)) perfilSet(false); });
+    perfil.addEventListener("focusout", (e) => { if (perfilAberto() && e.relatedTarget && !perfil.contains(e.relatedTarget)) perfilSet(false); });
+
+    // Recolher e expandir o menu lateral (computador). A escolha fica guardada no aparelho.
+    const recolher = $("menu-recolher");
+    const html = document.documentElement;
+    const aplicarRecolher = () => {
+      const r = html.classList.contains("menu-recolhido");
+      const nome = r ? "Expandir menu" : "Recolher menu";
+      recolher.innerHTML = `${icon(r ? "panelOpen" : "panelClose")}<span class="nav-label">${nome}</span>${tip(nome)}`;
+      recolher.setAttribute("aria-expanded", String(!r));
+      if (r) recolher.setAttribute("aria-label", nome); else recolher.removeAttribute("aria-label");
+    };
+    aplicarRecolher();
+    let animando;
+    recolher.addEventListener("click", () => {
+      const r = !html.classList.contains("menu-recolhido");
+      // Durante a animação da largura, o menu corta o que passa da borda (os nomes ainda não cabem).
+      html.classList.add("menu-animando"); clearTimeout(animando);
+      animando = setTimeout(() => html.classList.remove("menu-animando"), 400);
+      html.classList.toggle("menu-recolhido", r);
+      safe(() => localStorage.setItem(MENU_KEY, r ? "1" : "0"));
+      aplicarRecolher();
+    });
+
+    // Dicas e painéis de subitens do menu recolhido: Escape esconde (sem tirar o foco); voltam ao sair e entrar de novo.
+    const nav = $("drawer-nav");
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape" || !html.classList.contains("menu-recolhido")) return;
+      let alvo = document.activeElement?.closest?.("#drawer-nav a, .nav-grupo, #menu-recolher");
+      // Foco num subitem: volta para o item principal antes de esconder o painel.
+      if (alvo?.closest(".nav-sub")) { alvo = alvo.closest(".nav-grupo").querySelector("a"); alvo.focus(); }
+      const sobre = [...drawer.querySelectorAll("#drawer-nav a, .nav-grupo, #menu-recolher")].filter((x) => x.matches(":hover"));
+      [alvo, ...sobre].forEach((x) => { if (!x) return; x.classList.add("dica-fechada"); x.closest(".nav-grupo")?.classList.add("dica-fechada"); });
+    });
+    const reabrir = (e) => { const x = e.target.closest?.("#drawer-nav a, .nav-grupo, #menu-recolher"); if (x) { x.classList.remove("dica-fechada"); x.closest(".nav-grupo")?.classList.remove("dica-fechada"); } };
+    nav.addEventListener("mouseover", reabrir);
+    drawer.querySelector(".foot").addEventListener("mouseover", reabrir);
+    drawer.addEventListener("focusin", reabrir);
+    drawer.addEventListener("mouseleave", () => drawer.querySelectorAll(".dica-fechada").forEach((x) => x.classList.remove("dica-fechada")));
   }
 
   function init({ page, onReady }) {
@@ -384,8 +463,9 @@
     USER = u;
     const p = profile(u);
     $("who-name").textContent = p.nome;
-    $("who-avatar").src = p.avatar; $("who-avatar").alt = p.nome;
-    $("who-email").title = p.email || "";
+    $("perfil-menu-nome").textContent = p.nome;
+    $("who-avatar").src = p.avatar;
+    $("who-email").textContent = p.email || "";
   }
 
   // Log da plataforma: registra uma ação da administradora (visível em Configurações).
