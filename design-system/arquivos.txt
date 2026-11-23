@@ -21,6 +21,7 @@ src/app/components/ui/checkbox.tsx       apps/experience-intelligence/src/compon
 src/app/components/ui/password-field.tsx apps/experience-intelligence/src/components/ui/password-field.tsx
 src/app/components/ui/card.tsx           apps/experience-intelligence/src/components/ui/card.tsx
 src/app/components/ui/alert.tsx          apps/experience-intelligence/src/components/ui/alert.tsx
+src/app/components/ui/alerta-com-acao.tsx apps/experience-intelligence/src/components/ui/alerta-com-acao.tsx
 src/app/components/ui/badge.tsx          apps/experience-intelligence/src/components/ui/badge.tsx
 src/app/components/ui/progress.tsx       apps/experience-intelligence/src/components/ui/progress.tsx
 src/app/components/ui/avatar.tsx         apps/experience-intelligence/src/components/ui/avatar.tsx

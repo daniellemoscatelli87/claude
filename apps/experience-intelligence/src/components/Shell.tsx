@@ -115,9 +115,10 @@ export function Lead({ children, className }: { children: React.ReactNode; class
   return <p className={cn("m-0 text-base leading-relaxed text-muted-foreground", className)}>{children}</p>;
 }
 
-/** Mensagens de erro, sucesso e aviso: Alerta do DS, com ícone (a cor nunca é o único sinal). */
+/** Mensagens de erro, sucesso e aviso: Alerta do DS (padrão de 23/11/2026, ícone com base), com os ícones de cada estado
+ * do DS (aviso: AlertCircle; erro: TriangleAlert). A cor nunca é o único sinal. */
 export function Mensagem({ tipo, children, id }: { tipo: "erro" | "ok" | "aviso"; children: React.ReactNode; id?: string }) {
-  const Icone = tipo === "erro" ? AlertCircle : tipo === "ok" ? CheckCircle2 : TriangleAlert;
+  const Icone = tipo === "erro" ? TriangleAlert : tipo === "ok" ? CheckCircle2 : AlertCircle;
   return (
     <Alert id={id} variant={tipo === "erro" ? "error" : tipo === "ok" ? "success" : "warning"} role={tipo === "erro" ? "alert" : tipo === "ok" ? "status" : "note"}>
       <Icone aria-hidden="true" />

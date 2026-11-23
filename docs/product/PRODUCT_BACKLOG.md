@@ -62,7 +62,7 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 | T-07 | Conclusão do uso da IA só pelo servidor | Implementado e testado | banco |
 | T-08 | Procedimento de reversão das migrações e versões anteriores da função da IA | Pronto; reversão parcial testada | banco |
 | T-05 | Build da aplicação no Netlify só quando a pasta dela muda | Implementado (não publicado) | revisão |
-| T-09 | Visual do app pelo Design System Dani Moscatelli: tokens e componentes copiados e atualizados pela rotina diária, que testa o app antes do PR (D-046) | Implementado e testado (não publicado) | telas |
+| T-09 | Visual do app pelo Design System Dani Moscatelli: tokens e componentes copiados e atualizados pela rotina diária, que testa o app antes do PR (D-046); DS `697a765`: alertas no padrão novo e cores novas de aviso e erro | Implementado e testado (não publicado) | telas |
 
 ### Para fechar o incremento
 

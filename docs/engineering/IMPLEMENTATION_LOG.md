@@ -784,6 +784,18 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - `npm ci`, `npm run typecheck`, `npm test` (48 testes) e `npm run build` (gera `out/`);
   - aviso já existente do Next sobre a raiz do workspace (mais de um lockfile no repositório).
 
+## 2026-11-23 · App Experience Intelligence com o padrão novo de alertas e as cores novas de aviso e erro do DS (D-046), não publicado
+
+- **Mesclagem:** o `main` (com D-043, D-044 e D-045) entrou na branch `claude/ei-design-system`; a decisão do app, que era D-043, passou a D-046 (Decision Log, este log, Product Backlog, READMEs, `arquivos.txt` e rotina de sincronização).
+- **Sincronização:** `bash scripts/sincronizar-design-system.sh` com o DS `main` = `697a765`. Mudaram no app: `styles/theme.css` (aviso `#F0A020`, erro `#D9416E` e tokens `--warning-text`, `--error-text`, `--success-text`, `--info-text`), `ui/alert.tsx` (ícone com base, role automático) e `ui/password-field.tsx` ("As senhas não coincidem" em `--error-text`). Novo em `arquivos.txt`: `ui/alerta-com-acao.tsx` (`AlertaComAcao`, `BotaoDoAlerta`, `LinkDoAlerta`); dependências já existiam no app. Todas as 22 cópias conferidas com `cmp` contra o DS `697a765`.
+- **Código do app:**
+  - `src/design-system/campos.tsx`: mensagem de erro dos campos de `text-primary-text` para `text-error-text`, como na página Formulários do DS;
+  - `src/components/Shell.tsx` (`Mensagem`): ícones iguais aos do DS (aviso: `AlertCircle`; erro: `TriangleAlert`). O aviso "Não escreva nomes, documentos…" do novo desafio passa a sair no padrão novo (base laranja clara, ícone em `--warning-text`), com os mesmos textos e `role="note"`.
+  - Nenhum alerta do app pede ação; o `AlertaComAcao` ficou disponível, sem uso.
+  - Nenhum código do app usava `--warning` ou `--error` como cor de texto.
+- **Testes executados:** em `apps/experience-intelligence`: `npm run typecheck` (sem erros), `npm run lint` (0 erros; só avisos de "fast refresh"), `npm test` (48 de 48), `npm run build` (gera `out/`; uma execução terminou com o erro de segurança da versão do Next depois de gerar o site, como antes; repetida, passou). Sincronização rodada de novo: sem diferença no git. Navegador (Playwright, 1280 e 390 px, escala 2, Supabase simulado): 18 capturas (entrar, cadastro, cadastro com erros, aviso, meus dados, desafios, menu de perfil, empresa e novo desafio), sem rolagem horizontal, sem erros no console, fonte carregada.
+- **Pendente:** a dona do produto ver as capturas; publicar. No DS, a borda de erro do `ui/input`, do `ui/textarea` e do `ui/checkbox` ainda usa `--destructive` (vermelho da marca), enquanto o campo de senha usa `--error` (rosa); a mudança fica no DS.
+
 ## 2026-11-23 · App Experience Intelligence consome tokens e componentes do Design System Dani Moscatelli (D-046), não publicado
 
 - **Sincronização:** `design-system/arquivos.txt` ganhou 4 arquivos de estilo (`src/styles/`) e 16 componentes (`src/components/ui/`) do DS, copiados para `apps/experience-intelligence/`. Cópias nunca editadas. Versão do DS: `085153d`.

@@ -24,7 +24,7 @@ export function Ajuda({ id, children, className }: { id?: string; children: Reac
   return <p id={id} className={cn("m-0 text-[0.8125rem] leading-snug text-muted-foreground", className)}>{children}</p>;
 }
 
-/** Mensagem de erro e ajuda ligadas ao campo (aria-describedby). Erro com ícone: a cor nunca é o único sinal. */
+/** Mensagem de erro e ajuda ligadas ao campo (aria-describedby). Erro em --error-text, como na página Formulários do DS, com ícone: a cor nunca é o único sinal. */
 function useDescricao(erro?: string, hint?: string) {
   const id = useId();
   const ids = [hint && `${id}-ajuda`, erro && `${id}-erro`].filter(Boolean).join(" ") || undefined;
@@ -32,7 +32,7 @@ function useDescricao(erro?: string, hint?: string) {
     <>
       {hint && <Ajuda id={`${id}-ajuda`}>{hint}</Ajuda>}
       {erro && (
-        <p id={`${id}-erro`} className="m-0 inline-flex items-start gap-1.5 text-[0.8125rem] font-medium leading-snug text-primary-text">
+        <p id={`${id}-erro`} className="m-0 inline-flex items-start gap-1.5 text-[0.8125rem] font-medium leading-snug text-error-text">
           <AlertCircle className="mt-px size-4 shrink-0" aria-hidden />{erro}
         </p>
       )}
