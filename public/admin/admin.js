@@ -39,6 +39,7 @@
     bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
     bag: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
     settings: '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
+    clipboard: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/>',
     logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
   };
   const icon = (name) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -50,6 +51,9 @@
     { id: "parceiros", href: "/admin/parceiros/", label: "Parceiros", icon: "users", sub: [
       { id: "parceiros", href: "/admin/parceiros/", label: "Perfis e candidaturas" },
       { id: "comunicados", href: "/admin/comunicados/", label: "Comunicados" },
+    ] },
+    { id: "projetos", href: "/admin/pesquisas/", label: "Projetos", icon: "clipboard", sub: [
+      { id: "pesquisas", href: "/admin/pesquisas/", label: "Pesquisas" },
     ] },
     { id: "lancamento", href: "/admin/lancamento/", label: "Lançamento", icon: "rocket" },
     { id: "store", href: "/admin/store/", label: "Store", icon: "bag" },
@@ -409,6 +413,16 @@
         sb.from("email_envios").select(emailsSel, { count: "exact" }).is("visualizado_em", null).or("aberto_em.not.is.null,clicado_em.not.is.null").order("created_at", { ascending: false }).limit(200),
         sb.from("email_envios").select(emailsSel).not("visualizado_em", "is", null).gte("visualizado_em", desde).order("visualizado_em", { ascending: false }).limit(30),
       ]);
+      // Respostas novas das pesquisas do Studio (um aviso por pesquisa, até a administradora abrir o painel dela)
+      const [pr, prv, ps] = await Promise.all([
+        sb.from("pesquisa_respostas").select("pesquisa, created_at", { count: "exact" }).is("visualizado_em", null).order("created_at", { ascending: false }).limit(2000),
+        sb.from("pesquisa_respostas").select("pesquisa, visualizado_em").not("visualizado_em", "is", null).gte("visualizado_em", desde).order("visualizado_em", { ascending: false }).limit(500),
+        sb.from("pesquisas").select("slug, titulo"),
+      ]);
+      const tituloPesq = Object.fromEntries((ps.data || []).map((x) => [x.slug, x.titulo]));
+      const agrupar = (lista, campo) => { const m = new Map(); (lista || []).forEach((x) => { const g = m.get(x.pesquisa) || { n: 0, at: x[campo] }; g.n++; m.set(x.pesquisa, g); }); return [...m.entries()]; };
+      const pesqItens = agrupar(pr.data, "created_at").map(([slug, g]) => ({ href: "/admin/pesquisas/?p=" + encodeURIComponent(slug), at: g.at, text: g.n === 1 ? "Nova resposta na pesquisa" : g.n + " novas respostas na pesquisa", sub: tituloPesq[slug] || slug, icon: "clipboard" }));
+      const pesqVistas = agrupar(prv.data, "visualizado_em").map(([slug, g]) => ({ href: "/admin/pesquisas/?p=" + encodeURIComponent(slug), at: g.at, text: (g.n === 1 ? "1 resposta vista" : g.n + " respostas vistas") + " na pesquisa", sub: tituloPesq[slug] || slug, icon: "clipboard" }));
       const emailItem = (x) => {
         const nome = (x.cadastros && x.cadastros.nome) || "Parceiro";
         const clicou = !!x.clicado_em;
@@ -421,19 +435,21 @@
         const { data } = await sb.from("mensagens_recebidas").select("contato_id, created_at").in("contato_id", ids).order("created_at", { ascending: false });
         (data || []).forEach((m) => { if (!respostas.has(m.contato_id)) respostas.set(m.contato_id, m.created_at); });
       }
-      const n = { contatos: c.count || 0, parceiros: p.count || 0, emails: ev.count || 0 };
+      const n = { contatos: c.count || 0, parceiros: p.count || 0, emails: ev.count || 0, projetos: pr.count || 0 };
       const items = [
         ...contatos.map((x) => ({ href: "/admin/contatos/?id=" + x.id, at: respostas.get(x.id) || x.created_at, text: (respostas.has(x.id) ? "Nova resposta de " : "Nova mensagem de ") + (x.nome || "contato"), sub: x.assunto, icon: "mail" })),
         ...parceiros.map((x) => ({ href: "/admin/parceiros/?id=" + x.id, at: x.created_at, text: "Nova candidatura de " + (x.nome || "parceiro"), sub: x.principal_especializacao, icon: "users" })),
         ...(ev.data || []).map(emailItem),
+        ...pesqItens,
       ].sort((a, b) => new Date(b.at) - new Date(a.at));
       const vistas = [
         ...(cv.data || []).map((x) => ({ href: "/admin/contatos/?id=" + x.id, at: x.created_at, text: "Mensagem de " + (x.nome || "contato"), sub: x.assunto, icon: "mail" })),
         ...(pv.data || []).map((x) => ({ href: "/admin/parceiros/?id=" + x.id, at: x.created_at, text: "Candidatura de " + (x.nome || "parceiro"), sub: x.principal_especializacao, icon: "users" })),
         ...(evv.data || []).filter((x) => x.aberto_em || x.clicado_em).map(emailItem),
+        ...pesqVistas,
       ].sort((a, b) => new Date(b.at) - new Date(a.at)).slice(0, 30);
 
-      const total = n.contatos + n.parceiros + n.emails;
+      const total = n.contatos + n.parceiros + n.emails + n.projetos;
       const dot = $("bell-dot");
       dot.textContent = total > 99 ? "99+" : String(total);
       dot.classList.toggle("hidden", !total);
@@ -455,10 +471,10 @@
         return a;
       };
       if (items.length) { list.appendChild(el("div", "notif-sec", "Novas")); items.forEach((it) => list.appendChild(item(it, true))); }
-      else list.appendChild(el("div", "empty", "Nenhuma notificação nova. Mensagens, candidaturas e e-mails abertos pelos parceiros aparecem aqui."));
+      else list.appendChild(el("div", "empty", "Nenhuma notificação nova. Mensagens, candidaturas, e-mails abertos pelos parceiros e respostas das pesquisas aparecem aqui."));
       if (vistas.length) { list.appendChild(el("div", "notif-sec", "Já visualizadas")); vistas.forEach((it) => list.appendChild(item(it, false))); }
       return n;
-    })().catch(() => ({ contatos: 0, parceiros: 0, emails: 0 }));
+    })().catch(() => ({ contatos: 0, parceiros: 0, emails: 0, projetos: 0 }));
     return notifPromise;
   }
   const notifications = () => notifPromise || loadNotifications();
