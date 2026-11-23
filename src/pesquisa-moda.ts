@@ -236,7 +236,7 @@ function montarPergunta(p: Pergunta, i: number) {
     fs.append(lista, contador);
     sincronizar();
   } else if (p.tipo === 'escalas') {
-    // várias notas de 0 a 10 (um aspecto por bloco, com descrição), num card só
+    // várias notas de 1 a 10 (um aspecto por bloco, com descrição), num card só
     const atual = () => (E.r[p.id] as Record<string, number>) ?? {};
     const card = el('div', 'pq-escalas');
     p.linhas!.forEach((l) => {

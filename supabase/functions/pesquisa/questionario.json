@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v11-2026-11-23",
+  "versao": "moda-curitiba-v12-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "identificacao": {
     "versao": "moda-curitiba-identificacao-v1-2026-11-23",
@@ -185,10 +185,10 @@
     {
       "id": "q4",
       "tipo": "escalas",
-      "min": 0,
+      "min": 1,
       "max": 10,
       "texto": "Pensando nas roupas e acessórios que comprou recentemente, que nota você daria para cada um dos aspectos abaixo?",
-      "apoio": "Avalie de 0 a 10, considerando sua experiência geral.",
+      "apoio": "Avalie de 1 a 10, considerando sua experiência geral.",
       "rotulo_min": "Muito ruim",
       "rotulo_max": "Excelente",
       "linhas": [
