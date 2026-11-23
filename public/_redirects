@@ -6,4 +6,9 @@
 # Nome antigo da página do Programa Projeto Piloto.
 /parceiro-piloto                 /projeto-piloto/                                                            301
 /parceiro-piloto/*               /projeto-piloto/:splat                                                      301
+# Store: tirada do ar em 23/11/2026 (os dados de loja, marcas e produtos continuam no banco). Links antigos levam ao início.
+/store                           /                                                                           302
+/store/*                         /                                                                           302
+/admin/store                     /admin/                                                                     302
+/admin/store/*                   /admin/                                                                     302
 # Endereços que não existem mostram a página 404.html (status 404), em vez da página inicial.

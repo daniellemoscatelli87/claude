@@ -349,7 +349,15 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
-## 2026-11-23 · Pesquisa Moda em Curitiba: cabeçalho, pergunta 2 classificada e perfil (gênero e faixa etária), não publicado
+## 2026-11-23 · Store tirada do ar, não publicado
+
+- Pedido da dona do produto: a Store sai do site e do painel.
+- Removidos `public/store/` (página e imagens) e `public/admin/store/`; item "Store" fora do menu da área restrita.
+- `public/_redirects`: `/store` e `/admin/store` levam ao início do site e do painel (302, temporário).
+- Os dados (tabelas `loja`, `marcas` e `produtos`) continuam no banco; nada foi apagado. Os arquivos ficam no histórico do git para voltar, se preciso.
+- **Verificação executada:** build sem a pasta `store`; menu do painel sem "Store", sem erros de JavaScript.
+
+## 2026-11-23 · Pesquisa Moda em Curitiba: cabeçalho, pergunta 2 classificada e perfil (gênero e faixa etária), publicado
 
 - **Cabeçalho:** pílula branca centralizada com o logo e o nome do estúdio, no estilo do menu da Home, sem links (pedido da dona do produto).
 - **Pergunta 2:** novo texto ("Onde você realizou a maior parte...") e formato de classificação: de 1 a 3 escolhas, na ordem dos toques (1º é onde mais comprou); "Não comprei" fica sozinha e encerra. A 2.1 aparece se marketplaces ou lojas online de outras cidades estiver em qualquer posição. Gravada como lista ordenada.

@@ -56,7 +56,6 @@
       { id: "pesquisas", href: "/admin/pesquisas/", label: "Pesquisas" },
     ] },
     { id: "lancamento", href: "/admin/lancamento/", label: "Lançamento", icon: "rocket" },
-    { id: "store", href: "/admin/store/", label: "Store", icon: "bag" },
   ];
 
   const $ = (id) => document.getElementById(id);
