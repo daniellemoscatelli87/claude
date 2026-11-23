@@ -494,6 +494,17 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - O Campo Comprido fica em Santa Felicidade, mas a parte sul pertence à regional Portão. O agrupamento por regional é aproximado nesse bairro.
   - O código `fora_de_curitiba` continua nos dados e passa a significar "fora de Curitiba e da Região Metropolitana".
 
+## D-045 · 23/11/2026 · Alertas no padrão novo e cores de aviso e erro do DS Dani Moscatelli (site)
+
+- **Origem:** dona do produto, ao aprovar o "Alerta com ação" e a opção B de cores no DS Dani Moscatelli (`697a765`).
+- **Decisão:**
+  - A área restrita recebe o `theme.css` do DS na versão `697a765`: o aviso passa a laranja amarelado (`#F0A020`) e o erro fica mais rosa (`#D9416E`); entram os tokens de texto `--warning-text`, `--success-text`, `--info-text` e `--error-text`.
+  - Onde a área restrita usava `--warning` como cor de texto ou ícone, passa a usar `--warning-text`, porque o laranja amarelado não dá leitura sobre fundo claro:
+    - Parceiros: `.tp-gal.wait`, `.ai-stale`, lacunas da IA (`--ai-av`), `.pcs-fit`, `.pc-fit` e o número da linha do tempo (`.tl-mark span`, com `--c-texto`);
+    - Pesquisas: `.pa-dest-amostra` e o ícone de atenção.
+- **Contraste:** `#935E0A` sobre o fundo de aviso dá 4,9:1 e no branco 5,5:1.
+- **Trade-offs:** o ponto decorativo do selo pendente (`.badge.pend`) continua em `--warning`, porque não é texto.
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
