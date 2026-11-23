@@ -1,6 +1,6 @@
 {
   "slug": "moda-curitiba",
-  "versao": "moda-curitiba-v12-2026-11-23",
+  "versao": "moda-curitiba-v13-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "identificacao": {
     "versao": "moda-curitiba-identificacao-v1-2026-11-23",
@@ -180,7 +180,7 @@
           "texto": "Sim, a maior parte das minhas compras foi de segunda mão"
         }
       ],
-      "destaque": "brechós"
+      "destaque": "peças de segunda mão"
     },
     {
       "id": "q4",
@@ -212,8 +212,11 @@
     },
     {
       "id": "q5",
-      "tipo": "unica",
+      "tipo": "ranking",
+      "max": 3,
       "texto": "Quando você procura um produto específico, por onde costuma começar?",
+      "apoio": "Escolha até 3, na ordem: toque primeiro por onde você mais começa.",
+      "apoio_negrito": "toque primeiro por onde você mais começa",
       "opcoes": [
         {
           "id": "fisicas_cwb",
@@ -241,7 +244,8 @@
         },
         {
           "id": "nao_procuro",
-          "texto": "Não costumo procurar produtos específicos"
+          "texto": "Não costumo procurar produtos específicos",
+          "exclusiva": true
         }
       ],
       "destaque": "produto específico"
@@ -477,19 +481,31 @@
         },
         {
           "id": "trabalho",
-          "texto": "Roupas para trabalhar"
+          "texto": "Roupas para trabalhar e peças de alfaiataria"
+        },
+        {
+          "id": "casuais",
+          "texto": "Roupas casuais para o dia a dia"
+        },
+        {
+          "id": "basicas",
+          "texto": "Roupas básicas, como camisetas, blusas e regatas"
         },
         {
           "id": "jeans",
-          "texto": "Calças, shorts e outras peças jeans"
+          "texto": "Calças, shorts, saias e outras peças jeans"
+        },
+        {
+          "id": "academia",
+          "texto": "Roupas para academia e atividades físicas"
         },
         {
           "id": "praia",
           "texto": "Roupas de praia e piscina"
         },
         {
-          "id": "academia",
-          "texto": "Roupas para academia e atividades físicas"
+          "id": "intimas",
+          "texto": "Roupas íntimas, pijamas e moda para dormir"
         },
         {
           "id": "plus_size",
@@ -501,11 +517,11 @@
         },
         {
           "id": "calcados",
-          "texto": "Calçados"
+          "texto": "Calçados, como tênis, sandálias, botas e sapatos"
         },
         {
           "id": "bolsas",
-          "texto": "Bolsas e acessórios"
+          "texto": "Bolsas, cintos, bijuterias e outros acessórios"
         },
         {
           "id": "nenhuma",
@@ -523,8 +539,8 @@
     {
       "id": "q9",
       "tipo": "multipla",
-      "texto": "O que você tem feito quando não encontra um produto que gostaria de comprar?",
-      "apoio": "Selecione todas as situações que você já viveu.",
+      "texto": "Quando você não encontrou uma roupa, calçado ou acessório que queria comprar, o que acabou fazendo?",
+      "apoio": "Selecione todas as situações que você viveu neste ano.",
       "opcoes": [
         {
           "id": "outra_diferente",
@@ -532,19 +548,19 @@
         },
         {
           "id": "parecida",
-          "texto": "Comprei uma peça parecida, mesmo não sendo exatamente como eu queria"
+          "texto": "Comprei algo parecido, mesmo não sendo exatamente o que queria"
         },
         {
           "id": "desisti",
-          "texto": "Desisti da compra porque não encontrei o que queria"
+          "texto": "Desisti da compra"
         },
         {
           "id": "continuei",
-          "texto": "Continuei procurando até encontrar a peça que queria"
+          "texto": "Continuei procurando até conseguir o que queria"
         },
         {
           "id": "depois",
-          "texto": "Não encontrei na hora, mas deixei para procurar depois"
+          "texto": "Deixei a compra para outro momento"
         },
         {
           "id": "nao_passei",
@@ -552,7 +568,7 @@
           "exclusiva": true
         }
       ],
-      "destaque": "quando não encontra"
+      "destaque": "não encontrou"
     }
   ],
   "perfil": [

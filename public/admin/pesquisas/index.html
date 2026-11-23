@@ -573,6 +573,8 @@
       const v = x.respostas[p.id];
       if (p.tipo === "unica" && v != null) n[v] = (n[v] || 0) + 1;
       if (p.tipo === "multipla" && v) (v.opcoes || []).forEach((o) => { n[o] = (n[o] || 0) + 1; });
+      // classificação (1º, 2º, 3º): conta o 1º lugar; respostas antigas de escolha única também valem como 1º
+      if (p.tipo === "ranking" && v != null) { const f = valores(v)[0]; if (f) n[f] = (n[f] || 0) + 1; }
     });
     return n;
   }
@@ -973,6 +975,14 @@
         leitura = top && top.g.dif ? ["O que mais dificulta: ", { b: item(top.l.texto) }, ` (${pct(top.g.dif, top.n)}% acham difícil ou muito difícil).`] : "Ninguém marcou dificuldade ainda.";
         const temNa = corpo._linhas.some((x) => x.na) || (p.colunas || []).some((c) => c.id === "na");
         rodape.push(tabela(["Característica", "Muito fácil", "Fácil", "Médio", "Difícil", "Muito difícil", ...(temNa ? ["Não se aplica"] : [])], corpo._linhas.map((x) => [x.l.texto, x.cont["1"], x.cont["2"], x.cont["3"], x.cont["4"], x.cont["5"], ...(temNa ? [x.na] : [])])));
+      } else if (p.tipo === "ranking") {
+        // classificação (como a pergunta 2): 1º lugar em destaque e, mais claro, "entre os 3"
+        const its = p.opcoes.map((o) => ({ rotulo: o.texto, v: base.filter((x) => valores(x.respostas[p.id])[0] === o.id).length, v2: base.filter((x) => valores(x.respostas[p.id]).includes(o.id)).length, fixo: !!o.exclusiva }));
+        const t = maisEscolhida(its);
+        meta.push(`até ${p.max} escolhas, em ordem`);
+        corpo = (() => { const dv = el("div"); dv.append(legenda([["var(--chart-1)", "1º lugar"], ["var(--chart-3)", "Entre os 3"]]), barras(its, n, { camada: "entre os 3" })); return dv; })();
+        leitura = t && t.v ? ["Em 1º lugar: ", { b: semOutro(t.rotulo) }, ` (${pct(t.v, n)}%).`] : null;
+        rodape.push(tabela(["Opção", "1º lugar", "Entre os 3"], its.map((it) => [it.rotulo, `${it.v} (${pct(it.v, n)}%)`, `${it.v2} (${pct(it.v2, n)}%)`])));
       } else {
         const its = itensDe(p, base);
         const ordinal = ["q1_1", "q3", "q7", "q_foto", "q_disponibilidade"].includes(p.id);
@@ -1284,7 +1294,7 @@
       significado: fora1 > local1 ? ["A maior parte do gasto principal com moda dessas pessoas está saindo do comércio da cidade."] : ["O comércio de Curitiba concentra a compra principal da maioria dessas pessoas."],
       proximo: ["Cruzar com os motivos da pergunta 2.1 e entender quais compras poderiam acontecer na cidade."],
     });
-    const comecaLocal = comp.filter((x) => LOCAL.includes(x.respostas.q5));
+    const comecaLocal = comp.filter((x) => LOCAL.includes(valores(x.respostas.q5)[0]));
     if (comecaLocal.length >= MIN_SEG) {
       const fogem = comecaLocal.filter((x) => FORA.includes(prim(x))).length;
       add("Negócio", {
@@ -1366,7 +1376,7 @@
       proximo: ["Investigar o que faltou nas peças desse canal (tamanho, modelagem, tecido ou estilo)."],
     });
     const fluxos = {};
-    comp.forEach((x) => { if (!x.respostas.q5 || x.respostas.q5 === "nao_procuro" || !prim(x)) return; const k = x.respostas.q5 + ">" + prim(x); fluxos[k] = (fluxos[k] || 0) + 1; });
+    comp.forEach((x) => { const q5 = valores(x.respostas.q5)[0]; if (!q5 || q5 === "nao_procuro" || !prim(x)) return; const k = q5 + ">" + prim(x); fluxos[k] = (fluxos[k] || 0) + 1; });
     const topF = Object.entries(fluxos).sort((a, b) => b[1] - a[1]).slice(0, 4);
     if (topF.length) {
       const lista = el("ol", "pa-fluxos");

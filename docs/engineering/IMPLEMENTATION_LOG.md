@@ -595,7 +595,61 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-23 · Assinatura dos e-mails da página de contatos: telefone, e-mail e site, não publicado
+## 2026-11-23 · Pesquisa: tela própria para quem não comprou, campos subordinados abaixo da opção, perguntas 11 e 12 revisadas e faixa etária em cartões, publicado (função `pesquisa` v12, questionário v13)
+
+- **Tela de quem não comprou este ano (`#pq-semcompras`), na estrutura do modelo enviado pela dona do produto:**
+  - check em contorno;
+  - "Obrigada pelo seu interesse!";
+  - "Neste momento, nossa pesquisa é voltada a quem comprou roupas, calçados ou acessórios neste ano.", com "comprou roupas, calçados ou acessórios neste ano" em negrito vermelho;
+  - "Agradecemos por dedicar um tempinho para participar!";
+  - linha divisória e assinatura com a foto da Dani, como nas outras telas finais (pedido da dona do produto: todas as telas de conclusão da pesquisa com o avatar, padronizadas).
+  - Quem mora fora de Curitiba e da Região Metropolitana continua com a tela de encerramento.
+  - Ao recarregar a página, a tela é mantida.
+- **Pergunta 1:** o campo de bairro aparece logo abaixo de "Curitiba" e o de cidade logo abaixo de "Região Metropolitana de Curitiba", recuados e com uma linha vermelha à esquerda.
+- **Pergunta 11:** 14 opções novas, na ordem enviada. Ids mantidos onde o sentido é o mesmo; novas: `casuais`, `basicas` e `intimas`.
+- **Pergunta 12:**
+  - texto "Quando você não encontrou uma roupa, calçado ou acessório que queria comprar, o que acabou fazendo?", com "não encontrou" em vermelho;
+  - apoio "Selecione todas as situações que você viveu neste ano.";
+  - opções revisadas, sem ponto final, como as demais (ids mantidos).
+- **"Sobre você" no computador:** a faixa etária deixa as pílulas e usa os mesmos cartões de gênero e estado civil. No celular continua a lista suspensa.
+- Testes executados:
+  - Playwright no iPhone 13: fluxo completo nos três caminhos; "Não comprei", em Curitiba e na Região Metropolitana, mostra a tela nova sem confete e a mantém ao recarregar; ordem dos campos na pergunta 1; 15 itens na pergunta 11, com a exclusiva.
+  - Playwright no computador: "Sobre você" em cartões.
+  - Sem erros de JS.
+
+## 2026-11-23 · Pesquisa: correção da tela final de quem marca "Não comprei nenhuma peça este ano", publicado (função `pesquisa` v12, questionário v13)
+
+- **Defeito (no ar desde a v11):** `encerraEm()` em `src/pesquisa-moda.ts` olhava só as duas primeiras perguntas. Com a 1.1 entre a 1 e a 2, quem marcava "Não comprei" na pergunta 2 via a tela de agradecimento com confete em vez da tela de encerramento.
+  - O servidor gravava certo (`sem_compras`); só a tela estava errada.
+- **Correção:** olha todas as perguntas que valem para a pessoa.
+- Testes executados: Playwright no iPhone 13, sem erros de JS:
+  - "Não comprei", em Curitiba e na Região Metropolitana: tela de encerramento, sem confete;
+  - fluxo completo nos três caminhos.
+
+## 2026-11-23 · Pesquisa: pergunta 5 classificada em 1º, 2º e 3º (questionário v13), publicado (função `pesquisa` v12, questionário v13)
+
+- Pedido da dona do produto: a pergunta 5 segue o padrão da 2.
+  - Até 3 escolhas, na ordem.
+  - Apoio "Escolha até 3, na ordem: toque primeiro por onde você mais começa." (trecho em negrito).
+  - "Não costumo procurar produtos específicos" fica exclusiva.
+- O servidor passa a exigir a lista em ordem e recusa o formato antigo de uma só escolha (`ranking` com `max: 3`).
+- Painel:
+  - Card no formato da pergunta 2: 1º lugar em destaque, "entre os 3" mais claro, tabela.
+  - Destaques e cruzamentos da Inteligência usam o 1º lugar.
+  - Respostas antigas (texto único) contam como 1º lugar.
+- Testes executados:
+  - Playwright no iPhone 13: selos 1º, 2º e 3º e exclusiva; fluxo completo nos três caminhos, sem erros de JS.
+  - Função em bundle: formato antigo recusado, exclusiva com outra recusada, 4 opções recusadas, 3 em ordem gravadas.
+  - Painel com dados mistos (antigos e novos), sem erros de JS.
+- Na publicação: reimplantar a função `pesquisa`.
+
+## 2026-11-23 · Pesquisa: pergunta 3 com "peças de segunda mão" em vermelho, publicado (função `pesquisa` v12, questionário v13)
+
+- `questionario.json`: o destaque da pergunta 3 passa de "brechós" para "peças de segunda mão"; "(brechós)" fica no texto normal.
+- O destaque só é usado pela página. O JSON da função `pesquisa` fica igual ao repositório na próxima publicação dela.
+- Teste executado: Playwright no iPhone 13 (trecho em vermelho na pergunta 3), sem erros de JS.
+
+## 2026-11-23 · Assinatura dos e-mails da página de contatos: telefone, e-mail e site, publicado (PR #211; `responder-contato` v15; `comunicado-parceiros` v6)
 
 - `supabase/functions/responder-contato/index.ts`: a assinatura passa a ter, nesta ordem, o telefone (link para o WhatsApp, `https://wa.me/5541997485414`), contato@danimoscatelli.com.br (link `mailto:`) e o site (link para o site). Sai o Instagram (@danimoscatellistudio). A versão em texto simples segue a mesma ordem.
 - Visual novo (opção B, escolhida pela dona do produto): retrato de meio corpo com cantos arredondados e fundo graphite-50, linha vermelha e os dados ao lado.
