@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/design-system/theme.css?v=85a5ddb">
-<link rel="stylesheet" href="/admin/admin.css?v=20261123f">
+<link rel="stylesheet" href="/design-system/theme.css?v=085153d">
+<link rel="stylesheet" href="/admin/admin.css?v=20261123g">
 <style>
   .home { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
   .entry .ini svg { width: 18px; height: 18px; }
@@ -40,7 +40,7 @@
   .seeall:hover { text-decoration: underline; }
   .entry { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 2px 12px; padding: 14px 10px; border-radius: var(--radius-md); text-decoration: none; align-items: start; }
   .entry + .entry { border-top: 1px solid var(--muted); }
-  .entry:hover { background: var(--graphite-50); }
+  .entry:hover { background: var(--row-hover); }
   .entry .ini { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; background: var(--primary-muted); color: var(--primary-text); grid-row: span 4; }
   .entry .t { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .entry .when { text-align: right; font-size: 12px; color: var(--muted-foreground); white-space: nowrap; line-height: 1.35; }
@@ -93,7 +93,7 @@
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="/admin/admin.js?v=20261123f"></script>
+<script src="/admin/admin.js?v=20261123g"></script>
 <script>
 const LIMIT = 15;
 const plural = (n, s, p) => n + " " + (n === 1 ? s : p);
@@ -152,8 +152,8 @@ Admin.init({ page: "inicio", onReady: async () => {
   Admin.notifications().then((n) => {
     const totals = document.querySelectorAll("#totals .total");
     // Nos blocos, o que ainda não foi aberto entra na própria descrição.
+    // O bloco de mensagens já mostra embaixo quantas aguardam resposta; o "não lidas" fica só no card Contato, abaixo.
     if (n.contatos) {
-      totals[0].appendChild(Admin.el("span", "corner", n.contatos === 1 ? "1 não lida" : n.contatos + " não lidas"));
       document.getElementById("unread-contatos").textContent = n.contatos === 1 ? "1 não lida" : n.contatos + " não lidas";
     }
     if (n.parceiros) {

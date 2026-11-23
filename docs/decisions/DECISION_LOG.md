@@ -428,7 +428,7 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 ## D-037 · 23/11/2026 · Divisor no cabeçalho do card, hover mais claro e desabilitado do DS (site)
 
 - **Origem:** dona do produto (quarta rodada de ajustes dos painéis).
-- **Decisão:** o cabeçalho do card não tem faixa cinza; é separado do conteúdo por uma linha fina que some nas pontas. O hover de linha ou item dentro do card usa o cinza mais claro (`--graphite-50`). O botão desabilitado usa o fundo `--graphite-100`. O menu lateral empurra o conteúdo, nunca o cobre (no DS e na área restrita). As mudanças de token foram feitas no DS (branch `claude/ajustes-painel`) e trazidas pela sincronização, sem editar a cópia.
+- **Decisão:** o cabeçalho do card não tem faixa cinza; é separado do conteúdo por uma linha fina que some nas pontas. O hover de linha ou item dentro do card é bem claro e sutil: token `--row-hover` do DS (metade do `--graphite-50` sobre o card), decisão revista na quinta rodada. No card rosa da Início, o "não lidas" do canto sai por repetir a informação. O botão desabilitado usa o fundo `--graphite-100`. O menu lateral empurra o conteúdo, nunca o cobre (no DS e na área restrita). As mudanças de token foram feitas no DS (branch `claude/ajustes-painel`) e trazidas pela sincronização, sem editar a cópia.
 - **Trade-offs:** a área restrita fica, por enquanto, com o `theme.css` de uma branch do DS ainda não publicada; ao publicar o DS, a sincronização diária volta ao `main` e o `?v=` precisa mudar.
 
 ---

@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/design-system/theme.css?v=85a5ddb">
-<link rel="stylesheet" href="/admin/admin.css?v=20261123f">
+<link rel="stylesheet" href="/design-system/theme.css?v=085153d">
+<link rel="stylesheet" href="/admin/admin.css?v=20261123g">
 <style>
   .toolbar { display: flex; gap: 10px; align-items: center; margin: 20px 0 12px; }
   .toolbar input { flex: 1 1 auto; min-width: 0; max-width: 420px; }
@@ -26,7 +26,7 @@
   #detail { margin-bottom: 12px; }
   .ch { padding: 0; overflow: hidden; }
   .ch-head { width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; text-align: left; background: none; border: 0; border-radius: 0; padding: 16px 18px; color: var(--foreground); font-weight: 400; }
-  .ch-head:hover { background: var(--graphite-50); }
+  .ch-head:hover { background: var(--row-hover); }
   .ch-head .ini { width: 46px; height: 46px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); display: grid; place-items: center; font-weight: 800; font-size: 16px; }
   .ch-info { display: grid; gap: 2px; min-width: 0; }
   .ch-top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
@@ -166,7 +166,7 @@
   <div class="mt-body" id="mt-body"></div>
 </aside>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="/admin/admin.js?v=20261123f"></script>
+<script src="/admin/admin.js?v=20261123g"></script>
 <script>
 const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const pad = (n) => String(n).padStart(2, "0");

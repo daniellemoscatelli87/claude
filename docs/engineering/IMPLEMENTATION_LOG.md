@@ -349,6 +349,13 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** função `email-eventos` no Node com assinaturas reais da biblioteca `svix` (aceita assinadas; recusa sem assinatura, corpo alterado, segredo errado e horário com mais de 5 min); migração aplicada num Postgres 16 local descartável (contagem, aviso só no primeiro evento de cada tipo, evento repetido ignorado, e-mail desconhecido ignorado, RLS e permissões); `node --check` dos scripts do painel; `npm run build`; painel no navegador com login e banco simulados (card, sino e marcação de visto).
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
+## 2026-11-23 · Área restrita: hover de linha com --row-hover e card rosa sem repetição, não publicado
+
+- **DS em prévia:** sincronizado de novo com `DS_REF=claude/ajustes-painel` (commit `085153d`), que traz o token `--row-hover` (metade do `--graphite-50` sobre o card, ≈ #F6F8FA; branco a 4% no escuro). `?v=085153d` nas páginas.
+- **Hover de linha ou item dentro de card:** todos passam a `var(--row-hover)` (Início, comunicados, contatos, parceiros, pesquisa, notificações). Na tabela de parceiros, o foco pelo teclado ganhou o anel `--ring` (antes só mudava o fundo).
+- **Início, card rosa (Novas mensagens):** sai o "N não lidas" do canto; fica o "N não respondidas" embaixo. O card Novos parceiros mantém "N não vistas" (informação diferente de "nos últimos 7 dias"). A linha não lida (ex.: Ana) não tem fundo parado: o estado é o nome em negrito e o ícone vermelho; o cinza era o hover.
+- **Verificação executada:** `npm run build`; Playwright, 130 verificações.
+
 ## 2026-11-23 · Área restrita: divisor que some nas pontas, hover mais claro e DS da branch de ajustes (D-037), não publicado
 
 - **DS em prévia:** `DS_REF=claude/ajustes-painel bash scripts/sincronizar-design-system.sh` trouxe o `theme.css` do commit `85a5ddb` do DS (desabilitado `--graphite-100` com texto `--graphite-400`, 3,6:1); `versao.txt` atualizado; `?v=85a5ddb` nas páginas. Depois que o DS for publicado, a sincronização volta a seguir o `main`.
