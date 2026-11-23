@@ -15,6 +15,7 @@ type Pergunta = {
   opcoes?: Opcao[]; linhas?: { id: string; texto: string; apoio?: string }[]; colunas?: { id: string; texto: string }[];
   rotulo_min?: string; rotulo_max?: string;
   rotulo?: string; condicao?: { pergunta: string; opcoes: string[] }; // pergunta condicional (ex.: 2.1)
+  destaque?: string; // trecho do título em vermelho
 };
 type Multi = { opcoes: string[]; outro?: string };
 type Estado = {
@@ -93,9 +94,14 @@ function mostrarTela(id: string) {
 
 /* ---------- Perguntas ---------- */
 const etiqueta = (i: number) => (PERGUNTAS[i].condicao ? `Pergunta ${rotulo(i)}` : `Pergunta ${numero(i)} de ${PRINCIPAIS}`);
-function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apoio?: string) {
+// destaque: trecho do título em vermelho (a primeira ocorrência), para orientar a leitura
+function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apoio?: string, destaque?: string) {
   const lg = el('legend', 'pq-pergunta'); lg.tabIndex = -1;
-  lg.append(el('span', 'pq-num', eyebrow), el('span', 'pq-titulo', titulo));
+  const t = el('span', 'pq-titulo');
+  const k = destaque ? titulo.indexOf(destaque) : -1;
+  if (k >= 0) t.append(titulo.slice(0, k), el('em', undefined, destaque!), titulo.slice(k + destaque!.length));
+  else t.textContent = titulo;
+  lg.append(el('span', 'pq-num', eyebrow), t);
   fs.appendChild(lg);
   if (apoio) { const a = el('p', 'pq-apoio', apoio); a.id = fs.id + '-apoio'; fs.setAttribute('aria-describedby', a.id); fs.appendChild(a); }
 }
@@ -117,7 +123,7 @@ function abrirOutro(caixa: HTMLElement, campo: HTMLInputElement | null) {
 
 function montarPergunta(p: Pergunta, i: number) {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-' + p.id; fs.dataset.etapa = String(i);
-  cabecalho(fs, `Pergunta ${rotulo(i)}`, p.texto, p.apoio);
+  cabecalho(fs, `Pergunta ${rotulo(i)}`, p.texto, p.apoio, p.destaque);
   const erro = erroBox(fs.id);
   if (p.tipo === 'unica') {
     const lista = el('div', 'pq-ops');
@@ -276,8 +282,7 @@ function montarPergunta(p: Pergunta, i: number) {
 
 function montarPerfil() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-perfil'; fs.dataset.etapa = String(ETAPA_PERFIL);
-  cabecalho(fs, 'Sobre você', 'Para terminar, conte um pouco sobre você',
-    'Usamos estas informações só para analisar os resultados em conjunto, sem identificar ninguém.');
+  cabecalho(fs, 'Sobre você', 'Para terminar, conte um pouco sobre você',    'Usamos estas informações só para analisar os resultados em conjunto, sem identificar ninguém.', 'sobre você');
   PERFIL.forEach((c) => {
     const bloco = el('div', 'pq-perfil-campo'); bloco.id = 'pq-perfil-' + c.id;
     const tituloId = bloco.id + '-titulo';
@@ -336,8 +341,7 @@ function erroPerfil(id: string, msg: string) {
 
 function montarRelato() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-relato'; fs.dataset.etapa = String(ETAPA_RELATO);
-  cabecalho(fs, 'Para finalizar · opcional', 'Tem alguma experiência de compra que gostaria de compartilhar?',
-    'Pode ser uma situação positiva, uma dificuldade ou algo que marcou você ao procurar ou comprar roupas e acessórios.');
+  cabecalho(fs, 'Para finalizar · opcional', 'Tem alguma experiência de compra que gostaria de compartilhar?',    'Pode ser uma situação positiva, uma dificuldade ou algo que marcou você ao procurar ou comprar roupas e acessórios.', 'experiência de compra');
   const lab = el('label', 'pq-rotulo pq-oculto', 'Sua experiência (opcional)'); lab.htmlFor = 'pq-relato-txt';
   const ta = el('textarea'); ta.id = 'pq-relato-txt'; ta.rows = 6; ta.maxLength = RELATO_MAX; ta.placeholder = 'Conte sua experiência, se quiser...'; ta.value = E.relato;
   const cont = el('p', 'pq-contador pq-contador-dir'); cont.id = 'pq-relato-cont';
@@ -466,7 +470,7 @@ function validarEtapa(i: number): boolean {
       const r = (v as Record<string, string>) ?? {};
       const faltam = p.linhas!.filter((l) => !r[l.id]);
       fs.querySelectorAll<HTMLElement>('.pq-linha').forEach((x) => x.classList.toggle('pq-faltando', faltam.some((l) => l.id === x.dataset.linha)));
-      if (faltam.length) { mostrarErro(fs, faltam.length === 1 ? `Falta responder: ${faltam[0].texto}.` : `Faltam ${faltam.length} características para responder.`); return false; }
+      if (faltam.length) { mostrarErro(fs, faltam.length === 1 ? `Falta responder: ${faltam[0].texto}.` : `Faltam ${faltam.length} itens para responder.`); return false; }
     }
     if (p.tipo === 'multipla') {
       const m = (v as Multi) ?? { opcoes: [] };
@@ -573,7 +577,7 @@ function concluir(tipo: 'obrigada' | 'encerrada' | 'fora' | 'ja', comContato = f
   if (tipo !== 'fora') { try { localStorage.removeItem(CHAVE_RASCUNHO); sessionStorage.removeItem(CHAVE_RASCUNHO + '-contato'); } catch { /* sem armazenamento */ } }
   if (tipo === 'obrigada') {
     $('pq-obrigada-msg').textContent = comContato
-      ? 'Quando a plataforma for lançada, vamos avisar você pelo e-mail e WhatsApp informados, com as suas vantagens exclusivas.'
+      ? 'Assim que a plataforma for lançada, avisaremos você por e-mail e WhatsApp para que fique por dentro de todas as novidades!'
       : 'Obrigada por compartilhar um pouquinho da sua experiência com a gente!';
     $('pq-obrigada-dados').hidden = !comContato;
     mostrarTela('pq-obrigada');

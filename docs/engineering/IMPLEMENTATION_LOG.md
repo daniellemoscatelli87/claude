@@ -350,6 +350,29 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
 <<<<<<< HEAD
+## 2026-11-23 · Pesquisa Moda em Curitiba: títulos com destaque, textos revisados e perguntas 8 e 10 unidas, não publicado
+
+- **Pedidos da dona:**
+  - trecho de cada título em vermelho;
+  - novos textos para as perguntas 3, 4, 5, 7, 8 e 9 e para a mensagem final;
+  - "fusão da pergunta 8 com a 10": ela escolheu "Tudo na escala da 8".
+- **Questionário (`moda-curitiba-v9-2026-11-23`):**
+  - campo `destaque` em cada pergunta (o trecho em vermelho);
+  - textos novos nas perguntas 3, 4, 5, 7, 8 e 9;
+  - a pergunta 8 ganhou 7 linhas com os itens da antiga 10, escritos para a escala de facilidade e dificuldade (mesmos ids: `precos`, `onde_encontrar`, `muitas_lojas`, `esgotada`, `tempo`, `distancia`, `avaliar_online`);
+  - a pergunta 10 saiu, e a pesquisa passa a ter 9 perguntas.
+- **Página (`src/pesquisa-moda.ts`, `src/pesquisa-moda.css`):** `cabecalho` pinta o trecho de destaque, também em "sobre você" e "experiência de compra". Nova mensagem final: "Assim que a plataforma for lançada, avisaremos você por e-mail e WhatsApp para que fique por dentro de todas as novidades!"
+- **Painel (`public/admin/pesquisas/index.html`):**
+  - pergunta 8 em largura cheia, com a grade preenchendo os espaços livres (`grid-auto-flow: dense`);
+  - frases "O que mais dificulta" no lugar de "O mais difícil de encontrar";
+  - o destaque da antiga 10 saiu;
+  - o cartão "não sabem em quais lojas procurar" passa a usar a linha `onde_encontrar` da 8 (difícil ou muito difícil), e as respostas antigas da 10 continuam contando.
+- **Verificação executada:**
+  - `npm run build`;
+  - função com banco simulado (8 completa com 12 linhas aceita; só as 5 antigas recusada; 10 ignorada);
+  - fluxo completo no celular ("Pergunta 8 de 9", 12 linhas, 12 títulos com destaque, nova mensagem final);
+  - painel com dados fictícios (alturas iguais, 16 cartões, sem erros no console).
+
 ## 2026-11-23 · Política de Privacidade revisada (pesquisa, Hostinger e e-mail visível), publicado
 
 - **Pedido:** a dona pediu a revisão do texto e perguntou o que era "[email protected]". É a proteção de e-mails da Cloudflare, que esconde contato@danimoscatelli.com.br de robôs: aparece certo no navegador, mas não ao copiar o texto.
