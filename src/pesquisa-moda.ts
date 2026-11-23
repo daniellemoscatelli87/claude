@@ -412,7 +412,7 @@ function erroPerfil(id: string, msg: string) {
 
 function montarRelato() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-relato'; fs.dataset.etapa = String(ETAPA_RELATO);
-  cabecalho(fs, 'Para finalizar · opcional', 'Tem alguma experiência de compra que gostaria de compartilhar?',    'Pode ser uma situação positiva, uma dificuldade ou algo que marcou você ao procurar ou comprar roupas e acessórios.', 'experiência de compra');
+  cabecalho(fs, 'Para finalizar · opcional', 'Tem alguma experiência de compra que gostaria de compartilhar?',    'Pode ser uma situação positiva, uma dificuldade ou algo que marcou você ao procurar ou comprar peças.', 'experiência de compra');
   const lab = el('label', 'pq-rotulo pq-oculto', 'Sua experiência (opcional)'); lab.htmlFor = 'pq-relato-txt';
   const ta = el('textarea'); ta.id = 'pq-relato-txt'; ta.rows = 6; ta.maxLength = RELATO_MAX; ta.placeholder = 'Conte sua experiência, se quiser...'; ta.value = E.relato;
   const cont = el('p', 'pq-contador pq-contador-dir'); cont.id = 'pq-relato-cont';

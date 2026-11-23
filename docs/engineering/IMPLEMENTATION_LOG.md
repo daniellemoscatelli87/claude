@@ -601,6 +601,18 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Pergunta 5: o trecho em vermelho volta a ser "produto específico" (antes, "começar").
 - Pergunta 6 (foto de referência): "foto de referência" e "comprar algo igual ou parecido" em vermelho.
 - Pergunta 10 (matriz): novo texto "Quando você procura por um produto, qual é o grau de facilidade ou dificuldade para conseguir peças que atendam às suas expectativas?", com "produto" e "atendam às suas expectativas" em vermelho.
+- "Roupas, calçados e acessórios" aparece em 4 perguntas espaçadas (2, 4, 7 e 11), além da 1.1. Nenhuma pergunta diz mais "roupas e acessórios":
+  - 2.1: "…comprar em marketplaces ou lojas online de outras cidades?";
+  - 3: "Você tem comprado peças de segunda mão (brechós)…";
+  - 4: "Pensando nas roupas, calçados e acessórios que comprou recentemente…";
+  - 12: "…quando não encontra um produto que gostaria de comprar?".
+- Opções ajustadas (os ids não mudam; respostas antigas continuam valendo):
+  - "Não comprei nenhuma peça este ano";
+  - "Não costumo procurar produtos específicos";
+  - "Não conheço lojas físicas desse tipo em Curitiba".
+- Outros textos ajustados:
+  - tela de encerramento: "compraram roupas, calçados ou acessórios este ano";
+  - apoio do relato: "ao procurar ou comprar peças".
 - `questionario.json`:
   - `min: 1` na pergunta 4;
   - apoio "Avalie de 1 a 10…";
