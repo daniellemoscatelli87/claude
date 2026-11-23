@@ -20,10 +20,51 @@
   .head-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
   .head-row h1 { margin: 0; }
   .head-row .btn-ok svg { width: 16px; height: 16px; }
-  /* Novo e-mail (painel lateral) */
-  .ne-drawer { width: min(520px, 100vw); }
-  .ne-body { gap: 16px; }
-  .ne-body textarea { min-height: 180px; }
+  /* Abas Recebidos / Enviados (mesmo padrão das abas do painel de pesquisas) */
+  .ct-abas { display: flex; gap: 4px; padding: 4px; border-radius: var(--radius-md); background: var(--muted); width: fit-content; max-width: 100%; overflow-x: auto; margin: 14px 0 4px; }
+  .ct-abas button { font: inherit; font-size: 14px; font-weight: 600; border: 0; border-radius: var(--radius-sm); padding: 8px 16px; min-height: 40px; background: none; color: var(--muted-foreground); cursor: pointer; white-space: nowrap; transition: background .2s, color .2s, box-shadow .2s; }
+  .ct-abas button:hover { color: var(--foreground); }
+  .ct-abas button[aria-selected=true] { background: var(--card); color: var(--foreground); box-shadow: var(--shadow-sm); }
+  .ct-abas .n { margin-left: 6px; font-size: 11px; padding: 1px 7px; border-radius: var(--radius-full); background: var(--card); color: var(--muted-foreground); }
+  .ct-abas button[aria-selected=true] .n { background: var(--muted); color: var(--foreground); }
+  /* Novo e-mail: janela no centro da tela (cabeçalho como o da Janela do DS: graphite-50 com degradê, sem linha) */
+  .ne-dlg { width: min(640px, calc(100vw - 32px)); max-height: min(88vh, 860px); padding: 0; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); color: var(--card-foreground); box-shadow: var(--shadow-xl); overflow: hidden; }
+  .ne-dlg[open] { display: flex; flex-direction: column; animation: ne-in .22s var(--ease-out, ease-out) both; }
+  .ne-dlg::backdrop { background: var(--sobreposicao); animation: ne-fade .22s ease-out both; }
+  @keyframes ne-in { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }
+  @keyframes ne-fade { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .ne-dlg[open], .ne-dlg::backdrop { animation: none; } }
+  .ne-cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 16px 14px 22px; background: linear-gradient(180deg, #EDF0F5 72%, rgba(237, 240, 245, 0)); }
+  .ne-cab h2 { margin: 0; font-size: 20px; }
+  .ne-x { width: 44px; height: 44px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--muted-foreground); display: grid; place-items: center; cursor: pointer; }
+  .ne-x:hover { background: var(--card); color: var(--foreground); }
+  .ne-x svg { width: 22px; height: 22px; }
+  .ne-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 6px 22px 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-content: start; }
+  .ne-body .fld { display: block; min-width: 0; }
+  .ne-body .fld > span { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .ne-body input, .ne-body textarea { min-width: 0; width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--card); color: var(--foreground); }
+  .ne-body textarea { resize: vertical; }
+  .ne-body input:focus, .ne-body textarea:focus { outline: none; border-color: var(--info); box-shadow: 0 0 0 3px var(--info-muted); }
+  .ne-body .invalid { border-color: var(--primary) !important; }
+  .ne-body .fld-err { margin: 6px 0 0; font-size: 13px; color: var(--primary-text); }
+  .ne-rot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+  .ne-rot > span { font-size: 13px; font-weight: 600; }
+  .ne-mais { display: flex; gap: 4px; }
+  .ne-mais button { border: 0; background: none; font: inherit; font-size: 13px; font-weight: 700; color: var(--info); padding: 6px 10px; min-height: 32px; border-radius: var(--radius-sm); cursor: pointer; }
+  .ne-mais button:hover { background: var(--info-muted); }
+  /* campo de vários e-mails: cada endereço vira uma etiqueta; Enter, vírgula ou espaço confirmam */
+  .ne-emails { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; min-height: 46px; padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--card); cursor: text; transition: border-color .2s, box-shadow .2s; }
+  .ne-emails:focus-within { border-color: var(--info); box-shadow: 0 0 0 3px var(--info-muted); }
+  .ne-emails.invalid { border-color: var(--primary); }
+  .ne-emails input { flex: 1 1 160px; border: 0 !important; box-shadow: none !important; padding: 6px 4px !important; min-height: 32px; background: none !important; }
+  .ne-tag { display: inline-flex; align-items: center; gap: 4px; max-width: 100%; padding: 4px 4px 4px 10px; border-radius: var(--radius-full); background: var(--muted); font-size: 14px; animation: ne-pop .18s ease-out both; }
+  .ne-tag span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ne-tag.ruim { background: var(--primary-muted); color: var(--primary-text); }
+  .ne-tag button { width: 26px; height: 26px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 50%; background: none; color: inherit; font-size: 16px; line-height: 1; cursor: pointer; flex-shrink: 0; }
+  .ne-tag button:hover { background: rgba(19, 26, 39, .08); }
+  @media (prefers-reduced-motion: reduce) { .ne-tag { animation: none; } }
+  .ne-pe { position: sticky; bottom: 0; margin: 0 -22px; padding: 14px 22px 18px; background: linear-gradient(180deg, rgba(255,255,255,0), var(--card) 30%); }
+  .ne-body textarea { min-height: 160px; }
   .ne-body .fld span.opt { display: inline; margin: 0; font-weight: 500; color: var(--muted-foreground); }
   .ne-sig { margin: 0; font-size: 13px; color: var(--muted-foreground); }
   .ne-acts { display: flex; gap: 10px; justify-content: flex-end; align-items: center; flex-wrap: wrap; }
@@ -190,6 +231,7 @@
 <main class="wrap hidden" id="app">
   <div id="view-list">
     <div class="head-row"><h1>Contato</h1><button type="button" class="btn-ok" id="novo-email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.4 3.6a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>Novo e-mail</button></div>
+    <div class="ct-abas" role="tablist" aria-label="Mensagens"><button type="button" role="tab" id="aba-recebidos" aria-selected="true">Recebidos<span class="n" id="n-recebidos">0</span></button><button type="button" role="tab" id="aba-enviados" aria-selected="false">Enviados<span class="n" id="n-enviados">0</span></button></div>
     <p class="muted" id="count"></p>
     <div class="toolbar"><input type="search" id="busca" placeholder="Buscar" title="Buscar por nome, e-mail, empresa, assunto ou mensagem" aria-label="Buscar por nome, e-mail, empresa, assunto ou mensagem">
       <select id="situacao" aria-label="Situação"><option value="">Todas as mensagens</option><option value="pendentes">Não respondidas</option><option value="respondidas">Respondidas</option><option value="reunioes">Reuniões agendadas</option></select></div>
@@ -208,11 +250,10 @@
   <button type="button" class="close" id="mt-close" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   <div class="mt-body" id="mt-body"></div>
 </aside>
-<div class="backdrop" id="ne-backdrop"></div>
-<aside class="drawer ne-drawer" id="ne-drawer" role="dialog" aria-modal="true" aria-labelledby="ne-title">
-  <button type="button" class="close" id="ne-close" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
-  <div class="mt-body ne-body" id="ne-body"></div>
-</aside>
+<dialog class="ne-dlg" id="ne-dlg" aria-labelledby="ne-title">
+  <div class="ne-cab"><h2 id="ne-title">Novo e-mail</h2><button type="button" class="ne-x" id="ne-close" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+  <div class="ne-body" id="ne-body"></div>
+</dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/admin/admin.js?v=20261123g"></script>
 <script>
@@ -528,7 +569,10 @@ const origemTag = (r) => {
   return t;
 };
 const SECOES_EMAIL = [{ title: "E-mail", fields: [["nome", "Nome"], ["email", "E-mail"], ["assunto", "Assunto"], ["mensagem", "Mensagem"]] }];
-const SECOES_ENVIADO = [{ title: "E-mail enviado", fields: [["nome", "Para"], ["email", "E-mail"], ["assunto", "Assunto"]] }];
+// e-mail enviado: destinatários e cópias (a lista completa fica em destinatarios; e-mails antigos só têm email)
+const paraDe = (r) => (r.destinatarios && r.destinatarios.length ? r.destinatarios : [r.email].filter(Boolean));
+const destinatariosTexto = (r) => ["Para: " + paraDe(r).join(", "), r.copias?.length ? "Cc: " + r.copias.join(", ") : "", r.copias_ocultas?.length ? "Cco: " + r.copias_ocultas.join(", ") : ""].filter(Boolean).join(" · ");
+const secoesEnviado = (r) => [{ title: "E-mail enviado", fields: [["nome", "Conversa"], ["_para", "Para"], ...(r.copias?.length ? [["_cc", "Cc"]] : []), ...(r.copias_ocultas?.length ? [["_cco", "Cco"]] : []), ["assunto", "Assunto"]] }];
 
 function contactHeader(r) {
   const card = Admin.el("section", "card ch");
@@ -540,7 +584,8 @@ function contactHeader(r) {
   const chev = Admin.el("span", "ch-chev"); chev.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
   head.append(Admin.el("span", "ini", Admin.initials(r.nome)), info, chev);
   const body = Admin.el("div", "ch-body hidden"); body.id = "ch-body";
-  const full = Admin.detail(r, r.origem === "email" ? SECOES_EMAIL : r.origem === "enviado" ? SECOES_ENVIADO : Admin.CONTATO_SECOES, "");
+  if (r.origem === "enviado") { r._para = paraDe(r).join(", "); r._cc = (r.copias || []).join(", "); r._cco = (r.copias_ocultas || []).join(", "); }
+  const full = Admin.detail(r, r.origem === "email" ? SECOES_EMAIL : r.origem === "enviado" ? secoesEnviado(r) : Admin.CONTATO_SECOES, "");
   full.classList.remove("card"); full.querySelector(".detail-head")?.remove();
   body.appendChild(full);
   head.addEventListener("click", () => {
@@ -617,7 +662,7 @@ async function historico(r) {
   const box = document.getElementById("historico");
   box.replaceChildren(Admin.el("h2", null, "Histórico"), Admin.el("p", "muted", "Carregando…"));
   const [resp, evs, rec] = await Promise.all([
-    Admin.sb.from("respostas").select("id, created_at, mensagem, anexos").eq("contato_id", r.id).order("created_at", { ascending: true }),
+    Admin.sb.from("respostas").select("id, created_at, mensagem, anexos, para, copias, copias_ocultas").eq("contato_id", r.id).order("created_at", { ascending: true }),
     Admin.sb.from("contato_eventos").select("id, created_at, tipo, detalhe").eq("contato_id", r.id).order("created_at", { ascending: true }),
     Admin.sb.from("mensagens_recebidas").select("id, created_at, texto, texto_completo, anexos").eq("contato_id", r.id).order("created_at", { ascending: true }),
   ]);
@@ -647,6 +692,8 @@ async function historico(r) {
     }
     const b = Admin.el("div", "bubble " + it.kind);
     b.appendChild(Admin.el("div", "who", (it.kind === "in" ? r.nome || "Contato" : "Você") + " · " + Admin.fmtDate(it.at)));
+    // envio com vários destinatários ou cópias: mostra para quem foi
+    if (it.kind === "out" && it.x && (it.x.copias?.length || it.x.copias_ocultas?.length || (it.x.para || "").includes(","))) b.appendChild(Admin.el("div", "who", ["Para: " + it.x.para, it.x.copias?.length ? "Cc: " + it.x.copias.join(", ") : "", it.x.copias_ocultas?.length ? "Cco: " + it.x.copias_ocultas.join(", ") : ""].filter(Boolean).join(" · ")));
     const text = !it.x ? r.mensagem : it.kind === "in" ? it.x.texto : it.x.mensagem;
     if (text) b.appendChild(Admin.el("div", "txt", text));
     // Resposta recebida por e-mail: permite ver o e-mail inteiro, com o trecho citado.
@@ -680,7 +727,7 @@ async function historico(r) {
   const label = Admin.el("label", "l", "Responder"); label.htmlFor = "resposta";
   const ta = Admin.el("textarea"); ta.id = "resposta"; ta.placeholder = "Escreva sua resposta…";
   const { files, picker, attach, chips, msg } = anexador("anexos");
-  const to = Admin.el("span", "to", r.email ? "Para: " + r.email + " · Sua assinatura é incluída automaticamente no final do e-mail." : "Este contato não informou e-mail.");
+  const to = Admin.el("span", "to", r.email ? (r.origem === "enviado" ? destinatariosTexto({ ...r, copias_ocultas: null }) : "Para: " + r.email) + " · Sua assinatura é incluída automaticamente no final do e-mail." : "Este contato não informou e-mail.");
   const btn = Admin.el("button", "btn-ok", "Enviar resposta"); btn.type = "submit"; btn.disabled = !r.email;
   const tools = Admin.el("div", "row-end"); tools.append(attach, btn);
   form.append(label, ta, picker, chips, tools, to, msg);
@@ -703,7 +750,7 @@ async function historico(r) {
     Admin.log("Respondeu a mensagem de " + (r.nome || r.email || "contato"), qtdAnexos(anexos));
     if (!r.respondido_em) { r.respondido_em = data.respondido_em; statusBar(r); }
     await historico(r);
-    const m = document.querySelector("#historico .reply .msg"); if (m) m.textContent = "Resposta enviada para " + r.email + ".";
+    const m = document.querySelector("#historico .reply .msg"); if (m) m.textContent = "Resposta enviada para " + (r.origem === "enviado" ? paraDe(r).concat(r.copias || []).join(", ") : r.email) + ".";
   });
 
   box.replaceChildren(Admin.el("h2", null, "Histórico"), thread);
@@ -711,34 +758,78 @@ async function historico(r) {
   box.appendChild(form);
 }
 
-// Novo e-mail: escrever para qualquer endereço, com anexos e a assinatura. Vira uma conversa na lista
-// (selo "Enviado"); as respostas da pessoa aparecem no histórico.
+// Novo e-mail: escrever para um ou vários endereços, com cópia (Cc), cópia oculta (Cco), anexos e a assinatura.
+// Abre numa janela no centro da tela. Vira uma conversa na aba Enviados; as respostas aparecem no histórico.
 const EMAIL_OK = /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]{2,}$/;
-let neY = 0, neAberto = false;
+const MAX_END = 20; // Para + Cc + Cco
 function closeNovo() {
-  if (!neAberto) return; neAberto = false;
-  document.getElementById("ne-drawer").classList.remove("open"); document.getElementById("ne-backdrop").classList.remove("open");
-  document.body.classList.remove("scroll-lock"); document.body.style.top = ""; window.scrollTo(0, neY);
-  document.getElementById("novo-email")?.focus();
+  const d = document.getElementById("ne-dlg");
+  if (d.open) d.close();
 }
 function openNovo() {
-  neAberto = true;
-  neY = window.scrollY; document.body.style.top = -neY + "px"; document.body.classList.add("scroll-lock");
-  document.getElementById("ne-drawer").classList.add("open"); document.getElementById("ne-backdrop").classList.add("open");
+  const d = document.getElementById("ne-dlg");
   renderNovo();
+  d.showModal();
+}
+// Campo de vários e-mails: cada endereço vira uma etiqueta (Enter, vírgula, ponto e vírgula, espaço ou sair do campo).
+function campoEmails(id, rotulo, extra) {
+  const lista = [];
+  const wrap = Admin.el("div", "fld");
+  const rot = Admin.el("div", "ne-rot"); const lab = Admin.el("label", null, rotulo); lab.htmlFor = id;
+  rot.append(lab); if (extra) rot.append(extra);
+  const caixa = Admin.el("div", "ne-emails");
+  const inp = Admin.el("input"); inp.type = "email"; inp.id = id; inp.inputMode = "email"; inp.autocomplete = "off"; inp.placeholder = "nome@exemplo.com";
+  const err = Admin.el("p", "fld-err hidden"); err.id = id + "-err"; err.setAttribute("aria-live", "polite"); inp.setAttribute("aria-describedby", err.id);
+  caixa.appendChild(inp); caixa.addEventListener("click", (e) => { if (e.target === caixa) inp.focus(); });
+  const erro = (t) => { caixa.classList.toggle("invalid", !!t); inp.setAttribute("aria-invalid", t ? "true" : "false"); err.textContent = t || ""; err.classList.toggle("hidden", !t); };
+  const desenhar = () => {
+    caixa.querySelectorAll(".ne-tag").forEach((x) => x.remove());
+    lista.forEach((e, k) => {
+      const ok = EMAIL_OK.test(e);
+      const t = Admin.el("span", "ne-tag" + (ok ? "" : " ruim")); t.title = ok ? e : "E-mail incompleto: toque no × e escreva de novo";
+      const rm = Admin.el("button", null, "×"); rm.type = "button"; rm.setAttribute("aria-label", "Remover " + e);
+      rm.addEventListener("click", () => { lista.splice(k, 1); desenhar(); inp.focus(); });
+      t.append(Admin.el("span", null, e), rm); caixa.insertBefore(t, inp);
+    });
+  };
+  const confirmar = () => {
+    const partes = inp.value.split(/[,;\s]+/).map((x) => x.trim().toLowerCase()).filter(Boolean);
+    if (!partes.length) return;
+    partes.forEach((p) => { if (!lista.includes(p)) lista.push(p); });
+    inp.value = ""; erro(""); desenhar();
+  };
+  inp.addEventListener("keydown", (e) => {
+    if (["Enter", ",", ";", " "].includes(e.key)) { if (inp.value.trim()) { e.preventDefault(); confirmar(); } else if (e.key === "Enter") e.preventDefault(); }
+    else if (e.key === "Backspace" && !inp.value && lista.length) { lista.pop(); desenhar(); }
+  });
+  inp.addEventListener("input", () => { erro(""); if (/[,;\s]/.test(inp.value)) confirmar(); });
+  inp.addEventListener("blur", confirmar);
+  wrap.append(rot, caixa, err);
+  return { wrap, inp, erro, valores: () => { confirmar(); return [...lista]; } };
 }
 function renderNovo() {
   const body = document.getElementById("ne-body");
   const id = crypto.randomUUID(); // id da conversa e da pasta dos anexos
   const form = Admin.el("form"); form.noValidate = true; form.style.display = "contents";
-  const h = Admin.el("h2", null, "Novo e-mail"); h.id = "ne-title";
   const campo = (rot, el, opcional) => {
     const w = Admin.el("label", "fld"); const t = Admin.el("span", null, rot);
     if (opcional) t.appendChild(Admin.el("span", "opt", " (opcional)"));
     const e = Admin.el("p", "fld-err hidden"); e.id = el.id + "-err"; el.setAttribute("aria-describedby", e.id);
     w.append(t, el, e); return w;
   };
-  const para = Admin.el("input"); para.type = "email"; para.id = "ne-para"; para.autocomplete = "email"; para.placeholder = "nome@exemplo.com"; para.inputMode = "email";
+  // Cc e Cco aparecem só quando pedidos, para o formulário ficar simples
+  const mais = Admin.el("div", "ne-mais");
+  const bCc = Admin.el("button", null, "Cc"); bCc.type = "button"; bCc.setAttribute("aria-label", "Adicionar cópia (Cc)");
+  const bCco = Admin.el("button", null, "Cco"); bCco.type = "button"; bCco.setAttribute("aria-label", "Adicionar cópia oculta (Cco)");
+  mais.append(bCc, bCco);
+  const para = campoEmails("ne-para", "Para", mais);
+  const cc = campoEmails("ne-cc", "Cc (cópia)");
+  const cco = campoEmails("ne-cco", "Cco (cópia oculta)");
+  cc.wrap.hidden = true; cco.wrap.hidden = true;
+  const ccoNota = Admin.el("p", "ne-sig", "Quem está em cópia oculta recebe este e-mail, mas não aparece para os outros e não recebe as próximas respostas da conversa.");
+  cco.wrap.appendChild(ccoNota);
+  const abrir = (c, b) => { c.wrap.hidden = false; b.hidden = true; c.inp.focus(); };
+  bCc.addEventListener("click", () => abrir(cc, bCc)); bCco.addEventListener("click", () => abrir(cco, bCco));
   const nome = Admin.el("input"); nome.id = "ne-nome"; nome.placeholder = "Como a conversa aparece na lista";
   const assunto = Admin.el("input"); assunto.id = "ne-assunto";
   const texto = Admin.el("textarea"); texto.id = "ne-texto"; texto.placeholder = "Escreva sua mensagem…";
@@ -747,47 +838,51 @@ function renderNovo() {
   const cancelar = Admin.el("button", "btn-line", "Cancelar"); cancelar.type = "button"; cancelar.addEventListener("click", closeNovo);
   const btn = Admin.el("button", "btn-ok", "Enviar e-mail"); btn.type = "submit";
   const acts = Admin.el("div", "ne-acts"); acts.append(cancelar, btn);
+  const pe = Admin.el("div", "ne-pe"); pe.append(msg, acts);
   const anexos = Admin.el("div"); anexos.append(attach, picker, chips);
-  form.append(h, campo("Para", para), campo("Nome", nome, true), campo("Assunto", assunto), campo("Mensagem", texto), anexos, sig, msg, acts);
+  form.append(para.wrap, cc.wrap, cco.wrap, campo("Nome da conversa", nome, true), campo("Assunto", assunto), campo("Mensagem", texto), anexos, sig, pe);
   body.replaceChildren(form);
-  setTimeout(() => para.focus(), 50);
+  document.getElementById("ne-title").textContent = "Novo e-mail";
+  setTimeout(() => para.inp.focus(), 60);
 
   const erro = (el, t) => {
     const e = document.getElementById(el.id + "-err");
     el.classList.toggle("invalid", !!t); el.setAttribute("aria-invalid", t ? "true" : "false");
     e.textContent = t || ""; e.classList.toggle("hidden", !t);
   };
-  [para, assunto, texto].forEach((el) => el.addEventListener("input", () => erro(el, "")));
+  [assunto, texto].forEach((el) => el.addEventListener("input", () => erro(el, "")));
   form.addEventListener("submit", async (ev) => {
     ev.preventDefault();
     msg.className = "msg"; msg.textContent = "";
-    const v = { para: para.value.trim().toLowerCase(), nome: nome.value.trim(), assunto: assunto.value.trim(), texto: texto.value.trim() };
-    const falhas = [
-      [para, !v.para ? "Informe o e-mail do destinatário." : !EMAIL_OK.test(v.para) ? "Confira o e-mail: ele parece incompleto." : ""],
-      [assunto, v.assunto ? "" : "Informe o assunto."],
-      [texto, v.texto ? "" : "Escreva a mensagem."],
-    ];
-    falhas.forEach(([el, t]) => erro(el, t));
-    const primeiro = falhas.find(([, t]) => t);
-    if (primeiro) return primeiro[0].focus();
+    const lp = para.valores(), lc = cc.valores(), lo = cco.valores();
+    const ruim = (l) => l.find((e) => !EMAIL_OK.test(e));
+    const v = { nome: nome.value.trim(), assunto: assunto.value.trim(), texto: texto.value.trim() };
+    const ePara = !lp.length ? "Informe o e-mail de pelo menos um destinatário." : ruim(lp) ? `Confira o e-mail ${ruim(lp)}: ele parece incompleto.` : lp.length + lc.length + lo.length > MAX_END ? `Envie para no máximo ${MAX_END} endereços, somando Para, Cc e Cco.` : "";
+    const eCc = ruim(lc) ? `Confira o e-mail ${ruim(lc)}: ele parece incompleto.` : "";
+    const eCco = ruim(lo) ? `Confira o e-mail ${ruim(lo)}: ele parece incompleto.` : "";
+    para.erro(ePara); cc.erro(eCc); cco.erro(eCco);
+    erro(assunto, v.assunto ? "" : "Informe o assunto."); erro(texto, v.texto ? "" : "Escreva a mensagem.");
+    const primeiro = ePara ? para.inp : eCc ? cc.inp : eCco ? cco.inp : !v.assunto ? assunto : !v.texto ? texto : null;
+    if (primeiro) return primeiro.focus();
     btn.disabled = cancelar.disabled = true;
     const fail = (t) => { btn.disabled = cancelar.disabled = false; btn.textContent = "Enviar e-mail"; msg.className = "msg err"; msg.textContent = t; };
     const lista = await subirAnexos(files, id, (t) => (btn.textContent = t));
     if (typeof lista === "string") return fail(lista);
     btn.textContent = "Enviando…";
-    const { data, error } = await Admin.sb.functions.invoke("responder-contato", { body: { novo: { id, para: v.para, nome: v.nome, assunto: v.assunto }, mensagem: v.texto, anexos: lista } });
+    const { data, error } = await Admin.sb.functions.invoke("responder-contato", { body: { novo: { id, para: lp, cc: lc, cco: lo, nome: v.nome, assunto: v.assunto }, mensagem: v.texto, anexos: lista } });
     if (error || !data?.resposta) {
       let detail = "";
       try { detail = (await error?.context?.json())?.error || ""; } catch {}
       return fail("Não foi possível enviar o e-mail." + (detail ? " " + detail : " Tente novamente."));
     }
-    Admin.log("Enviou um e-mail para " + v.para, qtdAnexos(lista));
+    const total = lp.length + lc.length + lo.length;
+    Admin.log("Enviou um e-mail para " + lp.join(", ") + (lc.length ? " (Cc: " + lc.join(", ") + ")" : ""), qtdAnexos(lista));
     const ok = Admin.el("div", "ne-ok"); ok.setAttribute("role", "status");
     const chk = Admin.el("span", "chk"); chk.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>';
     const ver = Admin.el("a", "btn-ok", "Ver conversa"); ver.href = "/admin/contatos/?id=" + data.contato_id;
     const outro = Admin.el("button", "btn-line", "Escrever outro"); outro.type = "button"; outro.addEventListener("click", renderNovo);
     const a2 = Admin.el("div", "ne-acts"); a2.style.justifyContent = "center"; a2.append(outro, ver);
-    ok.append(chk, Admin.el("h2", null, "E-mail enviado"), Admin.el("p", null, "Enviado para " + v.para + ". A conversa já está na sua lista."), a2);
+    ok.append(chk, Admin.el("h2", null, "E-mail enviado"), Admin.el("p", null, (total === 1 ? "Enviado para " + lp[0] : "Enviado para " + total + " endereços") + ". A conversa está na aba Enviados."), a2);
     body.replaceChildren(ok);
     window.__novoEnviado?.(data.contato_id);
   });
@@ -804,6 +899,7 @@ Admin.init({ page: "contatos", onReady: async () => {
     const box = document.getElementById("detail");
     if (error || !data) { document.getElementById("status").classList.add("hidden"); box.replaceChildren(Admin.el("div", "card empty", error ? "Não foi possível carregar a mensagem." : "Mensagem não encontrada.")); return; }
     Admin.markSeen("contatos", data);
+    if (data.origem === "enviado") { const v = document.querySelector("#view-detail .back"); v.href = "/admin/contatos/?aba=enviados"; v.textContent = "← E-mails enviados"; }
     data.visualizado_em = data.visualizado_em || new Date().toISOString();
     const { data: reu } = await Admin.sb.from("reunioes").select("*").eq("contato_id", data.id).maybeSingle();
     data._reuniao = reu || null;
@@ -822,18 +918,32 @@ Admin.init({ page: "contatos", onReady: async () => {
   if (error) { err.textContent = "Não foi possível carregar as mensagens: " + error.message; return; }
   const sel = document.getElementById("situacao");
   if (["pendentes", "respondidas", "reunioes"].includes(params.get("situacao"))) sel.value = params.get("situacao");
+  // Abas: Recebidos (formulário do site e e-mails que chegaram) e Enviados (e-mails novos escritos por você)
+  let aba = params.get("aba") === "enviados" ? "enviados" : "recebidos";
+  const daAba = (r) => (aba === "enviados") === (r.origem === "enviado");
+  const abrirAba = (a) => {
+    aba = a;
+    ["recebidos", "enviados"].forEach((k) => document.getElementById("aba-" + k).setAttribute("aria-selected", String(k === a)));
+    const u = new URL(location.href); if (a === "enviados") u.searchParams.set("aba", "enviados"); else u.searchParams.delete("aba"); history.replaceState(null, "", u);
+    render();
+  };
+  ["recebidos", "enviados"].forEach((k) => document.getElementById("aba-" + k).addEventListener("click", () => abrirAba(k)));
   const render = () => {
     const q = norm(document.getElementById("busca").value.trim());
     const sit = sel.value;
+    document.getElementById("n-recebidos").textContent = data.filter((r) => r.origem !== "enviado").length;
+    document.getElementById("n-enviados").textContent = data.filter((r) => r.origem === "enviado").length;
+    const daqui = data.filter(daAba);
     const match = (r) => !sit || (sit === "reunioes" ? !!r.reuniao_em : (sit === "respondidas") === !!r.respondido_em);
-    const rows = data.filter((r) => match(r) && (!q || ["nome", "email", "empresa", "assunto", "mensagem"].some((k) => norm(r[k]).includes(q)) || norm(r.origem === "email" ? "e-mail email" : r.origem === "enviado" ? "enviado" : "site").includes(q)));
-    document.getElementById("count").textContent = (q || sit ? rows.length + " de " : "") + data.length + (data.length === 1 ? " conversa" : " conversas");
+    const rows = daqui.filter((r) => match(r) && (!q || ["nome", "email", "empresa", "assunto", "mensagem"].some((k) => norm(r[k]).includes(q)) || (r.destinatarios || []).concat(r.copias || [], r.copias_ocultas || []).some((e) => norm(e).includes(q)) || norm(r.origem === "email" ? "e-mail email" : r.origem === "enviado" ? "enviado" : "site").includes(q)));
+    const tot = daqui.length, rot = aba === "enviados" ? (tot === 1 ? " e-mail enviado" : " e-mails enviados") : (tot === 1 ? " mensagem recebida" : " mensagens recebidas");
+    document.getElementById("count").textContent = (q || sit ? rows.length + " de " : "") + tot + rot;
     const list = document.getElementById("list"); list.replaceChildren();
-    if (!rows.length) return list.appendChild(Admin.el("div", "empty", data.length ? "Nenhuma mensagem encontrada." : "Nenhuma mensagem ainda."));
+    if (!rows.length) return list.appendChild(Admin.el("div", "empty", tot ? "Nenhuma mensagem encontrada." : aba === "enviados" ? "Nenhum e-mail enviado ainda. Use \u201cNovo e-mail\u201d para escrever o primeiro." : "Nenhuma mensagem recebida ainda."));
     rows.forEach((r) => {
       const a = Admin.rowLink("/admin/contatos/?id=" + r.id, r.nome, r.assunto || "Sem assunto", r.created_at, Admin.mailState(r), true);
       a.classList.add("ctt");
-      a.appendChild(Admin.el("span", "s2", [r.email, r.empresa].filter(Boolean).join(" · ")));
+      a.appendChild(Admin.el("span", "s2", r.origem === "enviado" ? destinatariosTexto(r) : [r.email, r.empresa].filter(Boolean).join(" · ")));
       // selo de origem: ao lado da data (computador) e abaixo do ícone (celular); só um aparece por vez
       const d = a.querySelector(".d"); d.classList.add("com-origem");
       const div = Admin.el("span", "div"); div.setAttribute("aria-hidden", "true");
@@ -856,15 +966,16 @@ Admin.init({ page: "contatos", onReady: async () => {
     ["blur", "change"].forEach((ev) => sel.addEventListener(ev, upd));
   }
   sel.addEventListener("change", render);
-  render();
+  abrirAba(aba);
   // Novo e-mail: abre o painel; ao enviar, a conversa entra no topo da lista
   document.getElementById("novo-email").addEventListener("click", openNovo);
   document.getElementById("ne-close").addEventListener("click", closeNovo);
-  document.getElementById("ne-backdrop").addEventListener("click", closeNovo);
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeNovo(); });
+  // tocar fora da janela fecha (o clique no fundo chega no próprio <dialog>)
+  document.getElementById("ne-dlg").addEventListener("click", (e) => { if (e.target.id === "ne-dlg") closeNovo(); });
+  document.getElementById("ne-dlg").addEventListener("close", () => document.getElementById("novo-email")?.focus());
   window.__novoEnviado = async (cid) => {
     const { data: novo } = await Admin.sb.from("contatos").select("*").eq("id", cid).maybeSingle();
-    if (novo && !data.some((x) => x.id === novo.id)) { data.unshift(novo); render(); }
+    if (novo && !data.some((x) => x.id === novo.id)) { data.unshift(novo); abrirAba("enviados"); }
   };
 }});
 </script>
