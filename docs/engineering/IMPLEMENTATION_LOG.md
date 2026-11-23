@@ -350,6 +350,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação e teste real (16/11):** migração aplicada; funções publicadas; rastreamento de abertura e cliques ligado no domínio do Resend (subdomínio `links.danimoscatelli.com.br`, CNAME criado na Cloudflare pela configuração automática); webhook criado; segredo guardado em `RESEND_WEBHOOK_SECRET_RASTREIO` (separado do `RESEND_WEBHOOK_SECRET` das respostas de contato). E-mail real de teste: entregue, aberto e clicado registrados em `email_envios` (3 eventos).
 
 <<<<<<< HEAD
+## 2026-11-23 · Painel de pesquisas: "Leitura" no Alerta do DS e pergunta 8 sem números dentro das barras, não publicado
+
+- **Pedido:** a dona perguntou se a caixa "Leitura" seguia o DS. Não seguia: foi feita à mão, com fundo cinza, sem borda e ícone cinza. Conferido no repositório do DS (`alert.tsx`), junto com a regra de gráficos de 19/11/2026: barras sem número dentro.
+- **O que mudou (`public/admin/pesquisas/index.html`):**
+  - "Leitura" no padrão do Alerta do DS, variante info: fundo `--info-muted`, borda `--info` a 20%, ícone de 20 px em `--info`, texto de 14 px, 16 × 14 px de espaçamento e raio `--radius-md`;
+  - pergunta 8: os percentuais saíram de dentro das barras e vêm abaixo, na ordem das partes, cada um depois de um ponto na cor dela.
+- **Verificação executada:** `npm run build`; painel com dados fictícios no computador e no celular (nenhum número dentro das barras, sem erros no console); capturas.
+
 ## 2026-11-23 · Pesquisa Moda em Curitiba: abertura em card, botão sempre à vista e barra de navegação fixa, não publicado
 
 - **Pedido:** abertura dentro de um card; "Começar pesquisa" acima da dobra; botões fixos durante o formulário; "Pergunta X de 10" alinhado com o início da barra de progresso; título da pesquisa sempre visível no cabeçalho.
