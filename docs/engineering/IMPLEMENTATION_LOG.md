@@ -599,6 +599,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 ## 2026-11-24 · Painel de pesquisas: abas principais sublinhadas e "Ações" só com ícone, não publicado
 - **Pedido da dona do produto:** os dois níveis de abas usavam modelos parecidos (conflito visual); trocar o modelo das abas principais e deixar "Ações" só com o ícone de três pontinhos, ao lado das abas internas também no celular.
 - **`public/admin/pesquisas/index.html`:** Resultados · Inteligência · Respostas no modelo "Abas sublinhadas" do DS (linha da aba ativa em vermelho, deslizando entre as abas; sem movimento com "menos movimento"); abas internas continuam segmentadas. `menuAcoes` ganhou a opção só com ícone (`aria-label` e dica "Ações"). No celular, as abas internas e o botão ficam na mesma linha, com espaçamento ajustado para caber de 375 px em diante.
+- **Ajuste pedido em seguida:** abas internas com a mesma altura do botão de três pontinhos (40 px), medido em 375 px, iPhone 13 e computador.
 - **Ajuste pedido em seguida:** no celular, as abas ocupam 100% da largura (principais divididas na largura toda; internas + botão de três pontinhos preenchendo a linha). Medido: 343/343 px (375 px) e 358/358 px (iPhone 13).
 - **Verificação executada:** painel com dados fictícios e servidor simulado em 375 px, iPhone 13 e computador: linha da aba acompanha a aba escolhida; abas internas cabem sem rolagem (299/299 e 314/314 px); menu abre com "Exportar respostas" e "Excluir"; Esc devolve o foco ao botão; sem erros de JavaScript.
 
