@@ -25,11 +25,13 @@ type Pergunta = {
   opcoes?: Opcao[]; linhas?: { id: string }[]; colunas?: { id: string }[];
 };
 type Questionario = {
-  slug: string; versao: string; identificacao: { versao: string; texto: string }; consentimento: { versao: string; texto: string }; perguntas: Pergunta[];
+  slug: string; versao: string; identificacao: { versao: string; texto: string; finalidades?: string }; consentimento: { versao: string; texto: string }; perguntas: Pergunta[];
   // perguntas de perfil (cidade, bairro, gênero e faixa etária), fora da contagem; o bairro só vale para quem mora em Curitiba
   perfil?: { id: string; opcoes: Opcao[]; condicao?: { campo: string; opcoes: string[] } }[];
 };
 const QUESTIONARIOS: Record<string, Questionario> = { [modaCuritiba.slug]: modaCuritiba as Questionario };
+// registro da identificação: as finalidades mostradas no cartão + a frase da caixa que a pessoa marcou
+const textoIdentificacao = (q: Questionario) => [q.identificacao.finalidades, q.identificacao.texto].filter(Boolean).join(" ");
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -180,7 +182,7 @@ async function salvarParcial(q: Questionario, p: Record<string, unknown>, envioI
   const agora = new Date().toISOString();
   const linha = {
     pesquisa: q.slug, envio_id: envioId, situacao: "parcial", versao_questionario: q.versao, respostas, relato, quer_novidades: null,
-    nome, email, whatsapp: whats, identificacao_em: agora, identificacao_versao: q.identificacao.versao, identificacao_texto: q.identificacao.texto,
+    nome, email, whatsapp: whats, identificacao_em: agora, identificacao_versao: q.identificacao.versao, identificacao_texto: textoIdentificacao(q),
     parou_em: etapa, atualizado_em: agora,
   };
   await limparIncompletas(q.slug, email, whats, envioId);
@@ -287,7 +289,7 @@ Deno.serve(async (req) => {
 
     const linha = {
       pesquisa: q.slug, envio_id: envioId, situacao, versao_questionario: q.versao, respostas, relato, quer_novidades: quer,
-      nome, email, whatsapp: whats, identificacao_em: agora, identificacao_versao: q.identificacao.versao, identificacao_texto: q.identificacao.texto,
+      nome, email, whatsapp: whats, identificacao_em: agora, identificacao_versao: q.identificacao.versao, identificacao_texto: textoIdentificacao(q),
       parou_em: null, atualizado_em: agora, visualizado_em: null, // concluída: volta a aparecer como nova no sino
     };
     // quem já tinha progresso salvo (incompleta) tem a mesma linha atualizada; uma participação concluída nunca é sobrescrita

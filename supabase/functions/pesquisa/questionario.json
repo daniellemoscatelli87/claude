@@ -3,8 +3,9 @@
   "versao": "moda-curitiba-v13-2026-11-23",
   "titulo": "Hábitos e experiências de compra de moda em Curitiba",
   "identificacao": {
-    "versao": "moda-curitiba-identificacao-v1-2026-11-23",
-    "texto": "Li e concordo com o uso dos meus dados (nome, e-mail e WhatsApp) para participar desta pesquisa, conforme a Política de Privacidade."
+    "versao": "moda-curitiba-identificacao-v2-2026-11-24",
+    "finalidades": "Seus dados e sua privacidade. Usamos seu nome, e-mail e WhatsApp apenas para esta pesquisa e para informar sobre o lançamento da solução. Suas respostas não serão divulgadas de forma identificável.",
+    "texto": "Autorizo o uso dos meus dados conforme as finalidades acima e a Política de Privacidade."
   },
   "consentimento": {
     "versao": "moda-curitiba-contato-v3-2026-11-24",
@@ -144,7 +145,7 @@
         },
         {
           "id": "dificuldade_cwb",
-          "texto": "Dificuldade para encontrar o que procuro em Curitiba"
+          "texto": "Acesso a produtos indisponíveis no comércio local"
         },
         {
           "id": "outro",

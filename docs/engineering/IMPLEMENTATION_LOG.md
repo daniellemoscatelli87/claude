@@ -596,6 +596,33 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-24 · Pesquisa: link do cabeçalho vira "Home" com ícone de casa, não publicado
+
+- **Pergunta 2.1, sugestão da dona do produto:** a opção "Dificuldade para encontrar o que procuro em Curitiba" passa a ser "Acesso a produtos indisponíveis no comércio local".
+  - O id `dificuldade_cwb` continua igual; não há respostas gravadas.
+  - Painel, aba Inteligência: o grupo dos motivos vira "Produtos indisponíveis no comércio local", e o destaque passa a dizer "…% de quem compra fora busca produtos indisponíveis no comércio local", com a descrição ajustada.
+  - A função `pesquisa` precisa ser publicada junto.
+  - Teste: no iPhone 13, a 2.1 aparece para quem marca Marketplaces, com o texto novo; marcada, salva `dificuldade_cwb`; sem erros de JS.
+
+- Janela de busca de bairro e cidade, no celular: sai a borda vermelha do X ao abrir, por pedido da dona do produto. Era o anel de foco, porque a janela focava o X ao abrir. Agora o foco inicial vai para o título (`tabindex=-1`, sem contorno), o que também não abre o teclado. Quem usa teclado ainda vê o anel ao chegar no X com Tab. Teste: iPhone 13 com foco no título, sem contorno no X; Tab leva ao X; Esc fecha; sem erros de JS.
+
+- **Identificação, novos textos da dona do produto:**
+  - No cartão: "**Seus dados e sua privacidade**" em linha própria e "Usamos seu nome, e-mail e WhatsApp apenas para esta pesquisa e para informar sobre o lançamento da solução. Suas respostas não serão divulgadas de forma identificável." Este texto foi revisado duas vezes pela dona do produto; vale a versão final.
+  - Na caixa: "Autorizo o uso dos meus dados conforme as finalidades acima e a Política de Privacidade."
+  - "Política de Privacidade" vira link sempre que estiver no fim da frase da caixa, não mais só depois de "conforme a".
+- **Alinhamento, a pedido da dona do produto:** os dois blocos de texto começam na mesma posição à esquerda. A caixinha de 22 px fica centrada sob o escudo de 34 px (6 px de cada lado). Teste: o parágrafo e o texto da caixa começam ambos a 85 px, e o centro do escudo e o da caixinha ficam ambos a 56 px; a caixa continua marcando e desmarcando.
+- **Espaçamento:** a regra `#pq-id .pq-aceite-q { padding: 2px … }` zerava o espaço abaixo da linha divisória, colando o texto nela. Agora há 18 px acima e 18 px abaixo da linha, e o cartão tem 18/20 px de respiro.
+- **Registro (`questionario.json`):** a identificação passa para `moda-curitiba-identificacao-v2-2026-11-24`, com o campo novo `finalidades` (o texto do cartão). A função grava em `identificacao_texto` as finalidades seguidas da frase da caixa, porque "finalidades descritas" sozinho não diria quais são. A função `pesquisa` precisa ser publicada junto.
+- **Teste:**
+  - Função com banco simulado: os 13 cenários passam e o registro sai com v2 e o texto completo.
+  - Playwright no iPhone 13: os textos estão certos; há 18 px acima e 19 px abaixo do divisor; a caixa marca ao tocar na caixinha ou no texto e desmarca com novo toque; os fluxos completos seguem iguais; sem erros de JS.
+
+- Pedido da dona do produto: o link "Voltar para o site" do cabeçalho da pesquisa passa a mostrar o ícone de casa e o texto "Home".
+  - Leva para `/`, como antes. O nome para leitores de tela é "Home: ir para o site".
+  - Continua perguntando antes de sair de uma pesquisa em andamento.
+  - No hover, a casa sobe 2 px (antes, a seta ia para a esquerda).
+- Teste: Playwright no iPhone 13 e no computador. Conferidos o texto "Home", o `href="/"` e a janela "Quer mesmo interromper…" ao tocar durante a pesquisa; sem erros de JS.
+
 ## 2026-11-24 · Pesquisa: respostas incompletas guardadas no servidor, publicado (#220)
 
 - Publicado em 24/11/2026, nesta ordem: migração `pesquisa_incompletas` aplicada, função `pesquisa` v14 (código conferido igual ao do repositório; questionário igual pela ação `status`) e site pelo PR #220.

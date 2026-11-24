@@ -64,7 +64,7 @@ const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xx
 
 const novo = (): Estado => ({ envio: uuid(), etapa: -1, r: {}, relato: '', nov: '', nome: '', email: '', whats: '', ciente: false });
 /* Rascunho: as respostas ficam guardadas neste aparelho (localStorage) a cada toque, então fechar a aba, sair pelo
-   "Voltar para o site" ou perder a conexão não apaga nada; ao voltar pelo link, a pessoa continua de onde parou.
+   "Home" (cabeçalho) ou perder a conexão não apaga nada; ao voltar pelo link, a pessoa continua de onde parou.
    A identificação (nome, e-mail e WhatsApp) fica só nesta sessão do navegador, por privacidade em aparelhos
    compartilhados; ao voltar outro dia, a pessoa se identifica de novo e continua de onde parou. O rascunho vale por 30 dias e é apagado quando a participação é enviada. */
 const RASCUNHO_DIAS = 30;
@@ -460,7 +460,7 @@ function abrirBusca(c: CampoPerfil, sel: HTMLSelectElement, bt: HTMLButtonElemen
   document.documentElement.classList.add('pq-trava');
   dlg.showModal();
   // no computador o cursor já vai para a busca; no celular, mostra a lista sem abrir o teclado
-  if (matchMedia('(min-width: 640px)').matches) busca.focus(); else fechar.focus();
+  if (matchMedia('(min-width: 640px)').matches) busca.focus(); else { h.tabIndex = -1; h.focus({ preventScroll: true }); } // no celular, o foco vai para o título (sem anel de foco no X e sem abrir o teclado)
   dlg.querySelector<HTMLElement>('.pq-busca-op[aria-pressed="true"]')?.scrollIntoView({ block: 'center' });
 }
 function opcoesLista(sel: HTMLSelectElement, c: CampoPerfil, ops: OpcaoLista[]) {
@@ -592,13 +592,13 @@ function montarIdentificacao() {
   const ic = el('span', 'pq-ic'); ic.setAttribute('aria-hidden', 'true');
   ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
   const tx = el('p');
-  tx.append(el('strong', undefined, 'Seus dados estão protegidos pela LGPD. '), 'Usamos seu nome, e-mail e WhatsApp só para esta pesquisa. As respostas são analisadas em conjunto e nunca divulgadas com seu nome.');
+  tx.append(el('strong', 'pq-lgpd-tit', 'Seus dados e sua privacidade'), 'Usamos seu nome, e-mail e WhatsApp apenas para esta pesquisa e para informar sobre o lançamento da solução. Suas respostas não serão divulgadas de forma identificável.');
   lgpd.append(ic, tx);
   const aceite = el('div', 'pq-campo pq-aceite-q'); aceite.id = 'pq-ciente-q';
   const lab = el('label', 'pq-aceite');
   const cb = el('input'); cb.type = 'checkbox'; cb.id = 'pq-ciente'; cb.checked = E.ciente;
   const txt = el('span');
-  txt.append((Q as { identificacao: { texto: string } }).identificacao.texto.replace(/conforme a Política de Privacidade\.$/, 'conforme a '));
+  txt.append((Q as { identificacao: { texto: string } }).identificacao.texto.replace(/Política de Privacidade\.$/, ''));
   const a = el('a', undefined, 'Política de Privacidade'); a.href = '/privacidade/#pesquisa-moda'; a.dataset.politica = '';
   txt.append(a, '.');
   lab.append(cb, el('span', 'pq-caixa'), txt);
@@ -962,7 +962,7 @@ function indicar() {
   });
 }
 
-/* ---------- "Voltar para o site": pergunta antes de interromper a pesquisa em andamento ---------- */
+/* ---------- "Home" (cabeçalho): pergunta antes de interromper a pesquisa em andamento ---------- */
 function sair() {
   const dlg = $<HTMLDialogElement>('pq-sair-dlg');
   let destino = '/';
