@@ -793,7 +793,7 @@
   function abas() {
     const box = el("div");
     const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
-    const { bar, marcar } = linhaDeAbas([["resultados", "Resultados", null], ["inteligencia", "Inteligência", null], ["respostas", "Respostas", R.length + RP.length]], "Seções da pesquisa", (id) => abrir(id), "aba-");
+    const { bar, marcar } = linhaDeAbas([["resultados", "Resultados", null], ["inteligencia", "Inteligência", null], ["respostas", "Respostas", null]], "Seções da pesquisa", (id) => abrir(id), "aba-");
     bar.classList.add("pa-abas-sub"); // abas principais: modelo sublinhado do DS (as internas de Respostas são segmentadas)
     const abrir = (id, sub) => {
       SELECAO = null; marcar(id);
@@ -816,7 +816,8 @@
     const box = el("div", "pa-area-resp");
     const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
     const relatos = relatosR();
-    const { bar, marcar } = linhaDeAbas([["respostas", "Respostas", R.length + RP.length], ["relatos", "Relatos", relatos.length], ["interessados", "Interessados", interessadosR().length]], "Respostas, relatos e interessados", (id) => abrirSub(id), "aba-sub-");
+    // sem números nas abas (números grandes quebrariam a linha); a quantidade aparece no card de cada aba
+    const { bar, marcar } = linhaDeAbas([["respostas", "Respostas", null], ["relatos", "Relatos", null], ["interessados", "Interessados", null]], "Respostas, relatos e interessados", (id) => abrirSub(id), "aba-sub-");
     bar.classList.add("pa-abas-int");
     const abrirSub = (id) => {
       SELECAO = null; marcar(id);
@@ -2125,6 +2126,7 @@
   function listaRelatos(lista) {
     const card = el("section", "card pa-entra");
     if (!lista.length) { card.appendChild(vazio("Nenhum relato ainda", "A pergunta aberta é opcional; os relatos aparecem aqui quando alguém escrever.")); return card; }
+    card.appendChild(el("p", "pa-rl-cont", `${plural(lista.length, "relato", "relatos")}, do mais recente para o mais antigo.`));
     lista.forEach((x) => { const d = el("div", "pa-relato"); d.append(el("p", null, x.relato), el("small", null, fmtDate(x.created_at))); card.appendChild(d); });
     return card;
   }
