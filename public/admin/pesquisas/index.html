@@ -265,18 +265,21 @@
   .pa-rl-it { display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--muted); animation: pa-rl-in .3s var(--ease-out, ease-out) both; animation-delay: calc(var(--i, 0) * 18ms); }
   .pa-rl-it:first-child { border-top: 0; }
   @keyframes pa-rl-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-  .pa-rl-abrir { position: relative; flex: 1; min-width: 0; display: grid; gap: 4px; padding: 12px 36px 12px 10px; font: inherit; text-align: left; color: var(--foreground); background: none; border: 0; border-radius: var(--radius-md); cursor: pointer; transition: background-color .15s; }
+  .pa-rl-abrir { position: relative; flex: 1; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto 18px; grid-template-areas: "l1 sit seta" "res sit seta"; align-items: center; gap: 4px 12px; padding: 12px 10px; font: inherit; text-align: left; color: var(--foreground); background: none; border: 0; border-radius: var(--radius-md); cursor: pointer; transition: background-color .15s; }
   .pa-rl-abrir:hover { background: var(--row-hover); }
   .pa-rl-abrir:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
   .pa-rl-l1 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
   .pa-rl-l1 b { font-size: 14px; }
-  .pa-rl-data { font-size: 13px; color: var(--muted-foreground); }
+  .pa-rl-data { font-size: 13px; color: var(--muted-foreground); white-space: nowrap; }
+  @media (max-width: 560px) { .pa-rl-abrir { grid-template-areas: "l1 sit seta" "res res seta"; align-items: start; } .pa-rl-abrir > .pa-resp-sit { margin-top: 2px; } .pa-rl-seta { align-self: center; } }
   .pa-rl-nome { font-size: 15px; }
   .pa-rl-nome.sem, .pa-ficha-tit b.sem { font-weight: 600; color: var(--muted-foreground); font-style: italic; }
   .pa-rl-res { font-size: 13px; color: var(--muted-foreground); overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
-  .pa-rl-seta { position: absolute; right: 10px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); color: var(--muted-foreground); transition: transform .2s var(--ease-out, ease-out); }
+  .pa-rl-l1 { grid-area: l1; } .pa-rl-res { grid-area: res; }
+  .pa-rl-abrir > .pa-resp-sit { grid-area: sit; justify-self: end; }
+  .pa-rl-seta { grid-area: seta; width: 18px; height: 18px; color: var(--muted-foreground); transition: transform .2s var(--ease-out, ease-out); }
   .pa-rl-seta svg { width: 18px; height: 18px; }
-  .pa-rl-abrir:hover .pa-rl-seta { transform: translate(3px, -50%); color: var(--foreground); }
+  .pa-rl-abrir:hover .pa-rl-seta { transform: translateX(3px); color: var(--foreground); }
   .pa-rl-del { flex: none; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; color: var(--muted-foreground); background: none; border: 1px solid transparent; border-radius: var(--radius-md); cursor: pointer; transition: color .15s, background-color .15s, border-color .15s; }
   .pa-rl-del svg { width: 18px; height: 18px; }
   .pa-rl-del:hover, .pa-rl-del:focus-visible { color: var(--destructive, var(--primary-text)); background: var(--primary-muted); border-color: color-mix(in srgb, var(--primary) 25%, transparent); outline: none; }
@@ -1802,10 +1805,11 @@
         const li = el("li", "pa-rl-it"); li.style.setProperty("--i", Math.min(k, 12));
         const ab = el("button", "pa-rl-abrir"); ab.type = "button"; ab.setAttribute("aria-haspopup", "dialog");
         const linha1 = el("span", "pa-rl-l1");
-        linha1.append(el("b", "pa-rl-nome" + (x.nome ? "" : " sem"), nomeDe(x)), el("span", "pa-rl-data", `#${numResp(x)} · ${fmtDate(x.created_at)}`), el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao));
-        ab.appendChild(linha1);
+        linha1.append(el("b", "pa-rl-nome" + (x.nome ? "" : " sem"), nomeDe(x)), el("span", "pa-rl-data", `#${numResp(x)} · ${fmtDate(x.created_at)}`));
+        // situação à direita, ao lado da seta
+        const seta = el("span", "pa-rl-seta"); seta.innerHTML = ICR.dir;
+        ab.append(linha1, el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao), seta);
         const res = resumoDe(x); if (res) ab.appendChild(el("span", "pa-rl-res", res));
-        const seta = el("span", "pa-rl-seta"); seta.innerHTML = ICR.dir; ab.appendChild(seta);
         ab.setAttribute("aria-label", `Abrir a resposta de ${nomeDe(x)}, #${numResp(x)}, ${fmtDate(x.created_at)}, ${SIT_CURTA[x.situacao] || x.situacao}`);
         ab.addEventListener("click", () => abrirFicha(vs, k, ab));
         const del = el("button", "pa-rl-del"); del.type = "button"; del.innerHTML = IC.lixo; del.setAttribute("aria-label", `Excluir a resposta de ${nomeDe(x)}`); del.title = "Excluir resposta";
