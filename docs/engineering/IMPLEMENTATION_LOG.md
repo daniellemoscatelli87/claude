@@ -596,6 +596,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-24 · Pesquisa: item respondido sai do vermelho na hora, não publicado
+- **Pedido da dona do produto:** depois que a pessoa responde um item obrigatório, ele deve deixar de ficar vermelho (na grade de dificuldade, as opções de linhas já respondidas continuavam rosadas). Pesquisa já recebendo respostas reais: nada deve ser apagado do banco.
+- **`src/pesquisa-moda.css`:** nas perguntas com vários itens (notas e grade), o vermelho das opções vale só para os itens ainda sem resposta; nas demais, continua até a primeira escolha.
+- **Verificação executada:** navegador (iPhone 13) com servidor simulado, contando elementos em vermelho antes e depois de responder: identificação 8→0, pergunta 1 4→0, bairro 3→0, 2: 7→0, notas 37→25 com a linha respondida em 0, depois 0; 6: 10→0; grade 73, linha respondida 0 e as outras ainda em vermelho, depois 0; "Sobre você" 9, campo respondido 0, depois 0; avisos 3→0. Sem erros de JavaScript. Nenhum envio real e nada apagado do banco.
+
 ## 2026-11-24 · Painel de pesquisas: abas principais sublinhadas e "Ações" só com ícone, publicado (#224)
 - **Pedido da dona do produto:** os dois níveis de abas usavam modelos parecidos (conflito visual); trocar o modelo das abas principais e deixar "Ações" só com o ícone de três pontinhos, ao lado das abas internas também no celular.
 - **`public/admin/pesquisas/index.html`:** Resultados · Inteligência · Respostas no modelo "Abas sublinhadas" do DS (linha da aba ativa em vermelho, deslizando entre as abas; sem movimento com "menos movimento"); abas internas continuam segmentadas. `menuAcoes` ganhou a opção só com ícone (`aria-label` e dica "Ações"). No celular, as abas internas e o botão ficam na mesma linha, com espaçamento ajustado para caber de 375 px em diante.
