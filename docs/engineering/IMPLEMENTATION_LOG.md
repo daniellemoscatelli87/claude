@@ -596,6 +596,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-24 · Pesquisa: tela de sucesso mais enxuta, não publicado
+- **Pedido da dona do produto:** sai a frase "Cada resposta contribui para este projeto de inovação." e o quadro com o sino (aviso do lançamento ou agradecimento); a frase "Para cancelar os avisos…" vai para baixo do cartão "Indique a pesquisa".
+- **Arquivos:** `pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.ts` (texto do quadro removido), `src/pesquisa-moda.css` (espaço acima da frase).
+- **Verificação executada:** navegador (iPhone 13) com servidor simulado, fluxo completo com "Sim" (frase de cancelamento abaixo do cartão) e com "Não" (sem a frase); sem erros de JavaScript.
+
 ## 2026-11-24 · Pesquisa: pergunta aberta (relato) antes de "Sobre você", não publicado
 - **Pedido da dona do produto:** a pergunta da experiência frustrante vem antes das perguntas sobre a pessoa (gênero, faixa etária e estado civil).
 - **`src/pesquisa-moda.ts`:** ordem das etapas extras passa a ser relato → perfil → novidades (constantes `ETAPA_RELATO`, `ETAPA_PERFIL` e ordem de montagem). Servidor e painel não mudam.
