@@ -125,7 +125,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   .pq-acoes-intro { margin: 0 -44px; padding: 16px 44px 28px; justify-items: center; }
   .pq-acoes-intro .pq-btn { min-width: 320px; }
 }
-.pq-privacidade { margin: 0; font-size: 13px; color: var(--pq-muted); text-align: center; }
 
 /* Botões */
 .pq-btn { font: inherit; font-size: 16px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 26px;
