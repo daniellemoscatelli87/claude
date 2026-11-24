@@ -113,7 +113,8 @@ function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apo
   const lg = el('legend', 'pq-pergunta'); lg.tabIndex = -1;
   const t = el('span', 'pq-titulo');
   t.append(...realcar(titulo, destaque));
-  lg.append(el('span', 'pq-num', eyebrow), t);
+  // a etapa ("Pergunta 2 de 12", "Antes de começar"…) aparece só na barra de progresso; aqui só para leitores de tela
+  lg.append(el('span', 'pq-sr', eyebrow + ': '), t);
   fs.appendChild(lg);
   if (apoio) {
     const a = el('p', 'pq-apoio'); const n = negrito ? apoio.indexOf(negrito) : -1;
