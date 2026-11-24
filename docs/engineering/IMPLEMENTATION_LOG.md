@@ -652,6 +652,21 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - Múltipla escolha na ficha (perguntas 2.1, 7, 11 e 12): lista simples com check vermelho. Substitui as etiquetas, que herdavam o estilo `.tag` do design system (maiúsculas, espaçamento e ponto) e ficaram feias, segundo a dona do produto. Teste: os itens da pergunta 7 aparecem em lista no iPhone 13 e no computador, sem erros de JS.
   - Identificador: o nome que a pessoa informou no início aparece em destaque na lista, no topo da ficha e nas confirmações de exclusão, por pedido da dona do produto. O "#número · data" vem logo abaixo, e a coluna `nome` de `pesquisa_respostas` passa a entrar na consulta. Respostas sem nome, de antes da identificação, mostram "Sem nome" em itálico. Teste: com nomes fictícios, lista, ficha, "Próxima" (inclusive para uma resposta sem nome) e confirmação conferidas no computador e no iPhone 13; sem erros de JS.
   - Lista: a etiqueta da situação (Completa, Fora de Curitiba e RMC, Não comprou) fica à direita, ao lado da seta, por pedido da dona do produto. No celular, ela se alinha ao nome e o resumo usa a largura toda. Teste: computador e iPhone 13 sem sobreposição; sem erros de JS.
+  - Por pedido da dona do produto:
+    - **Seta removida da lista.**
+    - **Seleção de respostas:** caixa de seleção em cada linha e barra "Selecionar todas · N selecionadas · Excluir selecionadas". "Selecionar todas" vale só para o filtro aberto, e trocar de filtro limpa a seleção.
+    - **Excluir várias de uma vez:** apaga também os contatos dessas pessoas em Interessados, e a confirmação diz quantos são.
+    - **Menu "Ações" acima das abas:** só com Exportar Excel e Exportar PDF.
+    - **Ações do link fora do menu:** "Tirar do ar / Colocar no ar" e "Abrir" saíram do menu e ficam no cartão do link, junto da situação e do "Copiar".
+    - **Celular:** o cartão do topo deixou de passar da borda (`grid-template-columns: minmax(0, 1fr)`), e o botão "Tirar do ar" ocupa a linha toda.
+  - Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
+    - os botões do topo (Tirar do ar, Copiar link, Abrir);
+    - o menu "Ações" antes das abas, só com as duas exportações;
+    - nenhuma seta na lista;
+    - 2 respostas selecionadas: DELETE `id=in.(r0,r2)` e interessados `envio_id=in.(e0,e2)`, com a contagem passando de 42 para 40;
+    - selecionar todas com o filtro "Não comprou" dá 3;
+    - trocar de filtro limpa a seleção;
+    - a ficha continua abrindo.
   - Animações: entrada da lista, painel deslizando, troca de ficha e barras. Todas respeitam "menos movimento".
   - Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
     - o bloco de apagar fica fora das abas;
