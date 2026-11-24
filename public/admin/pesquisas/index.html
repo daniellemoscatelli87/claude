@@ -314,8 +314,10 @@
   .pa-fv-rank { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
   .pa-fv-rank li { display: flex; align-items: baseline; gap: 8px; font-size: 15px; }
   .pa-fv-rank .pos { flex: none; font-size: 12px; font-weight: 800; color: var(--primary-text); }
-  .pa-fv-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .pa-fv-tags .pa-tg { font-size: 13px; padding: 4px 10px; border-radius: var(--radius-full); background: var(--muted); color: var(--foreground); }
+  .pa-fv-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .pa-fv-lista li { display: flex; align-items: flex-start; gap: 8px; font-size: 15px; line-height: 1.45; }
+  .pa-fv-lista .ic { flex: none; width: 16px; height: 16px; margin-top: 3px; color: var(--primary-text); }
+  .pa-fv-lista .ic svg { width: 16px; height: 16px; stroke-width: 2.6; }
   .pa-fv-notas { display: grid; gap: 10px; }
   .pa-fv-nota { display: grid; grid-template-columns: minmax(0, 1fr) minmax(80px, 1.2fr) 28px; align-items: center; gap: 12px; font-size: 14px; }
   .pa-fv-nota .barra { height: 8px; border-radius: 99px; background: var(--muted); overflow: hidden; }
@@ -1851,9 +1853,10 @@
       });
       return ul;
     }
-    const tags = el("div", "pa-fv-tags");
-    valores(v).forEach((id) => tags.appendChild(el("span", "pa-tg", nome(id) + (op(id).outro && v.outro ? `: ${v.outro}` : ""))));
-    return tags;
+    // múltipla escolha: lista simples com check, no mesmo padrão da lista em ordem (1º, 2º, 3º)
+    const ul = el("ul", "pa-fv-lista");
+    valores(v).forEach((id) => { const li = el("li"); const ic = el("span", "ic"); ic.innerHTML = IC.ok; li.append(ic, el("span", null, nome(id) + (op(id).outro && v.outro ? `: ${v.outro}` : ""))); ul.appendChild(li); });
+    return ul;
   }
   function fichaConteudo(x) {
     const corpo = el("div", "pa-ficha-corpo");

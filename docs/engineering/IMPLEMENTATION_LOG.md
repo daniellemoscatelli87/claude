@@ -649,6 +649,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - **Leitura da ficha:** cada pergunta aparece com o número e um rótulo curto; o texto completo fica na dica ao passar o mouse.
   - **Navegação na ficha:** "Anterior / Próxima", com "1 de 42", que respeita o filtro escolhido. Setas ← → do teclado funcionam. A lixeira também fica no topo da ficha.
   - **Excluir uma resposta também apaga o contato da pessoa em Interessados.** A ligação é feita pelo `envio_id`, que a função grava igual nas duas tabelas e que agora entra nas consultas. A confirmação avisa quando há contato.
+  - Múltipla escolha na ficha (perguntas 2.1, 7, 11 e 12): lista simples com check vermelho. Substitui as etiquetas, que herdavam o estilo `.tag` do design system (maiúsculas, espaçamento e ponto) e ficaram feias, segundo a dona do produto. Teste: os itens da pergunta 7 aparecem em lista no iPhone 13 e no computador, sem erros de JS.
   - Animações: entrada da lista, painel deslizando, troca de ficha e barras. Todas respeitam "menos movimento".
   - Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
     - o bloco de apagar fica fora das abas;
