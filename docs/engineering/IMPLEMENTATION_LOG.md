@@ -601,6 +601,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Pedido da dona do produto: a informação já aparece em outros lugares, no rodapé da página e no passo de identificação, ambos com o link para a Política de Privacidade.
 - Removido `p.pq-privacidade` de `pesquisa/moda-curitiba/index.html` e o estilo correspondente.
 - Sem repetição da etapa: o texto vermelho acima do título ("PERGUNTA 2", "ANTES DE COMEÇAR", "SOBRE VOCÊ"…) sai de todas as etapas, por escolha da dona do produto. A etapa fica só na barra de progresso ("Pergunta 2 de 12", "Antes de começar", "Quase lá · sobre você"); no título fica um texto só para leitores de tela.
+- Tela de quem mora fora de Curitiba e da Região Metropolitana: a frase termina em "…moram em Curitiba e Região Metropolitana." (sai "e compraram roupas, calçados ou acessórios este ano", que já está na tela de quem não comprou).
 - Identificação: "quem é você" em vermelho no título "Conte quem é você".
 - Identificação: o aceite ("Li e concordo…") fica dentro do cartão branco do aviso da LGPD, separado por uma linha.
 - Barra "Voltar / Continuar" sempre presa no rodapé da tela, também nas perguntas curtas, como na abertura. O formulário ocupa a altura da tela abaixo do cabeçalho (`--pq-topo-h`, medida pelo script) e a barra fica no fim. Teste: no iPhone 13 e no computador, a barra fica no rodapé da tela em todas as etapas, sem rolagem extra nas telas curtas.
