@@ -596,7 +596,22 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-24 · Painel da pesquisa: Relatos e Interessados dentro de Respostas e exportações separadas, não publicado
+## 2026-11-24 · Pesquisa: teste completo no site real antes da divulgação, publicado (#218)
+
+- Pedido da dona do produto: publicar tudo e testar todo o formulário antes de divulgar o link ("nada pode ser perdido").
+- Publicado o painel (#218).
+- Antes de enviar de verdade, foi conferido que `pesquisa_respostas` e `pesquisa_interessados` não têm gatilhos: gravar uma resposta não dispara e-mail.
+- Teste no site real, sem simulação do servidor: Playwright no iPhone 13, com dados fictícios (`teste-claude-…@exemplo.com`). Função `pesquisa` v13.
+  - A, Região Metropolitana + relato + "Sim": 200 `completa`, contato salvo, tela de sucesso. No banco: 13 perguntas mais o perfil (com a 1.1 e a cidade), relato, `quer_novidades` true e contato com o aceite `moda-curitiba-contato-v3-2026-11-24`.
+  - B, Curitiba (bairro pela busca) + "Não": 200 `completa`, tela de sucesso. No banco: 12 perguntas mais o perfil com o bairro; sem contato.
+  - C, Outra cidade: 200 `fora_de_curitiba`, tela de fora da região. No banco: só a pergunta 1.
+  - D, Não comprei: 200 `sem_compras`, tela sem compras. No banco: perguntas 1 e 2.
+  - E, mesmo e-mail de A: barrado na identificação com "Este e-mail ou WhatsApp já participou da pesquisa…", sem seguir para as perguntas.
+  - Sem erros de JS em nenhum cenário.
+- Na primeira rodada, o teste do cenário A avançou antes de o servidor responder à conferência do e-mail (primeira chamada mais lenta) e não registrou o envio. O envio foi gravado mesmo assim (apareceu no banco). Nas rodadas seguintes, com espera pela resposta, tudo foi registrado.
+- Limpeza: apagados os 9 envios e os 3 contatos de teste (`email like 'teste-claude-%@exemplo.com'`). Estado final: 0 respostas, 0 interessados, nenhum resto de teste, pesquisa no ar.
+
+## 2026-11-24 · Painel da pesquisa: Relatos e Interessados dentro de Respostas e exportações separadas, publicado (#218)
 
 - Subtítulo do painel, aprovado pela dona do produto: "Projeto do Dani Moscatelli Studio. Resultados analisados em conjunto; os nomes aparecem só na aba Respostas."
 - **Relatos:** só os relatos, sem o aviso no topo, por pedido da dona do produto.
