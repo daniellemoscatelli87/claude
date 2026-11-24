@@ -598,6 +598,21 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 
 ## 2026-11-24 · Painel da pesquisa: Relatos e Interessados dentro de Respostas e exportações separadas, não publicado
 
+- **Relatos:** só os relatos, sem o aviso no topo, por pedido da dona do produto.
+- **Interessados:** em vez da lista de nomes, números e perfil de quem quer os avisos, sem nomes, por pedido da dona do produto. Quem quer os avisos aparece na ficha de cada resposta ("Sim, quer receber os avisos do lançamento.").
+  - Cartões: "N pessoas querem os avisos" e "% das respostas completas".
+  - Gráficos de perfil iguais aos de Resultados (cidade; bairro por regional com a tabela dos bairros; gênero em rosca; faixa etária; estado civil). O trecho virou a função `cardsDePerfil(lista)`, usada nas duas abas.
+  - Base: respostas completas com "Sim" que têm o contato guardado (`interessadosR`), o mesmo número na aba interna e no cartão. Contatos sem resposta, se houver, aparecem numa nota.
+  - Gráfico sem ninguém na base (ex.: bairro quando ninguém do grupo mora em Curitiba) não aparece.
+  - Os gráficos animam também ao trocar de aba interna.
+  - Na aba Interessados, o menu Ações tem só "Exportar respostas", porque não há mais lista para marcar. Os contatos (nome, e-mail e WhatsApp) continuam na planilha de "Exportar respostas".
+- Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
+  - Relatos sem aviso (11 relatos);
+  - Interessados com 2 pessoas e 6% (2 de 36), e os cartões de perfil com base 2;
+  - nenhum nome ou e-mail na tela;
+  - os 5 cartões de perfil em Resultados continuam;
+  - a ficha da resposta mostra o "Sim".
+
 - Pedido da dona do produto: Relatos e Interessados ficam dentro da área de Respostas, como abas internas, e a barra de ações fica no nível da resposta.
 - Exportações, por decisão dela: no nível da resposta, exportar só o que é da resposta (respostas, relatos e interessados); fora da aba Respostas, um "Exportar relatório" com toda a visão analítica.
 - **Abas de cima:** Resultados · Inteligência · Respostas.
@@ -614,7 +629,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - excluir 1 contato: continua em Respostas › Interessados;
   - a aba Relatos abre.
 
-## 2026-11-24 · Painel da pesquisa: aba Interessados com a mesma estrutura da aba Respostas, não publicado
+## 2026-11-24 · Painel da pesquisa: aba Interessados com a mesma estrutura da aba Respostas, não publicado (substituído depois por números e perfil, sem lista)
 
 - Pedido da dona do produto: a aba Interessados deve ter a mesma estrutura da aba Respostas.
 - Mesma estrutura:

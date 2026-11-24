@@ -242,11 +242,6 @@
   .pa-relato:first-child { border-top: 0; }
   .pa-relato p { margin: 0 0 6px; white-space: pre-wrap; overflow-wrap: anywhere; }
   .pa-relato small { font-size: 12px; color: var(--muted-foreground); }
-  .pa-int-info { cursor: default; }
-  .pa-int-ctt a { color: var(--primary-text); text-underline-offset: 2px; white-space: nowrap; }
-  .pa-int-ctt.pa-rl-res { display: block; -webkit-line-clamp: unset; line-clamp: unset; }
-  .pa-int-ctt { overflow-wrap: anywhere; }
-  .pa-resp-sit.pa-int-tag { background: var(--muted); color: var(--muted-foreground); cursor: help; }
   .pa-aviso { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: var(--radius-md); background: var(--muted); color: var(--muted-foreground); font-size: 13px; margin-bottom: 14px; }
   .pa-aviso svg { width: 18px; height: 18px; flex: none; margin-top: 1px; }
   .pa-lista { display: grid; gap: 12px; }
@@ -438,6 +433,7 @@
   .pa-dica b { font-size: 15px; }
   .pa-dica span { color: var(--muted-foreground); }
   /* Inteligência */
+  .pa-int-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 0 16px; }
   .pa-int-sec { margin-top: 22px; }
   .pa-int-sec > h2 { margin: 0 0 2px; font-size: 19px; }
   .pa-int-sec > .muted { margin: 0 0 12px; font-size: 13px; }
@@ -783,12 +779,13 @@
     const box = el("div", "pa-area-resp");
     const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
     const relatos = relatosR();
-    const { bar, marcar } = linhaDeAbas([["respostas", "Respostas", R.length], ["relatos", "Relatos", relatos.length], ["interessados", "Interessados", I.length]], "Respostas, relatos e interessados", (id) => abrirSub(id), "aba-sub-");
+    const { bar, marcar } = linhaDeAbas([["respostas", "Respostas", R.length], ["relatos", "Relatos", relatos.length], ["interessados", "Interessados", interessadosR().length]], "Respostas, relatos e interessados", (id) => abrirSub(id), "aba-sub-");
     bar.classList.add("pa-abas-int");
     const abrirSub = (id) => {
       SELECAO = null; marcar(id);
       corpo.setAttribute("aria-labelledby", "aba-sub-" + id);
       corpo.replaceChildren(id === "respostas" ? listaRespostas() : id === "relatos" ? listaRelatos(relatos) : listaInteressados());
+      requestAnimationFrame(() => requestAnimationFrame(animarGraficos));
     };
     const acoes = el("div", "pa-abas-acoes");
     acoes.appendChild(menuAcoes("pa-acoes-btn", "Ações", (item, btn) => {
@@ -1273,13 +1270,23 @@
       const card = qCard({ num: p.rotulo || num, titulo: p.texto, base: n, meta, leitura, corpo, rodape, largo });
       if (p.condicao && p.condicao.pergunta === "q1") depoisQ1.after(card); else g.appendChild(card);
     });
-    // perfil: um card para gênero e outro para faixa etária, lado a lado
+    cardsDePerfil(comp).forEach((c) => g.appendChild(c));
+    box.appendChild(g);
+    box.appendChild(el("p", "pa-nota", `Da pergunta 2.1 em diante, os números contam só quem respondeu tudo (${comp.length}). Quem não mora em Curitiba ou na Região Metropolitana, ou não comprou este ano, encerra na pergunta 1 ou 2.`));
+    return box;
+  }
+
+  // Cards de perfil (cidade, bairro por regional, gênero, faixa etária, estado civil) para uma base de respostas.
+  // Usados em Resultados (todas as completas) e na aba Interessados (só quem quer os avisos).
+  function cardsDePerfil(lista) {
+    const out = [];
     if (Q.perfil && Q.perfil.length) {
-      const comPerfil = comp.filter((x) => x.respostas.perfil);
+      const comPerfil = lista.filter((x) => x.respostas.perfil);
       Q.perfil.forEach((c) => {
         // cidade: as cidades com respostas; bairro (só Curitiba): por regional, com a tabela dos bairros
         if (c.id === "cidade" || c.id === "bairro") {
           const base = c.condicao ? comPerfil.filter((x) => c.condicao.opcoes.includes(x.respostas.perfil[c.condicao.campo])) : comPerfil;
+          if (!base.length) return;
           const conta = (id) => base.filter((x) => x.respostas.perfil[c.id] === id).length;
           const porOp = c.opcoes.map((o) => ({ rotulo: o.texto, v: conta(o.id), fixo: o.id === "nao_informar", o }));
           let its = porOp.filter((it) => it.v), rod = [];
@@ -1289,7 +1296,7 @@
             rod.push(el("p", "pa-nota", "Agrupado pelas Administrações Regionais da Prefeitura de Curitiba."), tabelaItens(porOp.filter((it) => it.v).map(({ rotulo, v, fixo }) => ({ rotulo, v, fixo })), base.length));
           } else rod.push(tabelaItens(its, base.length));
           const t = maisEscolhida(its);
-          g.appendChild(qCard({ num: "Perfil", titulo: c.texto, base: base.length,
+          out.push(qCard({ num: "Perfil", titulo: c.texto, base: base.length,
             leitura: t && t.v ? [c.id === "bairro" ? "Região com mais respostas: " : "Cidade com mais respostas: ", { b: t.rotulo }, ` (${pct(t.v, base.length)}%).`] : null,
             corpo: barras(its, base.length), rodape: rod }));
           return;
@@ -1299,14 +1306,12 @@
         const outrosTx = comPerfil.map((x) => x.respostas.perfil[c.id + "_outro"]).filter(Boolean);
         let ob = null;
         if (outrosTx.length) { ob = el("div", "pa-outros"); ob.appendChild(el("b", null, "O que escreveram em “outro”")); const ul = el("ul"); outrosTx.slice(0, 50).forEach((tx) => ul.appendChild(el("li", null, tx))); ob.appendChild(ul); }
-        g.appendChild(qCard({ num: "Perfil", titulo: c.texto, base: comPerfil.length,
+        out.push(qCard({ num: "Perfil", titulo: c.texto, base: comPerfil.length,
           leitura: t && t.v ? ["Maior grupo: ", { b: t.rotulo }, ` (${pct(t.v, comPerfil.length)}%).`] : null,
           corpo: c.id === "genero" ? rosca(its, comPerfil.length, { centro: t && t.v ? pct(t.v, comPerfil.length) + "%" : "0%", rotCentro: t && t.v ? t.rotulo.toLowerCase() : "" }) : barras(its, comPerfil.length, { ordem: "natural" }), rodape: [ob, tabelaItens(its, comPerfil.length)] }));
       });
     }
-    box.appendChild(g);
-    box.appendChild(el("p", "pa-nota", `Da pergunta 2.1 em diante, os números contam só quem respondeu tudo (${comp.length}). Quem não mora em Curitiba ou na Região Metropolitana, ou não comprou este ano, encerra na pergunta 1 ou 2.`));
-    return box;
+    return out;
   }
 
   // Destaques calculados direto dos números (sem IA): um cartão por achado, com o número em destaque,
@@ -2017,8 +2022,7 @@
     });
     if (x.relato && x.relato.trim()) { const q = el("blockquote", "pa-fb-relato", x.relato); bloco("Relato", [q]); }
     if (x.situacao === "completa") {
-      const tem = I.some((y) => y.envio_id && y.envio_id === x.envio_id);
-      bloco("Avisos do lançamento", [el("p", "pa-fv-tx", x.quer_novidades ? (tem ? "Quer receber. O contato está na aba Interessados." : "Quis receber. O contato já foi excluído.") : "Não quer receber.")]);
+      bloco("Avisos do lançamento", [el("p", "pa-fv-tx", x.quer_novidades ? "Sim, quer receber os avisos do lançamento." : "Não quer receber.")]);
     }
     if (x.situacao !== "completa") corpo.appendChild(el("p", "pa-ficha-nota", x.situacao === "fora_de_curitiba" ? "A pesquisa terminou na pergunta 1: a pessoa não mora em Curitiba nem na Região Metropolitana." : "A pesquisa terminou na pergunta 2: a pessoa não comprou roupas, calçados ou acessórios este ano."));
     return corpo;
@@ -2068,8 +2072,6 @@
   /* ---------- Relatos ---------- */
   function listaRelatos(lista) {
     const card = el("section", "card pa-entra");
-    const aviso = el("div", "pa-aviso"); aviso.innerHTML = IC.info; aviso.appendChild(el("span", null, "Relatos da pergunta aberta, exatamente como foram escritos. Aparecem sem nome, mesmo de quem deixou contato."));
-    card.appendChild(aviso);
     if (!lista.length) { card.appendChild(vazio("Nenhum relato ainda", "A pergunta aberta é opcional; os relatos aparecem aqui quando alguém escrever.")); return card; }
     lista.forEach((x) => { const d = el("div", "pa-relato"); d.append(el("p", null, x.relato), el("small", null, fmtDate(x.created_at))); card.appendChild(d); });
     return card;
@@ -2084,72 +2086,30 @@
     if (bt && n > 0 && !antes && !matchMedia("(prefers-reduced-motion: reduce)").matches) { bt.classList.remove("pa-pulsa"); void bt.offsetWidth; bt.classList.add("pa-pulsa"); }
   }
   // Aba Interessados: mesma estrutura da aba Respostas (seleção, lista em linhas, etiqueta em coluna fixa, lixeira)
-  const aceiteDe = (v) => { const m = /(\d{4})-(\d{2})-(\d{2})$/.exec(v || ""); return m ? `Aceite de ${m[3]}/${m[2]}` : "Aceite"; };
-  async function excluirInteressados(ids) {
-    const { error } = await sb.from("pesquisa_interessados").delete().in("id", ids);
-    if (error) { toast("Não foi possível excluir: " + error.message); return false; }
-    I = I.filter((y) => !ids.includes(y.id));
-    log(ids.length === 1 ? "Excluiu contato de interessado na pesquisa" : "Excluiu contatos de interessados na pesquisa", P.titulo);
-    toast(ids.length === 1 ? "Contato excluído" : `${plural(ids.length, "contato excluído", "contatos excluídos")}`);
-    ABA_INICIAL = "interessados"; desenhar();
-    return true;
-  }
+  // quem quer os avisos e tem o contato guardado (base da aba Interessados)
+  const interessadosR = () => completasR().filter((x) => x.quer_novidades && (!x.envio_id || I.some((y) => y.envio_id === x.envio_id)));
+  // Aba Interessados: quantas pessoas querem os avisos do lançamento e o perfil delas, sem nomes.
+  // (Quem quer os avisos aparece na ficha de cada resposta; os contatos saem em "Exportar respostas".)
   function listaInteressados() {
-    const card = el("section", "card pa-entra");
-    const aviso = el("div", "pa-aviso"); aviso.innerHTML = IC.info;
-    aviso.appendChild(el("span", null, "Pessoas que pediram para receber os avisos do lançamento, com autorização registrada (data, horário e versão do texto). Use estes contatos só para isso. Ficam separados das respostas da pesquisa."));
-    card.appendChild(aviso);
-    if (!I.length) { card.appendChild(vazio("Ninguém pediu os avisos ainda", "Quem marcar “Sim, quero receber os avisos” no fim da pesquisa aparece aqui.")); return card; }
-    const cont = el("p", "pa-rl-cont", `${plural(I.length, "contato", "contatos")}, do mais recente para o mais antigo.`);
-    const sel = new Set();
-    const barra = el("div", "pa-sel");
-    const todasLab = el("label", "pa-sel-todas"); const todasCb = el("input"); todasCb.type = "checkbox";
-    todasLab.append(todasCb, el("span", null, "Selecionar todos"));
-    const nSel = el("span", "pa-sel-n"); nSel.setAttribute("aria-live", "polite");
-    const dicaSel = el("span", "pa-sel-dica", "Para excluir, use o menu Ações");
-    barra.append(todasLab, nSel, dicaSel);
-    const lista = el("ul", "pa-rl");
-    const sincSel = () => {
-      const n = sel.size;
-      todasCb.checked = n > 0 && n === I.length; todasCb.indeterminate = n > 0 && n < I.length;
-      nSel.textContent = n ? plural(n, "selecionado", "selecionados") : "";
-      avisarSelecao(barra, n);
-      lista.querySelectorAll(".pa-rl-it").forEach((li) => li.classList.toggle("marcada", sel.has(li.dataset.id)));
-    };
-    todasCb.addEventListener("change", () => { I.forEach((x) => (todasCb.checked ? sel.add(x.id) : sel.delete(x.id))); lista.querySelectorAll(".pa-rl-cb input").forEach((c) => { c.checked = sel.has(c.value); }); sincSel(); });
-    const excluirSelecionados = async () => {
-      const alvo = I.filter((x) => sel.has(x.id)); if (!alvo.length) return;
-      const ok = await confirmDialog(alvo.length === 1
-        ? { title: "Excluir este contato?", message: `Os dados de ${alvo[0].nome} (nome, e-mail, WhatsApp e autorização) serão apagados de vez. Use quando a pessoa pedir a exclusão ou cancelar os avisos.`, ok: "Excluir" }
-        : { title: `Excluir ${plural(alvo.length, "contato", "contatos")}?`, message: `Os dados ${alvo.length === I.length ? "de todos os contatos" : `dos ${plural(alvo.length, "contato selecionado", "contatos selecionados")}`} (nome, e-mail, WhatsApp e autorização) serão apagados de vez. As respostas da pesquisa continuam. Essa ação não pode ser desfeita.`, ok: "Excluir" });
-      if (!ok) return;
-      await excluirInteressados(alvo.map((x) => x.id));
-    };
-    SELECAO = { n: () => sel.size, fn: excluirSelecionados };
-    I.forEach((x, k) => {
-      const li = el("li", "pa-rl-it"); li.style.setProperty("--i", Math.min(k, 12)); li.dataset.id = x.id;
-      const cbl = el("label", "pa-rl-cb"); const cb = el("input"); cb.type = "checkbox"; cb.value = x.id;
-      cb.setAttribute("aria-label", `Selecionar o contato de ${x.nome}`);
-      cb.addEventListener("change", () => { cb.checked ? sel.add(x.id) : sel.delete(x.id); sincSel(); });
-      cbl.appendChild(cb);
-      const info = el("div", "pa-rl-abrir pa-int-info");
-      const l1 = el("span", "pa-rl-l1"); l1.append(el("b", "pa-rl-nome", x.nome), el("span", "pa-rl-data", "Autorizou em " + fmtDate(x.consentimento_em)));
-      const ctt = el("span", "pa-rl-res pa-int-ctt");
-      const mail = el("a", null, x.email); mail.href = "mailto:" + x.email;
-      const tel = x.whatsapp.replace(/^(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3");
-      const wa = el("a", null, tel); wa.href = "https://wa.me/55" + x.whatsapp; wa.target = "_blank"; wa.rel = "noopener";
-      ctt.append(mail, " · ", wa);
-      const tag = el("span", "pa-resp-sit pa-int-tag", aceiteDe(x.consentimento_versao)); tag.title = "Versão do texto aceito: " + x.consentimento_versao;
-      info.append(l1, tag, ctt);
-      const del = el("button", "pa-rl-del"); del.type = "button"; del.innerHTML = IC.lixo; del.title = "Excluir contato"; del.setAttribute("aria-label", "Excluir o contato de " + x.nome);
-      del.addEventListener("click", async () => {
-        const ok = await confirmDialog({ title: "Excluir este contato?", message: `Os dados de ${x.nome} (nome, e-mail, WhatsApp e autorização) serão apagados de vez. Use quando a pessoa pedir a exclusão ou cancelar os avisos.`, ok: "Excluir" });
-        if (ok) { del.disabled = true; await excluirInteressados([x.id]); }
-      });
-      li.append(cbl, info, del); lista.appendChild(li);
-    });
-    card.append(cont, barra, lista); sincSel();
-    return card;
+    const box = el("div", "pa-entra");
+    const comp = completasR();
+    const quer = interessadosR();
+    if (!I.length && !quer.length) { const c = el("section", "card"); c.appendChild(vazio("Ninguém pediu os avisos ainda", "Quem marcar “Sim, quero receber os avisos” no fim da pesquisa aparece aqui.")); box.appendChild(c); return box; }
+    const kp = el("div", "pa-kpis pa-int-kpis");
+    const k = (n, t, sub) => { const d = el("div", "pa-kpi"); d.append(el("b", null, n), el("span", null, t)); if (sub) d.append(el("small", null, sub)); return d; };
+    kp.append(
+      k(quer.length.toLocaleString("pt-BR"), quer.length === 1 ? "pessoa quer os avisos" : "pessoas querem os avisos", "do lançamento e das vantagens"),
+      k(pct(quer.length, comp.length) + "%", "das respostas completas", `${quer.length} de ${comp.length}`),
+    );
+    box.appendChild(kp);
+    const g = el("div", "pa-graficos");
+    cardsDePerfil(quer).forEach((c) => g.appendChild(c));
+    if (g.children.length) box.appendChild(g);
+    else box.appendChild(el("p", "pa-nota", "Ainda não há perfil para mostrar."));
+    // contatos guardados cuja resposta já não existe (ex.: respostas apagadas antes de o contato ser apagado junto)
+    const soltos = I.filter((y) => !R.some((x) => x.envio_id === y.envio_id)).length;
+    if (soltos) box.appendChild(el("p", "pa-nota", `${plural(soltos, "contato guardado não tem", "contatos guardados não têm")} resposta na pesquisa e não ${soltos === 1 ? "entra" : "entram"} nos gráficos. ${soltos === 1 ? "Ele sai" : "Eles saem"} em "Exportar respostas".`));
+    return box;
   }
 
   function vazio(t, s) { const d = el("div", "pa-vazio"); d.append(el("b", null, t), s); return d; }
