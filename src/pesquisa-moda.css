@@ -472,3 +472,7 @@ html.pq-trava { overflow: hidden; }
 }
 @keyframes pq-busca-sobe { from { transform: translateY(100%); } to { transform: none; } }
 @media (prefers-reduced-motion: reduce) { .pq-busca[open] { animation: none; } }
+/* etapa sem título visível (última etapa): o conteúdo começa onde começaria o título */
+.pq-pergunta:has(.pq-titulo:empty) { margin: 0; }
+.pq-pergunta:has(.pq-titulo:empty) + * { margin-top: 0; }
+.pq-titulo:empty { display: none; }

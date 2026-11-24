@@ -545,7 +545,7 @@ function campo(id: string, rotulo: string, tipo: string, valor: string, ph: stri
 
 function montarNovidades() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-novidades'; fs.dataset.etapa = String(ETAPA_NOV);
-  cabecalho(fs, 'Última etapa', 'Sua contribuição vale vantagens exclusivas');
+  cabecalho(fs, 'Última etapa', ''); // sem título visível, por pedido da dona do produto: o cartão de vantagens abre a etapa
   // destaque: a contribuição da pessoa e as vantagens no lançamento
   const vant = el('div', 'pq-vantagem');
   const ic = el('span', 'pq-vantagem-ic'); ic.setAttribute('aria-hidden', 'true');
