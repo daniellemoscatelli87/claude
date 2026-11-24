@@ -596,6 +596,74 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-24 · Painel da pesquisa: Relatos e Interessados dentro de Respostas e exportações separadas, não publicado
+
+- Subtítulo do painel, aprovado pela dona do produto: "Projeto do Dani Moscatelli Studio. Resultados analisados em conjunto; os nomes aparecem só na aba Respostas."
+- **Relatos:** só os relatos, sem o aviso no topo, por pedido da dona do produto.
+- **Interessados:** em vez da lista de nomes, números e perfil de quem quer os avisos, sem nomes, por pedido da dona do produto. Quem quer os avisos aparece na ficha de cada resposta ("Sim, quer receber os avisos do lançamento.").
+  - Cartões: "N pessoas querem os avisos" e "% das respostas completas".
+  - Gráficos de perfil iguais aos de Resultados (cidade; bairro por regional com a tabela dos bairros; gênero em rosca; faixa etária; estado civil). O trecho virou a função `cardsDePerfil(lista)`, usada nas duas abas.
+  - Base: respostas completas com "Sim" que têm o contato guardado (`interessadosR`), o mesmo número na aba interna e no cartão. Contatos sem resposta, se houver, aparecem numa nota.
+  - Gráfico sem ninguém na base (ex.: bairro quando ninguém do grupo mora em Curitiba) não aparece.
+  - Os gráficos animam também ao trocar de aba interna.
+  - Na aba Interessados, o menu Ações tem só "Exportar respostas", porque não há mais lista para marcar. Os contatos (nome, e-mail e WhatsApp) continuam na planilha de "Exportar respostas".
+- Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
+  - Relatos sem aviso (11 relatos);
+  - Interessados com 2 pessoas e 6% (2 de 36), e os cartões de perfil com base 2;
+  - nenhum nome ou e-mail na tela;
+  - os 5 cartões de perfil em Resultados continuam;
+  - a ficha da resposta mostra o "Sim".
+
+- Pedido da dona do produto: Relatos e Interessados ficam dentro da área de Respostas, como abas internas, e a barra de ações fica no nível da resposta.
+- Exportações, por decisão dela: no nível da resposta, exportar só o que é da resposta (respostas, relatos e interessados); fora da aba Respostas, um "Exportar relatório" com toda a visão analítica.
+- **Abas de cima:** Resultados · Inteligência · Respostas.
+  - No canto direito, na mesma linha, fica o menu "Exportar relatório", com PDF (Resultados e Inteligência, com os indicadores) e Excel (abas Resumo, Resultados e Inteligência).
+  - No celular, o menu fica acima das abas.
+- **Dentro de Respostas:** abas internas Respostas · Relatos · Interessados, no padrão SegmentedControl do DS (variante suave, tamanho sm), para não confundir com as abas de cima.
+  - Na mesma linha fica o menu "Ações", com "Exportar respostas" (Excel com as abas Respostas, Relatos e Interessados, arquivo `…-respostas-AAAA-MM-DD.xlsx`) e "Excluir". "Excluir" só aparece em Respostas e Interessados e exclui o que estiver marcado.
+  - Depois de excluir, o painel volta para a mesma aba interna.
+- Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
+  - as abas de cima (3) e as internas (3, com as contagens);
+  - os menus ("PDF" e "Excel"; "Exportar respostas" e "Excluir" desativado sem seleção);
+  - as abas de cada planilha baixada (relatório: Resumo, Resultados e Inteligência; respostas: Respostas, Relatos e Interessados);
+  - excluir 2 respostas pelo menu: a contagem passa de 42 para 40, os contatos delas saem de Interessados e o painel continua em Respostas › Respostas;
+  - excluir 1 contato: continua em Respostas › Interessados;
+  - a aba Relatos abre.
+
+## 2026-11-24 · Painel da pesquisa: aba Interessados com a mesma estrutura da aba Respostas, não publicado (substituído depois por números e perfil, sem lista)
+
+- Pedido da dona do produto: a aba Interessados deve ter a mesma estrutura da aba Respostas.
+- Mesma estrutura:
+  - aviso no topo e contagem ("N contatos, do mais recente para o mais antigo");
+  - barra "Selecionar todos · N selecionados" (excluir pelo menu Ações);
+  - linhas com caixa de seleção, nome em destaque e "Autorizou em …";
+  - e-mail e WhatsApp clicáveis (`mailto:` e `wa.me`), cada um sem quebrar no meio;
+  - etiqueta na coluna fixa de 168 px e lixeira;
+  - hover e seleção na linha inteira.
+- **Etiqueta "Aceite de DD/MM":** mostra com qual versão do texto a pessoa concordou. A versão completa (`moda-curitiba-contato-v3-…`) aparece ao passar o mouse.
+- **Excluir:** um contato ou vários de uma vez (`pesquisa_interessados` por `id`). As respostas da pesquisa continuam. Depois de excluir, a aba Interessados continua aberta.
+- "Excluir selecionadas/selecionados" saiu da barra de seleção e virou item do menu Ações, por pedido da dona do produto. Vale para as abas Respostas e Interessados.
+  - O item mostra a quantidade ("Excluir 2 respostas selecionadas") e, embaixo, uma dica ("Apaga também o contato delas em Interessados" ou "As respostas da pesquisa continuam").
+  - Sem nada marcado, o item fica desativado, com "Marque as caixas na lista para escolher". Nas outras abas, ele não aparece.
+  - A barra mostra "Selecionar todos", a contagem e "Para excluir, use o menu Ações". Na primeira marcação, o botão "Ações" pulsa, respeitando "menos movimento".
+- Menu "Ações" só com o nome das ações (Exportar Excel, Exportar PDF, Excluir), sem explicações, e mais estreito, por pedido da dona do produto.
+  - "Excluir" fica no menu também no computador e apaga exatamente o que estiver marcado: uma, várias ou todas as respostas, ou os contatos marcados na aba Interessados. Sem nada marcado, fica desativado.
+  - Os interessados fazem parte da resposta: excluir respostas continua apagando o contato delas em Interessados, mas isso não é mais explicado no menu, nas confirmações nem no bloco "Recomeçar a pesquisa do zero" ("Apaga todas as respostas e relatos.").
+  - Teste: computador e iPhone 13, sem erros de JS. Conferidos:
+    - o menu com os 3 nomes;
+    - o "Excluir" desativado sem seleção;
+    - 2 respostas excluídas: a contagem passa de 42 para 40 e os contatos delas saem de Interessados (de 4 para 2 no computador);
+    - um contato excluído na aba Interessados.
+- No computador (a partir de 768 px), o menu "Ações" fica na mesma linha das abas, no canto direito, por pedido da dona do produto. No celular continua acima das abas, alinhado à direita.
+  - Teste: computador e iPhone 13, sem erros de JS. Conferidos:
+    - o menu só com as exportações em Resultados;
+    - o item desativado sem seleção;
+    - com 2 respostas marcadas: "Excluir 2 respostas selecionadas" → confirmação → DELETE `id=in.(…)`, com a contagem passando de 42 para 40;
+    - em Interessados: "Excluir 1 contato selecionado", com a contagem caindo 1.
+- Teste: Playwright com 4 contatos fictícios (2 com aceite v3 e 2 com v2), no computador e no iPhone 13, sem erros de JS. Conferidos:
+  - as etiquetas certas, todas na mesma coluna;
+  - 2 contatos selecionados e excluídos: DELETE `id=in.(i1,i3)` e a contagem passando de 4 para 2.
+
 ## 2026-11-24 · Pesquisa: sai o "Saiba como tratamos seus dados" de baixo do botão da abertura e ícones dos cartões em cinza, publicado (#216)
 
 - Publicado em 24/11/2026: site pelo PR #216 e função `pesquisa` v13 (questionário idêntico ao do repositório, conferido pela ação `status`). Checagem no site real (iPhone 13, sem envio): busca de bairro ("umbara" → Umbará), sem erros de JS.

@@ -43,7 +43,7 @@
   .pa-menu-caixa { position: relative; flex-shrink: 0; }
   .pa-menu-btn svg:last-child { transition: transform var(--duration-normal, .2s) var(--ease-out, ease-out); }
   .pa-menu-caixa.aberto .pa-menu-btn svg:last-child { transform: rotate(180deg); }
-  .pa-menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; width: min(300px, calc(100vw - 48px)); padding: 6px; background: var(--popover, var(--card)); color: var(--popover-foreground, var(--foreground)); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-md); transform-origin: top right; animation: pa-menu-in .16s var(--ease-out, ease-out) both; }
+  .pa-menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; width: max-content; min-width: 200px; max-width: calc(100vw - 48px); padding: 6px; background: var(--popover, var(--card)); color: var(--popover-foreground, var(--foreground)); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-md); transform-origin: top right; animation: pa-menu-in .16s var(--ease-out, ease-out) both; }
   @keyframes pa-menu-in { from { opacity: 0; transform: translateY(-4px) scale(.97); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) { .pa-menu { animation: none; } .pa-menu-btn svg:last-child { transition: none; } }
   .pa-menu-it { display: flex; align-items: flex-start; gap: 10px; width: 100%; min-height: 44px; padding: 9px 10px; border: 0; border-radius: var(--radius-sm); background: none; font: inherit; font-size: 14px; text-align: left; color: var(--foreground); text-decoration: none; cursor: pointer; }
@@ -242,12 +242,6 @@
   .pa-relato:first-child { border-top: 0; }
   .pa-relato p { margin: 0 0 6px; white-space: pre-wrap; overflow-wrap: anywhere; }
   .pa-relato small { font-size: 12px; color: var(--muted-foreground); }
-  .pa-int { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: center; padding: 14px 4px; border-top: 1px solid var(--muted); }
-  .pa-int:first-child { border-top: 0; }
-  .pa-int .n { font-weight: 700; overflow-wrap: anywhere; }
-  .pa-int .c { font-size: 13px; color: var(--foreground); overflow-wrap: anywhere; }
-  .pa-int .c a { color: var(--primary-text); }
-  .pa-int small { font-size: 12px; color: var(--muted-foreground); }
   .pa-aviso { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: var(--radius-md); background: var(--muted); color: var(--muted-foreground); font-size: 13px; margin-bottom: 14px; }
   .pa-aviso svg { width: 18px; height: 18px; flex: none; margin-top: 1px; }
   .pa-lista { display: grid; gap: 12px; }
@@ -302,9 +296,26 @@
   .pa-sel.ativa { background: var(--primary-muted); }
   .pa-sel-todas { display: inline-flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 600; color: var(--foreground); cursor: pointer; }
   .pa-sel-n { font-size: 13px; color: var(--primary-text); font-weight: 600; }
-  .pa-sel .pa-btn { margin-left: auto; animation: pa-rl-in .2s var(--ease-out, ease-out) both; }
-  .pa-sel .pa-btn[hidden] { display: none; }
-  .pa-abas-acoes { position: relative; z-index: 6; display: flex; justify-content: flex-end; margin: 0 0 10px; }
+  .pa-sel-dica { margin-left: auto; font-size: 12.5px; color: var(--muted-foreground); }
+  .pa-sel:not(.ativa) .pa-sel-dica { display: none; }
+  .pa-menu-it:disabled { opacity: .5; cursor: default; }
+  .pa-menu-it:disabled:hover { background: none; }
+  .pa-pulsa { animation: pa-pulsa .9s var(--ease-out, ease-out) 2; }
+  @keyframes pa-pulsa { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 40%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
+  /* abas internas de Respostas no padrão SegmentedControl do DS (variante suave, tamanho sm) */
+  .pa-abas.pa-abas-int { gap: 0; padding: 0; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-xs, var(--shadow-sm)); overflow: hidden; }
+  .pa-abas.pa-abas-int button { height: 32px; padding: 0 12px; border-radius: 0; font-size: 13px; font-weight: 600; color: var(--muted-foreground); border-left: 1px solid var(--border); transition: background-color .15s, color .15s; display: inline-flex; align-items: center; }
+  .pa-abas.pa-abas-int button:first-child { border-left: 0; }
+  .pa-abas.pa-abas-int button:hover { background: var(--accent, var(--muted)); color: var(--foreground); }
+  .pa-abas.pa-abas-int button[aria-selected=true] { background: var(--primary-muted); color: var(--primary-text); box-shadow: none; }
+  .pa-abas.pa-abas-int button:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--ring, var(--primary)); }
+  .pa-abas.pa-abas-int .n { background: var(--muted); }
+  .pa-abas.pa-abas-int button[aria-selected=true] .n { background: var(--card); color: var(--primary-text); }
+  .pa-area-resp > .pa-abas-linha { margin-bottom: 14px; }
+  .pa-abas-linha { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .pa-abas-linha > .pa-abas { margin-bottom: 0; min-width: 0; }
+  .pa-abas-acoes { position: relative; z-index: 6; display: flex; justify-content: flex-end; margin-left: auto; flex: none; }
+  @media (max-width: 767px) { .pa-abas-linha { flex-direction: column-reverse; align-items: stretch; gap: 10px; } .pa-abas-linha > .pa-abas { align-self: flex-start; } }
   .pa-rl-del { flex: none; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; color: var(--muted-foreground); background: none; border: 1px solid transparent; border-radius: var(--radius-md); cursor: pointer; transition: color .15s, background-color .15s, border-color .15s; }
   .pa-rl-del svg { width: 18px; height: 18px; }
   .pa-rl-del:hover, .pa-rl-del:focus-visible { color: var(--destructive, var(--primary-text)); background: var(--primary-muted); border-color: color-mix(in srgb, var(--primary) 25%, transparent); outline: none; }
@@ -422,6 +433,7 @@
   .pa-dica b { font-size: 15px; }
   .pa-dica span { color: var(--muted-foreground); }
   /* Inteligência */
+  .pa-int-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 0 16px; }
   .pa-int-sec { margin-top: 22px; }
   .pa-int-sec > h2 { margin: 0 0 2px; font-size: 19px; }
   .pa-int-sec > .muted { margin: 0 0 12px; font-size: 13px; }
@@ -600,7 +612,7 @@
     P = p.data; Q = q.questionario; R = r.data || []; I = i.data || [];
     document.title = P.titulo + " | Área restrita";
     $("titulo").textContent = P.titulo;
-    $("sub").textContent = "Projeto do Dani Moscatelli Studio. Respostas analisadas em conjunto, sem identificar quem respondeu.";
+    $("sub").textContent = "Projeto do Dani Moscatelli Studio. Resultados analisados em conjunto; os nomes aparecem só na aba Respostas.";
     desenhar();
     // ao abrir, as respostas novas deixam de aparecer como notificação
     const novas = R.filter((x) => !x.visualizado_em).map((x) => x.id);
@@ -651,11 +663,13 @@
   }
   // Menu "Ações": abre abaixo do botão, alinhado à direita; Esc, clique fora ou escolher uma ação fecham.
   // Setas para cima e para baixo navegam entre os itens. O próprio botão mostra o andamento (ex.: gerando planilha).
-  function menuAcoes() {
+  // Menu suspenso (padrão "Ações"): abre abaixo do botão, alinhado à direita; Esc, clique fora ou escolher fecham.
+  // Os itens são montados a cada abertura (montar), para refletir o estado atual (ex.: o que está marcado na lista).
+  function menuAcoes(id = "pa-acoes-btn", rotulo = "Ações", montar = null) {
     const caixa = el("div", "pa-menu-caixa");
     const btn = el("button", "pa-btn pa-menu-btn"); btn.type = "button";
-    btn.setAttribute("aria-haspopup", "menu"); btn.setAttribute("aria-expanded", "false"); btn.id = "pa-acoes-btn";
-    btn.innerHTML = '<span>Ações</span>' + svg('<path d="m6 9 6 6 6-6"/>');
+    btn.setAttribute("aria-haspopup", "menu"); btn.setAttribute("aria-expanded", "false"); btn.id = id;
+    btn.innerHTML = '<span>' + rotulo + '</span>' + svg('<path d="m6 9 6 6 6-6"/>');
     const menu = el("div", "pa-menu"); menu.setAttribute("role", "menu"); menu.setAttribute("aria-labelledby", btn.id); menu.hidden = true;
     const item = (ic, texto, dica, acao, cls = "") => {
       const b = el(acao.href ? "a" : "button", "pa-menu-it" + cls); b.setAttribute("role", "menuitem"); b.tabIndex = -1;
@@ -664,13 +678,11 @@
       b.addEventListener("click", () => { fechar(false); if (acao.fn) acao.fn(); });
       return b;
     };
-    menu.append(
-      item(IC_BAIXAR, "Exportar Excel", "Planilha com todas as abas", { fn: () => exportarExcel(btn) }),
-      item(IC_BAIXAR, "Exportar PDF", "Relatório completo; escolha Salvar como PDF", { fn: exportarPdf }),
-    );
-    const itens = () => [...menu.querySelectorAll(".pa-menu-it")];
+    const montarExtra = () => menu.replaceChildren(...(montar ? montar(item, btn) : []));
+    const itens = () => [...menu.querySelectorAll(".pa-menu-it:not(:disabled)")];
     const fora = (e) => { if (!caixa.contains(e.target)) fechar(false); };
     function abrir() {
+      montarExtra();
       menu.hidden = false; btn.setAttribute("aria-expanded", "true"); caixa.classList.add("aberto");
       requestAnimationFrame(() => itens()[0]?.focus());
       document.addEventListener("pointerdown", fora);
@@ -727,28 +739,67 @@
     return wrap;
   }
 
+  let SELECAO = null; // seleção da aba aberta (Respostas ou Interessados), usada pelo item "Excluir" do menu Ações
   let ABA_INICIAL = null; // depois de excluir, o painel é redesenhado e volta para a mesma aba
-  function abas() {
-    const relatos = R.filter((x) => x.relato && x.relato.trim());
-    const box = el("div");
-    const bar = el("div", "pa-abas"); bar.setAttribute("role", "tablist"); bar.setAttribute("aria-label", "Seções da pesquisa");
-    const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
-    const defs = [["resultados", "Resultados", null], ["inteligencia", "Inteligência", null], ["respostas", "Respostas", R.length], ["relatos", "Relatos", relatos.length], ["interessados", "Interessados", I.length]];
+  // Abas de cima: Resultados · Inteligência · Respostas, com "Exportar relatório" (visão analítica) no canto direito.
+  // Dentro de Respostas, abas internas Respostas · Relatos · Interessados, com o menu "Ações" (exportar respostas e excluir).
+  const SUBABAS = ["respostas", "relatos", "interessados"];
+  function linhaDeAbas(defs, rotuloAria, abrir, prefixo) {
+    const bar = el("div", "pa-abas"); bar.setAttribute("role", "tablist"); bar.setAttribute("aria-label", rotuloAria);
     const botoes = defs.map(([id, t, n]) => {
-      const b = el("button"); b.type = "button"; b.setAttribute("role", "tab"); b.id = "aba-" + id; b.append(t);
+      const b = el("button"); b.type = "button"; b.setAttribute("role", "tab"); b.id = prefixo + id; b.append(t);
       if (n != null) b.appendChild(el("span", "n", String(n)));
       b.addEventListener("click", () => abrir(id));
       bar.appendChild(b); return b;
     });
-    const abrir = (id) => {
-      botoes.forEach((b) => b.setAttribute("aria-selected", String(b.id === "aba-" + id)));
+    return { bar, marcar: (id) => botoes.forEach((b) => b.setAttribute("aria-selected", String(b.id === prefixo + id))) };
+  }
+  function abas() {
+    const box = el("div");
+    const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
+    const { bar, marcar } = linhaDeAbas([["resultados", "Resultados", null], ["inteligencia", "Inteligência", null], ["respostas", "Respostas", R.length]], "Seções da pesquisa", (id) => abrir(id), "aba-");
+    const abrir = (id, sub) => {
+      SELECAO = null; marcar(id);
       corpo.setAttribute("aria-labelledby", "aba-" + id);
-      corpo.replaceChildren(id === "resultados" ? resultados() : id === "inteligencia" ? inteligencia() : id === "respostas" ? listaRespostas() : id === "relatos" ? listaRelatos(relatos) : listaInteressados());
+      corpo.replaceChildren(id === "resultados" ? resultados() : id === "inteligencia" ? inteligencia() : areaRespostas(sub || "respostas"));
       requestAnimationFrame(() => requestAnimationFrame(animarGraficos));
     };
-    const acoes = el("div", "pa-abas-acoes"); acoes.appendChild(menuAcoes());
-    box.append(acoes, bar, corpo);
-    abrir(ABA_INICIAL || "resultados"); ABA_INICIAL = null;
+    const exp = el("div", "pa-abas-acoes");
+    exp.appendChild(menuAcoes("pa-relatorio-btn", "Exportar relatório", (item, btn) => [
+      item(IC_BAIXAR, "PDF", "", { fn: exportarPdf }),
+      item(IC_BAIXAR, "Excel", "", { fn: () => exportarExcel(btn) }),
+    ]));
+    const linha = el("div", "pa-abas-linha"); linha.append(bar, exp);
+    box.append(linha, corpo);
+    const ini = ABA_INICIAL; ABA_INICIAL = null;
+    if (SUBABAS.includes(ini)) abrir("respostas", ini); else abrir(ini || "resultados");
+    return box;
+  }
+  function areaRespostas(sub) {
+    const box = el("div", "pa-area-resp");
+    const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
+    const relatos = relatosR();
+    const { bar, marcar } = linhaDeAbas([["respostas", "Respostas", R.length], ["relatos", "Relatos", relatos.length], ["interessados", "Interessados", interessadosR().length]], "Respostas, relatos e interessados", (id) => abrirSub(id), "aba-sub-");
+    bar.classList.add("pa-abas-int");
+    const abrirSub = (id) => {
+      SELECAO = null; marcar(id);
+      corpo.setAttribute("aria-labelledby", "aba-sub-" + id);
+      corpo.replaceChildren(id === "respostas" ? listaRespostas() : id === "relatos" ? listaRelatos(relatos) : listaInteressados());
+      requestAnimationFrame(() => requestAnimationFrame(animarGraficos));
+    };
+    const acoes = el("div", "pa-abas-acoes");
+    acoes.appendChild(menuAcoes("pa-acoes-btn", "Ações", (item, btn) => {
+      const l = [item(IC_BAIXAR, "Exportar respostas", "", { fn: () => exportarRespostas(btn) })];
+      if (SELECAO) {
+        const ex = item(IC.lixo, "Excluir", "", { fn: SELECAO.fn }, " perigo");
+        if (!SELECAO.n()) { ex.disabled = true; ex.setAttribute("aria-disabled", "true"); }
+        l.push(el("div", "pa-menu-sep"), ex);
+      }
+      return l;
+    }));
+    const linha = el("div", "pa-abas-linha"); linha.append(bar, acoes);
+    box.append(linha, corpo);
+    abrirSub(sub);
     return box;
   }
 
@@ -1219,13 +1270,23 @@
       const card = qCard({ num: p.rotulo || num, titulo: p.texto, base: n, meta, leitura, corpo, rodape, largo });
       if (p.condicao && p.condicao.pergunta === "q1") depoisQ1.after(card); else g.appendChild(card);
     });
-    // perfil: um card para gênero e outro para faixa etária, lado a lado
+    cardsDePerfil(comp).forEach((c) => g.appendChild(c));
+    box.appendChild(g);
+    box.appendChild(el("p", "pa-nota", `Da pergunta 2.1 em diante, os números contam só quem respondeu tudo (${comp.length}). Quem não mora em Curitiba ou na Região Metropolitana, ou não comprou este ano, encerra na pergunta 1 ou 2.`));
+    return box;
+  }
+
+  // Cards de perfil (cidade, bairro por regional, gênero, faixa etária, estado civil) para uma base de respostas.
+  // Usados em Resultados (todas as completas) e na aba Interessados (só quem quer os avisos).
+  function cardsDePerfil(lista) {
+    const out = [];
     if (Q.perfil && Q.perfil.length) {
-      const comPerfil = comp.filter((x) => x.respostas.perfil);
+      const comPerfil = lista.filter((x) => x.respostas.perfil);
       Q.perfil.forEach((c) => {
         // cidade: as cidades com respostas; bairro (só Curitiba): por regional, com a tabela dos bairros
         if (c.id === "cidade" || c.id === "bairro") {
           const base = c.condicao ? comPerfil.filter((x) => c.condicao.opcoes.includes(x.respostas.perfil[c.condicao.campo])) : comPerfil;
+          if (!base.length) return;
           const conta = (id) => base.filter((x) => x.respostas.perfil[c.id] === id).length;
           const porOp = c.opcoes.map((o) => ({ rotulo: o.texto, v: conta(o.id), fixo: o.id === "nao_informar", o }));
           let its = porOp.filter((it) => it.v), rod = [];
@@ -1235,7 +1296,7 @@
             rod.push(el("p", "pa-nota", "Agrupado pelas Administrações Regionais da Prefeitura de Curitiba."), tabelaItens(porOp.filter((it) => it.v).map(({ rotulo, v, fixo }) => ({ rotulo, v, fixo })), base.length));
           } else rod.push(tabelaItens(its, base.length));
           const t = maisEscolhida(its);
-          g.appendChild(qCard({ num: "Perfil", titulo: c.texto, base: base.length,
+          out.push(qCard({ num: "Perfil", titulo: c.texto, base: base.length,
             leitura: t && t.v ? [c.id === "bairro" ? "Região com mais respostas: " : "Cidade com mais respostas: ", { b: t.rotulo }, ` (${pct(t.v, base.length)}%).`] : null,
             corpo: barras(its, base.length), rodape: rod }));
           return;
@@ -1245,14 +1306,12 @@
         const outrosTx = comPerfil.map((x) => x.respostas.perfil[c.id + "_outro"]).filter(Boolean);
         let ob = null;
         if (outrosTx.length) { ob = el("div", "pa-outros"); ob.appendChild(el("b", null, "O que escreveram em “outro”")); const ul = el("ul"); outrosTx.slice(0, 50).forEach((tx) => ul.appendChild(el("li", null, tx))); ob.appendChild(ul); }
-        g.appendChild(qCard({ num: "Perfil", titulo: c.texto, base: comPerfil.length,
+        out.push(qCard({ num: "Perfil", titulo: c.texto, base: comPerfil.length,
           leitura: t && t.v ? ["Maior grupo: ", { b: t.rotulo }, ` (${pct(t.v, comPerfil.length)}%).`] : null,
           corpo: c.id === "genero" ? rosca(its, comPerfil.length, { centro: t && t.v ? pct(t.v, comPerfil.length) + "%" : "0%", rotCentro: t && t.v ? t.rotulo.toLowerCase() : "" }) : barras(its, comPerfil.length, { ordem: "natural" }), rodape: [ob, tabelaItens(its, comPerfil.length)] }));
       });
     }
-    box.appendChild(g);
-    box.appendChild(el("p", "pa-nota", `Da pergunta 2.1 em diante, os números contam só quem respondeu tudo (${comp.length}). Quem não mora em Curitiba ou na Região Metropolitana, ou não comprou este ano, encerra na pergunta 1 ou 2.`));
-    return box;
+    return out;
   }
 
   // Destaques calculados direto dos números (sem IA): um cartão por achado, com o número em destaque,
@@ -1334,7 +1393,7 @@
      painel mostra (títulos, leituras e tabelas de números); Respostas, Relatos e Interessados saem direto dos dados.
      PDF: monta todas as abas numa página só e abre a janela de impressão ("Salvar como PDF"). */
   const IC_BAIXAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>';
-  const ABAS_EXP = [["resultados", "Resultados"], ["inteligencia", "Inteligência"], ["respostas", "Respostas"], ["relatos", "Relatos"], ["interessados", "Interessados"]];
+  const ABAS_EXP = [["resultados", "Resultados"], ["inteligencia", "Inteligência"]]; // o relatório é a visão analítica; respostas, relatos e interessados saem em "Exportar respostas"
   const relatosR = () => R.filter((x) => x.relato && x.relato.trim());
   const montarAba = (id) => id === "resultados" ? resultados() : id === "inteligencia" ? inteligencia() : id === "respostas" ? listaRespostas() : id === "relatos" ? listaRelatos(relatosR()) : listaInteressados();
   const limpo = (t) => String(t ?? "").replace(/\s+/g, " ").trim();
@@ -1389,9 +1448,6 @@
       add("Resumo", resumoLinhas(), [{ wch: 28 }, { wch: 40 }]);
       add("Resultados", linhasDoPainel(resultados()), [{ wch: 60 }, ...Array(8).fill({ wch: 14 })]);
       add("Inteligência", linhasDoPainel(inteligencia()), [{ wch: 60 }, ...Array(8).fill({ wch: 14 })]);
-      const resp = dadosRespostas(); add("Respostas", resp, resp[0].map((_, k) => ({ wch: k < 3 ? 14 : 36 })));
-      add("Relatos", [["Data", "Relato"], ...relatosR().map((x) => [fmtDate(x.created_at), x.relato])], [{ wch: 18 }, { wch: 100 }]);
-      add("Interessados", [["Nome", "E-mail", "WhatsApp", "Autorizou em", "Versão da autorização"], ...I.map((x) => [x.nome, x.email, x.whatsapp, fmtDate(x.consentimento_em), x.consentimento_versao])], [{ wch: 28 }, { wch: 32 }, { wch: 16 }, { wch: 18 }, { wch: 34 }]);
       X.writeFile(wb, nomeArquivo("xlsx"));
       log("Exportou o relatório da pesquisa em Excel", P.titulo);
       btn.classList.add("ok"); btn.innerHTML = IC.ok + "<span>Planilha baixada</span>";
@@ -1402,9 +1458,29 @@
       toast("Não foi possível gerar a planilha. Confira a conexão e tente de novo.");
     }
   }
+  // Exportar respostas (menu "Ações" da área Respostas): planilha com Respostas, Relatos e Interessados
+  async function exportarRespostas(btn) {
+    const orig = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="pa-spin" aria-hidden="true"></span><span>Gerando planilha…</span>';
+    try {
+      const X = await carregarXlsx();
+      const wb = X.utils.book_new();
+      const add = (nome, rows, larg) => { const ws = X.utils.aoa_to_sheet(rows.length ? rows : [["Sem dados"]]); ws["!cols"] = larg; X.utils.book_append_sheet(wb, ws, nome); };
+      const resp = dadosRespostas(); add("Respostas", resp, resp[0].map((_, k) => ({ wch: k < 3 ? 14 : 36 })));
+      add("Relatos", [["Data", "Relato"], ...relatosR().map((x) => [fmtDate(x.created_at), x.relato])], [{ wch: 18 }, { wch: 100 }]);
+      add("Interessados", [["Nome", "E-mail", "WhatsApp", "Autorizou em", "Versão da autorização"], ...I.map((x) => [x.nome, x.email, x.whatsapp, fmtDate(x.consentimento_em), x.consentimento_versao])], [{ wch: 28 }, { wch: 32 }, { wch: 16 }, { wch: 18 }, { wch: 34 }]);
+      X.writeFile(wb, nomeArquivo("xlsx").replace("-relatorio-", "-respostas-"));
+      log("Exportou as respostas da pesquisa em Excel", P.titulo);
+      btn.classList.add("ok"); btn.innerHTML = IC.ok + "<span>Planilha baixada</span>";
+      setTimeout(() => { btn.classList.remove("ok"); btn.innerHTML = orig; btn.disabled = false; }, 2200);
+    } catch (e) {
+      console.error("exportar Excel", e);
+      btn.innerHTML = orig; btn.disabled = false;
+      toast("Não foi possível gerar a planilha. Confira a conexão e tente de novo.");
+    }
+  }
   function exportarPdf() {
     const box = el("div"); box.id = "pa-print";
-    const cab = el("header", "pa-print-cab"); cab.append(el("h1", null, P.titulo), el("p", "muted", "Relatório completo · gerado em " + fmtDate(new Date().toISOString())));
+    const cab = el("header", "pa-print-cab"); cab.append(el("h1", null, P.titulo), el("p", "muted", "Relatório · gerado em " + fmtDate(new Date().toISOString())));
     box.append(cab, kpis());
     ABAS_EXP.forEach(([id, t]) => { const sec = el("section", "pa-print-aba"); sec.append(el("h2", "pa-print-tit", t), montarAba(id)); box.appendChild(sec); });
     box.querySelectorAll("details").forEach((d) => { d.open = true; });
@@ -1778,12 +1854,11 @@
     const box = el("div", "pa-zerar pa-entra");
     if (!R.length && !I.length) return box;
     const tx = el("div");
-    tx.append(el("b", null, "Recomeçar a pesquisa do zero"), el("span", null, "Apaga todas as respostas, relatos e contatos de interessados."));
+    tx.append(el("b", null, "Recomeçar a pesquisa do zero"), el("span", null, "Apaga todas as respostas e relatos."));
     const bt = el("button", "pa-btn perigo"); bt.type = "button"; bt.innerHTML = IC.lixo + "<span>Apagar todas as respostas</span>";
     bt.addEventListener("click", async () => {
       const partes = [];
-      if (R.length) partes.push(`As ${plural(R.length, "participação", "participações")} desta pesquisa serão apagadas de vez, junto com os relatos.`);
-      if (I.length) partes.push(`${I.length === 1 ? "O contato" : `Os ${plural(I.length, "contato", "contatos")}`} da aba Interessados ${R.length ? "também " : ""}${I.length === 1 ? "será apagado" : "serão apagados"}.`);
+      partes.push(R.length ? `As ${plural(R.length, "participação", "participações")} desta pesquisa serão apagadas de vez, junto com os relatos.` : "Os dados desta pesquisa serão apagados de vez.");
       partes.push("Os gráficos voltam a zero. Essa ação não pode ser desfeita.");
       const ok = await confirmDialog({ title: "Apagar todas as respostas?", message: partes.join(" "), ok: "Apagar todas", word: "APAGAR" });
       if (ok) { bt.disabled = true; await excluirRespostas([], true); }
@@ -1815,8 +1890,7 @@
     return [pf, prim && x.situacao === "completa" ? "Mais comprou: " + textoResposta({ ...q2, tipo: "unica" }, prim) : ""].filter(Boolean).join(" · ");
   }
   async function excluirUma(x, bt) {
-    const tem = I.some((y) => y.envio_id && y.envio_id === x.envio_id);
-    const ok = await confirmDialog({ title: `Excluir a resposta de ${nomeDe(x)}?`, message: `A participação #${numResp(x)}, de ${fmtDate(x.created_at)}, será apagada de vez e sai dos gráficos.${tem ? " O contato dessa pessoa na aba Interessados (avisos do lançamento) também será apagado." : ""} Essa ação não pode ser desfeita.`, ok: "Excluir" });
+    const ok = await confirmDialog({ title: `Excluir a resposta de ${nomeDe(x)}?`, message: `A participação #${numResp(x)}, de ${fmtDate(x.created_at)}, será apagada de vez e sai dos gráficos. Essa ação não pode ser desfeita.`, ok: "Excluir" });
     if (!ok) return false;
     if (bt) bt.disabled = true;
     return excluirRespostas([x.id], false);
@@ -1834,27 +1908,26 @@
     const todasCb = el("input"); todasCb.type = "checkbox";
     todasLab.append(todasCb, el("span", null, "Selecionar todas"));
     const nSel = el("span", "pa-sel-n"); nSel.setAttribute("aria-live", "polite");
-    const excluirSel = el("button", "pa-btn perigo"); excluirSel.type = "button"; excluirSel.innerHTML = IC.lixo + "<span>Excluir selecionadas</span>";
-    barra.append(todasLab, nSel, excluirSel);
+    const dicaSel = el("span", "pa-sel-dica", "Para excluir, use o menu Ações");
+    barra.append(todasLab, nSel, dicaSel);
     const visiveis = () => R.filter((x) => FILTRO === "todas" || x.situacao === FILTRO);
     const sincSel = () => {
       const vs = visiveis(), marcadas = vs.filter((x) => sel.has(x.id)).length;
       todasCb.checked = marcadas > 0 && marcadas === vs.length; todasCb.indeterminate = marcadas > 0 && marcadas < vs.length;
       nSel.textContent = marcadas ? `${plural(marcadas, "selecionada", "selecionadas")}` : "";
-      excluirSel.hidden = !marcadas; barra.classList.toggle("ativa", marcadas > 0);
+      avisarSelecao(barra, marcadas);
       lista.querySelectorAll(".pa-rl-it").forEach((li) => li.classList.toggle("marcada", sel.has(li.dataset.id)));
     };
     todasCb.addEventListener("change", () => { visiveis().forEach((x) => (todasCb.checked ? sel.add(x.id) : sel.delete(x.id))); lista.querySelectorAll(".pa-rl-cb input").forEach((c) => { c.checked = sel.has(c.value); }); sincSel(); });
-    excluirSel.addEventListener("click", async () => {
+    const excluirSelecionadas = async () => {
       const alvo = R.filter((x) => sel.has(x.id));
       if (!alvo.length) return;
-      if (alvo.length === 1) return excluirUma(alvo[0], excluirSel);
-      const comContato = alvo.filter((x) => I.some((y) => y.envio_id && y.envio_id === x.envio_id)).length;
-      const ok = await confirmDialog({ title: `Excluir ${plural(alvo.length, "resposta", "respostas")}?`, message: `${alvo.length === R.length ? "Todas as participações" : `As ${plural(alvo.length, "participação selecionada", "participações selecionadas")}`} serão apagadas de vez e saem dos gráficos.${comContato ? ` ${comContato === 1 ? "O contato de 1 dessas pessoas" : `Os contatos de ${comContato} dessas pessoas`} na aba Interessados (avisos do lançamento) também ${comContato === 1 ? "será apagado" : "serão apagados"}.` : ""} Essa ação não pode ser desfeita.`, ok: "Excluir" });
+      if (alvo.length === 1) return excluirUma(alvo[0], null);
+      const ok = await confirmDialog({ title: `Excluir ${plural(alvo.length, "resposta", "respostas")}?`, message: `${alvo.length === R.length ? "Todas as participações" : `As ${plural(alvo.length, "participação selecionada", "participações selecionadas")}`} serão apagadas de vez e saem dos gráficos. Essa ação não pode ser desfeita.`, ok: "Excluir" });
       if (!ok) return;
-      excluirSel.disabled = true;
       await excluirRespostas(alvo.map((x) => x.id), false);
-    });
+    };
+    SELECAO = { n: () => visiveis().filter((x) => sel.has(x.id)).length, fn: excluirSelecionadas };
     const pintar = () => {
       filtros.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.f === FILTRO)));
       const vs = visiveis();
@@ -1949,8 +2022,7 @@
     });
     if (x.relato && x.relato.trim()) { const q = el("blockquote", "pa-fb-relato", x.relato); bloco("Relato", [q]); }
     if (x.situacao === "completa") {
-      const tem = I.some((y) => y.envio_id && y.envio_id === x.envio_id);
-      bloco("Avisos do lançamento", [el("p", "pa-fv-tx", x.quer_novidades ? (tem ? "Quer receber. O contato está na aba Interessados." : "Quis receber. O contato já foi excluído.") : "Não quer receber.")]);
+      bloco("Avisos do lançamento", [el("p", "pa-fv-tx", x.quer_novidades ? "Sim, quer receber os avisos do lançamento." : "Não quer receber.")]);
     }
     if (x.situacao !== "completa") corpo.appendChild(el("p", "pa-ficha-nota", x.situacao === "fora_de_curitiba" ? "A pesquisa terminou na pergunta 1: a pessoa não mora em Curitiba nem na Região Metropolitana." : "A pesquisa terminou na pergunta 2: a pessoa não comprou roupas, calçados ou acessórios este ano."));
     return corpo;
@@ -2000,40 +2072,44 @@
   /* ---------- Relatos ---------- */
   function listaRelatos(lista) {
     const card = el("section", "card pa-entra");
-    const aviso = el("div", "pa-aviso"); aviso.innerHTML = IC.info; aviso.appendChild(el("span", null, "Relatos da pergunta aberta, exatamente como foram escritos. Aparecem sem nome, mesmo de quem deixou contato."));
-    card.appendChild(aviso);
     if (!lista.length) { card.appendChild(vazio("Nenhum relato ainda", "A pergunta aberta é opcional; os relatos aparecem aqui quando alguém escrever.")); return card; }
     lista.forEach((x) => { const d = el("div", "pa-relato"); d.append(el("p", null, x.relato), el("small", null, fmtDate(x.created_at))); card.appendChild(d); });
     return card;
   }
 
   /* ---------- Interessados ---------- */
+  // barra de seleção: destaque quando há itens marcados; na primeira marcação, o botão "Ações" pulsa para indicar onde excluir
+  function avisarSelecao(barra, n) {
+    const antes = barra.classList.contains("ativa");
+    barra.classList.toggle("ativa", n > 0);
+    const bt = document.getElementById("pa-acoes-btn");
+    if (bt && n > 0 && !antes && !matchMedia("(prefers-reduced-motion: reduce)").matches) { bt.classList.remove("pa-pulsa"); void bt.offsetWidth; bt.classList.add("pa-pulsa"); }
+  }
+  // Aba Interessados: mesma estrutura da aba Respostas (seleção, lista em linhas, etiqueta em coluna fixa, lixeira)
+  // quem quer os avisos e tem o contato guardado (base da aba Interessados)
+  const interessadosR = () => completasR().filter((x) => x.quer_novidades && (!x.envio_id || I.some((y) => y.envio_id === x.envio_id)));
+  // Aba Interessados: quantas pessoas querem os avisos do lançamento e o perfil delas, sem nomes.
+  // (Quem quer os avisos aparece na ficha de cada resposta; os contatos saem em "Exportar respostas".)
   function listaInteressados() {
-    const card = el("section", "card pa-entra");
-    const aviso = el("div", "pa-aviso"); aviso.innerHTML = IC.info;
-    aviso.appendChild(el("span", null, "Pessoas que pediram para receber novidades sobre o lançamento, com autorização registrada (data, horário e versão do texto). Use estes contatos só para isso. Ficam separados das respostas da pesquisa."));
-    card.appendChild(aviso);
-    if (!I.length) { card.appendChild(vazio("Ninguém pediu novidades ainda", "Quem marcar “Sim, quero receber novidades” no fim da pesquisa aparece aqui.")); return card; }
-    I.forEach((x) => {
-      const d = el("div", "pa-int");
-      const tx = el("div");
-      const ctt = el("div", "c");
-      const mail = el("a", null, x.email); mail.href = "mailto:" + x.email;
-      const tel = x.whatsapp.replace(/^(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3");
-      const wa = el("a", null, tel); wa.href = "https://wa.me/55" + x.whatsapp; wa.target = "_blank"; wa.rel = "noopener";
-      ctt.append(mail, " · ", wa);
-      tx.append(el("div", "n", x.nome), ctt, el("small", null, "Autorizou em " + fmtDate(x.consentimento_em) + " · " + x.consentimento_versao));
-      const del = el("button", "pa-btn perigo"); del.type = "button"; del.innerHTML = IC.lixo + "<span>Excluir</span>"; del.setAttribute("aria-label", "Excluir contato de " + x.nome);
-      del.addEventListener("click", async () => {
-        const ok = await confirmDialog({ title: "Excluir este contato?", message: `Os dados de ${x.nome} (nome, e-mail, WhatsApp e autorização) serão apagados de vez. Use quando a pessoa pedir a exclusão ou cancelar os avisos.`, ok: "Excluir" });
-        if (!ok) return;
-        const { error } = await sb.from("pesquisa_interessados").delete().eq("id", x.id);
-        if (error) return toast("Não foi possível excluir: " + error.message);
-        I = I.filter((y) => y.id !== x.id); log("Excluiu contato de interessado na pesquisa", P.titulo); toast("Contato excluído"); desenhar(); document.getElementById("aba-interessados").click();
-      });
-      d.append(tx, del); card.appendChild(d);
-    });
-    return card;
+    const box = el("div", "pa-entra");
+    const comp = completasR();
+    const quer = interessadosR();
+    if (!I.length && !quer.length) { const c = el("section", "card"); c.appendChild(vazio("Ninguém pediu os avisos ainda", "Quem marcar “Sim, quero receber os avisos” no fim da pesquisa aparece aqui.")); box.appendChild(c); return box; }
+    const kp = el("div", "pa-kpis pa-int-kpis");
+    const k = (n, t, sub) => { const d = el("div", "pa-kpi"); d.append(el("b", null, n), el("span", null, t)); if (sub) d.append(el("small", null, sub)); return d; };
+    kp.append(
+      k(quer.length.toLocaleString("pt-BR"), quer.length === 1 ? "pessoa quer os avisos" : "pessoas querem os avisos", "do lançamento e das vantagens"),
+      k(pct(quer.length, comp.length) + "%", "das respostas completas", `${quer.length} de ${comp.length}`),
+    );
+    box.appendChild(kp);
+    const g = el("div", "pa-graficos");
+    cardsDePerfil(quer).forEach((c) => g.appendChild(c));
+    if (g.children.length) box.appendChild(g);
+    else box.appendChild(el("p", "pa-nota", "Ainda não há perfil para mostrar."));
+    // contatos guardados cuja resposta já não existe (ex.: respostas apagadas antes de o contato ser apagado junto)
+    const soltos = I.filter((y) => !R.some((x) => x.envio_id === y.envio_id)).length;
+    if (soltos) box.appendChild(el("p", "pa-nota", `${plural(soltos, "contato guardado não tem", "contatos guardados não têm")} resposta na pesquisa e não ${soltos === 1 ? "entra" : "entram"} nos gráficos. ${soltos === 1 ? "Ele sai" : "Eles saem"} em "Exportar respostas".`));
+    return box;
   }
 
   function vazio(t, s) { const d = el("div", "pa-vazio"); d.append(el("b", null, t), s); return d; }
