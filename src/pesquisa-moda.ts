@@ -509,7 +509,7 @@ function erroPerfil(id: string, msg: string) {
 
 function montarRelato() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-relato'; fs.dataset.etapa = String(ETAPA_RELATO);
-  cabecalho(fs, 'Para finalizar · opcional', 'Você já teve alguma experiência frustrante ao procurar ou comprar roupas e acessórios?', 'Conte-nos sobre dificuldades, insatisfações ou situações que fizeram você desistir de uma compra, perder tempo ou sentir que suas expectativas não foram atendidas.', 'experiência frustrante');
+  cabecalho(fs, 'Para finalizar · opcional', 'Você já teve alguma experiência frustrante ao procurar ou comprar roupas e acessórios?', 'Pode ser relacionada à busca, ao atendimento, à disponibilidade das peças, à qualidade ou ao pós-venda.', 'experiência frustrante');
   const lab = el('label', 'pq-rotulo pq-oculto', 'Sua experiência (opcional)'); lab.htmlFor = 'pq-relato-txt';
   const ta = el('textarea'); ta.id = 'pq-relato-txt'; ta.rows = 6; ta.maxLength = RELATO_MAX; ta.placeholder = 'Conte o que aconteceu e, se possível, o que poderia ter sido diferente…'; ta.value = E.relato;
   const cont = el('p', 'pq-contador pq-contador-dir'); cont.id = 'pq-relato-cont';
