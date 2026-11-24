@@ -409,6 +409,31 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-062 · 24/11/2026 · Alerta com ação e todos os alertas no mesmo padrão; cores novas de aviso e erro no DS Dani Moscatelli (FindLook 292de01, DM 697a765)
+
+- **Decisões dela:**
+  - **Alerta com ação:**
+    - O botão fica sempre embaixo do texto, nunca ao lado.
+    - O botão principal é só de contorno, sem fundo: borda na cor do estado e texto num tom mais escuro dela. No aviso, borda amarela e texto marrom, sem texto preto.
+    - A segunda ação é um link sublinhado em grafite.
+  - **Ícone:** segue o padrão "ícone com base" do DS (base de 44 px clara na cor do estado, ícone na cor do estado).
+  - **Texto:** dentro do card não varia de tamanho, exceto no título. O destaque (`<strong>`) usa seminegrito e a cor do texto principal.
+  - **Todos os alertas** (com ou sem botão) seguem o mesmo padrão: o `Alert` do DS foi refeito com o mesmo visual.
+  - **Tokens novos de texto** (contraste de 5:1 no fundo do alerta):
+    - FindLook: `--success-text` #2B7553, `--info-text` #2E6E98 e `--error-text` igual ao `--primary-text`.
+    - Dani Moscatelli: `--success-text` #327650, `--info-text` #366E97, `--warning-text` #935E0A e `--error-text` #C52756.
+  - **Dani Moscatelli, opção B:** o aviso passa a laranja amarelado #F0A020 (texto escuro por cima) e o erro fica mais rosa (#D9416E), porque aviso e erro estavam parecidos demais. O vermelho da marca continua nos botões principais.
+- **Publicado:**
+  - os dois DS;
+  - a área restrita com as cores novas (pull request daniellemoscatelli87/claude#209, D-045 no registro do site);
+  - o aviso de conferência do painel da loja do FindLook com o Alerta com ação (pull request daniellemoscatelli87/FindLook#112);
+  - o app DM | Experience Intelligence consumindo tokens e componentes do DS, com atualização diária (pull request daniellemoscatelli87/claude#213, D-047 no registro do site).
+- **Também publicado:** o painel do produto FindLook com a casca do DS v92 e a Opção A (pull request daniellemoscatelli87/FindLook#110).
+- **Pendente:**
+  - no produto FindLook, outros 9 avisos feitos à mão ainda não usam o alerta do DS;
+  - no DS Dani Moscatelli, campos (`input`, `textarea`, `checkbox`) ainda desenham a borda de erro no vermelho da marca, e o texto suave dos alertas fica entre 4,47 e 4,49:1 nos alertas de erro e sucesso;
+  - a área restrita refeita em React (decisão dela) ainda não foi iniciada.
+
 ## D-061 · 23/11/2026 · Painéis e sites dos DS na mesma estrutura; Experience Intelligence no Cloudflare (FindLook v92, DM v62)
 
 - **Decisões dela, nesta rodada:**

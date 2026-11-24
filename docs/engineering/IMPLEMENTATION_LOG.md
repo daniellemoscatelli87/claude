@@ -360,6 +360,28 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Novo componente `TituloEtapa` (`src/design-system/campos.tsx`), classes `.etapa-cabecalho` e `.etapa-icone` (`globals.css`): 44 px, cantos de 12 px, fundo `--red-tint`, ícone `--red`. "Seus dados" usa `UserRound`; "Empresa ou negócio" usa `Building2`. Documentado em `docs/design-system/COMPONENTES.md`.
 - Verificado: `tsc --noEmit`, `oxlint` (sem erros; 2 avisos antigos), `vitest` (48 de 48), `npm run build`, teste no navegador a 320 e 375 px sem erros e sem rolagem lateral.
 
+## 2026-11-24 · Alerta com ação nos dois DS, cores novas no DM e adoção nos produtos (D-062)
+
+- **DS FindLook (`292de01`) e DS Dani Moscatelli (`697a765`):**
+  - `ui/alerta-com-acao.tsx` é novo e `ui/alert.tsx` foi refeito, idênticos nos dois DS;
+  - documentação com regras, contraste e exemplos;
+  - tokens `--*-text`;
+  - no DM, cores novas de aviso e erro, e ajustes onde havia texto branco sobre o aviso.
+- **Testes nos dois DS:**
+  - build e páginas sem erro;
+  - sem quebras novas;
+  - contraste medido no navegador: 5,0 a 5,8:1 em repouso, a partir de 4,3:1 no hover.
+- **Publicação:** `publish-findlook.yml` e `publish.yml` concluídos com sucesso; conferi no ar o "Alerta com ação" e os tokens novos.
+- **Área restrita do site** (daniellemoscatelli87/claude#209): `theme.css` em `697a765` e textos de aviso com `--warning-text`. Suíte Playwright: 130 casos passaram. Conferi no ar o `theme.css?v=697a765`.
+- **Produto FindLook:**
+  - daniellemoscatelli87/FindLook#110: casca do painel e Opção A. Testes: 277 testes e o painel da loja passaram.
+  - daniellemoscatelli87/FindLook#112: aviso de conferência com o Alerta com ação. Testes: 277 testes e o painel da loja passaram.
+- **App Experience Intelligence** (daniellemoscatelli87/claude#213):
+  - 48 testes passaram;
+  - build passa, mas algumas tentativas param com o aviso de segurança do Next.js;
+  - o Cloudflare Pages concluiu com sucesso;
+  - o app continua pedindo senha (401).
+
 ## 2026-11-21 · Gráficos publicados nos dois DS (D-060)
 
 - **Branch `claude/graficos-2` levado ao `main` e publicado:**
