@@ -28,7 +28,7 @@ type Estado = {
 const PERGUNTAS = Q.perguntas as Pergunta[];
 const TOTAL = PERGUNTAS.length; // etapas de perguntas, contando a condicional 2.1
 const PRINCIPAIS = PERGUNTAS.filter((p) => !p.condicao).length; // as 10 perguntas principais; 2.1, relato e novidades ficam fora
-const ETAPA_PERFIL = TOTAL, ETAPA_RELATO = TOTAL + 1, ETAPA_NOV = TOTAL + 2; // perfil, relato e novidades depois das perguntas
+const ETAPA_RELATO = TOTAL, ETAPA_PERFIL = TOTAL + 1, ETAPA_NOV = TOTAL + 2; // relato, perfil e novidades depois das perguntas
 const ETAPA_ID = TOTAL + 3; // identificação, antes da primeira pergunta
 type OpcaoLista = Opcao & { regional?: string };
 // inicio: cidade e bairro são perguntados junto com a pergunta 1 (onde mora), não no "Sobre você"
@@ -786,9 +786,6 @@ function concluir(tipo: 'obrigada' | 'encerrada' | 'semcompras' | 'fora' | 'ja',
   if (tipo === 'obrigada' || tipo === 'encerrada' || tipo === 'semcompras') guardar(CHAVE_FIM, { tipo, comContato, em: Date.now() });
   if (tipo !== 'fora') { try { localStorage.removeItem(CHAVE_RASCUNHO); sessionStorage.removeItem(CHAVE_RASCUNHO + '-contato'); } catch { /* sem armazenamento */ } }
   if (tipo === 'obrigada') {
-    $('pq-obrigada-msg').textContent = comContato
-      ? 'Assim que a plataforma for lançada, avisaremos você por e\u2011mail e WhatsApp para que fique por dentro de todas as novidades!'
-      : 'Obrigada por compartilhar um pouquinho da sua experiência com a gente!';
     $('pq-obrigada-dados').hidden = !comContato;
     mostrarTela('pq-obrigada');
     if (animar) confete();
@@ -984,7 +981,7 @@ function iniciar() {
   politica(); topo(); sair(); indicar();
   const etapas = $('pq-etapas');
   PERGUNTAS.forEach((p, i) => etapas.appendChild(montarPergunta(p, i)));
-  etapas.append(montarIdentificacao(), montarPerfil(), montarRelato(), montarNovidades());
+  etapas.append(montarIdentificacao(), montarRelato(), montarPerfil(), montarNovidades());
   [...etapas.children].forEach((x) => { (x as HTMLElement).hidden = true; });
 
   // escolhas que encerram mudam o texto do botão
