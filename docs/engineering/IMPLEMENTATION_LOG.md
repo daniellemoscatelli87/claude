@@ -667,6 +667,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - selecionar todas com o filtro "Não comprou" dá 3;
     - trocar de filtro limpa a seleção;
     - a ficha continua abrindo.
+  - Cartão do link rediagramado, por pedido da dona do produto:
+    - Linha 1: situação ("No ar · recebendo respostas"; abaixo de 400 px fica só "No ar") e "Tirar do ar" compacto, na mesma linha.
+    - Linha 2: o link, com Copiar e Abrir.
+    - Rodapé: ícone de relógio e "Última resposta em …", separado por uma linha.
+    - Teste: computador, iPhone 13 e larguras de 375 e 320 px, sem nada passando da borda; sem erros de JS.
   - Animações: entrada da lista, painel deslizando, troca de ficha e barras. Todas respeitam "menos movimento".
   - Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
     - o bloco de apagar fica fora das abas;

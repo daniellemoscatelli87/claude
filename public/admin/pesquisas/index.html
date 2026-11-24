@@ -27,8 +27,17 @@
   .pa-cab > div:first-child { min-width: 0; }
   .pa-link { flex-wrap: nowrap; }
   .pa-link .pa-btn { flex-shrink: 0; }
+  .pa-cab { align-items: center; }
   .pa-cab > .pa-btn { flex-shrink: 0; }
-  @media (max-width: 480px) { .pa-cab { flex-wrap: wrap; } .pa-cab > .pa-btn { width: 100%; justify-content: center; } }
+  .pa-btn-sm { min-height: 36px; padding: 6px 12px; font-size: 13px; }
+  .pa-btn-sm svg { width: 15px; height: 15px; }
+  .pa-status { min-width: 0; }
+  .pa-status b { font-weight: 800; }
+  .pa-status-d { font-weight: 600; color: var(--muted-foreground); }
+  .pa-status-d::before { content: "· "; }
+  @media (max-width: 400px) { .pa-status-d { display: none; } }
+  .pa-ult { display: flex; align-items: center; gap: 8px; margin: 0; padding-top: 14px; border-top: 1px solid var(--muted); font-size: 13px; color: var(--muted-foreground); }
+  .pa-ult svg { width: 16px; height: 16px; flex: none; }
   @media (max-width: 480px) { .pa-link .pa-rot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .pa-link .pa-btn { padding-left: 12px; padding-right: 12px; } }
   /* Menu "Ações" (Dropdown Menu do DS: fundo do popover, borda, sombra média, itens de 14px com ícone) */
   .pa-menu-caixa { position: relative; flex-shrink: 0; }
@@ -605,17 +614,16 @@
   function topo() {
     const card = el("section", "card pa-topo pa-entra");
     const cab = el("div", "pa-cab");
-    const esq = el("div");
-    const st = el("span", "pa-status" + (P.ativa ? "" : " off"), P.ativa ? "No ar, recebendo respostas" : "Fora do ar");
-    esq.append(st);
-    const ult = R[0] ? "Última resposta: " + fmtDate(R[0].created_at) : "Ainda sem respostas";
-    const m = el("p", "muted", ult); m.style.marginTop = "8px"; esq.appendChild(m);
+    // linha 1: situação e o botão de ligar/desligar; linha 2: link; rodapé: última resposta
+    const st = el("span", "pa-status" + (P.ativa ? "" : " off"));
+    st.append(el("b", null, P.ativa ? "No ar" : "Fora do ar"), el("span", "pa-status-d", P.ativa ? "recebendo respostas" : "não recebe respostas"));
     const url = SITE + (PAGINAS[P.slug] || "/pesquisa/" + P.slug + "/");
     // o que diz respeito ao link (no ar / fora do ar, abrir) fica aqui, junto dele; o menu "Ações" fica acima das abas
     const tog = el("button", "pa-btn" + (P.ativa ? " perigo" : " liga")); tog.type = "button";
     tog.innerHTML = (P.ativa ? IC.pausa : IC.play) + "<span>" + (P.ativa ? "Tirar do ar" : "Colocar no ar") + "</span>";
     tog.addEventListener("click", () => alternar(tog));
-    cab.append(esq, tog);
+    tog.classList.add("pa-btn-sm");
+    cab.append(st, tog);
     const link = el("div", "pa-link");
     const inp = el("input"); inp.type = "text"; inp.readOnly = true; inp.value = url; inp.setAttribute("aria-label", "Link da pesquisa");
     inp.addEventListener("focus", () => inp.select());
@@ -629,7 +637,10 @@
     const abrirL = el("a", "pa-btn"); abrirL.href = url; abrirL.target = "_blank"; abrirL.rel = "noopener";
     abrirL.innerHTML = IC.abrir + '<span class="pa-rot">Abrir</span>'; abrirL.setAttribute("aria-label", "Abrir a pesquisa numa nova aba");
     link.append(inp, copiar, abrirL);
-    card.append(cab, link);
+    const ult = el("p", "pa-ult");
+    ult.innerHTML = svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>');
+    ult.append(R[0] ? "Última resposta em " + fmtDate(R[0].created_at) : "Ainda sem respostas");
+    card.append(cab, link, ult);
     return card;
   }
   // Menu "Ações": abre abaixo do botão, alinhado à direita; Esc, clique fora ou escolher uma ação fecham.
