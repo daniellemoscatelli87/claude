@@ -200,7 +200,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-aspecto .pq-nota span { height: 46px; font-size: 16px; background: var(--pq-fundo); }
 .pq-aspecto.pq-faltando .pq-aspecto-t { color: var(--pq-erro); }
 .pq-aspecto.pq-faltando .pq-nota span { border-color: rgba(198, 40, 40, 0.45); }
-.pq-escala { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 22px; }
+.pq-escala { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 22px; }
 @media (min-width: 560px) { .pq-escala { grid-template-columns: repeat(11, minmax(0, 1fr)); } }
 .pq-nota { position: relative; cursor: pointer; }
 .pq-nota input { position: absolute; opacity: 0; pointer-events: none; }
