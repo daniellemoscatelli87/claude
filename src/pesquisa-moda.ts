@@ -485,7 +485,7 @@ function montarNovidades() {
 function montarIdentificacao() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-id'; fs.dataset.etapa = String(ETAPA_ID);
   cabecalho(fs, 'Antes de começar', 'Conte quem é você',
-    'Pedimos seus dados para garantir uma participação por pessoa e para entregar as suas vantagens no lançamento.');
+    'Pedimos seus dados para garantir uma participação por pessoa e para entregar as suas vantagens no lançamento.', 'quem é você');
   const campos = el('div', 'pq-contato');
   campos.append(
     campo('pq-nome', 'Seu nome', 'text', E.nome, 'Como podemos chamar você?', (i) => { i.autocomplete = 'name'; i.maxLength = 120; i.addEventListener('input', () => { E.nome = i.value; salvar(); erroCampo(i, ''); limparErro(fs); }); }),
