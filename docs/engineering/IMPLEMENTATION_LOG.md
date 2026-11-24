@@ -641,6 +641,21 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - A confirmação (digitar APAGAR) diz quantas participações e quantos contatos serão apagados.
   - Se a exclusão dos interessados falhar, aparece um aviso e a aba Interessados é aberta.
   - Teste: Playwright com dados fictícios, no computador (42 respostas + 1 interessado) e no iPhone 13 (0 respostas + 3 interessados). Nos dois casos, DELETE em `pesquisa_respostas` e em `pesquisa_interessados` filtrado pela pesquisa; abas zeradas; botão some; sem erros de JS. A regra de acesso "Admin exclui interessados" já existia.
+- Admin › Pesquisas, aba Respostas refeita, com as escolhas da dona do produto:
+  - **"Apagar todas as respostas" fora das abas:** um bloco "Recomeçar a pesquisa do zero" entre os indicadores e as abas. Não fica no menu Ações, a pedido dela, porque reinicia a pesquisa inteira. Apaga respostas, relatos e interessados, com confirmação "APAGAR". O bloco some quando não há nada.
+  - **Filtros por situação:** Todas, Completas, Fora de Curitiba e RMC, Não comprou, cada um com sua contagem. No celular ficam numa linha com rolagem lateral.
+  - **Lista enxuta:** linha inteira clicável (#, data, situação, resumo do perfil e de onde mais comprou, em até 2 linhas). Ícone de lixeira em cada linha.
+  - **Ficha da resposta:** painel lateral no computador e tela cheia no celular, organizada em blocos: Perfil, Onde compra, Notas das compras (barras de 1 a 10), Como procura, Dificuldades (pergunta 10 com etiquetas coloridas de Muito fácil a Muito difícil), Relato e Avisos do lançamento.
+  - **Leitura da ficha:** cada pergunta aparece com o número e um rótulo curto; o texto completo fica na dica ao passar o mouse.
+  - **Navegação na ficha:** "Anterior / Próxima", com "1 de 42", que respeita o filtro escolhido. Setas ← → do teclado funcionam. A lixeira também fica no topo da ficha.
+  - **Excluir uma resposta também apaga o contato da pessoa em Interessados.** A ligação é feita pelo `envio_id`, que a função grava igual nas duas tabelas e que agora entra nas consultas. A confirmação avisa quando há contato.
+  - Animações: entrada da lista, painel deslizando, troca de ficha e barras. Todas respeitam "menos movimento".
+  - Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
+    - o bloco de apagar fica fora das abas;
+    - os filtros e as contagens, com 36 completas e 3 em cada uma das outras situações;
+    - a ficha, com os 6 blocos, "Próxima" e a seta ←;
+    - excluir pela ficha uma resposta com contato faz DELETE em `pesquisa_respostas` (`id`) e em `pesquisa_interessados` (`envio_id`), e as abas passam de 42 para 41 e de 1 para 0;
+    - excluir uma resposta sem contato pelo ícone da lista apaga só a resposta.
 - Barra "Voltar / Continuar" sempre presa no rodapé da tela, também nas perguntas curtas, como na abertura. O formulário ocupa a altura da tela abaixo do cabeçalho (`--pq-topo-h`, medida pelo script) e a barra fica no fim. Teste: no iPhone 13 e no computador, a barra fica no rodapé da tela em todas as etapas, sem rolagem extra nas telas curtas.
 - Ícones dos cartões "Leva de 3 a 5 minutos", "Participação voluntária" e "Privacidade protegida": padrão cinza (fundo graphite-50 `#EDF0F5` e ícone em `--pq-muted`), por pedido da dona do produto.
 - Teste executado: Playwright no iPhone 13 (abertura sem o texto, botão "Começar pesquisa" funcionando, link da política no rodapé e na identificação), sem erros de JS.
