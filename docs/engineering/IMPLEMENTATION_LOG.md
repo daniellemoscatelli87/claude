@@ -596,6 +596,107 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-24 · Pesquisa: sai o "Saiba como tratamos seus dados" de baixo do botão da abertura e ícones dos cartões em cinza, não publicado
+
+- Pedido da dona do produto: a informação já aparece em outros lugares, no rodapé da página e no passo de identificação, ambos com o link para a Política de Privacidade.
+- Removido `p.pq-privacidade` de `pesquisa/moda-curitiba/index.html` e o estilo correspondente.
+- Sem repetição da etapa: o texto vermelho acima do título ("PERGUNTA 2", "ANTES DE COMEÇAR", "SOBRE VOCÊ"…) sai de todas as etapas, por escolha da dona do produto. A etapa fica só na barra de progresso ("Pergunta 2 de 12", "Antes de começar", "Quase lá · sobre você"); no título fica um texto só para leitores de tela.
+- Tela de quem mora fora de Curitiba e da Região Metropolitana: a frase termina em "…moram em Curitiba e Região Metropolitana." (sai "e compraram roupas, calçados ou acessórios este ano", que já está na tela de quem não comprou).
+- Identificação: "quem é você" em vermelho no título "Conte quem é você".
+- Identificação: o aceite ("Li e concordo…") fica dentro do cartão branco do aviso da LGPD, separado por uma linha.
+- "Indique a pesquisa" nas telas finais (obrigada, fora de Curitiba e da Região Metropolitana, não comprou e já participou), por pedido da dona do produto:
+  - Campo com o link da pesquisa (tocar seleciona tudo) e botão "Compartilhar", como pedido pela dona do produto.
+  - No celular, o botão abre o compartilhar do próprio aparelho (todos os apps, inclusive o Direct do Instagram), com a mensagem e o link.
+  - Sem esse recurso (alguns computadores), abre uma lista: WhatsApp (`wa.me` com a mensagem), Facebook (`sharer.php`), LinkedIn (`share-offsite`) e "Copiar link" (check "Copiado"), com a nota "Para o Direct do Instagram, copie o link e cole na conversa".
+  - a prévia do link usa as tags `og:` que a página já tem.
+  - Teste: Playwright no iPhone 13 nas telas obrigada, não comprou e fora da região (links certos; "Copiar link" coloca o endereço na área de transferência); bloco montado também em "já participou"; sem erros de JS. O compartilhar do aparelho foi testado com um substituto que confere título, texto e link; a lista de redes foi testada sem esse recurso. Falta conferir a folha de compartilhar num celular de verdade.
+- Bairro (Curitiba) e cidade (Região Metropolitana) na pergunta 1: a lista suspensa vira um botão que abre uma janela com busca, por pedido da dona do produto.
+  - Janela vem de baixo no celular e fica no centro no computador.
+  - A busca ignora acentos e também acha pelo nome da regional ("boa vista" mostra os bairros da Regional Boa Vista).
+  - Os bairros continuam agrupados por regional; quando a busca não encontra nada, aparece um aviso.
+  - O bairro ou a cidade escolhidos ficam marcados com check.
+  - Ao escolher, a janela fecha, o botão mostra o nome e o foco volta para ele; Esc ou o X fecham sem mudar nada.
+  - O valor continua na lista nativa (oculta), então validação e envio não mudam.
+  - Teste: Playwright no iPhone 13 e no computador (1280 px). Buscas "umbara" (1 resultado), "boa vista" (13), "xyz" (aviso) e "sitio" + Enter (escolhe Sítio Cercado). Ao reabrir, a opção escolhida aparece marcada; Esc fecha. Na Região Metropolitana (28 cidades), "sao jose" acha São José dos Pinhais e a pesquisa avança para a 1.1. Sem erros de JS.
+- Notas de 1 a 10 no celular: 5 números em cima e 5 embaixo, ocupando toda a largura do cartão (antes eram 6 + 4), por pedido da dona do produto. Teste: iPhone 13 e iPhone SE com 5 + 5 alinhados às bordas; computador sem mudança; sem erros de JS.
+- Notas: 14 px entre a descrição ("Aparência, estilo e beleza das peças") e os botões. O `margin-top` de 12 px dos botões era anulado pelo título flutuante (`legend` com float); o espaço passou para a margem de baixo do título. Teste: 14 px medidos no iPhone 13, no iPhone SE e no computador; sem erros de JS.
+- Pergunta 12: "Quando você não encontrou **um produto** que queria comprar, o que acabou fazendo?" (sai "uma roupa, calçado ou acessório"), por pedido da dona do produto. Só muda o texto: opções, destaque ("não encontrou") e versão do questionário seguem iguais. A função `pesquisa` será publicada junto para o servidor ficar com o mesmo texto. Teste: build com o texto novo no pacote da página.
+- Etapa "Para finalizar · opcional" (relato), textos da dona do produto. Título: "Você já teve alguma experiência frustrante ao procurar ou comprar roupas e acessórios?", com destaque em "experiência frustrante" (no lugar de "experiência de compra"). Apoio: "Pode ser relacionada à busca, ao atendimento, à disponibilidade das peças, à qualidade ou ao pós-venda." Placeholder: "Conte o que aconteceu e, se possível, o que poderia ter sido diferente…". O relato continua opcional, com até 2.000 caracteres.
+- Última etapa (novidades), por pedido da dona do produto:
+  - Título: "Obrigado por participar", com "Obrigado" em vermelho. Substitui "Sua contribuição vale vantagens exclusivas", que chegou a ser retirado.
+  - Cartão no padrão da referência enviada por ela. Título: "Você terá vantagens exclusivas no lançamento!", com "vantagens exclusivas" em vermelho escuro (`--pq-red-escuro`), 20 px, peso 800. Texto: "Essa é a nossa forma de agradecer por sua contribuição na construção dessa nova solução."
+  - Teste: fluxo completo no iPhone 15 Pro Max (títulos e destaques conferidos; envio com "Sim" leva à tela de obrigada); sem erros de JS.
+- Última etapa: novos textos do aceite de avisos, por pedido da dona do produto:
+  - Pergunta: "Quer receber avisos sobre o lançamento e suas vantagens por e-mail e WhatsApp?"
+  - Opções: "Sim, quero receber os avisos." e "Não, prefiro não receber."
+  - Consentimento dentro do cartão do "Sim", abaixo do texto principal, visível antes da escolha: "Autorizo o uso dos meus contatos exclusivamente para essa finalidade, conforme a Política de Privacidade. Posso revogar meu consentimento a qualquer momento."
+  - Estilo do consentimento: 13 px, peso regular, cor secundária, link em vermelho e sublinhado.
+  - Nenhuma opção vem marcada. O círculo do "Sim" fica alinhado à primeira linha.
+  - O link abre a política sem marcar o "Sim". Sai a nota que ficava abaixo das opções.
+  - `questionario.json`: o consentimento passa para a versão `moda-curitiba-contato-v3-2026-11-24`, com o texto completo que a pessoa vê (pergunta + opção + autorização). Assim, cada "Sim" guarda exatamente o que foi aceito. A função `pesquisa` precisa ser publicada junto.
+  - Teste: fluxo completo no iPhone 15 Pro Max. Sem opção marcada ao chegar; estilo conferido (13 px, 400, cinza; link vermelho sublinhado); o link abre a política e não marca o "Sim"; com "Sim", o envio sai com quer = true e a tela de obrigada aparece; sem erros de JS.
+- Tela de sucesso (`#pq-obrigada`): o título "Obrigada por participar!" vira "Pesquisa **enviada** com sucesso", com "enviada" em vermelho, por pedido da dona do produto. É a única tela final com esse título. Teste: envio completo no iPhone 15 Pro Max chega na tela com o título novo e o destaque em vermelho; sem erros de JS.
+- Admin › Pesquisas › Respostas: "Apagar todas as respostas" agora apaga também os contatos da aba Interessados (`pesquisa_interessados` da pesquisa), por pedido da dona do produto.
+  - O botão aparece também quando só sobraram interessados.
+  - A confirmação (digitar APAGAR) diz quantas participações e quantos contatos serão apagados.
+  - Se a exclusão dos interessados falhar, aparece um aviso e a aba Interessados é aberta.
+  - Teste: Playwright com dados fictícios, no computador (42 respostas + 1 interessado) e no iPhone 13 (0 respostas + 3 interessados). Nos dois casos, DELETE em `pesquisa_respostas` e em `pesquisa_interessados` filtrado pela pesquisa; abas zeradas; botão some; sem erros de JS. A regra de acesso "Admin exclui interessados" já existia.
+- Admin › Pesquisas, aba Respostas refeita, com as escolhas da dona do produto:
+  - **"Apagar todas as respostas" fora das abas:** um bloco "Recomeçar a pesquisa do zero" entre os indicadores e as abas. Não fica no menu Ações, a pedido dela, porque reinicia a pesquisa inteira. Apaga respostas, relatos e interessados, com confirmação "APAGAR". O bloco some quando não há nada.
+  - **Filtros por situação:** Todas, Completas, Fora de Curitiba e RMC, Não comprou, cada um com sua contagem. No celular ficam numa linha com rolagem lateral.
+  - **Lista enxuta:** linha inteira clicável (#, data, situação, resumo do perfil e de onde mais comprou, em até 2 linhas). Ícone de lixeira em cada linha.
+  - **Ficha da resposta:** painel lateral no computador e tela cheia no celular, organizada em blocos: Perfil, Onde compra, Notas das compras (barras de 1 a 10), Como procura, Dificuldades (pergunta 10 com etiquetas coloridas de Muito fácil a Muito difícil), Relato e Avisos do lançamento.
+  - **Leitura da ficha:** cada pergunta aparece com o número e um rótulo curto; o texto completo fica na dica ao passar o mouse.
+  - **Navegação na ficha:** "Anterior / Próxima", com "1 de 42", que respeita o filtro escolhido. Setas ← → do teclado funcionam. A lixeira também fica no topo da ficha.
+  - **Excluir uma resposta também apaga o contato da pessoa em Interessados.** A ligação é feita pelo `envio_id`, que a função grava igual nas duas tabelas e que agora entra nas consultas. A confirmação avisa quando há contato.
+  - Múltipla escolha na ficha (perguntas 2.1, 7, 11 e 12): lista simples com check vermelho. Substitui as etiquetas, que herdavam o estilo `.tag` do design system (maiúsculas, espaçamento e ponto) e ficaram feias, segundo a dona do produto. Teste: os itens da pergunta 7 aparecem em lista no iPhone 13 e no computador, sem erros de JS.
+  - Identificador: o nome que a pessoa informou no início aparece em destaque na lista, no topo da ficha e nas confirmações de exclusão, por pedido da dona do produto. O "#número · data" vem logo abaixo, e a coluna `nome` de `pesquisa_respostas` passa a entrar na consulta. Respostas sem nome, de antes da identificação, mostram "Sem nome" em itálico. Teste: com nomes fictícios, lista, ficha, "Próxima" (inclusive para uma resposta sem nome) e confirmação conferidas no computador e no iPhone 13; sem erros de JS.
+  - Lista: a etiqueta da situação (Completa, Fora de Curitiba e RMC, Não comprou) fica à direita, ao lado da seta, por pedido da dona do produto. No celular, ela se alinha ao nome e o resumo usa a largura toda. Teste: computador e iPhone 13 sem sobreposição; sem erros de JS.
+  - Por pedido da dona do produto:
+    - **Seta removida da lista.**
+    - **Seleção de respostas:** caixa de seleção em cada linha e barra "Selecionar todas · N selecionadas · Excluir selecionadas". "Selecionar todas" vale só para o filtro aberto, e trocar de filtro limpa a seleção.
+    - **Excluir várias de uma vez:** apaga também os contatos dessas pessoas em Interessados, e a confirmação diz quantos são.
+    - **Menu "Ações" acima das abas:** só com Exportar Excel e Exportar PDF.
+    - **Ações do link fora do menu:** "Tirar do ar / Colocar no ar" e "Abrir" saíram do menu e ficam no cartão do link, junto da situação e do "Copiar".
+    - **Celular:** o cartão do topo deixou de passar da borda (`grid-template-columns: minmax(0, 1fr)`), e o botão "Tirar do ar" ocupa a linha toda.
+  - Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
+    - os botões do topo (Tirar do ar, Copiar link, Abrir);
+    - o menu "Ações" antes das abas, só com as duas exportações;
+    - nenhuma seta na lista;
+    - 2 respostas selecionadas: DELETE `id=in.(r0,r2)` e interessados `envio_id=in.(e0,e2)`, com a contagem passando de 42 para 40;
+    - selecionar todas com o filtro "Não comprou" dá 3;
+    - trocar de filtro limpa a seleção;
+    - a ficha continua abrindo.
+  - Cartão do link rediagramado, por pedido da dona do produto:
+    - Linha 1: situação ("No ar · recebendo respostas"; abaixo de 400 px fica só "No ar") e "Tirar do ar" compacto, na mesma linha.
+    - Linha 2: o link, com Copiar e Abrir.
+    - Rodapé: ícone de relógio e "Última resposta em …", separado por uma linha.
+    - Teste: computador, iPhone 13 e larguras de 375 e 320 px, sem nada passando da borda; sem erros de JS.
+  - Aba Inteligência, cartões de destaque no padrão do cartão de indicador do DS (`CardsDeKpi`, vitrine Cards/Dados do DS), por pedido da dona do produto, que apontou que cor, ícone e tipografia fugiam do DS.
+    - Card branco com borda e sombra do DS (`--shadow`), raio `--radius-lg` e padding de 20 px, estático (sem levantar no hover).
+    - Rótulo em 13 px, peso 500, `--muted-foreground`, sem caixa alta.
+    - Valor em 26 px, peso 700, `--foreground` (não mais vermelho).
+    - Ícone de 18 px em `--muted-foreground`, numa base `--muted` de 36 px, à direita.
+    - Frase em 13,5 px, `--muted-foreground`, com o trecho em destaque na cor do texto.
+    - Sai o fundo rosa e o número vermelho dos 4 principais.
+    - Valores alinhados entre os cartões no computador.
+  - Aba Inteligência, cartões de destaque no celular (até 560 px): um por linha, por pedido da dona do produto. O rótulo e o ícone ocupam uma linha inteira em cima. Embaixo ficam o número à esquerda, numa coluna fixa de 84 px e separado por uma linha vertical, e a frase à direita, começando na mesma posição em todos os cartões. O computador continua com 4 por linha. Teste: computador, iPhone 13 e 320 px, com o título numa linha só em todos os cartões e nada passando da borda; sem erros de JS.
+  - Regra da dona do produto: nos grids, o texto nunca passa da coluna de etiquetas ou de ações.
+    - Lista: a coluna da situação tem largura fixa de 168 px, igual para todas as linhas, com as etiquetas alinhadas à esquerda dela. No celular, a etiqueta ganha linha própria, entre a data e o resumo.
+    - Ficha, pergunta 10: a coluna da etiqueta (Fácil, Difícil…) tem largura fixa de 112 px.
+    - Teste: medição automática no computador e no iPhone 13, sem nenhum texto avançando sobre a coluna das etiquetas e com todas começando na mesma posição (computador: 1017 px na lista e 1135 px na ficha); sem erros de JS.
+  - Lista: o hover e a seleção pintam a linha inteira (caixa de seleção, texto, etiqueta e lixeira), sem cantos arredondados, por pedido da dona do produto. Saiu o hover arredondado só na área do texto. Teste: hover medido no iPhone 13 e no computador, com o fundo cobrindo a largura toda da linha e raio 0; sem erros de JS.
+  - Animações: entrada da lista, painel deslizando, troca de ficha e barras. Todas respeitam "menos movimento".
+  - Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
+    - o bloco de apagar fica fora das abas;
+    - os filtros e as contagens, com 36 completas e 3 em cada uma das outras situações;
+    - a ficha, com os 6 blocos, "Próxima" e a seta ←;
+    - excluir pela ficha uma resposta com contato faz DELETE em `pesquisa_respostas` (`id`) e em `pesquisa_interessados` (`envio_id`), e as abas passam de 42 para 41 e de 1 para 0;
+    - excluir uma resposta sem contato pelo ícone da lista apaga só a resposta.
+- Barra "Voltar / Continuar" sempre presa no rodapé da tela, também nas perguntas curtas, como na abertura. O formulário ocupa a altura da tela abaixo do cabeçalho (`--pq-topo-h`, medida pelo script) e a barra fica no fim. Teste: no iPhone 13 e no computador, a barra fica no rodapé da tela em todas as etapas, sem rolagem extra nas telas curtas.
+- Ícones dos cartões "Leva de 3 a 5 minutos", "Participação voluntária" e "Privacidade protegida": padrão cinza (fundo graphite-50 `#EDF0F5` e ícone em `--pq-muted`), por pedido da dona do produto.
+- Teste executado: Playwright no iPhone 13 (abertura sem o texto, botão "Começar pesquisa" funcionando, link da política no rodapé e na identificação), sem erros de JS.
+
 ## 2026-11-24 · Painel de pesquisas: ações num menu e correção da aba Respostas e do Excel com respostas antigas da pergunta 5, publicado
 
 - **Card do topo (`public/admin/pesquisas/index.html`):**

@@ -113,7 +113,8 @@ function cabecalho(fs: HTMLFieldSetElement, eyebrow: string, titulo: string, apo
   const lg = el('legend', 'pq-pergunta'); lg.tabIndex = -1;
   const t = el('span', 'pq-titulo');
   t.append(...realcar(titulo, destaque));
-  lg.append(el('span', 'pq-num', eyebrow), t);
+  // a etapa ("Pergunta 2 de 12", "Antes de começar"…) aparece só na barra de progresso; aqui só para leitores de tela
+  lg.append(el('span', 'pq-sr', eyebrow + ': '), t);
   fs.appendChild(lg);
   if (apoio) {
     const a = el('p', 'pq-apoio'); const n = negrito ? apoio.indexOf(negrito) : -1;
@@ -360,17 +361,107 @@ function montarPerfil() {
 // pelas regionais da Prefeitura, só aparece para Curitiba.
 function montarLista(c: CampoPerfil) {
   const bloco = el('div', 'pq-perfil-campo'); bloco.id = 'pq-perfil-' + c.id;
-  const sel = el('select', 'pq-select'); sel.id = bloco.id + '-sel';
-  const t = el('label', 'pq-perfil-titulo'); t.htmlFor = sel.id; t.append(...realcar(c.texto_inicio ?? c.texto, c.destaque_inicio ?? c.destaque), el('span', 'pq-obrig', ' *'));
+  // a lista nativa guarda o valor; quem escolhe é o botão, que abre a janela com busca
+  const sel = el('select', 'pq-select'); sel.id = bloco.id + '-sel'; sel.hidden = true; sel.tabIndex = -1; sel.setAttribute('aria-hidden', 'true');
+  const bt = el('button', 'pq-select pq-escolher'); bt.type = 'button'; bt.id = bloco.id + '-bt'; bt.setAttribute('aria-haspopup', 'dialog');
+  bt.appendChild(el('span', 'pq-escolher-txt', 'Selecione'));
+  const t = el('label', 'pq-perfil-titulo'); t.htmlFor = bt.id; t.append(...realcar(c.texto_inicio ?? c.texto, c.destaque_inicio ?? c.destaque), el('span', 'pq-obrig', ' *'));
   const nota = el('p', 'pq-perfil-nota'); nota.id = bloco.id + '-nota'; nota.hidden = true;
   const err = el('p', 'pq-erro'); err.id = bloco.id + '-erro'; err.hidden = true; err.setAttribute('role', 'alert');
-  sel.setAttribute('aria-describedby', nota.id + ' ' + err.id);
+  bt.setAttribute('aria-describedby', nota.id + ' ' + err.id);
   sel.addEventListener('change', () => {
-    E.r.perfil = { ...perfilAtual(), [c.id]: sel.value }; salvar(); erroPerfil(c.id, '');
+    E.r.perfil = { ...perfilAtual(), [c.id]: sel.value }; salvar(); erroPerfil(c.id, ''); rotuloEscolha(sel);
     if (c.id === 'cidade') sincronizarLocal();
   });
-  bloco.append(t, sel, nota, err);
+  bt.addEventListener('click', () => abrirBusca(c, sel, bt));
+  bloco.append(t, sel, bt, nota, err);
   return bloco;
+}
+// texto do botão: a opção escolhida ou "Selecione"
+function rotuloEscolha(sel: HTMLSelectElement) {
+  const bt = document.getElementById(sel.id.replace(/-sel$/, '-bt')); if (!bt) return;
+  const op = sel.value ? sel.selectedOptions[0] : null;
+  bt.querySelector('.pq-escolher-txt')!.textContent = op ? op.textContent : 'Selecione';
+  bt.classList.toggle('pq-escolher-vazio', !op);
+}
+const semAcento = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+// Janela com busca para bairro (75, agrupados por regional) e cidade da Região Metropolitana (28)
+function abrirBusca(c: CampoPerfil, sel: HTMLSelectElement, bt: HTMLButtonElement) {
+  const ehBairro = c.id === 'bairro';
+  const dlg = el('dialog', 'pq-busca'); dlg.setAttribute('aria-labelledby', 'pq-busca-titulo');
+  const topo = el('div', 'pq-busca-topo');
+  const h = el('h2', undefined, ehBairro ? 'Em qual bairro você mora?' : 'Em qual cidade você mora?'); h.id = 'pq-busca-titulo';
+  const fechar = el('button', 'pq-busca-fechar'); fechar.type = 'button'; fechar.setAttribute('aria-label', 'Fechar');
+  fechar.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+  const campo = el('div', 'pq-busca-campo');
+  campo.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+  const busca = el('input'); busca.type = 'search'; busca.placeholder = ehBairro ? 'Digite o nome do bairro' : 'Digite o nome da cidade';
+  busca.setAttribute('aria-label', busca.placeholder); busca.autocomplete = 'off'; busca.enterKeyHint = 'search';
+  campo.appendChild(busca);
+  topo.append(h, fechar, campo);
+  const lista = el('div', 'pq-busca-lista');
+  const status = el('p', 'pq-sr'); status.setAttribute('aria-live', 'polite');
+  const vazio = el('p', 'pq-busca-vazio'); vazio.hidden = true;
+  lista.appendChild(vazio);
+  // monta a partir das opções da lista nativa (mesma ordem e mesmos grupos)
+  const itens: { b: HTMLButtonElement; chave: string; grupo?: HTMLElement }[] = [];
+  const grupos: { g: HTMLElement; chave: string }[] = [];
+  const item = (op: HTMLOptionElement, chaveGrupo: string, g?: HTMLElement) => {
+    const b = el('button', 'pq-busca-op'); b.type = 'button'; b.dataset.v = op.value;
+    const marcado = op.value === sel.value;
+    b.setAttribute('aria-pressed', String(marcado));
+    b.append(el('span', undefined, op.textContent ?? ''));
+    if (marcado) b.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>');
+    b.addEventListener('click', () => escolher(op.value));
+    itens.push({ b, chave: semAcento((op.textContent ?? '') + ' ' + chaveGrupo), grupo: g });
+    return b;
+  };
+  Array.from(sel.children).forEach((n) => {
+    if (n instanceof HTMLOptGroupElement) {
+      const g = el('div', 'pq-busca-grupo'); g.setAttribute('role', 'group');
+      const tit = el('p', 'pq-busca-grupo-tit', n.label); tit.id = 'pq-busca-g' + grupos.length; g.setAttribute('aria-labelledby', tit.id);
+      g.appendChild(tit);
+      Array.from(n.children).forEach((op) => g.appendChild(item(op as HTMLOptionElement, n.label, g)));
+      grupos.push({ g, chave: semAcento(n.label) }); lista.appendChild(g);
+    } else if (n instanceof HTMLOptionElement && n.value) lista.appendChild(item(n, ''));
+  });
+  const filtrar = () => {
+    const q = semAcento(busca.value.trim());
+    let n = 0;
+    itens.forEach((i) => { const ok = !q || i.chave.includes(q); i.b.hidden = !ok; if (ok) n++; });
+    grupos.forEach(({ g }) => { g.hidden = !g.querySelector('.pq-busca-op:not([hidden])'); });
+    vazio.hidden = n > 0;
+    vazio.textContent = `Não encontramos “${busca.value.trim()}”. Confira a escrita ou procure pelo nome da ${ehBairro ? 'regional' : 'cidade'}.`;
+    status.textContent = q ? (n ? `${n} ${n === 1 ? 'resultado' : 'resultados'}` : 'Nenhum resultado') : '';
+  };
+  const sair = () => { dlg.close(); };
+  const escolher = (v: string) => {
+    sel.value = v; sel.dispatchEvent(new Event('change'));
+    sair();
+    if (!reduzir) { bt.classList.remove('pq-escolhido'); void bt.offsetWidth; bt.classList.add('pq-escolhido'); }
+  };
+  busca.addEventListener('input', filtrar);
+  busca.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); const vis = itens.filter((i) => !i.b.hidden); if (vis.length === 1) vis[0].b.click(); else vis[0]?.b.focus(); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); itens.find((i) => !i.b.hidden)?.b.focus(); }
+  });
+  lista.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+    const vis = itens.filter((i) => !i.b.hidden).map((i) => i.b);
+    const k = vis.indexOf(document.activeElement as HTMLButtonElement); if (k < 0) return;
+    e.preventDefault();
+    if (e.key === 'ArrowUp' && k === 0) busca.focus(); else vis[Math.min(vis.length - 1, k + (e.key === 'ArrowDown' ? 1 : -1))].focus();
+  });
+  fechar.addEventListener('click', sair);
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) sair(); });
+  dlg.addEventListener('close', () => { dlg.remove(); document.documentElement.classList.remove('pq-trava'); bt.focus({ preventScroll: true }); });
+  dlg.append(topo, lista, status);
+  document.body.appendChild(dlg);
+  document.documentElement.classList.add('pq-trava');
+  dlg.showModal();
+  // no computador o cursor já vai para a busca; no celular, mostra a lista sem abrir o teclado
+  if (matchMedia('(min-width: 640px)').matches) busca.focus(); else fechar.focus();
+  dlg.querySelector<HTMLElement>('.pq-busca-op[aria-pressed="true"]')?.scrollIntoView({ block: 'center' });
 }
 function opcoesLista(sel: HTMLSelectElement, c: CampoPerfil, ops: OpcaoLista[]) {
   const vazio = el('option', undefined, 'Selecione'); vazio.value = ''; vazio.disabled = true;
@@ -386,6 +477,7 @@ function opcoesLista(sel: HTMLSelectElement, c: CampoPerfil, ops: OpcaoLista[]) 
   // "Prefiro não informar" no fim, depois dos grupos
   const ni = sel.querySelector('option[value="nao_informar"]'); if (ni) sel.appendChild(ni);
   sel.value = perfilAtual()[c.id] ?? '';
+  rotuloEscolha(sel);
 }
 function sincronizarLocal() {
   const cidade = PERFIL.find((c) => c.id === 'cidade'), bairro = PERFIL.find((c) => c.id === 'bairro');
@@ -417,9 +509,9 @@ function erroPerfil(id: string, msg: string) {
 
 function montarRelato() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-relato'; fs.dataset.etapa = String(ETAPA_RELATO);
-  cabecalho(fs, 'Para finalizar · opcional', 'Tem alguma experiência de compra que gostaria de compartilhar?',    'Pode ser uma situação positiva, uma dificuldade ou algo que marcou você ao procurar ou comprar peças.', 'experiência de compra');
+  cabecalho(fs, 'Para finalizar · opcional', 'Você já teve alguma experiência frustrante ao procurar ou comprar roupas e acessórios?', 'Pode ser relacionada à busca, ao atendimento, à disponibilidade das peças, à qualidade ou ao pós-venda.', 'experiência frustrante');
   const lab = el('label', 'pq-rotulo pq-oculto', 'Sua experiência (opcional)'); lab.htmlFor = 'pq-relato-txt';
-  const ta = el('textarea'); ta.id = 'pq-relato-txt'; ta.rows = 6; ta.maxLength = RELATO_MAX; ta.placeholder = 'Conte sua experiência, se quiser...'; ta.value = E.relato;
+  const ta = el('textarea'); ta.id = 'pq-relato-txt'; ta.rows = 6; ta.maxLength = RELATO_MAX; ta.placeholder = 'Conte o que aconteceu e, se possível, o que poderia ter sido diferente…'; ta.value = E.relato;
   const cont = el('p', 'pq-contador pq-contador-dir'); cont.id = 'pq-relato-cont';
   ta.setAttribute('aria-describedby', 'pq-relato-apoio pq-relato-cont');
   const atualizar = () => { cont.textContent = `${ta.value.length.toLocaleString('pt-BR')}/${RELATO_MAX.toLocaleString('pt-BR')}`; };
@@ -453,30 +545,35 @@ function campo(id: string, rotulo: string, tipo: string, valor: string, ph: stri
 
 function montarNovidades() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-novidades'; fs.dataset.etapa = String(ETAPA_NOV);
-  cabecalho(fs, 'Última etapa', 'Sua contribuição vale vantagens exclusivas');
+  cabecalho(fs, 'Última etapa', 'Obrigado por participar', undefined, 'Obrigado');
   // destaque: a contribuição da pessoa e as vantagens no lançamento
   const vant = el('div', 'pq-vantagem');
   const ic = el('span', 'pq-vantagem-ic'); ic.setAttribute('aria-hidden', 'true');
   ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>';
   const tx = el('div');
-  tx.append(el('p', 'pq-vantagem-t', 'Obrigada por contribuir com a solução que estamos desenvolvendo!'),
-    el('p', 'pq-vantagem-d', 'Por isso, você terá vantagens exclusivas quando a plataforma for lançada.'));
+  const vt = el('p', 'pq-vantagem-t'); vt.append(...realcar('Você terá vantagens exclusivas no lançamento!', 'vantagens exclusivas'));
+  tx.append(vt, el('p', 'pq-vantagem-d', 'Essa é a nossa forma de agradecer por sua contribuição na construção dessa nova solução.'));
   vant.append(ic, tx);
-  const perg = el('p', 'pq-nov-perg', 'Quer receber os avisos do lançamento e das suas vantagens pelo e-mail e WhatsApp que você informou?');
+  const perg = el('p', 'pq-nov-perg', 'Quer receber avisos sobre o lançamento e suas vantagens por e-mail e WhatsApp?');
   perg.id = 'pq-novidades-perg'; fs.setAttribute('aria-describedby', perg.id);
   const lista = el('div', 'pq-ops pq-nov-ops');
-  const opts: [Estado['nov'], string][] = [['sim', 'Sim, quero receber os avisos do lançamento e das minhas vantagens.'], ['nao', 'Não, obrigado(a).']];
+  const opts: [Estado['nov'], string][] = [['sim', 'Sim, quero receber os avisos.'], ['nao', 'Não, prefiro não receber.']];
   opts.forEach(([v, t]) => {
     const { lab, inp } = opcaoCartao('radio', 'novidades', { id: v, texto: t }, E.nov === v);
-    if (v === 'sim') lab.classList.add('pq-op-sim');
+    if (v === 'sim') {
+      // consentimento dentro do cartão do "Sim", visível antes de escolher (nenhuma opção vem marcada)
+      lab.classList.add('pq-op-sim');
+      const nota = el('span', 'pq-nota-consent'); nota.id = 'pq-novidades-consent';
+      nota.append('Autorizo o uso dos meus contatos exclusivamente para essa finalidade, conforme a ');
+      const a = el('a', undefined, 'Política de Privacidade'); a.href = '/privacidade/#pesquisa-moda'; a.dataset.politica = '';
+      nota.append(a, '. Posso revogar meu consentimento a qualquer momento.');
+      lab.querySelector('.pq-op-txt')!.appendChild(nota);
+      inp.setAttribute('aria-describedby', nota.id);
+    }
     inp.addEventListener('change', () => { E.nov = v; salvar(); limparErro(fs); atualizarBotao(); });
     lista.appendChild(lab);
   });
-  const nota = el('p', 'pq-nota-consent');
-  nota.append('Ao escolher "Sim", você autoriza o Dani Moscatelli — Experience Design Studio a usar seu e-mail e WhatsApp só para esses avisos, conforme a ');
-  const a = el('a', undefined, 'Política de Privacidade'); a.href = '/privacidade/#pesquisa-moda'; a.dataset.politica = '';
-  nota.append(a, '. Você pode cancelar quando quiser.');
-  fs.append(vant, perg, lista, nota, erroBox(fs.id));
+  fs.append(vant, perg, lista, erroBox(fs.id));
   return fs;
 }
 
@@ -484,7 +581,7 @@ function montarNovidades() {
 function montarIdentificacao() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-id'; fs.dataset.etapa = String(ETAPA_ID);
   cabecalho(fs, 'Antes de começar', 'Conte quem é você',
-    'Pedimos seus dados para garantir uma participação por pessoa e para entregar as suas vantagens no lançamento.');
+    'Pedimos seus dados para garantir uma participação por pessoa e para entregar as suas vantagens no lançamento.', 'quem é você');
   const campos = el('div', 'pq-contato');
   campos.append(
     campo('pq-nome', 'Seu nome', 'text', E.nome, 'Como podemos chamar você?', (i) => { i.autocomplete = 'name'; i.maxLength = 120; i.addEventListener('input', () => { E.nome = i.value; salvar(); erroCampo(i, ''); limparErro(fs); }); }),
@@ -508,7 +605,9 @@ function montarIdentificacao() {
   const errA = el('p', 'pq-erro'); errA.id = 'pq-ciente-erro'; errA.hidden = true; cb.setAttribute('aria-describedby', errA.id);
   cb.addEventListener('change', () => { E.ciente = cb.checked; salvar(); erroCampo(cb, ''); });
   aceite.append(lab, errA);
-  fs.append(campos, lgpd, aceite, erroBox(fs.id));
+  // aviso da LGPD e o aceite no mesmo cartão branco, separados por uma linha
+  const cartao = el('div', 'pq-lgpd-cartao'); cartao.append(lgpd, aceite);
+  fs.append(campos, cartao, erroBox(fs.id));
   return fs;
 }
 
@@ -774,7 +873,75 @@ function topo() {
   };
   window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(atualizar); } }, { passive: true });
   t.addEventListener('focusin', () => t.classList.remove('is-hidden'));
+  // altura do cabeçalho, para o formulário ocupar o resto da tela e a barra de botões ficar sempre presa embaixo
+  const medir = () => document.documentElement.style.setProperty('--pq-topo-h', t.offsetHeight + 'px');
+  if ('ResizeObserver' in window) new ResizeObserver(medir).observe(t);
+  medir();
   atualizar();
+}
+
+/* ---------- Telas finais: "Indique a pesquisa" (WhatsApp, Facebook, LinkedIn, copiar link e o compartilhar do aparelho) ---------- */
+const LINK_PESQUISA = 'https://www.danimoscatelli.com.br/pesquisa/moda-curitiba/';
+const MSG_INDICAR = 'Conhece a pesquisa sobre como é procurar e comprar roupas, calçados e acessórios em Curitiba e Região Metropolitana? Leva de 3 a 5 minutos e ajuda um projeto de inovação. Participe:';
+const ICONES_REDES = {
+  whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.47-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.05 21.5h-.01a9.5 9.5 0 0 1-4.84-1.33l-.35-.21-3.6.94.96-3.5-.23-.36a9.46 9.46 0 0 1-1.45-5.04c0-5.24 4.27-9.5 9.52-9.5a9.44 9.44 0 0 1 6.72 2.79 9.43 9.43 0 0 1 2.78 6.72c0 5.24-4.27 9.5-9.5 9.5zm8.09-17.59A11.36 11.36 0 0 0 12.05.56C5.75.56.62 5.68.62 11.98c0 2.01.53 3.98 1.53 5.71L.53 23.6l6.06-1.59a11.4 11.4 0 0 0 5.45 1.39h.01c6.3 0 11.43-5.13 11.43-11.43 0-3.05-1.19-5.92-3.35-8.08z"/></svg>',
+  facebook: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.23 2.68.23v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>',
+  linkedin: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>',
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+  ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
+  mais: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></svg>',
+};
+function indicar() {
+  const url = encodeURIComponent(LINK_PESQUISA);
+  const temNativo = typeof navigator.share === 'function';
+  document.querySelectorAll<HTMLElement>('[data-indicar]').forEach((box, n) => {
+    box.replaceChildren();
+    const tit = el('p', 'pq-indicar-tit', 'Indique a pesquisa');
+    const txt = el('p', 'pq-indicar-txt', 'Conhece alguém que compra roupas, calçados ou acessórios em Curitiba ou na Região Metropolitana? Compartilhe o link.');
+    // campo com o link (tocar seleciona tudo) e o botão "Compartilhar"
+    const linha = el('div', 'pq-indicar-linha');
+    const campo = el('input'); campo.type = 'text'; campo.readOnly = true; campo.value = LINK_PESQUISA; campo.id = 'pq-indicar-link-' + n;
+    campo.setAttribute('aria-label', 'Link da pesquisa'); campo.addEventListener('focus', () => campo.select());
+    const bt = el('button', 'pq-btn pq-btn-primario pq-indicar-bt-principal'); bt.type = 'button';
+    bt.innerHTML = ICONES_REDES.mais + '<span>Compartilhar</span>';
+    linha.append(campo, bt);
+    // sem o compartilhar do aparelho (alguns computadores): lista com as redes e "Copiar link"
+    const menu = el('div', 'pq-indicar-menu'); menu.hidden = true; menu.id = 'pq-indicar-menu-' + n;
+    bt.setAttribute('aria-controls', menu.id); bt.setAttribute('aria-expanded', 'false');
+    const link = (rede: string, rotulo: string, href: string) => {
+      const a = el('a', 'pq-indicar-bt pq-rede-' + rede); a.href = href; a.target = '_blank'; a.rel = 'noopener';
+      a.innerHTML = (ICONES_REDES as Record<string, string>)[rede] + '<span>' + rotulo + '</span>';
+      a.setAttribute('aria-label', 'Compartilhar no ' + rotulo + ' (abre em nova aba)');
+      return a;
+    };
+    const copiar = el('button', 'pq-indicar-bt pq-rede-link'); copiar.type = 'button';
+    const rotCopiar = () => { copiar.classList.remove('ok'); copiar.removeAttribute('aria-label'); copiar.innerHTML = ICONES_REDES.link + '<span>Copiar link</span>'; };
+    rotCopiar();
+    copiar.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(LINK_PESQUISA); }
+      catch { campo.select(); document.execCommand?.('copy'); }
+      copiar.classList.add('ok'); copiar.innerHTML = ICONES_REDES.ok + '<span>Copiado</span>'; copiar.setAttribute('aria-label', 'Link copiado');
+      setTimeout(rotCopiar, 2200);
+    });
+    const grade = el('div', 'pq-indicar-grade');
+    grade.append(
+      link('whatsapp', 'WhatsApp', 'https://wa.me/?text=' + encodeURIComponent(MSG_INDICAR + ' ' + LINK_PESQUISA)),
+      link('facebook', 'Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + url),
+      link('linkedin', 'LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' + url),
+      copiar,
+    );
+    menu.append(grade, el('p', 'pq-indicar-nota', 'Para o Direct do Instagram, copie o link e cole na conversa.'));
+    bt.addEventListener('click', async () => {
+      if (temNativo) {
+        try { await navigator.share({ title: 'Vamos conversar sobre moda em Curitiba?', text: MSG_INDICAR, url: LINK_PESQUISA }); return; }
+        catch (e) { if ((e as DOMException)?.name === 'AbortError') return; /* sem o compartilhar do aparelho: mostra a lista */ }
+      }
+      const abrir = menu.hidden;
+      menu.hidden = !abrir; bt.setAttribute('aria-expanded', String(abrir));
+      if (abrir && !reduzir) { menu.classList.remove('pq-entra'); void menu.offsetWidth; menu.classList.add('pq-entra'); }
+    });
+    box.append(tit, txt, linha, menu);
+  });
 }
 
 /* ---------- "Voltar para o site": pergunta antes de interromper a pesquisa em andamento ---------- */
@@ -796,7 +963,7 @@ function sair() {
 
 /* ---------- Início ---------- */
 function iniciar() {
-  politica(); topo(); sair();
+  politica(); topo(); sair(); indicar();
   const etapas = $('pq-etapas');
   PERGUNTAS.forEach((p, i) => etapas.appendChild(montarPergunta(p, i)));
   etapas.append(montarIdentificacao(), montarPerfil(), montarRelato(), montarNovidades());

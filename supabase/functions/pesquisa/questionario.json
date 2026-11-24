@@ -7,8 +7,8 @@
     "texto": "Li e concordo com o uso dos meus dados (nome, e-mail e WhatsApp) para participar desta pesquisa, conforme a Política de Privacidade."
   },
   "consentimento": {
-    "versao": "moda-curitiba-contato-v2-2026-11-23",
-    "texto": "Autorizo o Dani Moscatelli — Experience Design Studio a usar meu e-mail e WhatsApp para me avisar sobre o lançamento deste projeto e sobre as vantagens exclusivas de quem participou, conforme a Política de Privacidade."
+    "versao": "moda-curitiba-contato-v3-2026-11-24",
+    "texto": "Quer receber avisos sobre o lançamento e suas vantagens por e-mail e WhatsApp? Sim, quero receber os avisos. Autorizo o uso dos meus contatos exclusivamente para essa finalidade, conforme a Política de Privacidade. Posso revogar meu consentimento a qualquer momento."
   },
   "perguntas": [
     {
@@ -539,7 +539,7 @@
     {
       "id": "q9",
       "tipo": "multipla",
-      "texto": "Quando você não encontrou uma roupa, calçado ou acessório que queria comprar, o que acabou fazendo?",
+      "texto": "Quando você não encontrou um produto que queria comprar, o que acabou fazendo?",
       "apoio": "Selecione todas as situações que você viveu neste ano.",
       "opcoes": [
         {

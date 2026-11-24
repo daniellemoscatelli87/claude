@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="/design-system/theme.css?v=697a765">
 <link rel="stylesheet" href="/admin/admin.css?v=20261123g">
 <style>
-  .pa-topo { display: grid; gap: 16px; position: relative; z-index: 5; } /* o menu "Ações" abre por cima dos números abaixo */
+  .pa-topo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; position: relative; z-index: 5; } /* o menu "Ações" abre por cima dos números abaixo */
   .pa-cab { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 20px; }
   .pa-cab h2 { margin: 0 0 4px; font-size: 20px; }
   .pa-cab .muted { margin: 0; font-size: 13px; }
@@ -27,6 +27,17 @@
   .pa-cab > div:first-child { min-width: 0; }
   .pa-link { flex-wrap: nowrap; }
   .pa-link .pa-btn { flex-shrink: 0; }
+  .pa-cab { align-items: center; }
+  .pa-cab > .pa-btn { flex-shrink: 0; }
+  .pa-btn-sm { min-height: 36px; padding: 6px 12px; font-size: 13px; }
+  .pa-btn-sm svg { width: 15px; height: 15px; }
+  .pa-status { min-width: 0; }
+  .pa-status b { font-weight: 800; }
+  .pa-status-d { font-weight: 600; color: var(--muted-foreground); }
+  .pa-status-d::before { content: "· "; }
+  @media (max-width: 400px) { .pa-status-d { display: none; } }
+  .pa-ult { display: flex; align-items: center; gap: 8px; margin: 0; padding-top: 14px; border-top: 1px solid var(--muted); font-size: 13px; color: var(--muted-foreground); }
+  .pa-ult svg { width: 16px; height: 16px; flex: none; }
   @media (max-width: 480px) { .pa-link .pa-rot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .pa-link .pa-btn { padding-left: 12px; padding-right: 12px; } }
   /* Menu "Ações" (Dropdown Menu do DS: fundo do popover, borda, sombra média, itens de 14px com ícone) */
   .pa-menu-caixa { position: relative; flex-shrink: 0; }
@@ -169,20 +180,24 @@
   .pa-dest-bt .seta { display: inline-grid; transition: transform .25s; }
   .pa-dest-bt .seta svg { width: 16px; height: 16px; }
   .pa-dest-bt.aberto .seta { transform: rotate(180deg); }
-  .pa-dest-it { display: grid; align-content: start; gap: 6px; padding: 16px; border-radius: 14px; background: var(--muted); border: 1px solid transparent; transition: transform .2s, box-shadow .2s, border-color .2s; }
-  .pa-dest-it:hover { transform: translateY(-2px); border-color: var(--border); box-shadow: var(--shadow-md); }
-  .pa-dest-it.forte { background: var(--crimson-50); }
-  .pa-dest-tema { display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted-foreground); }
-  .pa-dest-tema .ic { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--card); color: var(--muted-foreground); }
-  .pa-dest-it.forte .pa-dest-tema .ic { color: var(--primary); }
-  .pa-dest-tema svg { width: 15px; height: 15px; }
-  .pa-dest-v { font-size: 30px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; color: var(--foreground); }
-  .pa-dest-it.forte .pa-dest-v { color: var(--primary); }
-  .pa-dest-it p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--foreground); }
+  /* Destaques no padrão do cartão de indicador do DS (CardsDeKpi): card branco, borda e sombra do DS,
+     rótulo 13 px médio em cinza, valor 26 px negrito na cor do texto, ícone 18 px cinza numa base cinza de 36 px à direita */
+  .pa-dest-it { display: grid; grid-template-columns: minmax(0, 1fr) 36px; grid-template-areas: "tema ic" "v v" "p p"; align-items: start; align-content: start; grid-template-rows: 36px auto auto; gap: 12px 12px; padding: 20px; border-radius: var(--radius-lg); background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .pa-dest-tema { grid-area: tema; align-self: center; font-size: 13px; font-weight: 500; line-height: 1.35; color: var(--muted-foreground); }
+  .pa-dest-ic { grid-area: ic; width: 36px; height: 36px; border-radius: var(--radius-md); display: grid; place-items: center; background: var(--muted); color: var(--muted-foreground); }
+  .pa-dest-ic svg { width: 18px; height: 18px; }
+  .pa-dest-v { grid-area: v; font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.025em; color: var(--foreground); }
+  .pa-dest-it p { grid-area: p; margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--muted-foreground); }
+  .pa-dest-it p strong { color: var(--foreground); font-weight: 600; }
   .pa-dest-vazio { grid-column: span 2; display: grid; align-content: center; gap: 4px; padding: 16px; border-radius: 14px; border: 1px dashed var(--border); font-size: 13px; color: var(--muted-foreground); }
   .pa-dest-vazio b { color: var(--foreground); font-size: 14px; }
-  @media (max-width: 560px) { .pa-dest-vazio { grid-column: 1 / -1; } .pa-dest-v { font-size: 26px; } .pa-dest-it { padding: 14px 12px; } .pa-dest-tema { flex-direction: column; align-items: flex-start; gap: 6px; font-size: 10.5px; letter-spacing: .02em; overflow-wrap: anywhere; } }
-  @media (max-width: 380px) { .pa-dest-grade { grid-template-columns: 1fr; } }
+  /* celular: um destaque por linha. Rótulo e ícone numa linha inteira em cima; embaixo, o valor à esquerda (coluna fixa) e a frase à direita */
+  @media (max-width: 560px) {
+    .pa-dest-grade { grid-template-columns: 1fr; gap: 10px; }
+    .pa-dest-vazio { grid-column: 1 / -1; }
+    .pa-dest-it { grid-template-columns: 84px minmax(0, 1fr) 36px; grid-template-rows: auto auto; grid-template-areas: "tema tema ic" "v p p"; align-items: center; gap: 12px 14px; padding: 16px; }
+    .pa-dest-v { align-self: stretch; display: flex; align-items: center; padding-right: 14px; border-right: 1px solid var(--border); }
+  }
   .pa-bloco { margin-top: 16px; }
   .pa-bloco h2 { margin: 0 0 4px; }
   .pa-bloco > .muted { margin: 0 0 14px; font-size: 13px; }
@@ -244,25 +259,114 @@
   .pa-item .tx b { font-size: 15px; }
   .pa-item .tx span { font-size: 13px; color: var(--muted-foreground); }
   .pa-novas { font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: var(--radius-full); background: var(--primary); color: var(--primary-foreground); white-space: nowrap; }
-  .pa-resp-topo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-bottom: 8px; }
-  .pa-resp-topo .muted { margin: 0; font-size: 13px; }
-  .pa-resp { border-top: 1px solid var(--muted); }
-  .pa-resp:first-child { border-top: 0; }
-  .pa-resp > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 4px; cursor: pointer; list-style: none; border-radius: var(--radius-md); }
-  .pa-resp > summary::-webkit-details-marker { display: none; }
-  .pa-resp > summary:hover { background: var(--row-hover); }
-  .pa-resp > summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-  .pa-resp-info { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; min-width: 0; }
-  .pa-resp-info b { font-size: 14px; }
-  .pa-resp-info::before { content: ""; width: 8px; height: 8px; border-right: 2px solid var(--muted-foreground); border-bottom: 2px solid var(--muted-foreground); transform: rotate(-45deg); margin-right: 4px; transition: transform .2s; }
-  .pa-resp[open] .pa-resp-info::before { transform: rotate(45deg); }
-  .pa-resp-sit { font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: var(--radius-full); background: var(--success-muted); color: var(--success); }
+  /* Apagar tudo: fora das abas, reinicia a pesquisa inteira */
+  .pa-zerar:empty { display: none; }
+  .pa-zerar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; margin: 0 0 20px; padding: 14px 16px; border: 1px dashed color-mix(in srgb, var(--destructive, var(--primary)) 35%, var(--border)); border-radius: var(--radius-lg); background: var(--card); }
+  .pa-zerar > div { display: grid; gap: 2px; min-width: 0; }
+  .pa-zerar b { font-size: 14px; }
+  .pa-zerar > div span { font-size: 13px; color: var(--muted-foreground); }
+  @media (max-width: 560px) { .pa-zerar .pa-btn { width: 100%; justify-content: center; } }
+  /* Aba Respostas */
+  .pa-filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  @media (max-width: 560px) { .pa-filtros { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 -16px 12px; padding: 2px 16px; scroll-padding: 16px; } .pa-filtros::-webkit-scrollbar { display: none; } .pa-filtro { flex: none; } }
+  .pa-filtro { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 6px 14px; font: inherit; font-size: 13px; font-weight: 600; color: var(--muted-foreground); background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-full); cursor: pointer; transition: background-color .15s, color .15s, border-color .15s; }
+  .pa-filtro .n { font-size: 11px; padding: 1px 7px; border-radius: var(--radius-full); background: var(--muted); color: var(--muted-foreground); }
+  .pa-filtro:hover { color: var(--foreground); border-color: color-mix(in srgb, var(--primary) 35%, var(--border)); }
+  .pa-filtro[aria-pressed=true] { background: var(--primary-muted); color: var(--primary-text); border-color: color-mix(in srgb, var(--primary) 40%, transparent); }
+  .pa-filtro[aria-pressed=true] .n { background: var(--card); color: var(--primary-text); }
+  .pa-filtro:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .pa-rl-cont { margin: 0 0 6px; font-size: 13px; color: var(--muted-foreground); }
+  .pa-rl { list-style: none; margin: 0; padding: 0; }
+  .pa-rl-it { display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--muted); animation: pa-rl-in .3s var(--ease-out, ease-out) both; animation-delay: calc(var(--i, 0) * 18ms); }
+  .pa-rl-it:first-child { border-top: 0; }
+  @keyframes pa-rl-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  .pa-rl-abrir { position: relative; flex: 1; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) var(--pa-col-sit, 168px); grid-template-areas: "l1 sit" "res sit"; align-items: center; gap: 4px 12px; padding: 12px 10px; font: inherit; text-align: left; color: var(--foreground); background: none; border: 0; border-radius: 0; cursor: pointer; }
+  .pa-rl-abrir:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
+  .pa-rl-l1 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+  .pa-rl-l1 b { font-size: 14px; }
+  .pa-rl-data { font-size: 13px; color: var(--muted-foreground); white-space: nowrap; }
+  @media (max-width: 560px) { .pa-rl-abrir { grid-template-columns: minmax(0, 1fr); grid-template-areas: "l1" "sit" "res"; align-items: start; } .pa-rl-abrir > .pa-resp-sit { justify-self: start; margin: 2px 0; } }
+  .pa-rl-nome { font-size: 15px; }
+  .pa-rl-nome.sem, .pa-ficha-tit b.sem { font-weight: 600; color: var(--muted-foreground); font-style: italic; }
+  .pa-rl-res { font-size: 13px; color: var(--muted-foreground); overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+  .pa-rl-l1 { grid-area: l1; } .pa-rl-res { grid-area: res; }
+  .pa-rl-abrir > .pa-resp-sit { grid-area: sit; justify-self: start; }
+  .pa-rl-cb { flex: none; display: grid; place-items: center; width: 40px; height: 40px; margin-left: 2px; border-radius: var(--radius-md); cursor: pointer; }
+  .pa-rl-cb input, .pa-sel-todas input { width: 18px; height: 18px; margin: 0; accent-color: var(--primary); cursor: pointer; }
+  /* hover e seleção pegam a linha toda (caixa, texto, etiqueta e lixeira), sem cantos arredondados */
+  .pa-rl-it { transition: background-color .15s; }
+  .pa-rl-it:hover { background: var(--row-hover); }
+  .pa-rl-it.marcada { background: color-mix(in srgb, var(--primary-muted) 55%, transparent); }
+  .pa-rl-it.marcada:hover { background: var(--primary-muted); }
+  .pa-sel { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; min-height: 48px; margin: 0 0 4px; padding: 4px 8px 4px 13px; border-radius: var(--radius-md); background: var(--muted); transition: background-color .2s; }
+  .pa-sel.ativa { background: var(--primary-muted); }
+  .pa-sel-todas { display: inline-flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 600; color: var(--foreground); cursor: pointer; }
+  .pa-sel-n { font-size: 13px; color: var(--primary-text); font-weight: 600; }
+  .pa-sel .pa-btn { margin-left: auto; animation: pa-rl-in .2s var(--ease-out, ease-out) both; }
+  .pa-sel .pa-btn[hidden] { display: none; }
+  .pa-abas-acoes { position: relative; z-index: 6; display: flex; justify-content: flex-end; margin: 0 0 10px; }
+  .pa-rl-del { flex: none; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; color: var(--muted-foreground); background: none; border: 1px solid transparent; border-radius: var(--radius-md); cursor: pointer; transition: color .15s, background-color .15s, border-color .15s; }
+  .pa-rl-del svg { width: 18px; height: 18px; }
+  .pa-rl-del:hover, .pa-rl-del:focus-visible { color: var(--destructive, var(--primary-text)); background: var(--primary-muted); border-color: color-mix(in srgb, var(--primary) 25%, transparent); outline: none; }
+  .pa-rl-del:disabled { opacity: .5; cursor: default; }
+  .pa-rl-vazio { padding: 24px 8px; text-align: center; font-size: 14px; color: var(--muted-foreground); }
+  .pa-resp-sit { font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: var(--radius-full); background: var(--success-muted); color: var(--success); white-space: nowrap; }
   .pa-resp-sit.fora_de_curitiba, .pa-resp-sit.sem_compras { background: var(--muted); color: var(--muted-foreground); }
-  .pa-resp-res { flex-basis: 100%; font-size: 12.5px; color: var(--muted-foreground); padding-left: 18px; }
-  .pa-resp-del { flex: none; padding: 8px 12px; }
-  .pa-resp-dl { margin: 0 4px 16px 22px; }
-  .pa-resp-dl dd { white-space: pre-wrap; }
-  @media (max-width: 560px) { .pa-resp-del span { display: none; } .pa-resp-dl { margin-left: 4px; } }
+  /* Ficha da resposta */
+  html.pa-trava { overflow: hidden; }
+  .pa-ficha { width: min(600px, 100vw); max-width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0 0 0 auto; padding: 0; border: 0; background: var(--background, var(--card)); color: var(--foreground); box-shadow: var(--shadow-lg, 0 20px 50px rgba(0,0,0,.25)); overflow: hidden; }
+  .pa-ficha[open] { display: flex; flex-direction: column; animation: pa-ficha-in .32s var(--ease-out, ease-out) both; }
+  .pa-ficha::backdrop { background: rgba(13, 17, 25, .45); }
+  @keyframes pa-ficha-in { from { transform: translateX(32px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .pa-ficha-cab { display: flex; align-items: center; gap: 6px; padding: 14px 12px 14px 20px; background: var(--card); border-bottom: 1px solid var(--border); }
+  .pa-ficha-tit { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; }
+  .pa-ficha-tit b { font-size: 16px; }
+  .pa-ficha-tit > span:not(.pa-resp-sit) { font-size: 13px; color: var(--muted-foreground); }
+  .pa-ficha-x { flex: none; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; background: none; border: 0; border-radius: var(--radius-md); color: var(--muted-foreground); cursor: pointer; }
+  .pa-ficha-x:hover, .pa-ficha-x:focus-visible { background: var(--muted); color: var(--foreground); outline: none; }
+  .pa-ficha-x svg { width: 20px; height: 20px; }
+  .pa-ficha-rola { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 16px; }
+  .pa-ficha-corpo { display: grid; gap: 12px; }
+  .pa-ficha-corpo.vem-dir { animation: pa-vem-dir .28s var(--ease-out, ease-out) both; }
+  .pa-ficha-corpo.vem-esq { animation: pa-vem-esq .28s var(--ease-out, ease-out) both; }
+  @keyframes pa-vem-dir { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+  @keyframes pa-vem-esq { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+  .pa-fb { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; display: grid; gap: 14px; }
+  .pa-fb h3 { margin: 0; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted-foreground); }
+  .pa-fb-perfil { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; margin: 0; }
+  .pa-fb-perfil dt { font-size: 12px; color: var(--muted-foreground); }
+  .pa-fb-perfil dd { margin: 2px 0 0; font-size: 14px; font-weight: 600; }
+  .pa-fq { display: grid; gap: 6px; padding-top: 14px; border-top: 1px solid var(--muted); }
+  .pa-fb h3 + .pa-fq { padding-top: 0; border-top: 0; }
+  .pa-fq-t { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--muted-foreground); }
+  .pa-fq-t .num { flex: none; min-width: 26px; height: 22px; padding: 0 6px; display: grid; place-items: center; border-radius: 6px; background: var(--primary-muted); color: var(--primary-text); font-size: 11px; font-weight: 800; }
+  .pa-fv-tx { margin: 0; font-size: 15px; color: var(--foreground); }
+  .pa-fv-rank { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .pa-fv-rank li { display: flex; align-items: baseline; gap: 8px; font-size: 15px; }
+  .pa-fv-rank .pos { flex: none; font-size: 12px; font-weight: 800; color: var(--primary-text); }
+  .pa-fv-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .pa-fv-lista li { display: flex; align-items: flex-start; gap: 8px; font-size: 15px; line-height: 1.45; }
+  .pa-fv-lista .ic { flex: none; width: 16px; height: 16px; margin-top: 3px; color: var(--primary-text); }
+  .pa-fv-lista .ic svg { width: 16px; height: 16px; stroke-width: 2.6; }
+  .pa-fv-notas { display: grid; gap: 10px; }
+  .pa-fv-nota { display: grid; grid-template-columns: minmax(0, 1fr) minmax(80px, 1.2fr) 28px; align-items: center; gap: 12px; font-size: 14px; }
+  .pa-fv-nota .barra { height: 8px; border-radius: 99px; background: var(--muted); overflow: hidden; }
+  .pa-fv-nota .barra span { display: block; height: 100%; width: calc(var(--w) * 100%); border-radius: inherit; background: var(--primary); transform-origin: left; animation: pa-barra .6s var(--ease-out, ease-out) both; }
+  @keyframes pa-barra { from { transform: scaleX(0); } to { transform: none; } }
+  .pa-fv-nota b { text-align: right; font-variant-numeric: tabular-nums; }
+  .pa-fv-mat { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pa-fv-mat li { display: grid; grid-template-columns: minmax(0, 1fr) 112px; align-items: center; gap: 12px; font-size: 14px; }
+  .pa-fv-mat .pa-tg { justify-self: start; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: var(--radius-full); background: var(--muted); color: var(--muted-foreground); }
+  .pa-fv-mat .pa-tg.n-1, .pa-fv-mat .pa-tg.n-2 { background: var(--success-muted); color: var(--success); }
+  .pa-fv-mat .pa-tg.n-3 { background: var(--warning-muted); color: var(--foreground); }
+  .pa-fv-mat .pa-tg.n-4, .pa-fv-mat .pa-tg.n-5 { background: var(--primary-muted); color: var(--primary-text); }
+  .pa-fb-relato { margin: 0; padding: 12px 14px; border-left: 3px solid var(--primary); background: var(--muted); border-radius: 0 var(--radius-md) var(--radius-md) 0; font-size: 15px; line-height: 1.6; white-space: pre-wrap; }
+  .pa-ficha-nota { margin: 0; padding: 14px 16px; border-radius: var(--radius-md); background: var(--muted); font-size: 14px; color: var(--muted-foreground); }
+  .pa-ficha-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--card); border-top: 1px solid var(--border); }
+  .pa-ficha-pos { font-size: 13px; color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+  .pa-ficha-nav .pa-btn:disabled { opacity: .4; cursor: default; }
+  .pa-ficha-nav svg { width: 16px; height: 16px; }
+  @media (prefers-reduced-motion: reduce) { .pa-rl-it, .pa-ficha[open], .pa-fv-nota .barra span { animation: none; } }
   /* gráficos (design system: vermelho para destaque, cinza-azulado para o restante, tons para escalas ordenadas) */
   .pa-seg-rot { display: flex; gap: 2px; margin-bottom: 4px; }
   .pa-seg-rot span { flex: 0 1 0; min-width: 0; text-align: center; font-size: 12px; font-weight: 700; color: var(--foreground); font-variant-numeric: tabular-nums; transition: flex-grow .8s var(--ease-snappy); }
@@ -486,8 +590,8 @@
     $("voltar").classList.remove("hidden");
     const [p, r, i, q] = await Promise.all([
       sb.from("pesquisas").select("slug, titulo, ativa, criada_em, atualizado_em").eq("slug", s).maybeSingle(),
-      sb.from("pesquisa_respostas").select("id, created_at, situacao, respostas, relato, quer_novidades, visualizado_em").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
-      sb.from("pesquisa_interessados").select("id, created_at, nome, email, whatsapp, consentimento_em, consentimento_versao").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
+      sb.from("pesquisa_respostas").select("id, envio_id, nome, created_at, situacao, respostas, relato, quer_novidades, visualizado_em").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
+      sb.from("pesquisa_interessados").select("id, envio_id, created_at, nome, email, whatsapp, consentimento_em, consentimento_versao").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
       fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ acao: "status", pesquisa: s }) }).then((x) => x.json()).catch(() => null),
     ]);
     if (p.error || !p.data) return erro(p.error ? "Não foi possível carregar a pesquisa: " + p.error.message : "Pesquisa não encontrada.");
@@ -508,7 +612,7 @@
 
   function desenhar() {
     const c = $("conteudo"); c.replaceChildren();
-    c.append(topo(), kpis(), abas());
+    c.append(topo(), kpis(), apagarTudo(), abas());
   }
 
   // Cabeçalho do painel: situação e "Ações" na mesma linha; o link com "Copiar" logo abaixo.
@@ -516,13 +620,16 @@
   function topo() {
     const card = el("section", "card pa-topo pa-entra");
     const cab = el("div", "pa-cab");
-    const esq = el("div");
-    const st = el("span", "pa-status" + (P.ativa ? "" : " off"), P.ativa ? "No ar, recebendo respostas" : "Fora do ar");
-    esq.append(st);
-    const ult = R[0] ? "Última resposta: " + fmtDate(R[0].created_at) : "Ainda sem respostas";
-    const m = el("p", "muted", ult); m.style.marginTop = "8px"; esq.appendChild(m);
+    // linha 1: situação e o botão de ligar/desligar; linha 2: link; rodapé: última resposta
+    const st = el("span", "pa-status" + (P.ativa ? "" : " off"));
+    st.append(el("b", null, P.ativa ? "No ar" : "Fora do ar"), el("span", "pa-status-d", P.ativa ? "recebendo respostas" : "não recebe respostas"));
     const url = SITE + (PAGINAS[P.slug] || "/pesquisa/" + P.slug + "/");
-    cab.append(esq, menuAcoes(url));
+    // o que diz respeito ao link (no ar / fora do ar, abrir) fica aqui, junto dele; o menu "Ações" fica acima das abas
+    const tog = el("button", "pa-btn" + (P.ativa ? " perigo" : " liga")); tog.type = "button";
+    tog.innerHTML = (P.ativa ? IC.pausa : IC.play) + "<span>" + (P.ativa ? "Tirar do ar" : "Colocar no ar") + "</span>";
+    tog.addEventListener("click", () => alternar(tog));
+    tog.classList.add("pa-btn-sm");
+    cab.append(st, tog);
     const link = el("div", "pa-link");
     const inp = el("input"); inp.type = "text"; inp.readOnly = true; inp.value = url; inp.setAttribute("aria-label", "Link da pesquisa");
     inp.addEventListener("focus", () => inp.select());
@@ -533,13 +640,18 @@
       copiar.classList.add("ok"); copiar.innerHTML = IC.ok + '<span class="pa-rot">Link copiado</span>';
       setTimeout(() => { copiar.classList.remove("ok"); copiar.innerHTML = IC.copiar + '<span class="pa-rot">Copiar link</span>'; }, 2200);
     });
-    link.append(inp, copiar);
-    card.append(cab, link);
+    const abrirL = el("a", "pa-btn"); abrirL.href = url; abrirL.target = "_blank"; abrirL.rel = "noopener";
+    abrirL.innerHTML = IC.abrir + '<span class="pa-rot">Abrir</span>'; abrirL.setAttribute("aria-label", "Abrir a pesquisa numa nova aba");
+    link.append(inp, copiar, abrirL);
+    const ult = el("p", "pa-ult");
+    ult.innerHTML = svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>');
+    ult.append(R[0] ? "Última resposta em " + fmtDate(R[0].created_at) : "Ainda sem respostas");
+    card.append(cab, link, ult);
     return card;
   }
   // Menu "Ações": abre abaixo do botão, alinhado à direita; Esc, clique fora ou escolher uma ação fecham.
   // Setas para cima e para baixo navegam entre os itens. O próprio botão mostra o andamento (ex.: gerando planilha).
-  function menuAcoes(url) {
+  function menuAcoes() {
     const caixa = el("div", "pa-menu-caixa");
     const btn = el("button", "pa-btn pa-menu-btn"); btn.type = "button";
     btn.setAttribute("aria-haspopup", "menu"); btn.setAttribute("aria-expanded", "false"); btn.id = "pa-acoes-btn";
@@ -553,12 +665,8 @@
       return b;
     };
     menu.append(
-      item(IC.abrir, "Ver a pesquisa", "Abre o link numa nova aba", { href: url }),
       item(IC_BAIXAR, "Exportar Excel", "Planilha com todas as abas", { fn: () => exportarExcel(btn) }),
       item(IC_BAIXAR, "Exportar PDF", "Relatório completo; escolha Salvar como PDF", { fn: exportarPdf }),
-      el("div", "pa-menu-sep"),
-      P.ativa ? item(IC.pausa, "Tirar do ar", "O link para de aceitar respostas", { fn: () => alternar(btn) }, " perigo")
-              : item(IC.play, "Colocar no ar", "O link volta a aceitar respostas", { fn: () => alternar(btn) }, " liga"),
     );
     const itens = () => [...menu.querySelectorAll(".pa-menu-it")];
     const fora = (e) => { if (!caixa.contains(e.target)) fechar(false); };
@@ -638,7 +746,8 @@
       corpo.replaceChildren(id === "resultados" ? resultados() : id === "inteligencia" ? inteligencia() : id === "respostas" ? listaRespostas() : id === "relatos" ? listaRelatos(relatos) : listaInteressados());
       requestAnimationFrame(() => requestAnimationFrame(animarGraficos));
     };
-    box.append(bar, corpo);
+    const acoes = el("div", "pa-abas-acoes"); acoes.appendChild(menuAcoes());
+    box.append(acoes, bar, corpo);
     abrir(ABA_INICIAL || "resultados"); ABA_INICIAL = null;
     return box;
   }
@@ -1171,9 +1280,10 @@
     const itens = [];
     const add = ({ ic, tema, valor, partes, forte, ordem = 9 }) => {
       const d = el("div", "pa-dest-it" + (forte ? " forte" : "")); d._ordem = ordem; d._i = itens.length; itens.push(d);
-      const t = el("span", "pa-dest-tema"); const i = el("span", "ic"); i.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC_D[ic]}</svg>`; t.append(i, tema);
+      // cartão de indicador do DS (CardsDeKpi): rótulo → valor → frase, ícone cinza à direita
+      const t = el("span", "pa-dest-tema", tema); const i = el("span", "pa-dest-ic"); i.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC_D[ic]}</svg>`;
       const p = el("p"); partes.forEach((x) => p.append(typeof x === "string" ? x : el("strong", null, x.b)));
-      d.append(t, el("b", "pa-dest-v", valor), p);
+      d.append(t, i, el("b", "pa-dest-v", valor), p);
     };
     // os 4 principais (o problema que a pesquisa investiga) na primeira linha; os demais em "Ver mais destaques"
     const montar = () => {
@@ -1647,59 +1757,244 @@
     const q = sb.from("pesquisa_respostas").delete();
     const { error } = await (todas ? q.eq("pesquisa", P.slug) : q.in("id", ids));
     if (error) { toast("Não foi possível excluir: " + error.message); return false; }
+    // junto vai o interesse em receber os avisos do lançamento (o contato fica ligado à resposta pelo envio_id)
+    const envios = todas ? null : R.filter((x) => ids.includes(x.id)).map((x) => x.envio_id).filter(Boolean);
     R = todas ? [] : R.filter((x) => !ids.includes(x.id));
-    log(todas ? "Apagou todas as respostas da pesquisa" : "Excluiu uma resposta da pesquisa", P.titulo);
-    toast(todas ? "Todas as respostas foram apagadas" : "Resposta excluída");
-    ABA_INICIAL = "respostas"; desenhar(); Admin.refreshNotifications();
-    return true;
+    let falhaI = null;
+    if (todas || envios.some((e) => I.some((y) => y.envio_id === e))) {
+      const qi = sb.from("pesquisa_interessados").delete();
+      const { error: eI } = await (todas ? qi.eq("pesquisa", P.slug) : qi.in("envio_id", envios));
+      if (eI) falhaI = eI.message; else I = todas ? [] : I.filter((y) => !envios.includes(y.envio_id));
+    }
+    log(todas ? "Apagou todas as respostas e os interessados da pesquisa" : "Excluiu uma resposta da pesquisa", P.titulo);
+    if (falhaI) { toast((todas ? "As respostas foram apagadas" : "A resposta foi excluída") + ", mas não foi possível apagar o contato em Interessados: " + falhaI); ABA_INICIAL = "interessados"; }
+    else { toast(todas ? "Respostas e interessados apagados" : "Resposta excluída"); ABA_INICIAL = "respostas"; }
+    desenhar(); Admin.refreshNotifications();
+    return !falhaI;
+  }
+
+  // "Apagar todas as respostas" reinicia a pesquisa inteira, por isso fica fora das abas (e fora do menu Ações)
+  function apagarTudo() {
+    const box = el("div", "pa-zerar pa-entra");
+    if (!R.length && !I.length) return box;
+    const tx = el("div");
+    tx.append(el("b", null, "Recomeçar a pesquisa do zero"), el("span", null, "Apaga todas as respostas, relatos e contatos de interessados."));
+    const bt = el("button", "pa-btn perigo"); bt.type = "button"; bt.innerHTML = IC.lixo + "<span>Apagar todas as respostas</span>";
+    bt.addEventListener("click", async () => {
+      const partes = [];
+      if (R.length) partes.push(`As ${plural(R.length, "participação", "participações")} desta pesquisa serão apagadas de vez, junto com os relatos.`);
+      if (I.length) partes.push(`${I.length === 1 ? "O contato" : `Os ${plural(I.length, "contato", "contatos")}`} da aba Interessados ${R.length ? "também " : ""}${I.length === 1 ? "será apagado" : "serão apagados"}.`);
+      partes.push("Os gráficos voltam a zero. Essa ação não pode ser desfeita.");
+      const ok = await confirmDialog({ title: "Apagar todas as respostas?", message: partes.join(" "), ok: "Apagar todas", word: "APAGAR" });
+      if (ok) { bt.disabled = true; await excluirRespostas([], true); }
+    });
+    box.append(tx, bt);
+    return box;
+  }
+
+  // Aba Respostas: filtros por situação, lista enxuta (ícone de excluir em cada linha) e ficha por pessoa,
+  // organizada em blocos, com anterior / próxima.
+  const ROTULO = { q1: "Onde mora", q1_1: "Compra em Curitiba", q2: "Onde mais comprou este ano", q2_1: "Por que compra fora", q3: "Segunda mão (brechós)",
+    q4: "Nota de 1 a 10 para cada aspecto", q5: "Onde começa a procura", q_foto: "Foto de referência", q6: "Como descobre lojas", q_disponibilidade: "Pergunta antes se tem a peça",
+    q7: "Dificuldade para encontrar", q8: "Facilidade para conseguir peças", q_categorias: "Mais difícil de encontrar", q9: "Quando não encontrou" };
+  const BLOCOS = [["Onde compra", ["q1", "q1_1", "q2", "q2_1", "q3"]], ["Notas das compras", ["q4"]], ["Como procura", ["q5", "q_foto", "q6", "q_disponibilidade"]], ["Dificuldades", ["q7", "q8", "q_categorias", "q9"]]];
+  const FILTROS = [["todas", "Todas"], ["completa", "Completas"], ["fora_de_curitiba", "Fora de Curitiba e RMC"], ["sem_compras", "Não comprou"]];
+  let FILTRO = "todas";
+  const numResp = (x) => R.length - R.indexOf(x);
+  // identificador da resposta: o nome que a pessoa informou no início (respostas antigas, de antes da identificação, não têm)
+  const nomeDe = (x) => (x.nome && x.nome.trim()) || "Sem nome";
+  const ICR = { dir: svg('<path d="m9 18 6-6-6-6"/>'), esq: svg('<path d="m15 18-6-6 6-6"/>'), x: svg('<path d="M18 6 6 18M6 6l12 12"/>') };
+  function perfilDe(x) {
+    const pf = (x.respostas && x.respostas.perfil) || {};
+    return (Q.perfil || []).map((c) => [c, pf[c.id] ? ((c.opcoes.find((o) => o.id === pf[c.id]) || {}).texto || pf[c.id]).replace(/ \(especifique\)$/, "") + (pf[c.id + "_outro"] ? ` (${pf[c.id + "_outro"]})` : "") : null]).filter(([, v]) => v);
+  }
+  function resumoDe(x) {
+    const q2 = Q.perguntas.find((p) => p.id === "q2");
+    const prim = q2 && valores(x.respostas.q2)[0];
+    const pf = perfilDe(x).map(([, v]) => v).filter((t) => t !== "Prefiro não informar").join(" · ");
+    return [pf, prim && x.situacao === "completa" ? "Mais comprou: " + textoResposta({ ...q2, tipo: "unica" }, prim) : ""].filter(Boolean).join(" · ");
+  }
+  async function excluirUma(x, bt) {
+    const tem = I.some((y) => y.envio_id && y.envio_id === x.envio_id);
+    const ok = await confirmDialog({ title: `Excluir a resposta de ${nomeDe(x)}?`, message: `A participação #${numResp(x)}, de ${fmtDate(x.created_at)}, será apagada de vez e sai dos gráficos.${tem ? " O contato dessa pessoa na aba Interessados (avisos do lançamento) também será apagado." : ""} Essa ação não pode ser desfeita.`, ok: "Excluir" });
+    if (!ok) return false;
+    if (bt) bt.disabled = true;
+    return excluirRespostas([x.id], false);
   }
   function listaRespostas() {
     const card = el("section", "card pa-entra");
-    const topo = el("div", "pa-resp-topo");
-    topo.appendChild(el("p", "muted", R.length ? `${plural(R.length, "participação", "participações")}, da mais recente para a mais antiga.` : ""));
-    if (R.length) {
-      const todas = el("button", "pa-btn perigo"); todas.type = "button"; todas.innerHTML = IC.lixo + "<span>Apagar todas as respostas</span>";
-      todas.addEventListener("click", async () => {
-        const ok = await confirmDialog({ title: "Apagar todas as respostas?", message: `As ${plural(R.length, "participação", "participações")} desta pesquisa serão apagadas de vez, junto com os relatos. Os gráficos voltam a zero. Os contatos da aba Interessados não são apagados por aqui. Essa ação não pode ser desfeita.`, ok: "Apagar todas", word: "APAGAR" });
-        if (ok) { todas.disabled = true; await excluirRespostas([], true); }
-      });
-      topo.appendChild(todas);
-    }
-    card.appendChild(topo);
     if (!R.length) { card.appendChild(vazio("Nenhuma resposta", "As participações aparecem aqui assim que alguém envia a pesquisa.")); return card; }
-    const lista = el("div", "pa-resp-lista");
-    R.forEach((x, k) => {
-      const d = el("details", "pa-resp");
-      const sum = el("summary");
-      const pf = x.respostas.perfil || {};
-      const perfilTx = Q.perfil ? Q.perfil.map((c) => (c.opcoes.find((o) => o.id === pf[c.id]) || {}).texto).filter((t) => t && t !== "Prefiro não informar").join(" · ") : "";
-      const q2 = Q.perguntas.find((p) => p.id === "q2");
-      const prim = q2 && valores(x.respostas.q2)[0];
-      const resumo = [perfilTx, prim && x.situacao === "completa" ? "Mais comprou: " + textoResposta({ ...q2, tipo: "unica" }, prim) : ""].filter(Boolean).join(" · ");
-      const info = el("span", "pa-resp-info");
-      info.append(el("b", null, `#${R.length - k} · ${fmtDate(x.created_at)}`), el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao));
-      if (resumo) info.appendChild(el("span", "pa-resp-res", resumo));
-      sum.appendChild(info);
-      const del = el("button", "pa-btn perigo pa-resp-del"); del.type = "button"; del.innerHTML = IC.lixo + "<span>Excluir</span>"; del.setAttribute("aria-label", `Excluir a resposta #${R.length - k}`);
-      del.addEventListener("click", async (ev) => {
-        ev.preventDefault(); ev.stopPropagation();
-        const ok = await confirmDialog({ title: "Excluir esta resposta?", message: `A participação #${R.length - k} (${fmtDate(x.created_at)}) será apagada de vez e sai dos gráficos. Essa ação não pode ser desfeita.`, ok: "Excluir" });
-        if (ok) { del.disabled = true; await excluirRespostas([x.id], false); }
-      });
-      sum.appendChild(del);
-      d.appendChild(sum);
-      const dl = el("dl", "pa-resp-dl");
-      const linha = (t, v) => { const r = el("div", "row"); r.append(el("dt", null, t), el("dd", null, v)); dl.appendChild(r); };
-      let num = 0;
-      Q.perguntas.forEach((p) => { if (!p.condicao) num++; if (x.respostas[p.id] === undefined) return; linha(`${p.rotulo || num}. ${p.texto}`, textoResposta(p, x.respostas[p.id])); });
-      (Q.perfil || []).forEach((c) => { if (pf[c.id]) linha(c.texto, ((c.opcoes.find((o) => o.id === pf[c.id]) || {}).texto || pf[c.id]).replace(/ \(especifique\)$/, "") + (pf[c.id + "_outro"] ? ` (${pf[c.id + "_outro"]})` : "")); });
-      if (x.relato) linha("Relato", x.relato);
-      if (x.situacao === "completa") linha("Quer novidades", x.quer_novidades ? "Sim (contato na aba Interessados)" : "Não");
-      d.appendChild(dl);
-      lista.appendChild(d);
+    const filtros = el("div", "pa-filtros"); filtros.setAttribute("role", "group"); filtros.setAttribute("aria-label", "Filtrar por situação");
+    const lista = el("ul", "pa-rl");
+    const cont = el("p", "pa-rl-cont"); cont.setAttribute("aria-live", "polite");
+    // seleção para excluir uma ou mais respostas de uma vez
+    const sel = new Set();
+    const barra = el("div", "pa-sel");
+    const todasLab = el("label", "pa-sel-todas");
+    const todasCb = el("input"); todasCb.type = "checkbox";
+    todasLab.append(todasCb, el("span", null, "Selecionar todas"));
+    const nSel = el("span", "pa-sel-n"); nSel.setAttribute("aria-live", "polite");
+    const excluirSel = el("button", "pa-btn perigo"); excluirSel.type = "button"; excluirSel.innerHTML = IC.lixo + "<span>Excluir selecionadas</span>";
+    barra.append(todasLab, nSel, excluirSel);
+    const visiveis = () => R.filter((x) => FILTRO === "todas" || x.situacao === FILTRO);
+    const sincSel = () => {
+      const vs = visiveis(), marcadas = vs.filter((x) => sel.has(x.id)).length;
+      todasCb.checked = marcadas > 0 && marcadas === vs.length; todasCb.indeterminate = marcadas > 0 && marcadas < vs.length;
+      nSel.textContent = marcadas ? `${plural(marcadas, "selecionada", "selecionadas")}` : "";
+      excluirSel.hidden = !marcadas; barra.classList.toggle("ativa", marcadas > 0);
+      lista.querySelectorAll(".pa-rl-it").forEach((li) => li.classList.toggle("marcada", sel.has(li.dataset.id)));
+    };
+    todasCb.addEventListener("change", () => { visiveis().forEach((x) => (todasCb.checked ? sel.add(x.id) : sel.delete(x.id))); lista.querySelectorAll(".pa-rl-cb input").forEach((c) => { c.checked = sel.has(c.value); }); sincSel(); });
+    excluirSel.addEventListener("click", async () => {
+      const alvo = R.filter((x) => sel.has(x.id));
+      if (!alvo.length) return;
+      if (alvo.length === 1) return excluirUma(alvo[0], excluirSel);
+      const comContato = alvo.filter((x) => I.some((y) => y.envio_id && y.envio_id === x.envio_id)).length;
+      const ok = await confirmDialog({ title: `Excluir ${plural(alvo.length, "resposta", "respostas")}?`, message: `${alvo.length === R.length ? "Todas as participações" : `As ${plural(alvo.length, "participação selecionada", "participações selecionadas")}`} serão apagadas de vez e saem dos gráficos.${comContato ? ` ${comContato === 1 ? "O contato de 1 dessas pessoas" : `Os contatos de ${comContato} dessas pessoas`} na aba Interessados (avisos do lançamento) também ${comContato === 1 ? "será apagado" : "serão apagados"}.` : ""} Essa ação não pode ser desfeita.`, ok: "Excluir" });
+      if (!ok) return;
+      excluirSel.disabled = true;
+      await excluirRespostas(alvo.map((x) => x.id), false);
     });
-    card.appendChild(lista);
+    const pintar = () => {
+      filtros.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.f === FILTRO)));
+      const vs = visiveis();
+      cont.textContent = `${plural(vs.length, "participação", "participações")}, da mais recente para a mais antiga.`;
+      lista.replaceChildren(...vs.map((x, k) => {
+        const li = el("li", "pa-rl-it"); li.style.setProperty("--i", Math.min(k, 12)); li.dataset.id = x.id;
+        const cbl = el("label", "pa-rl-cb");
+        const cb = el("input"); cb.type = "checkbox"; cb.value = x.id; cb.checked = sel.has(x.id);
+        cb.setAttribute("aria-label", `Selecionar a resposta de ${nomeDe(x)}, #${numResp(x)}`);
+        cb.addEventListener("change", () => { cb.checked ? sel.add(x.id) : sel.delete(x.id); sincSel(); });
+        cbl.appendChild(cb);
+        const ab = el("button", "pa-rl-abrir"); ab.type = "button"; ab.setAttribute("aria-haspopup", "dialog");
+        const linha1 = el("span", "pa-rl-l1");
+        linha1.append(el("b", "pa-rl-nome" + (x.nome ? "" : " sem"), nomeDe(x)), el("span", "pa-rl-data", `#${numResp(x)} · ${fmtDate(x.created_at)}`));
+        ab.append(linha1, el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao));
+        const res = resumoDe(x); if (res) ab.appendChild(el("span", "pa-rl-res", res));
+        ab.setAttribute("aria-label", `Abrir a resposta de ${nomeDe(x)}, #${numResp(x)}, ${fmtDate(x.created_at)}, ${SIT_CURTA[x.situacao] || x.situacao}`);
+        ab.addEventListener("click", () => abrirFicha(vs, k, ab));
+        const del = el("button", "pa-rl-del"); del.type = "button"; del.innerHTML = IC.lixo; del.setAttribute("aria-label", `Excluir a resposta de ${nomeDe(x)}`); del.title = "Excluir resposta";
+        del.addEventListener("click", () => excluirUma(x, del));
+        li.append(cbl, ab, del);
+        return li;
+      }));
+      if (!vs.length) lista.appendChild(el("li", "pa-rl-vazio", "Nenhuma participação com essa situação."));
+      barra.hidden = !vs.length;
+      sincSel();
+    };
+    FILTROS.forEach(([id, t]) => {
+      const n = id === "todas" ? R.length : R.filter((x) => x.situacao === id).length;
+      const b = el("button", "pa-filtro"); b.type = "button"; b.dataset.f = id;
+      b.append(t, el("span", "n", String(n)));
+      b.addEventListener("click", () => { FILTRO = id; sel.clear(); pintar(); });
+      filtros.appendChild(b);
+    });
+    pintar();
+    card.append(filtros, cont, barra, lista);
     return card;
+  }
+
+  // valor de cada pergunta na ficha: texto, lista em ordem (1º, 2º, 3º), etiquetas ou barras de nota
+  function valorFicha(p, v) {
+    const op = (id) => ((p.opcoes || []).find((o) => o.id === id) || {});
+    const nome = (id) => (op(id).texto || id).replace(/ \(especifique\)$/, "");
+    if (p.tipo === "unica") return el("p", "pa-fv-tx", nome(v));
+    if (p.tipo === "ranking") {
+      const ol = el("ol", "pa-fv-rank");
+      valores(v).forEach((id, k) => { const li = el("li"); li.append(el("span", "pos", `${k + 1}º`), el("span", null, nome(id))); ol.appendChild(li); });
+      return ol;
+    }
+    if (p.tipo === "escalas" || p.tipo === "escala") {
+      const max = p.max || 10, wrap = el("div", "pa-fv-notas");
+      const linhas = typeof v === "number" ? [["Nota", v]] : (p.linhas || []).map((l) => [l.texto, v[l.id]]);
+      linhas.forEach(([t, n]) => {
+        const r = el("div", "pa-fv-nota");
+        const barra = el("span", "barra"); const enc = el("span"); enc.style.setProperty("--w", typeof n === "number" ? Math.max(0, n) / max : 0); barra.appendChild(enc);
+        r.append(el("span", "t", t), barra, el("b", null, typeof n === "number" ? String(n) : "—"));
+        wrap.appendChild(r);
+      });
+      return wrap;
+    }
+    if (p.tipo === "matriz") {
+      const ul = el("ul", "pa-fv-mat");
+      p.linhas.forEach((l) => {
+        const c = p.colunas.find((c) => c.id === v[l.id]); const li = el("li");
+        const tag = el("span", "pa-tg n-" + (c ? c.id : "x"), c ? c.texto : "—");
+        li.append(el("span", null, l.texto), tag); ul.appendChild(li);
+      });
+      return ul;
+    }
+    // múltipla escolha: lista simples com check, no mesmo padrão da lista em ordem (1º, 2º, 3º)
+    const ul = el("ul", "pa-fv-lista");
+    valores(v).forEach((id) => { const li = el("li"); const ic = el("span", "ic"); ic.innerHTML = IC.ok; li.append(ic, el("span", null, nome(id) + (op(id).outro && v.outro ? `: ${v.outro}` : ""))); ul.appendChild(li); });
+    return ul;
+  }
+  function fichaConteudo(x) {
+    const corpo = el("div", "pa-ficha-corpo");
+    const bloco = (t, filhos) => { const s = el("section", "pa-fb"); s.appendChild(el("h3", null, t)); s.append(...filhos); corpo.appendChild(s); };
+    const pf = perfilDe(x);
+    if (pf.length) { const dl = el("dl", "pa-fb-perfil"); pf.forEach(([c, v]) => { const d = el("div"); d.append(el("dt", null, ROTULO_PF[c.id] || c.texto), el("dd", null, v)); dl.appendChild(d); }); bloco("Perfil", [dl]); }
+    let num = 0; const nums = {};
+    Q.perguntas.forEach((p) => { if (!p.condicao) num++; nums[p.id] = p.rotulo || String(num); });
+    BLOCOS.forEach(([t, ids]) => {
+      const itens = ids.map((id) => Q.perguntas.find((p) => p.id === id)).filter((p) => p && x.respostas[p.id] != null);
+      if (!itens.length) return;
+      bloco(t, itens.map((p) => {
+        const it = el("div", "pa-fq");
+        const cab = el("p", "pa-fq-t"); cab.title = p.texto;
+        cab.append(el("span", "num", nums[p.id]), ROTULO[p.id] || p.texto);
+        it.append(cab, valorFicha(p, x.respostas[p.id]));
+        return it;
+      }));
+    });
+    if (x.relato && x.relato.trim()) { const q = el("blockquote", "pa-fb-relato", x.relato); bloco("Relato", [q]); }
+    if (x.situacao === "completa") {
+      const tem = I.some((y) => y.envio_id && y.envio_id === x.envio_id);
+      bloco("Avisos do lançamento", [el("p", "pa-fv-tx", x.quer_novidades ? (tem ? "Quer receber. O contato está na aba Interessados." : "Quis receber. O contato já foi excluído.") : "Não quer receber.")]);
+    }
+    if (x.situacao !== "completa") corpo.appendChild(el("p", "pa-ficha-nota", x.situacao === "fora_de_curitiba" ? "A pesquisa terminou na pergunta 1: a pessoa não mora em Curitiba nem na Região Metropolitana." : "A pesquisa terminou na pergunta 2: a pessoa não comprou roupas, calçados ou acessórios este ano."));
+    return corpo;
+  }
+  const ROTULO_PF = { cidade: "Cidade", bairro: "Bairro", genero: "Gênero", faixa_etaria: "Faixa etária", estado_civil: "Estado civil" };
+  function abrirFicha(lista, k, origem) {
+    const dlg = el("dialog", "pa-ficha"); dlg.setAttribute("aria-labelledby", "pa-ficha-tit");
+    const cab = el("header", "pa-ficha-cab");
+    const tit = el("div", "pa-ficha-tit"); tit.id = "pa-ficha-tit";
+    const del = el("button", "pa-rl-del"); del.type = "button"; del.innerHTML = IC.lixo; del.title = "Excluir resposta";
+    const fechar = el("button", "pa-ficha-x"); fechar.type = "button"; fechar.innerHTML = ICR.x; fechar.setAttribute("aria-label", "Fechar");
+    cab.append(tit, del, fechar);
+    const rolagem = el("div", "pa-ficha-rola");
+    const nav = el("footer", "pa-ficha-nav");
+    const ant = el("button", "pa-btn"); ant.type = "button"; ant.innerHTML = ICR.esq + "<span>Anterior</span>";
+    const pos = el("span", "pa-ficha-pos"); pos.setAttribute("aria-live", "polite");
+    const prox = el("button", "pa-btn"); prox.type = "button"; prox.innerHTML = "<span>Próxima</span>" + ICR.dir;
+    nav.append(ant, pos, prox);
+    dlg.append(cab, rolagem, nav);
+    const mostrar = (n, dir) => {
+      k = n; const x = lista[k];
+      tit.replaceChildren(el("b", x.nome ? null : "sem", nomeDe(x)), el("span", null, `#${numResp(x)} · ${fmtDate(x.created_at)}`), el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao));
+      del.setAttribute("aria-label", `Excluir a resposta de ${nomeDe(x)}`);
+      const corpo = fichaConteudo(x);
+      if (dir && !matchMedia("(prefers-reduced-motion: reduce)").matches) corpo.classList.add(dir > 0 ? "vem-dir" : "vem-esq");
+      rolagem.replaceChildren(corpo); rolagem.scrollTop = 0;
+      pos.textContent = `${k + 1} de ${lista.length}`;
+      ant.disabled = k === 0; prox.disabled = k === lista.length - 1;
+    };
+    ant.addEventListener("click", () => k > 0 && mostrar(k - 1, -1));
+    prox.addEventListener("click", () => k < lista.length - 1 && mostrar(k + 1, 1));
+    dlg.addEventListener("keydown", (e) => {
+      if (e.target.closest && e.target.closest("input, textarea")) return;
+      if (e.key === "ArrowLeft" && k > 0) { e.preventDefault(); mostrar(k - 1, -1); }
+      if (e.key === "ArrowRight" && k < lista.length - 1) { e.preventDefault(); mostrar(k + 1, 1); }
+    });
+    del.addEventListener("click", async () => { const x = lista[k]; dlg.close(); await excluirUma(x, null); });
+    fechar.addEventListener("click", () => dlg.close());
+    dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener("close", () => { dlg.remove(); document.documentElement.classList.remove("pa-trava"); if (origem && origem.isConnected) origem.focus({ preventScroll: true }); });
+    document.body.appendChild(dlg);
+    mostrar(k, 0);
+    document.documentElement.classList.add("pa-trava");
+    dlg.showModal(); fechar.focus();
   }
 
   /* ---------- Relatos ---------- */
