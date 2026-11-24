@@ -592,13 +592,13 @@ function montarIdentificacao() {
   const ic = el('span', 'pq-ic'); ic.setAttribute('aria-hidden', 'true');
   ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
   const tx = el('p');
-  tx.append(el('strong', 'pq-lgpd-tit', 'Seus dados e sua privacidade'), 'Utilizamos seu nome, e-mail e WhatsApp exclusivamente para os fins desta pesquisa e para comunicar o lançamento da solução. As respostas são analisadas em conjunto e não são divulgadas de forma que permita sua identificação.');
+  tx.append(el('strong', 'pq-lgpd-tit', 'Seus dados e sua privacidade'), 'Usamos seu nome, e-mail e WhatsApp apenas para esta pesquisa e para informar sobre o lançamento da solução. Suas respostas não serão divulgadas de forma identificável.');
   lgpd.append(ic, tx);
   const aceite = el('div', 'pq-campo pq-aceite-q'); aceite.id = 'pq-ciente-q';
   const lab = el('label', 'pq-aceite');
   const cb = el('input'); cb.type = 'checkbox'; cb.id = 'pq-ciente'; cb.checked = E.ciente;
   const txt = el('span');
-  txt.append((Q as { identificacao: { texto: string } }).identificacao.texto.replace(/conforme a Política de Privacidade\.$/, 'conforme a '));
+  txt.append((Q as { identificacao: { texto: string } }).identificacao.texto.replace(/Política de Privacidade\.$/, ''));
   const a = el('a', undefined, 'Política de Privacidade'); a.href = '/privacidade/#pesquisa-moda'; a.dataset.politica = '';
   txt.append(a, '.');
   lab.append(cb, el('span', 'pq-caixa'), txt);

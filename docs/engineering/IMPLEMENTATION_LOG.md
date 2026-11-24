@@ -601,8 +601,9 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Janela de busca de bairro e cidade, no celular: sai a borda vermelha do X ao abrir, por pedido da dona do produto. Era o anel de foco, porque a janela focava o X ao abrir. Agora o foco inicial vai para o título (`tabindex=-1`, sem contorno), o que também não abre o teclado. Quem usa teclado ainda vê o anel ao chegar no X com Tab. Teste: iPhone 13 com foco no título, sem contorno no X; Tab leva ao X; Esc fecha; sem erros de JS.
 
 - **Identificação, novos textos da dona do produto:**
-  - No cartão: "**Seus dados e sua privacidade**" em linha própria e "Utilizamos seu nome, e-mail e WhatsApp exclusivamente para os fins desta pesquisa e para comunicar o lançamento da solução. As respostas são analisadas em conjunto e não são divulgadas de forma que permita sua identificação."
-  - Na caixa: "Li e autorizo o uso dos meus dados para as finalidades descritas, conforme a Política de Privacidade."
+  - No cartão: "**Seus dados e sua privacidade**" em linha própria e "Usamos seu nome, e-mail e WhatsApp apenas para esta pesquisa e para informar sobre o lançamento da solução. Suas respostas não serão divulgadas de forma identificável." Este texto foi revisado duas vezes pela dona do produto; vale a versão final.
+  - Na caixa: "Autorizo o uso dos meus dados conforme as finalidades acima e a Política de Privacidade."
+  - "Política de Privacidade" vira link sempre que estiver no fim da frase da caixa, não mais só depois de "conforme a".
 - **Espaçamento:** a regra `#pq-id .pq-aceite-q { padding: 2px … }` zerava o espaço abaixo da linha divisória, colando o texto nela. Agora há 18 px acima e 18 px abaixo da linha, e o cartão tem 18/20 px de respiro.
 - **Registro (`questionario.json`):** a identificação passa para `moda-curitiba-identificacao-v2-2026-11-24`, com o campo novo `finalidades` (o texto do cartão). A função grava em `identificacao_texto` as finalidades seguidas da frase da caixa, porque "finalidades descritas" sozinho não diria quais são. A função `pesquisa` precisa ser publicada junto.
 - **Teste:**
