@@ -318,8 +318,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @keyframes pq-falta-entra { 0% { opacity: 0; transform: translateY(10px); } 60% { opacity: 1; transform: translateY(-2px); } 100% { transform: none; } }
 @media (prefers-reduced-motion: reduce) { .pq-falta-entra, .pq-erro { animation: none; } }
 .pq-campo .pq-erro { margin-top: 0; }
-.pq-etapa.pq-invalido .pq-op:not(:has(input:checked)) { border-color: rgba(198, 40, 40, 0.6); background: var(--pq-erro-fundo); }
-.pq-etapa.pq-invalido .pq-nota span { border-color: rgba(198, 40, 40, 0.6); }
+/* só o que ainda falta fica em vermelho: em perguntas com vários itens (notas e grade), cada item sai do vermelho assim que é respondido */
+.pq-etapa.pq-invalido:not(:has(.pq-linha, .pq-aspecto)) .pq-op:not(:has(input:checked)), .pq-linha.pq-faltando .pq-op:not(:has(input:checked)) { border-color: rgba(198, 40, 40, 0.6); background: var(--pq-erro-fundo); }
+.pq-etapa.pq-invalido:not(:has(.pq-aspecto)) .pq-nota span, .pq-aspecto.pq-faltando .pq-nota span { border-color: rgba(198, 40, 40, 0.6); }
 .pq-treme { animation: pq-treme .4s ease both !important; }
 @keyframes pq-treme { 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
 .pq-erro-geral { margin: 18px 0 0; padding: 12px 14px; border-radius: 12px; background: #FDECEC; color: #8E1F1F; font-size: 14px; font-weight: 600; }
