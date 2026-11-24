@@ -301,8 +301,12 @@
   .pa-sel.ativa { background: var(--primary-muted); }
   .pa-sel-todas { display: inline-flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 600; color: var(--foreground); cursor: pointer; }
   .pa-sel-n { font-size: 13px; color: var(--primary-text); font-weight: 600; }
-  .pa-sel .pa-btn { margin-left: auto; animation: pa-rl-in .2s var(--ease-out, ease-out) both; }
-  .pa-sel .pa-btn[hidden] { display: none; }
+  .pa-sel-dica { margin-left: auto; font-size: 12.5px; color: var(--muted-foreground); }
+  .pa-sel:not(.ativa) .pa-sel-dica { display: none; }
+  .pa-menu-it:disabled { opacity: .5; cursor: default; }
+  .pa-menu-it:disabled:hover { background: none; }
+  .pa-pulsa { animation: pa-pulsa .9s var(--ease-out, ease-out) 2; }
+  @keyframes pa-pulsa { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 40%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
   .pa-abas-acoes { position: relative; z-index: 6; display: flex; justify-content: flex-end; margin: 0 0 10px; }
   .pa-rl-del { flex: none; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; color: var(--muted-foreground); background: none; border: 1px solid transparent; border-radius: var(--radius-md); cursor: pointer; transition: color .15s, background-color .15s, border-color .15s; }
   .pa-rl-del svg { width: 18px; height: 18px; }
@@ -667,9 +671,20 @@
       item(IC_BAIXAR, "Exportar Excel", "Planilha com todas as abas", { fn: () => exportarExcel(btn) }),
       item(IC_BAIXAR, "Exportar PDF", "Relatório completo; escolha Salvar como PDF", { fn: exportarPdf }),
     );
-    const itens = () => [...menu.querySelectorAll(".pa-menu-it")];
+    // nas abas Respostas e Interessados: excluir o que foi marcado na lista
+    const extra = el("div"); menu.appendChild(extra);
+    const montarExtra = () => {
+      extra.replaceChildren();
+      if (!SELECAO) return;
+      const n = SELECAO.n();
+      const it = item(IC.lixo, n ? `Excluir ${plural(n, SELECAO.um, SELECAO.varios)}` : `Excluir ${SELECAO.varios}`, n ? SELECAO.dica : "Marque as caixas na lista para escolher", { fn: SELECAO.fn }, " perigo");
+      if (!n) { it.disabled = true; it.setAttribute("aria-disabled", "true"); }
+      extra.append(el("div", "pa-menu-sep"), it);
+    };
+    const itens = () => [...menu.querySelectorAll(".pa-menu-it:not(:disabled)")];
     const fora = (e) => { if (!caixa.contains(e.target)) fechar(false); };
     function abrir() {
+      montarExtra();
       menu.hidden = false; btn.setAttribute("aria-expanded", "true"); caixa.classList.add("aberto");
       requestAnimationFrame(() => itens()[0]?.focus());
       document.addEventListener("pointerdown", fora);
@@ -726,6 +741,7 @@
     return wrap;
   }
 
+  let SELECAO = null; // seleção da aba aberta (Respostas ou Interessados), usada pelo item "Excluir" do menu Ações
   let ABA_INICIAL = null; // depois de excluir, o painel é redesenhado e volta para a mesma aba
   function abas() {
     const relatos = R.filter((x) => x.relato && x.relato.trim());
@@ -740,6 +756,7 @@
       bar.appendChild(b); return b;
     });
     const abrir = (id) => {
+      SELECAO = null;
       botoes.forEach((b) => b.setAttribute("aria-selected", String(b.id === "aba-" + id)));
       corpo.setAttribute("aria-labelledby", "aba-" + id);
       corpo.replaceChildren(id === "resultados" ? resultados() : id === "inteligencia" ? inteligencia() : id === "respostas" ? listaRespostas() : id === "relatos" ? listaRelatos(relatos) : listaInteressados());
@@ -1833,27 +1850,27 @@
     const todasCb = el("input"); todasCb.type = "checkbox";
     todasLab.append(todasCb, el("span", null, "Selecionar todas"));
     const nSel = el("span", "pa-sel-n"); nSel.setAttribute("aria-live", "polite");
-    const excluirSel = el("button", "pa-btn perigo"); excluirSel.type = "button"; excluirSel.innerHTML = IC.lixo + "<span>Excluir selecionadas</span>";
-    barra.append(todasLab, nSel, excluirSel);
+    const dicaSel = el("span", "pa-sel-dica", "Para excluir, use o menu Ações");
+    barra.append(todasLab, nSel, dicaSel);
     const visiveis = () => R.filter((x) => FILTRO === "todas" || x.situacao === FILTRO);
     const sincSel = () => {
       const vs = visiveis(), marcadas = vs.filter((x) => sel.has(x.id)).length;
       todasCb.checked = marcadas > 0 && marcadas === vs.length; todasCb.indeterminate = marcadas > 0 && marcadas < vs.length;
       nSel.textContent = marcadas ? `${plural(marcadas, "selecionada", "selecionadas")}` : "";
-      excluirSel.hidden = !marcadas; barra.classList.toggle("ativa", marcadas > 0);
+      avisarSelecao(barra, marcadas);
       lista.querySelectorAll(".pa-rl-it").forEach((li) => li.classList.toggle("marcada", sel.has(li.dataset.id)));
     };
     todasCb.addEventListener("change", () => { visiveis().forEach((x) => (todasCb.checked ? sel.add(x.id) : sel.delete(x.id))); lista.querySelectorAll(".pa-rl-cb input").forEach((c) => { c.checked = sel.has(c.value); }); sincSel(); });
-    excluirSel.addEventListener("click", async () => {
+    const excluirSelecionadas = async () => {
       const alvo = R.filter((x) => sel.has(x.id));
       if (!alvo.length) return;
-      if (alvo.length === 1) return excluirUma(alvo[0], excluirSel);
+      if (alvo.length === 1) return excluirUma(alvo[0], null);
       const comContato = alvo.filter((x) => I.some((y) => y.envio_id && y.envio_id === x.envio_id)).length;
       const ok = await confirmDialog({ title: `Excluir ${plural(alvo.length, "resposta", "respostas")}?`, message: `${alvo.length === R.length ? "Todas as participações" : `As ${plural(alvo.length, "participação selecionada", "participações selecionadas")}`} serão apagadas de vez e saem dos gráficos.${comContato ? ` ${comContato === 1 ? "O contato de 1 dessas pessoas" : `Os contatos de ${comContato} dessas pessoas`} na aba Interessados (avisos do lançamento) também ${comContato === 1 ? "será apagado" : "serão apagados"}.` : ""} Essa ação não pode ser desfeita.`, ok: "Excluir" });
       if (!ok) return;
-      excluirSel.disabled = true;
       await excluirRespostas(alvo.map((x) => x.id), false);
-    });
+    };
+    SELECAO = { n: () => visiveis().filter((x) => sel.has(x.id)).length, um: "resposta selecionada", varios: "respostas selecionadas", dica: "Apaga também o contato delas em Interessados", fn: excluirSelecionadas };
     const pintar = () => {
       filtros.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.f === FILTRO)));
       const vs = visiveis();
@@ -2007,6 +2024,13 @@
   }
 
   /* ---------- Interessados ---------- */
+  // barra de seleção: destaque quando há itens marcados; na primeira marcação, o botão "Ações" pulsa para indicar onde excluir
+  function avisarSelecao(barra, n) {
+    const antes = barra.classList.contains("ativa");
+    barra.classList.toggle("ativa", n > 0);
+    const bt = document.getElementById("pa-acoes-btn");
+    if (bt && n > 0 && !antes && !matchMedia("(prefers-reduced-motion: reduce)").matches) { bt.classList.remove("pa-pulsa"); void bt.offsetWidth; bt.classList.add("pa-pulsa"); }
+  }
   // Aba Interessados: mesma estrutura da aba Respostas (seleção, lista em linhas, etiqueta em coluna fixa, lixeira)
   const aceiteDe = (v) => { const m = /(\d{4})-(\d{2})-(\d{2})$/.exec(v || ""); return m ? `Aceite de ${m[3]}/${m[2]}` : "Aceite"; };
   async function excluirInteressados(ids) {
@@ -2030,25 +2054,26 @@
     const todasLab = el("label", "pa-sel-todas"); const todasCb = el("input"); todasCb.type = "checkbox";
     todasLab.append(todasCb, el("span", null, "Selecionar todos"));
     const nSel = el("span", "pa-sel-n"); nSel.setAttribute("aria-live", "polite");
-    const excluirSel = el("button", "pa-btn perigo"); excluirSel.type = "button"; excluirSel.innerHTML = IC.lixo + "<span>Excluir selecionados</span>";
-    barra.append(todasLab, nSel, excluirSel);
+    const dicaSel = el("span", "pa-sel-dica", "Para excluir, use o menu Ações");
+    barra.append(todasLab, nSel, dicaSel);
     const lista = el("ul", "pa-rl");
     const sincSel = () => {
       const n = sel.size;
       todasCb.checked = n > 0 && n === I.length; todasCb.indeterminate = n > 0 && n < I.length;
       nSel.textContent = n ? plural(n, "selecionado", "selecionados") : "";
-      excluirSel.hidden = !n; barra.classList.toggle("ativa", n > 0);
+      avisarSelecao(barra, n);
       lista.querySelectorAll(".pa-rl-it").forEach((li) => li.classList.toggle("marcada", sel.has(li.dataset.id)));
     };
     todasCb.addEventListener("change", () => { I.forEach((x) => (todasCb.checked ? sel.add(x.id) : sel.delete(x.id))); lista.querySelectorAll(".pa-rl-cb input").forEach((c) => { c.checked = sel.has(c.value); }); sincSel(); });
-    excluirSel.addEventListener("click", async () => {
+    const excluirSelecionados = async () => {
       const alvo = I.filter((x) => sel.has(x.id)); if (!alvo.length) return;
       const ok = await confirmDialog(alvo.length === 1
         ? { title: "Excluir este contato?", message: `Os dados de ${alvo[0].nome} (nome, e-mail, WhatsApp e autorização) serão apagados de vez. Use quando a pessoa pedir a exclusão ou cancelar os avisos.`, ok: "Excluir" }
         : { title: `Excluir ${plural(alvo.length, "contato", "contatos")}?`, message: `Os dados ${alvo.length === I.length ? "de todos os contatos" : `dos ${plural(alvo.length, "contato selecionado", "contatos selecionados")}`} (nome, e-mail, WhatsApp e autorização) serão apagados de vez. As respostas da pesquisa continuam. Essa ação não pode ser desfeita.`, ok: "Excluir" });
       if (!ok) return;
-      excluirSel.disabled = true; await excluirInteressados(alvo.map((x) => x.id));
-    });
+      await excluirInteressados(alvo.map((x) => x.id));
+    };
+    SELECAO = { n: () => sel.size, um: "contato selecionado", varios: "contatos selecionados", dica: "As respostas da pesquisa continuam", fn: excluirSelecionados };
     I.forEach((x, k) => {
       const li = el("li", "pa-rl-it"); li.style.setProperty("--i", Math.min(k, 12)); li.dataset.id = x.id;
       const cbl = el("label", "pa-rl-cb"); const cb = el("input"); cb.type = "checkbox"; cb.value = x.id;

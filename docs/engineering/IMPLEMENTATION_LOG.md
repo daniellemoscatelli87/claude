@@ -601,13 +601,22 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Pedido da dona do produto: a aba Interessados deve ter a mesma estrutura da aba Respostas.
 - Mesma estrutura:
   - aviso no topo e contagem ("N contatos, do mais recente para o mais antigo");
-  - barra "Selecionar todos · N selecionados · Excluir selecionados";
+  - barra "Selecionar todos · N selecionados" (excluir pelo menu Ações);
   - linhas com caixa de seleção, nome em destaque e "Autorizou em …";
   - e-mail e WhatsApp clicáveis (`mailto:` e `wa.me`), cada um sem quebrar no meio;
   - etiqueta na coluna fixa de 168 px e lixeira;
   - hover e seleção na linha inteira.
 - **Etiqueta "Aceite de DD/MM":** mostra com qual versão do texto a pessoa concordou. A versão completa (`moda-curitiba-contato-v3-…`) aparece ao passar o mouse.
 - **Excluir:** um contato ou vários de uma vez (`pesquisa_interessados` por `id`). As respostas da pesquisa continuam. Depois de excluir, a aba Interessados continua aberta.
+- "Excluir selecionadas/selecionados" saiu da barra de seleção e virou item do menu Ações, por pedido da dona do produto. Vale para as abas Respostas e Interessados.
+  - O item mostra a quantidade ("Excluir 2 respostas selecionadas") e, embaixo, uma dica ("Apaga também o contato delas em Interessados" ou "As respostas da pesquisa continuam").
+  - Sem nada marcado, o item fica desativado, com "Marque as caixas na lista para escolher". Nas outras abas, ele não aparece.
+  - A barra mostra "Selecionar todos", a contagem e "Para excluir, use o menu Ações". Na primeira marcação, o botão "Ações" pulsa, respeitando "menos movimento".
+  - Teste: computador e iPhone 13, sem erros de JS. Conferidos:
+    - o menu só com as exportações em Resultados;
+    - o item desativado sem seleção;
+    - com 2 respostas marcadas: "Excluir 2 respostas selecionadas" → confirmação → DELETE `id=in.(…)`, com a contagem passando de 42 para 40;
+    - em Interessados: "Excluir 1 contato selecionado", com a contagem caindo 1.
 - Teste: Playwright com 4 contatos fictícios (2 com aceite v3 e 2 com v2), no computador e no iPhone 13, sem erros de JS. Conferidos:
   - as etiquetas certas, todas na mesma coluna;
   - 2 contatos selecionados e excluídos: DELETE `id=in.(i1,i3)` e a contagem passando de 4 para 2.
