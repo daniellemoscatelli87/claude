@@ -554,21 +554,26 @@ function montarNovidades() {
   tx.append(el('p', 'pq-vantagem-t', 'Obrigada por contribuir com a solução que estamos desenvolvendo!'),
     el('p', 'pq-vantagem-d', 'Por isso, você terá vantagens exclusivas quando a plataforma for lançada.'));
   vant.append(ic, tx);
-  const perg = el('p', 'pq-nov-perg', 'Quer receber os avisos do lançamento e das suas vantagens pelo e-mail e WhatsApp que você informou?');
+  const perg = el('p', 'pq-nov-perg', 'Quer receber avisos sobre o lançamento e suas vantagens por e-mail e WhatsApp?');
   perg.id = 'pq-novidades-perg'; fs.setAttribute('aria-describedby', perg.id);
   const lista = el('div', 'pq-ops pq-nov-ops');
-  const opts: [Estado['nov'], string][] = [['sim', 'Sim, quero receber os avisos do lançamento e das minhas vantagens.'], ['nao', 'Não, obrigado(a).']];
+  const opts: [Estado['nov'], string][] = [['sim', 'Sim, quero receber os avisos.'], ['nao', 'Não, prefiro não receber.']];
   opts.forEach(([v, t]) => {
     const { lab, inp } = opcaoCartao('radio', 'novidades', { id: v, texto: t }, E.nov === v);
-    if (v === 'sim') lab.classList.add('pq-op-sim');
+    if (v === 'sim') {
+      // consentimento dentro do cartão do "Sim", visível antes de escolher (nenhuma opção vem marcada)
+      lab.classList.add('pq-op-sim');
+      const nota = el('span', 'pq-nota-consent'); nota.id = 'pq-novidades-consent';
+      nota.append('Autorizo o uso dos meus contatos exclusivamente para essa finalidade, conforme a ');
+      const a = el('a', undefined, 'Política de Privacidade'); a.href = '/privacidade/#pesquisa-moda'; a.dataset.politica = '';
+      nota.append(a, '. Posso revogar meu consentimento a qualquer momento.');
+      lab.querySelector('.pq-op-txt')!.appendChild(nota);
+      inp.setAttribute('aria-describedby', nota.id);
+    }
     inp.addEventListener('change', () => { E.nov = v; salvar(); limparErro(fs); atualizarBotao(); });
     lista.appendChild(lab);
   });
-  const nota = el('p', 'pq-nota-consent');
-  nota.append('Ao escolher "Sim", você autoriza o Dani Moscatelli — Experience Design Studio a usar seu e-mail e WhatsApp só para esses avisos, conforme a ');
-  const a = el('a', undefined, 'Política de Privacidade'); a.href = '/privacidade/#pesquisa-moda'; a.dataset.politica = '';
-  nota.append(a, '. Você pode cancelar quando quiser.');
-  fs.append(vant, perg, lista, nota, erroBox(fs.id));
+  fs.append(vant, perg, lista, erroBox(fs.id));
   return fs;
 }
 

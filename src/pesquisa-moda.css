@@ -268,7 +268,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-nov-perg { margin: 22px 0 0; font-size: 16px; font-weight: 700; line-height: 1.45; color: var(--pq-ink); }
 .pq-nov-ops { margin-top: 12px; }
 .pq-nov-ops .pq-op-sim { font-weight: 700; }
-.pq-nota-consent { margin: 14px 2px 0; font-size: 13px; line-height: 1.55; color: var(--pq-muted); }
+.pq-nov-ops .pq-op-sim { align-items: flex-start; }
+.pq-nov-ops .pq-op-sim .pq-marca-op { margin-top: 1px; }
+.pq-nota-consent { display: block; margin-top: 6px; font-size: 13px; font-weight: 400; line-height: 1.55; color: var(--pq-muted); }
+.pq-nota-consent a { color: var(--pq-red); text-decoration: underline; }
 /* Abertura: destaque das vantagens */
 .pq-infos .pq-info-destaque { background: var(--pq-tint); border-color: rgba(212, 77, 77, 0.22); }
 .pq-infos .pq-info-destaque .pq-ic { background: #fff; }
