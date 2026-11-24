@@ -340,6 +340,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Site (mesmo período, publicado à parte):** accordions do Projeto Piloto no estilo dos da Rede de Parceiros; cabeçalho com degradê nas gavetas de contato e de cadastro (`.gaveta-topo`); descrições `.sec-desc` em 14 px no celular; cards do mockup com a sombra do DS.
 - **Banco e migrações:** nenhuma alteração.
 - **Verificação executada:** em `apps/experience-intelligence`: `npm run typecheck` (sem erros), `npm run lint` (sem erros; 3 avisos antigos de `only-export-components`), `npm test` (48 de 48), `npm run build` (exportação estática). No navegador (Playwright, iPhone 13 e 1280 px), `/cadastro/` → "Como usamos seus dados": cabeçalho com o degradê, sem borda, e o texto passa por baixo dele ao rolar.
+
 ## 2026-11-16 · Rastreamento dos e-mails da Rede de Parceiros (site), publicado
 
 - **Banco:** migração `supabase/migrations/20261116120000_email_rastreio.sql`: tabelas `email_envios` e `email_eventos` (RLS: leitura só da administradora; ela só pode alterar `visualizado_em`) e função `registrar_email_evento` (só `service_role`).
@@ -899,6 +900,36 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Testes:**
   - `npm ci`, `npm run typecheck`, `npm test` (48 testes) e `npm run build` (gera `out/`);
   - aviso já existente do Next sobre a raiz do workspace (mais de um lockfile no repositório).
+
+## 2026-11-23 · App Experience Intelligence com o padrão novo de alertas e as cores novas de aviso e erro do DS (D-047), não publicado
+
+- **Mesclagem:** o `main` (com D-043, D-044 e D-045) entrou na branch `claude/ei-design-system`; a decisão do app, que era D-043, passou a D-047, porque D-046 ficou com os Contatos no main (Decision Log, este log, Product Backlog, READMEs, `arquivos.txt` e rotina de sincronização).
+- **Sincronização:** `bash scripts/sincronizar-design-system.sh` com o DS `main` = `697a765`. Mudaram no app: `styles/theme.css` (aviso `#F0A020`, erro `#D9416E` e tokens `--warning-text`, `--error-text`, `--success-text`, `--info-text`), `ui/alert.tsx` (ícone com base, role automático) e `ui/password-field.tsx` ("As senhas não coincidem" em `--error-text`). Novo em `arquivos.txt`: `ui/alerta-com-acao.tsx` (`AlertaComAcao`, `BotaoDoAlerta`, `LinkDoAlerta`); dependências já existiam no app. Todas as 22 cópias conferidas com `cmp` contra o DS `697a765`.
+- **Código do app:**
+  - `src/design-system/campos.tsx`: mensagem de erro dos campos de `text-primary-text` para `text-error-text`, como na página Formulários do DS;
+  - `src/components/Shell.tsx` (`Mensagem`): ícones iguais aos do DS (aviso: `AlertCircle`; erro: `TriangleAlert`). O aviso "Não escreva nomes, documentos…" do novo desafio passa a sair no padrão novo (base laranja clara, ícone em `--warning-text`), com os mesmos textos e `role="note"`.
+  - Nenhum alerta do app pede ação; o `AlertaComAcao` ficou disponível, sem uso.
+  - Nenhum código do app usava `--warning` ou `--error` como cor de texto.
+- **Testes executados:** em `apps/experience-intelligence`: `npm run typecheck` (sem erros), `npm run lint` (0 erros; só avisos de "fast refresh"), `npm test` (48 de 48), `npm run build` (gera `out/`; uma execução terminou com o erro de segurança da versão do Next depois de gerar o site, como antes; repetida, passou). Sincronização rodada de novo: sem diferença no git. Navegador (Playwright, 1280 e 390 px, escala 2, Supabase simulado): 18 capturas (entrar, cadastro, cadastro com erros, aviso, meus dados, desafios, menu de perfil, empresa e novo desafio), sem rolagem horizontal, sem erros no console, fonte carregada.
+- **Pendente:** a dona do produto ver as capturas; publicar. No DS, a borda de erro do `ui/input`, do `ui/textarea` e do `ui/checkbox` ainda usa `--destructive` (vermelho da marca), enquanto o campo de senha usa `--error` (rosa); a mudança fica no DS.
+
+## 2026-11-23 · App Experience Intelligence consome tokens e componentes do Design System Dani Moscatelli (D-047), não publicado
+
+- **Sincronização:** `design-system/arquivos.txt` ganhou 4 arquivos de estilo (`src/styles/`) e 16 componentes (`src/components/ui/`) do DS, copiados para `apps/experience-intelligence/`. Cópias nunca editadas. Versão do DS: `085153d`.
+- **Rotina diária** (`.github/workflows/sincronizar-design-system.yml`): além do build do site, roda no app `npm ci`, `npm run typecheck`, `npm run lint`, `npm test` e `npm run build`; o PR só abre se tudo passar.
+- **App:**
+  - Tailwind v4 (`tailwindcss` e `@tailwindcss/postcss` 4.1.12, `postcss.config.mjs`) e dependências dos componentes (Radix, `class-variance-authority`, `clsx`, `tailwind-merge`, `tw-animate-css`), nas versões do DS;
+  - `src/app/globals.css` removido: zero cor hexadecimal fora das cópias do DS;
+  - telas refeitas só na camada visual, com textos, campos, validações e fluxos iguais: entrar, cadastro, completar cadastro, empresa ou negócio, meus dados, novo desafio, desafio, área master e aviso de privacidade;
+  - `src/design-system/campos.tsx` compõe os componentes do DS com a lógica de `padroes.ts` (máscaras, validações e mensagens, sem mudança); `src/design-system/classes.ts` guarda a classe de link de texto (variante "link" do botão do DS);
+  - fontes por `<link>` lido do `fonts.css` copiado (o Next descarta o `@import url(...)` externo).
+- **Telas que não existem:** `recuperar-senha` e `redefinir-senha` não existem no `main`; não foram criadas.
+- **Testes executados:**
+  - app: `npm ci`, `npm run typecheck` (sem erros), `npm run lint` (só avisos, os 3 de antes mais os de "fast refresh" das cópias do DS), `npm test` (48 testes passaram) e `npm run build` (gera `out/`; numa das execuções o Next encerrou com erro depois de gerar o site, por um aviso de segurança da própria versão do Next; repetido, passou);
+  - site: `npm ci`, `npm run build` e `npm run lint` (só avisos);
+  - sincronização: `DS_REF=085153d bash scripts/sincronizar-design-system.sh` reproduz as cópias byte a byte (sem diferença no git e `cmp` com o DS);
+  - navegador (Playwright, 1280 e 390 px, escala 2, Supabase simulado com dados fictícios): entrar, cadastro (vazio, com erros e com o aviso aberto), meus dados, seus desafios, menu de perfil, empresa ou negócio e novo desafio; sem rolagem horizontal, sem erros no console e com a fonte Plus Jakarta Sans carregada.
+- **Pendente:** a dona do produto ver as capturas; publicar; decidir no DS os itens que faltam (D-047).
 
 ## 2026-11-16 · Agendamento do envio da autorização da galeria (SITE-01), não publicado
 

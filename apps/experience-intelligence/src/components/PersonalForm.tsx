@@ -12,7 +12,11 @@ import { FieldErrors, resendConfirmation, saveMyProfile, signUpWithProfile, type
 import { mensagemDeErro } from "@/application/errors";
 import { formatarTelefone } from "@/domain/profile/personal";
 import { AVISO_TITULO } from "@/domain/privacy/aviso";
-import { CampoConfirmacao, CampoEmail, CampoEstadoCidade, CampoSenhaNova, CampoTelefone, CampoTexto, Janela, TituloEtapa } from "@/design-system/campos";
+import { Ajuda, BotaoLink, CampoConfirmacao, CampoEmail, CampoEstadoCidade, CampoSenhaNova, CampoTelefone, CampoTexto, Janela, TituloEtapa } from "@/design-system/campos";
+import { classeLink } from "@/design-system/classes";
+import { Button } from "@/components/ui/button";
+import { Selo } from "@/components/ui/selo";
+import { Cartao, Lead, Mensagem, TituloCard } from "./Shell";
 import { AvisoPrivacidade } from "./AvisoPrivacidade";
 import { useSession } from "./session";
 
@@ -63,12 +67,13 @@ export function PersonalForm({ modo, perfil, email: emailConta }: { modo: Modo; 
       {modo !== "editar" && (
         <>
           <TituloEtapa icone={<UserRound size={22} />}>Seus dados</TituloEtapa>
-          <p className="lead">{modo === "cadastro"
+          <Lead>{modo === "cadastro"
             ? "Comece pelos seus dados. Depois, você cadastra sua empresa ou negócio. O acesso à plataforma está disponível apenas para pessoas convidadas nesta fase."
-            : "Antes de continuar, precisamos de alguns dados da pessoa responsável pela conta."}</p>
+            : "Antes de continuar, precisamos de alguns dados da pessoa responsável pela conta."}</Lead>
         </>
       )}
-      <form className="card stack" onSubmit={enviar} noValidate>
+      <Cartao>
+      <form className="flex flex-col gap-4" onSubmit={enviar} noValidate>
         <CampoTexto label="Nome completo" value={v.full_name} onChange={atualiza("full_name")} maxLength={120} autoComplete="name" required erro={campos.full_name} />
         <CampoEstadoCidade uf={v.state} cidade={v.city} erro={campos.state || campos.city}
           onChange={(uf, cidade) => { setV((a) => ({ ...a, state: uf, city: cidade })); limpa("state", "city"); }} />
@@ -91,25 +96,26 @@ export function PersonalForm({ modo, perfil, email: emailConta }: { modo: Modo; 
             </CampoConfirmacao>
             <CampoConfirmacao checked={aceites.privacy_accepted} erro={campos.privacy_accepted}
               onChange={(c) => { setAceites((a) => ({ ...a, privacy_accepted: c })); limpa("privacy_accepted"); }}>
-              Li e aceito o <button type="button" className="btn-link" onClick={() => setAvisoAberto(true)}>aviso de privacidade</button>.
+              Li e aceito o <BotaoLink onClick={() => setAvisoAberto(true)}>aviso de privacidade</BotaoLink>.
             </CampoConfirmacao>
-            <p className="hint" style={{ margin: 0 }}>
+            <Ajuda>
               Usamos estado e cidade para entender o perfil dos clientes, de forma agrupada. Não pedimos CPF nem data de nascimento.{" "}
-              <button type="button" className="btn-link" onClick={() => setAvisoAberto(true)}>Como usamos seus dados</button>
-            </p>
+              <BotaoLink onClick={() => setAvisoAberto(true)}>Como usamos seus dados</BotaoLink>
+            </Ajuda>
           </>
         ) : perfil ? (
-          <p className="hint" style={{ margin: 0 }}>
-            Você aceitou o <button type="button" className="btn-link" onClick={() => setAvisoAberto(true)}>aviso de privacidade</button> (versão {perfil.privacy_notice_version}) em {new Date(perfil.privacy_accepted_at).toLocaleDateString("pt-BR")}.
-          </p>
+          <Ajuda>
+            Você aceitou o <BotaoLink onClick={() => setAvisoAberto(true)}>aviso de privacidade</BotaoLink> (versão {perfil.privacy_notice_version}) em {new Date(perfil.privacy_accepted_at).toLocaleDateString("pt-BR")}.
+          </Ajuda>
         ) : null}
-        {erro && <p className="msg err" role="alert">{erro}</p>}
-        {ok && <p className="msg ok" role="status">{ok}</p>}
-        <button className="btn btn-primary btn-block" disabled={enviando}>
+        {erro && <Mensagem tipo="erro">{erro}</Mensagem>}
+        {ok && <Mensagem tipo="ok">{ok}</Mensagem>}
+        <Button type="submit" className="w-full" disabled={enviando}>
           {enviando ? "Salvando…" : modo === "cadastro" ? "Criar conta" : modo === "completar" ? "Continuar" : "Salvar meus dados"}
-        </button>
-        {modo === "cadastro" && <p className="center" style={{ margin: 0 }}>Já tem uma conta? <Link href="/">Entrar</Link></p>}
+        </Button>
+        {modo === "cadastro" && <p className="m-0 text-center text-[0.9375rem]">Já tem uma conta? <Link href="/" className={classeLink}>Entrar</Link></p>}
       </form>
+      </Cartao>
       <Janela titulo={AVISO_TITULO} aberta={avisoAberto} onFechar={() => setAvisoAberto(false)}>
         <AvisoPrivacidade />
       </Janela>
@@ -121,17 +127,17 @@ function ConfirmarEmail({ email }: { email: string }) {
   const [msg, setMsg] = useState("");
   const [erro, setErro] = useState("");
   return (
-    <div className="card stack">
-      <p className="eyebrow"><MailCheck size={18} aria-hidden="true" /> Confirme seu e-mail</p>
-      <h2 style={{ margin: 0 }}>Falta só confirmar seu e-mail.</h2>
-      <p className="lead" style={{ margin: 0 }}>Enviamos um link de confirmação para <b>{email}</b>. Confirme seu endereço para continuar. Depois, entre com seu e-mail e senha para cadastrar sua empresa ou negócio.</p>
-      {msg && <p className="msg ok" role="status">{msg}</p>}
-      {erro && <p className="msg err" role="alert">{erro}</p>}
-      <button type="button" className="btn btn-ghost btn-block" onClick={async () => {
+    <Cartao className="items-stretch">
+      <Selo icon={<MailCheck />} tone="primary">Confirme seu e-mail</Selo>
+      <TituloCard>Falta só confirmar seu e-mail.</TituloCard>
+      <Lead>Enviamos um link de confirmação para <b>{email}</b>. Confirme seu endereço para continuar. Depois, entre com seu e-mail e senha para cadastrar sua empresa ou negócio.</Lead>
+      {msg && <Mensagem tipo="ok">{msg}</Mensagem>}
+      {erro && <Mensagem tipo="erro">{erro}</Mensagem>}
+      <Button type="button" variant="outline" className="w-full" onClick={async () => {
         setMsg(""); setErro("");
         try { await resendConfirmation(email); setMsg("Enviamos o link de novo."); } catch (e) { setErro(/rate|seconds/i.test(String((e as Error).message)) ? "Aguarde alguns minutos antes de solicitar outro e-mail." : mensagemDeErro(e)); }
-      }}>Reenviar e-mail de confirmação</button>
-      <Link href="/" className="btn btn-primary btn-block">Ir para a tela de entrada</Link>
-    </div>
+      }}>Reenviar e-mail de confirmação</Button>
+      <Button asChild className="w-full"><Link href="/">Ir para a tela de entrada</Link></Button>
+    </Cartao>
   );
 }

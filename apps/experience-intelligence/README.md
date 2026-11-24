@@ -22,6 +22,9 @@ O que ainda não existe está no [Product Backlog](../../docs/product/PRODUCT_BA
 src/
   app/              telas (início, novo desafio, desafio)
   components/       partes das telas (formulários, pergunta, revisão)
+    ui/             componentes do Design System Dani Moscatelli (cópias sincronizadas, não editar)
+  styles/           tokens, fontes e Tailwind do Design System (cópias sincronizadas, não editar)
+  design-system/    lógica dos campos (máscaras, validações, mensagens) e montagem com os componentes do DS
   domain/
     challenge/      regras do desafio e das perguntas, sem depender de tela ou banco
     methodology/    contratos do próximo módulo (somente tipos)
@@ -33,6 +36,10 @@ supabase/
   functions/        função da IA que sugere a organização do desafio
 tests/              testes automatizados das regras
 ```
+
+## Visual: Design System Dani Moscatelli
+
+Todo o visual vem do [Design System Dani Moscatelli](https://designsystem.danimoscatelli.com.br) (D-047): Tailwind v4 com os tokens do DS em `src/styles/` e os componentes do DS em `src/components/ui/`. Esses arquivos são cópias atualizadas todo dia pela rotina do site (`design-system/arquivos.txt` e `design-system/README.md`, na raiz do repositório): **nunca edite as cópias**; mudanças são feitas no repositório do DS. Não crie cores, fontes ou componentes visuais fora dele. `src/design-system/` guarda só a lógica dos campos (`padroes.ts`) e a montagem deles com os componentes do DS (`campos.tsx`).
 
 Pressupostos registrados no [Decision Log](../../docs/decisions/DECISION_LOG.md): mesmo projeto Supabase do site (D-006), IA desde o primeiro incremento (D-007) e site estático com escrita apenas por funções do banco (D-008).
 
