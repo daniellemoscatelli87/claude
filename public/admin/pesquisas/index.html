@@ -612,7 +612,7 @@
     P = p.data; Q = q.questionario; R = r.data || []; I = i.data || [];
     document.title = P.titulo + " | Área restrita";
     $("titulo").textContent = P.titulo;
-    $("sub").textContent = "Projeto do Dani Moscatelli Studio. Respostas analisadas em conjunto, sem identificar quem respondeu.";
+    $("sub").textContent = "Projeto do Dani Moscatelli Studio. Resultados analisados em conjunto; os nomes aparecem só na aba Respostas.";
     desenhar();
     // ao abrir, as respostas novas deixam de aparecer como notificação
     const novas = R.filter((x) => !x.visualizado_em).map((x) => x.id);

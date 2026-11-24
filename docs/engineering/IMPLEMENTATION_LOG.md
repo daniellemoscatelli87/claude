@@ -598,6 +598,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 
 ## 2026-11-24 · Painel da pesquisa: Relatos e Interessados dentro de Respostas e exportações separadas, não publicado
 
+- Subtítulo do painel, aprovado pela dona do produto: "Projeto do Dani Moscatelli Studio. Resultados analisados em conjunto; os nomes aparecem só na aba Respostas."
 - **Relatos:** só os relatos, sem o aviso no topo, por pedido da dona do produto.
 - **Interessados:** em vez da lista de nomes, números e perfil de quem quer os avisos, sem nomes, por pedido da dona do produto. Quem quer os avisos aparece na ficha de cada resposta ("Sim, quer receber os avisos do lançamento.").
   - Cartões: "N pessoas querem os avisos" e "% das respostas completas".
