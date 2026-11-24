@@ -271,6 +271,8 @@
   .pa-rl-l1 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
   .pa-rl-l1 b { font-size: 14px; }
   .pa-rl-data { font-size: 13px; color: var(--muted-foreground); }
+  .pa-rl-nome { font-size: 15px; }
+  .pa-rl-nome.sem, .pa-ficha-tit b.sem { font-weight: 600; color: var(--muted-foreground); font-style: italic; }
   .pa-rl-res { font-size: 13px; color: var(--muted-foreground); overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
   .pa-rl-seta { position: absolute; right: 10px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); color: var(--muted-foreground); transition: transform .2s var(--ease-out, ease-out); }
   .pa-rl-seta svg { width: 18px; height: 18px; }
@@ -560,7 +562,7 @@
     $("voltar").classList.remove("hidden");
     const [p, r, i, q] = await Promise.all([
       sb.from("pesquisas").select("slug, titulo, ativa, criada_em, atualizado_em").eq("slug", s).maybeSingle(),
-      sb.from("pesquisa_respostas").select("id, envio_id, created_at, situacao, respostas, relato, quer_novidades, visualizado_em").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
+      sb.from("pesquisa_respostas").select("id, envio_id, nome, created_at, situacao, respostas, relato, quer_novidades, visualizado_em").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
       sb.from("pesquisa_interessados").select("id, envio_id, created_at, nome, email, whatsapp, consentimento_em, consentimento_versao").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
       fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ acao: "status", pesquisa: s }) }).then((x) => x.json()).catch(() => null),
     ]);
@@ -1765,6 +1767,8 @@
   const FILTROS = [["todas", "Todas"], ["completa", "Completas"], ["fora_de_curitiba", "Fora de Curitiba e RMC"], ["sem_compras", "Não comprou"]];
   let FILTRO = "todas";
   const numResp = (x) => R.length - R.indexOf(x);
+  // identificador da resposta: o nome que a pessoa informou no início (respostas antigas, de antes da identificação, não têm)
+  const nomeDe = (x) => (x.nome && x.nome.trim()) || "Sem nome";
   const ICR = { dir: svg('<path d="m9 18 6-6-6-6"/>'), esq: svg('<path d="m15 18-6-6 6-6"/>'), x: svg('<path d="M18 6 6 18M6 6l12 12"/>') };
   function perfilDe(x) {
     const pf = (x.respostas && x.respostas.perfil) || {};
@@ -1778,7 +1782,7 @@
   }
   async function excluirUma(x, bt) {
     const tem = I.some((y) => y.envio_id && y.envio_id === x.envio_id);
-    const ok = await confirmDialog({ title: `Excluir a resposta #${numResp(x)}?`, message: `A participação de ${fmtDate(x.created_at)} será apagada de vez e sai dos gráficos.${tem ? " O contato dessa pessoa na aba Interessados (avisos do lançamento) também será apagado." : ""} Essa ação não pode ser desfeita.`, ok: "Excluir" });
+    const ok = await confirmDialog({ title: `Excluir a resposta de ${nomeDe(x)}?`, message: `A participação #${numResp(x)}, de ${fmtDate(x.created_at)}, será apagada de vez e sai dos gráficos.${tem ? " O contato dessa pessoa na aba Interessados (avisos do lançamento) também será apagado." : ""} Essa ação não pode ser desfeita.`, ok: "Excluir" });
     if (!ok) return false;
     if (bt) bt.disabled = true;
     return excluirRespostas([x.id], false);
@@ -1798,13 +1802,13 @@
         const li = el("li", "pa-rl-it"); li.style.setProperty("--i", Math.min(k, 12));
         const ab = el("button", "pa-rl-abrir"); ab.type = "button"; ab.setAttribute("aria-haspopup", "dialog");
         const linha1 = el("span", "pa-rl-l1");
-        linha1.append(el("b", null, `#${numResp(x)}`), el("span", "pa-rl-data", fmtDate(x.created_at)), el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao));
+        linha1.append(el("b", "pa-rl-nome" + (x.nome ? "" : " sem"), nomeDe(x)), el("span", "pa-rl-data", `#${numResp(x)} · ${fmtDate(x.created_at)}`), el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao));
         ab.appendChild(linha1);
         const res = resumoDe(x); if (res) ab.appendChild(el("span", "pa-rl-res", res));
         const seta = el("span", "pa-rl-seta"); seta.innerHTML = ICR.dir; ab.appendChild(seta);
-        ab.setAttribute("aria-label", `Abrir a resposta #${numResp(x)}, ${fmtDate(x.created_at)}, ${SIT_CURTA[x.situacao] || x.situacao}`);
+        ab.setAttribute("aria-label", `Abrir a resposta de ${nomeDe(x)}, #${numResp(x)}, ${fmtDate(x.created_at)}, ${SIT_CURTA[x.situacao] || x.situacao}`);
         ab.addEventListener("click", () => abrirFicha(vs, k, ab));
-        const del = el("button", "pa-rl-del"); del.type = "button"; del.innerHTML = IC.lixo; del.setAttribute("aria-label", `Excluir a resposta #${numResp(x)}`); del.title = "Excluir resposta";
+        const del = el("button", "pa-rl-del"); del.type = "button"; del.innerHTML = IC.lixo; del.setAttribute("aria-label", `Excluir a resposta de ${nomeDe(x)}`); del.title = "Excluir resposta";
         del.addEventListener("click", () => excluirUma(x, del));
         li.append(ab, del);
         return li;
@@ -1901,8 +1905,8 @@
     dlg.append(cab, rolagem, nav);
     const mostrar = (n, dir) => {
       k = n; const x = lista[k];
-      tit.replaceChildren(el("b", null, `Resposta #${numResp(x)}`), el("span", null, fmtDate(x.created_at)), el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao));
-      del.setAttribute("aria-label", `Excluir a resposta #${numResp(x)}`);
+      tit.replaceChildren(el("b", x.nome ? null : "sem", nomeDe(x)), el("span", null, `#${numResp(x)} · ${fmtDate(x.created_at)}`), el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao));
+      del.setAttribute("aria-label", `Excluir a resposta de ${nomeDe(x)}`);
       const corpo = fichaConteudo(x);
       if (dir && !matchMedia("(prefers-reduced-motion: reduce)").matches) corpo.classList.add(dir > 0 ? "vem-dir" : "vem-esq");
       rolagem.replaceChildren(corpo); rolagem.scrollTop = 0;
