@@ -263,7 +263,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-vantagem-ic svg { width: 26px; height: 26px; }
 @keyframes pq-presente { 0%, 70%, 100% { transform: none; } 76% { transform: rotate(-8deg) scale(1.06); } 82% { transform: rotate(7deg) scale(1.06); } 88% { transform: rotate(-4deg); } 94% { transform: rotate(2deg); } }
 .pq-vantagem > div { position: relative; z-index: 1; }
-.pq-vantagem-t { margin: 0 0 4px; font-size: 17px; font-weight: 800; line-height: 1.35; color: var(--pq-ink); }
+.pq-vantagem-t { margin: 0 0 8px; font-size: 20px; font-weight: 800; line-height: 1.25; letter-spacing: -0.015em; color: var(--pq-ink); text-wrap: pretty; }
+.pq-vantagem-t em { font-style: normal; color: var(--pq-red-escuro); }
 .pq-vantagem-d { margin: 0; font-size: 15px; line-height: 1.5; color: var(--pq-texto); }
 .pq-nov-perg { margin: 22px 0 0; font-size: 16px; font-weight: 700; line-height: 1.45; color: var(--pq-ink); }
 .pq-nov-ops { margin-top: 12px; }
@@ -475,7 +476,3 @@ html.pq-trava { overflow: hidden; }
 }
 @keyframes pq-busca-sobe { from { transform: translateY(100%); } to { transform: none; } }
 @media (prefers-reduced-motion: reduce) { .pq-busca[open] { animation: none; } }
-/* etapa sem título visível (última etapa): o conteúdo começa onde começaria o título */
-.pq-pergunta:has(.pq-titulo:empty) { margin: 0; }
-.pq-pergunta:has(.pq-titulo:empty) + * { margin-top: 0; }
-.pq-titulo:empty { display: none; }

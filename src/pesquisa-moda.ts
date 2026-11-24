@@ -545,14 +545,14 @@ function campo(id: string, rotulo: string, tipo: string, valor: string, ph: stri
 
 function montarNovidades() {
   const fs = el('fieldset', 'pq-etapa'); fs.id = 'pq-novidades'; fs.dataset.etapa = String(ETAPA_NOV);
-  cabecalho(fs, 'Última etapa', ''); // sem título visível, por pedido da dona do produto: o cartão de vantagens abre a etapa
+  cabecalho(fs, 'Última etapa', 'Obrigado por participar', undefined, 'Obrigado');
   // destaque: a contribuição da pessoa e as vantagens no lançamento
   const vant = el('div', 'pq-vantagem');
   const ic = el('span', 'pq-vantagem-ic'); ic.setAttribute('aria-hidden', 'true');
   ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>';
   const tx = el('div');
-  tx.append(el('p', 'pq-vantagem-t', 'Obrigada por contribuir com a solução que estamos desenvolvendo!'),
-    el('p', 'pq-vantagem-d', 'Por isso, você terá vantagens exclusivas quando a plataforma for lançada.'));
+  const vt = el('p', 'pq-vantagem-t'); vt.append(...realcar('Você terá vantagens exclusivas no lançamento!', 'vantagens exclusivas'));
+  tx.append(vt, el('p', 'pq-vantagem-d', 'Essa é a nossa forma de agradecer por sua contribuição na construção dessa nova solução.'));
   vant.append(ic, tx);
   const perg = el('p', 'pq-nov-perg', 'Quer receber avisos sobre o lançamento e suas vantagens por e-mail e WhatsApp?');
   perg.id = 'pq-novidades-perg'; fs.setAttribute('aria-describedby', perg.id);
