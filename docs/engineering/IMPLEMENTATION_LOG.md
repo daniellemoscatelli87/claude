@@ -596,7 +596,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-24 · Painel de pesquisas: ações num menu e correção da aba Respostas e do Excel com respostas antigas da pergunta 5, não publicado
+## 2026-11-24 · Painel de pesquisas: ações num menu e correção da aba Respostas e do Excel com respostas antigas da pergunta 5, publicado
 
 - **Card do topo (`public/admin/pesquisas/index.html`):**
   - O botão "Ações" abre um menu com Ver a pesquisa, Exportar Excel, Exportar PDF e Tirar do ar ou Colocar no ar.
