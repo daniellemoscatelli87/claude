@@ -712,7 +712,7 @@ function atualizarBotao() {
   t.textContent = enviando ? (i === ETAPA_ID ? 'Conferindo…' : 'Enviando…') : enc ? 'Concluir' : i === ETAPA_NOV ? 'Concluir participação' : i === ETAPA_ID ? 'Começar as perguntas' : i === ETAPA_RELATO && !E.relato.trim() ? 'Pular' : 'Continuar';
 }
 function irPara(i: number, voltando = false) {
-  E.etapa = i; salvar();
+  E.etapa = i; salvar(); progressoNoServidor();
   $('pq-erro-geral').hidden = true;
   const etapas = [...$('pq-etapas').children] as HTMLElement[];
   etapas.forEach((x) => { x.hidden = Number(x.dataset.etapa) !== i; });
@@ -727,6 +727,24 @@ function irPara(i: number, voltando = false) {
   atualizarBotao();
   window.scrollTo({ top: 0, behavior: reduzir ? 'auto' : 'smooth' });
   atual.querySelector<HTMLElement>('legend')?.focus({ preventScroll: true });
+}
+
+/* Progresso no servidor: depois da identificação, cada etapa salva as respostas até ali (situação "parcial"),
+   para a administradora ver quem parou e onde. Também salva ao sair da página. O envio final usa o mesmo envio_id
+   e transforma essa linha na participação concluída. Falhas aqui não atrapalham a pessoa (o rascunho local continua). */
+let ultimoProgresso = '';
+function progressoNoServidor(saindo = false) {
+  if (enviando || !identificado() || E.etapa < 0 || E.etapa === ETAPA_ID || ler(CHAVE_FIM)) return;
+  const etapa = E.etapa < TOTAL ? PERGUNTAS[E.etapa].id : E.etapa === ETAPA_PERFIL ? 'perfil' : E.etapa === ETAPA_RELATO ? 'relato' : 'novidades';
+  const respostas: Record<string, unknown> = {};
+  for (const p of PERGUNTAS) if (aplica(p) && E.r[p.id] != null) respostas[p.id] = E.r[p.id];
+  const corpo = JSON.stringify({
+    acao: 'parcial', pesquisa: Q.slug, envio_id: E.envio, etapa, respostas, perfil: perfilAtual(), relato: E.relato,
+    identificacao: { nome: E.nome, email: E.email, whatsapp: E.whats, ciente: E.ciente }, site: $<HTMLInputElement>('pq-site').value,
+  });
+  if (corpo === ultimoProgresso) return;
+  ultimoProgresso = corpo;
+  fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, keepalive: saindo }).catch(() => { ultimoProgresso = ''; });
 }
 
 async function enviar(final: boolean) {
@@ -995,6 +1013,10 @@ function iniciar() {
     if (E.etapa === ETAPA_ID) return void conferirId();
     irPara(proxima(E.etapa));
   });
+
+  // saiu da página no meio: salva o progresso no servidor
+  addEventListener('pagehide', () => progressoNoServidor(true));
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') progressoNoServidor(true); });
 
   // participação já concluída neste aparelho: mostra a tela final, sem novo envio
   const fim = ler<{ tipo: 'obrigada' | 'encerrada' | 'semcompras'; comContato: boolean }>(CHAVE_FIM);

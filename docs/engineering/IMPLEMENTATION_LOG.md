@@ -596,6 +596,31 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-24 · Pesquisa: respostas incompletas guardadas no servidor, não publicado
+
+- Pedido da dona do produto: guardar no servidor as respostas de quem para no meio, para ela ver quem parou e em qual pergunta. Antes, o progresso ficava só no aparelho da pessoa (rascunho de 30 dias), e o servidor só recebia a resposta no fim.
+- **Migração `20261124200000_pesquisa_incompletas.sql`:** `situacao` passa a aceitar `parcial`. Entram as colunas `parou_em` (etapa em que a pessoa estava) e `atualizado_em`.
+- **Função `pesquisa`, nova ação `parcial`:**
+  - exige a mesma identificação válida do envio final e uma etapa conhecida;
+  - grava só as respostas válidas até ali (as inválidas ou pela metade são ignoradas, sem bloquear);
+  - nunca sobrescreve uma participação concluída;
+  - substitui a incompleta da mesma pessoa feita em outro aparelho (e-mail e WhatsApp são únicos por pesquisa);
+  - trata dois salvamentos simultâneos do mesmo envio.
+- **Mudanças no fluxo existente:**
+  - "Já participou" (`verificar` e envio) passa a ignorar as incompletas.
+  - O envio final atualiza a mesma linha (mesmo `envio_id`) para a situação final, limpa `parou_em` e zera `visualizado_em`, para acender o sino.
+- **Pesquisa (`src/pesquisa-moda.ts`):** depois da identificação, salva o progresso a cada etapa (`irPara`) e ao sair da página (`pagehide` ou aba oculta, com `keepalive`). Não reenvia se nada mudou. Falhas não atrapalham a pessoa, porque o rascunho local continua.
+- **Painel:**
+  - As incompletas aparecem só na aba Respostas: filtro "Incompletas", etiqueta amarela "Incompleta" e o resumo "Parou na pergunta N · última atividade em …".
+  - Na ficha, um aviso no topo diz que a pessoa não terminou e mostra o que ela respondeu até ali.
+  - As incompletas entram na contagem da aba Respostas e em "Exportar respostas" (situação "Incompleta (parou …)"). Ficam fora dos indicadores, dos gráficos, do relatório e do sino (`neq situacao parcial` em `admin.js` e na lista de pesquisas).
+  - `admin.js?v=20261124a` em todas as páginas da área restrita.
+- **Testes:**
+  - Função com banco simulado (unicidade de `envio_id`, e-mail e WhatsApp): 13 cenários. Conferidos: salvar e avançar; resposta inválida ignorada; incompleta não conta como "já participou"; outro aparelho substitui; o final converte a mesma linha e guarda o contato; parcial atrasado não altera a concluída; 409 para quem já concluiu; 400 para identificação ou etapa inválidas; corrida de dois parciais.
+  - Pesquisa (Playwright, iPhone 13): nenhum salvamento antes da identificação; `q1` logo depois dela; `q2`, `q3` e `q4` a cada etapa; ao sair da página, salva a etapa atual com a nota marcada; sem reenvio repetido. Os fluxos completos (Região Metropolitana, Curitiba, outra cidade e "Sim") seguem iguais; sem erros de JS.
+  - Painel com 3 incompletas fictícias: indicadores sem elas (42); aba com elas (45); filtro "Incompletas 3" com onde cada uma parou; ficha com o aviso; planilha com "Incompleta (parou …)"; exclusão funcionando; sino filtrando; sem erros de JS.
+- Para publicar, nesta ordem: migração, função e site.
+
 ## 2026-11-24 · Pesquisa: teste completo no site real antes da divulgação, publicado (#218)
 
 - Pedido da dona do produto: publicar tudo e testar todo o formulário antes de divulgar o link ("nada pode ser perdido").

@@ -323,6 +323,8 @@
   .pa-rl-vazio { padding: 24px 8px; text-align: center; font-size: 14px; color: var(--muted-foreground); }
   .pa-resp-sit { font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: var(--radius-full); background: var(--success-muted); color: var(--success); white-space: nowrap; }
   .pa-resp-sit.fora_de_curitiba, .pa-resp-sit.sem_compras { background: var(--muted); color: var(--muted-foreground); }
+  .pa-resp-sit.parcial { background: var(--warning-muted); color: var(--warning-text, var(--foreground)); }
+  .pa-ficha-nota.pa-ficha-parcial { background: var(--warning-muted); color: var(--foreground); }
   /* Ficha da resposta */
   html.pa-trava { overflow: hidden; }
   .pa-ficha { width: min(600px, 100vw); max-width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0 0 0 auto; padding: 0; border: 0; background: var(--background, var(--card)); color: var(--foreground); box-shadow: var(--shadow-lg, 0 20px 50px rgba(0,0,0,.25)); overflow: hidden; }
@@ -546,7 +548,7 @@
   <div id="conteudo"><div class="pa-esqueleto"></div></div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="/admin/admin.js?v=20261123g"></script>
+<script src="/admin/admin.js?v=20261124a"></script>
 <script>
 (() => {
   const { sb, el, icon, fmtDate, fmtDay, log, confirmDialog, toast } = Admin;
@@ -577,7 +579,7 @@
   async function lista() {
     const [{ data: ps, error }, { data: novas }] = await Promise.all([
       sb.from("pesquisas").select("slug, titulo, ativa, criada_em").order("criada_em", { ascending: false }),
-      sb.from("pesquisa_respostas").select("pesquisa").is("visualizado_em", null).limit(5000),
+      sb.from("pesquisa_respostas").select("pesquisa").is("visualizado_em", null).neq("situacao", "parcial").limit(5000),
     ]);
     if (error) return erro("Não foi possível carregar as pesquisas: " + error.message);
     const contagem = {}; (novas || []).forEach((r) => { contagem[r.pesquisa] = (contagem[r.pesquisa] || 0) + 1; });
@@ -597,19 +599,22 @@
   }
 
   /* ---------- Painel de uma pesquisa ---------- */
-  let P = null, Q = null, R = [], I = [];
+  let P = null, Q = null, R = [], I = [], RP = [];
+  // R: participações concluídas (números, gráficos e exportações); RP: incompletas (quem parou no meio), só na lista de respostas
+  const separar = (todas) => { R = todas.filter((x) => x.situacao !== "parcial"); RP = todas.filter((x) => x.situacao === "parcial"); };
+  const todasR = () => [...R, ...RP].sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
   async function painel(s) {
     $("voltar").classList.remove("hidden");
     const [p, r, i, q] = await Promise.all([
       sb.from("pesquisas").select("slug, titulo, ativa, criada_em, atualizado_em").eq("slug", s).maybeSingle(),
-      sb.from("pesquisa_respostas").select("id, envio_id, nome, created_at, situacao, respostas, relato, quer_novidades, visualizado_em").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
+      sb.from("pesquisa_respostas").select("id, envio_id, nome, created_at, situacao, respostas, relato, quer_novidades, visualizado_em, parou_em, atualizado_em").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
       sb.from("pesquisa_interessados").select("id, envio_id, created_at, nome, email, whatsapp, consentimento_em, consentimento_versao").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
       fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ acao: "status", pesquisa: s }) }).then((x) => x.json()).catch(() => null),
     ]);
     if (p.error || !p.data) return erro(p.error ? "Não foi possível carregar a pesquisa: " + p.error.message : "Pesquisa não encontrada.");
     if (r.error) return erro("Não foi possível carregar as respostas: " + r.error.message);
     if (!q || !q.questionario) return erro("Não foi possível carregar as perguntas da pesquisa. Atualize a página para tentar de novo.");
-    P = p.data; Q = q.questionario; R = r.data || []; I = i.data || [];
+    P = p.data; Q = q.questionario; I = i.data || []; separar(r.data || []);
     document.title = P.titulo + " | Área restrita";
     $("titulo").textContent = P.titulo;
     $("sub").textContent = "Projeto do Dani Moscatelli Studio. Resultados analisados em conjunto; os nomes aparecem só na aba Respostas.";
@@ -757,7 +762,7 @@
   function abas() {
     const box = el("div");
     const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
-    const { bar, marcar } = linhaDeAbas([["resultados", "Resultados", null], ["inteligencia", "Inteligência", null], ["respostas", "Respostas", R.length]], "Seções da pesquisa", (id) => abrir(id), "aba-");
+    const { bar, marcar } = linhaDeAbas([["resultados", "Resultados", null], ["inteligencia", "Inteligência", null], ["respostas", "Respostas", R.length + RP.length]], "Seções da pesquisa", (id) => abrir(id), "aba-");
     const abrir = (id, sub) => {
       SELECAO = null; marcar(id);
       corpo.setAttribute("aria-labelledby", "aba-" + id);
@@ -779,7 +784,7 @@
     const box = el("div", "pa-area-resp");
     const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
     const relatos = relatosR();
-    const { bar, marcar } = linhaDeAbas([["respostas", "Respostas", R.length], ["relatos", "Relatos", relatos.length], ["interessados", "Interessados", interessadosR().length]], "Respostas, relatos e interessados", (id) => abrirSub(id), "aba-sub-");
+    const { bar, marcar } = linhaDeAbas([["respostas", "Respostas", R.length + RP.length], ["relatos", "Relatos", relatos.length], ["interessados", "Interessados", interessadosR().length]], "Respostas, relatos e interessados", (id) => abrirSub(id), "aba-sub-");
     bar.classList.add("pa-abas-int");
     const abrirSub = (id) => {
       SELECAO = null; marcar(id);
@@ -1417,9 +1422,10 @@
     let num = 0;
     const cols = Q.perguntas.map((p) => { if (!p.condicao) num++; return [p, `${p.rotulo || num}. ${p.texto}`]; });
     const cab = ["#", "Data", "Situação", ...cols.map((c) => c[1]), ...(Q.perfil || []).map((c) => c.texto), "Relato", "Quer novidades"];
-    const linhas = R.map((x, k) => {
+    const T = todasR();
+    const linhas = T.map((x, k) => {
       const pf = x.respostas.perfil || {};
-      return [R.length - k, fmtDate(x.created_at), SIT_CURTA[x.situacao] || x.situacao,
+      return [T.length - k, fmtDate(x.created_at), x.situacao === "parcial" ? `Incompleta (parou ${ondeParou(x)})` : SIT_CURTA[x.situacao] || x.situacao,
         ...cols.map(([p]) => x.respostas[p.id] === undefined ? "" : textoResposta(p, x.respostas[p.id])),
         ...(Q.perfil || []).map((c) => pf[c.id] ? ((c.opcoes.find((o) => o.id === pf[c.id]) || {}).texto || pf[c.id]).replace(/ \(especifique\)$/, "") + (pf[c.id + "_outro"] ? ` (${pf[c.id + "_outro"]})` : "") : ""),
         x.relato || "", x.situacao === "completa" ? (x.quer_novidades ? "Sim" : "Não") : ""];
@@ -1817,7 +1823,7 @@
   }
 
   /* ---------- Respostas individuais (ver e excluir) ---------- */
-  const SIT_CURTA = { completa: "Completa", fora_de_curitiba: "Fora de Curitiba e RMC", sem_compras: "Não comprou este ano" };
+  const SIT_CURTA = { completa: "Completa", fora_de_curitiba: "Fora de Curitiba e RMC", sem_compras: "Não comprou este ano", parcial: "Incompleta" };
   function textoResposta(p, v) {
     if (v == null) return "—";
     const op = (id) => ((p.opcoes || []).find((o) => o.id === id) || {}).texto?.replace(/ \(especifique\)$/, "") || id;
@@ -1834,8 +1840,8 @@
     const { error } = await (todas ? q.eq("pesquisa", P.slug) : q.in("id", ids));
     if (error) { toast("Não foi possível excluir: " + error.message); return false; }
     // junto vai o interesse em receber os avisos do lançamento (o contato fica ligado à resposta pelo envio_id)
-    const envios = todas ? null : R.filter((x) => ids.includes(x.id)).map((x) => x.envio_id).filter(Boolean);
-    R = todas ? [] : R.filter((x) => !ids.includes(x.id));
+    const envios = todas ? null : todasR().filter((x) => ids.includes(x.id)).map((x) => x.envio_id).filter(Boolean);
+    if (todas) { R = []; RP = []; } else separar(todasR().filter((x) => !ids.includes(x.id)));
     let falhaI = null;
     if (todas || envios.some((e) => I.some((y) => y.envio_id === e))) {
       const qi = sb.from("pesquisa_interessados").delete();
@@ -1852,13 +1858,13 @@
   // "Apagar todas as respostas" reinicia a pesquisa inteira, por isso fica fora das abas (e fora do menu Ações)
   function apagarTudo() {
     const box = el("div", "pa-zerar pa-entra");
-    if (!R.length && !I.length) return box;
+    if (!R.length && !RP.length && !I.length) return box;
     const tx = el("div");
     tx.append(el("b", null, "Recomeçar a pesquisa do zero"), el("span", null, "Apaga todas as respostas e relatos."));
     const bt = el("button", "pa-btn perigo"); bt.type = "button"; bt.innerHTML = IC.lixo + "<span>Apagar todas as respostas</span>";
     bt.addEventListener("click", async () => {
       const partes = [];
-      partes.push(R.length ? `As ${plural(R.length, "participação", "participações")} desta pesquisa serão apagadas de vez, junto com os relatos.` : "Os dados desta pesquisa serão apagados de vez.");
+      partes.push(R.length + RP.length ? `As ${plural(R.length + RP.length, "participação", "participações")} desta pesquisa serão apagadas de vez, junto com os relatos.` : "Os dados desta pesquisa serão apagados de vez.");
       partes.push("Os gráficos voltam a zero. Essa ação não pode ser desfeita.");
       const ok = await confirmDialog({ title: "Apagar todas as respostas?", message: partes.join(" "), ok: "Apagar todas", word: "APAGAR" });
       if (ok) { bt.disabled = true; await excluirRespostas([], true); }
@@ -1873,9 +1879,9 @@
     q4: "Nota de 1 a 10 para cada aspecto", q5: "Onde começa a procura", q_foto: "Foto de referência", q6: "Como descobre lojas", q_disponibilidade: "Pergunta antes se tem a peça",
     q7: "Dificuldade para encontrar", q8: "Facilidade para conseguir peças", q_categorias: "Mais difícil de encontrar", q9: "Quando não encontrou" };
   const BLOCOS = [["Onde compra", ["q1", "q1_1", "q2", "q2_1", "q3"]], ["Notas das compras", ["q4"]], ["Como procura", ["q5", "q_foto", "q6", "q_disponibilidade"]], ["Dificuldades", ["q7", "q8", "q_categorias", "q9"]]];
-  const FILTROS = [["todas", "Todas"], ["completa", "Completas"], ["fora_de_curitiba", "Fora de Curitiba e RMC"], ["sem_compras", "Não comprou"]];
+  const FILTROS = [["todas", "Todas"], ["completa", "Completas"], ["parcial", "Incompletas"], ["fora_de_curitiba", "Fora de Curitiba e RMC"], ["sem_compras", "Não comprou"]];
   let FILTRO = "todas";
-  const numResp = (x) => R.length - R.indexOf(x);
+  const numResp = (x) => { const t = todasR(); return t.length - t.indexOf(x); };
   // identificador da resposta: o nome que a pessoa informou no início (respostas antigas, de antes da identificação, não têm)
   const nomeDe = (x) => (x.nome && x.nome.trim()) || "Sem nome";
   const ICR = { dir: svg('<path d="m9 18 6-6-6-6"/>'), esq: svg('<path d="m15 18-6-6 6-6"/>'), x: svg('<path d="M18 6 6 18M6 6l12 12"/>') };
@@ -1883,7 +1889,18 @@
     const pf = (x.respostas && x.respostas.perfil) || {};
     return (Q.perfil || []).map((c) => [c, pf[c.id] ? ((c.opcoes.find((o) => o.id === pf[c.id]) || {}).texto || pf[c.id]).replace(/ \(especifique\)$/, "") + (pf[c.id + "_outro"] ? ` (${pf[c.id + "_outro"]})` : "") : null]).filter(([, v]) => v);
   }
+  // onde a pessoa parou (incompletas): "pergunta 5", "Sobre você", "relato" ou "última etapa"
+  function ondeParou(x) {
+    const e = x.parou_em;
+    if (e === "perfil") return "na etapa Sobre você";
+    if (e === "relato") return "no relato (opcional)";
+    if (e === "novidades") return "na última etapa";
+    let num = 0; let rot = null;
+    Q.perguntas.forEach((p) => { if (!p.condicao) num++; if (p.id === e) rot = p.rotulo || String(num); });
+    return rot ? `na pergunta ${rot}` : "no começo";
+  }
   function resumoDe(x) {
+    if (x.situacao === "parcial") return `Parou ${ondeParou(x)} · última atividade em ${fmtDate(x.atualizado_em || x.created_at)}`;
     const q2 = Q.perguntas.find((p) => p.id === "q2");
     const prim = q2 && valores(x.respostas.q2)[0];
     const pf = perfilDe(x).map(([, v]) => v).filter((t) => t !== "Prefiro não informar").join(" · ");
@@ -1897,7 +1914,7 @@
   }
   function listaRespostas() {
     const card = el("section", "card pa-entra");
-    if (!R.length) { card.appendChild(vazio("Nenhuma resposta", "As participações aparecem aqui assim que alguém envia a pesquisa.")); return card; }
+    if (!R.length && !RP.length) { card.appendChild(vazio("Nenhuma resposta", "As participações aparecem aqui assim que alguém começa a responder a pesquisa.")); return card; }
     const filtros = el("div", "pa-filtros"); filtros.setAttribute("role", "group"); filtros.setAttribute("aria-label", "Filtrar por situação");
     const lista = el("ul", "pa-rl");
     const cont = el("p", "pa-rl-cont"); cont.setAttribute("aria-live", "polite");
@@ -1910,7 +1927,7 @@
     const nSel = el("span", "pa-sel-n"); nSel.setAttribute("aria-live", "polite");
     const dicaSel = el("span", "pa-sel-dica", "Para excluir, use o menu Ações");
     barra.append(todasLab, nSel, dicaSel);
-    const visiveis = () => R.filter((x) => FILTRO === "todas" || x.situacao === FILTRO);
+    const visiveis = () => todasR().filter((x) => FILTRO === "todas" || x.situacao === FILTRO);
     const sincSel = () => {
       const vs = visiveis(), marcadas = vs.filter((x) => sel.has(x.id)).length;
       todasCb.checked = marcadas > 0 && marcadas === vs.length; todasCb.indeterminate = marcadas > 0 && marcadas < vs.length;
@@ -1920,10 +1937,10 @@
     };
     todasCb.addEventListener("change", () => { visiveis().forEach((x) => (todasCb.checked ? sel.add(x.id) : sel.delete(x.id))); lista.querySelectorAll(".pa-rl-cb input").forEach((c) => { c.checked = sel.has(c.value); }); sincSel(); });
     const excluirSelecionadas = async () => {
-      const alvo = R.filter((x) => sel.has(x.id));
+      const alvo = todasR().filter((x) => sel.has(x.id));
       if (!alvo.length) return;
       if (alvo.length === 1) return excluirUma(alvo[0], null);
-      const ok = await confirmDialog({ title: `Excluir ${plural(alvo.length, "resposta", "respostas")}?`, message: `${alvo.length === R.length ? "Todas as participações" : `As ${plural(alvo.length, "participação selecionada", "participações selecionadas")}`} serão apagadas de vez e saem dos gráficos. Essa ação não pode ser desfeita.`, ok: "Excluir" });
+      const ok = await confirmDialog({ title: `Excluir ${plural(alvo.length, "resposta", "respostas")}?`, message: `${alvo.length === R.length + RP.length ? "Todas as participações" : `As ${plural(alvo.length, "participação selecionada", "participações selecionadas")}`} serão apagadas de vez e saem dos gráficos. Essa ação não pode ser desfeita.`, ok: "Excluir" });
       if (!ok) return;
       await excluirRespostas(alvo.map((x) => x.id), false);
     };
@@ -1956,7 +1973,7 @@
       sincSel();
     };
     FILTROS.forEach(([id, t]) => {
-      const n = id === "todas" ? R.length : R.filter((x) => x.situacao === id).length;
+      const n = id === "todas" ? R.length + RP.length : todasR().filter((x) => x.situacao === id).length;
       const b = el("button", "pa-filtro"); b.type = "button"; b.dataset.f = id;
       b.append(t, el("span", "n", String(n)));
       b.addEventListener("click", () => { FILTRO = id; sel.clear(); pintar(); });
@@ -2024,7 +2041,8 @@
     if (x.situacao === "completa") {
       bloco("Avisos do lançamento", [el("p", "pa-fv-tx", x.quer_novidades ? "Sim, quer receber os avisos do lançamento." : "Não quer receber.")]);
     }
-    if (x.situacao !== "completa") corpo.appendChild(el("p", "pa-ficha-nota", x.situacao === "fora_de_curitiba" ? "A pesquisa terminou na pergunta 1: a pessoa não mora em Curitiba nem na Região Metropolitana." : "A pesquisa terminou na pergunta 2: a pessoa não comprou roupas, calçados ou acessórios este ano."));
+    if (x.situacao === "parcial") corpo.prepend(el("p", "pa-ficha-nota pa-ficha-parcial", `Não terminou a pesquisa: parou ${ondeParou(x)}. Última atividade em ${fmtDate(x.atualizado_em || x.created_at)}. Abaixo, o que respondeu até ali.`));
+    else if (x.situacao !== "completa") corpo.appendChild(el("p", "pa-ficha-nota", x.situacao === "fora_de_curitiba" ? "A pesquisa terminou na pergunta 1: a pessoa não mora em Curitiba nem na Região Metropolitana." : "A pesquisa terminou na pergunta 2: a pessoa não comprou roupas, calçados ou acessórios este ano."));
     return corpo;
   }
   const ROTULO_PF = { cidade: "Cidade", bairro: "Bairro", genero: "Gênero", faixa_etaria: "Faixa etária", estado_civil: "Estado civil" };

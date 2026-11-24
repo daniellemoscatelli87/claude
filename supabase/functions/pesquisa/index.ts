@@ -10,6 +10,11 @@
 //     novidades: { quer: boolean } só para participações completas; "sim" é a autorização para receber avisos.
 //     Quem quer novidades também entra em pesquisa_interessados (lista do painel), com o texto da autorização.
 //     O relato (pergunta aberta) é guardado exatamente como foi enviado.
+// { acao: "parcial", pesquisa, envio_id, identificacao, respostas, perfil?, relato?, etapa }
+//     Progresso de quem ainda não terminou (salvo a cada etapa, depois da identificação), com situacao "parcial"
+//     e parou_em = etapa. Nunca sobrescreve uma participação concluída. Respostas inválidas ou fora de ordem são
+//     ignoradas (não bloqueiam o salvamento). Uma incompleta da mesma pessoa com outro envio_id (ex.: começou em outro
+//     aparelho) é substituída. No envio final ("enviar"), a mesma linha vira a participação concluída.
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 import modaCuritiba from "./questionario.json" with { type: "json" };
 
@@ -43,13 +48,28 @@ const JA = "Este e-mail ou WhatsApp já participou da pesquisa. Cada pessoa part
 // já existe participação com este e-mail ou WhatsApp (fora o próprio envio, para reenvios não serem barrados)
 async function jaRespondeu(slug: string, email: string, whats: string, envioId?: string) {
   for (const [col, val] of [["email", email], ["whatsapp", whats]]) {
-    let qy = db.from("pesquisa_respostas").select("id", { count: "exact", head: true }).eq("pesquisa", slug).eq(col, val);
+    let qy = db.from("pesquisa_respostas").select("id", { count: "exact", head: true }).eq("pesquisa", slug).eq(col, val).neq("situacao", "parcial");
     if (envioId) qy = qy.neq("envio_id", envioId);
     const { count, error } = await qy;
     if (error) throw error;
     if ((count ?? 0) > 0) return true;
   }
   return false;
+}
+
+// incompletas da mesma pessoa com outro envio (ex.: começou em outro aparelho): saem antes de gravar,
+// porque e-mail e WhatsApp são únicos por pesquisa
+async function limparIncompletas(slug: string, email: string, whats: string, envioId: string) {
+  for (const [col, val] of [["email", email], ["whatsapp", whats]]) {
+    const { error } = await db.from("pesquisa_respostas").delete().eq("pesquisa", slug).eq("situacao", "parcial").eq(col, val).neq("envio_id", envioId);
+    if (error) throw error;
+  }
+}
+// situação atual de um envio (null se ainda não existe)
+async function situacaoDoEnvio(envioId: string): Promise<string | null> {
+  const { data, error } = await db.from("pesquisa_respostas").select("situacao").eq("envio_id", envioId).maybeSingle();
+  if (error) throw error;
+  return data?.situacao ?? null;
 }
 
 // valores escolhidos numa resposta (escolha única, classificação ou múltipla escolha)
@@ -122,6 +142,61 @@ function validar(p: Pergunta, v: unknown): unknown {
   return res;
 }
 
+// Progresso de quem ainda não terminou: mesma identificação obrigatória do envio final; respostas tolerantes.
+const ETAPAS_EXTRAS = ["identificacao", "perfil", "relato", "novidades"];
+async function salvarParcial(q: Questionario, p: Record<string, unknown>, envioId: string) {
+  const id = (p.identificacao && typeof p.identificacao === "object" ? p.identificacao : {}) as Record<string, unknown>;
+  const nome = String(id.nome ?? "").trim().replace(/\s+/g, " ");
+  const email = String(id.email ?? "").trim().toLowerCase();
+  const whats = String(id.whatsapp ?? "").replace(/\D/g, "");
+  if (!nome || nome.length > 120 || !EMAIL.test(email) || email.length > 254 || !WHATS.test(whats) || id.ciente !== true) return json({ error: "Identificação inválida." }, 400);
+  const etapa = String(p.etapa ?? "");
+  if (!q.perguntas.some((x) => x.id === etapa) && !ETAPAS_EXTRAS.includes(etapa)) return json({ error: "Etapa inválida." }, 400);
+  if (await jaRespondeu(q.slug, email, whats, envioId)) return json({ error: JA, ja_respondeu: true }, 409);
+  const atual = await situacaoDoEnvio(envioId);
+  if (atual && atual !== "parcial") return json({ ok: true, concluida: true }); // já terminou: não mexe
+
+  // respostas válidas, na ordem do questionário; as inválidas ou incompletas são deixadas de fora
+  const r = (p.respostas && typeof p.respostas === "object" ? p.respostas : {}) as Record<string, unknown>;
+  const respostas: Record<string, unknown> = {};
+  for (const per of q.perguntas) {
+    if (per.condicao && !valores(respostas[per.condicao.pergunta]).some((x) => per.condicao!.opcoes.includes(x))) continue;
+    if (r[per.id] == null) continue;
+    try { respostas[per.id] = validar(per, r[per.id]); } catch (e) { if (!(e instanceof Invalido)) throw e; }
+  }
+  // perfil: só os campos válidos que já foram respondidos (cidade e bairro vêm na pergunta 1)
+  const pf = (p.perfil && typeof p.perfil === "object" ? p.perfil : {}) as Record<string, unknown>;
+  const perfil: Record<string, string> = {};
+  for (const per of q.perfil ?? []) {
+    if (per.condicao && !per.condicao.opcoes.includes(perfil[per.condicao.campo])) continue;
+    const v = String(pf[per.id] ?? "");
+    const op = per.opcoes.find((o) => o.id === v);
+    if (!op) continue;
+    perfil[per.id] = v;
+    if (op.outro && String(pf[per.id + "_outro"] ?? "").trim()) perfil[per.id + "_outro"] = String(pf[per.id + "_outro"]).trim().slice(0, 100);
+  }
+  if (Object.keys(perfil).length) respostas.perfil = perfil;
+  const relato = typeof p.relato === "string" && p.relato.trim() ? p.relato.slice(0, 2000) : null;
+  const agora = new Date().toISOString();
+  const linha = {
+    pesquisa: q.slug, envio_id: envioId, situacao: "parcial", versao_questionario: q.versao, respostas, relato, quer_novidades: null,
+    nome, email, whatsapp: whats, identificacao_em: agora, identificacao_versao: q.identificacao.versao, identificacao_texto: q.identificacao.texto,
+    parou_em: etapa, atualizado_em: agora,
+  };
+  await limparIncompletas(q.slug, email, whats, envioId);
+  const atualizar = () => db.from("pesquisa_respostas").update(linha).eq("envio_id", envioId).eq("situacao", "parcial");
+  let { error } = atual === "parcial" ? await atualizar() : await db.from("pesquisa_respostas").insert(linha);
+  if (error?.code === "23505") {
+    // outro salvamento do mesmo envio chegou antes (ex.: trocar de etapa e sair da página ao mesmo tempo)
+    const agoraSit = await situacaoDoEnvio(envioId);
+    if (agoraSit === "parcial") ({ error } = await atualizar());
+    else if (agoraSit) return json({ ok: true, concluida: true });
+    else return json({ error: JA, ja_respondeu: true }, 409);
+  }
+  if (error) { console.error("pesquisa_respostas parcial", error.message); return json({ error: "Não foi possível salvar o progresso agora." }, 500); }
+  return json({ ok: true });
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return json({ error: "Método não permitido" }, 405);
@@ -142,7 +217,7 @@ Deno.serve(async (req) => {
     try { return json({ ja_respondeu: await jaRespondeu(q.slug, email, whats) }); }
     catch (e) { console.error(e); return json({ error: "Não foi possível conferir agora. Tente de novo em instantes." }, 500); }
   }
-  if (p.acao !== "enviar") return json({ error: "Ação inválida." }, 400);
+  if (p.acao !== "enviar" && p.acao !== "parcial") return json({ error: "Ação inválida." }, 400);
   if (!ativa) return json({ error: "Esta pesquisa foi encerrada.", encerrada: true }, 410);
   if (String(p.site ?? "")) return json({ ok: true }); // campo invisível preenchido: robô
 
@@ -150,6 +225,7 @@ Deno.serve(async (req) => {
   if (!UUID.test(envioId)) return json({ error: "Envio inválido." }, 400);
 
   try {
+    if (p.acao === "parcial") return await salvarParcial(q, p, envioId);
     // identificação (início da pesquisa): nome, e-mail e WhatsApp, com ciência do uso dos dados
     const id = (p.identificacao && typeof p.identificacao === "object" ? p.identificacao : {}) as Record<string, unknown>;
     const nome = String(id.nome ?? "").trim().replace(/\s+/g, " ");
@@ -209,10 +285,17 @@ Deno.serve(async (req) => {
     const quer = completa && nov ? nov.quer === true : null;
     const agora = new Date().toISOString();
 
-    const { error } = await db.from("pesquisa_respostas").upsert({
+    const linha = {
       pesquisa: q.slug, envio_id: envioId, situacao, versao_questionario: q.versao, respostas, relato, quer_novidades: quer,
       nome, email, whatsapp: whats, identificacao_em: agora, identificacao_versao: q.identificacao.versao, identificacao_texto: q.identificacao.texto,
-    }, { onConflict: "envio_id", ignoreDuplicates: true });
+      parou_em: null, atualizado_em: agora, visualizado_em: null, // concluída: volta a aparecer como nova no sino
+    };
+    // quem já tinha progresso salvo (incompleta) tem a mesma linha atualizada; uma participação concluída nunca é sobrescrita
+    await limparIncompletas(q.slug, email, whats, envioId);
+    const atual = await situacaoDoEnvio(envioId);
+    const { error } = atual === "parcial"
+      ? await db.from("pesquisa_respostas").update(linha).eq("envio_id", envioId).eq("situacao", "parcial")
+      : await db.from("pesquisa_respostas").upsert(linha, { onConflict: "envio_id", ignoreDuplicates: true });
     if (error?.code === "23505") return json({ error: JA, ja_respondeu: true }, 409); // corrida entre dois envios da mesma pessoa
     if (error) { console.error("pesquisa_respostas", error.message); return json({ error: "Não foi possível salvar agora. Tente de novo em instantes." }, 500); }
     if (quer) {
