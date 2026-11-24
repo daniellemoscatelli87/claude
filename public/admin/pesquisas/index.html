@@ -76,6 +76,28 @@
   /* "Leitura": Alerta do DS, variante info (alert.tsx): fundo --info-muted, borda na cor do estado a 20%, ícone 20px em --info, texto 14px */
   .pa-leitura { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 2px 12px; align-items: start; padding: 14px 16px; border-radius: var(--radius-md);
     background: var(--info-muted); border: 1px solid color-mix(in srgb, var(--info) 20%, transparent); color: var(--foreground); }
+  .pa-leitura .tx { display: grid; gap: 2px; min-width: 0; }
+  .pa-leitura .tit { font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--foreground); }
+  .pa-leitura .tx p { color: var(--muted-foreground); }
+  .pa-leitura .tx p strong { color: var(--foreground); font-weight: 600; }
+  /* acordeão dos cards de pergunta: no computador o conteúdo fica sempre à vista */
+  .pa-q-mais, .pa-q-mais-in { display: contents; }
+  .pa-q-tog { display: none; }
+  @media (max-width: 640px) {
+    .pa-q { gap: 12px; }
+    .pa-q-cab { position: relative; padding-right: 40px; }
+    .pa-q-tog { display: grid; place-items: end; position: absolute; inset: -8px -8px -8px -8px; padding: 8px; border: 0; background: none; border-radius: var(--radius-md); color: var(--muted-foreground); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .pa-q-tog svg { width: 32px; height: 32px; padding: 6px; border-radius: 50%; background: var(--muted); align-self: start; justify-self: end; transition: transform var(--duration-normal, .2s) var(--ease-out, ease-out); }
+    .pa-q-tog:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    .pa-q.aberto .pa-q-tog svg { transform: rotate(180deg); }
+    .pa-q-mais { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s var(--ease-out, ease-out); margin-top: -12px; }
+    .pa-q.aberto .pa-q-mais { grid-template-rows: 1fr; margin-top: 0; }
+    .pa-q-mais-in { display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow: hidden; visibility: hidden; transition: visibility 0s .28s; }
+    .pa-q.aberto .pa-q-mais-in { visibility: visible; transition: visibility 0s; }
+    .pa-graficos > .pa-q { height: auto; }
+    .pa-q .pa-q-cab .meta { margin-bottom: 0; }
+  }
+  @media (max-width: 640px) and (prefers-reduced-motion: reduce) { .pa-q-mais, .pa-q-tog svg { transition: none; } }
   .pa-leitura .ic { color: var(--info); }
   .pa-leitura .ic svg { width: 20px; height: 20px; display: block; }
   .pa-leitura p { margin: 0; font-size: .875rem; line-height: 1.55; color: var(--foreground); }
@@ -390,6 +412,9 @@
     #pa-print .pa-graficos > .card { margin: 0 0 12px; }
     #pa-print .pa-q.largo, #pa-print .pa-graficos > .card { break-inside: auto; }
     #pa-print .pa-q-cab, #pa-print .pa-leitura { break-after: avoid; }
+    /* no papel, os cards de pergunta saem sempre abertos */
+    #pa-print .pa-q-mais, #pa-print .pa-q-mais-in { display: contents !important; visibility: visible !important; }
+    #pa-print .pa-q-tog { display: none !important; }
     #pa-print button, #pa-print .pa-btn, #pa-print summary { display: none !important; }
     #pa-print .pa-entra { animation: none !important; opacity: 1 !important; transform: none !important; }
     #pa-print * { transition: none !important; }
@@ -852,6 +877,7 @@
      em vermelho, as demais em cinza-azulado, opções como "Prefiro não informar" em cinza claro).
      Cards lado a lado têm a mesma altura (o pé fica sempre embaixo). Sem respostas: estado vazio, sem gráfico zerado. */
   const IC_LEITURA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>';
+  let qSeq = 0;
   function qCard({ num, titulo, base, meta = [], leitura, corpo, rodape = [], largo = false }) {
     const c = el("section", "card pa-q" + (largo ? " largo" : ""));
     const cab = el("div", "pa-q-cab");
@@ -863,10 +889,31 @@
       const v = el("div", "pa-q-vazio"); v.append(el("b", null, "Ainda sem respostas aqui"), el("span", null, "O gráfico aparece com a primeira resposta a esta pergunta."));
       c.appendChild(v); return c;
     }
-    if (leitura) { const l = el("div", "pa-leitura"); const i = el("span", "ic"); i.innerHTML = IC_LEITURA; const t = el("p"); (Array.isArray(leitura) ? leitura : [leitura]).forEach((x) => t.append(typeof x === "string" ? x : el("strong", null, x.b))); l.append(i, t); c.appendChild(l); }
-    c.appendChild(corpo);
+    // Resumo: Alerta do DS (info) com título e descrição
+    if (leitura) {
+      const l = el("div", "pa-leitura"); const i = el("span", "ic"); i.innerHTML = IC_LEITURA;
+      const tx = el("div", "tx"); const t = el("p");
+      (Array.isArray(leitura) ? leitura : [leitura]).forEach((x) => t.append(typeof x === "string" ? x : el("strong", null, x.b)));
+      tx.append(el("b", "tit", "Resumo"), t); l.append(i, tx); c.appendChild(l);
+    }
+    // gráfico e números: no celular ficam num acordeão fechado (abre tocando no cabeçalho); no computador, sempre à vista
+    const mais = el("div", "pa-q-mais"); const dentro = el("div", "pa-q-mais-in"); mais.appendChild(dentro);
+    dentro.appendChild(corpo);
     const pe = el("div", "pa-q-pe"); rodape.filter(Boolean).forEach((x) => pe.appendChild(x));
-    if (pe.childNodes.length) c.appendChild(pe);
+    if (pe.childNodes.length) dentro.appendChild(pe);
+    c.appendChild(mais);
+    const id = "pa-q-" + (++qSeq);
+    dentro.id = id;
+    const tog = el("button", "pa-q-tog"); tog.type = "button";
+    tog.setAttribute("aria-expanded", "false"); tog.setAttribute("aria-controls", id);
+    tog.setAttribute("aria-label", "Mostrar gráfico e números: " + titulo);
+    tog.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+    tog.addEventListener("click", () => {
+      const aberto = c.classList.toggle("aberto");
+      tog.setAttribute("aria-expanded", String(aberto));
+      tog.setAttribute("aria-label", (aberto ? "Esconder gráfico e números: " : "Mostrar gráfico e números: ") + titulo);
+    });
+    cab.appendChild(tog);
     return c;
   }
   // lista de barras: rótulo, percentual e quantidade; ordem do maior para o menor (ou a ordem natural da escala)

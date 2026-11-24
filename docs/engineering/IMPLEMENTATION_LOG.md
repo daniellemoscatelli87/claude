@@ -606,11 +606,17 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Defeito (no ar desde a v13):** a pergunta 5 virou classificação, mas as respostas antigas guardam uma escolha só (texto). `textoResposta` usava `v.map`, o que quebrava a aba Respostas e a exportação do Excel.
   - No banco há 1 resposta antiga da pergunta 5.
   - **Correção:** usa `valores(v)`, e a resposta antiga aparece como "1º …". O erro da exportação também passa a ser registrado no console.
+- **Cards de pergunta no celular (até 640 px):**
+  - Viram acordeões fechados: mostram número, título, quantidade de respostas e o resumo. O gráfico e "Ver números" abrem tocando no cabeçalho (seta à direita, `aria-expanded`), com transição de altura que respeita "menos movimento".
+  - No computador nada muda.
+  - No PDF, os cards saem sempre abertos.
+- **Resumo (antes "Leitura"):** Alerta do DS (info), com título "Resumo" (14 px, peso 600) e a frase em `--muted-foreground`, com os números em destaque.
 - Testes executados (Playwright, computador e iPhone 13, 42 respostas fictícias com a pergunta 5 antiga e nova):
   - menu com 4 itens, foco no primeiro, setas, Esc devolvendo o foco e clique fora;
   - menu inteiro dentro da tela;
   - Excel baixado pelo menu, PDF abrindo a impressão e "Tirar do ar" pedindo confirmação;
   - aba Respostas com 42 respostas, incluindo as antigas;
+  - acordeão: no celular, card fechado com 247 px, aberto com 557 px e fechado de novo; no computador, sempre aberto; no PDF, os 19 cards abertos;
   - sem erros de JS.
   - Antes da correção, a mesma aba ficava vazia, com o erro `v.map is not a function`.
 
