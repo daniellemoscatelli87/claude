@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="/design-system/theme.css?v=697a765">
 <link rel="stylesheet" href="/admin/admin.css?v=20261123g">
 <style>
-  .pa-topo { display: grid; gap: 16px; }
+  .pa-topo { display: grid; gap: 16px; position: relative; z-index: 5; } /* o menu "Ações" abre por cima dos números abaixo */
   .pa-cab { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 20px; }
   .pa-cab h2 { margin: 0 0 4px; font-size: 20px; }
   .pa-cab .muted { margin: 0; font-size: 13px; }
@@ -23,7 +23,26 @@
   @keyframes pa-pulso { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 45%, transparent); } 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
   .pa-link { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
   .pa-link input { flex: 1 1 220px; min-width: 0; font: inherit; font-size: 14px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--muted); color: var(--foreground); }
-  .pa-acoes { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pa-cab { flex-wrap: nowrap; }
+  .pa-cab > div:first-child { min-width: 0; }
+  .pa-link { flex-wrap: nowrap; }
+  .pa-link .pa-btn { flex-shrink: 0; }
+  @media (max-width: 480px) { .pa-link .pa-rot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .pa-link .pa-btn { padding-left: 12px; padding-right: 12px; } }
+  /* Menu "Ações" (Dropdown Menu do DS: fundo do popover, borda, sombra média, itens de 14px com ícone) */
+  .pa-menu-caixa { position: relative; flex-shrink: 0; }
+  .pa-menu-btn svg:last-child { transition: transform var(--duration-normal, .2s) var(--ease-out, ease-out); }
+  .pa-menu-caixa.aberto .pa-menu-btn svg:last-child { transform: rotate(180deg); }
+  .pa-menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; width: min(300px, calc(100vw - 48px)); padding: 6px; background: var(--popover, var(--card)); color: var(--popover-foreground, var(--foreground)); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-md); transform-origin: top right; animation: pa-menu-in .16s var(--ease-out, ease-out) both; }
+  @keyframes pa-menu-in { from { opacity: 0; transform: translateY(-4px) scale(.97); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .pa-menu { animation: none; } .pa-menu-btn svg:last-child { transition: none; } }
+  .pa-menu-it { display: flex; align-items: flex-start; gap: 10px; width: 100%; min-height: 44px; padding: 9px 10px; border: 0; border-radius: var(--radius-sm); background: none; font: inherit; font-size: 14px; text-align: left; color: var(--foreground); text-decoration: none; cursor: pointer; }
+  .pa-menu-it svg { width: 16px; height: 16px; margin-top: 2px; flex-shrink: 0; color: var(--muted-foreground); }
+  .pa-menu-it span { display: grid; gap: 1px; min-width: 0; }
+  .pa-menu-it b { font-weight: 600; }
+  .pa-menu-it small { font-size: 12px; color: var(--muted-foreground); }
+  .pa-menu-it:hover, .pa-menu-it:focus-visible { background: var(--accent, var(--muted)); outline: none; }
+  .pa-menu-it.perigo, .pa-menu-it.perigo svg { color: var(--destructive, var(--primary-text)); }
+  .pa-menu-sep { height: 1px; margin: 6px 4px; background: var(--border); }
   .pa-btn:active { transform: scale(.97); }
   .pa-btn.ok, .pa-btn.ok:hover { border-color: var(--success); color: var(--success); background: var(--success-muted); }
   .pa-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 20px 0; }
@@ -467,6 +486,8 @@
     c.append(topo(), kpis(), abas());
   }
 
+  // Cabeçalho do painel: situação e "Ações" na mesma linha; o link com "Copiar" logo abaixo.
+  // As ações (ver, exportar, tirar do ar) ficam num menu, para o card não quebrar em várias linhas no celular.
   function topo() {
     const card = el("section", "card pa-topo pa-entra");
     const cab = el("div", "pa-cab");
@@ -475,33 +496,73 @@
     esq.append(st);
     const ult = R[0] ? "Última resposta: " + fmtDate(R[0].created_at) : "Ainda sem respostas";
     const m = el("p", "muted", ult); m.style.marginTop = "8px"; esq.appendChild(m);
-    cab.appendChild(esq);
     const url = SITE + (PAGINAS[P.slug] || "/pesquisa/" + P.slug + "/");
+    cab.append(esq, menuAcoes(url));
     const link = el("div", "pa-link");
     const inp = el("input"); inp.type = "text"; inp.readOnly = true; inp.value = url; inp.setAttribute("aria-label", "Link da pesquisa");
     inp.addEventListener("focus", () => inp.select());
-    const copiar = el("button", "pa-btn"); copiar.type = "button"; copiar.innerHTML = IC.copiar + "<span>Copiar link</span>";
+    const copiar = el("button", "pa-btn"); copiar.type = "button"; copiar.innerHTML = IC.copiar + '<span class="pa-rot">Copiar link</span>';
+    copiar.setAttribute("aria-label", "Copiar link da pesquisa");
     copiar.addEventListener("click", async () => {
       try { await navigator.clipboard.writeText(url); } catch { inp.select(); document.execCommand && document.execCommand("copy"); }
-      copiar.classList.add("ok"); copiar.innerHTML = IC.ok + "<span>Link copiado</span>";
-      setTimeout(() => { copiar.classList.remove("ok"); copiar.innerHTML = IC.copiar + "<span>Copiar link</span>"; }, 2200);
+      copiar.classList.add("ok"); copiar.innerHTML = IC.ok + '<span class="pa-rot">Link copiado</span>';
+      setTimeout(() => { copiar.classList.remove("ok"); copiar.innerHTML = IC.copiar + '<span class="pa-rot">Copiar link</span>'; }, 2200);
     });
     link.append(inp, copiar);
-    const acoes = el("div", "pa-acoes");
-    const ver = el("a", "pa-btn"); ver.href = url; ver.target = "_blank"; ver.rel = "noopener"; ver.innerHTML = IC.abrir + "<span>Ver a pesquisa</span>";
-    const tog = el("button", "pa-btn " + (P.ativa ? "perigo" : "liga")); tog.type = "button";
-    tog.innerHTML = P.ativa ? IC.pausa + "<span>Tirar do ar</span>" : IC.play + "<span>Colocar no ar</span>";
-    tog.addEventListener("click", () => alternar(tog));
-    const xls = el("button", "pa-btn"); xls.type = "button"; xls.innerHTML = IC_BAIXAR + "<span>Exportar Excel</span>";
-    xls.title = "Planilha com todas as abas: Resumo, Resultados, Inteligência, Respostas, Relatos e Interessados";
-    xls.addEventListener("click", () => exportarExcel(xls));
-    const pdf = el("button", "pa-btn"); pdf.type = "button"; pdf.innerHTML = IC_BAIXAR + "<span>Exportar PDF</span>";
-    pdf.title = "Relatório com todas as abas. Na janela que abrir, escolha Salvar como PDF.";
-    pdf.addEventListener("click", exportarPdf);
-    acoes.append(ver, xls, pdf, tog);
-    card.append(cab, link, acoes);
+    card.append(cab, link);
     return card;
   }
+  // Menu "Ações": abre abaixo do botão, alinhado à direita; Esc, clique fora ou escolher uma ação fecham.
+  // Setas para cima e para baixo navegam entre os itens. O próprio botão mostra o andamento (ex.: gerando planilha).
+  function menuAcoes(url) {
+    const caixa = el("div", "pa-menu-caixa");
+    const btn = el("button", "pa-btn pa-menu-btn"); btn.type = "button";
+    btn.setAttribute("aria-haspopup", "menu"); btn.setAttribute("aria-expanded", "false"); btn.id = "pa-acoes-btn";
+    btn.innerHTML = '<span>Ações</span>' + svg('<path d="m6 9 6 6 6-6"/>');
+    const menu = el("div", "pa-menu"); menu.setAttribute("role", "menu"); menu.setAttribute("aria-labelledby", btn.id); menu.hidden = true;
+    const item = (ic, texto, dica, acao, cls = "") => {
+      const b = el(acao.href ? "a" : "button", "pa-menu-it" + cls); b.setAttribute("role", "menuitem"); b.tabIndex = -1;
+      if (acao.href) { b.href = acao.href; b.target = "_blank"; b.rel = "noopener"; } else b.type = "button";
+      b.innerHTML = ic + "<span><b>" + texto + "</b>" + (dica ? "<small>" + dica + "</small>" : "") + "</span>";
+      b.addEventListener("click", () => { fechar(false); if (acao.fn) acao.fn(); });
+      return b;
+    };
+    menu.append(
+      item(IC.abrir, "Ver a pesquisa", "Abre o link numa nova aba", { href: url }),
+      item(IC_BAIXAR, "Exportar Excel", "Planilha com todas as abas", { fn: () => exportarExcel(btn) }),
+      item(IC_BAIXAR, "Exportar PDF", "Relatório completo; escolha Salvar como PDF", { fn: exportarPdf }),
+      el("div", "pa-menu-sep"),
+      P.ativa ? item(IC.pausa, "Tirar do ar", "O link para de aceitar respostas", { fn: () => alternar(btn) }, " perigo")
+              : item(IC.play, "Colocar no ar", "O link volta a aceitar respostas", { fn: () => alternar(btn) }, " liga"),
+    );
+    const itens = () => [...menu.querySelectorAll(".pa-menu-it")];
+    const fora = (e) => { if (!caixa.contains(e.target)) fechar(false); };
+    function abrir() {
+      menu.hidden = false; btn.setAttribute("aria-expanded", "true"); caixa.classList.add("aberto");
+      requestAnimationFrame(() => itens()[0]?.focus());
+      document.addEventListener("pointerdown", fora);
+    }
+    function fechar(voltarFoco = true) {
+      if (menu.hidden) return;
+      menu.hidden = true; btn.setAttribute("aria-expanded", "false"); caixa.classList.remove("aberto");
+      document.removeEventListener("pointerdown", fora);
+      if (voltarFoco) btn.focus();
+    }
+    btn.addEventListener("click", () => (menu.hidden ? abrir() : fechar()));
+    btn.addEventListener("keydown", (e) => { if (e.key === "ArrowDown") { e.preventDefault(); abrir(); } });
+    menu.addEventListener("keydown", (e) => {
+      const l = itens(), k = l.indexOf(document.activeElement);
+      if (e.key === "Escape") { e.preventDefault(); fechar(); }
+      else if (e.key === "ArrowDown") { e.preventDefault(); l[(k + 1) % l.length].focus(); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); l[(k - 1 + l.length) % l.length].focus(); }
+      else if (e.key === "Home") { e.preventDefault(); l[0].focus(); }
+      else if (e.key === "End") { e.preventDefault(); l[l.length - 1].focus(); }
+      else if (e.key === "Tab") fechar(false);
+    });
+    caixa.append(btn, menu);
+    return caixa;
+  }
+
 
   async function alternar(btn) {
     const ligar = !P.ativa;
@@ -1179,6 +1240,7 @@
       btn.classList.add("ok"); btn.innerHTML = IC.ok + "<span>Planilha baixada</span>";
       setTimeout(() => { btn.classList.remove("ok"); btn.innerHTML = orig; btn.disabled = false; }, 2200);
     } catch (e) {
+      console.error("exportar Excel", e);
       btn.innerHTML = orig; btn.disabled = false;
       toast("Não foi possível gerar a planilha. Confira a conexão e tente de novo.");
     }
@@ -1527,7 +1589,8 @@
     if (v == null) return "—";
     const op = (id) => ((p.opcoes || []).find((o) => o.id === id) || {}).texto?.replace(/ \(especifique\)$/, "") || id;
     if (p.tipo === "unica") return op(v);
-    if (p.tipo === "ranking") return v.map((id, k) => `${k + 1}º ${op(id)}`).join(" · ");
+    // classificação; respostas antigas de escolha única (ex.: pergunta 5 antes da v13) aparecem como 1º
+    if (p.tipo === "ranking") return valores(v).map((id, k) => `${k + 1}º ${op(id)}`).join(" · ");
     if (p.tipo === "escala") return String(v);
     if (p.tipo === "escalas") return typeof v === "number" ? String(v) : (p.linhas || []).map((l) => `${l.texto}: ${v[l.id] ?? "—"}`).join("\n");
     if (p.tipo === "matriz") return p.linhas.map((l) => `${l.texto}: ${(p.colunas.find((c) => c.id === v[l.id]) || {}).texto || "—"}`).join("\n");
