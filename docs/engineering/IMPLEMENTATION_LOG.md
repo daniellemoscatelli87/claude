@@ -596,6 +596,31 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-24 · Painel de pesquisas: ações num menu e correção da aba Respostas e do Excel com respostas antigas da pergunta 5, publicado
+
+- **Card do topo (`public/admin/pesquisas/index.html`):**
+  - O botão "Ações" abre um menu com Ver a pesquisa, Exportar Excel, Exportar PDF e Tirar do ar ou Colocar no ar.
+  - O menu segue o Dropdown Menu do DS (fundo do popover, borda, sombra média, itens com ícone e descrição curta).
+  - Abre por cima dos números e fecha com Esc, com clique fora ou ao escolher um item. Setas, Home e End navegam entre os itens.
+  - O botão mostra o andamento ("Gerando planilha…" e depois "Planilha baixada").
+  - O link e "Copiar link" ficam numa linha só; no celular, o botão mostra só o ícone, com o nome acessível.
+- **Defeito (no ar desde a v13):** a pergunta 5 virou classificação, mas as respostas antigas guardam uma escolha só (texto). `textoResposta` usava `v.map`, o que quebrava a aba Respostas e a exportação do Excel.
+  - No banco há 1 resposta antiga da pergunta 5.
+  - **Correção:** usa `valores(v)`, e a resposta antiga aparece como "1º …". O erro da exportação também passa a ser registrado no console.
+- **Cards de pergunta no celular (até 640 px):**
+  - Viram acordeões fechados: mostram número, título, quantidade de respostas e o resumo. O gráfico e "Ver números" abrem tocando no cabeçalho (seta à direita, `aria-expanded`), com transição de altura que respeita "menos movimento".
+  - No computador nada muda.
+  - No PDF, os cards saem sempre abertos.
+- **Resumo (antes "Leitura"):** Alerta do DS (info), com título "Resumo" (14 px, peso 600) e a frase em `--muted-foreground`, com os números em destaque.
+- Testes executados (Playwright, computador e iPhone 13, 42 respostas fictícias com a pergunta 5 antiga e nova):
+  - menu com 4 itens, foco no primeiro, setas, Esc devolvendo o foco e clique fora;
+  - menu inteiro dentro da tela;
+  - Excel baixado pelo menu, PDF abrindo a impressão e "Tirar do ar" pedindo confirmação;
+  - aba Respostas com 42 respostas, incluindo as antigas;
+  - acordeão: no celular, card fechado com 247 px, aberto com 557 px e fechado de novo; no computador, sempre aberto; no PDF, os 19 cards abertos;
+  - sem erros de JS.
+  - Antes da correção, a mesma aba ficava vazia, com o erro `v.map is not a function`.
+
 ## 2026-11-23 · Pesquisa: tela própria para quem não comprou, campos subordinados abaixo da opção, perguntas 11 e 12 revisadas e faixa etária em cartões, publicado (função `pesquisa` v12, questionário v13)
 
 - **Tela de quem não comprou este ano (`#pq-semcompras`), na estrutura do modelo enviado pela dona do produto:**

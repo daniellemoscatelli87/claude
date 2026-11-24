@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="/design-system/theme.css?v=697a765">
 <link rel="stylesheet" href="/admin/admin.css?v=20261123g">
 <style>
-  .pa-topo { display: grid; gap: 16px; }
+  .pa-topo { display: grid; gap: 16px; position: relative; z-index: 5; } /* o menu "Ações" abre por cima dos números abaixo */
   .pa-cab { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 20px; }
   .pa-cab h2 { margin: 0 0 4px; font-size: 20px; }
   .pa-cab .muted { margin: 0; font-size: 13px; }
@@ -23,7 +23,26 @@
   @keyframes pa-pulso { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 45%, transparent); } 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
   .pa-link { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
   .pa-link input { flex: 1 1 220px; min-width: 0; font: inherit; font-size: 14px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--muted); color: var(--foreground); }
-  .pa-acoes { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pa-cab { flex-wrap: nowrap; }
+  .pa-cab > div:first-child { min-width: 0; }
+  .pa-link { flex-wrap: nowrap; }
+  .pa-link .pa-btn { flex-shrink: 0; }
+  @media (max-width: 480px) { .pa-link .pa-rot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .pa-link .pa-btn { padding-left: 12px; padding-right: 12px; } }
+  /* Menu "Ações" (Dropdown Menu do DS: fundo do popover, borda, sombra média, itens de 14px com ícone) */
+  .pa-menu-caixa { position: relative; flex-shrink: 0; }
+  .pa-menu-btn svg:last-child { transition: transform var(--duration-normal, .2s) var(--ease-out, ease-out); }
+  .pa-menu-caixa.aberto .pa-menu-btn svg:last-child { transform: rotate(180deg); }
+  .pa-menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; width: min(300px, calc(100vw - 48px)); padding: 6px; background: var(--popover, var(--card)); color: var(--popover-foreground, var(--foreground)); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-md); transform-origin: top right; animation: pa-menu-in .16s var(--ease-out, ease-out) both; }
+  @keyframes pa-menu-in { from { opacity: 0; transform: translateY(-4px) scale(.97); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .pa-menu { animation: none; } .pa-menu-btn svg:last-child { transition: none; } }
+  .pa-menu-it { display: flex; align-items: flex-start; gap: 10px; width: 100%; min-height: 44px; padding: 9px 10px; border: 0; border-radius: var(--radius-sm); background: none; font: inherit; font-size: 14px; text-align: left; color: var(--foreground); text-decoration: none; cursor: pointer; }
+  .pa-menu-it svg { width: 16px; height: 16px; margin-top: 2px; flex-shrink: 0; color: var(--muted-foreground); }
+  .pa-menu-it span { display: grid; gap: 1px; min-width: 0; }
+  .pa-menu-it b { font-weight: 600; }
+  .pa-menu-it small { font-size: 12px; color: var(--muted-foreground); }
+  .pa-menu-it:hover, .pa-menu-it:focus-visible { background: var(--accent, var(--muted)); outline: none; }
+  .pa-menu-it.perigo, .pa-menu-it.perigo svg { color: var(--destructive, var(--primary-text)); }
+  .pa-menu-sep { height: 1px; margin: 6px 4px; background: var(--border); }
   .pa-btn:active { transform: scale(.97); }
   .pa-btn.ok, .pa-btn.ok:hover { border-color: var(--success); color: var(--success); background: var(--success-muted); }
   .pa-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 20px 0; }
@@ -57,6 +76,28 @@
   /* "Leitura": Alerta do DS, variante info (alert.tsx): fundo --info-muted, borda na cor do estado a 20%, ícone 20px em --info, texto 14px */
   .pa-leitura { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 2px 12px; align-items: start; padding: 14px 16px; border-radius: var(--radius-md);
     background: var(--info-muted); border: 1px solid color-mix(in srgb, var(--info) 20%, transparent); color: var(--foreground); }
+  .pa-leitura .tx { display: grid; gap: 2px; min-width: 0; }
+  .pa-leitura .tit { font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--foreground); }
+  .pa-leitura .tx p { color: var(--muted-foreground); }
+  .pa-leitura .tx p strong { color: var(--foreground); font-weight: 600; }
+  /* acordeão dos cards de pergunta: no computador o conteúdo fica sempre à vista */
+  .pa-q-mais, .pa-q-mais-in { display: contents; }
+  .pa-q-tog { display: none; }
+  @media (max-width: 640px) {
+    .pa-q { gap: 12px; }
+    .pa-q-cab { position: relative; padding-right: 40px; }
+    .pa-q-tog { display: grid; place-items: end; position: absolute; inset: -8px -8px -8px -8px; padding: 8px; border: 0; background: none; border-radius: var(--radius-md); color: var(--muted-foreground); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .pa-q-tog svg { width: 32px; height: 32px; padding: 6px; border-radius: 50%; background: var(--muted); align-self: start; justify-self: end; transition: transform var(--duration-normal, .2s) var(--ease-out, ease-out); }
+    .pa-q-tog:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    .pa-q.aberto .pa-q-tog svg { transform: rotate(180deg); }
+    .pa-q-mais { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s var(--ease-out, ease-out); margin-top: -12px; }
+    .pa-q.aberto .pa-q-mais { grid-template-rows: 1fr; margin-top: 0; }
+    .pa-q-mais-in { display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow: hidden; visibility: hidden; transition: visibility 0s .28s; }
+    .pa-q.aberto .pa-q-mais-in { visibility: visible; transition: visibility 0s; }
+    .pa-graficos > .pa-q { height: auto; }
+    .pa-q .pa-q-cab .meta { margin-bottom: 0; }
+  }
+  @media (max-width: 640px) and (prefers-reduced-motion: reduce) { .pa-q-mais, .pa-q-tog svg { transition: none; } }
   .pa-leitura .ic { color: var(--info); }
   .pa-leitura .ic svg { width: 20px; height: 20px; display: block; }
   .pa-leitura p { margin: 0; font-size: .875rem; line-height: 1.55; color: var(--foreground); }
@@ -371,6 +412,9 @@
     #pa-print .pa-graficos > .card { margin: 0 0 12px; }
     #pa-print .pa-q.largo, #pa-print .pa-graficos > .card { break-inside: auto; }
     #pa-print .pa-q-cab, #pa-print .pa-leitura { break-after: avoid; }
+    /* no papel, os cards de pergunta saem sempre abertos */
+    #pa-print .pa-q-mais, #pa-print .pa-q-mais-in { display: contents !important; visibility: visible !important; }
+    #pa-print .pa-q-tog { display: none !important; }
     #pa-print button, #pa-print .pa-btn, #pa-print summary { display: none !important; }
     #pa-print .pa-entra { animation: none !important; opacity: 1 !important; transform: none !important; }
     #pa-print * { transition: none !important; }
@@ -467,6 +511,8 @@
     c.append(topo(), kpis(), abas());
   }
 
+  // Cabeçalho do painel: situação e "Ações" na mesma linha; o link com "Copiar" logo abaixo.
+  // As ações (ver, exportar, tirar do ar) ficam num menu, para o card não quebrar em várias linhas no celular.
   function topo() {
     const card = el("section", "card pa-topo pa-entra");
     const cab = el("div", "pa-cab");
@@ -475,33 +521,73 @@
     esq.append(st);
     const ult = R[0] ? "Última resposta: " + fmtDate(R[0].created_at) : "Ainda sem respostas";
     const m = el("p", "muted", ult); m.style.marginTop = "8px"; esq.appendChild(m);
-    cab.appendChild(esq);
     const url = SITE + (PAGINAS[P.slug] || "/pesquisa/" + P.slug + "/");
+    cab.append(esq, menuAcoes(url));
     const link = el("div", "pa-link");
     const inp = el("input"); inp.type = "text"; inp.readOnly = true; inp.value = url; inp.setAttribute("aria-label", "Link da pesquisa");
     inp.addEventListener("focus", () => inp.select());
-    const copiar = el("button", "pa-btn"); copiar.type = "button"; copiar.innerHTML = IC.copiar + "<span>Copiar link</span>";
+    const copiar = el("button", "pa-btn"); copiar.type = "button"; copiar.innerHTML = IC.copiar + '<span class="pa-rot">Copiar link</span>';
+    copiar.setAttribute("aria-label", "Copiar link da pesquisa");
     copiar.addEventListener("click", async () => {
       try { await navigator.clipboard.writeText(url); } catch { inp.select(); document.execCommand && document.execCommand("copy"); }
-      copiar.classList.add("ok"); copiar.innerHTML = IC.ok + "<span>Link copiado</span>";
-      setTimeout(() => { copiar.classList.remove("ok"); copiar.innerHTML = IC.copiar + "<span>Copiar link</span>"; }, 2200);
+      copiar.classList.add("ok"); copiar.innerHTML = IC.ok + '<span class="pa-rot">Link copiado</span>';
+      setTimeout(() => { copiar.classList.remove("ok"); copiar.innerHTML = IC.copiar + '<span class="pa-rot">Copiar link</span>'; }, 2200);
     });
     link.append(inp, copiar);
-    const acoes = el("div", "pa-acoes");
-    const ver = el("a", "pa-btn"); ver.href = url; ver.target = "_blank"; ver.rel = "noopener"; ver.innerHTML = IC.abrir + "<span>Ver a pesquisa</span>";
-    const tog = el("button", "pa-btn " + (P.ativa ? "perigo" : "liga")); tog.type = "button";
-    tog.innerHTML = P.ativa ? IC.pausa + "<span>Tirar do ar</span>" : IC.play + "<span>Colocar no ar</span>";
-    tog.addEventListener("click", () => alternar(tog));
-    const xls = el("button", "pa-btn"); xls.type = "button"; xls.innerHTML = IC_BAIXAR + "<span>Exportar Excel</span>";
-    xls.title = "Planilha com todas as abas: Resumo, Resultados, Inteligência, Respostas, Relatos e Interessados";
-    xls.addEventListener("click", () => exportarExcel(xls));
-    const pdf = el("button", "pa-btn"); pdf.type = "button"; pdf.innerHTML = IC_BAIXAR + "<span>Exportar PDF</span>";
-    pdf.title = "Relatório com todas as abas. Na janela que abrir, escolha Salvar como PDF.";
-    pdf.addEventListener("click", exportarPdf);
-    acoes.append(ver, xls, pdf, tog);
-    card.append(cab, link, acoes);
+    card.append(cab, link);
     return card;
   }
+  // Menu "Ações": abre abaixo do botão, alinhado à direita; Esc, clique fora ou escolher uma ação fecham.
+  // Setas para cima e para baixo navegam entre os itens. O próprio botão mostra o andamento (ex.: gerando planilha).
+  function menuAcoes(url) {
+    const caixa = el("div", "pa-menu-caixa");
+    const btn = el("button", "pa-btn pa-menu-btn"); btn.type = "button";
+    btn.setAttribute("aria-haspopup", "menu"); btn.setAttribute("aria-expanded", "false"); btn.id = "pa-acoes-btn";
+    btn.innerHTML = '<span>Ações</span>' + svg('<path d="m6 9 6 6 6-6"/>');
+    const menu = el("div", "pa-menu"); menu.setAttribute("role", "menu"); menu.setAttribute("aria-labelledby", btn.id); menu.hidden = true;
+    const item = (ic, texto, dica, acao, cls = "") => {
+      const b = el(acao.href ? "a" : "button", "pa-menu-it" + cls); b.setAttribute("role", "menuitem"); b.tabIndex = -1;
+      if (acao.href) { b.href = acao.href; b.target = "_blank"; b.rel = "noopener"; } else b.type = "button";
+      b.innerHTML = ic + "<span><b>" + texto + "</b>" + (dica ? "<small>" + dica + "</small>" : "") + "</span>";
+      b.addEventListener("click", () => { fechar(false); if (acao.fn) acao.fn(); });
+      return b;
+    };
+    menu.append(
+      item(IC.abrir, "Ver a pesquisa", "Abre o link numa nova aba", { href: url }),
+      item(IC_BAIXAR, "Exportar Excel", "Planilha com todas as abas", { fn: () => exportarExcel(btn) }),
+      item(IC_BAIXAR, "Exportar PDF", "Relatório completo; escolha Salvar como PDF", { fn: exportarPdf }),
+      el("div", "pa-menu-sep"),
+      P.ativa ? item(IC.pausa, "Tirar do ar", "O link para de aceitar respostas", { fn: () => alternar(btn) }, " perigo")
+              : item(IC.play, "Colocar no ar", "O link volta a aceitar respostas", { fn: () => alternar(btn) }, " liga"),
+    );
+    const itens = () => [...menu.querySelectorAll(".pa-menu-it")];
+    const fora = (e) => { if (!caixa.contains(e.target)) fechar(false); };
+    function abrir() {
+      menu.hidden = false; btn.setAttribute("aria-expanded", "true"); caixa.classList.add("aberto");
+      requestAnimationFrame(() => itens()[0]?.focus());
+      document.addEventListener("pointerdown", fora);
+    }
+    function fechar(voltarFoco = true) {
+      if (menu.hidden) return;
+      menu.hidden = true; btn.setAttribute("aria-expanded", "false"); caixa.classList.remove("aberto");
+      document.removeEventListener("pointerdown", fora);
+      if (voltarFoco) btn.focus();
+    }
+    btn.addEventListener("click", () => (menu.hidden ? abrir() : fechar()));
+    btn.addEventListener("keydown", (e) => { if (e.key === "ArrowDown") { e.preventDefault(); abrir(); } });
+    menu.addEventListener("keydown", (e) => {
+      const l = itens(), k = l.indexOf(document.activeElement);
+      if (e.key === "Escape") { e.preventDefault(); fechar(); }
+      else if (e.key === "ArrowDown") { e.preventDefault(); l[(k + 1) % l.length].focus(); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); l[(k - 1 + l.length) % l.length].focus(); }
+      else if (e.key === "Home") { e.preventDefault(); l[0].focus(); }
+      else if (e.key === "End") { e.preventDefault(); l[l.length - 1].focus(); }
+      else if (e.key === "Tab") fechar(false);
+    });
+    caixa.append(btn, menu);
+    return caixa;
+  }
+
 
   async function alternar(btn) {
     const ligar = !P.ativa;
@@ -791,6 +877,7 @@
      em vermelho, as demais em cinza-azulado, opções como "Prefiro não informar" em cinza claro).
      Cards lado a lado têm a mesma altura (o pé fica sempre embaixo). Sem respostas: estado vazio, sem gráfico zerado. */
   const IC_LEITURA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>';
+  let qSeq = 0;
   function qCard({ num, titulo, base, meta = [], leitura, corpo, rodape = [], largo = false }) {
     const c = el("section", "card pa-q" + (largo ? " largo" : ""));
     const cab = el("div", "pa-q-cab");
@@ -802,10 +889,31 @@
       const v = el("div", "pa-q-vazio"); v.append(el("b", null, "Ainda sem respostas aqui"), el("span", null, "O gráfico aparece com a primeira resposta a esta pergunta."));
       c.appendChild(v); return c;
     }
-    if (leitura) { const l = el("div", "pa-leitura"); const i = el("span", "ic"); i.innerHTML = IC_LEITURA; const t = el("p"); (Array.isArray(leitura) ? leitura : [leitura]).forEach((x) => t.append(typeof x === "string" ? x : el("strong", null, x.b))); l.append(i, t); c.appendChild(l); }
-    c.appendChild(corpo);
+    // Resumo: Alerta do DS (info) com título e descrição
+    if (leitura) {
+      const l = el("div", "pa-leitura"); const i = el("span", "ic"); i.innerHTML = IC_LEITURA;
+      const tx = el("div", "tx"); const t = el("p");
+      (Array.isArray(leitura) ? leitura : [leitura]).forEach((x) => t.append(typeof x === "string" ? x : el("strong", null, x.b)));
+      tx.append(el("b", "tit", "Resumo"), t); l.append(i, tx); c.appendChild(l);
+    }
+    // gráfico e números: no celular ficam num acordeão fechado (abre tocando no cabeçalho); no computador, sempre à vista
+    const mais = el("div", "pa-q-mais"); const dentro = el("div", "pa-q-mais-in"); mais.appendChild(dentro);
+    dentro.appendChild(corpo);
     const pe = el("div", "pa-q-pe"); rodape.filter(Boolean).forEach((x) => pe.appendChild(x));
-    if (pe.childNodes.length) c.appendChild(pe);
+    if (pe.childNodes.length) dentro.appendChild(pe);
+    c.appendChild(mais);
+    const id = "pa-q-" + (++qSeq);
+    dentro.id = id;
+    const tog = el("button", "pa-q-tog"); tog.type = "button";
+    tog.setAttribute("aria-expanded", "false"); tog.setAttribute("aria-controls", id);
+    tog.setAttribute("aria-label", "Mostrar gráfico e números: " + titulo);
+    tog.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+    tog.addEventListener("click", () => {
+      const aberto = c.classList.toggle("aberto");
+      tog.setAttribute("aria-expanded", String(aberto));
+      tog.setAttribute("aria-label", (aberto ? "Esconder gráfico e números: " : "Mostrar gráfico e números: ") + titulo);
+    });
+    cab.appendChild(tog);
     return c;
   }
   // lista de barras: rótulo, percentual e quantidade; ordem do maior para o menor (ou a ordem natural da escala)
@@ -1179,6 +1287,7 @@
       btn.classList.add("ok"); btn.innerHTML = IC.ok + "<span>Planilha baixada</span>";
       setTimeout(() => { btn.classList.remove("ok"); btn.innerHTML = orig; btn.disabled = false; }, 2200);
     } catch (e) {
+      console.error("exportar Excel", e);
       btn.innerHTML = orig; btn.disabled = false;
       toast("Não foi possível gerar a planilha. Confira a conexão e tente de novo.");
     }
@@ -1527,7 +1636,8 @@
     if (v == null) return "—";
     const op = (id) => ((p.opcoes || []).find((o) => o.id === id) || {}).texto?.replace(/ \(especifique\)$/, "") || id;
     if (p.tipo === "unica") return op(v);
-    if (p.tipo === "ranking") return v.map((id, k) => `${k + 1}º ${op(id)}`).join(" · ");
+    // classificação; respostas antigas de escolha única (ex.: pergunta 5 antes da v13) aparecem como 1º
+    if (p.tipo === "ranking") return valores(v).map((id, k) => `${k + 1}º ${op(id)}`).join(" · ");
     if (p.tipo === "escala") return String(v);
     if (p.tipo === "escalas") return typeof v === "number" ? String(v) : (p.linhas || []).map((l) => `${l.texto}: ${v[l.id] ?? "—"}`).join("\n");
     if (p.tipo === "matriz") return p.linhas.map((l) => `${l.texto}: ${(p.colunas.find((c) => c.id === v[l.id]) || {}).texto || "—"}`).join("\n");
