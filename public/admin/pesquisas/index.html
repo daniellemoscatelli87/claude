@@ -43,7 +43,7 @@
   .pa-menu-caixa { position: relative; flex-shrink: 0; }
   .pa-menu-btn svg:last-child { transition: transform var(--duration-normal, .2s) var(--ease-out, ease-out); }
   .pa-menu-caixa.aberto .pa-menu-btn svg:last-child { transform: rotate(180deg); }
-  .pa-menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; width: min(300px, calc(100vw - 48px)); padding: 6px; background: var(--popover, var(--card)); color: var(--popover-foreground, var(--foreground)); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-md); transform-origin: top right; animation: pa-menu-in .16s var(--ease-out, ease-out) both; }
+  .pa-menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; width: max-content; min-width: 200px; max-width: calc(100vw - 48px); padding: 6px; background: var(--popover, var(--card)); color: var(--popover-foreground, var(--foreground)); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-md); transform-origin: top right; animation: pa-menu-in .16s var(--ease-out, ease-out) both; }
   @keyframes pa-menu-in { from { opacity: 0; transform: translateY(-4px) scale(.97); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) { .pa-menu { animation: none; } .pa-menu-btn svg:last-child { transition: none; } }
   .pa-menu-it { display: flex; align-items: flex-start; gap: 10px; width: 100%; min-height: 44px; padding: 9px 10px; border: 0; border-radius: var(--radius-sm); background: none; font: inherit; font-size: 14px; text-align: left; color: var(--foreground); text-decoration: none; cursor: pointer; }
@@ -671,8 +671,8 @@
       return b;
     };
     menu.append(
-      item(IC_BAIXAR, "Exportar Excel", "Planilha com todas as abas", { fn: () => exportarExcel(btn) }),
-      item(IC_BAIXAR, "Exportar PDF", "Relatório completo; escolha Salvar como PDF", { fn: exportarPdf }),
+      item(IC_BAIXAR, "Exportar Excel", "", { fn: () => exportarExcel(btn) }),
+      item(IC_BAIXAR, "Exportar PDF", "", { fn: exportarPdf }),
     );
     // nas abas Respostas e Interessados: excluir o que foi marcado na lista
     const extra = el("div"); menu.appendChild(extra);
@@ -680,7 +680,7 @@
       extra.replaceChildren();
       if (!SELECAO) return;
       const n = SELECAO.n();
-      const it = item(IC.lixo, n ? `Excluir ${plural(n, SELECAO.um, SELECAO.varios)}` : `Excluir ${SELECAO.varios}`, n ? SELECAO.dica : "Marque as caixas na lista para escolher", { fn: SELECAO.fn }, " perigo");
+      const it = item(IC.lixo, "Excluir", "", { fn: SELECAO.fn }, " perigo");
       if (!n) { it.disabled = true; it.setAttribute("aria-disabled", "true"); }
       extra.append(el("div", "pa-menu-sep"), it);
     };
@@ -1799,12 +1799,11 @@
     const box = el("div", "pa-zerar pa-entra");
     if (!R.length && !I.length) return box;
     const tx = el("div");
-    tx.append(el("b", null, "Recomeçar a pesquisa do zero"), el("span", null, "Apaga todas as respostas, relatos e contatos de interessados."));
+    tx.append(el("b", null, "Recomeçar a pesquisa do zero"), el("span", null, "Apaga todas as respostas e relatos."));
     const bt = el("button", "pa-btn perigo"); bt.type = "button"; bt.innerHTML = IC.lixo + "<span>Apagar todas as respostas</span>";
     bt.addEventListener("click", async () => {
       const partes = [];
-      if (R.length) partes.push(`As ${plural(R.length, "participação", "participações")} desta pesquisa serão apagadas de vez, junto com os relatos.`);
-      if (I.length) partes.push(`${I.length === 1 ? "O contato" : `Os ${plural(I.length, "contato", "contatos")}`} da aba Interessados ${R.length ? "também " : ""}${I.length === 1 ? "será apagado" : "serão apagados"}.`);
+      partes.push(R.length ? `As ${plural(R.length, "participação", "participações")} desta pesquisa serão apagadas de vez, junto com os relatos.` : "Os dados desta pesquisa serão apagados de vez.");
       partes.push("Os gráficos voltam a zero. Essa ação não pode ser desfeita.");
       const ok = await confirmDialog({ title: "Apagar todas as respostas?", message: partes.join(" "), ok: "Apagar todas", word: "APAGAR" });
       if (ok) { bt.disabled = true; await excluirRespostas([], true); }
@@ -1836,8 +1835,7 @@
     return [pf, prim && x.situacao === "completa" ? "Mais comprou: " + textoResposta({ ...q2, tipo: "unica" }, prim) : ""].filter(Boolean).join(" · ");
   }
   async function excluirUma(x, bt) {
-    const tem = I.some((y) => y.envio_id && y.envio_id === x.envio_id);
-    const ok = await confirmDialog({ title: `Excluir a resposta de ${nomeDe(x)}?`, message: `A participação #${numResp(x)}, de ${fmtDate(x.created_at)}, será apagada de vez e sai dos gráficos.${tem ? " O contato dessa pessoa na aba Interessados (avisos do lançamento) também será apagado." : ""} Essa ação não pode ser desfeita.`, ok: "Excluir" });
+    const ok = await confirmDialog({ title: `Excluir a resposta de ${nomeDe(x)}?`, message: `A participação #${numResp(x)}, de ${fmtDate(x.created_at)}, será apagada de vez e sai dos gráficos. Essa ação não pode ser desfeita.`, ok: "Excluir" });
     if (!ok) return false;
     if (bt) bt.disabled = true;
     return excluirRespostas([x.id], false);
@@ -1870,12 +1868,11 @@
       const alvo = R.filter((x) => sel.has(x.id));
       if (!alvo.length) return;
       if (alvo.length === 1) return excluirUma(alvo[0], null);
-      const comContato = alvo.filter((x) => I.some((y) => y.envio_id && y.envio_id === x.envio_id)).length;
-      const ok = await confirmDialog({ title: `Excluir ${plural(alvo.length, "resposta", "respostas")}?`, message: `${alvo.length === R.length ? "Todas as participações" : `As ${plural(alvo.length, "participação selecionada", "participações selecionadas")}`} serão apagadas de vez e saem dos gráficos.${comContato ? ` ${comContato === 1 ? "O contato de 1 dessas pessoas" : `Os contatos de ${comContato} dessas pessoas`} na aba Interessados (avisos do lançamento) também ${comContato === 1 ? "será apagado" : "serão apagados"}.` : ""} Essa ação não pode ser desfeita.`, ok: "Excluir" });
+      const ok = await confirmDialog({ title: `Excluir ${plural(alvo.length, "resposta", "respostas")}?`, message: `${alvo.length === R.length ? "Todas as participações" : `As ${plural(alvo.length, "participação selecionada", "participações selecionadas")}`} serão apagadas de vez e saem dos gráficos. Essa ação não pode ser desfeita.`, ok: "Excluir" });
       if (!ok) return;
       await excluirRespostas(alvo.map((x) => x.id), false);
     };
-    SELECAO = { n: () => visiveis().filter((x) => sel.has(x.id)).length, um: "resposta selecionada", varios: "respostas selecionadas", dica: "Apaga também o contato delas em Interessados", fn: excluirSelecionadas };
+    SELECAO = { n: () => visiveis().filter((x) => sel.has(x.id)).length, fn: excluirSelecionadas };
     const pintar = () => {
       filtros.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.f === FILTRO)));
       const vs = visiveis();
@@ -2078,7 +2075,7 @@
       if (!ok) return;
       await excluirInteressados(alvo.map((x) => x.id));
     };
-    SELECAO = { n: () => sel.size, um: "contato selecionado", varios: "contatos selecionados", dica: "As respostas da pesquisa continuam", fn: excluirSelecionados };
+    SELECAO = { n: () => sel.size, fn: excluirSelecionados };
     I.forEach((x, k) => {
       const li = el("li", "pa-rl-it"); li.style.setProperty("--i", Math.min(k, 12)); li.dataset.id = x.id;
       const cbl = el("label", "pa-rl-cb"); const cb = el("input"); cb.type = "checkbox"; cb.value = x.id;
