@@ -83,7 +83,7 @@ const salvar = () => {
 };
 let enviando = false;
 let retomar = -1; // etapa salva para continuar depois da identificação
-const identificado = () => !!(E.nome.trim() && emailValido(E.email) && whatsValido(E.whats) && E.ciente);
+const identificado = () => !!(E.nome.trim() && (!E.email.trim() || emailValido(E.email)) && whatsValido(E.whats) && E.ciente);
 
 /* ---------- Telas ---------- */
 const telas = ['pq-intro', 'pq-form', 'pq-obrigada', 'pq-encerrada', 'pq-semcompras', 'pq-ja', 'pq-fora-do-ar'];
@@ -532,10 +532,10 @@ function mascaraWhats(v: string) {
 const whatsValido = (v: string) => /^[1-9][1-9](9\d{8}|[2-5]\d{7})$/.test(v.replace(/\D/g, ''));
 const emailValido = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
 
-function campo(id: string, rotulo: string, tipo: string, valor: string, ph: string, extra: (i: HTMLInputElement) => void) {
+function campo(id: string, rotulo: string, tipo: string, valor: string, ph: string, extra: (i: HTMLInputElement) => void, opcional = false) {
   const q = el('div', 'pq-campo'); q.id = id + '-q';
-  const l = el('label', 'pq-rotulo'); l.htmlFor = id; l.append(rotulo, el('span', 'pq-obrig', ' *'));
-  const i = el('input'); i.id = id; i.type = tipo; i.value = valor; i.placeholder = ph; i.required = true;
+  const l = el('label', 'pq-rotulo'); l.htmlFor = id; l.append(rotulo, opcional ? el('span', 'pq-opcional', ' (opcional)') : el('span', 'pq-obrig', ' *'));
+  const i = el('input'); i.id = id; i.type = tipo; i.value = valor; i.placeholder = ph; i.required = !opcional;
   const err = el('p', 'pq-erro'); err.id = id + '-erro'; err.hidden = true;
   i.setAttribute('aria-describedby', err.id);
   extra(i);
@@ -585,8 +585,8 @@ function montarIdentificacao() {
   const campos = el('div', 'pq-contato');
   campos.append(
     campo('pq-nome', 'Seu nome', 'text', E.nome, 'Como podemos chamar você?', (i) => { i.autocomplete = 'name'; i.maxLength = 120; i.addEventListener('input', () => { E.nome = i.value; salvar(); erroCampo(i, ''); limparErro(fs); }); }),
-    campo('pq-email', 'E-mail', 'email', E.email, 'seuemail@exemplo.com', (i) => { i.autocomplete = 'email'; i.inputMode = 'email'; i.maxLength = 254; i.spellcheck = false; i.addEventListener('input', () => { E.email = i.value; salvar(); erroCampo(i, ''); limparErro(fs); }); }),
     campo('pq-whats', 'WhatsApp com DDD', 'tel', mascaraWhats(E.whats), '(41) 99999-9999', (i) => { i.autocomplete = 'tel-national'; i.inputMode = 'tel'; i.addEventListener('input', () => { i.value = mascaraWhats(i.value); E.whats = i.value; salvar(); erroCampo(i, ''); limparErro(fs); }); }),
+    campo('pq-email', 'E-mail', 'email', E.email, 'seuemail@exemplo.com', (i) => { i.autocomplete = 'email'; i.inputMode = 'email'; i.maxLength = 254; i.spellcheck = false; i.addEventListener('input', () => { E.email = i.value; salvar(); erroCampo(i, ''); limparErro(fs); }); }, true),
   );
   const lgpd = el('div', 'pq-lgpd');
   const ic = el('span', 'pq-ic'); ic.setAttribute('aria-hidden', 'true');
@@ -618,14 +618,31 @@ function erroCampo(i: HTMLInputElement, msg: string) {
   i.closest('.pq-campo')?.classList.toggle('pq-invalido', !!msg);
 }
 
+/* ---------- Aviso de campo faltando ----------
+   Além da mensagem junto ao campo, um aviso aparece colado aos botões (sempre à vista, mesmo com a tela rolada):
+   diz o que falta e, ao tocar, leva até o campo. Some assim que a pessoa começa a corrigir ou muda de etapa. */
+let alvoFalta: HTMLElement | null = null;
+// mensagem única para qualquer campo faltando (o detalhe fica junto de cada campo); erros do servidor trazem o próprio texto
+const FALTA_MSG = 'Preencha os campos em vermelho para prosseguir.';
+function avisarFalta(alvo: HTMLElement | null, msg = FALTA_MSG) {
+  const box = $('pq-falta'), txt = $('pq-falta-txt');
+  txt.textContent = msg; alvoFalta = alvo;
+  box.hidden = false;
+  if (!reduzir) { box.classList.remove('pq-falta-entra'); void box.offsetWidth; box.classList.add('pq-falta-entra'); }
+  if (alvo) alvo.scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' });
+}
+function esconderFalta() { const box = document.getElementById('pq-falta'); if (box) box.hidden = true; alvoFalta = null; }
+
 /* ---------- Validação de cada etapa ---------- */
-function mostrarErro(fs: HTMLElement, msg: string) {
+function mostrarErro(fs: HTMLElement, msg: string, avisoProprio = false) {
   const e = $(fs.id + '-erro'); e.textContent = msg; e.hidden = false;
   fs.classList.add('pq-invalido'); fs.setAttribute('aria-invalid', 'true');
   if (!reduzir) { fs.classList.remove('pq-treme'); void fs.offsetWidth; fs.classList.add('pq-treme'); }
+  avisarFalta(e, avisoProprio ? msg : FALTA_MSG);
 }
 function limparErro(fs: HTMLElement) {
   const e = $(fs.id + '-erro'); if (e) { e.hidden = true; e.textContent = ''; }
+  esconderFalta();
   fs.classList.remove('pq-invalido'); fs.removeAttribute('aria-invalid');
 }
 function validarEtapa(i: number): boolean {
@@ -635,8 +652,8 @@ function validarEtapa(i: number): boolean {
     if (p.tipo === 'unica' && typeof v !== 'string') { mostrarErro(fs, 'Escolha uma opção para continuar.'); return false; }
     if (p.id === 'q1') {
       const pf = perfilAtual();
-      if (v === 'rmc' && !pf.cidade) { erroPerfil('cidade', 'Escolha a cidade onde você mora.'); $('pq-perfil-cidade').scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' }); return false; }
-      if (v === 'sim' && !pf.bairro) { erroPerfil('bairro', 'Escolha o seu bairro. Se preferir, marque "Prefiro não informar" no fim da lista.'); $('pq-perfil-bairro').scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' }); return false; }
+      if (v === 'rmc' && !pf.cidade) { erroPerfil('cidade', 'Escolha a cidade onde você mora.'); avisarFalta($('pq-perfil-cidade')); return false; }
+      if (v === 'sim' && !pf.bairro) { erroPerfil('bairro', 'Escolha o seu bairro. Se preferir, marque "Prefiro não informar" no fim da lista.'); avisarFalta($('pq-perfil-bairro')); return false; }
     }
     if (p.tipo === 'ranking' && !(Array.isArray(v) && v.length)) { mostrarErro(fs, p.id === 'q2' ? `Escolha pelo menos uma opção, na ordem de onde você mais comprou (até ${p.max}).` : `Escolha pelo menos uma opção, na ordem do que vem primeiro para você (até ${p.max}).`); return false; }
     if (p.tipo === 'escala' && typeof v !== 'number') { mostrarErro(fs, 'Escolha uma nota de 0 a 10 para continuar.'); return false; }
@@ -644,13 +661,13 @@ function validarEtapa(i: number): boolean {
       const r = (v as Record<string, number>) ?? {};
       const faltam = p.linhas!.filter((l) => typeof r[l.id] !== 'number');
       fs.querySelectorAll<HTMLElement>('.pq-aspecto').forEach((x) => x.classList.toggle('pq-faltando', faltam.some((l) => l.id === x.dataset.linha)));
-      if (faltam.length) { mostrarErro(fs, faltam.length === 1 ? `Falta dar nota para: ${faltam[0].texto}.` : `Faltam notas para ${faltam.length} aspectos.`); return false; }
+      if (faltam.length) { const m = faltam.length === 1 ? `Falta dar nota para: ${faltam[0].texto}.` : `Faltam notas para ${faltam.length} aspectos.`; mostrarErro(fs, m); avisarFalta(fs.querySelector<HTMLElement>('.pq-aspecto.pq-faltando')); return false; }
     }
     if (p.tipo === 'matriz') {
       const r = (v as Record<string, string>) ?? {};
       const faltam = p.linhas!.filter((l) => !r[l.id]);
       fs.querySelectorAll<HTMLElement>('.pq-linha').forEach((x) => x.classList.toggle('pq-faltando', faltam.some((l) => l.id === x.dataset.linha)));
-      if (faltam.length) { mostrarErro(fs, faltam.length === 1 ? `Falta responder: ${faltam[0].texto}.` : `Faltam ${faltam.length} itens para responder.`); return false; }
+      if (faltam.length) { const m = faltam.length === 1 ? `Falta responder: ${faltam[0].texto}.` : `Faltam ${faltam.length} itens para responder.`; mostrarErro(fs, m); avisarFalta(fs.querySelector<HTMLElement>('.pq-linha.pq-faltando')); return false; }
     }
     if (p.tipo === 'multipla') {
       const m = (v as Multi) ?? { opcoes: [] };
@@ -678,19 +695,24 @@ function validarEtapa(i: number): boolean {
       erroPerfil(c.id, msg);
       if (msg && !primeiro) primeiro = $('pq-perfil-' + c.id);
     });
-    if (primeiro) { (primeiro as HTMLElement).scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' }); return false; }
+    if (primeiro) { avisarFalta(primeiro); return false; }
     return true;
   }
   if (i === ETAPA_ID) {
     const checks: [string, string][] = [
       ['pq-nome', E.nome.trim() ? '' : 'Informe como podemos chamar você.'],
-      ['pq-email', !E.email.trim() ? 'Informe o seu e-mail.' : emailValido(E.email) ? '' : 'Confira o e-mail. Exemplo: seuemail@exemplo.com'],
       ['pq-whats', !E.whats.trim() ? 'Informe o seu WhatsApp com DDD.' : whatsValido(E.whats) ? '' : 'Confira o número. Use o DDD e o número, como (41) 99999-9999.'],
+      ['pq-email', !E.email.trim() || emailValido(E.email) ? '' : 'Confira o e-mail ou deixe em branco. Exemplo: seuemail@exemplo.com'],
       ['pq-ciente', E.ciente ? '' : 'Para participar, marque que você leu e concorda.'],
     ];
     let primeiro: HTMLInputElement | null = null;
     checks.forEach(([id, msg]) => { const inp = $<HTMLInputElement>(id); erroCampo(inp, msg); if (msg && !primeiro) primeiro = inp; });
-    if (primeiro) { (primeiro as HTMLInputElement).focus(); return false; }
+    if (primeiro) {
+      const p0 = primeiro as HTMLInputElement;
+      avisarFalta(p0.closest<HTMLElement>('.pq-campo'));
+      if (p0.type !== 'checkbox') p0.focus({ preventScroll: true });
+      return false;
+    }
     return true;
   }
   // novidades
@@ -713,7 +735,7 @@ function atualizarBotao() {
 }
 function irPara(i: number, voltando = false) {
   E.etapa = i; salvar(); progressoNoServidor();
-  $('pq-erro-geral').hidden = true;
+  $('pq-erro-geral').hidden = true; esconderFalta();
   const etapas = [...$('pq-etapas').children] as HTMLElement[];
   etapas.forEach((x) => { x.hidden = Number(x.dataset.etapa) !== i; });
   const atual = etapas.find((x) => Number(x.dataset.etapa) === i)!;
@@ -834,12 +856,12 @@ async function conferirId() {
     const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ acao: 'verificar', pesquisa: Q.slug, email: E.email, whatsapp: E.whats }) });
     const out = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(out.error || '');
-    if (out.ja_respondeu) { mostrarErro(fs, 'Este e-mail ou WhatsApp já participou da pesquisa. Cada pessoa participa uma vez. Obrigada!'); return; }
+    if (out.ja_respondeu) { mostrarErro(fs, 'Este e-mail ou WhatsApp já participou da pesquisa. Cada pessoa participa uma vez. Obrigada!', true); return; }
     enviando = false;
     const destino = retomar >= 0 && retomar !== ETAPA_ID ? retomar : 0; retomar = -1;
     irPara(destino);
   } catch (e) {
-    mostrarErro(fs, (e instanceof Error && e.message && !/fetch|network/i.test(e.message) ? e.message : 'Não foi possível conferir agora. Confira sua conexão e tente de novo.'));
+    mostrarErro(fs, (e instanceof Error && e.message && !/fetch|network/i.test(e.message) ? e.message : 'Não foi possível conferir agora. Confira sua conexão e tente de novo.'), true);
   } finally {
     enviando = false; b.disabled = false; b.classList.remove('pq-carregando'); atualizarBotao();
   }
@@ -1001,6 +1023,17 @@ function iniciar() {
     if (E.etapa <= 0) { irPara(ETAPA_ID, true); return; }
     irPara(anterior(E.etapa), true);
   });
+  $('pq-falta-ir').addEventListener('click', () => {
+    if (!alvoFalta) return;
+    alvoFalta.scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' });
+    // primeiro campo visível do trecho com problema (no celular e no computador os controles podem ser diferentes)
+    const sel = 'input:not([type=hidden]), select, textarea, button';
+    const visivel = (x: HTMLElement) => !!(x.offsetParent || x.getClientRects().length) && getComputedStyle(x).visibility !== 'hidden';
+    const lista = alvoFalta.matches(sel) ? [alvoFalta] : [...alvoFalta.querySelectorAll<HTMLElement>(sel), ...(alvoFalta.closest('.pq-etapa')?.querySelectorAll<HTMLElement>(sel) ?? [])];
+    lista.find(visivel)?.focus({ preventScroll: true });
+  });
+  // começou a corrigir: o aviso some (a mensagem junto ao campo some quando ele fica certo)
+  ['input', 'change'].forEach((t) => $('pq-etapas').addEventListener(t, () => esconderFalta()));
   $('pq-form').addEventListener('submit', (e) => {
     e.preventDefault();
     if (enviando || !validarEtapa(E.etapa)) return;

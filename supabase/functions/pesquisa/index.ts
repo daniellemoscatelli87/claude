@@ -2,7 +2,7 @@
 // { acao: "status", pesquisa }      devolve { ativa, questionario } (o questionário também serve ao painel).
 // { acao: "verificar", pesquisa, email, whatsapp }   devolve { ja_respondeu } (checado na identificação, antes das perguntas).
 // { acao: "enviar", pesquisa, envio_id, identificacao, respostas, relato?, novidades? }
-//     identificacao: { nome, email, whatsapp, ciente: true }, obrigatória. Uma participação por e-mail e uma por WhatsApp.
+//     identificacao: { nome, whatsapp, email?, ciente: true }, obrigatória (o e-mail é opcional). Uma participação por WhatsApp e, quando informado, uma por e-mail.
 //     Grava a participação uma única vez por envio_id (reenvio ou atualização da página não duplica).
 //     situacao vem das próprias respostas: Q1 = "Outra cidade" encerra (fora_de_curitiba, fora de Curitiba e Região Metropolitana); Q2 = "Não comprei" encerra (sem_compras).
 //     Perguntas com condicao (ex.: 2.1) só são exigidas e gravadas para quem escolheu uma das opções indicadas.
@@ -50,6 +50,7 @@ const JA = "Este e-mail ou WhatsApp já participou da pesquisa. Cada pessoa part
 // já existe participação com este e-mail ou WhatsApp (fora o próprio envio, para reenvios não serem barrados)
 async function jaRespondeu(slug: string, email: string, whats: string, envioId?: string) {
   for (const [col, val] of [["email", email], ["whatsapp", whats]]) {
+    if (!val) continue; // e-mail é opcional
     let qy = db.from("pesquisa_respostas").select("id", { count: "exact", head: true }).eq("pesquisa", slug).eq(col, val).neq("situacao", "parcial");
     if (envioId) qy = qy.neq("envio_id", envioId);
     const { count, error } = await qy;
@@ -63,6 +64,7 @@ async function jaRespondeu(slug: string, email: string, whats: string, envioId?:
 // porque e-mail e WhatsApp são únicos por pesquisa
 async function limparIncompletas(slug: string, email: string, whats: string, envioId: string) {
   for (const [col, val] of [["email", email], ["whatsapp", whats]]) {
+    if (!val) continue; // e-mail é opcional
     const { error } = await db.from("pesquisa_respostas").delete().eq("pesquisa", slug).eq("situacao", "parcial").eq(col, val).neq("envio_id", envioId);
     if (error) throw error;
   }
@@ -151,7 +153,7 @@ async function salvarParcial(q: Questionario, p: Record<string, unknown>, envioI
   const nome = String(id.nome ?? "").trim().replace(/\s+/g, " ");
   const email = String(id.email ?? "").trim().toLowerCase();
   const whats = String(id.whatsapp ?? "").replace(/\D/g, "");
-  if (!nome || nome.length > 120 || !EMAIL.test(email) || email.length > 254 || !WHATS.test(whats) || id.ciente !== true) return json({ error: "Identificação inválida." }, 400);
+  if (!nome || nome.length > 120 || (email && (!EMAIL.test(email) || email.length > 254)) || !WHATS.test(whats) || id.ciente !== true) return json({ error: "Identificação inválida." }, 400);
   const etapa = String(p.etapa ?? "");
   if (!q.perguntas.some((x) => x.id === etapa) && !ETAPAS_EXTRAS.includes(etapa)) return json({ error: "Etapa inválida." }, 400);
   if (await jaRespondeu(q.slug, email, whats, envioId)) return json({ error: JA, ja_respondeu: true }, 409);
@@ -182,7 +184,7 @@ async function salvarParcial(q: Questionario, p: Record<string, unknown>, envioI
   const agora = new Date().toISOString();
   const linha = {
     pesquisa: q.slug, envio_id: envioId, situacao: "parcial", versao_questionario: q.versao, respostas, relato, quer_novidades: null,
-    nome, email, whatsapp: whats, identificacao_em: agora, identificacao_versao: q.identificacao.versao, identificacao_texto: textoIdentificacao(q),
+    nome, email: email || null, whatsapp: whats, identificacao_em: agora, identificacao_versao: q.identificacao.versao, identificacao_texto: textoIdentificacao(q),
     parou_em: etapa, atualizado_em: agora,
   };
   await limparIncompletas(q.slug, email, whats, envioId);
@@ -215,7 +217,7 @@ Deno.serve(async (req) => {
   if (p.acao === "status") return json({ ativa, questionario: q });
   if (p.acao === "verificar") {
     const email = String(p.email ?? "").trim().toLowerCase(), whats = String(p.whatsapp ?? "").replace(/\D/g, "");
-    if (!EMAIL.test(email) || !WHATS.test(whats)) return json({ error: "Dados inválidos." }, 400);
+    if ((email && !EMAIL.test(email)) || !WHATS.test(whats)) return json({ error: "Dados inválidos." }, 400);
     try { return json({ ja_respondeu: await jaRespondeu(q.slug, email, whats) }); }
     catch (e) { console.error(e); return json({ error: "Não foi possível conferir agora. Tente de novo em instantes." }, 500); }
   }
@@ -234,8 +236,8 @@ Deno.serve(async (req) => {
     const email = String(id.email ?? "").trim().toLowerCase();
     const whats = String(id.whatsapp ?? "").replace(/\D/g, "");
     if (!nome || nome.length > 120) falha("Informe o seu nome.");
-    if (!EMAIL.test(email) || email.length > 254) falha("Informe um e-mail válido.");
     if (!WHATS.test(whats)) falha("Informe um WhatsApp válido, com DDD.");
+    if (email && (!EMAIL.test(email) || email.length > 254)) falha("Confira o e-mail ou deixe em branco.");
     if (id.ciente !== true) falha("Para participar, confirme que leu e concorda com o uso dos dados.");
     if (await jaRespondeu(q.slug, email, whats, envioId)) return json({ error: JA, ja_respondeu: true }, 409);
 
@@ -289,7 +291,7 @@ Deno.serve(async (req) => {
 
     const linha = {
       pesquisa: q.slug, envio_id: envioId, situacao, versao_questionario: q.versao, respostas, relato, quer_novidades: quer,
-      nome, email, whatsapp: whats, identificacao_em: agora, identificacao_versao: q.identificacao.versao, identificacao_texto: textoIdentificacao(q),
+      nome, email: email || null, whatsapp: whats, identificacao_em: agora, identificacao_versao: q.identificacao.versao, identificacao_texto: textoIdentificacao(q),
       parou_em: null, atualizado_em: agora, visualizado_em: null, // concluída: volta a aparecer como nova no sino
     };
     // quem já tinha progresso salvo (incompleta) tem a mesma linha atualizada; uma participação concluída nunca é sobrescrita
@@ -302,7 +304,7 @@ Deno.serve(async (req) => {
     if (error) { console.error("pesquisa_respostas", error.message); return json({ error: "Não foi possível salvar agora. Tente de novo em instantes." }, 500); }
     if (quer) {
       const contato = {
-        pesquisa: q.slug, envio_id: envioId, nome, email, whatsapp: whats,
+        pesquisa: q.slug, envio_id: envioId, nome, email: email || null, whatsapp: whats,
         consentimento_em: agora, consentimento_versao: q.consentimento.versao, consentimento_texto: q.consentimento.texto,
       };
       const { error: e2 } = await db.from("pesquisa_interessados").upsert(contato, { onConflict: "envio_id", ignoreDuplicates: true });

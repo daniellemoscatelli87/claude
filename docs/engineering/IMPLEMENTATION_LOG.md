@@ -596,17 +596,35 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-24 · Notificações: "Fulano respondeu a pesquisa", não publicado
+## 2026-11-24 · Painel de pesquisas: abas principais sublinhadas e "Ações" só com ícone, não publicado
+- **Pedido da dona do produto:** os dois níveis de abas usavam modelos parecidos (conflito visual); trocar o modelo das abas principais e deixar "Ações" só com o ícone de três pontinhos, ao lado das abas internas também no celular.
+- **`public/admin/pesquisas/index.html`:** Resultados · Inteligência · Respostas no modelo "Abas sublinhadas" do DS (linha da aba ativa em vermelho, deslizando entre as abas; sem movimento com "menos movimento"); abas internas continuam segmentadas. `menuAcoes` ganhou a opção só com ícone (`aria-label` e dica "Ações"). No celular, as abas internas e o botão ficam na mesma linha, com espaçamento ajustado para caber de 375 px em diante.
+- **Ajuste pedido em seguida:** abas principais renomeadas para Resultado · Inteligência · Dados (antes Resultados · Inteligência · Respostas); textos que citam as abas atualizados (subtítulo do painel e Destaques). Títulos das seções do PDF e da planilha do relatório não mudaram.
+- **Ajuste pedido em seguida:** abas sem números (Respostas, nos dois níveis, Relatos e Interessados), para números grandes não quebrarem a linha; a quantidade fica no card de cada aba (Respostas: "N participações…" e filtros; Relatos: nova linha "N relatos, do mais recente para o mais antigo."; Interessados: indicador "pessoas querem os avisos"). Testado em 375 px, iPhone 13 e computador.
+- **Ajuste pedido em seguida:** no celular, "Exportar relatório" ocupa 100% da largura, com o menu (PDF e Excel) também na largura toda. Medido: 343/343 px (375 px) e 358/358 px (iPhone 13); no computador continua no canto direito.
+- **Ajuste pedido em seguida:** abas internas com a mesma altura do botão de três pontinhos (40 px), medido em 375 px, iPhone 13 e computador.
+- **Ajuste pedido em seguida:** no celular, as abas ocupam 100% da largura (principais divididas na largura toda; internas + botão de três pontinhos preenchendo a linha). Medido: 343/343 px (375 px) e 358/358 px (iPhone 13).
+- **Verificação executada:** painel com dados fictícios e servidor simulado em 375 px, iPhone 13 e computador: linha da aba acompanha a aba escolhida; abas internas cabem sem rolagem (299/299 e 314/314 px); menu abre com "Exportar respostas" e "Excluir"; Esc devolve o foco ao botão; sem erros de JavaScript.
+
+## 2026-11-24 · Pesquisa: e-mail opcional e avisos de campo faltando mais visíveis, não publicado
+- **Pedido da dona do produto:** pessoas mais velhas podem não ter e-mail e podem não perceber o aviso de campo obrigatório. Ordem passa a ser nome, WhatsApp e e-mail (opcional); feedback de campos não preenchidos mais visual, intuitivo e acessível em todo o formulário.
+- **`src/pesquisa-moda.ts` e `.css`, `pesquisa/moda-curitiba/index.html`:** e-mail "(opcional)", validado só quando preenchido. Novo aviso colado aos botões (`#pq-falta`, `role="alert"`), sempre à vista, dizendo o que falta em linguagem simples ("Falta preencher seu nome e marcar a autorização."); "Ver" leva e põe o foco no primeiro campo com problema; some quando a pessoa começa a corrigir ou muda de etapa. A tela rola até o primeiro problema. Campos com problema: borda mais grossa, fundo rosado, rótulo em vermelho; mensagem junto ao campo maior, com ícone e fundo. Movimento de entrada e o tremor existente respeitam "menos movimento". Fundo da barra de botões refeito (pseudo-elemento) para não cortar o aviso.
+- **Ajuste pedido em seguida:** o aviso flutuante passa a ter uma mensagem única para qualquer campo faltando: "Preencha os campos em vermelho para prosseguir." (o detalhe continua junto de cada campo). Avisos do servidor ("já participou", sem conexão) mantêm o próprio texto. Testado: identificação, pergunta 1, bairro, notas, grade e "Sobre você" mostram a mensagem única; "já participou" mostra o próprio texto.
+- **`supabase/functions/pesquisa/index.ts`:** e-mail opcional em `verificar`, `parcial` e `enviar` (gravado como nulo); uma participação por WhatsApp e, quando informado, por e-mail.
+- **Migração `20261124200000_pesquisa_email_opcional.sql`:** `pesquisa_interessados.email` aceita nulo (o CHECK de formato continua valendo quando informado). `pesquisa_respostas.email` já aceitava nulo, com índice único parcial.
+- **Verificação executada:** função no Node com banco simulado (21 casos, incluindo sem e-mail: parcial, verificar, final com avisos, duas pessoas sem e-mail sem conflito, WhatsApp repetido bloqueado, e-mail inválido recusado, sem WhatsApp recusado). Navegador (iPhone 13 e computador) com servidor simulado: ordem dos campos, avisos na identificação, pergunta 1, bairro, notas, grade de dificuldade e "Sobre você"; "Ver" põe o foco no campo; participação sem e-mail segue; fluxos completos, busca, notas, Home e salvamento parcial sem erros de JavaScript.
+
+## 2026-11-24 · Notificações: "Fulano respondeu a pesquisa", publicado (#223)
 - **Pedido da dona do produto:** o aviso de resposta passa a trazer o nome da pessoa.
 - **`public/admin/admin.js`:** um aviso por resposta concluída ("<nome> respondeu a pesquisa", com o nome da pesquisa embaixo e a hora da conclusão), no lugar de um aviso agrupado por pesquisa. Novas: até 200; já vistas: as 30 mais recentes dos últimos 30 dias. Contador do sino inalterado.
 - **Verificação executada:** painel no navegador (iPhone 13) com dados fictícios e servidor simulado: 3 novas e as já vistas, cada uma com nome, pesquisa e hora; sem erros de JavaScript.
 
-## 2026-11-24 · Pesquisa: tela de sucesso mais enxuta, não publicado
+## 2026-11-24 · Pesquisa: tela de sucesso mais enxuta, publicado (#223)
 - **Pedido da dona do produto:** sai a frase "Cada resposta contribui para este projeto de inovação." e o quadro com o sino (aviso do lançamento ou agradecimento); a frase "Para cancelar os avisos…" vai para baixo do cartão "Indique a pesquisa".
 - **Arquivos:** `pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.ts` (texto do quadro removido), `src/pesquisa-moda.css` (espaço acima da frase).
 - **Verificação executada:** navegador (iPhone 13) com servidor simulado, fluxo completo com "Sim" (frase de cancelamento abaixo do cartão) e com "Não" (sem a frase); sem erros de JavaScript.
 
-## 2026-11-24 · Pesquisa: pergunta aberta (relato) antes de "Sobre você", não publicado
+## 2026-11-24 · Pesquisa: pergunta aberta (relato) antes de "Sobre você", publicado (#223)
 - **Pedido da dona do produto:** a pergunta da experiência frustrante vem antes das perguntas sobre a pessoa (gênero, faixa etária e estado civil).
 - **`src/pesquisa-moda.ts`:** ordem das etapas extras passa a ser relato → perfil → novidades (constantes `ETAPA_RELATO`, `ETAPA_PERFIL` e ordem de montagem). Servidor e painel não mudam.
 - **Verificação executada:** navegador (iPhone 13) com servidor simulado: depois da pergunta 12 aparece o relato ("Pular"), depois "Sobre você", depois os avisos; Voltar do perfil volta ao relato com o texto mantido; envio final com relato, perfil e novidades; salvamentos parciais com as etapas certas; fluxos completos (Região Metropolitana, Curitiba, outra cidade) sem erros de JavaScript.

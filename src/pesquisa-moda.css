@@ -2,7 +2,7 @@
    Mobile-first: uma ação principal por tela, opções grandes para o toque, botões fixos no rodapé do celular. */
 :root {
   --pq-red: #D44D4D; --pq-red-escuro: #B83A3A; --pq-tint: #FDF2F2; --pq-ink: #131A27; --pq-texto: #334155; --pq-muted: #627288;
-  --pq-linha: rgba(19, 26, 39, 0.10); --pq-fundo: #F6F7FA; --pq-card: #FFFFFF; --pq-erro: #C62828;
+  --pq-linha: rgba(19, 26, 39, 0.10); --pq-fundo: #F6F7FA; --pq-card: #FFFFFF; --pq-erro: #C62828; --pq-erro-fundo: #FFF5F5;
   --pq-sombra: 0 1px 2px rgba(13, 17, 25, 0.04), 0 12px 32px -18px rgba(13, 17, 25, 0.18);
   --pq-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -178,6 +178,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-outro { padding: 2px 0 4px 52px; display: grid; gap: 6px; animation: pq-entra .35s var(--pq-ease) both; }
 .pq-rotulo { font-size: 14px; font-weight: 600; color: var(--pq-ink); }
 .pq-obrig { color: var(--pq-red); }
+.pq-opcional { color: var(--pq-muted); font-weight: 500; }
 
 /* Campos de texto */
 .pq-main input[type=text], .pq-main input[type=email], .pq-main input[type=tel], .pq-main textarea {
@@ -296,11 +297,29 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-aceite-q.pq-invalido .pq-caixa { border-color: var(--pq-erro); }
 
 /* Erros */
-.pq-erro { display: flex; gap: 6px; align-items: flex-start; margin: 10px 0 0; font-size: 13px; font-weight: 600; color: var(--pq-erro); }
-.pq-erro::before { content: "!"; flex: none; width: 16px; height: 16px; margin-top: 1px; border-radius: 999px; background: var(--pq-erro); color: #fff; font-size: 11px; font-weight: 800; display: grid; place-items: center; }
+.pq-erro { display: flex; gap: 8px; align-items: flex-start; margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--pq-erro-fundo); font-size: 14px; line-height: 1.45; font-weight: 600; color: var(--pq-erro);
+  scroll-margin-bottom: 150px; animation: pq-abre .25s var(--pq-ease) both; }
+.pq-erro::before { content: "!"; flex: none; width: 18px; height: 18px; margin-top: 1px; border-radius: 999px; background: var(--pq-erro); color: #fff; font-size: 12px; font-weight: 800; display: grid; place-items: center; }
+/* campo com problema: borda mais grossa, fundo rosado e rótulo em vermelho */
+.pq-campo.pq-invalido .pq-rotulo, .pq-perfil-campo.pq-invalido .pq-perfil-titulo, .pq-aspecto.pq-faltando .pq-aspecto-t { color: var(--pq-erro); }
+.pq-campo.pq-invalido input[type=text], .pq-campo.pq-invalido input[type=email], .pq-campo.pq-invalido input[type=tel] { border-width: 2px; background: var(--pq-erro-fundo); box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.12); }
+.pq-aceite-q.pq-invalido .pq-caixa { border-width: 2px; background: var(--pq-erro-fundo); box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.14); }
+.pq-perfil-campo.pq-invalido .pq-select, .pq-perfil-campo.pq-invalido .pq-escolher { border-width: 2px; background-color: var(--pq-erro-fundo); }
+.pq-linha.pq-faltando, .pq-aspecto.pq-faltando { background: var(--pq-erro-fundo); }
+/* aviso colado aos botões: sempre à vista, diz o que falta e leva até o campo */
+.pq-falta { position: absolute; left: 0; right: 0; bottom: calc(100% + 10px); z-index: 2; }
+.pq-falta-ir { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 10px 14px; border: 1.5px solid var(--pq-erro); border-radius: 14px; background: #FFF5F5;
+  color: #8E1F1F; font: inherit; font-size: 14px; font-weight: 600; line-height: 1.4; text-align: left; cursor: pointer; box-shadow: 0 10px 28px -12px rgba(142, 31, 31, 0.45); }
+.pq-falta-ic { flex: none; width: 22px; height: 22px; border-radius: 999px; background: var(--pq-erro); color: #fff; font-size: 13px; font-weight: 800; display: grid; place-items: center; }
+.pq-falta-ir > span:nth-child(2) { flex: 1; min-width: 0; }
+.pq-falta-ver { flex: none; font-size: 13px; font-weight: 700; color: var(--pq-erro); text-decoration: underline; text-underline-offset: 3px; }
+.pq-falta-ir:focus-visible { outline: 3px solid rgba(198, 40, 40, 0.4); outline-offset: 2px; }
+.pq-falta-entra { animation: pq-falta-entra .35s var(--pq-ease) both; }
+@keyframes pq-falta-entra { 0% { opacity: 0; transform: translateY(10px); } 60% { opacity: 1; transform: translateY(-2px); } 100% { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .pq-falta-entra, .pq-erro { animation: none; } }
 .pq-campo .pq-erro { margin-top: 0; }
-.pq-etapa.pq-invalido .pq-op:not(:has(input:checked)) { border-color: rgba(198, 40, 40, 0.45); }
-.pq-etapa.pq-invalido .pq-nota span { border-color: rgba(198, 40, 40, 0.45); }
+.pq-etapa.pq-invalido .pq-op:not(:has(input:checked)) { border-color: rgba(198, 40, 40, 0.6); background: var(--pq-erro-fundo); }
+.pq-etapa.pq-invalido .pq-nota span { border-color: rgba(198, 40, 40, 0.6); }
 .pq-treme { animation: pq-treme .4s ease both !important; }
 @keyframes pq-treme { 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
 .pq-erro-geral { margin: 18px 0 0; padding: 12px 14px; border-radius: 12px; background: #FDECEC; color: #8E1F1F; font-size: 14px; font-weight: 600; }
@@ -308,8 +327,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* Navegação: presa ao rodapé da tela durante todo o formulário (fundo de ponta a ponta) */
 .pq-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 28px;
-  position: sticky; bottom: 0; z-index: 10; padding: 14px 0 calc(14px + env(safe-area-inset-bottom)); background: rgba(246, 247, 250, 0.95);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 0 0 100vmax rgba(246, 247, 250, 0.95), 0 -1px 0 100vmax var(--pq-linha); clip-path: inset(-1px -100vmax 0); }
+  position: sticky; bottom: 0; z-index: 10; padding: 14px 0 calc(14px + env(safe-area-inset-bottom)); }
+/* fundo de ponta a ponta (sem cortar o aviso de campo faltando, que fica logo acima da barra) */
+.pq-nav::before { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(246, 247, 250, 0.95); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  box-shadow: 0 0 0 100vmax rgba(246, 247, 250, 0.95), 0 -1px 0 100vmax var(--pq-linha); clip-path: inset(-1px -100vmax 0); }
 .pq-nav .pq-btn-primario { min-width: 180px; white-space: nowrap; }
 /* o formulário ocupa a tela toda abaixo do cabeçalho: em perguntas curtas a barra de botões fica presa embaixo, como na abertura */
 #pq-form:not([hidden]) { display: flex; flex-direction: column; min-height: calc(100svh - var(--pq-topo-h, 160px) - 68px); }

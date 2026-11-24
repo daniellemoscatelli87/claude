@@ -305,7 +305,7 @@
   @keyframes pa-pulsa { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 40%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
   /* abas internas de Respostas no padrão SegmentedControl do DS (variante suave, tamanho sm) */
   .pa-abas.pa-abas-int { gap: 0; padding: 0; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-xs, var(--shadow-sm)); overflow: hidden; }
-  .pa-abas.pa-abas-int button { height: 32px; padding: 0 12px; border-radius: 0; font-size: 13px; font-weight: 600; color: var(--muted-foreground); border-left: 1px solid var(--border); transition: background-color .15s, color .15s; display: inline-flex; align-items: center; }
+  .pa-abas.pa-abas-int button { height: 38px; padding: 0 12px; border-radius: 0; font-size: 13px; font-weight: 600; color: var(--muted-foreground); border-left: 1px solid var(--border); transition: background-color .15s, color .15s; display: inline-flex; align-items: center; }
   .pa-abas.pa-abas-int button:first-child { border-left: 0; }
   .pa-abas.pa-abas-int button:hover { background: var(--accent, var(--muted)); color: var(--foreground); }
   .pa-abas.pa-abas-int button[aria-selected=true] { background: var(--primary-muted); color: var(--primary-text); box-shadow: none; }
@@ -317,6 +317,30 @@
   .pa-abas-linha > .pa-abas { margin-bottom: 0; min-width: 0; }
   .pa-abas-acoes { position: relative; z-index: 6; display: flex; justify-content: flex-end; margin-left: auto; flex: none; }
   @media (max-width: 767px) { .pa-abas-linha { flex-direction: column-reverse; align-items: stretch; gap: 10px; } .pa-abas-linha > .pa-abas { align-self: flex-start; } }
+  /* abas principais (Resultados · Inteligência · Respostas): modelo sublinhado do DS, com a linha da aba ativa deslizando */
+  .pa-abas-ind { display: none; }
+  .pa-abas-linha-sec { align-items: flex-end; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+  .pa-abas.pa-abas-sub { position: relative; gap: 4px; padding: 0; background: none; border-radius: 0; overflow-x: auto; scrollbar-width: none; }
+  .pa-abas.pa-abas-sub::-webkit-scrollbar { display: none; }
+  .pa-abas.pa-abas-sub button { display: inline-flex; align-items: center; padding: 12px 16px; border-radius: 0; background: none; box-shadow: none; color: var(--muted-foreground); transition: color .15s, box-shadow .15s; }
+  .pa-abas.pa-abas-sub button:hover { color: var(--foreground); box-shadow: inset 0 -2px 0 var(--border); }
+  .pa-abas.pa-abas-sub button[aria-selected=true] { background: none; box-shadow: none; color: var(--primary-text); }
+  .pa-abas.pa-abas-sub button:focus-visible { outline: 2px solid var(--ring, var(--primary)); outline-offset: -2px; border-radius: var(--radius-sm); }
+  .pa-abas.pa-abas-sub .n { background: var(--muted); color: var(--muted-foreground); }
+  .pa-abas.pa-abas-sub button[aria-selected=true] .n { background: var(--primary-muted); color: var(--primary-text); }
+  .pa-abas.pa-abas-sub .pa-abas-ind { display: block; position: absolute; left: 0; bottom: 0; width: 0; height: 2px; border-radius: 2px 2px 0 0; background: var(--primary); pointer-events: none;
+    transition: transform .3s var(--ease-out, ease-out), width .3s var(--ease-out, ease-out); }
+  .pa-abas-linha-sec .pa-abas-acoes { margin-bottom: 8px; }
+  @media (max-width: 767px) { .pa-abas-linha-sec { gap: 12px; } .pa-abas-linha-sec > .pa-abas { align-self: stretch; width: 100%; } .pa-abas-linha-sec .pa-abas-acoes { margin-bottom: 0; }
+    .pa-abas-linha-sec .pa-abas-acoes, .pa-abas-linha-sec .pa-menu-caixa, .pa-abas-linha-sec .pa-menu-btn { width: 100%; } .pa-abas-linha-sec .pa-menu-btn { justify-content: center; } .pa-abas-linha-sec .pa-menu { left: 0; right: 0; width: auto; max-width: none; } .pa-abas.pa-abas-sub button { flex: 1 0 auto; justify-content: center; padding: 12px 10px; } }
+  @media (prefers-reduced-motion: reduce) { .pa-abas.pa-abas-sub .pa-abas-ind { transition: none; } }
+  /* "Ações" só com o ícone de três pontinhos, na mesma linha das abas internas (também no celular) */
+  .pa-menu-btn.pa-menu-ic { width: 36px; height: 36px; padding: 0; display: grid; place-items: center; }
+  .pa-menu-btn.pa-menu-ic svg { width: 20px; height: 20px; transform: none !important; }
+  .pa-menu-caixa.aberto .pa-menu-btn.pa-menu-ic { background: var(--muted); }
+  @media (max-width: 767px) { .pa-abas-linha-int { flex-direction: row; align-items: center; gap: 6px; } .pa-abas-linha-int > .pa-abas { flex: 1 1 auto; width: auto; }
+    .pa-abas.pa-abas-int button { flex: 1 0 auto; justify-content: center; padding: 0 7px; font-size: 12.5px; } .pa-abas.pa-abas-int .n { margin-left: 4px; padding: 1px 6px; } }
+  @media (max-width: 380px) { .pa-abas.pa-abas-int button { padding: 0 5px; } .pa-abas.pa-abas-int .n { padding: 1px 5px; } }
   .pa-rl-del { flex: none; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; color: var(--muted-foreground); background: none; border: 1px solid transparent; border-radius: var(--radius-md); cursor: pointer; transition: color .15s, background-color .15s, border-color .15s; }
   .pa-rl-del svg { width: 18px; height: 18px; }
   .pa-rl-del:hover, .pa-rl-del:focus-visible { color: var(--destructive, var(--primary-text)); background: var(--primary-muted); border-color: color-mix(in srgb, var(--primary) 25%, transparent); outline: none; }
@@ -618,7 +642,7 @@
     P = p.data; Q = q.questionario; I = i.data || []; separar(r.data || []);
     document.title = P.titulo + " | Área restrita";
     $("titulo").textContent = P.titulo;
-    $("sub").textContent = "Projeto do Dani Moscatelli Studio. Resultados analisados em conjunto; os nomes aparecem só na aba Respostas.";
+    $("sub").textContent = "Projeto do Dani Moscatelli Studio. Resultados analisados em conjunto; os nomes aparecem só na aba Dados.";
     desenhar();
     // ao abrir, as respostas novas deixam de aparecer como notificação
     const novas = R.filter((x) => !x.visualizado_em).map((x) => x.id);
@@ -671,11 +695,13 @@
   // Setas para cima e para baixo navegam entre os itens. O próprio botão mostra o andamento (ex.: gerando planilha).
   // Menu suspenso (padrão "Ações"): abre abaixo do botão, alinhado à direita; Esc, clique fora ou escolher fecham.
   // Os itens são montados a cada abertura (montar), para refletir o estado atual (ex.: o que está marcado na lista).
-  function menuAcoes(id = "pa-acoes-btn", rotulo = "Ações", montar = null) {
+  function menuAcoes(id = "pa-acoes-btn", rotulo = "Ações", montar = null, soIcone = false) {
     const caixa = el("div", "pa-menu-caixa");
-    const btn = el("button", "pa-btn pa-menu-btn"); btn.type = "button";
+    const btn = el("button", "pa-btn pa-menu-btn" + (soIcone ? " pa-menu-ic" : "")); btn.type = "button";
     btn.setAttribute("aria-haspopup", "menu"); btn.setAttribute("aria-expanded", "false"); btn.id = id;
-    btn.innerHTML = '<span>' + rotulo + '</span>' + svg('<path d="m6 9 6 6 6-6"/>');
+    // só ícone (três pontinhos verticais): o nome fica para leitores de tela e na dica ao passar o mouse
+    if (soIcone) { btn.setAttribute("aria-label", rotulo); btn.title = rotulo; btn.innerHTML = svg('<circle cx="12" cy="5" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/>'); }
+    else btn.innerHTML = '<span>' + rotulo + '</span>' + svg('<path d="m6 9 6 6 6-6"/>');
     const menu = el("div", "pa-menu"); menu.setAttribute("role", "menu"); menu.setAttribute("aria-labelledby", btn.id); menu.hidden = true;
     const item = (ic, texto, dica, acao, cls = "") => {
       const b = el(acao.href ? "a" : "button", "pa-menu-it" + cls); b.setAttribute("role", "menuitem"); b.tabIndex = -1;
@@ -747,7 +773,7 @@
 
   let SELECAO = null; // seleção da aba aberta (Respostas ou Interessados), usada pelo item "Excluir" do menu Ações
   let ABA_INICIAL = null; // depois de excluir, o painel é redesenhado e volta para a mesma aba
-  // Abas de cima: Resultados · Inteligência · Respostas, com "Exportar relatório" (visão analítica) no canto direito.
+  // Abas de cima: Resultado · Inteligência · Dados, com "Exportar relatório" (visão analítica) no canto direito.
   // Dentro de Respostas, abas internas Respostas · Relatos · Interessados, com o menu "Ações" (exportar respostas e excluir).
   const SUBABAS = ["respostas", "relatos", "interessados"];
   function linhaDeAbas(defs, rotuloAria, abrir, prefixo) {
@@ -758,12 +784,17 @@
       b.addEventListener("click", () => abrir(id));
       bar.appendChild(b); return b;
     });
-    return { bar, marcar: (id) => botoes.forEach((b) => b.setAttribute("aria-selected", String(b.id === prefixo + id))) };
+    // abas sublinhadas (seções da pesquisa): a linha vermelha desliza até a aba escolhida
+    const ind = el("span", "pa-abas-ind"); ind.setAttribute("aria-hidden", "true"); bar.appendChild(ind);
+    const moverInd = () => { const b = botoes.find((x) => x.getAttribute("aria-selected") === "true"); if (!b || !b.offsetWidth) return; ind.style.width = b.offsetWidth + "px"; ind.style.transform = "translateX(" + b.offsetLeft + "px)"; };
+    new ResizeObserver(moverInd).observe(bar);
+    return { bar, marcar: (id) => { botoes.forEach((b) => b.setAttribute("aria-selected", String(b.id === prefixo + id))); requestAnimationFrame(moverInd); } };
   }
   function abas() {
     const box = el("div");
     const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
-    const { bar, marcar } = linhaDeAbas([["resultados", "Resultados", null], ["inteligencia", "Inteligência", null], ["respostas", "Respostas", R.length + RP.length]], "Seções da pesquisa", (id) => abrir(id), "aba-");
+    const { bar, marcar } = linhaDeAbas([["resultados", "Resultado", null], ["inteligencia", "Inteligência", null], ["respostas", "Dados", null]], "Seções da pesquisa", (id) => abrir(id), "aba-");
+    bar.classList.add("pa-abas-sub"); // abas principais: modelo sublinhado do DS (as internas de Respostas são segmentadas)
     const abrir = (id, sub) => {
       SELECAO = null; marcar(id);
       corpo.setAttribute("aria-labelledby", "aba-" + id);
@@ -775,7 +806,7 @@
       item(IC_BAIXAR, "PDF", "", { fn: exportarPdf }),
       item(IC_BAIXAR, "Excel", "", { fn: () => exportarExcel(btn) }),
     ]));
-    const linha = el("div", "pa-abas-linha"); linha.append(bar, exp);
+    const linha = el("div", "pa-abas-linha pa-abas-linha-sec"); linha.append(bar, exp);
     box.append(linha, corpo);
     const ini = ABA_INICIAL; ABA_INICIAL = null;
     if (SUBABAS.includes(ini)) abrir("respostas", ini); else abrir(ini || "resultados");
@@ -785,7 +816,8 @@
     const box = el("div", "pa-area-resp");
     const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
     const relatos = relatosR();
-    const { bar, marcar } = linhaDeAbas([["respostas", "Respostas", R.length + RP.length], ["relatos", "Relatos", relatos.length], ["interessados", "Interessados", interessadosR().length]], "Respostas, relatos e interessados", (id) => abrirSub(id), "aba-sub-");
+    // sem números nas abas (números grandes quebrariam a linha); a quantidade aparece no card de cada aba
+    const { bar, marcar } = linhaDeAbas([["respostas", "Respostas", null], ["relatos", "Relatos", null], ["interessados", "Interessados", null]], "Respostas, relatos e interessados", (id) => abrirSub(id), "aba-sub-");
     bar.classList.add("pa-abas-int");
     const abrirSub = (id) => {
       SELECAO = null; marcar(id);
@@ -802,8 +834,8 @@
         l.push(el("div", "pa-menu-sep"), ex);
       }
       return l;
-    }));
-    const linha = el("div", "pa-abas-linha"); linha.append(bar, acoes);
+    }, true));
+    const linha = el("div", "pa-abas-linha pa-abas-linha-int"); linha.append(bar, acoes);
     box.append(linha, corpo);
     abrirSub(sub);
     return box;
@@ -1337,7 +1369,7 @@
   function cardInsights(comp) {
     const card = el("section", "card pa-dest");
     const cab = el("div", "pa-dest-cab");
-    const tit = el("div"); tit.append(el("h2", null, "Destaques"), el("p", "muted", "O principal de cada pergunta, em números. Passe para as abas Resultados e Inteligência para ver os detalhes."));
+    const tit = el("div"); tit.append(el("h2", null, "Destaques"), el("p", "muted", "O principal de cada pergunta, em números. Passe para as abas Resultado e Inteligência para ver os detalhes."));
     cab.appendChild(tit);
     if (comp.length && comp.length < 30) { const av = el("span", "pa-dest-amostra", `Amostra pequena: ${plural(comp.length, "resposta completa", "respostas completas")}`); av.title = "Com poucas respostas, os percentuais ainda podem mudar bastante a cada nova participação."; cab.appendChild(av); }
     card.appendChild(cab);
@@ -2094,6 +2126,7 @@
   function listaRelatos(lista) {
     const card = el("section", "card pa-entra");
     if (!lista.length) { card.appendChild(vazio("Nenhum relato ainda", "A pergunta aberta é opcional; os relatos aparecem aqui quando alguém escrever.")); return card; }
+    card.appendChild(el("p", "pa-rl-cont", `${plural(lista.length, "relato", "relatos")}, do mais recente para o mais antigo.`));
     lista.forEach((x) => { const d = el("div", "pa-relato"); d.append(el("p", null, x.relato), el("small", null, fmtDate(x.created_at))); card.appendChild(d); });
     return card;
   }
