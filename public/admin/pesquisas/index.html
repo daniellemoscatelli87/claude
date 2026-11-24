@@ -307,7 +307,10 @@
   .pa-menu-it:disabled:hover { background: none; }
   .pa-pulsa { animation: pa-pulsa .9s var(--ease-out, ease-out) 2; }
   @keyframes pa-pulsa { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 40%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
-  .pa-abas-acoes { position: relative; z-index: 6; display: flex; justify-content: flex-end; margin: 0 0 10px; }
+  .pa-abas-linha { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .pa-abas-linha > .pa-abas { margin-bottom: 0; min-width: 0; }
+  .pa-abas-acoes { position: relative; z-index: 6; display: flex; justify-content: flex-end; margin-left: auto; flex: none; }
+  @media (max-width: 767px) { .pa-abas-linha { flex-direction: column-reverse; align-items: stretch; gap: 10px; } .pa-abas-linha > .pa-abas { align-self: flex-start; } }
   .pa-rl-del { flex: none; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; color: var(--muted-foreground); background: none; border: 1px solid transparent; border-radius: var(--radius-md); cursor: pointer; transition: color .15s, background-color .15s, border-color .15s; }
   .pa-rl-del svg { width: 18px; height: 18px; }
   .pa-rl-del:hover, .pa-rl-del:focus-visible { color: var(--destructive, var(--primary-text)); background: var(--primary-muted); border-color: color-mix(in srgb, var(--primary) 25%, transparent); outline: none; }
@@ -762,8 +765,10 @@
       corpo.replaceChildren(id === "resultados" ? resultados() : id === "inteligencia" ? inteligencia() : id === "respostas" ? listaRespostas() : id === "relatos" ? listaRelatos(relatos) : listaInteressados());
       requestAnimationFrame(() => requestAnimationFrame(animarGraficos));
     };
+    // abas e menu "Ações" na mesma linha no computador (menu no canto direito); no celular o menu fica acima das abas
     const acoes = el("div", "pa-abas-acoes"); acoes.appendChild(menuAcoes());
-    box.append(acoes, bar, corpo);
+    const linha = el("div", "pa-abas-linha"); linha.append(bar, acoes);
+    box.append(linha, corpo);
     abrir(ABA_INICIAL || "resultados"); ABA_INICIAL = null;
     return box;
   }

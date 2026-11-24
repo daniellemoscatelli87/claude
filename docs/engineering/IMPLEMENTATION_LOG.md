@@ -612,6 +612,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - O item mostra a quantidade ("Excluir 2 respostas selecionadas") e, embaixo, uma dica ("Apaga também o contato delas em Interessados" ou "As respostas da pesquisa continuam").
   - Sem nada marcado, o item fica desativado, com "Marque as caixas na lista para escolher". Nas outras abas, ele não aparece.
   - A barra mostra "Selecionar todos", a contagem e "Para excluir, use o menu Ações". Na primeira marcação, o botão "Ações" pulsa, respeitando "menos movimento".
+- No computador (a partir de 768 px), o menu "Ações" fica na mesma linha das abas, no canto direito, por pedido da dona do produto. No celular continua acima das abas, alinhado à direita.
   - Teste: computador e iPhone 13, sem erros de JS. Conferidos:
     - o menu só com as exportações em Resultados;
     - o item desativado sem seleção;
