@@ -523,8 +523,8 @@
       ]);
       // Respostas novas das pesquisas do Studio (um aviso por pesquisa, até a administradora abrir o painel dela)
       const [pr, prv, ps] = await Promise.all([
-        sb.from("pesquisa_respostas").select("pesquisa, created_at", { count: "exact" }).is("visualizado_em", null).order("created_at", { ascending: false }).limit(2000),
-        sb.from("pesquisa_respostas").select("pesquisa, visualizado_em").not("visualizado_em", "is", null).gte("visualizado_em", desde).order("visualizado_em", { ascending: false }).limit(500),
+        sb.from("pesquisa_respostas").select("pesquisa, created_at", { count: "exact" }).is("visualizado_em", null).neq("situacao", "parcial").order("created_at", { ascending: false }).limit(2000),
+        sb.from("pesquisa_respostas").select("pesquisa, visualizado_em").not("visualizado_em", "is", null).neq("situacao", "parcial").gte("visualizado_em", desde).order("visualizado_em", { ascending: false }).limit(500),
         sb.from("pesquisas").select("slug, titulo"),
       ]);
       const tituloPesq = Object.fromEntries((ps.data || []).map((x) => [x.slug, x.titulo]));
