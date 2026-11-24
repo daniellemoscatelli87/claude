@@ -284,6 +284,7 @@
   .pa-rl-nome.sem, .pa-ficha-tit b.sem { font-weight: 600; color: var(--muted-foreground); font-style: italic; }
   .pa-rl-res { font-size: 13px; color: var(--muted-foreground); overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
   .pa-rl-l1 { grid-area: l1; } .pa-rl-res { grid-area: res; }
+  .pa-rl-sem-sit .pa-rl-abrir { grid-template-columns: minmax(0, 1fr); grid-template-areas: "l1" "res"; }
   .pa-rl-abrir > .pa-resp-sit { grid-area: sit; justify-self: start; }
   .pa-rl-cb { flex: none; display: grid; place-items: center; width: 40px; height: 40px; margin-left: 2px; border-radius: var(--radius-md); cursor: pointer; }
   .pa-rl-cb input, .pa-sel-todas input { width: 18px; height: 18px; margin: 0; accent-color: var(--primary); cursor: pointer; }
@@ -1947,6 +1948,7 @@
     SELECAO = { n: () => visiveis().filter((x) => sel.has(x.id)).length, fn: excluirSelecionadas };
     const pintar = () => {
       filtros.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.f === FILTRO)));
+      lista.classList.toggle("pa-rl-sem-sit", FILTRO !== "todas");
       const vs = visiveis();
       cont.textContent = `${plural(vs.length, "participação", "participações")}, da mais recente para a mais antiga.`;
       lista.replaceChildren(...vs.map((x, k) => {
@@ -1959,7 +1961,8 @@
         const ab = el("button", "pa-rl-abrir"); ab.type = "button"; ab.setAttribute("aria-haspopup", "dialog");
         const linha1 = el("span", "pa-rl-l1");
         linha1.append(el("b", "pa-rl-nome" + (x.nome ? "" : " sem"), nomeDe(x)), el("span", "pa-rl-data", `#${numResp(x)} · ${fmtDate(x.created_at)}`));
-        ab.append(linha1, el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao));
+        // a etiqueta da situação só aparece em "Todas" (respostas misturadas); num filtro, todas são iguais
+        ab.appendChild(linha1); if (FILTRO === "todas") ab.appendChild(el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao));
         const res = resumoDe(x); if (res) ab.appendChild(el("span", "pa-rl-res", res));
         ab.setAttribute("aria-label", `Abrir a resposta de ${nomeDe(x)}, #${numResp(x)}, ${fmtDate(x.created_at)}, ${SIT_CURTA[x.situacao] || x.situacao}`);
         ab.addEventListener("click", () => abrirFicha(vs, k, ab));
@@ -2062,7 +2065,7 @@
     dlg.append(cab, rolagem, nav);
     const mostrar = (n, dir) => {
       k = n; const x = lista[k];
-      tit.replaceChildren(el("b", x.nome ? null : "sem", nomeDe(x)), el("span", null, `#${numResp(x)} · ${fmtDate(x.created_at)}`), el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao));
+      tit.replaceChildren(el("b", x.nome ? null : "sem", nomeDe(x)), el("span", null, `#${numResp(x)} · ${fmtDate(x.created_at)}`), ...(FILTRO === "todas" ? [el("span", "pa-resp-sit " + x.situacao, SIT_CURTA[x.situacao] || x.situacao)] : []));
       del.setAttribute("aria-label", `Excluir a resposta de ${nomeDe(x)}`);
       const corpo = fichaConteudo(x);
       if (dir && !matchMedia("(prefers-reduced-motion: reduce)").matches) corpo.classList.add(dir > 0 ? "vem-dir" : "vem-esq");
