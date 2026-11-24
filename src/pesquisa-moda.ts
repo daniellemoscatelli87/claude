@@ -509,7 +509,9 @@ function montarIdentificacao() {
   const errA = el('p', 'pq-erro'); errA.id = 'pq-ciente-erro'; errA.hidden = true; cb.setAttribute('aria-describedby', errA.id);
   cb.addEventListener('change', () => { E.ciente = cb.checked; salvar(); erroCampo(cb, ''); });
   aceite.append(lab, errA);
-  fs.append(campos, lgpd, aceite, erroBox(fs.id));
+  // aviso da LGPD e o aceite no mesmo cartão branco, separados por uma linha
+  const cartao = el('div', 'pq-lgpd-cartao'); cartao.append(lgpd, aceite);
+  fs.append(campos, cartao, erroBox(fs.id));
   return fs;
 }
 

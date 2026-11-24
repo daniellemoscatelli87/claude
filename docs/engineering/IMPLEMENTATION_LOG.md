@@ -602,6 +602,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Removido `p.pq-privacidade` de `pesquisa/moda-curitiba/index.html` e o estilo correspondente.
 - Sem repetição da etapa: o texto vermelho acima do título ("PERGUNTA 2", "ANTES DE COMEÇAR", "SOBRE VOCÊ"…) sai de todas as etapas, por escolha da dona do produto. A etapa fica só na barra de progresso ("Pergunta 2 de 12", "Antes de começar", "Quase lá · sobre você"); no título fica um texto só para leitores de tela.
 - Identificação: "quem é você" em vermelho no título "Conte quem é você".
+- Identificação: o aceite ("Li e concordo…") fica dentro do cartão branco do aviso da LGPD, separado por uma linha.
 - Ícones dos cartões "Leva de 3 a 5 minutos", "Participação voluntária" e "Privacidade protegida": padrão cinza (fundo graphite-50 `#EDF0F5` e ícone em `--pq-muted`), por pedido da dona do produto.
 - Teste executado: Playwright no iPhone 13 (abertura sem o texto, botão "Começar pesquisa" funcionando, link da política no rodapé e na identificação), sem erros de JS.
 
