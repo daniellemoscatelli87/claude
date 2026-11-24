@@ -685,6 +685,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - Lista: a coluna da situação tem largura fixa de 168 px, igual para todas as linhas, com as etiquetas alinhadas à esquerda dela. No celular, a etiqueta ganha linha própria, entre a data e o resumo.
     - Ficha, pergunta 10: a coluna da etiqueta (Fácil, Difícil…) tem largura fixa de 112 px.
     - Teste: medição automática no computador e no iPhone 13, sem nenhum texto avançando sobre a coluna das etiquetas e com todas começando na mesma posição (computador: 1017 px na lista e 1135 px na ficha); sem erros de JS.
+  - Lista: o hover e a seleção pintam a linha inteira (caixa de seleção, texto, etiqueta e lixeira), sem cantos arredondados, por pedido da dona do produto. Saiu o hover arredondado só na área do texto. Teste: hover medido no iPhone 13 e no computador, com o fundo cobrindo a largura toda da linha e raio 0; sem erros de JS.
   - Animações: entrada da lista, painel deslizando, troca de ficha e barras. Todas respeitam "menos movimento".
   - Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
     - o bloco de apagar fica fora das abas;
