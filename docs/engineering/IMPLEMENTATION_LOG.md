@@ -673,6 +673,10 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - Rodapé: ícone de relógio e "Última resposta em …", separado por uma linha.
     - Teste: computador, iPhone 13 e larguras de 375 e 320 px, sem nada passando da borda; sem erros de JS.
   - Aba Inteligência, cartões de destaque no celular (até 560 px): um por linha, na horizontal, por pedido da dona do produto. O número fica à esquerda, separado por uma linha vertical, e o tema com ícone e a frase ficam à direita. Abaixo de 380 px, a coluna do número e o espaçamento diminuem para "CORRESPONDÊNCIA" caber. O computador continua com 4 por linha. Teste: computador, iPhone 13 e 320 px, sem nada passando da borda; sem erros de JS.
+  - Regra da dona do produto: nos grids, o texto nunca passa da coluna de etiquetas ou de ações.
+    - Lista: a coluna da situação tem largura fixa de 168 px, igual para todas as linhas, com as etiquetas alinhadas à esquerda dela. No celular, a etiqueta ganha linha própria, entre a data e o resumo.
+    - Ficha, pergunta 10: a coluna da etiqueta (Fácil, Difícil…) tem largura fixa de 112 px.
+    - Teste: medição automática no computador e no iPhone 13, sem nenhum texto avançando sobre a coluna das etiquetas e com todas começando na mesma posição (computador: 1017 px na lista e 1135 px na ficha); sem erros de JS.
   - Animações: entrada da lista, painel deslizando, troca de ficha e barras. Todas respeitam "menos movimento".
   - Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
     - o bloco de apagar fica fora das abas;
