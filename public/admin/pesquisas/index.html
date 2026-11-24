@@ -180,28 +180,23 @@
   .pa-dest-bt .seta { display: inline-grid; transition: transform .25s; }
   .pa-dest-bt .seta svg { width: 16px; height: 16px; }
   .pa-dest-bt.aberto .seta { transform: rotate(180deg); }
-  .pa-dest-it { display: grid; align-content: start; gap: 6px; padding: 16px; border-radius: 14px; background: var(--muted); border: 1px solid transparent; transition: transform .2s, box-shadow .2s, border-color .2s; }
-  .pa-dest-it:hover { transform: translateY(-2px); border-color: var(--border); box-shadow: var(--shadow-md); }
-  .pa-dest-it.forte { background: var(--crimson-50); }
-  .pa-dest-tema { display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted-foreground); }
-  .pa-dest-tema .ic { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--card); color: var(--muted-foreground); }
-  .pa-dest-it.forte .pa-dest-tema .ic { color: var(--primary); }
-  .pa-dest-tema svg { width: 15px; height: 15px; }
-  .pa-dest-v { font-size: 30px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; color: var(--foreground); }
-  .pa-dest-it.forte .pa-dest-v { color: var(--primary); }
-  .pa-dest-it p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--foreground); }
+  /* Destaques no padrão do cartão de indicador do DS (CardsDeKpi): card branco, borda e sombra do DS,
+     rótulo 13 px médio em cinza, valor 26 px negrito na cor do texto, ícone 18 px cinza numa base cinza de 36 px à direita */
+  .pa-dest-it { display: grid; grid-template-columns: minmax(0, 1fr) 36px; grid-template-areas: "tema ic" "v v" "p p"; align-items: start; align-content: start; grid-template-rows: 36px auto auto; gap: 12px 12px; padding: 20px; border-radius: var(--radius-lg); background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .pa-dest-tema { grid-area: tema; align-self: center; font-size: 13px; font-weight: 500; line-height: 1.35; color: var(--muted-foreground); }
+  .pa-dest-ic { grid-area: ic; width: 36px; height: 36px; border-radius: var(--radius-md); display: grid; place-items: center; background: var(--muted); color: var(--muted-foreground); }
+  .pa-dest-ic svg { width: 18px; height: 18px; }
+  .pa-dest-v { grid-area: v; font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.025em; color: var(--foreground); }
+  .pa-dest-it p { grid-area: p; margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--muted-foreground); }
+  .pa-dest-it p strong { color: var(--foreground); font-weight: 600; }
   .pa-dest-vazio { grid-column: span 2; display: grid; align-content: center; gap: 4px; padding: 16px; border-radius: 14px; border: 1px dashed var(--border); font-size: 13px; color: var(--muted-foreground); }
   .pa-dest-vazio b { color: var(--foreground); font-size: 14px; }
-  /* celular: um destaque por linha. Título numa linha inteira em cima; embaixo, o número à esquerda e a frase à direita */
+  /* celular: um destaque por linha. Rótulo e ícone numa linha inteira em cima; embaixo, o valor à esquerda (coluna fixa) e a frase à direita */
   @media (max-width: 560px) {
     .pa-dest-grade { grid-template-columns: 1fr; gap: 10px; }
     .pa-dest-vazio { grid-column: 1 / -1; }
-    .pa-dest-it { grid-template-columns: 92px minmax(0, 1fr); grid-template-areas: "tema tema" "v p"; align-items: center; gap: 10px 14px; padding: 14px 16px 16px; }
-    .pa-dest-it > .pa-dest-tema { grid-area: tema; font-size: 11.5px; letter-spacing: .05em; }
-    .pa-dest-it > .pa-dest-v { grid-area: v; align-self: stretch; display: flex; align-items: center; font-size: 28px; padding-right: 14px; border-right: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent); }
-    .pa-dest-it > p { grid-area: p; }
-    .pa-dest-tema .ic { width: 24px; height: 24px; border-radius: 7px; }
-    .pa-dest-tema svg { width: 14px; height: 14px; }
+    .pa-dest-it { grid-template-columns: 84px minmax(0, 1fr) 36px; grid-template-rows: auto auto; grid-template-areas: "tema tema ic" "v p p"; align-items: center; gap: 12px 14px; padding: 16px; }
+    .pa-dest-v { align-self: stretch; display: flex; align-items: center; padding-right: 14px; border-right: 1px solid var(--border); }
   }
   .pa-bloco { margin-top: 16px; }
   .pa-bloco h2 { margin: 0 0 4px; }
@@ -1283,9 +1278,10 @@
     const itens = [];
     const add = ({ ic, tema, valor, partes, forte, ordem = 9 }) => {
       const d = el("div", "pa-dest-it" + (forte ? " forte" : "")); d._ordem = ordem; d._i = itens.length; itens.push(d);
-      const t = el("span", "pa-dest-tema"); const i = el("span", "ic"); i.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC_D[ic]}</svg>`; t.append(i, tema);
+      // cartão de indicador do DS (CardsDeKpi): rótulo → valor → frase, ícone cinza à direita
+      const t = el("span", "pa-dest-tema", tema); const i = el("span", "pa-dest-ic"); i.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC_D[ic]}</svg>`;
       const p = el("p"); partes.forEach((x) => p.append(typeof x === "string" ? x : el("strong", null, x.b)));
-      d.append(t, el("b", "pa-dest-v", valor), p);
+      d.append(t, i, el("b", "pa-dest-v", valor), p);
     };
     // os 4 principais (o problema que a pesquisa investiga) na primeira linha; os demais em "Ver mais destaques"
     const montar = () => {

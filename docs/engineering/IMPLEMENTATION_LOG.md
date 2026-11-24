@@ -672,7 +672,15 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
     - Linha 2: o link, com Copiar e Abrir.
     - Rodapé: ícone de relógio e "Última resposta em …", separado por uma linha.
     - Teste: computador, iPhone 13 e larguras de 375 e 320 px, sem nada passando da borda; sem erros de JS.
-  - Aba Inteligência, cartões de destaque no celular (até 560 px): um por linha, por pedido da dona do produto. O título (ícone + tema) ocupa uma linha inteira em cima. Embaixo ficam o número à esquerda, numa coluna fixa de 92 px e separado por uma linha vertical, e a frase à direita, começando na mesma posição em todos os cartões. O computador continua com 4 por linha. Teste: computador, iPhone 13 e 320 px, com o título numa linha só em todos os cartões e nada passando da borda; sem erros de JS.
+  - Aba Inteligência, cartões de destaque no padrão do cartão de indicador do DS (`CardsDeKpi`, vitrine Cards/Dados do DS), por pedido da dona do produto, que apontou que cor, ícone e tipografia fugiam do DS.
+    - Card branco com borda e sombra do DS (`--shadow`), raio `--radius-lg` e padding de 20 px, estático (sem levantar no hover).
+    - Rótulo em 13 px, peso 500, `--muted-foreground`, sem caixa alta.
+    - Valor em 26 px, peso 700, `--foreground` (não mais vermelho).
+    - Ícone de 18 px em `--muted-foreground`, numa base `--muted` de 36 px, à direita.
+    - Frase em 13,5 px, `--muted-foreground`, com o trecho em destaque na cor do texto.
+    - Sai o fundo rosa e o número vermelho dos 4 principais.
+    - Valores alinhados entre os cartões no computador.
+  - Aba Inteligência, cartões de destaque no celular (até 560 px): um por linha, por pedido da dona do produto. O rótulo e o ícone ocupam uma linha inteira em cima. Embaixo ficam o número à esquerda, numa coluna fixa de 84 px e separado por uma linha vertical, e a frase à direita, começando na mesma posição em todos os cartões. O computador continua com 4 por linha. Teste: computador, iPhone 13 e 320 px, com o título numa linha só em todos os cartões e nada passando da borda; sem erros de JS.
   - Regra da dona do produto: nos grids, o texto nunca passa da coluna de etiquetas ou de ações.
     - Lista: a coluna da situação tem largura fixa de 168 px, igual para todas as linhas, com as etiquetas alinhadas à esquerda dela. No celular, a etiqueta ganha linha própria, entre a data e o resumo.
     - Ficha, pergunta 10: a coluna da etiqueta (Fácil, Difícil…) tem largura fixa de 112 px.
