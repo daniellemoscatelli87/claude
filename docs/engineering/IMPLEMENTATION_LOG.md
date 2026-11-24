@@ -598,6 +598,15 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 
 ## 2026-11-24 · Pesquisa: link do cabeçalho vira "Home" com ícone de casa, não publicado
 
+- **Identificação, novos textos da dona do produto:**
+  - No cartão: "**Seus dados e sua privacidade**" em linha própria e "Utilizamos seu nome, e-mail e WhatsApp exclusivamente para os fins desta pesquisa e para comunicar o lançamento da solução. As respostas são analisadas em conjunto e não são divulgadas de forma que permita sua identificação."
+  - Na caixa: "Li e autorizo o uso dos meus dados para as finalidades descritas, conforme a Política de Privacidade."
+- **Espaçamento:** a regra `#pq-id .pq-aceite-q { padding: 2px … }` zerava o espaço abaixo da linha divisória, colando o texto nela. Agora há 18 px acima e 18 px abaixo da linha, e o cartão tem 18/20 px de respiro.
+- **Registro (`questionario.json`):** a identificação passa para `moda-curitiba-identificacao-v2-2026-11-24`, com o campo novo `finalidades` (o texto do cartão). A função grava em `identificacao_texto` as finalidades seguidas da frase da caixa, porque "finalidades descritas" sozinho não diria quais são. A função `pesquisa` precisa ser publicada junto.
+- **Teste:**
+  - Função com banco simulado: os 13 cenários passam e o registro sai com v2 e o texto completo.
+  - Playwright no iPhone 13: os textos estão certos; há 18 px acima e 19 px abaixo do divisor; a caixa marca ao tocar na caixinha ou no texto e desmarca com novo toque; os fluxos completos seguem iguais; sem erros de JS.
+
 - Pedido da dona do produto: o link "Voltar para o site" do cabeçalho da pesquisa passa a mostrar o ícone de casa e o texto "Home".
   - Leva para `/`, como antes. O nome para leitores de tela é "Home: ir para o site".
   - Continua perguntando antes de sair de uma pesquisa em andamento.

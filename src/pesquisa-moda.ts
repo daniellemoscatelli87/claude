@@ -592,7 +592,7 @@ function montarIdentificacao() {
   const ic = el('span', 'pq-ic'); ic.setAttribute('aria-hidden', 'true');
   ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
   const tx = el('p');
-  tx.append(el('strong', undefined, 'Seus dados estão protegidos pela LGPD. '), 'Usamos seu nome, e-mail e WhatsApp só para esta pesquisa. As respostas são analisadas em conjunto e nunca divulgadas com seu nome.');
+  tx.append(el('strong', 'pq-lgpd-tit', 'Seus dados e sua privacidade'), 'Utilizamos seu nome, e-mail e WhatsApp exclusivamente para os fins desta pesquisa e para comunicar o lançamento da solução. As respostas são analisadas em conjunto e não são divulgadas de forma que permita sua identificação.');
   lgpd.append(ic, tx);
   const aceite = el('div', 'pq-campo pq-aceite-q'); aceite.id = 'pq-ciente-q';
   const lab = el('label', 'pq-aceite');

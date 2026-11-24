@@ -254,6 +254,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-lgpd-cartao .pq-lgpd { margin: 0; padding: 0; border: 0; border-radius: 0; background: none; }
 .pq-lgpd-cartao .pq-aceite-q { margin: 16px 0 0; padding-top: 16px; border-top: 1px solid var(--pq-linha); }
 #pq-id .pq-aceite-q { padding: 2px 2px 0; }
+/* aviso e aceite no mesmo cartão: respiro igual acima e abaixo da linha divisória */
+#pq-id .pq-lgpd-cartao { padding: 18px 18px 20px; }
+#pq-id .pq-lgpd-cartao .pq-aceite-q { margin: 18px 0 0; padding: 18px 2px 0; border-top: 1px solid var(--pq-linha); }
+.pq-lgpd-tit { display: block; margin-bottom: 4px; }
 /* Última etapa: destaque da contribuição e das vantagens */
 .pq-vantagem { position: relative; overflow: hidden; display: flex; gap: 16px; align-items: flex-start; margin-top: 20px; padding: 20px; border-radius: 18px;
   background: linear-gradient(135deg, #FDF2F2 0%, #FBE3E3 100%); border: 1px solid rgba(212, 77, 77, 0.25); }
