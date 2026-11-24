@@ -242,12 +242,11 @@
   .pa-relato:first-child { border-top: 0; }
   .pa-relato p { margin: 0 0 6px; white-space: pre-wrap; overflow-wrap: anywhere; }
   .pa-relato small { font-size: 12px; color: var(--muted-foreground); }
-  .pa-int { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: center; padding: 14px 4px; border-top: 1px solid var(--muted); }
-  .pa-int:first-child { border-top: 0; }
-  .pa-int .n { font-weight: 700; overflow-wrap: anywhere; }
-  .pa-int .c { font-size: 13px; color: var(--foreground); overflow-wrap: anywhere; }
-  .pa-int .c a { color: var(--primary-text); }
-  .pa-int small { font-size: 12px; color: var(--muted-foreground); }
+  .pa-int-info { cursor: default; }
+  .pa-int-ctt a { color: var(--primary-text); text-underline-offset: 2px; white-space: nowrap; }
+  .pa-int-ctt.pa-rl-res { display: block; -webkit-line-clamp: unset; line-clamp: unset; }
+  .pa-int-ctt { overflow-wrap: anywhere; }
+  .pa-resp-sit.pa-int-tag { background: var(--muted); color: var(--muted-foreground); cursor: help; }
   .pa-aviso { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: var(--radius-md); background: var(--muted); color: var(--muted-foreground); font-size: 13px; margin-bottom: 14px; }
   .pa-aviso svg { width: 18px; height: 18px; flex: none; margin-top: 1px; }
   .pa-lista { display: grid; gap: 12px; }
@@ -2008,31 +2007,71 @@
   }
 
   /* ---------- Interessados ---------- */
+  // Aba Interessados: mesma estrutura da aba Respostas (seleção, lista em linhas, etiqueta em coluna fixa, lixeira)
+  const aceiteDe = (v) => { const m = /(\d{4})-(\d{2})-(\d{2})$/.exec(v || ""); return m ? `Aceite de ${m[3]}/${m[2]}` : "Aceite"; };
+  async function excluirInteressados(ids) {
+    const { error } = await sb.from("pesquisa_interessados").delete().in("id", ids);
+    if (error) { toast("Não foi possível excluir: " + error.message); return false; }
+    I = I.filter((y) => !ids.includes(y.id));
+    log(ids.length === 1 ? "Excluiu contato de interessado na pesquisa" : "Excluiu contatos de interessados na pesquisa", P.titulo);
+    toast(ids.length === 1 ? "Contato excluído" : `${plural(ids.length, "contato excluído", "contatos excluídos")}`);
+    ABA_INICIAL = "interessados"; desenhar();
+    return true;
+  }
   function listaInteressados() {
     const card = el("section", "card pa-entra");
     const aviso = el("div", "pa-aviso"); aviso.innerHTML = IC.info;
-    aviso.appendChild(el("span", null, "Pessoas que pediram para receber novidades sobre o lançamento, com autorização registrada (data, horário e versão do texto). Use estes contatos só para isso. Ficam separados das respostas da pesquisa."));
+    aviso.appendChild(el("span", null, "Pessoas que pediram para receber os avisos do lançamento, com autorização registrada (data, horário e versão do texto). Use estes contatos só para isso. Ficam separados das respostas da pesquisa."));
     card.appendChild(aviso);
-    if (!I.length) { card.appendChild(vazio("Ninguém pediu novidades ainda", "Quem marcar “Sim, quero receber novidades” no fim da pesquisa aparece aqui.")); return card; }
-    I.forEach((x) => {
-      const d = el("div", "pa-int");
-      const tx = el("div");
-      const ctt = el("div", "c");
+    if (!I.length) { card.appendChild(vazio("Ninguém pediu os avisos ainda", "Quem marcar “Sim, quero receber os avisos” no fim da pesquisa aparece aqui.")); return card; }
+    const cont = el("p", "pa-rl-cont", `${plural(I.length, "contato", "contatos")}, do mais recente para o mais antigo.`);
+    const sel = new Set();
+    const barra = el("div", "pa-sel");
+    const todasLab = el("label", "pa-sel-todas"); const todasCb = el("input"); todasCb.type = "checkbox";
+    todasLab.append(todasCb, el("span", null, "Selecionar todos"));
+    const nSel = el("span", "pa-sel-n"); nSel.setAttribute("aria-live", "polite");
+    const excluirSel = el("button", "pa-btn perigo"); excluirSel.type = "button"; excluirSel.innerHTML = IC.lixo + "<span>Excluir selecionados</span>";
+    barra.append(todasLab, nSel, excluirSel);
+    const lista = el("ul", "pa-rl");
+    const sincSel = () => {
+      const n = sel.size;
+      todasCb.checked = n > 0 && n === I.length; todasCb.indeterminate = n > 0 && n < I.length;
+      nSel.textContent = n ? plural(n, "selecionado", "selecionados") : "";
+      excluirSel.hidden = !n; barra.classList.toggle("ativa", n > 0);
+      lista.querySelectorAll(".pa-rl-it").forEach((li) => li.classList.toggle("marcada", sel.has(li.dataset.id)));
+    };
+    todasCb.addEventListener("change", () => { I.forEach((x) => (todasCb.checked ? sel.add(x.id) : sel.delete(x.id))); lista.querySelectorAll(".pa-rl-cb input").forEach((c) => { c.checked = sel.has(c.value); }); sincSel(); });
+    excluirSel.addEventListener("click", async () => {
+      const alvo = I.filter((x) => sel.has(x.id)); if (!alvo.length) return;
+      const ok = await confirmDialog(alvo.length === 1
+        ? { title: "Excluir este contato?", message: `Os dados de ${alvo[0].nome} (nome, e-mail, WhatsApp e autorização) serão apagados de vez. Use quando a pessoa pedir a exclusão ou cancelar os avisos.`, ok: "Excluir" }
+        : { title: `Excluir ${plural(alvo.length, "contato", "contatos")}?`, message: `Os dados ${alvo.length === I.length ? "de todos os contatos" : `dos ${plural(alvo.length, "contato selecionado", "contatos selecionados")}`} (nome, e-mail, WhatsApp e autorização) serão apagados de vez. As respostas da pesquisa continuam. Essa ação não pode ser desfeita.`, ok: "Excluir" });
+      if (!ok) return;
+      excluirSel.disabled = true; await excluirInteressados(alvo.map((x) => x.id));
+    });
+    I.forEach((x, k) => {
+      const li = el("li", "pa-rl-it"); li.style.setProperty("--i", Math.min(k, 12)); li.dataset.id = x.id;
+      const cbl = el("label", "pa-rl-cb"); const cb = el("input"); cb.type = "checkbox"; cb.value = x.id;
+      cb.setAttribute("aria-label", `Selecionar o contato de ${x.nome}`);
+      cb.addEventListener("change", () => { cb.checked ? sel.add(x.id) : sel.delete(x.id); sincSel(); });
+      cbl.appendChild(cb);
+      const info = el("div", "pa-rl-abrir pa-int-info");
+      const l1 = el("span", "pa-rl-l1"); l1.append(el("b", "pa-rl-nome", x.nome), el("span", "pa-rl-data", "Autorizou em " + fmtDate(x.consentimento_em)));
+      const ctt = el("span", "pa-rl-res pa-int-ctt");
       const mail = el("a", null, x.email); mail.href = "mailto:" + x.email;
       const tel = x.whatsapp.replace(/^(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3");
       const wa = el("a", null, tel); wa.href = "https://wa.me/55" + x.whatsapp; wa.target = "_blank"; wa.rel = "noopener";
       ctt.append(mail, " · ", wa);
-      tx.append(el("div", "n", x.nome), ctt, el("small", null, "Autorizou em " + fmtDate(x.consentimento_em) + " · " + x.consentimento_versao));
-      const del = el("button", "pa-btn perigo"); del.type = "button"; del.innerHTML = IC.lixo + "<span>Excluir</span>"; del.setAttribute("aria-label", "Excluir contato de " + x.nome);
+      const tag = el("span", "pa-resp-sit pa-int-tag", aceiteDe(x.consentimento_versao)); tag.title = "Versão do texto aceito: " + x.consentimento_versao;
+      info.append(l1, tag, ctt);
+      const del = el("button", "pa-rl-del"); del.type = "button"; del.innerHTML = IC.lixo; del.title = "Excluir contato"; del.setAttribute("aria-label", "Excluir o contato de " + x.nome);
       del.addEventListener("click", async () => {
         const ok = await confirmDialog({ title: "Excluir este contato?", message: `Os dados de ${x.nome} (nome, e-mail, WhatsApp e autorização) serão apagados de vez. Use quando a pessoa pedir a exclusão ou cancelar os avisos.`, ok: "Excluir" });
-        if (!ok) return;
-        const { error } = await sb.from("pesquisa_interessados").delete().eq("id", x.id);
-        if (error) return toast("Não foi possível excluir: " + error.message);
-        I = I.filter((y) => y.id !== x.id); log("Excluiu contato de interessado na pesquisa", P.titulo); toast("Contato excluído"); desenhar(); document.getElementById("aba-interessados").click();
+        if (ok) { del.disabled = true; await excluirInteressados([x.id]); }
       });
-      d.append(tx, del); card.appendChild(d);
+      li.append(cbl, info, del); lista.appendChild(li);
     });
+    card.append(cont, barra, lista); sincSel();
     return card;
   }
 

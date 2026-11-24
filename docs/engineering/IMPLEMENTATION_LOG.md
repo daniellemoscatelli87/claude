@@ -596,6 +596,22 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-24 · Painel da pesquisa: aba Interessados com a mesma estrutura da aba Respostas, não publicado
+
+- Pedido da dona do produto: a aba Interessados deve ter a mesma estrutura da aba Respostas.
+- Mesma estrutura:
+  - aviso no topo e contagem ("N contatos, do mais recente para o mais antigo");
+  - barra "Selecionar todos · N selecionados · Excluir selecionados";
+  - linhas com caixa de seleção, nome em destaque e "Autorizou em …";
+  - e-mail e WhatsApp clicáveis (`mailto:` e `wa.me`), cada um sem quebrar no meio;
+  - etiqueta na coluna fixa de 168 px e lixeira;
+  - hover e seleção na linha inteira.
+- **Etiqueta "Aceite de DD/MM":** mostra com qual versão do texto a pessoa concordou. A versão completa (`moda-curitiba-contato-v3-…`) aparece ao passar o mouse.
+- **Excluir:** um contato ou vários de uma vez (`pesquisa_interessados` por `id`). As respostas da pesquisa continuam. Depois de excluir, a aba Interessados continua aberta.
+- Teste: Playwright com 4 contatos fictícios (2 com aceite v3 e 2 com v2), no computador e no iPhone 13, sem erros de JS. Conferidos:
+  - as etiquetas certas, todas na mesma coluna;
+  - 2 contatos selecionados e excluídos: DELETE `id=in.(i1,i3)` e a contagem passando de 4 para 2.
+
 ## 2026-11-24 · Pesquisa: sai o "Saiba como tratamos seus dados" de baixo do botão da abertura e ícones dos cartões em cinza, publicado (#216)
 
 - Publicado em 24/11/2026: site pelo PR #216 e função `pesquisa` v13 (questionário idêntico ao do repositório, conferido pela ação `status`). Checagem no site real (iPhone 13, sem envio): busca de bairro ("umbara" → Umbará), sem erros de JS.
