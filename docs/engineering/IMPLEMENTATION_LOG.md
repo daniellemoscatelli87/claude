@@ -596,10 +596,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-24 · Pesquisa: sai o "Saiba como tratamos seus dados" de baixo do botão da abertura, não publicado
+## 2026-11-24 · Pesquisa: sai o "Saiba como tratamos seus dados" de baixo do botão da abertura e ícones dos cartões em cinza, não publicado
 
 - Pedido da dona do produto: a informação já aparece em outros lugares, no rodapé da página e no passo de identificação, ambos com o link para a Política de Privacidade.
 - Removido `p.pq-privacidade` de `pesquisa/moda-curitiba/index.html` e o estilo correspondente.
+- Ícones dos cartões "Leva de 3 a 5 minutos", "Participação voluntária" e "Privacidade protegida": padrão cinza (fundo graphite-50 `#EDF0F5` e ícone em `--pq-muted`), por pedido da dona do produto.
 - Teste executado: Playwright no iPhone 13 (abertura sem o texto, botão "Começar pesquisa" funcionando, link da política no rodapé e na identificação), sem erros de JS.
 
 ## 2026-11-24 · Painel de pesquisas: ações num menu e correção da aba Respostas e do Excel com respostas antigas da pergunta 5, publicado

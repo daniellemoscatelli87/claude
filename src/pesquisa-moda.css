@@ -81,6 +81,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-infos strong { font-size: 14px; color: var(--pq-ink); font-weight: 700; }
 .pq-ic { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--pq-tint); color: var(--pq-red); }
 .pq-ic svg { width: 18px; height: 18px; }
+/* ícones dos cartões de informação da abertura: padrão cinza (fundo graphite-50 e ícone no cinza do texto de apoio) */
+.pq-infos li .pq-ic { background: #EDF0F5; color: var(--pq-muted); }
 /* Abertura: "Por que vale participar" depois da explicação; tom claro para não competir com o botão */
 .pq-porque { position: relative; overflow: hidden; margin: 24px 0 0; padding: 22px; text-align: left; border-radius: 20px;
   background: linear-gradient(135deg, #FDF2F2 0%, #FBE8E8 100%); border: 1px solid rgba(212, 77, 77, 0.28); box-shadow: 0 14px 32px -24px rgba(212, 77, 77, 0.55); }
