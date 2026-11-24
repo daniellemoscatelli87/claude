@@ -300,6 +300,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   position: sticky; bottom: 0; z-index: 10; padding: 14px 0 calc(14px + env(safe-area-inset-bottom)); background: rgba(246, 247, 250, 0.95);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 0 0 100vmax rgba(246, 247, 250, 0.95), 0 -1px 0 100vmax var(--pq-linha); clip-path: inset(-1px -100vmax 0); }
 .pq-nav .pq-btn-primario { min-width: 180px; white-space: nowrap; }
+/* o formulário ocupa a tela toda abaixo do cabeçalho: em perguntas curtas a barra de botões fica presa embaixo, como na abertura */
+#pq-form:not([hidden]) { display: flex; flex-direction: column; min-height: calc(100svh - var(--pq-topo-h, 160px) - 68px); }
+#pq-form .pq-nav { margin-top: auto; margin-bottom: -40px; }
+#pq-etapas { padding-bottom: 28px; }
 @media (max-width: 639px) {
   .pq-nav { margin: 28px 0 -40px; padding: 12px 0 calc(12px + env(safe-area-inset-bottom)); }
   .pq-nav .pq-btn-primario { flex: 1; min-width: 0; padding: 0 18px; }

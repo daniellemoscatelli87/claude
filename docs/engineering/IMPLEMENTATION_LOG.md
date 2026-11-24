@@ -603,6 +603,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Sem repetição da etapa: o texto vermelho acima do título ("PERGUNTA 2", "ANTES DE COMEÇAR", "SOBRE VOCÊ"…) sai de todas as etapas, por escolha da dona do produto. A etapa fica só na barra de progresso ("Pergunta 2 de 12", "Antes de começar", "Quase lá · sobre você"); no título fica um texto só para leitores de tela.
 - Identificação: "quem é você" em vermelho no título "Conte quem é você".
 - Identificação: o aceite ("Li e concordo…") fica dentro do cartão branco do aviso da LGPD, separado por uma linha.
+- Barra "Voltar / Continuar" sempre presa no rodapé da tela, também nas perguntas curtas, como na abertura. O formulário ocupa a altura da tela abaixo do cabeçalho (`--pq-topo-h`, medida pelo script) e a barra fica no fim. Teste: no iPhone 13 e no computador, a barra fica no rodapé da tela em todas as etapas, sem rolagem extra nas telas curtas.
 - Ícones dos cartões "Leva de 3 a 5 minutos", "Participação voluntária" e "Privacidade protegida": padrão cinza (fundo graphite-50 `#EDF0F5` e ícone em `--pq-muted`), por pedido da dona do produto.
 - Teste executado: Playwright no iPhone 13 (abertura sem o texto, botão "Começar pesquisa" funcionando, link da política no rodapé e na identificação), sem erros de JS.
 

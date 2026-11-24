@@ -777,6 +777,10 @@ function topo() {
   };
   window.addEventListener('scroll', () => { if (!agendado) { agendado = true; requestAnimationFrame(atualizar); } }, { passive: true });
   t.addEventListener('focusin', () => t.classList.remove('is-hidden'));
+  // altura do cabeçalho, para o formulário ocupar o resto da tela e a barra de botões ficar sempre presa embaixo
+  const medir = () => document.documentElement.style.setProperty('--pq-topo-h', t.offsetHeight + 'px');
+  if ('ResizeObserver' in window) new ResizeObserver(medir).observe(t);
+  medir();
   atualizar();
 }
 
