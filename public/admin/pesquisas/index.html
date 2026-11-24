@@ -331,7 +331,8 @@
   .pa-abas.pa-abas-sub .pa-abas-ind { display: block; position: absolute; left: 0; bottom: 0; width: 0; height: 2px; border-radius: 2px 2px 0 0; background: var(--primary); pointer-events: none;
     transition: transform .3s var(--ease-out, ease-out), width .3s var(--ease-out, ease-out); }
   .pa-abas-linha-sec .pa-abas-acoes { margin-bottom: 8px; }
-  @media (max-width: 767px) { .pa-abas-linha-sec { gap: 12px; } .pa-abas-linha-sec > .pa-abas { align-self: stretch; width: 100%; } .pa-abas-linha-sec .pa-abas-acoes { margin-bottom: 0; } .pa-abas.pa-abas-sub button { flex: 1 0 auto; justify-content: center; padding: 12px 10px; } }
+  @media (max-width: 767px) { .pa-abas-linha-sec { gap: 12px; } .pa-abas-linha-sec > .pa-abas { align-self: stretch; width: 100%; } .pa-abas-linha-sec .pa-abas-acoes { margin-bottom: 0; }
+    .pa-abas-linha-sec .pa-abas-acoes, .pa-abas-linha-sec .pa-menu-caixa, .pa-abas-linha-sec .pa-menu-btn { width: 100%; } .pa-abas-linha-sec .pa-menu-btn { justify-content: center; } .pa-abas-linha-sec .pa-menu { left: 0; right: 0; width: auto; max-width: none; } .pa-abas.pa-abas-sub button { flex: 1 0 auto; justify-content: center; padding: 12px 10px; } }
   @media (prefers-reduced-motion: reduce) { .pa-abas.pa-abas-sub .pa-abas-ind { transition: none; } }
   /* "Ações" só com o ícone de três pontinhos, na mesma linha das abas internas (também no celular) */
   .pa-menu-btn.pa-menu-ic { width: 36px; height: 36px; padding: 0; display: grid; place-items: center; }
