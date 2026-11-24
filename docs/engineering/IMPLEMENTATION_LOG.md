@@ -596,7 +596,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-24 · Pesquisa: respostas incompletas guardadas no servidor, não publicado
+## 2026-11-24 · Pesquisa: respostas incompletas guardadas no servidor, publicado (#220)
+
+- Publicado em 24/11/2026, nesta ordem: migração `pesquisa_incompletas` aplicada, função `pesquisa` v14 (código conferido igual ao do repositório; questionário igual pela ação `status`) e site pelo PR #220.
+- Teste no site real (iPhone 13, dados fictícios `teste-claude-…@exemplo.com`, sem erros de JS):
+  - P1 respondeu até a pergunta 3 e fechou a página. No banco: `parcial`, `parou_em` = `q4`, perguntas 1 a 3 e o bairro.
+  - P2 parou na pergunta 2, fechou e voltou pelo link. Retomou na pergunta 3 e terminou. No banco: uma única linha `completa`, com as 12 perguntas e o perfil completo, aparecendo no sino.
+- A pedido da dona do produto ("resete todo o formulário" antes de divulgar), foram apagados os 2 envios, ambos de teste. Estado final: 0 respostas, 0 interessados, pesquisa no ar.
+
 
 - Pedido da dona do produto: guardar no servidor as respostas de quem para no meio, para ela ver quem parou e em qual pergunta. Antes, o progresso ficava só no aparelho da pessoa (rascunho de 30 dias), e o servidor só recebia a resposta no fim.
 - **Migração `20261124200000_pesquisa_incompletas.sql`:** `situacao` passa a aceitar `parcial`. Entram as colunas `parou_em` (etapa em que a pessoa estava) e `atualizado_em`.
