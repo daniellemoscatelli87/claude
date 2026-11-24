@@ -1,6 +1,8 @@
 // Envia, pela área restrita, e-mails da administradora: a resposta a uma mensagem de contato ou um e-mail novo.
 // Resposta:   { contato_id, mensagem, anexos? }
-// E-mail novo: { novo: { id, para, nome?, assunto }, mensagem, anexos? }  ("Novo e-mail" da página de contatos)
+// E-mail novo: { novo: { id, para: string[], cc?: string[], cco?: string[], nome?, assunto }, mensagem, anexos? }  ("Novo e-mail")
+//   Vários destinatários, cópia (Cc) e cópia oculta (Cco). As respostas seguintes da conversa vão para os mesmos
+//   destinatários e cópias; a cópia oculta vale só para o primeiro envio.
 //   O e-mail novo vira uma conversa em `contatos` (origem "enviado", com o id gerado na página), para que as
 //   respostas da pessoa apareçam no histórico como nas demais mensagens.
 // Só aceita a conta de administradora (token da sessão).
@@ -13,16 +15,19 @@ import { encodeBase64 } from "jsr:@std/encoding@1/base64";
 
 const REMETENTE = "Dani Moscatelli <contato@danimoscatelli.com.br>";
 const DOMINIO_RESPOSTA = "resposta.danimoscatelli.com.br";
-const FOTO = "https://www.danimoscatelli.com.br/email/dani-foto.jpg";
-// Assinatura em texto (legível e clicável no celular), com a foto da Dani.
+const FOTO = "https://www.danimoscatelli.com.br/email/dani-assinatura.png";
+// Assinatura em texto (legível e clicável no celular): retrato com cantos arredondados, linha vermelha e os dados.
+// A imagem tem o dobro do tamanho exibido (220 × 280), para ficar nítida em telas de alta resolução.
 const ASSINATURA_HTML = `<table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse"><tr>
-<td valign="top" style="padding:0 16px 0 0"><img src="${FOTO}" width="80" height="80" alt="Dani Moscatelli" style="display:block;width:80px;height:80px;border-radius:50%;border:0"></td>
-<td valign="top" style="font-family:Arial,Helvetica,sans-serif">
+<td valign="middle" style="padding:0 18px 0 0"><img src="${FOTO}" width="110" height="140" alt="Dani Moscatelli" style="display:block;width:110px;height:140px;border:0"></td>
+<td width="3" style="width:3px;background:#d44d4d;font-size:0;line-height:0">&nbsp;</td>
+<td width="18" style="width:18px;font-size:0;line-height:0">&nbsp;</td>
+<td valign="middle" style="font-family:Arial,Helvetica,sans-serif">
 <p style="margin:0;font-size:18px;line-height:1.3;font-weight:bold;color:#0f172a">Dani Moscatelli</p>
 <p style="margin:2px 0 10px;font-size:14px;line-height:1.4;color:#64748b">CEO | Experience Design <span style="color:#d44d4d;font-weight:bold">Studio</span></p>
-<p style="margin:0;font-size:15px;line-height:1.8"><a href="https://www.danimoscatelli.com.br" style="color:#0f172a;text-decoration:none">www.danimoscatelli.com.br</a><br><a href="tel:+5541997485414" style="color:#0f172a;text-decoration:none">+55 (41) 99748-5414</a><br><a href="https://www.instagram.com/danimoscatellistudio/" style="color:#0f172a;text-decoration:none">@danimoscatellistudio</a></p>
+<p style="margin:0;font-size:15px;line-height:1.8"><a href="https://wa.me/5541997485414" style="color:#0f172a;text-decoration:none">+55 (41) 99748-5414</a><br><a href="mailto:contato@danimoscatelli.com.br" style="color:#0f172a;text-decoration:none">contato@danimoscatelli.com.br</a><br><a href="https://www.danimoscatelli.com.br" style="color:#0f172a;text-decoration:none">www.danimoscatelli.com.br</a></p>
 </td></tr></table>`;
-const ASSINATURA_TXT = "Dani Moscatelli\nCEO | Experience Design Studio\nwww.danimoscatelli.com.br\n+55 (41) 99748-5414\nInstagram: @danimoscatellistudio";
+const ASSINATURA_TXT = "Dani Moscatelli\nCEO | Experience Design Studio\n+55 (41) 99748-5414\ncontato@danimoscatelli.com.br\nwww.danimoscatelli.com.br";
 const MAX_ANEXOS = 10;
 const MAX_BYTES = 20 * 1024 * 1024;
 const EMAIL = /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]{2,}$/;
@@ -40,7 +45,11 @@ const esc = (v: unknown) =>
   String(v ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 
 type Anexo = { path: string; name: string; type: string; size: number };
-type Contato = { id: string; nome: string; email: string; assunto: string; mensagem: string; created_at: string; respondido_em: string | null; origem: string };
+type Contato = { id: string; nome: string; email: string; assunto: string; mensagem: string; created_at: string; respondido_em: string | null; origem: string; destinatarios: string[] | null; copias: string[] | null; copias_ocultas: string[] | null };
+const CAMPOS = "id, nome, email, assunto, mensagem, created_at, respondido_em, origem, destinatarios, copias, copias_ocultas";
+const MAX_ENDERECOS = 20;
+// lista de e-mails: aceita texto ou lista; minúsculas, sem repetidos
+const listaEmails = (v: unknown): string[] => [...new Set((Array.isArray(v) ? v : typeof v === "string" ? v.split(/[,;\s]+/) : []).map((x) => String(x).trim().toLowerCase()).filter(Boolean))];
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
@@ -60,13 +69,19 @@ Deno.serve(async (req) => {
   let criado = false; // conversa criada agora (e-mail novo): é desfeita se o envio falhar
   if (novo && typeof novo === "object") {
     // E-mail novo: valida e cria a conversa (com o id gerado na página, que também nomeia a pasta dos anexos)
-    const id = String(novo.id ?? ""), para = String(novo.para ?? "").trim().toLowerCase();
+    const id = String(novo.id ?? ""), lPara = listaEmails(novo.para);
+    const lCc = listaEmails(novo.cc).filter((e) => !lPara.includes(e));
+    const lCco = listaEmails(novo.cco).filter((e) => !lPara.includes(e) && !lCc.includes(e));
+    const para = lPara[0] ?? "";
     const nome = String(novo.nome ?? "").trim().replace(/\s+/g, " "), assunto = String(novo.assunto ?? "").trim().replace(/\s+/g, " ");
     if (!UUID.test(id)) return json({ error: "Envio inválido." }, 400);
-    if (!EMAIL.test(para) || para.length > 254) return json({ error: "Informe um e-mail válido para o destinatário." }, 400);
+    if (!lPara.length) return json({ error: "Informe o e-mail do destinatário." }, 400);
+    const invalido = [...lPara, ...lCc, ...lCco].find((e) => !EMAIL.test(e) || e.length > 254);
+    if (invalido) return json({ error: `Confira o e-mail ${invalido}.` }, 400);
+    if (lPara.length + lCc.length + lCco.length > MAX_ENDERECOS) return json({ error: `Envie para no máximo ${MAX_ENDERECOS} endereços, somando Para, Cc e Cco.` }, 400);
     if (!assunto) return json({ error: "Informe o assunto." }, 400);
     if (!texto) return json({ error: "Escreva a mensagem." }, 400);
-    const { data: ja } = await admin.from("contatos").select("id, nome, email, assunto, mensagem, created_at, respondido_em, origem").eq("id", id).maybeSingle();
+    const { data: ja } = await admin.from("contatos").select(CAMPOS).eq("id", id).maybeSingle();
     if (ja) {
       // mesmo envio repetido (ex.: duas vezes no botão): não cria outra conversa nem envia de novo
       const { data: r } = await admin.from("respostas").select("*").eq("contato_id", id).limit(1).maybeSingle();
@@ -78,13 +93,14 @@ Deno.serve(async (req) => {
         id, origem: "enviado", nome: (nome || para).slice(0, 200), email: para, assunto: assunto.slice(0, 300), mensagem: "",
         telefone: "", empresa: "", cargo: "", tipo_negocio: "", periodo: "", dias_preferidos: [],
         respondido_em: agora, visualizado_em: agora,
-      }).select("id, nome, email, assunto, mensagem, created_at, respondido_em, origem").single();
+        destinatarios: lPara, copias: lCc.length ? lCc : null, copias_ocultas: lCco.length ? lCco : null,
+      }).select(CAMPOS).single();
       if (insErr) return json({ error: "Não foi possível criar a conversa: " + insErr.message }, 500);
       c = ins as Contato; criado = true;
     }
   } else {
     if (typeof contato_id !== "string" || (!texto && !lista.length)) return json({ error: "Escreva a mensagem ou anexe um arquivo." }, 400);
-    const { data, error } = await admin.from("contatos").select("id, nome, email, assunto, mensagem, created_at, respondido_em, origem").eq("id", contato_id).maybeSingle();
+    const { data, error } = await admin.from("contatos").select(CAMPOS).eq("id", contato_id).maybeSingle();
     if (error) return json({ error: error.message }, 500);
     if (!data) return json({ error: "Mensagem não encontrada." }, 404);
     if (!data.email) return json({ error: "Este contato não tem e-mail." }, 400);
@@ -124,11 +140,15 @@ Deno.serve(async (req) => {
     </div>` : ""}
   </div>`;
 
+  // destinatários: a lista do e-mail novo (ou o e-mail do contato) e as cópias; a cópia oculta só no primeiro envio
+  const to = c.destinatarios?.length ? c.destinatarios : [c.email];
+  const cc = c.copias ?? [];
+  const bcc = criado ? (c.copias_ocultas ?? []) : [];
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${Deno.env.get("RESEND_API_KEY")}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      from: REMETENTE, to: [c.email], reply_to: `Dani Moscatelli <conversa-${c.id}@${DOMINIO_RESPOSTA}>`,
+      from: REMETENTE, to, ...(cc.length ? { cc } : {}), ...(bcc.length ? { bcc } : {}), reply_to: `Dani Moscatelli <conversa-${c.id}@${DOMINIO_RESPOSTA}>`,
       subject: assunto, html, text, ...(attachments.length ? { attachments } : {}),
     }),
   });
@@ -136,7 +156,7 @@ Deno.serve(async (req) => {
   if (!res.ok) return erro(`Não foi possível enviar o e-mail (${res.status}).`, 502, { detalhe: out });
 
   const { data: resposta, error: insErr } = await admin.from("respostas")
-    .insert({ contato_id: c.id, para: c.email, assunto, mensagem: texto, anexos: salvos, resend_id: out.id ?? null })
+    .insert({ contato_id: c.id, para: to.join(", "), copias: cc.length ? cc : null, copias_ocultas: bcc.length ? bcc : null, assunto, mensagem: texto, anexos: salvos, resend_id: out.id ?? null })
     .select().single();
   if (insErr) return json({ error: "E-mail enviado, mas não foi possível salvar no histórico: " + insErr.message, contato_id: c.id }, 500);
   const respondido_em = c.respondido_em ?? resposta.created_at;

@@ -505,7 +505,21 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Contraste:** `#935E0A` sobre o fundo de aviso dá 4,9:1 e no branco 5,5:1.
 - **Trade-offs:** o ponto decorativo do selo pendente (`.badge.pend`) continua em `--warning`, porque não é texto.
 
-## D-046 · 23/11/2026 · App DM | Experience Intelligence consome tokens e componentes do DS Dani Moscatelli, com atualização diária
+## D-046 · 23/11/2026 · Contatos com abas Recebidos e Enviados; e-mail para vários destinatários, com Cc e Cco (site)
+
+- **Origem:** dona do produto. Pediu:
+  - separar enviados de recebidos em duas abas;
+  - enviar com cópia, cópia oculta e para vários destinatários;
+  - a janela no centro da tela, e não na lateral.
+- **Decisão:**
+  - A conversa guarda a lista de destinatários e as cópias. As respostas seguintes vão para os mesmos destinatários e cópias.
+  - A cópia oculta vale só para o primeiro envio, para não expor nem incluir essas pessoas na conversa.
+  - Limite de 20 endereços por envio.
+- **Trade-offs:**
+  - `contatos.email` continua com o primeiro destinatário, para não mudar a busca e a importação da caixa.
+  - Uma resposta de alguém em cópia chega pela conversa, mas a conversa continua identificada pelo primeiro destinatário.
+
+## D-047 · 23/11/2026 · App DM | Experience Intelligence consome tokens e componentes do DS Dani Moscatelli, com atualização diária
 
 - **Origem:** dona do produto, 23/11/2026: "app EI consome tokens e componentes do DS Dani Moscatelli, com atualização diária" (escolheu "Tokens e componentes", não só os tokens).
 - **Decisão:** o app (`apps/experience-intelligence/`) deixa de ter cores e componentes visuais feitos à mão. Usa Tailwind v4 com os arquivos do DS (`index.css`, `fonts.css`, `tailwind.css` e `theme.css`, mapeamento `@theme inline`) e os componentes `ui/` do DS (botão, campo, área de texto, rótulo, caixa de seleção, campo de senha, card, alerta, badge, progresso, avatar, menu suspenso, painel lateral, título, selo e, desde a versão `697a765`, o alerta com ação). Os arquivos são cópias listadas em `design-system/arquivos.txt`, atualizadas pela mesma rotina diária do site, que agora também roda tipos, lint, testes e build do app antes de abrir o pull request.
