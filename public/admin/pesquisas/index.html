@@ -1647,9 +1647,15 @@
     const q = sb.from("pesquisa_respostas").delete();
     const { error } = await (todas ? q.eq("pesquisa", P.slug) : q.in("id", ids));
     if (error) { toast("Não foi possível excluir: " + error.message); return false; }
+    // "Apagar todas" também apaga os contatos da aba Interessados
+    if (todas) {
+      const { error: eI } = await sb.from("pesquisa_interessados").delete().eq("pesquisa", P.slug);
+      if (eI) { R = []; toast("As respostas foram apagadas, mas não foi possível apagar os interessados: " + eI.message); ABA_INICIAL = "interessados"; desenhar(); return false; }
+      I = [];
+    }
     R = todas ? [] : R.filter((x) => !ids.includes(x.id));
-    log(todas ? "Apagou todas as respostas da pesquisa" : "Excluiu uma resposta da pesquisa", P.titulo);
-    toast(todas ? "Todas as respostas foram apagadas" : "Resposta excluída");
+    log(todas ? "Apagou todas as respostas e os interessados da pesquisa" : "Excluiu uma resposta da pesquisa", P.titulo);
+    toast(todas ? "Respostas e interessados apagados" : "Resposta excluída");
     ABA_INICIAL = "respostas"; desenhar(); Admin.refreshNotifications();
     return true;
   }
@@ -1657,10 +1663,14 @@
     const card = el("section", "card pa-entra");
     const topo = el("div", "pa-resp-topo");
     topo.appendChild(el("p", "muted", R.length ? `${plural(R.length, "participação", "participações")}, da mais recente para a mais antiga.` : ""));
-    if (R.length) {
+    if (R.length || I.length) {
       const todas = el("button", "pa-btn perigo"); todas.type = "button"; todas.innerHTML = IC.lixo + "<span>Apagar todas as respostas</span>";
       todas.addEventListener("click", async () => {
-        const ok = await confirmDialog({ title: "Apagar todas as respostas?", message: `As ${plural(R.length, "participação", "participações")} desta pesquisa serão apagadas de vez, junto com os relatos. Os gráficos voltam a zero. Os contatos da aba Interessados não são apagados por aqui. Essa ação não pode ser desfeita.`, ok: "Apagar todas", word: "APAGAR" });
+        const partes = [];
+        if (R.length) partes.push(`As ${plural(R.length, "participação", "participações")} desta pesquisa serão apagadas de vez, junto com os relatos.`);
+        if (I.length) partes.push(`${I.length === 1 ? "O contato" : `Os ${plural(I.length, "contato", "contatos")}`} da aba Interessados ${R.length ? "também " : ""}${I.length === 1 ? "será apagado" : "serão apagados"}.`);
+        partes.push("Os gráficos voltam a zero. Essa ação não pode ser desfeita.");
+        const ok = await confirmDialog({ title: "Apagar todas as respostas?", message: partes.join(" "), ok: "Apagar todas", word: "APAGAR" });
         if (ok) { todas.disabled = true; await excluirRespostas([], true); }
       });
       topo.appendChild(todas);
