@@ -596,6 +596,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-24 · Notificações: "Fulano respondeu a pesquisa", não publicado
+- **Pedido da dona do produto:** o aviso de resposta passa a trazer o nome da pessoa.
+- **`public/admin/admin.js`:** um aviso por resposta concluída ("<nome> respondeu a pesquisa", com o nome da pesquisa embaixo e a hora da conclusão), no lugar de um aviso agrupado por pesquisa. Novas: até 200; já vistas: as 30 mais recentes dos últimos 30 dias. Contador do sino inalterado.
+- **Verificação executada:** painel no navegador (iPhone 13) com dados fictícios e servidor simulado: 3 novas e as já vistas, cada uma com nome, pesquisa e hora; sem erros de JavaScript.
+
 ## 2026-11-24 · Pesquisa: tela de sucesso mais enxuta, não publicado
 - **Pedido da dona do produto:** sai a frase "Cada resposta contribui para este projeto de inovação." e o quadro com o sino (aviso do lançamento ou agradecimento); a frase "Para cancelar os avisos…" vai para baixo do cartão "Indique a pesquisa".
 - **Arquivos:** `pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.ts` (texto do quadro removido), `src/pesquisa-moda.css` (espaço acima da frase).

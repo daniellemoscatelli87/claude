@@ -521,16 +521,17 @@
         sb.from("email_envios").select(emailsSel, { count: "exact" }).is("visualizado_em", null).or("aberto_em.not.is.null,clicado_em.not.is.null").order("created_at", { ascending: false }).limit(200),
         sb.from("email_envios").select(emailsSel).not("visualizado_em", "is", null).gte("visualizado_em", desde).order("visualizado_em", { ascending: false }).limit(30),
       ]);
-      // Respostas novas das pesquisas do Studio (um aviso por pesquisa, até a administradora abrir o painel dela)
+      // Respostas das pesquisas do Studio (novas até a administradora abrir o painel da pesquisa)
       const [pr, prv, ps] = await Promise.all([
-        sb.from("pesquisa_respostas").select("pesquisa, created_at", { count: "exact" }).is("visualizado_em", null).neq("situacao", "parcial").order("created_at", { ascending: false }).limit(2000),
-        sb.from("pesquisa_respostas").select("pesquisa, visualizado_em").not("visualizado_em", "is", null).neq("situacao", "parcial").gte("visualizado_em", desde).order("visualizado_em", { ascending: false }).limit(500),
+        sb.from("pesquisa_respostas").select("pesquisa, nome, created_at, atualizado_em", { count: "exact" }).is("visualizado_em", null).neq("situacao", "parcial").order("created_at", { ascending: false }).limit(200),
+        sb.from("pesquisa_respostas").select("pesquisa, nome, created_at, atualizado_em").not("visualizado_em", "is", null).neq("situacao", "parcial").gte("created_at", desde).order("created_at", { ascending: false }).limit(30),
         sb.from("pesquisas").select("slug, titulo"),
       ]);
       const tituloPesq = Object.fromEntries((ps.data || []).map((x) => [x.slug, x.titulo]));
-      const agrupar = (lista, campo) => { const m = new Map(); (lista || []).forEach((x) => { const g = m.get(x.pesquisa) || { n: 0, at: x[campo] }; g.n++; m.set(x.pesquisa, g); }); return [...m.entries()]; };
-      const pesqItens = agrupar(pr.data, "created_at").map(([slug, g]) => ({ href: "/admin/pesquisas/?p=" + encodeURIComponent(slug), at: g.at, text: g.n === 1 ? "Nova resposta na pesquisa" : g.n + " novas respostas na pesquisa", sub: tituloPesq[slug] || slug, icon: "clipboard" }));
-      const pesqVistas = agrupar(prv.data, "visualizado_em").map(([slug, g]) => ({ href: "/admin/pesquisas/?p=" + encodeURIComponent(slug), at: g.at, text: (g.n === 1 ? "1 resposta vista" : g.n + " respostas vistas") + " na pesquisa", sub: tituloPesq[slug] || slug, icon: "clipboard" }));
+      // um aviso por resposta: "Fulano respondeu a pesquisa", com o nome da pesquisa embaixo
+      const pesqItem = (x) => ({ href: "/admin/pesquisas/?p=" + encodeURIComponent(x.pesquisa), at: x.atualizado_em || x.created_at, text: (x.nome || "Alguém") + " respondeu a pesquisa", sub: tituloPesq[x.pesquisa] || x.pesquisa, icon: "clipboard" });
+      const pesqItens = (pr.data || []).map(pesqItem);
+      const pesqVistas = (prv.data || []).map(pesqItem);
       const emailItem = (x) => {
         const nome = (x.cadastros && x.cadastros.nome) || "Parceiro";
         const clicou = !!x.clicado_em;
