@@ -6,6 +6,8 @@
 
 > **Arquivo de instrução persistente do repositório** para Claude Code. Se recebido como anexo no chat, crie ou atualize `CLAUDE.md` na raiz do projeto e copie os documentos de referência para `/docs` antes de programar. Se não tiver permissão/acesso ao workspace, explique isso claramente e oriente a dona do produto pelo celular, sem afirmar que salvou arquivos.
 
+> **App DM | Experience Intelligence em stand-by (decisão da dona do produto, 24/11/2026, D-048).** Não trabalhar no app até ela retomá-lo. **Quando ela retomar, antes de qualquer outra tarefa no app, avise-a da adequação pendente:** atualizar o Next.js do app (`apps/experience-intelligence/`), porque a versão usada tem uma falha de segurança conhecida (o build às vezes para com esse aviso). O app continua no ar no Cloudflare Pages, com senha, e recebe a atualização diária do design system.
+
 ## Missão e visão obrigatórias
 
 Construir SaaS B2B multiorganização **comercializável e utilizável independentemente da consultoria**, da Dani Moscatelli | Experience Design Studio. O usuário começa por **“O que você deseja melhorar?”** e é conduzido, sem jargões de Service Design, a investigar um desafio humano, reunir evidências, entender hipóteses, planejar/testar melhorias **também físicas, operacionais e humanas** e avaliar resultados. A consultoria é opção especializada complementar, nunca pré-requisito artificial. O objetivo não é criar somente telas nem um chatbot genérico.

@@ -533,6 +533,12 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Atualização (23/11/2026, DS `697a765`):** o app recebe o padrão novo de alertas (ícone com base) e as cores novas de aviso e erro do DS (D-045). Textos e ícones de erro do app passam ao token `--error-text` (a mensagem de erro dos campos usava `--primary-text`, que só coincidia com o erro enquanto o erro era o vermelho da marca); os ícones das mensagens seguem os do DS (aviso: círculo com exclamação; erro: triângulo). O `AlertaComAcao` passa a ser copiado, para quando um alerta do app pedir uma ação; hoje nenhum pede.
 - **Trade-offs:** cada sincronização do DS pode mudar a aparência do app; os testes pegam erros de tipos e de build, não problemas visuais, então a dona do produto confere as telas antes de aprovar o PR. Itens que faltam no DS (rodapé sem "Preferências de cookies", select nativo como componente, "Fechar" em português no `ui/dialog`) ficam para decisão no DS, sem solução inventada no app.
 
+## D-048 · 24/11/2026 · App DM | Experience Intelligence em stand-by
+
+- **Origem:** dona do produto ("vamos deixar o app em stand-by por enquanto e quando eu retomá-lo você me notifica da tarefa de adequação").
+- **Decisão:** nenhum trabalho novo no app até ela retomá-lo. O app segue no ar (Cloudflare Pages, com senha) e recebe a atualização diária do DS.
+- **Ao retomar:** avisar a dona do produto da adequação pendente, a atualização do Next.js por causa de uma falha de segurança conhecida. O aviso está no `CLAUDE.md`, para qualquer sessão ver.
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
