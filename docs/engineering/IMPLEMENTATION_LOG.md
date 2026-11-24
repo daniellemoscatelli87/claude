@@ -598,6 +598,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 
 ## 2026-11-24 · Pesquisa: link do cabeçalho vira "Home" com ícone de casa, não publicado
 
+- **Pergunta 2.1, sugestão da dona do produto:** a opção "Dificuldade para encontrar o que procuro em Curitiba" passa a ser "Acesso a produtos indisponíveis no comércio local".
+  - O id `dificuldade_cwb` continua igual; não há respostas gravadas.
+  - Painel, aba Inteligência: o grupo dos motivos vira "Produtos indisponíveis no comércio local", e o destaque passa a dizer "…% de quem compra fora busca produtos indisponíveis no comércio local", com a descrição ajustada.
+  - A função `pesquisa` precisa ser publicada junto.
+  - Teste: no iPhone 13, a 2.1 aparece para quem marca Marketplaces, com o texto novo; marcada, salva `dificuldade_cwb`; sem erros de JS.
+
 - Janela de busca de bairro e cidade, no celular: sai a borda vermelha do X ao abrir, por pedido da dona do produto. Era o anel de foco, porque a janela focava o X ao abrir. Agora o foco inicial vai para o título (`tabindex=-1`, sem contorno), o que também não abre o teclado. Quem usa teclado ainda vê o anel ao chegar no X com Tab. Teste: iPhone 13 com foco no título, sem contorno no X; Tab leva ao X; Esc fecha; sem erros de JS.
 
 - **Identificação, novos textos da dona do produto:**

@@ -1617,7 +1617,7 @@
         const gr = [
           { rotulo: "Variedade, tamanhos e peças específicas", ids: ["variedade", "tamanhos", "pecas_especificas"] },
           { rotulo: "Preço e condições", ids: ["precos", "promocoes"] },
-          { rotulo: "Não encontrar em Curitiba", ids: ["dificuldade_cwb"] },
+          { rotulo: "Produtos indisponíveis no comércio local", ids: ["dificuldade_cwb"] },
           { rotulo: "Comodidade", ids: ["comodidade"] },
         ].map((x) => ({ rotulo: x.rotulo, v: pct(cita(x.ids), b21.length) })).sort((a, b) => b.v - a.v);
         add("Negócio", {
@@ -1778,8 +1778,8 @@
       const dc = b21.filter((x) => valores(x.respostas.q2_1).includes("dificuldade_cwb")).length;
       if (b21.length >= MIN_SEG && dc) add("Estratégia", {
         tag: "Oportunidade identificada", sinal: { nivel: "alta", texto: "Demanda que pode ficar na cidade" },
-        titulo: `${pct(dc, b21.length)}% de quem compra fora diz não encontrar o que procura em Curitiba`,
-        descricao: ["Entre quem compra em marketplaces ou lojas online de outras cidades, quantos citam a dificuldade de encontrar em Curitiba (pergunta 2.1)."],
+        titulo: `${pct(dc, b21.length)}% de quem compra fora busca produtos indisponíveis no comércio local`,
+        descricao: ["Entre quem compra em marketplaces ou lojas online de outras cidades, quantos citam o acesso a produtos indisponíveis no comércio local (pergunta 2.1)."],
         base: b21.length, recorte: "Quem viu a pergunta 2.1", kpis: [{ v: `${dc}`, t: "pessoas citaram" }, { v: `${pct(dc, b21.length)}%`, t: "de quem compra fora" }],
         significado: ["Se a dificuldade for de descoberta (não saber onde está) e não de oferta (não existir), tornar a oferta local mais fácil de encontrar pode reter parte dessas compras."],
         proximo: ["Validar com entrevistas se as peças procuradas existem nas lojas da cidade."],
