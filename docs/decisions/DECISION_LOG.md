@@ -519,6 +519,20 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - `contatos.email` continua com o primeiro destinatário, para não mudar a busca e a importação da caixa.
   - Uma resposta de alguém em cópia chega pela conversa, mas a conversa continua identificada pelo primeiro destinatário.
 
+## D-047 · 23/11/2026 · App DM | Experience Intelligence consome tokens e componentes do DS Dani Moscatelli, com atualização diária
+
+- **Origem:** dona do produto, 23/11/2026: "app EI consome tokens e componentes do DS Dani Moscatelli, com atualização diária" (escolheu "Tokens e componentes", não só os tokens).
+- **Decisão:** o app (`apps/experience-intelligence/`) deixa de ter cores e componentes visuais feitos à mão. Usa Tailwind v4 com os arquivos do DS (`index.css`, `fonts.css`, `tailwind.css` e `theme.css`, mapeamento `@theme inline`) e os componentes `ui/` do DS (botão, campo, área de texto, rótulo, caixa de seleção, campo de senha, card, alerta, badge, progresso, avatar, menu suspenso, painel lateral, título, selo e, desde a versão `697a765`, o alerta com ação). Os arquivos são cópias listadas em `design-system/arquivos.txt`, atualizadas pela mesma rotina diária do site, que agora também roda tipos, lint, testes e build do app antes de abrir o pull request.
+- **Escolhas do Claude (forma):**
+  - nenhum componente copiado importa algo exclusivo do site do DS (como o `i18n`); por isso não foi preciso nenhum módulo de compatibilidade;
+  - o Next descarta o `@import url(...)` externo do `fonts.css`; o `layout.tsx` lê o endereço das fontes da própria cópia do `fonts.css` e carrega por `<link>`, então muda junto com a sincronização;
+  - as telas seguem a casca de painel do DS: cabeçalho branco na largura toda, perfil no cabeçalho (menu suspenso do DS no lugar da barra lateral), fundo cinza claro, cards só com borda e título da página fora dos cards;
+  - seleções usam o select nativo no padrão da página Formulários do DS (o `ui/select` do Radix não aceita a opção vazia "Selecione" e troca o seletor nativo do celular);
+  - o aviso de privacidade abre no painel lateral do DS (o `ui/dialog` tem o botão fechar com o texto "Close", em inglês, para leitores de tela);
+  - o medidor de força da senha mantém as regras e os textos do app (`padroes.ts`), com as barras e os checks do campo de senha do DS.
+- **Atualização (23/11/2026, DS `697a765`):** o app recebe o padrão novo de alertas (ícone com base) e as cores novas de aviso e erro do DS (D-045). Textos e ícones de erro do app passam ao token `--error-text` (a mensagem de erro dos campos usava `--primary-text`, que só coincidia com o erro enquanto o erro era o vermelho da marca); os ícones das mensagens seguem os do DS (aviso: círculo com exclamação; erro: triângulo). O `AlertaComAcao` passa a ser copiado, para quando um alerta do app pedir uma ação; hoje nenhum pede.
+- **Trade-offs:** cada sincronização do DS pode mudar a aparência do app; os testes pegam erros de tipos e de build, não problemas visuais, então a dona do produto confere as telas antes de aprovar o PR. Itens que faltam no DS (rodapé sem "Preferências de cookies", select nativo como componente, "Fechar" em português no `ui/dialog`) ficam para decisão no DS, sem solução inventada no app.
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:

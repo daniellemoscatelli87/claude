@@ -27,6 +27,9 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            apps/experience-intelligence/package-lock.json
 
       - name: Copiar a versão mais recente do design system
         run: bash scripts/sincronizar-design-system.sh
@@ -46,6 +49,18 @@ jobs:
         if: steps.mudanca.outputs.houve == 'sim'
         run: |
           npm ci
+          npm run build
+
+      # O app DM | Experience Intelligence usa os tokens e os componentes do DS (D-047): o PR só abre se ele continuar
+      # passando nos tipos, no lint, nos testes e no build com a versão nova.
+      - name: Testar o app Experience Intelligence (tipos, lint, testes e build)
+        if: steps.mudanca.outputs.houve == 'sim'
+        working-directory: apps/experience-intelligence
+        run: |
+          npm ci
+          npm run typecheck
+          npm run lint
+          npm test
           npm run build
 
       - name: Abrir ou atualizar o pull request
@@ -75,7 +90,8 @@ jobs:
             echo
             echo "## Teste automático"
             echo
-            echo "Build aprovado. O teste não avalia a aparência: confira a área restrita se a mudança for visual."
+            echo "Build do site aprovado. App Experience Intelligence aprovado em tipos, lint, testes e build."
+            echo "Os testes não avaliam a aparência: confira a área restrita e as telas do app se a mudança for visual."
             echo
             echo "Lembrete: troque o ?v= do theme.css nas páginas de public/admin/ para o navegador não usar a cópia antiga."
             echo
@@ -98,7 +114,7 @@ jobs:
           if [ -z "$ABERTA" ]; then
             gh issue create --title "$TITULO" --body "A sincronização automática não foi aplicada. Detalhes da execução: $LINK
 
-          Causas mais comuns: um arquivo listado em design-system/arquivos.txt foi renomeado ou removido no design system, ou a mudança quebrou o build do site."
+          Causas mais comuns: um arquivo listado em design-system/arquivos.txt foi renomeado ou removido no design system, ou a mudança quebrou o build do site ou os testes do app Experience Intelligence (apps/experience-intelligence)."
           else
             gh issue comment "$ABERTA" --body "Nova falha: $LINK"
           fi

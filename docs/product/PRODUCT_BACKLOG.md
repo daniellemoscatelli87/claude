@@ -6,7 +6,7 @@ Cada item indica o elo da cadeia de valor em que atua: **Identificar** um desafi
 
 Referência dos cortes: seção 18 de [`CHALLENGE_METHODOLOGY.md`](CHALLENGE_METHODOLOGY.md). Escopo aprovado: [`../engineering/FIRST_INCREMENT_PROMPT.md`](../engineering/FIRST_INCREMENT_PROMPT.md).
 
-**Atualizado em:** 20/10/2026 (testes controlados, limites da IA e decisão de IA independente de fornecedor).
+**Atualizado em:** 23/11/2026 (app consome tokens e componentes do Design System Dani Moscatelli, D-047).
 
 ---
 
@@ -62,6 +62,7 @@ Legenda de teste: **banco** = teste executado no banco real (`rls_isolation.sql`
 | T-07 | Conclusão do uso da IA só pelo servidor | Implementado e testado | banco |
 | T-08 | Procedimento de reversão das migrações e versões anteriores da função da IA | Pronto; reversão parcial testada | banco |
 | T-05 | Build da aplicação no Netlify só quando a pasta dela muda | Implementado (não publicado) | revisão |
+| T-09 | Visual do app pelo Design System Dani Moscatelli: tokens e componentes copiados e atualizados pela rotina diária, que testa o app antes do PR (D-047); DS `697a765`: alertas no padrão novo e cores novas de aviso e erro | Implementado e testado (não publicado) | telas |
 
 ### Para fechar o incremento
 

@@ -1,9 +1,8 @@
 "use client";
 // Informações da organização atual (UX-3a): contexto mínimo usado para adaptar as orientações.
 import { useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Shell, Loading } from "@/components/Shell";
+import { Shell, Loading, Voltar } from "@/components/Shell";
 import { OrganizationForm } from "@/components/OrganizationForm";
 import { useSession } from "@/components/session";
 
@@ -14,7 +13,7 @@ export default function Organizacao() {
   if (loading || !current) return <Shell><Loading /></Shell>;
   return (
     <Shell>
-      <p style={{ margin: "0 0 12px" }}><Link href="/">← Seus desafios</Link></p>
+      <Voltar href="/">← Seus desafios</Voltar>
       <OrganizationForm key={current.id} org={current} />
     </Shell>
   );
