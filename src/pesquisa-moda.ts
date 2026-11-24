@@ -622,7 +622,9 @@ function erroCampo(i: HTMLInputElement, msg: string) {
    Além da mensagem junto ao campo, um aviso aparece colado aos botões (sempre à vista, mesmo com a tela rolada):
    diz o que falta e, ao tocar, leva até o campo. Some assim que a pessoa começa a corrigir ou muda de etapa. */
 let alvoFalta: HTMLElement | null = null;
-function avisarFalta(msg: string, alvo: HTMLElement | null) {
+// mensagem única para qualquer campo faltando (o detalhe fica junto de cada campo); erros do servidor trazem o próprio texto
+const FALTA_MSG = 'Preencha os campos em vermelho para prosseguir.';
+function avisarFalta(alvo: HTMLElement | null, msg = FALTA_MSG) {
   const box = $('pq-falta'), txt = $('pq-falta-txt');
   txt.textContent = msg; alvoFalta = alvo;
   box.hidden = false;
@@ -630,14 +632,13 @@ function avisarFalta(msg: string, alvo: HTMLElement | null) {
   if (alvo) alvo.scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' });
 }
 function esconderFalta() { const box = document.getElementById('pq-falta'); if (box) box.hidden = true; alvoFalta = null; }
-const nomesLista = (l: string[]) => l.length === 1 ? l[0] : l.slice(0, -1).join(', ') + ' e ' + l[l.length - 1];
 
 /* ---------- Validação de cada etapa ---------- */
-function mostrarErro(fs: HTMLElement, msg: string) {
+function mostrarErro(fs: HTMLElement, msg: string, avisoProprio = false) {
   const e = $(fs.id + '-erro'); e.textContent = msg; e.hidden = false;
   fs.classList.add('pq-invalido'); fs.setAttribute('aria-invalid', 'true');
   if (!reduzir) { fs.classList.remove('pq-treme'); void fs.offsetWidth; fs.classList.add('pq-treme'); }
-  avisarFalta(msg, e);
+  avisarFalta(e, avisoProprio ? msg : FALTA_MSG);
 }
 function limparErro(fs: HTMLElement) {
   const e = $(fs.id + '-erro'); if (e) { e.hidden = true; e.textContent = ''; }
@@ -651,8 +652,8 @@ function validarEtapa(i: number): boolean {
     if (p.tipo === 'unica' && typeof v !== 'string') { mostrarErro(fs, 'Escolha uma opção para continuar.'); return false; }
     if (p.id === 'q1') {
       const pf = perfilAtual();
-      if (v === 'rmc' && !pf.cidade) { erroPerfil('cidade', 'Escolha a cidade onde você mora.'); avisarFalta('Falta escolher a cidade onde você mora.', $('pq-perfil-cidade')); return false; }
-      if (v === 'sim' && !pf.bairro) { erroPerfil('bairro', 'Escolha o seu bairro. Se preferir, marque "Prefiro não informar" no fim da lista.'); avisarFalta('Falta escolher o seu bairro.', $('pq-perfil-bairro')); return false; }
+      if (v === 'rmc' && !pf.cidade) { erroPerfil('cidade', 'Escolha a cidade onde você mora.'); avisarFalta($('pq-perfil-cidade')); return false; }
+      if (v === 'sim' && !pf.bairro) { erroPerfil('bairro', 'Escolha o seu bairro. Se preferir, marque "Prefiro não informar" no fim da lista.'); avisarFalta($('pq-perfil-bairro')); return false; }
     }
     if (p.tipo === 'ranking' && !(Array.isArray(v) && v.length)) { mostrarErro(fs, p.id === 'q2' ? `Escolha pelo menos uma opção, na ordem de onde você mais comprou (até ${p.max}).` : `Escolha pelo menos uma opção, na ordem do que vem primeiro para você (até ${p.max}).`); return false; }
     if (p.tipo === 'escala' && typeof v !== 'number') { mostrarErro(fs, 'Escolha uma nota de 0 a 10 para continuar.'); return false; }
@@ -660,13 +661,13 @@ function validarEtapa(i: number): boolean {
       const r = (v as Record<string, number>) ?? {};
       const faltam = p.linhas!.filter((l) => typeof r[l.id] !== 'number');
       fs.querySelectorAll<HTMLElement>('.pq-aspecto').forEach((x) => x.classList.toggle('pq-faltando', faltam.some((l) => l.id === x.dataset.linha)));
-      if (faltam.length) { const m = faltam.length === 1 ? `Falta dar nota para: ${faltam[0].texto}.` : `Faltam notas para ${faltam.length} aspectos.`; mostrarErro(fs, m); avisarFalta(m, fs.querySelector<HTMLElement>('.pq-aspecto.pq-faltando')); return false; }
+      if (faltam.length) { const m = faltam.length === 1 ? `Falta dar nota para: ${faltam[0].texto}.` : `Faltam notas para ${faltam.length} aspectos.`; mostrarErro(fs, m); avisarFalta(fs.querySelector<HTMLElement>('.pq-aspecto.pq-faltando')); return false; }
     }
     if (p.tipo === 'matriz') {
       const r = (v as Record<string, string>) ?? {};
       const faltam = p.linhas!.filter((l) => !r[l.id]);
       fs.querySelectorAll<HTMLElement>('.pq-linha').forEach((x) => x.classList.toggle('pq-faltando', faltam.some((l) => l.id === x.dataset.linha)));
-      if (faltam.length) { const m = faltam.length === 1 ? `Falta responder: ${faltam[0].texto}.` : `Faltam ${faltam.length} itens para responder.`; mostrarErro(fs, m); avisarFalta(m, fs.querySelector<HTMLElement>('.pq-linha.pq-faltando')); return false; }
+      if (faltam.length) { const m = faltam.length === 1 ? `Falta responder: ${faltam[0].texto}.` : `Faltam ${faltam.length} itens para responder.`; mostrarErro(fs, m); avisarFalta(fs.querySelector<HTMLElement>('.pq-linha.pq-faltando')); return false; }
     }
     if (p.tipo === 'multipla') {
       const m = (v as Multi) ?? { opcoes: [] };
@@ -686,18 +687,15 @@ function validarEtapa(i: number): boolean {
       faixa_etaria: 'Escolha sua faixa etária. Se preferir, marque "Prefiro não informar".',
       estado_civil: 'Escolha seu estado civil. Se preferir, marque "Prefiro não informar".',
     };
-    const ROTULO: Record<string, string> = { genero: 'gênero', faixa_etaria: 'faixa etária', estado_civil: 'estado civil' };
-    const faltando: string[] = [];
     PERFIL.forEach((c) => {
       if (c.inicio || !perfilAplica(c)) { if (!c.inicio) erroPerfil(c.id, ''); return; }
       const outro = c.opcoes.find((o) => o.outro);
       const msg = !pf[c.id] ? FALTA[c.id] ?? 'Responda esta pergunta.'
         : outro && pf[c.id] === outro.id && !(pf[c.id + '_outro'] ?? '').trim() ? 'Conte como você se identifica ou escolha outra opção.' : '';
       erroPerfil(c.id, msg);
-      if (msg) faltando.push(ROTULO[c.id] ?? c.id);
       if (msg && !primeiro) primeiro = $('pq-perfil-' + c.id);
     });
-    if (primeiro) { avisarFalta('Falta responder: ' + nomesLista(faltando) + '.', primeiro); return false; }
+    if (primeiro) { avisarFalta(primeiro); return false; }
     return true;
   }
   if (i === ETAPA_ID) {
@@ -707,14 +705,11 @@ function validarEtapa(i: number): boolean {
       ['pq-email', !E.email.trim() || emailValido(E.email) ? '' : 'Confira o e-mail ou deixe em branco. Exemplo: seuemail@exemplo.com'],
       ['pq-ciente', E.ciente ? '' : 'Para participar, marque que você leu e concorda.'],
     ];
-    // o que falta, em linguagem simples: "Falta preencher seu nome e marcar a autorização."
-    const FALTA = (id: string) => id === 'pq-nome' ? 'preencher seu nome' : id === 'pq-whats' ? (E.whats.trim() ? 'corrigir o WhatsApp' : 'preencher o WhatsApp')
-      : id === 'pq-email' ? 'corrigir o e-mail (ou deixar em branco)' : 'marcar a autorização';
-    let primeiro: HTMLInputElement | null = null; const faltando: string[] = [];
-    checks.forEach(([id, msg]) => { const inp = $<HTMLInputElement>(id); erroCampo(inp, msg); if (msg) { faltando.push(FALTA(id)); if (!primeiro) primeiro = inp; } });
+    let primeiro: HTMLInputElement | null = null;
+    checks.forEach(([id, msg]) => { const inp = $<HTMLInputElement>(id); erroCampo(inp, msg); if (msg && !primeiro) primeiro = inp; });
     if (primeiro) {
       const p0 = primeiro as HTMLInputElement;
-      avisarFalta('Falta ' + nomesLista(faltando) + '.', p0.closest<HTMLElement>('.pq-campo'));
+      avisarFalta(p0.closest<HTMLElement>('.pq-campo'));
       if (p0.type !== 'checkbox') p0.focus({ preventScroll: true });
       return false;
     }
@@ -861,12 +856,12 @@ async function conferirId() {
     const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ acao: 'verificar', pesquisa: Q.slug, email: E.email, whatsapp: E.whats }) });
     const out = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(out.error || '');
-    if (out.ja_respondeu) { mostrarErro(fs, 'Este e-mail ou WhatsApp já participou da pesquisa. Cada pessoa participa uma vez. Obrigada!'); return; }
+    if (out.ja_respondeu) { mostrarErro(fs, 'Este e-mail ou WhatsApp já participou da pesquisa. Cada pessoa participa uma vez. Obrigada!', true); return; }
     enviando = false;
     const destino = retomar >= 0 && retomar !== ETAPA_ID ? retomar : 0; retomar = -1;
     irPara(destino);
   } catch (e) {
-    mostrarErro(fs, (e instanceof Error && e.message && !/fetch|network/i.test(e.message) ? e.message : 'Não foi possível conferir agora. Confira sua conexão e tente de novo.'));
+    mostrarErro(fs, (e instanceof Error && e.message && !/fetch|network/i.test(e.message) ? e.message : 'Não foi possível conferir agora. Confira sua conexão e tente de novo.'), true);
   } finally {
     enviando = false; b.disabled = false; b.classList.remove('pq-carregando'); atualizarBotao();
   }
