@@ -256,7 +256,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 #pq-id .pq-aceite-q { padding: 2px 2px 0; }
 /* aviso e aceite no mesmo cartão: respiro igual acima e abaixo da linha divisória */
 #pq-id .pq-lgpd-cartao { padding: 18px 18px 20px; }
-#pq-id .pq-lgpd-cartao .pq-aceite-q { margin: 18px 0 0; padding: 18px 2px 0; border-top: 1px solid var(--pq-linha); }
+#pq-id .pq-lgpd-cartao .pq-aceite-q { margin: 18px 0 0; padding: 18px 0 0; border-top: 1px solid var(--pq-linha); }
+/* caixinha (22 px) centrada sob o escudo (34 px): o texto da autorização começa na mesma posição do parágrafo */
+#pq-id .pq-lgpd-cartao .pq-caixa { margin-left: 6px; margin-right: 6px; }
+#pq-id .pq-lgpd-cartao .pq-aceite input { left: 6px; }
 .pq-lgpd-tit { display: block; margin-bottom: 4px; }
 /* Última etapa: destaque da contribuição e das vantagens */
 .pq-vantagem { position: relative; overflow: hidden; display: flex; gap: 16px; align-items: flex-start; margin-top: 20px; padding: 20px; border-radius: 18px;

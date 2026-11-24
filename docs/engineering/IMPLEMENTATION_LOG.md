@@ -604,6 +604,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - No cartão: "**Seus dados e sua privacidade**" em linha própria e "Usamos seu nome, e-mail e WhatsApp apenas para esta pesquisa e para informar sobre o lançamento da solução. Suas respostas não serão divulgadas de forma identificável." Este texto foi revisado duas vezes pela dona do produto; vale a versão final.
   - Na caixa: "Autorizo o uso dos meus dados conforme as finalidades acima e a Política de Privacidade."
   - "Política de Privacidade" vira link sempre que estiver no fim da frase da caixa, não mais só depois de "conforme a".
+- **Alinhamento, a pedido da dona do produto:** os dois blocos de texto começam na mesma posição à esquerda. A caixinha de 22 px fica centrada sob o escudo de 34 px (6 px de cada lado). Teste: o parágrafo e o texto da caixa começam ambos a 85 px, e o centro do escudo e o da caixinha ficam ambos a 56 px; a caixa continua marcando e desmarcando.
 - **Espaçamento:** a regra `#pq-id .pq-aceite-q { padding: 2px … }` zerava o espaço abaixo da linha divisória, colando o texto nela. Agora há 18 px acima e 18 px abaixo da linha, e o cartão tem 18/20 px de respiro.
 - **Registro (`questionario.json`):** a identificação passa para `moda-curitiba-identificacao-v2-2026-11-24`, com o campo novo `finalidades` (o texto do cartão). A função grava em `identificacao_texto` as finalidades seguidas da frase da caixa, porque "finalidades descritas" sozinho não diria quais são. A função `pesquisa` precisa ser publicada junto.
 - **Teste:**
