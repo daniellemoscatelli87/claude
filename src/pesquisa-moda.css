@@ -454,6 +454,7 @@ html.pq-trava { overflow: hidden; }
 .pq-busca[open] { display: flex; flex-direction: column; animation: pq-confirma .35s var(--pq-ease) both; }
 .pq-busca::backdrop { background: rgba(13, 17, 25, 0.5); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
 .pq-busca-topo { position: relative; padding: 20px 20px 14px; border-bottom: 1px solid var(--pq-linha); }
+.pq-busca-topo h2:focus { outline: none; }
 .pq-busca-topo h2 { margin: 0 48px 14px 0; font-size: 18px; line-height: 1.35; color: var(--pq-ink); }
 .pq-busca-fechar { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 12px; background: transparent; color: var(--pq-muted); cursor: pointer; transition: background .2s ease, color .2s ease; }
 .pq-busca-fechar:hover { background: #F1F3F7; color: var(--pq-ink); }

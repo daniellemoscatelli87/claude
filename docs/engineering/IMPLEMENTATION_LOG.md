@@ -598,6 +598,8 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 
 ## 2026-11-24 · Pesquisa: link do cabeçalho vira "Home" com ícone de casa, não publicado
 
+- Janela de busca de bairro e cidade, no celular: sai a borda vermelha do X ao abrir, por pedido da dona do produto. Era o anel de foco, porque a janela focava o X ao abrir. Agora o foco inicial vai para o título (`tabindex=-1`, sem contorno), o que também não abre o teclado. Quem usa teclado ainda vê o anel ao chegar no X com Tab. Teste: iPhone 13 com foco no título, sem contorno no X; Tab leva ao X; Esc fecha; sem erros de JS.
+
 - **Identificação, novos textos da dona do produto:**
   - No cartão: "**Seus dados e sua privacidade**" em linha própria e "Utilizamos seu nome, e-mail e WhatsApp exclusivamente para os fins desta pesquisa e para comunicar o lançamento da solução. As respostas são analisadas em conjunto e não são divulgadas de forma que permita sua identificação."
   - Na caixa: "Li e autorizo o uso dos meus dados para as finalidades descritas, conforme a Política de Privacidade."

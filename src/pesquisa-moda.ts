@@ -460,7 +460,7 @@ function abrirBusca(c: CampoPerfil, sel: HTMLSelectElement, bt: HTMLButtonElemen
   document.documentElement.classList.add('pq-trava');
   dlg.showModal();
   // no computador o cursor já vai para a busca; no celular, mostra a lista sem abrir o teclado
-  if (matchMedia('(min-width: 640px)').matches) busca.focus(); else fechar.focus();
+  if (matchMedia('(min-width: 640px)').matches) busca.focus(); else { h.tabIndex = -1; h.focus({ preventScroll: true }); } // no celular, o foco vai para o título (sem anel de foco no X e sem abrir o teclado)
   dlg.querySelector<HTMLElement>('.pq-busca-op[aria-pressed="true"]')?.scrollIntoView({ block: 'center' });
 }
 function opcoesLista(sel: HTMLSelectElement, c: CampoPerfil, ops: OpcaoLista[]) {
