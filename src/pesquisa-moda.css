@@ -192,11 +192,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-escalas { margin-top: 20px; padding: 6px 18px; border-radius: 16px; background: #fff; border: 1.5px solid var(--pq-linha); }
 .pq-aspecto { margin: 0; padding: 18px 0; border: 0; min-width: 0; }
 .pq-aspecto + .pq-aspecto { border-top: 1px solid var(--pq-linha); border-radius: 0; }
-.pq-aspecto legend { float: left; width: 100%; display: grid; gap: 2px; padding: 0; }
+.pq-aspecto legend { float: left; width: 100%; display: grid; gap: 2px; padding: 0; margin: 0 0 14px; }
 .pq-aspecto legend + * { clear: both; }
 .pq-aspecto-t { font-size: 16px; font-weight: 700; color: var(--pq-ink); }
 .pq-aspecto-d { font-size: 13.5px; color: var(--pq-muted); }
-.pq-aspecto .pq-escala { margin-top: 12px; }
+.pq-aspecto .pq-escala { margin-top: 0; }
 .pq-aspecto .pq-nota span { height: 46px; font-size: 16px; background: var(--pq-fundo); }
 .pq-aspecto.pq-faltando .pq-aspecto-t { color: var(--pq-erro); }
 .pq-aspecto.pq-faltando .pq-nota span { border-color: rgba(198, 40, 40, 0.45); }
