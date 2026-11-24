@@ -596,6 +596,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-24 · Pesquisa: link do cabeçalho vira "Home" com ícone de casa, não publicado
+
+- Pedido da dona do produto: o link "Voltar para o site" do cabeçalho da pesquisa passa a mostrar o ícone de casa e o texto "Home".
+  - Leva para `/`, como antes. O nome para leitores de tela é "Home: ir para o site".
+  - Continua perguntando antes de sair de uma pesquisa em andamento.
+  - No hover, a casa sobe 2 px (antes, a seta ia para a esquerda).
+- Teste: Playwright no iPhone 13 e no computador. Conferidos o texto "Home", o `href="/"` e a janela "Quer mesmo interromper…" ao tocar durante a pesquisa; sem erros de JS.
+
 ## 2026-11-24 · Pesquisa: respostas incompletas guardadas no servidor, publicado (#220)
 
 - Publicado em 24/11/2026, nesta ordem: migração `pesquisa_incompletas` aplicada, função `pesquisa` v14 (código conferido igual ao do repositório; questionário igual pela ação `status`) e site pelo PR #220.

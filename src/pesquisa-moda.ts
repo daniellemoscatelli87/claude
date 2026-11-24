@@ -64,7 +64,7 @@ const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xx
 
 const novo = (): Estado => ({ envio: uuid(), etapa: -1, r: {}, relato: '', nov: '', nome: '', email: '', whats: '', ciente: false });
 /* Rascunho: as respostas ficam guardadas neste aparelho (localStorage) a cada toque, então fechar a aba, sair pelo
-   "Voltar para o site" ou perder a conexão não apaga nada; ao voltar pelo link, a pessoa continua de onde parou.
+   "Home" (cabeçalho) ou perder a conexão não apaga nada; ao voltar pelo link, a pessoa continua de onde parou.
    A identificação (nome, e-mail e WhatsApp) fica só nesta sessão do navegador, por privacidade em aparelhos
    compartilhados; ao voltar outro dia, a pessoa se identifica de novo e continua de onde parou. O rascunho vale por 30 dias e é apagado quando a participação é enviada. */
 const RASCUNHO_DIAS = 30;
@@ -962,7 +962,7 @@ function indicar() {
   });
 }
 
-/* ---------- "Voltar para o site": pergunta antes de interromper a pesquisa em andamento ---------- */
+/* ---------- "Home" (cabeçalho): pergunta antes de interromper a pesquisa em andamento ---------- */
 function sair() {
   const dlg = $<HTMLDialogElement>('pq-sair-dlg');
   let destino = '/';
