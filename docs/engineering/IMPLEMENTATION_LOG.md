@@ -605,10 +605,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - Identificação: "quem é você" em vermelho no título "Conte quem é você".
 - Identificação: o aceite ("Li e concordo…") fica dentro do cartão branco do aviso da LGPD, separado por uma linha.
 - "Indique a pesquisa" nas telas finais (obrigada, fora de Curitiba e da Região Metropolitana, não comprou e já participou), por pedido da dona do produto:
-  - WhatsApp (`wa.me` com mensagem pronta e o link), Facebook (`sharer.php`), LinkedIn (`share-offsite`) e "Copiar link", que mostra o check "Copiado" e volta ao estado inicial;
-  - "Mais opções (Instagram e outros apps)" usa o compartilhar do próprio aparelho, quando o navegador oferece;
+  - Campo com o link da pesquisa (tocar seleciona tudo) e botão "Compartilhar", como pedido pela dona do produto.
+  - No celular, o botão abre o compartilhar do próprio aparelho (todos os apps, inclusive o Direct do Instagram), com a mensagem e o link.
+  - Sem esse recurso (alguns computadores), abre uma lista: WhatsApp (`wa.me` com a mensagem), Facebook (`sharer.php`), LinkedIn (`share-offsite`) e "Copiar link" (check "Copiado"), com a nota "Para o Direct do Instagram, copie o link e cole na conversa".
   - a prévia do link usa as tags `og:` que a página já tem.
-  - Teste: Playwright no iPhone 13 nas telas obrigada, não comprou e fora da região (links certos; "Copiar link" coloca o endereço na área de transferência); bloco montado também em "já participou"; sem erros de JS. O "Mais opções" não aparece no navegador de teste, que não tem o compartilhar do aparelho; precisa ser conferido num celular de verdade.
+  - Teste: Playwright no iPhone 13 nas telas obrigada, não comprou e fora da região (links certos; "Copiar link" coloca o endereço na área de transferência); bloco montado também em "já participou"; sem erros de JS. O compartilhar do aparelho foi testado com um substituto que confere título, texto e link; a lista de redes foi testada sem esse recurso. Falta conferir a folha de compartilhar num celular de verdade.
 - Barra "Voltar / Continuar" sempre presa no rodapé da tela, também nas perguntas curtas, como na abertura. O formulário ocupa a altura da tela abaixo do cabeçalho (`--pq-topo-h`, medida pelo script) e a barra fica no fim. Teste: no iPhone 13 e no computador, a barra fica no rodapé da tela em todas as etapas, sem rolagem extra nas telas curtas.
 - Ícones dos cartões "Leva de 3 a 5 minutos", "Participação voluntária" e "Privacidade protegida": padrão cinza (fundo graphite-50 `#EDF0F5` e ícone em `--pq-muted`), por pedido da dona do produto.
 - Teste executado: Playwright no iPhone 13 (abertura sem o texto, botão "Começar pesquisa" funcionando, link da política no rodapé e na identificação), sem erros de JS.

@@ -797,41 +797,54 @@ const ICONES_REDES = {
 };
 function indicar() {
   const url = encodeURIComponent(LINK_PESQUISA);
-  document.querySelectorAll<HTMLElement>('[data-indicar]').forEach((box) => {
+  const temNativo = typeof navigator.share === 'function';
+  document.querySelectorAll<HTMLElement>('[data-indicar]').forEach((box, n) => {
     box.replaceChildren();
     const tit = el('p', 'pq-indicar-tit', 'Indique a pesquisa');
     const txt = el('p', 'pq-indicar-txt', 'Conhece alguém que compra roupas, calçados ou acessórios em Curitiba ou na Região Metropolitana? Compartilhe o link.');
-    const grade = el('div', 'pq-indicar-grade');
+    // campo com o link (tocar seleciona tudo) e o botão "Compartilhar"
+    const linha = el('div', 'pq-indicar-linha');
+    const campo = el('input'); campo.type = 'text'; campo.readOnly = true; campo.value = LINK_PESQUISA; campo.id = 'pq-indicar-link-' + n;
+    campo.setAttribute('aria-label', 'Link da pesquisa'); campo.addEventListener('focus', () => campo.select());
+    const bt = el('button', 'pq-btn pq-btn-primario pq-indicar-bt-principal'); bt.type = 'button';
+    bt.innerHTML = ICONES_REDES.mais + '<span>Compartilhar</span>';
+    linha.append(campo, bt);
+    // sem o compartilhar do aparelho (alguns computadores): lista com as redes e "Copiar link"
+    const menu = el('div', 'pq-indicar-menu'); menu.hidden = true; menu.id = 'pq-indicar-menu-' + n;
+    bt.setAttribute('aria-controls', menu.id); bt.setAttribute('aria-expanded', 'false');
     const link = (rede: string, rotulo: string, href: string) => {
       const a = el('a', 'pq-indicar-bt pq-rede-' + rede); a.href = href; a.target = '_blank'; a.rel = 'noopener';
       a.innerHTML = (ICONES_REDES as Record<string, string>)[rede] + '<span>' + rotulo + '</span>';
       a.setAttribute('aria-label', 'Compartilhar no ' + rotulo + ' (abre em nova aba)');
       return a;
     };
-    grade.append(
-      link('whatsapp', 'WhatsApp', 'https://wa.me/?text=' + encodeURIComponent(MSG_INDICAR + ' ' + LINK_PESQUISA)),
-      link('facebook', 'Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + url),
-      link('linkedin', 'LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' + url),
-    );
-    // copiar o link: retorno visual (check) e volta ao estado inicial
     const copiar = el('button', 'pq-indicar-bt pq-rede-link'); copiar.type = 'button';
     const rotCopiar = () => { copiar.classList.remove('ok'); copiar.removeAttribute('aria-label'); copiar.innerHTML = ICONES_REDES.link + '<span>Copiar link</span>'; };
     rotCopiar();
     copiar.addEventListener('click', async () => {
       try { await navigator.clipboard.writeText(LINK_PESQUISA); }
-      catch { const t = el('textarea'); t.value = LINK_PESQUISA; document.body.appendChild(t); t.select(); document.execCommand?.('copy'); t.remove(); }
+      catch { campo.select(); document.execCommand?.('copy'); }
       copiar.classList.add('ok'); copiar.innerHTML = ICONES_REDES.ok + '<span>Copiado</span>'; copiar.setAttribute('aria-label', 'Link copiado');
       setTimeout(rotCopiar, 2200);
     });
-    grade.appendChild(copiar);
-    box.append(tit, txt, grade);
-    // compartilhar do próprio aparelho (Instagram, Telegram, e-mail…), quando o navegador oferece
-    if (typeof navigator.share === 'function') {
-      const mais = el('button', 'pq-indicar-mais'); mais.type = 'button';
-      mais.innerHTML = ICONES_REDES.mais + '<span>Mais opções (Instagram e outros apps)</span>';
-      mais.addEventListener('click', () => { navigator.share({ title: 'Vamos conversar sobre moda em Curitiba?', text: MSG_INDICAR, url: LINK_PESQUISA }).catch(() => { /* a pessoa fechou o compartilhar */ }); });
-      box.appendChild(mais);
-    }
+    const grade = el('div', 'pq-indicar-grade');
+    grade.append(
+      link('whatsapp', 'WhatsApp', 'https://wa.me/?text=' + encodeURIComponent(MSG_INDICAR + ' ' + LINK_PESQUISA)),
+      link('facebook', 'Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + url),
+      link('linkedin', 'LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' + url),
+      copiar,
+    );
+    menu.append(grade, el('p', 'pq-indicar-nota', 'Para o Direct do Instagram, copie o link e cole na conversa.'));
+    bt.addEventListener('click', async () => {
+      if (temNativo) {
+        try { await navigator.share({ title: 'Vamos conversar sobre moda em Curitiba?', text: MSG_INDICAR, url: LINK_PESQUISA }); return; }
+        catch (e) { if ((e as DOMException)?.name === 'AbortError') return; /* sem o compartilhar do aparelho: mostra a lista */ }
+      }
+      const abrir = menu.hidden;
+      menu.hidden = !abrir; bt.setAttribute('aria-expanded', String(abrir));
+      if (abrir && !reduzir) { menu.classList.remove('pq-entra'); void menu.offsetWidth; menu.classList.add('pq-entra'); }
+    });
+    box.append(tit, txt, linha, menu);
   });
 }
 
