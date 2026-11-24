@@ -361,17 +361,107 @@ function montarPerfil() {
 // pelas regionais da Prefeitura, só aparece para Curitiba.
 function montarLista(c: CampoPerfil) {
   const bloco = el('div', 'pq-perfil-campo'); bloco.id = 'pq-perfil-' + c.id;
-  const sel = el('select', 'pq-select'); sel.id = bloco.id + '-sel';
-  const t = el('label', 'pq-perfil-titulo'); t.htmlFor = sel.id; t.append(...realcar(c.texto_inicio ?? c.texto, c.destaque_inicio ?? c.destaque), el('span', 'pq-obrig', ' *'));
+  // a lista nativa guarda o valor; quem escolhe é o botão, que abre a janela com busca
+  const sel = el('select', 'pq-select'); sel.id = bloco.id + '-sel'; sel.hidden = true; sel.tabIndex = -1; sel.setAttribute('aria-hidden', 'true');
+  const bt = el('button', 'pq-select pq-escolher'); bt.type = 'button'; bt.id = bloco.id + '-bt'; bt.setAttribute('aria-haspopup', 'dialog');
+  bt.appendChild(el('span', 'pq-escolher-txt', 'Selecione'));
+  const t = el('label', 'pq-perfil-titulo'); t.htmlFor = bt.id; t.append(...realcar(c.texto_inicio ?? c.texto, c.destaque_inicio ?? c.destaque), el('span', 'pq-obrig', ' *'));
   const nota = el('p', 'pq-perfil-nota'); nota.id = bloco.id + '-nota'; nota.hidden = true;
   const err = el('p', 'pq-erro'); err.id = bloco.id + '-erro'; err.hidden = true; err.setAttribute('role', 'alert');
-  sel.setAttribute('aria-describedby', nota.id + ' ' + err.id);
+  bt.setAttribute('aria-describedby', nota.id + ' ' + err.id);
   sel.addEventListener('change', () => {
-    E.r.perfil = { ...perfilAtual(), [c.id]: sel.value }; salvar(); erroPerfil(c.id, '');
+    E.r.perfil = { ...perfilAtual(), [c.id]: sel.value }; salvar(); erroPerfil(c.id, ''); rotuloEscolha(sel);
     if (c.id === 'cidade') sincronizarLocal();
   });
-  bloco.append(t, sel, nota, err);
+  bt.addEventListener('click', () => abrirBusca(c, sel, bt));
+  bloco.append(t, sel, bt, nota, err);
   return bloco;
+}
+// texto do botão: a opção escolhida ou "Selecione"
+function rotuloEscolha(sel: HTMLSelectElement) {
+  const bt = document.getElementById(sel.id.replace(/-sel$/, '-bt')); if (!bt) return;
+  const op = sel.value ? sel.selectedOptions[0] : null;
+  bt.querySelector('.pq-escolher-txt')!.textContent = op ? op.textContent : 'Selecione';
+  bt.classList.toggle('pq-escolher-vazio', !op);
+}
+const semAcento = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+// Janela com busca para bairro (75, agrupados por regional) e cidade da Região Metropolitana (28)
+function abrirBusca(c: CampoPerfil, sel: HTMLSelectElement, bt: HTMLButtonElement) {
+  const ehBairro = c.id === 'bairro';
+  const dlg = el('dialog', 'pq-busca'); dlg.setAttribute('aria-labelledby', 'pq-busca-titulo');
+  const topo = el('div', 'pq-busca-topo');
+  const h = el('h2', undefined, ehBairro ? 'Em qual bairro você mora?' : 'Em qual cidade você mora?'); h.id = 'pq-busca-titulo';
+  const fechar = el('button', 'pq-busca-fechar'); fechar.type = 'button'; fechar.setAttribute('aria-label', 'Fechar');
+  fechar.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+  const campo = el('div', 'pq-busca-campo');
+  campo.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+  const busca = el('input'); busca.type = 'search'; busca.placeholder = ehBairro ? 'Digite o nome do bairro' : 'Digite o nome da cidade';
+  busca.setAttribute('aria-label', busca.placeholder); busca.autocomplete = 'off'; busca.enterKeyHint = 'search';
+  campo.appendChild(busca);
+  topo.append(h, fechar, campo);
+  const lista = el('div', 'pq-busca-lista');
+  const status = el('p', 'pq-sr'); status.setAttribute('aria-live', 'polite');
+  const vazio = el('p', 'pq-busca-vazio'); vazio.hidden = true;
+  lista.appendChild(vazio);
+  // monta a partir das opções da lista nativa (mesma ordem e mesmos grupos)
+  const itens: { b: HTMLButtonElement; chave: string; grupo?: HTMLElement }[] = [];
+  const grupos: { g: HTMLElement; chave: string }[] = [];
+  const item = (op: HTMLOptionElement, chaveGrupo: string, g?: HTMLElement) => {
+    const b = el('button', 'pq-busca-op'); b.type = 'button'; b.dataset.v = op.value;
+    const marcado = op.value === sel.value;
+    b.setAttribute('aria-pressed', String(marcado));
+    b.append(el('span', undefined, op.textContent ?? ''));
+    if (marcado) b.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>');
+    b.addEventListener('click', () => escolher(op.value));
+    itens.push({ b, chave: semAcento((op.textContent ?? '') + ' ' + chaveGrupo), grupo: g });
+    return b;
+  };
+  Array.from(sel.children).forEach((n) => {
+    if (n instanceof HTMLOptGroupElement) {
+      const g = el('div', 'pq-busca-grupo'); g.setAttribute('role', 'group');
+      const tit = el('p', 'pq-busca-grupo-tit', n.label); tit.id = 'pq-busca-g' + grupos.length; g.setAttribute('aria-labelledby', tit.id);
+      g.appendChild(tit);
+      Array.from(n.children).forEach((op) => g.appendChild(item(op as HTMLOptionElement, n.label, g)));
+      grupos.push({ g, chave: semAcento(n.label) }); lista.appendChild(g);
+    } else if (n instanceof HTMLOptionElement && n.value) lista.appendChild(item(n, ''));
+  });
+  const filtrar = () => {
+    const q = semAcento(busca.value.trim());
+    let n = 0;
+    itens.forEach((i) => { const ok = !q || i.chave.includes(q); i.b.hidden = !ok; if (ok) n++; });
+    grupos.forEach(({ g }) => { g.hidden = !g.querySelector('.pq-busca-op:not([hidden])'); });
+    vazio.hidden = n > 0;
+    vazio.textContent = `Não encontramos “${busca.value.trim()}”. Confira a escrita ou procure pelo nome da ${ehBairro ? 'regional' : 'cidade'}.`;
+    status.textContent = q ? (n ? `${n} ${n === 1 ? 'resultado' : 'resultados'}` : 'Nenhum resultado') : '';
+  };
+  const sair = () => { dlg.close(); };
+  const escolher = (v: string) => {
+    sel.value = v; sel.dispatchEvent(new Event('change'));
+    sair();
+    if (!reduzir) { bt.classList.remove('pq-escolhido'); void bt.offsetWidth; bt.classList.add('pq-escolhido'); }
+  };
+  busca.addEventListener('input', filtrar);
+  busca.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); const vis = itens.filter((i) => !i.b.hidden); if (vis.length === 1) vis[0].b.click(); else vis[0]?.b.focus(); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); itens.find((i) => !i.b.hidden)?.b.focus(); }
+  });
+  lista.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+    const vis = itens.filter((i) => !i.b.hidden).map((i) => i.b);
+    const k = vis.indexOf(document.activeElement as HTMLButtonElement); if (k < 0) return;
+    e.preventDefault();
+    if (e.key === 'ArrowUp' && k === 0) busca.focus(); else vis[Math.min(vis.length - 1, k + (e.key === 'ArrowDown' ? 1 : -1))].focus();
+  });
+  fechar.addEventListener('click', sair);
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) sair(); });
+  dlg.addEventListener('close', () => { dlg.remove(); document.documentElement.classList.remove('pq-trava'); bt.focus({ preventScroll: true }); });
+  dlg.append(topo, lista, status);
+  document.body.appendChild(dlg);
+  document.documentElement.classList.add('pq-trava');
+  dlg.showModal();
+  // no computador o cursor já vai para a busca; no celular, mostra a lista sem abrir o teclado
+  if (matchMedia('(min-width: 640px)').matches) busca.focus(); else fechar.focus();
+  dlg.querySelector<HTMLElement>('.pq-busca-op[aria-pressed="true"]')?.scrollIntoView({ block: 'center' });
 }
 function opcoesLista(sel: HTMLSelectElement, c: CampoPerfil, ops: OpcaoLista[]) {
   const vazio = el('option', undefined, 'Selecione'); vazio.value = ''; vazio.disabled = true;
@@ -387,6 +477,7 @@ function opcoesLista(sel: HTMLSelectElement, c: CampoPerfil, ops: OpcaoLista[]) 
   // "Prefiro não informar" no fim, depois dos grupos
   const ni = sel.querySelector('option[value="nao_informar"]'); if (ni) sel.appendChild(ni);
   sel.value = perfilAtual()[c.id] ?? '';
+  rotuloEscolha(sel);
 }
 function sincronizarLocal() {
   const cidade = PERFIL.find((c) => c.id === 'cidade'), bairro = PERFIL.find((c) => c.id === 'bairro');

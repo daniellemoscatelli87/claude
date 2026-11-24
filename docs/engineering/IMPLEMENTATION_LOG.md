@@ -610,6 +610,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - Sem esse recurso (alguns computadores), abre uma lista: WhatsApp (`wa.me` com a mensagem), Facebook (`sharer.php`), LinkedIn (`share-offsite`) e "Copiar link" (check "Copiado"), com a nota "Para o Direct do Instagram, copie o link e cole na conversa".
   - a prévia do link usa as tags `og:` que a página já tem.
   - Teste: Playwright no iPhone 13 nas telas obrigada, não comprou e fora da região (links certos; "Copiar link" coloca o endereço na área de transferência); bloco montado também em "já participou"; sem erros de JS. O compartilhar do aparelho foi testado com um substituto que confere título, texto e link; a lista de redes foi testada sem esse recurso. Falta conferir a folha de compartilhar num celular de verdade.
+- Bairro (Curitiba) e cidade (Região Metropolitana) na pergunta 1: a lista suspensa vira um botão que abre uma janela com busca, por pedido da dona do produto.
+  - Janela vem de baixo no celular e fica no centro no computador.
+  - A busca ignora acentos e também acha pelo nome da regional ("boa vista" mostra os bairros da Regional Boa Vista).
+  - Os bairros continuam agrupados por regional; quando a busca não encontra nada, aparece um aviso.
+  - O bairro ou a cidade escolhidos ficam marcados com check.
+  - Ao escolher, a janela fecha, o botão mostra o nome e o foco volta para ele; Esc ou o X fecham sem mudar nada.
+  - O valor continua na lista nativa (oculta), então validação e envio não mudam.
+  - Teste: Playwright no iPhone 13 e no computador (1280 px). Buscas "umbara" (1 resultado), "boa vista" (13), "xyz" (aviso) e "sitio" + Enter (escolhe Sítio Cercado). Ao reabrir, a opção escolhida aparece marcada; Esc fecha. Na Região Metropolitana (28 cidades), "sao jose" acha São José dos Pinhais e a pesquisa avança para a 1.1. Sem erros de JS.
 - Barra "Voltar / Continuar" sempre presa no rodapé da tela, também nas perguntas curtas, como na abertura. O formulário ocupa a altura da tela abaixo do cabeçalho (`--pq-topo-h`, medida pelo script) e a barra fica no fim. Teste: no iPhone 13 e no computador, a barra fica no rodapé da tela em todas as etapas, sem rolagem extra nas telas curtas.
 - Ícones dos cartões "Leva de 3 a 5 minutos", "Participação voluntária" e "Privacidade protegida": padrão cinza (fundo graphite-50 `#EDF0F5` e ícone em `--pq-muted`), por pedido da dona do produto.
 - Teste executado: Playwright no iPhone 13 (abertura sem o texto, botão "Começar pesquisa" funcionando, link da política no rodapé e na identificação), sem erros de JS.
