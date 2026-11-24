@@ -784,6 +784,57 @@ function topo() {
   atualizar();
 }
 
+/* ---------- Telas finais: "Indique a pesquisa" (WhatsApp, Facebook, LinkedIn, copiar link e o compartilhar do aparelho) ---------- */
+const LINK_PESQUISA = 'https://www.danimoscatelli.com.br/pesquisa/moda-curitiba/';
+const MSG_INDICAR = 'Conhece a pesquisa sobre como é procurar e comprar roupas, calçados e acessórios em Curitiba e Região Metropolitana? Leva de 3 a 5 minutos e ajuda um projeto de inovação. Participe:';
+const ICONES_REDES = {
+  whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.47-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.05 21.5h-.01a9.5 9.5 0 0 1-4.84-1.33l-.35-.21-3.6.94.96-3.5-.23-.36a9.46 9.46 0 0 1-1.45-5.04c0-5.24 4.27-9.5 9.52-9.5a9.44 9.44 0 0 1 6.72 2.79 9.43 9.43 0 0 1 2.78 6.72c0 5.24-4.27 9.5-9.5 9.5zm8.09-17.59A11.36 11.36 0 0 0 12.05.56C5.75.56.62 5.68.62 11.98c0 2.01.53 3.98 1.53 5.71L.53 23.6l6.06-1.59a11.4 11.4 0 0 0 5.45 1.39h.01c6.3 0 11.43-5.13 11.43-11.43 0-3.05-1.19-5.92-3.35-8.08z"/></svg>',
+  facebook: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.23 2.68.23v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>',
+  linkedin: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>',
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+  ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
+  mais: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></svg>',
+};
+function indicar() {
+  const url = encodeURIComponent(LINK_PESQUISA);
+  document.querySelectorAll<HTMLElement>('[data-indicar]').forEach((box) => {
+    box.replaceChildren();
+    const tit = el('p', 'pq-indicar-tit', 'Indique a pesquisa');
+    const txt = el('p', 'pq-indicar-txt', 'Conhece alguém que compra roupas, calçados ou acessórios em Curitiba ou na Região Metropolitana? Compartilhe o link.');
+    const grade = el('div', 'pq-indicar-grade');
+    const link = (rede: string, rotulo: string, href: string) => {
+      const a = el('a', 'pq-indicar-bt pq-rede-' + rede); a.href = href; a.target = '_blank'; a.rel = 'noopener';
+      a.innerHTML = (ICONES_REDES as Record<string, string>)[rede] + '<span>' + rotulo + '</span>';
+      a.setAttribute('aria-label', 'Compartilhar no ' + rotulo + ' (abre em nova aba)');
+      return a;
+    };
+    grade.append(
+      link('whatsapp', 'WhatsApp', 'https://wa.me/?text=' + encodeURIComponent(MSG_INDICAR + ' ' + LINK_PESQUISA)),
+      link('facebook', 'Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + url),
+      link('linkedin', 'LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' + url),
+    );
+    // copiar o link: retorno visual (check) e volta ao estado inicial
+    const copiar = el('button', 'pq-indicar-bt pq-rede-link'); copiar.type = 'button';
+    const rotCopiar = () => { copiar.classList.remove('ok'); copiar.removeAttribute('aria-label'); copiar.innerHTML = ICONES_REDES.link + '<span>Copiar link</span>'; };
+    rotCopiar();
+    copiar.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(LINK_PESQUISA); }
+      catch { const t = el('textarea'); t.value = LINK_PESQUISA; document.body.appendChild(t); t.select(); document.execCommand?.('copy'); t.remove(); }
+      copiar.classList.add('ok'); copiar.innerHTML = ICONES_REDES.ok + '<span>Copiado</span>'; copiar.setAttribute('aria-label', 'Link copiado');
+      setTimeout(rotCopiar, 2200);
+    });
+    grade.appendChild(copiar);
+    box.append(tit, txt, grade);
+    // compartilhar do próprio aparelho (Instagram, Telegram, e-mail…), quando o navegador oferece
+    if (typeof navigator.share === 'function') {
+      const mais = el('button', 'pq-indicar-mais'); mais.type = 'button';
+      mais.innerHTML = ICONES_REDES.mais + '<span>Mais opções (Instagram e outros apps)</span>';
+      mais.addEventListener('click', () => { navigator.share({ title: 'Vamos conversar sobre moda em Curitiba?', text: MSG_INDICAR, url: LINK_PESQUISA }).catch(() => { /* a pessoa fechou o compartilhar */ }); });
+      box.appendChild(mais);
+    }
+  });
+}
+
 /* ---------- "Voltar para o site": pergunta antes de interromper a pesquisa em andamento ---------- */
 function sair() {
   const dlg = $<HTMLDialogElement>('pq-sair-dlg');
@@ -803,7 +854,7 @@ function sair() {
 
 /* ---------- Início ---------- */
 function iniciar() {
-  politica(); topo(); sair();
+  politica(); topo(); sair(); indicar();
   const etapas = $('pq-etapas');
   PERGUNTAS.forEach((p, i) => etapas.appendChild(montarPergunta(p, i)));
   etapas.append(montarIdentificacao(), montarPerfil(), montarRelato(), montarNovidades());
