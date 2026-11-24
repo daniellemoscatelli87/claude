@@ -596,6 +596,24 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-24 · Painel da pesquisa: Relatos e Interessados dentro de Respostas e exportações separadas, não publicado
+
+- Pedido da dona do produto: Relatos e Interessados ficam dentro da área de Respostas, como abas internas, e a barra de ações fica no nível da resposta.
+- Exportações, por decisão dela: no nível da resposta, exportar só o que é da resposta (respostas, relatos e interessados); fora da aba Respostas, um "Exportar relatório" com toda a visão analítica.
+- **Abas de cima:** Resultados · Inteligência · Respostas.
+  - No canto direito, na mesma linha, fica o menu "Exportar relatório", com PDF (Resultados e Inteligência, com os indicadores) e Excel (abas Resumo, Resultados e Inteligência).
+  - No celular, o menu fica acima das abas.
+- **Dentro de Respostas:** abas internas Respostas · Relatos · Interessados, no padrão SegmentedControl do DS (variante suave, tamanho sm), para não confundir com as abas de cima.
+  - Na mesma linha fica o menu "Ações", com "Exportar respostas" (Excel com as abas Respostas, Relatos e Interessados, arquivo `…-respostas-AAAA-MM-DD.xlsx`) e "Excluir". "Excluir" só aparece em Respostas e Interessados e exclui o que estiver marcado.
+  - Depois de excluir, o painel volta para a mesma aba interna.
+- Teste: Playwright com dados fictícios, no computador e no iPhone 13, sem erros de JS. Conferidos:
+  - as abas de cima (3) e as internas (3, com as contagens);
+  - os menus ("PDF" e "Excel"; "Exportar respostas" e "Excluir" desativado sem seleção);
+  - as abas de cada planilha baixada (relatório: Resumo, Resultados e Inteligência; respostas: Respostas, Relatos e Interessados);
+  - excluir 2 respostas pelo menu: a contagem passa de 42 para 40, os contatos delas saem de Interessados e o painel continua em Respostas › Respostas;
+  - excluir 1 contato: continua em Respostas › Interessados;
+  - a aba Relatos abre.
+
 ## 2026-11-24 · Painel da pesquisa: aba Interessados com a mesma estrutura da aba Respostas, não publicado
 
 - Pedido da dona do produto: a aba Interessados deve ter a mesma estrutura da aba Respostas.

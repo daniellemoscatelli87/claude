@@ -307,6 +307,16 @@
   .pa-menu-it:disabled:hover { background: none; }
   .pa-pulsa { animation: pa-pulsa .9s var(--ease-out, ease-out) 2; }
   @keyframes pa-pulsa { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 40%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
+  /* abas internas de Respostas no padrão SegmentedControl do DS (variante suave, tamanho sm) */
+  .pa-abas.pa-abas-int { gap: 0; padding: 0; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-xs, var(--shadow-sm)); overflow: hidden; }
+  .pa-abas.pa-abas-int button { height: 32px; padding: 0 12px; border-radius: 0; font-size: 13px; font-weight: 600; color: var(--muted-foreground); border-left: 1px solid var(--border); transition: background-color .15s, color .15s; display: inline-flex; align-items: center; }
+  .pa-abas.pa-abas-int button:first-child { border-left: 0; }
+  .pa-abas.pa-abas-int button:hover { background: var(--accent, var(--muted)); color: var(--foreground); }
+  .pa-abas.pa-abas-int button[aria-selected=true] { background: var(--primary-muted); color: var(--primary-text); box-shadow: none; }
+  .pa-abas.pa-abas-int button:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--ring, var(--primary)); }
+  .pa-abas.pa-abas-int .n { background: var(--muted); }
+  .pa-abas.pa-abas-int button[aria-selected=true] .n { background: var(--card); color: var(--primary-text); }
+  .pa-area-resp > .pa-abas-linha { margin-bottom: 14px; }
   .pa-abas-linha { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
   .pa-abas-linha > .pa-abas { margin-bottom: 0; min-width: 0; }
   .pa-abas-acoes { position: relative; z-index: 6; display: flex; justify-content: flex-end; margin-left: auto; flex: none; }
@@ -657,11 +667,13 @@
   }
   // Menu "Ações": abre abaixo do botão, alinhado à direita; Esc, clique fora ou escolher uma ação fecham.
   // Setas para cima e para baixo navegam entre os itens. O próprio botão mostra o andamento (ex.: gerando planilha).
-  function menuAcoes() {
+  // Menu suspenso (padrão "Ações"): abre abaixo do botão, alinhado à direita; Esc, clique fora ou escolher fecham.
+  // Os itens são montados a cada abertura (montar), para refletir o estado atual (ex.: o que está marcado na lista).
+  function menuAcoes(id = "pa-acoes-btn", rotulo = "Ações", montar = null) {
     const caixa = el("div", "pa-menu-caixa");
     const btn = el("button", "pa-btn pa-menu-btn"); btn.type = "button";
-    btn.setAttribute("aria-haspopup", "menu"); btn.setAttribute("aria-expanded", "false"); btn.id = "pa-acoes-btn";
-    btn.innerHTML = '<span>Ações</span>' + svg('<path d="m6 9 6 6 6-6"/>');
+    btn.setAttribute("aria-haspopup", "menu"); btn.setAttribute("aria-expanded", "false"); btn.id = id;
+    btn.innerHTML = '<span>' + rotulo + '</span>' + svg('<path d="m6 9 6 6 6-6"/>');
     const menu = el("div", "pa-menu"); menu.setAttribute("role", "menu"); menu.setAttribute("aria-labelledby", btn.id); menu.hidden = true;
     const item = (ic, texto, dica, acao, cls = "") => {
       const b = el(acao.href ? "a" : "button", "pa-menu-it" + cls); b.setAttribute("role", "menuitem"); b.tabIndex = -1;
@@ -670,20 +682,7 @@
       b.addEventListener("click", () => { fechar(false); if (acao.fn) acao.fn(); });
       return b;
     };
-    menu.append(
-      item(IC_BAIXAR, "Exportar Excel", "", { fn: () => exportarExcel(btn) }),
-      item(IC_BAIXAR, "Exportar PDF", "", { fn: exportarPdf }),
-    );
-    // nas abas Respostas e Interessados: excluir o que foi marcado na lista
-    const extra = el("div"); menu.appendChild(extra);
-    const montarExtra = () => {
-      extra.replaceChildren();
-      if (!SELECAO) return;
-      const n = SELECAO.n();
-      const it = item(IC.lixo, "Excluir", "", { fn: SELECAO.fn }, " perigo");
-      if (!n) { it.disabled = true; it.setAttribute("aria-disabled", "true"); }
-      extra.append(el("div", "pa-menu-sep"), it);
-    };
+    const montarExtra = () => menu.replaceChildren(...(montar ? montar(item, btn) : []));
     const itens = () => [...menu.querySelectorAll(".pa-menu-it:not(:disabled)")];
     const fora = (e) => { if (!caixa.contains(e.target)) fechar(false); };
     function abrir() {
@@ -746,30 +745,64 @@
 
   let SELECAO = null; // seleção da aba aberta (Respostas ou Interessados), usada pelo item "Excluir" do menu Ações
   let ABA_INICIAL = null; // depois de excluir, o painel é redesenhado e volta para a mesma aba
-  function abas() {
-    const relatos = R.filter((x) => x.relato && x.relato.trim());
-    const box = el("div");
-    const bar = el("div", "pa-abas"); bar.setAttribute("role", "tablist"); bar.setAttribute("aria-label", "Seções da pesquisa");
-    const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
-    const defs = [["resultados", "Resultados", null], ["inteligencia", "Inteligência", null], ["respostas", "Respostas", R.length], ["relatos", "Relatos", relatos.length], ["interessados", "Interessados", I.length]];
+  // Abas de cima: Resultados · Inteligência · Respostas, com "Exportar relatório" (visão analítica) no canto direito.
+  // Dentro de Respostas, abas internas Respostas · Relatos · Interessados, com o menu "Ações" (exportar respostas e excluir).
+  const SUBABAS = ["respostas", "relatos", "interessados"];
+  function linhaDeAbas(defs, rotuloAria, abrir, prefixo) {
+    const bar = el("div", "pa-abas"); bar.setAttribute("role", "tablist"); bar.setAttribute("aria-label", rotuloAria);
     const botoes = defs.map(([id, t, n]) => {
-      const b = el("button"); b.type = "button"; b.setAttribute("role", "tab"); b.id = "aba-" + id; b.append(t);
+      const b = el("button"); b.type = "button"; b.setAttribute("role", "tab"); b.id = prefixo + id; b.append(t);
       if (n != null) b.appendChild(el("span", "n", String(n)));
       b.addEventListener("click", () => abrir(id));
       bar.appendChild(b); return b;
     });
-    const abrir = (id) => {
-      SELECAO = null;
-      botoes.forEach((b) => b.setAttribute("aria-selected", String(b.id === "aba-" + id)));
+    return { bar, marcar: (id) => botoes.forEach((b) => b.setAttribute("aria-selected", String(b.id === prefixo + id))) };
+  }
+  function abas() {
+    const box = el("div");
+    const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
+    const { bar, marcar } = linhaDeAbas([["resultados", "Resultados", null], ["inteligencia", "Inteligência", null], ["respostas", "Respostas", R.length]], "Seções da pesquisa", (id) => abrir(id), "aba-");
+    const abrir = (id, sub) => {
+      SELECAO = null; marcar(id);
       corpo.setAttribute("aria-labelledby", "aba-" + id);
-      corpo.replaceChildren(id === "resultados" ? resultados() : id === "inteligencia" ? inteligencia() : id === "respostas" ? listaRespostas() : id === "relatos" ? listaRelatos(relatos) : listaInteressados());
+      corpo.replaceChildren(id === "resultados" ? resultados() : id === "inteligencia" ? inteligencia() : areaRespostas(sub || "respostas"));
       requestAnimationFrame(() => requestAnimationFrame(animarGraficos));
     };
-    // abas e menu "Ações" na mesma linha no computador (menu no canto direito); no celular o menu fica acima das abas
-    const acoes = el("div", "pa-abas-acoes"); acoes.appendChild(menuAcoes());
+    const exp = el("div", "pa-abas-acoes");
+    exp.appendChild(menuAcoes("pa-relatorio-btn", "Exportar relatório", (item, btn) => [
+      item(IC_BAIXAR, "PDF", "", { fn: exportarPdf }),
+      item(IC_BAIXAR, "Excel", "", { fn: () => exportarExcel(btn) }),
+    ]));
+    const linha = el("div", "pa-abas-linha"); linha.append(bar, exp);
+    box.append(linha, corpo);
+    const ini = ABA_INICIAL; ABA_INICIAL = null;
+    if (SUBABAS.includes(ini)) abrir("respostas", ini); else abrir(ini || "resultados");
+    return box;
+  }
+  function areaRespostas(sub) {
+    const box = el("div", "pa-area-resp");
+    const corpo = el("div"); corpo.setAttribute("role", "tabpanel");
+    const relatos = relatosR();
+    const { bar, marcar } = linhaDeAbas([["respostas", "Respostas", R.length], ["relatos", "Relatos", relatos.length], ["interessados", "Interessados", I.length]], "Respostas, relatos e interessados", (id) => abrirSub(id), "aba-sub-");
+    bar.classList.add("pa-abas-int");
+    const abrirSub = (id) => {
+      SELECAO = null; marcar(id);
+      corpo.setAttribute("aria-labelledby", "aba-sub-" + id);
+      corpo.replaceChildren(id === "respostas" ? listaRespostas() : id === "relatos" ? listaRelatos(relatos) : listaInteressados());
+    };
+    const acoes = el("div", "pa-abas-acoes");
+    acoes.appendChild(menuAcoes("pa-acoes-btn", "Ações", (item, btn) => {
+      const l = [item(IC_BAIXAR, "Exportar respostas", "", { fn: () => exportarRespostas(btn) })];
+      if (SELECAO) {
+        const ex = item(IC.lixo, "Excluir", "", { fn: SELECAO.fn }, " perigo");
+        if (!SELECAO.n()) { ex.disabled = true; ex.setAttribute("aria-disabled", "true"); }
+        l.push(el("div", "pa-menu-sep"), ex);
+      }
+      return l;
+    }));
     const linha = el("div", "pa-abas-linha"); linha.append(bar, acoes);
     box.append(linha, corpo);
-    abrir(ABA_INICIAL || "resultados"); ABA_INICIAL = null;
+    abrirSub(sub);
     return box;
   }
 
@@ -1355,7 +1388,7 @@
      painel mostra (títulos, leituras e tabelas de números); Respostas, Relatos e Interessados saem direto dos dados.
      PDF: monta todas as abas numa página só e abre a janela de impressão ("Salvar como PDF"). */
   const IC_BAIXAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>';
-  const ABAS_EXP = [["resultados", "Resultados"], ["inteligencia", "Inteligência"], ["respostas", "Respostas"], ["relatos", "Relatos"], ["interessados", "Interessados"]];
+  const ABAS_EXP = [["resultados", "Resultados"], ["inteligencia", "Inteligência"]]; // o relatório é a visão analítica; respostas, relatos e interessados saem em "Exportar respostas"
   const relatosR = () => R.filter((x) => x.relato && x.relato.trim());
   const montarAba = (id) => id === "resultados" ? resultados() : id === "inteligencia" ? inteligencia() : id === "respostas" ? listaRespostas() : id === "relatos" ? listaRelatos(relatosR()) : listaInteressados();
   const limpo = (t) => String(t ?? "").replace(/\s+/g, " ").trim();
@@ -1410,9 +1443,6 @@
       add("Resumo", resumoLinhas(), [{ wch: 28 }, { wch: 40 }]);
       add("Resultados", linhasDoPainel(resultados()), [{ wch: 60 }, ...Array(8).fill({ wch: 14 })]);
       add("Inteligência", linhasDoPainel(inteligencia()), [{ wch: 60 }, ...Array(8).fill({ wch: 14 })]);
-      const resp = dadosRespostas(); add("Respostas", resp, resp[0].map((_, k) => ({ wch: k < 3 ? 14 : 36 })));
-      add("Relatos", [["Data", "Relato"], ...relatosR().map((x) => [fmtDate(x.created_at), x.relato])], [{ wch: 18 }, { wch: 100 }]);
-      add("Interessados", [["Nome", "E-mail", "WhatsApp", "Autorizou em", "Versão da autorização"], ...I.map((x) => [x.nome, x.email, x.whatsapp, fmtDate(x.consentimento_em), x.consentimento_versao])], [{ wch: 28 }, { wch: 32 }, { wch: 16 }, { wch: 18 }, { wch: 34 }]);
       X.writeFile(wb, nomeArquivo("xlsx"));
       log("Exportou o relatório da pesquisa em Excel", P.titulo);
       btn.classList.add("ok"); btn.innerHTML = IC.ok + "<span>Planilha baixada</span>";
@@ -1423,9 +1453,29 @@
       toast("Não foi possível gerar a planilha. Confira a conexão e tente de novo.");
     }
   }
+  // Exportar respostas (menu "Ações" da área Respostas): planilha com Respostas, Relatos e Interessados
+  async function exportarRespostas(btn) {
+    const orig = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="pa-spin" aria-hidden="true"></span><span>Gerando planilha…</span>';
+    try {
+      const X = await carregarXlsx();
+      const wb = X.utils.book_new();
+      const add = (nome, rows, larg) => { const ws = X.utils.aoa_to_sheet(rows.length ? rows : [["Sem dados"]]); ws["!cols"] = larg; X.utils.book_append_sheet(wb, ws, nome); };
+      const resp = dadosRespostas(); add("Respostas", resp, resp[0].map((_, k) => ({ wch: k < 3 ? 14 : 36 })));
+      add("Relatos", [["Data", "Relato"], ...relatosR().map((x) => [fmtDate(x.created_at), x.relato])], [{ wch: 18 }, { wch: 100 }]);
+      add("Interessados", [["Nome", "E-mail", "WhatsApp", "Autorizou em", "Versão da autorização"], ...I.map((x) => [x.nome, x.email, x.whatsapp, fmtDate(x.consentimento_em), x.consentimento_versao])], [{ wch: 28 }, { wch: 32 }, { wch: 16 }, { wch: 18 }, { wch: 34 }]);
+      X.writeFile(wb, nomeArquivo("xlsx").replace("-relatorio-", "-respostas-"));
+      log("Exportou as respostas da pesquisa em Excel", P.titulo);
+      btn.classList.add("ok"); btn.innerHTML = IC.ok + "<span>Planilha baixada</span>";
+      setTimeout(() => { btn.classList.remove("ok"); btn.innerHTML = orig; btn.disabled = false; }, 2200);
+    } catch (e) {
+      console.error("exportar Excel", e);
+      btn.innerHTML = orig; btn.disabled = false;
+      toast("Não foi possível gerar a planilha. Confira a conexão e tente de novo.");
+    }
+  }
   function exportarPdf() {
     const box = el("div"); box.id = "pa-print";
-    const cab = el("header", "pa-print-cab"); cab.append(el("h1", null, P.titulo), el("p", "muted", "Relatório completo · gerado em " + fmtDate(new Date().toISOString())));
+    const cab = el("header", "pa-print-cab"); cab.append(el("h1", null, P.titulo), el("p", "muted", "Relatório · gerado em " + fmtDate(new Date().toISOString())));
     box.append(cab, kpis());
     ABAS_EXP.forEach(([id, t]) => { const sec = el("section", "pa-print-aba"); sec.append(el("h2", "pa-print-tit", t), montarAba(id)); box.appendChild(sec); });
     box.querySelectorAll("details").forEach((d) => { d.open = true; });
