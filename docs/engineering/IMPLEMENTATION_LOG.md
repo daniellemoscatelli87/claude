@@ -596,7 +596,17 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-24 · Pesquisa: link do cabeçalho vira "Home" com ícone de casa, não publicado
+## 2026-11-24 · Pesquisa: pergunta aberta (relato) antes de "Sobre você", não publicado
+- **Pedido da dona do produto:** a pergunta da experiência frustrante vem antes das perguntas sobre a pessoa (gênero, faixa etária e estado civil).
+- **`src/pesquisa-moda.ts`:** ordem das etapas extras passa a ser relato → perfil → novidades (constantes `ETAPA_RELATO`, `ETAPA_PERFIL` e ordem de montagem). Servidor e painel não mudam.
+- **Verificação executada:** navegador (iPhone 13) com servidor simulado: depois da pergunta 12 aparece o relato ("Pular"), depois "Sobre você", depois os avisos; Voltar do perfil volta ao relato com o texto mantido; envio final com relato, perfil e novidades; salvamentos parciais com as etapas certas; fluxos completos (Região Metropolitana, Curitiba, outra cidade) sem erros de JavaScript.
+
+## 2026-11-24 · Publicação: Home, cartão LGPD v2 e texto da 2.1 (#222)
+- Função `pesquisa` v15 no ar (consentimento de identificação v2; `identificacao_texto` = finalidades + frase da caixa). Questionário do `status` igual ao do repositório.
+- Site publicado e conferido no ar. Teste real (iPhone 13, dados fictícios): Região Metropolitana com avisos, Curitiba sem avisos, outra cidade, não comprou e repetição bloqueada. Banco conferido: versão v2 e texto completo gravados. Respostas de teste apagadas.
+- Ficou 1 resposta (e 1 interessado) enviada antes desta publicação pelo e-mail da dona do produto; não apagada, aguardando decisão dela.
+
+## 2026-11-24 · Pesquisa: link do cabeçalho vira "Home" com ícone de casa, publicado (#222)
 
 - **Pergunta 2.1, sugestão da dona do produto:** a opção "Dificuldade para encontrar o que procuro em Curitiba" passa a ser "Acesso a produtos indisponíveis no comércio local".
   - O id `dificuldade_cwb` continua igual; não há respostas gravadas.

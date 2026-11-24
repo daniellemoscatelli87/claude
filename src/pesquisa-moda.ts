@@ -28,7 +28,7 @@ type Estado = {
 const PERGUNTAS = Q.perguntas as Pergunta[];
 const TOTAL = PERGUNTAS.length; // etapas de perguntas, contando a condicional 2.1
 const PRINCIPAIS = PERGUNTAS.filter((p) => !p.condicao).length; // as 10 perguntas principais; 2.1, relato e novidades ficam fora
-const ETAPA_PERFIL = TOTAL, ETAPA_RELATO = TOTAL + 1, ETAPA_NOV = TOTAL + 2; // perfil, relato e novidades depois das perguntas
+const ETAPA_RELATO = TOTAL, ETAPA_PERFIL = TOTAL + 1, ETAPA_NOV = TOTAL + 2; // relato, perfil e novidades depois das perguntas
 const ETAPA_ID = TOTAL + 3; // identificação, antes da primeira pergunta
 type OpcaoLista = Opcao & { regional?: string };
 // inicio: cidade e bairro são perguntados junto com a pergunta 1 (onde mora), não no "Sobre você"
@@ -984,7 +984,7 @@ function iniciar() {
   politica(); topo(); sair(); indicar();
   const etapas = $('pq-etapas');
   PERGUNTAS.forEach((p, i) => etapas.appendChild(montarPergunta(p, i)));
-  etapas.append(montarIdentificacao(), montarPerfil(), montarRelato(), montarNovidades());
+  etapas.append(montarIdentificacao(), montarRelato(), montarPerfil(), montarNovidades());
   [...etapas.children].forEach((x) => { (x as HTMLElement).hidden = true; });
 
   // escolhas que encerram mudam o texto do botão
