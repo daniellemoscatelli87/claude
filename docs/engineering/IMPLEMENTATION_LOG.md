@@ -596,6 +596,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-25 · Painel de pesquisas: WhatsApp e e-mail na ficha da resposta, não publicado
+- **Pedido da dona do produto:** mostrar telefone e e-mail na ficha de resposta de cada pessoa.
+- **`public/admin/pesquisas/index.html`:** a lista de respostas passa a carregar `email` e `whatsapp` (leitura só da administradora, como antes); a ficha ganha o bloco "Contato" no topo, com WhatsApp formatado (link para conversar) e e-mail (link para escrever), ou "Não informado". No celular o bloco fica em uma coluna.
+- **Verificação executada:** painel com dados fictícios e servidor simulado (iPhone 13 e computador): contato aparece formatado com link correto; ficha sem contato mostra "Não informado"; sem erros de JavaScript. Banco de produção só consultado, nada alterado.
+
 ## 2026-11-25 · Painel de pesquisas: QR Code do link da pesquisa, publicado (#234)
 - **Pedido da dona do produto:** um QR Code no mesmo bloco do link; ao tocar, abre uma janela com o QR Code que leva ao endereço da pesquisa.
 - **`public/admin/pesquisas/index.html`:** botão "QR Code" ao lado de Copiar e Abrir (só ícone no celular, com nome para leitores de tela). Janela com título, código (gerado no navegador pela biblioteca qrcode-generator 1.4.4, carregada do cdnjs só quando a janela abre), instrução "Aponte a câmera do celular…" e o endereço; estados de carregando e erro; fecha no X, no fundo e no Esc, com o foco voltando ao botão; entrada suave, sem movimento com "menos movimento".
