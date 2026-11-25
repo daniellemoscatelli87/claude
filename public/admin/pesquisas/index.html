@@ -390,6 +390,10 @@
   .pa-fb-perfil { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; margin: 0; }
   .pa-fb-perfil dt { font-size: 12px; color: var(--muted-foreground); }
   .pa-fb-perfil dd { margin: 2px 0 0; font-size: 14px; font-weight: 600; }
+  .pa-fb-contato dd { overflow-wrap: anywhere; }
+  @media (max-width: 520px) { .pa-fb-contato { grid-template-columns: minmax(0, 1fr); } }
+  .pa-fb-contato a { color: var(--primary-text); text-decoration: underline; text-underline-offset: 3px; }
+  .pa-fb-contato .sem { font-weight: 500; color: var(--muted-foreground); }
   .pa-fq { display: grid; gap: 6px; padding-top: 14px; border-top: 1px solid var(--muted); }
   .pa-fb h3 + .pa-fq { padding-top: 0; border-top: 0; }
   .pa-fq-t { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--muted-foreground); }
@@ -676,7 +680,7 @@
     $("voltar").classList.remove("hidden");
     const [p, r, i, q] = await Promise.all([
       sb.from("pesquisas").select("slug, titulo, ativa, criada_em, atualizado_em").eq("slug", s).maybeSingle(),
-      sb.from("pesquisa_respostas").select("id, envio_id, nome, created_at, situacao, respostas, relato, quer_novidades, visualizado_em, parou_em, atualizado_em").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
+      sb.from("pesquisa_respostas").select("id, envio_id, nome, email, whatsapp, created_at, situacao, respostas, relato, quer_novidades, visualizado_em, parou_em, atualizado_em").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
       sb.from("pesquisa_interessados").select("id, envio_id, created_at, nome, email, whatsapp, consentimento_em, consentimento_versao").eq("pesquisa", s).order("created_at", { ascending: false }).limit(10000),
       fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ acao: "status", pesquisa: s }) }).then((x) => x.json()).catch(() => null),
     ]);
@@ -2190,6 +2194,13 @@
   function fichaConteudo(x) {
     const corpo = el("div", "pa-ficha-corpo");
     const bloco = (t, filhos) => { const s = el("section", "pa-fb"); s.appendChild(el("h3", null, t)); s.append(...filhos); corpo.appendChild(s); };
+    // contato informado na identificação (WhatsApp abre a conversa; e-mail abre o aplicativo de e-mail)
+    const fone = (w) => { const d = String(w || "").replace(/\D/g, ""); return d.length === 11 ? `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}` : d.length === 10 ? `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}` : d; };
+    const ct = el("dl", "pa-fb-perfil pa-fb-contato");
+    const linha = (rot, conteudo) => { const d = el("div"); const dd = el("dd"); dd.append(conteudo); d.append(el("dt", null, rot), dd); ct.appendChild(d); };
+    if (x.whatsapp) { const a = el("a", null, fone(x.whatsapp)); a.href = "https://wa.me/55" + String(x.whatsapp).replace(/\D/g, ""); a.target = "_blank"; a.rel = "noopener"; a.setAttribute("aria-label", "Conversar no WhatsApp: " + fone(x.whatsapp)); linha("WhatsApp", a); } else linha("WhatsApp", el("span", "sem", "Não informado"));
+    if (x.email) { const a = el("a", null, x.email); a.href = "mailto:" + x.email; linha("E-mail", a); } else linha("E-mail", el("span", "sem", "Não informado"));
+    bloco("Contato", [ct]);
     const pf = perfilDe(x);
     if (pf.length) { const dl = el("dl", "pa-fb-perfil"); pf.forEach(([c, v]) => { const d = el("div"); d.append(el("dt", null, ROTULO_PF[c.id] || c.texto), el("dd", null, v)); dl.appendChild(d); }); bloco("Perfil", [dl]); }
     let num = 0; const nums = {};
