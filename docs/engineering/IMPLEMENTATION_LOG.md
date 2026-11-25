@@ -599,6 +599,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 ## 2026-11-25 · Painel de pesquisas: QR Code do link da pesquisa, não publicado
 - **Pedido da dona do produto:** um QR Code no mesmo bloco do link; ao tocar, abre uma janela com o QR Code que leva ao endereço da pesquisa.
 - **`public/admin/pesquisas/index.html`:** botão "QR Code" ao lado de Copiar e Abrir (só ícone no celular, com nome para leitores de tela). Janela com título, código (gerado no navegador pela biblioteca qrcode-generator 1.4.4, carregada do cdnjs só quando a janela abre), instrução "Aponte a câmera do celular…" e o endereço; estados de carregando e erro; fecha no X, no fundo e no Esc, com o foco voltando ao botão; entrada suave, sem movimento com "menos movimento".
+- **Ajuste pedido em seguida:** fundo desfocado (blur de 8 px) atrás da janela do QR Code; o código continua lido corretamente.
 - **Verificação executada:** painel com dados fictícios e servidor simulado, no iPhone 13 e no computador: o QR Code da captura de tela foi lido por um leitor de QR (jsQR) e abre `https://www.danimoscatelli.com.br/pesquisa/moda-curitiba/`; linha do link sem rolagem lateral; Esc fecha e devolve o foco; sem erros de JavaScript.
 
 ## 2026-11-25 · Painel de pesquisas: Inteligência só com cartões de insight, para decidir o Find Look, publicado (#232)

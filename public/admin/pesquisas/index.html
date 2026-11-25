@@ -358,7 +358,7 @@
   /* janela do QR Code */
   .pa-qr { width: min(380px, calc(100vw - 32px)); padding: 20px 20px 22px; border: 0; border-radius: var(--radius-xl); background: var(--card); color: var(--foreground); box-shadow: var(--shadow-lg, 0 20px 50px rgba(0,0,0,.25)); text-align: center; }
   .pa-qr[open] { animation: pa-qr-in .28s var(--ease-out, ease-out) both; }
-  .pa-qr::backdrop { background: rgba(13, 17, 25, .45); }
+  .pa-qr::backdrop { background: rgba(13, 17, 25, .35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
   @keyframes pa-qr-in { from { opacity: 0; transform: translateY(10px) scale(.96); } to { opacity: 1; transform: none; } }
   .pa-qr-cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; text-align: left; }
   .pa-qr-cab h2 { margin: 0; font-size: 18px; }
