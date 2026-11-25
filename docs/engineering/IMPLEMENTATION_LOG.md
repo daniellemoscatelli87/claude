@@ -596,6 +596,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-25 · Pesquisa: "TikTok Shop" nos exemplos de marketplaces, não publicado
+- **Pedido da dona do produto:** incluir o TikTok Shop nas opções de loja online. Decisão dela: acrescentar aos exemplos (não criar opção nova), para manter comparáveis as respostas já recebidas.
+- **`supabase/functions/pesquisa/questionario.json`:** pergunta 2 "Marketplaces (Shein, Shopee, Mercado Livre, TikTok Shop etc.)" e pergunta 5 "Pesquiso em marketplaces, como Shein, Shopee, Mercado Livre ou TikTok Shop". Identificadores das opções e versão do questionário sem mudança. Precisa publicar a função `pesquisa` (o painel usa os textos que ela devolve).
+- **Verificação executada:** navegador (iPhone 13) com servidor simulado: textos novos nas perguntas 2 e 5; sem erros de JavaScript.
+
 ## 2026-11-24 · Painel de pesquisas: resposta nova só conta como vista ao abrir a aba Dados, não publicado
 - **Problema relatado:** a dona do produto respondeu a pesquisa e o aviso foi direto para "Já visualizadas": a resposta foi concluída às 20:42:01 e marcada como vista às 20:42:17, porque abrir a página da pesquisa marcava todas as respostas novas como vistas. (O celular dela também mostrava a versão antiga do sino, em cache.)
 - **Decisão dela:** a resposta passa a contar como vista só ao abrir a aba Dados.
