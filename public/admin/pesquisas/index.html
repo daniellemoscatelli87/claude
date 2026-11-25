@@ -489,6 +489,12 @@
   .pa-int-tema summary b { margin-left: auto; font-weight: 600; color: var(--muted-foreground); font-size: 12.5px; }
   .pa-int-tema blockquote { margin: 0 12px 8px; padding: 8px 10px; border-left: 3px solid var(--primary); background: var(--muted); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 13px; line-height: 1.5; }
   .pa-int-tema small { display: block; margin: 0 12px 10px; color: var(--muted-foreground); font-size: 12px; }
+  .pa-ia-barra { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin: 0 0 10px; }
+  .pa-ia-status { font-size: 12.5px; color: var(--muted-foreground); }
+  .pa-ia-bt { min-height: 36px; padding: 0 14px; font-size: 13px; }
+  .pa-ia-bt.carregando { opacity: .7; cursor: progress; }
+  .pa-ia-sintese { margin: 0 0 10px; padding: 10px 12px; border-radius: var(--radius-md); background: var(--card); border: 1px solid var(--border); font-size: 13.5px; line-height: 1.55; }
+  .pa-int-tema-res { margin: 0 12px 8px; font-size: 13px; line-height: 1.5; color: var(--foreground); }
   .pa-int-oport { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: 13.5px; }
   .pa-int-oport li b { display: block; }
   .pa-int-oport li span { color: var(--muted-foreground); }
@@ -1645,6 +1651,87 @@
     }
     return card;
   }
+  // Relatos por tema. Sem IA: palavras-chave. Com IA (Google Gemini, função relatos-ia): só o texto dos relatos vai
+  // para a IA, sem nome nem contatos; o resultado fica guardado e só é gerado de novo quando os relatos mudam.
+  let RELATOS_IA = null, RELATOS_IA_SLUG = null;
+  const TEMAS_CHAVE = [
+    ["Tamanho e modelagem", ["tamanho", "numero", "numeracao", "plus", "grande", "pequen", "modelagem", "caimento", "veste", "vestir", "forma", "apertad", "larg"]],
+    ["Disponibilidade e estoque", ["esgot", "estoque", "disponiv", "nao tinha", "nao tem", "acabou", "falta", "encontr", "achar", "acho"]],
+    ["Preço", ["preco", "caro", "valor", "custo", "barat", "desconto", "promoc"]],
+    ["Qualidade", ["qualidade", "tecido", "costura", "material", "rasg", "desbot", "durou", "acabamento"]],
+    ["Atendimento", ["atendiment", "vendedor", "atendent", "grosse", "educad", "resposta", "respond", "whats", "insta"]],
+    ["Entrega, troca e pós-venda", ["troca", "trocar", "devolu", "entrega", "prazo", "frete", "chegou", "chegar", "pos-venda", "pos venda", "reembols"]],
+  ];
+  function cardRelatos(rel) {
+    const norm = (t) => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const kn = (k, d) => `${k} de ${d}`;
+    const porId = new Map(rel.map((x) => [x.id, x]));
+    const lista = el("div", "pa-int-temas");
+    const card = cartao({
+      tag: "Relatos", sinal: { nivel: "info", texto: "Pergunta aberta" }, titulo: "Relatos", descricao: [""],
+      base: rel.length, recorte: "Quem escreveu na pergunta aberta", mini: lista,
+      significado: ["Os relatos explicam o “porquê” que os números ainda não mostram. O agrupamento pode errar: confira lendo os relatos."],
+      proximo: ["Usar os temas mais citados para montar o roteiro das conversas com quem pediu os avisos."],
+    });
+    const h3 = card.querySelector("h3"), desc = card.querySelector(".pa-ic-desc");
+    const barra = el("div", "pa-ia-barra");
+    const status = el("span", "pa-ia-status"); status.setAttribute("aria-live", "polite");
+    const bt = el("button", "pa-btn pa-ia-bt"); bt.type = "button";
+    barra.append(status, bt);
+    lista.before(barra);
+    const ia = () => (RELATOS_IA_SLUG === P.slug && RELATOS_IA && Array.isArray(RELATOS_IA.temas) && RELATOS_IA.temas.length ? RELATOS_IA : null);
+    const tema = (nome, itens, resumo) => {
+      const d = el("details", "pa-int-tema"); const sm = el("summary"); sm.append(el("span", null, nome), el("b", null, kn(itens.length, rel.length))); d.appendChild(sm);
+      if (resumo) d.appendChild(el("p", "pa-int-tema-res", resumo));
+      itens.slice(0, 3).forEach((x) => { const q = el("blockquote"); const r = x.relato.trim(); q.textContent = "“" + (r.length > 220 ? r.slice(0, 217).trimEnd() + "…" : r) + "”"; d.appendChild(q); });
+      if (itens.length > 3) d.appendChild(el("small", null, `E mais ${itens.length - 3} na aba Dados › Relatos.`));
+      return d;
+    };
+    function desenhar() {
+      const r = ia();
+      lista.replaceChildren(); card.querySelector(".pa-ia-sintese")?.remove(); card.querySelector(".pa-ic-nota")?.remove();
+      let temas;
+      if (r) {
+        temas = r.temas.map((t) => ({ nome: t.nome, resumo: t.resumo, itens: t.ids.map((id) => porId.get(id)).filter(Boolean) })).filter((t) => t.itens.length);
+        desc.textContent = "Relatos agrupados por temas com IA (Google Gemini). Só o texto dos relatos foi enviado, sem nome nem contatos. Um relato pode cair em mais de um tema. Toque em cada tema para ler o resumo e trechos.";
+        if (r.sintese) { const sx = el("p", "pa-ia-sintese"); sx.append(el("strong", null, "Leitura geral (IA): "), r.sintese); lista.before(sx); }
+        status.textContent = r.desatualizada ? `Agrupado com IA em ${fmtDate(r.gerado_em)}. Chegaram relatos novos desde então.` : `Agrupado com IA em ${fmtDate(r.gerado_em)}.`;
+        bt.textContent = r.desatualizada ? "Atualizar com IA" : "Agrupar de novo";
+        bt.hidden = !r.desatualizada;
+      } else {
+        temas = TEMAS_CHAVE.map(([nome, chaves]) => ({ nome, itens: rel.filter((x) => chaves.some((k) => norm(x.relato).includes(k))) })).filter((t) => t.itens.length);
+        desc.textContent = "Relatos agrupados por palavras-chave (sem IA). Um relato pode cair em mais de um tema. Toque em cada tema para ler trechos.";
+        status.textContent = "Agrupamento por palavras-chave.";
+        bt.textContent = "Agrupar com IA"; bt.hidden = false;
+      }
+      temas.sort((a, b) => b.itens.length - a.itens.length);
+      temas.forEach((t) => lista.appendChild(tema(t.nome, t.itens, t.resumo)));
+      h3.textContent = temas.length ? `Tema mais citado nos relatos: ${lc(temas[0].nome)} (${kn(temas[0].itens.length, rel.length)})` : `${plural(rel.length, "relato", "relatos")} sem tema identificado`;
+      const semTema = rel.filter((x) => !temas.some((t) => t.itens.includes(x))).length;
+      if (semTema) { const nt = el("p", "pa-ic-nota", `${plural(semTema, "relato não entrou", "relatos não entraram")} em nenhum tema; leia todos na aba Dados › Relatos.`); lista.after(nt); }
+    }
+    bt.addEventListener("click", async () => {
+      bt.disabled = true; bt.classList.add("carregando"); const antes = bt.textContent; bt.textContent = "Agrupando…"; status.textContent = "A IA está lendo os relatos. Pode levar alguns segundos.";
+      const { data, error } = await sb.functions.invoke("relatos-ia", { body: { pesquisa: P.slug } }).catch((e) => ({ error: e }));
+      bt.disabled = false; bt.classList.remove("carregando");
+      if (error || !data || data.error) {
+        bt.textContent = antes;
+        const ocupado = data && data.error === "ocupado";
+        status.textContent = ocupado ? "A IA está ocupada agora (plano gratuito). Tente de novo em alguns minutos." : "Não foi possível agrupar com IA agora. O agrupamento por palavras-chave continua valendo.";
+        return;
+      }
+      RELATOS_IA = data; RELATOS_IA_SLUG = P.slug;
+      log("Agrupou os relatos da pesquisa com IA", P.titulo);
+      desenhar(); toast("Relatos agrupados com IA");
+    });
+    desenhar();
+    // análise com IA já guardada: aparece sem gastar uma nova chamada
+    if (RELATOS_IA_SLUG !== P.slug) {
+      RELATOS_IA_SLUG = P.slug; RELATOS_IA = null;
+      sb.functions.invoke("relatos-ia", { body: { pesquisa: P.slug, somente_cache: true } }).then(({ data }) => { if (data && !data.error && !data.vazio) { RELATOS_IA = data; if (card.isConnected) desenhar(); } }).catch(() => {});
+    }
+    return card;
+  }
   function inteligencia() {
     const box = el("div", "pa-entra");
     const comp = completasR();
@@ -1919,37 +2006,10 @@
       proximo: ["Acompanhar no cruzamento por idade onde esse hábito é mais forte."],
     });
 
-    /* ----- O que dizem os relatos (temas por palavras-chave, sem inteligência artificial) ----- */
+    /* ----- O que dizem os relatos: por palavras-chave (sem IA) ou, quando pedido, agrupados com IA ----- */
     const rel = comp.filter((x) => x.relato && x.relato.trim());
-    if (rel.length) {
-      const norm = (t) => t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-      const TEMAS = [
-        ["Tamanho e modelagem", ["tamanho", "numero", "numeracao", "plus", "grande", "pequen", "modelagem", "caimento", "veste", "vestir", "forma", "apertad", "larg"]],
-        ["Disponibilidade e estoque", ["esgot", "estoque", "disponiv", "nao tinha", "nao tem", "acabou", "falta", "encontr", "achar", "acho"]],
-        ["Preço", ["preco", "caro", "valor", "custo", "barat", "desconto", "promoc"]],
-        ["Qualidade", ["qualidade", "tecido", "costura", "material", "rasg", "desbot", "durou", "acabamento"]],
-        ["Atendimento", ["atendiment", "vendedor", "atendent", "grosse", "educad", "resposta", "respond", "whats", "insta"]],
-        ["Entrega, troca e pós-venda", ["troca", "trocar", "devolu", "entrega", "prazo", "frete", "chegou", "chegar", "pos-venda", "pos venda", "reembols"]],
-      ];
-      const lista = el("div", "pa-int-temas");
-      const cont = TEMAS.map(([nome, chaves]) => ({ nome, itens: rel.filter((x) => chaves.some((k) => norm(x.relato).includes(k))) })).filter((t) => t.itens.length).sort((a, b) => b.itens.length - a.itens.length);
-      cont.forEach((t) => {
-        const d = el("details", "pa-int-tema"); const s = el("summary"); s.append(el("span", null, t.nome), el("b", null, kn(t.itens.length, rel.length))); d.appendChild(s);
-        t.itens.slice(0, 3).forEach((x) => { const q = el("blockquote"); const r = x.relato.trim(); q.textContent = "“" + (r.length > 220 ? r.slice(0, 217).trimEnd() + "…" : r) + "”"; d.appendChild(q); });
-        if (t.itens.length > 3) d.appendChild(el("small", null, `E mais ${t.itens.length - 3} na aba Dados › Relatos.`));
-        lista.appendChild(d);
-      });
-      const semTema = rel.filter((x) => !cont.some((t) => t.itens.includes(x))).length;
-      add("relatos", {
-        tag: "Relatos", sinal: { nivel: "info", texto: "Pergunta aberta" },
-        titulo: cont.length ? `Tema mais citado nos relatos: ${lc(cont[0].nome)} (${kn(cont[0].itens.length, rel.length)})` : `${plural(rel.length, "relato", "relatos")} sem tema identificado`,
-        descricao: [`Relatos agrupados por palavras-chave (sem inteligência artificial). Um relato pode cair em mais de um tema. Toque em cada tema para ler trechos.`],
-        base: rel.length, recorte: "Quem escreveu na pergunta aberta", mini: lista,
-        nota: semTema ? `${plural(semTema, "relato não se encaixou", "relatos não se encaixaram")} em nenhum tema; leia todos na aba Dados › Relatos.` : "",
-        significado: ["Os relatos explicam o “porquê” que os números ainda não mostram. O agrupamento por palavras pode errar: confira lendo os relatos."],
-        proximo: ["Usar os temas mais citados para montar o roteiro das conversas com quem pediu os avisos."],
-      });
-    } else add("relatos", el("p", "pa-int-vazio", "Ainda não há relatos na pergunta aberta."));
+    if (rel.length) add("relatos", cardRelatos(rel));
+    else add("relatos", el("p", "pa-int-vazio", "Ainda não há relatos na pergunta aberta."));
 
     /* ----- Oportunidades a validar ----- */
     // dores com mais gente afetada e, entre os afetados, quantos desistiram de comprar
