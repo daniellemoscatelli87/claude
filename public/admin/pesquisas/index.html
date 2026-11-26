@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="/design-system/theme.css?v=697a765">
 <link rel="stylesheet" href="/admin/admin.css?v=20261123g">
 <style>
-  .pa-topo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; position: relative; z-index: 5; } /* o menu "Ações" abre por cima dos números abaixo */
   .pa-cab { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 20px; }
   .pa-cab h2 { margin: 0 0 4px; font-size: 20px; }
   .pa-cab .muted { margin: 0; font-size: 13px; }
@@ -22,21 +21,27 @@
   .pa-status.off::before { background: var(--muted-foreground); animation: none; }
   @keyframes pa-pulso { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 45%, transparent); } 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
   /* cabeçalho: título à esquerda, Exportar relatório e Apagar pesquisa no canto superior direito */
-  /* cabeçalho do painel: um card com título e descrição em cima e a barra de ações embaixo, separada por uma linha */
+  /* cabeçalho único do painel (card): situação, título e descrição, link e barra de ações */
   .pa-cabecalho { margin: 4px 0 20px; }
   .pa-cabecalho h1 { margin: 0 0 6px; }
   .pa-cabecalho #sub { margin: 0; max-width: 46rem; }
-  .pa-cabecalho.painel { padding: 24px 24px 0; border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--card); }
+  .pa-cab-status:empty, #cab-link:empty, .pa-cab-acoes:empty { display: none; }
+  .pa-cabecalho.painel { position: relative; z-index: 5; padding: 22px 24px 0; border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--card); }
+  .pa-cabecalho.painel .pa-cab-status { margin-bottom: 12px; }
   .pa-cabecalho.painel h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; text-wrap: balance; }
   .pa-cabecalho.painel #sub { font-size: 14.5px; line-height: 1.6; }
-  .pa-cabecalho.painel .pa-cab-acoes { margin: 20px -24px 0; padding: 14px 24px; border-top: 1px solid var(--border); justify-content: flex-end; }
-  @media (max-width: 600px) { .pa-cabecalho.painel { padding: 20px 18px 0; } .pa-cabecalho.painel h1 { font-size: 22px; } .pa-cabecalho.painel .pa-cab-acoes { margin: 18px -18px 0; padding: 12px 18px; } }
-  .pa-cab-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-  .pa-cab-acoes:empty { display: none; }
+  .pa-cabecalho.painel #cab-link { margin-top: 18px; }
+  .pa-cab-acoes { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin: 20px -24px 0; padding: 14px 24px; border-top: 1px solid var(--border); }
+  .pa-cab-acoes .pa-ult { margin: 0; padding-top: 0; border-top: 0; }
+  .pa-cab-botoes { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-left: auto; }
+  @media (max-width: 600px) {
+    .pa-cabecalho.painel { padding: 18px 18px 0; } .pa-cabecalho.painel h1 { font-size: 22px; }
+    .pa-cab-acoes { margin: 18px -18px 0; padding: 14px 18px; }
+    .pa-cab-botoes { width: 100%; margin-left: 0; } .pa-cab-botoes > * { flex: 1 1 100%; } .pa-cab-botoes .pa-btn, .pa-cab-botoes .pa-menu-btn { width: 100%; justify-content: center; }
+  }
   .pa-del-pesq.bloqueado { opacity: .55; cursor: not-allowed; }
   .pa-treme { animation: pa-treme .4s ease both; }
   @keyframes pa-treme { 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }
-  @media (max-width: 600px) { .pa-cab-acoes > * { flex: 1 1 0; } .pa-cab-acoes .pa-menu-btn, .pa-cab-acoes .pa-del-pesq { width: 100%; justify-content: center; } }
   .pa-link { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
   .pa-link input { flex: 1 1 220px; min-width: 0; font: inherit; font-size: 14px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--muted); color: var(--foreground); }
   .pa-cab { flex-wrap: nowrap; }
@@ -641,7 +646,9 @@
 <main class="wrap hidden" id="app">
   <a class="back hidden" id="voltar" href="/admin/pesquisas/">← Pesquisas</a>
   <header class="pa-cabecalho">
+    <div class="pa-cab-status" id="cab-status"></div>
     <div class="pa-cab-texto"><h1 id="titulo">Pesquisas</h1><p class="muted" id="sub">Pesquisas do Studio: acompanhe as respostas, compartilhe o link e tire do ar quando quiser.</p></div>
+    <div id="cab-link"></div>
     <div class="pa-cab-acoes" id="cab-acoes"></div>
   </header>
   <p class="msg err hidden" id="load-err" role="alert"></p>
@@ -734,25 +741,10 @@
 
   function desenhar() {
     const c = $("conteudo"); c.replaceChildren();
-    cabecalhoAcoes();
-    c.append(topo(), abas());
+    topo();
+    c.append(abas());
   }
 
-  // Cabeçalho do painel (canto superior direito): "Exportar relatório" e "Apagar pesquisa".
-  // Apagar remove a pesquisa inteira (com respostas, relatos e interessados). Só vale para pesquisa fora do ar,
-  // e sempre pede confirmação digitando APAGAR.
-  function cabecalhoAcoes() {
-    const box = $("cab-acoes"); box.replaceChildren();
-    box.appendChild(menuAcoes("pa-relatorio-btn", "Exportar relatório", (item, btn) => [
-      item(IC_BAIXAR, "PDF", "", { fn: exportarPdf }),
-      item(IC_BAIXAR, "Excel", "", { fn: () => exportarExcel(btn) }),
-    ]));
-    const del = el("button", "pa-btn perigo pa-del-pesq" + (P.ativa ? " bloqueado" : "")); del.type = "button";
-    del.innerHTML = IC.lixo + "<span>Apagar pesquisa</span>";
-    if (P.ativa) { del.setAttribute("aria-disabled", "true"); del.title = "Para apagar, primeiro tire a pesquisa do ar."; }
-    del.addEventListener("click", () => apagarPesquisa(del));
-    box.appendChild(del);
-  }
   async function apagarPesquisa(btn) {
     if (P.ativa) {
       toast("Não é possível apagar uma pesquisa no ar. Primeiro toque em “Tirar do ar”.");
@@ -779,10 +771,9 @@
 
   // Cabeçalho do painel: situação e "Ações" na mesma linha; o link com "Copiar" logo abaixo.
   // As ações (ver, exportar, tirar do ar) ficam num menu, para o card não quebrar em várias linhas no celular.
+  // Cabeçalho único do painel: situação (no ar / fora do ar) em cima, título e descrição, o link com Copiar, Abrir e
+  // QR Code, e embaixo a barra de ações: última resposta à esquerda; Tirar do ar, Exportar relatório e Apagar pesquisa à direita.
   function topo() {
-    const card = el("section", "card pa-topo pa-entra");
-    const cab = el("div", "pa-cab");
-    // linha 1: situação e o botão de ligar/desligar; linha 2: link; rodapé: última resposta
     const st = el("span", "pa-status" + (P.ativa ? "" : " off"));
     st.append(el("b", null, P.ativa ? "No ar" : "Fora do ar"), el("span", "pa-status-d", P.ativa ? "recebendo respostas" : "não recebe respostas"));
     const url = SITE + (PAGINAS[P.slug] || "/pesquisa/" + P.slug + "/");
@@ -790,8 +781,7 @@
     const tog = el("button", "pa-btn" + (P.ativa ? " perigo" : " liga")); tog.type = "button";
     tog.innerHTML = (P.ativa ? IC.pausa : IC.play) + "<span>" + (P.ativa ? "Tirar do ar" : "Colocar no ar") + "</span>";
     tog.addEventListener("click", () => alternar(tog));
-    tog.classList.add("pa-btn-sm");
-    cab.append(st, tog);
+    $("cab-status").replaceChildren(st);
     const link = el("div", "pa-link");
     const inp = el("input"); inp.type = "text"; inp.readOnly = true; inp.value = url; inp.setAttribute("aria-label", "Link da pesquisa");
     inp.addEventListener("focus", () => inp.select());
@@ -812,8 +802,19 @@
     const ult = el("p", "pa-ult");
     ult.innerHTML = svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>');
     ult.append(R[0] ? "Última resposta em " + fmtDate(R[0].created_at) : "Ainda sem respostas");
-    card.append(cab, link, ult);
-    return card;
+    $("cab-link").replaceChildren(link);
+    const bar = $("cab-acoes"); bar.replaceChildren(ult);
+    const botoes = el("div", "pa-cab-botoes"); bar.appendChild(botoes);
+    botoes.appendChild(tog);
+    botoes.appendChild(menuAcoes("pa-relatorio-btn", "Exportar relatório", (item, btn) => [
+      item(IC_BAIXAR, "PDF", "", { fn: exportarPdf }),
+      item(IC_BAIXAR, "Excel", "", { fn: () => exportarExcel(btn) }),
+    ]));
+    const del = el("button", "pa-btn perigo pa-del-pesq" + (P.ativa ? " bloqueado" : "")); del.type = "button";
+    del.innerHTML = IC.lixo + "<span>Apagar pesquisa</span>";
+    if (P.ativa) { del.setAttribute("aria-disabled", "true"); del.title = "Para apagar, primeiro tire a pesquisa do ar."; }
+    del.addEventListener("click", () => apagarPesquisa(del));
+    botoes.appendChild(del);
   }
   // Menu "Ações": abre abaixo do botão, alinhado à direita; Esc, clique fora ou escolher uma ação fecham.
   // Setas para cima e para baixo navegam entre os itens. O próprio botão mostra o andamento (ex.: gerando planilha).
