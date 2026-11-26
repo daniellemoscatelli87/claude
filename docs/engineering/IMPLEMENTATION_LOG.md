@@ -596,6 +596,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
+## 2026-11-26 · Painel de pesquisas: cabeçalho no padrão do DS e números do topo unificados no funil, não publicado
+- **Pedidos da dona do produto:** o título estava fora do padrão do DS e os botões muito em cima do texto; os números do topo (participações, completas, fora do público, querem novidades) repetiam o bloco "Quem chegou até onde": unificar e deixar na aba Resultado.
+- **`public/admin/pesquisas/index.html`:** cabeçalho no padrão PageHeader do DS (sobretítulo "PESQUISA" 12 px em vermelho, título 32/40 px negrito com fonte de destaque, descrição 17 px), com Exportar relatório e Apagar pesquisa alinhados embaixo, à direita (no celular, abaixo do texto, com 20 px de espaço). A fileira de números do topo saiu do painel e do PDF; o funil "Quem chegou até onde" (aba Resultado) ganhou a frase com quem ficou fora do público (fora de Curitiba e RMC, não comprou) e os contatos guardados.
+- **Verificação executada:** painel com dados fictícios e servidor simulado (computador e iPhone 13): sem a fileira de números no topo; frase do funil correta; botões separados do texto (no celular, 20 px abaixo da descrição); sem erros de JavaScript.
+
 ## 2026-11-26 · Pesquisa: tempo de resposta recalculado ("Leva de 5 a 8 minutos"), não publicado
 - **Pedido da dona do produto:** corrigir "Leva de 3 a 5 minutos" e recalcular.
 - **Cálculo (banco de produção, só leitura):** tempo entre o início (identificação, quando o progresso começa a ser salvo) e a conclusão de 32 participações completas: mediana 6,1 min; metade das pessoas entre 4,8 e 8,2 min; mínimo 3,1 e máximo 20,2. Arredondado para "5 a 8 minutos".

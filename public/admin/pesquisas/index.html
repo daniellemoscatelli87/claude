@@ -22,8 +22,13 @@
   .pa-status.off::before { background: var(--muted-foreground); animation: none; }
   @keyframes pa-pulso { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 45%, transparent); } 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
   /* cabeçalho: título à esquerda, Exportar relatório e Apagar pesquisa no canto superior direito */
-  .pa-cabecalho { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
-  .pa-cabecalho h1 { flex: 1 1 320px; min-width: 0; }
+  /* cabeçalho de página no padrão do DS (PageHeader): sobretítulo, título e descrição; ações alinhadas embaixo, à direita */
+  .pa-cabecalho { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 32px; margin: 4px 0 24px; }
+  .pa-cab-texto { flex: 1 1 420px; min-width: 0; }
+  .pa-sobretitulo { margin: 0 0 12px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--primary-text); }
+  .pa-cabecalho h1 { margin: 0 0 16px; font-family: var(--font-display, inherit); font-size: 32px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.1; text-wrap: balance; }
+  .pa-cabecalho #sub { margin: 0; max-width: 42rem; font-size: 17px; line-height: 1.6; }
+  @media (min-width: 640px) { .pa-cabecalho h1 { font-size: 40px; } }
   .pa-cab-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
   .pa-cab-acoes:empty { display: none; }
   .pa-del-pesq.bloqueado { opacity: .55; cursor: not-allowed; }
@@ -633,8 +638,10 @@
 <body>
 <main class="wrap hidden" id="app">
   <a class="back hidden" id="voltar" href="/admin/pesquisas/">← Pesquisas</a>
-  <div class="pa-cabecalho"><h1 id="titulo">Pesquisas</h1><div class="pa-cab-acoes" id="cab-acoes"></div></div>
-  <p class="muted" id="sub">Pesquisas do Studio: acompanhe as respostas, compartilhe o link e tire do ar quando quiser.</p>
+  <header class="pa-cabecalho">
+    <div class="pa-cab-texto"><p class="pa-sobretitulo hidden" id="sobretitulo">Pesquisa</p><h1 id="titulo">Pesquisas</h1><p class="muted" id="sub">Pesquisas do Studio: acompanhe as respostas, compartilhe o link e tire do ar quando quiser.</p></div>
+    <div class="pa-cab-acoes" id="cab-acoes"></div>
+  </header>
   <p class="msg err hidden" id="load-err" role="alert"></p>
   <div id="conteudo"><div class="pa-esqueleto"></div></div>
 </main>
@@ -707,7 +714,7 @@
     if (!q || !q.questionario) return erro("Não foi possível carregar as perguntas da pesquisa. Atualize a página para tentar de novo.");
     P = p.data; Q = q.questionario; I = i.data || []; separar(r.data || []);
     document.title = P.titulo + " | Área restrita";
-    $("titulo").textContent = P.titulo;
+    $("titulo").textContent = P.titulo; $("sobretitulo").classList.remove("hidden");
     $("sub").textContent = "Projeto do Dani Moscatelli Studio. Resultados analisados em conjunto; os nomes aparecem só na aba Dados.";
     desenhar();
   }
@@ -726,7 +733,7 @@
   function desenhar() {
     const c = $("conteudo"); c.replaceChildren();
     cabecalhoAcoes();
-    c.append(topo(), kpis(), abas());
+    c.append(topo(), abas());
   }
 
   // Cabeçalho do painel (canto superior direito): "Exportar relatório" e "Apagar pesquisa".
@@ -872,19 +879,7 @@
     desenhar();
   }
 
-  function kpis() {
-    const completas = R.filter((x) => x.situacao === "completa").length;
-    const encerradas = R.length - completas;
-    const wrap = el("div", "pa-kpis pa-entra");
-    const k = (n, t, s) => { const d = el("div", "pa-kpi"); d.append(el("b", null, n), el("span", null, t)); if (s) d.append(el("small", null, s)); return d; };
-    wrap.append(
-      k(R.length.toLocaleString("pt-BR"), "participações", R.length ? "todas as pessoas que enviaram" : ""),
-      k(completas.toLocaleString("pt-BR"), "respostas completas", R.length ? pct(completas, R.length) + "% das participações" : ""),
-      k(encerradas.toLocaleString("pt-BR"), "fora do público", encerradas ? `${R.filter((x) => x.situacao === "fora_de_curitiba").length} fora de Curitiba e RMC · ${R.filter((x) => x.situacao === "sem_compras").length} sem compras` : ""),
-      (() => { const q = R.filter((x) => x.quer_novidades).length; return k(q.toLocaleString("pt-BR"), "querem novidades", completas ? `${pct(q, completas)}% das completas · ${plural(I.length, "contato guardado", "contatos guardados")}` : ""); })(),
-    );
-    return wrap;
-  }
+
 
   let SELECAO = null; // seleção da aba aberta (Respostas ou Interessados), usada pelo item "Excluir" do menu Ações
   let ABA_INICIAL = null; // depois de excluir, o painel é redesenhado e volta para a mesma aba
@@ -1317,6 +1312,7 @@
     return box;
   }
 
+  const juntarL = (l) => (l.length < 2 ? l.join("") : l.slice(0, -1).join(", ") + " e " + l[l.length - 1]);
   function resultados() {
     const box = el("div", "pa-entra");
     if (!R.length) { box.appendChild(vazio("Ainda não há respostas", "Compartilhe o link. Cada participação aparece aqui na hora, e o sino avisa quando chegar uma nova.")); return box; }
@@ -1332,6 +1328,12 @@
         { rotulo: "Responderam tudo", v: comp.length },
         { rotulo: "Querem os avisos", v: comp.filter((x) => x.quer_novidades).length },
       ]));
+    // o que antes ficava nos números do topo do painel: quem ficou fora do público e os contatos guardados
+    const foraC = R.filter((x) => x.situacao === "fora_de_curitiba").length, semC = R.filter((x) => x.situacao === "sem_compras").length;
+    const notaF = [];
+    if (foraC || semC) notaF.push(`Ficaram fora do público: ${juntarL([foraC ? plural(foraC, "pessoa mora", "pessoas moram") + " fora de Curitiba e da Região Metropolitana" : "", semC ? plural(semC, "pessoa não comprou", "pessoas não compraram") + " roupas, calçados ou acessórios este ano" : ""].filter(Boolean))}.`);
+    notaF.push(`${plural(I.length, "contato guardado", "contatos guardados")} de quem pediu os avisos do lançamento.`);
+    fc.appendChild(el("p", "pa-nota pa-funil-nota", notaF.join(" ")));
     box.appendChild(fc);
 
     const g = el("div", "pa-graficos");
@@ -1657,7 +1659,7 @@
   function exportarPdf() {
     const box = el("div"); box.id = "pa-print";
     const cab = el("header", "pa-print-cab"); cab.append(el("h1", null, P.titulo), el("p", "muted", "Relatório · gerado em " + fmtDate(new Date().toISOString())));
-    box.append(cab, kpis());
+    box.append(cab);
     ABAS_EXP.forEach(([id, t]) => { const sec = el("section", "pa-print-aba"); sec.append(el("h2", "pa-print-tit", t), montarAba(id)); box.appendChild(sec); });
     box.querySelectorAll("details").forEach((d) => { d.open = true; });
     box.querySelectorAll("[data-w]").forEach((i) => { i.style.width = i.dataset.w; });
