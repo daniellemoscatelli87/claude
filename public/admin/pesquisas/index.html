@@ -33,11 +33,12 @@
   .pa-cabecalho.painel #cab-link { margin-top: 18px; }
   .pa-cab-acoes { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin: 20px -24px 0; padding: 14px 24px; border-top: 1px solid var(--border); }
   .pa-cab-acoes .pa-ult { margin: 0; padding-top: 0; border-top: 0; }
-  .pa-cab-botoes { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-left: auto; }
+  .pa-cab-botoes { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-left: auto; }
+  .pa-cab-sep { align-self: stretch; width: 1px; min-height: 24px; margin: 4px 4px; background: var(--border); }
   @media (max-width: 600px) {
     .pa-cabecalho.painel { padding: 18px 18px 0; } .pa-cabecalho.painel h1 { font-size: 22px; }
     .pa-cab-acoes { margin: 18px -18px 0; padding: 14px 18px; }
-    .pa-cab-botoes { width: 100%; margin-left: 0; } .pa-cab-botoes > * { flex: 1 1 100%; } .pa-cab-botoes .pa-btn, .pa-cab-botoes .pa-menu-btn { width: 100%; justify-content: center; }
+    .pa-cab-botoes { width: 100%; margin-left: 0; } .pa-cab-botoes > * { flex: 1 1 100%; } .pa-cab-sep { width: 100%; min-height: 0; height: 1px; margin: 2px 0; } .pa-cab-botoes .pa-btn, .pa-cab-botoes .pa-menu-btn { width: 100%; justify-content: center; }
   }
   .pa-del-pesq.bloqueado { opacity: .55; cursor: not-allowed; }
   .pa-treme { animation: pa-treme .4s ease both; }
@@ -805,7 +806,9 @@
     $("cab-link").replaceChildren(link);
     const bar = $("cab-acoes"); bar.replaceChildren(ult);
     const botoes = el("div", "pa-cab-botoes"); bar.appendChild(botoes);
+    const sep = () => { const d = el("span", "pa-cab-sep"); d.setAttribute("aria-hidden", "true"); return d; };
     botoes.appendChild(tog);
+    botoes.appendChild(sep());
     botoes.appendChild(menuAcoes("pa-relatorio-btn", "Exportar relatório", (item, btn) => [
       item(IC_BAIXAR, "PDF", "", { fn: exportarPdf }),
       item(IC_BAIXAR, "Excel", "", { fn: () => exportarExcel(btn) }),
@@ -814,6 +817,7 @@
     del.innerHTML = IC.lixo + "<span>Apagar pesquisa</span>";
     if (P.ativa) { del.setAttribute("aria-disabled", "true"); del.title = "Para apagar, primeiro tire a pesquisa do ar."; }
     del.addEventListener("click", () => apagarPesquisa(del));
+    botoes.appendChild(sep());
     botoes.appendChild(del);
   }
   // Menu "Ações": abre abaixo do botão, alinhado à direita; Esc, clique fora ou escolher uma ação fecham.
