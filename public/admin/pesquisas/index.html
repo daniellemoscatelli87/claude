@@ -22,19 +22,21 @@
   .pa-status.off::before { background: var(--muted-foreground); animation: none; }
   @keyframes pa-pulso { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 45%, transparent); } 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
   /* cabeçalho: título à esquerda, Exportar relatório e Apagar pesquisa no canto superior direito */
-  /* cabeçalho de página no padrão do DS (PageHeader): sobretítulo, título e descrição; ações alinhadas embaixo, à direita */
-  .pa-cabecalho { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 32px; margin: 4px 0 24px; }
-  .pa-cab-texto { flex: 1 1 420px; min-width: 0; }
-  .pa-sobretitulo { margin: 0 0 12px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--primary-text); }
-  .pa-cabecalho h1 { margin: 0 0 16px; font-family: var(--font-display, inherit); font-size: 32px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.1; text-wrap: balance; }
-  .pa-cabecalho #sub { margin: 0; max-width: 42rem; font-size: 17px; line-height: 1.6; }
-  @media (min-width: 640px) { .pa-cabecalho h1 { font-size: 40px; } }
+  /* cabeçalho do painel: um card com título e descrição em cima e a barra de ações embaixo, separada por uma linha */
+  .pa-cabecalho { margin: 4px 0 20px; }
+  .pa-cabecalho h1 { margin: 0 0 6px; }
+  .pa-cabecalho #sub { margin: 0; max-width: 46rem; }
+  .pa-cabecalho.painel { padding: 24px 24px 0; border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--card); }
+  .pa-cabecalho.painel h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; text-wrap: balance; }
+  .pa-cabecalho.painel #sub { font-size: 14.5px; line-height: 1.6; }
+  .pa-cabecalho.painel .pa-cab-acoes { margin: 20px -24px 0; padding: 14px 24px; border-top: 1px solid var(--border); justify-content: flex-end; }
+  @media (max-width: 600px) { .pa-cabecalho.painel { padding: 20px 18px 0; } .pa-cabecalho.painel h1 { font-size: 22px; } .pa-cabecalho.painel .pa-cab-acoes { margin: 18px -18px 0; padding: 12px 18px; } }
   .pa-cab-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
   .pa-cab-acoes:empty { display: none; }
   .pa-del-pesq.bloqueado { opacity: .55; cursor: not-allowed; }
   .pa-treme { animation: pa-treme .4s ease both; }
   @keyframes pa-treme { 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }
-  @media (max-width: 600px) { .pa-cab-acoes { width: 100%; } .pa-cab-acoes > * { flex: 1 1 0; } .pa-cab-acoes .pa-menu-btn, .pa-cab-acoes .pa-del-pesq { width: 100%; justify-content: center; } }
+  @media (max-width: 600px) { .pa-cab-acoes > * { flex: 1 1 0; } .pa-cab-acoes .pa-menu-btn, .pa-cab-acoes .pa-del-pesq { width: 100%; justify-content: center; } }
   .pa-link { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
   .pa-link input { flex: 1 1 220px; min-width: 0; font: inherit; font-size: 14px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--muted); color: var(--foreground); }
   .pa-cab { flex-wrap: nowrap; }
@@ -639,7 +641,7 @@
 <main class="wrap hidden" id="app">
   <a class="back hidden" id="voltar" href="/admin/pesquisas/">← Pesquisas</a>
   <header class="pa-cabecalho">
-    <div class="pa-cab-texto"><p class="pa-sobretitulo hidden" id="sobretitulo">Pesquisa</p><h1 id="titulo">Pesquisas</h1><p class="muted" id="sub">Pesquisas do Studio: acompanhe as respostas, compartilhe o link e tire do ar quando quiser.</p></div>
+    <div class="pa-cab-texto"><h1 id="titulo">Pesquisas</h1><p class="muted" id="sub">Pesquisas do Studio: acompanhe as respostas, compartilhe o link e tire do ar quando quiser.</p></div>
     <div class="pa-cab-acoes" id="cab-acoes"></div>
   </header>
   <p class="msg err hidden" id="load-err" role="alert"></p>
@@ -714,7 +716,7 @@
     if (!q || !q.questionario) return erro("Não foi possível carregar as perguntas da pesquisa. Atualize a página para tentar de novo.");
     P = p.data; Q = q.questionario; I = i.data || []; separar(r.data || []);
     document.title = P.titulo + " | Área restrita";
-    $("titulo").textContent = P.titulo; $("sobretitulo").classList.remove("hidden");
+    $("titulo").textContent = P.titulo; document.querySelector(".pa-cabecalho").classList.add("painel");
     $("sub").textContent = "Projeto do Dani Moscatelli Studio. Resultados analisados em conjunto; os nomes aparecem só na aba Dados.";
     desenhar();
   }
