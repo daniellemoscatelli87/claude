@@ -481,14 +481,16 @@
   .pa-dica span { color: var(--muted-foreground); }
   /* Inteligência */
   .pa-int-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 0 16px; }
-  .pa-int-sec { margin-top: 22px; }
   /* Inteligência: cartões de insight (texto corrido, sem gráficos) */
-  .pa-ins-intro { margin: 4px 0 6px; max-width: 760px; }
-  .pa-ins-intro h2 { margin: 0 0 6px; font-size: 21px; }
-  .pa-ins-intro p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--muted-foreground); }
-  .pa-int-sec > h2 { margin: 0 0 12px; font-size: 18px; }
-  .pa-ins-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 16px; align-items: start; }
-  .pa-ins { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 22px; display: grid; gap: 14px; transition: box-shadow .25s, transform .25s; }
+  /* temas (Resultado e Inteligência): título e descrição do tema acima da grade de cards */
+  .pa-tema { margin-top: 28px; }
+  .pa-tema > h2 { margin: 0 0 4px; font-size: 19px; }
+  .pa-tema > .muted { margin: 0; font-size: 13px; }
+  .pa-ins-grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; margin-top: 16px; }
+  @media (max-width: 900px) { .pa-ins-grade { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 560px) { .pa-ins { padding: 16px; } }
+  /* cartão de insight no mesmo padrão dos cards da aba Resultado (card branco do DS) */
+  .pa-ins { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 20px; display: grid; gap: 14px; transition: box-shadow .25s, transform .25s; }
   .pa-ins:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
   .pa-ins.destaque { border-color: color-mix(in srgb, var(--primary) 35%, var(--border)); }
   .pa-ins-tema { justify-self: start; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-full); background: var(--muted); color: var(--foreground); }
@@ -511,7 +513,6 @@
   .pa-ia-bt { min-height: 36px; padding: 0 14px; font-size: 13px; }
   .pa-ia-bt[hidden] { display: none; }
   .pa-ia-bt.carregando { opacity: .7; cursor: progress; }
-  .pa-int-sec > .muted { margin: 0 0 12px; font-size: 13px; }
   .pa-int-grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
   @media (max-width: 900px) { .pa-int-grade { grid-template-columns: 1fr; } }
   .pa-int-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 18px; display: grid; gap: 10px; align-content: start; transition: box-shadow .25s, transform .25s; }
@@ -1265,7 +1266,6 @@
     if (!R.length) { box.appendChild(vazio("Ainda não há respostas", "Compartilhe o link. Cada participação aparece aqui na hora, e o sino avisa quando chegar uma nova.")); return box; }
     const comp = completasR();
     const perg = Object.fromEntries(Q.perguntas.map((p) => [p.id, p]));
-    box.appendChild(cardInsights(comp));
 
     // funil em etapas
     const fc = el("section", "card pa-bloco");
@@ -1284,6 +1284,7 @@
     const b1 = respondeu("q1"), sim = b1.filter((x) => ["sim", "rmc"].includes(x.respostas.q1)).length;
     const i1 = perg.q1.opcoes.map((o) => ({ rotulo: o.texto, v: b1.filter((x) => x.respostas.q1 === o.id).length }));
     g.appendChild(qCard({ num: 1, titulo: perg.q1.texto, base: b1.length, leitura: [{ b: pct(sim, b1.length) + "%" }, " moram em Curitiba ou na Região Metropolitana e seguiram na pesquisa."], corpo: rosca(i1, b1.length, { centro: pct(sim, b1.length) + "%", rotCentro: "Curitiba e RMC" }), rodape: [tabelaItens(i1, b1.length)] }));
+    g.lastChild.dataset.q = "q1";
     const depoisQ1 = g.lastChild; // a 1.1 (condicional da pergunta 1) entra logo depois deste card
     // P2 (classificação): % em 1º lugar e, mais claro, % entre as 3
     const b2 = respondeu("q2");
@@ -1298,9 +1299,11 @@
         corpo: (() => { const d = el("div"); d.append(leg, barras(it2, b2.length, { camada: "entre os 3" })); return d; })(),
         rodape: [enc && nEnc ? el("p", "pa-nota", `${enc.texto}: ${nEnc} (${pct(nEnc, b2.length)}%), encerraram aqui.`) : null,
           tabela(["Lugar", "1º lugar", "Entre os 3"], it2.map((it) => [it.rotulo, `${it.v} (${pct(it.v, b2.length)}%)`, `${it.v2} (${pct(it.v2, b2.length)}%)`]))] }));
+      g.lastChild.dataset.q = "q2";
     } else {
       const it2 = itensDe(perg.q2, b2); const t2 = maisEscolhida(it2);
       g.appendChild(qCard({ num: 2, titulo: perg.q2.texto, base: b2.length, leitura: t2 && t2.v ? [{ b: t2.rotulo }, `: ${pct(t2.v, b2.length)}%.`] : null, corpo: barras(it2, b2.length), rodape: [tabelaItens(it2, b2.length)] }));
+      g.lastChild.dataset.q = "q2";
     }
     // P2.1 a P10
     let num = 2;
@@ -1363,11 +1366,29 @@
         const mae = Q.perguntas.filter((x) => !x.condicao).findIndex((x) => x.id === p.condicao.pergunta) + 1;
         rodape.unshift(el("p", "pa-nota", `Aparece só para quem marcou na pergunta ${mae} ` + ops.join(" ou ") + "."));
       }
-      const card = qCard({ num: p.rotulo || num, titulo: p.texto, base: n, meta, leitura, corpo, rodape, largo });
+      const card = qCard({ num: p.rotulo || num, titulo: p.texto, base: n, meta, leitura, corpo, rodape, largo }); card.dataset.q = p.id;
       if (p.condicao && p.condicao.pergunta === "q1") depoisQ1.after(card); else g.appendChild(card);
     });
-    cardsDePerfil(comp).forEach((c) => g.appendChild(c));
-    box.appendChild(g);
+    cardsDePerfil(comp).forEach((c) => { c.dataset.q = "perfil"; g.appendChild(c); });
+    // perguntas agrupadas por tema, cada tema com título e a grade de cards (a ordem das perguntas se mantém)
+    const TEMAS_RES = [
+      ["Onde compram", "Onde moram, onde mais compram roupas, calçados e acessórios, por que compram fora e segunda mão.", BLOCOS[0][1]],
+      ["Notas das compras", "Como avaliam a qualidade, a estética e a correspondência das peças que compraram.", BLOCOS[1][1]],
+      ["Como procuram", "Por onde começam a procura, foto de referência, como descobrem lojas e contato antes de ir.", BLOCOS[2][1]],
+      ["Dificuldades", "Com que frequência têm dificuldade, o que é difícil encontrar e o que fazem quando não encontram.", BLOCOS[3][1]],
+      ["Quem respondeu", "Cidade, bairro, gênero, faixa etária e estado civil de quem respondeu tudo.", ["perfil"]],
+    ];
+    const cards = [...g.children];
+    TEMAS_RES.forEach(([nome, sub, ids]) => {
+      const doTema = cards.filter((c) => ids.includes(c.dataset.q));
+      if (!doTema.length) return;
+      const sec = el("section", "pa-tema");
+      sec.append(el("h2", null, nome), el("p", "muted", sub));
+      const grade = el("div", "pa-graficos"); doTema.forEach((c) => grade.appendChild(c)); sec.appendChild(grade);
+      box.appendChild(sec);
+    });
+    const soltos = cards.filter((c) => !c.closest(".pa-tema"));
+    if (soltos.length) { const grade = el("div", "pa-graficos"); soltos.forEach((c) => grade.appendChild(c)); box.appendChild(grade); }
     box.appendChild(el("p", "pa-nota", `Da pergunta 2.1 em diante, os números contam só quem respondeu tudo (${comp.length}). Quem não mora em Curitiba ou na Região Metropolitana, ou não comprou este ano, encerra na pergunta 1 ou 2.`));
     return box;
   }
@@ -1427,9 +1448,9 @@
   function cardInsights(comp) {
     const card = el("section", "card pa-dest");
     const cab = el("div", "pa-dest-cab");
-    const tit = el("div"); tit.append(el("h2", null, "Destaques"), el("p", "muted", "O principal de cada pergunta, em números. Passe para as abas Resultado e Inteligência para ver os detalhes."));
+    // fica no topo da aba Inteligência: os números que resumem a pesquisa, antes das descobertas
+    const tit = el("div"); tit.append(el("h2", null, "Destaques"), el("p", "muted", "O principal da pesquisa em números. Abaixo, o que cada descoberta sugere para o Find Look." + (comp.length && comp.length < 30 ? " Com poucas respostas, os números ainda mudam bastante: trate as conclusões como pistas para validar." : "")));
     cab.appendChild(tit);
-    if (comp.length && comp.length < 30) { const av = el("span", "pa-dest-amostra", `Amostra pequena: ${plural(comp.length, "resposta completa", "respostas completas")}`); av.title = "Com poucas respostas, os percentuais ainda podem mudar bastante a cada nova participação."; cab.appendChild(av); }
     card.appendChild(cab);
     const grade = el("div", "pa-dest-grade");
     const itens = [];
@@ -1616,10 +1637,11 @@
   // quantidade em linguagem natural: "6 de 9 pessoas", com "a maioria", "metade"... quando ajuda a ler
   const qualif = (k, n) => { const r = n ? k / n : 0; return r === 1 ? "todas" : r >= 0.75 ? "a grande maioria" : r > 0.5 ? "a maioria" : r === 0.5 ? "metade" : r >= 0.3 ? "cerca de um terço" : r > 0 ? "uma parte menor" : "ninguém"; };
   // itens de dificuldade (o que a pessoa procura) em linguagem natural
-  const DIF_NATURAL = { estilo: "roupas que combinam com o próprio estilo", tamanho: "peças no tamanho certo", modelagem: "roupas que vestem bem no corpo", tecido: "peças com o tecido e a qualidade desejados", acessorios: "acessórios que combinam com o próprio gosto", precos: "preços dentro do orçamento", onde_encontrar: "saber em quais lojas procurar", muitas_lojas: "achar o que quer sem rodar muitas lojas e sites", esgotada: "encontrar a peça disponível, sem estar esgotada", tempo: "ter tempo para procurar e comparar", distancia: "chegar até as lojas", avaliar_online: "avaliar tecido e caimento pelas fotos" };
+  const DIF_NATURAL = { estilo: "encontrar roupas que combinam com o próprio estilo", tamanho: "encontrar peças no tamanho certo", modelagem: "encontrar roupas que vestem bem no corpo", tecido: "encontrar peças com o tecido e a qualidade desejados", acessorios: "encontrar acessórios que combinam com o próprio gosto", precos: "encontrar preços dentro do orçamento", onde_encontrar: "saber em quais lojas procurar", muitas_lojas: "achar o que quer sem rodar muitas lojas e sites", esgotada: "encontrar a peça disponível, sem estar esgotada", tempo: "ter tempo para procurar e comparar", distancia: "chegar até as lojas", avaliar_online: "avaliar tecido e caimento pelas fotos" };
   const Q6_NATURAL = { passando: "passar em frente às lojas, na rua ou no shopping", redes: "ver publicações de lojas nas redes sociais", indicacao: "indicação de amigos, familiares e conhecidos", google: "pesquisar no Google ou no Google Maps", anuncios: "anúncios de lojas na internet e nas redes sociais", influenciadores: "recomendações de influenciadores" };
   const Q5_NATURAL = { fisicas_cwb: "indo pessoalmente às lojas de Curitiba", online_cwb: "procurando lojas de Curitiba pelo Instagram, site ou WhatsApp", marketplaces: "pesquisando em marketplaces", outras_cidades: "procurando em sites e aplicativos de lojas de outras cidades", google: "pesquisando no Google", redes: "buscando inspiração e indicações nas redes sociais" };
   const difNat = (l) => DIF_NATURAL[l.id] || item(l.texto);
+  const capt = (t) => t.charAt(0).toUpperCase() + t.slice(1);
   const pessoas = (k, n) => `${k} de ${n} ${n === 1 ? "pessoa" : "pessoas"}`;
   const juntar = (l) => (l.length < 2 ? l.join("") : l.slice(0, -1).join(", ") + " e " + l[l.length - 1]);
   const ICONES_INSIGHT = {
@@ -1676,7 +1698,7 @@
       const signif = r && r.sintese ? r.sintese : temas.length ? `Os relatos mostram, com as palavras das próprias pessoas, onde a experiência de procurar e comprar falha. É o “porquê” por trás dos números.` : "Ainda é cedo para tirar conclusões dos relatos.";
       const cartaoRel = insight({
         tema: "Relatos",
-        titulo: temas.length ? `O que mais frustra nas compras: ${temas[0].nome}` : "O que as pessoas contam",
+        titulo: temas.length ? `${temas[0].itens.length} de ${n} relatos falam de ${temas[0].nome}` : "Os relatos ainda não repetem um mesmo tema",
         descoberta: desc, significa: signif,
         oportunidade: temas.length ? `Tratar “${temas[0].nome}”${temas[1] ? ` e “${temas[1].nome}”` : ""} como as primeiras frustrações que o Find Look precisa resolver, e como roteiro das conversas com quem pediu os avisos.` : "",
         base: `Com base em ${n === 1 ? "1 relato" : `${n} relatos`}. ` + (r ? `Temas organizados com IA (Google Gemini) em ${fmtDate(r.gerado_em)}${r.desatualizada ? "; chegaram relatos novos desde então" : ""}. Só o texto dos relatos foi enviado, sem nome nem contatos.` : "Temas encontrados por palavras-chave, sem IA."),
@@ -1716,18 +1738,16 @@
     const perg = Object.fromEntries(Q.perguntas.map((p) => [p.id, p]));
     const txt = (pid, id) => semOutro(((perg[pid].opcoes || []).find((o) => o.id === id) || {}).texto || id);
     const n = comp.length;
-    const intro = el("div", "pa-ins-intro");
-    intro.append(el("h2", null, "O que a pesquisa está revelando"), el("p", null, `Aqui estão as principais descobertas até agora, explicadas em linguagem simples, e o que cada uma sugere para o Find Look. Elas vêm de ${n === 1 ? "1 pessoa que respondeu" : `${n} pessoas que responderam`} a pesquisa completa.` + (n < 30 ? " Com poucas respostas, trate cada conclusão como uma pista forte para validar, e não como certeza." : "")));
-    box.appendChild(intro);
+    if (R.length) box.appendChild(cardInsights(comp));
     if (n < MIN_SEG) { box.appendChild(vazio("Ainda há poucas respostas completas", `As descobertas aparecem a partir de ${MIN_SEG} respostas completas. Agora: ${n}.`)); return box; }
 
     const SECOES = [
-      ["vazamento", "Para onde vai a compra"],
-      ["dor", "A dor de encontrar"],
-      ["busca", "Como as pessoas procuram"],
-      ["quem", "Quem são essas pessoas"],
-      ["voz", "Na voz das pessoas"],
-      ["caminho", "Por onde o Find Look pode começar"],
+      ["vazamento", "Para onde vai a compra", "Quanto da compra de moda sai do comércio de Curitiba e por quê."],
+      ["dor", "A dor de encontrar", "O que é difícil, para quem, e quanto isso custa em compras que não acontecem."],
+      ["busca", "Como as pessoas procuram", "Busca por foto, contato com a loja antes de ir e descoberta de lojas."],
+      ["quem", "Quem são essas pessoas", "Diferenças entre grupos de idade e entre quem mora em Curitiba e na Região Metropolitana."],
+      ["voz", "Na voz das pessoas", "O que aparece nos relatos da pergunta aberta."],
+      ["caminho", "Por onde o Find Look pode começar", "Prioridades, primeiros usuários e o que ainda vamos descobrir."],
     ];
     const grupos = Object.fromEntries(SECOES.map(([k]) => [k, []]));
     const add = (g, c) => grupos[g].push(c.nodeType ? c : insight(c));
@@ -1752,14 +1772,14 @@
     /* ----- Para onde vai a compra ----- */
     const local1 = comp.filter((x) => LOCAL.includes(prim(x))).length, fora1 = comp.filter(foraPrin).length;
     add("vazamento", fora1 > local1 ? {
-      tema: "Compra fora da cidade", titulo: "A compra de moda está saindo de Curitiba",
-      descoberta: `Para ${qualif(fora1, n)} das pessoas (${pessoas(fora1, n)}), o lugar onde mais compraram roupas, calçados e acessórios este ano foi um marketplace ou uma loja de outra cidade. Só ${pessoas(local1, n)} compram principalmente em lojas de Curitiba, físicas ou online.`,
+      tema: "Compra fora da cidade", titulo: `${capt(qualif(fora1, n))} (${fora1} de ${n}) ${fora1 === n ? "compram" : "compra"} principalmente fora de Curitiba`,
+      descoberta: `Para ${qualif(fora1, n)} das pessoas (${fora1} de ${n}), o lugar onde mais compraram roupas, calçados e acessórios este ano foi um marketplace ou uma loja de outra cidade. Só ${pessoas(local1, n)} compram principalmente em lojas de Curitiba, físicas ou online.`,
       significa: "O comércio local está perdendo a compra principal para canais de fora, mesmo para quem mora aqui. Existe demanda; o que falta é ela encontrar o caminho até as lojas da cidade.",
       oportunidade: "Mostrar que a peça procurada existe numa loja de Curitiba, com a mesma facilidade de buscar num marketplace, pode trazer parte dessa compra de volta para a cidade.",
       base: baseN(n),
     } : {
-      tema: "Comércio local", titulo: "As lojas de Curitiba ainda são a primeira escolha",
-      descoberta: `Para ${qualif(local1, n)} das pessoas (${pessoas(local1, n)}), o lugar onde mais compraram este ano foi uma loja de Curitiba, física ou online. ${pessoas(fora1, n)} compram principalmente em marketplaces ou lojas de outras cidades.`,
+      tema: "Comércio local", titulo: `${capt(qualif(local1, n))} (${local1} de ${n}) ${local1 === n ? "compram" : "compra"} principalmente em lojas de Curitiba`,
+      descoberta: `Para ${qualif(local1, n)} das pessoas (${local1} de ${n}), o lugar onde mais compraram este ano foi uma loja de Curitiba, física ou online. ${pessoas(fora1, n)} compram principalmente em marketplaces ou lojas de outras cidades.`,
       significa: "Há uma base de clientes que já prefere o comércio da cidade. O desafio é ajudar essa preferência a virar compra com menos esforço.",
       oportunidade: "Facilitar a busca nas lojas locais pode fortalecer um hábito que já existe e evitar que ele migre para o online de fora.",
       base: baseN(n),
@@ -1768,7 +1788,7 @@
     if (comecaLocal.length >= MIN_SEG) {
       const fogem = comecaLocal.filter(foraPrin).length;
       if (fogem) add("vazamento", {
-        tema: "Procura aqui, compra fora", titulo: "Muita gente começa procurando em Curitiba e termina comprando fora",
+        tema: "Procura aqui, compra fora", titulo: `${fogem} de ${comecaLocal.length} pessoas começam procurando em Curitiba e acabam comprando fora`,
         descoberta: `Entre as ${comecaLocal.length} pessoas que costumam começar a procura nas lojas de Curitiba, ${fogem} acabam comprando principalmente em marketplaces ou lojas de outras cidades.`,
         significa: "Essas pessoas querem comprar aqui, tanto que começam por aqui. Algo entre a procura e a compra não funciona: a peça não aparece, não está disponível ou dá trabalho demais encontrar.",
         oportunidade: "É o público mais fácil de recuperar: já tem intenção de comprar na cidade. O Find Look pode atuar exatamente nesse momento em que a procura local falha.",
@@ -1793,7 +1813,7 @@
           comodidade: "Reduzir o esforço de ir à loja, por exemplo sabendo antes se a peça está lá, ataca o principal motivo para comprar fora.",
         };
         add("vazamento", {
-          tema: "Por que compram fora", titulo: `O principal motivo para comprar fora é ${g0.rotulo}`,
+          tema: "Por que compram fora", titulo: `${g0.k} de ${b21.length} pessoas compram fora por causa de ${g0.rotulo}`,
           descoberta: `Entre as ${b21.length} pessoas que compram em marketplaces ou lojas online de outras cidades, ${g0.k} citam ${g0.rotulo}.` + (gr[1].k ? ` Em seguida aparece ${gr[1].rotulo} (${gr[1].k}).` : ""),
           significa: g0.id === "preco" ? "A decisão de comprar fora está mais ligada ao bolso do que ao que existe na cidade." : g0.id === "comodidade" ? "A conveniência pesa mais do que preço ou variedade." : "A decisão de comprar fora está mais ligada ao que a pessoa consegue encontrar do que ao preço.",
           oportunidade: OPORT[g0.id],
@@ -1806,7 +1826,7 @@
     const viveu = comp.filter((x) => x.respostas.q9 && !valores(x.respostas.q9).includes("nao_passei"));
     const nDes = comp.filter(desistiu).length, nTro = comp.filter(trocou).length;
     if (viveu.length) add("dor", {
-      tema: "Vendas perdidas", titulo: nDes ? "Não encontrar a peça faz as pessoas desistirem de comprar" : "Quem não encontra a peça acaba comprando outra coisa",
+      tema: "Vendas perdidas", titulo: nDes ? `${nDes} de ${n} pessoas já desistiram de comprar por não encontrar a peça` : `${nTro} de ${n} pessoas acabaram levando algo diferente do que queriam`,
       descoberta: `${pessoas(viveu.length, n)} já passaram este ano pela situação de não encontrar o que queriam. Nesses casos, ${pessoas(nDes, n)} desistiram da compra e ${pessoas(nTro, n)} compraram algo diferente ou só parecido com o que procuravam.`,
       significa: "Cada desistência é uma venda que existia e não aconteceu. E quem leva uma peça “parecida” compra, mas sai menos satisfeito e com menos chance de voltar.",
       oportunidade: "Ajudar a pessoa a encontrar exatamente a peça que procura, e não uma parecida, transforma desistência em compra. Esse é o valor central a provar.",
@@ -1816,7 +1836,7 @@
     if (comparar(comDif, semD, "se quem tem dificuldade para encontrar desiste mais de comprar")) {
       const a = pc(comDif, desistiu), b = pc(semD, desistiu);
       add("dor", {
-        tema: "Dificuldade e desistência", titulo: a > b ? "Quem tem dificuldade para encontrar desiste mais de comprar" : "A desistência não depende só da dificuldade para encontrar",
+        tema: "Dificuldade e desistência", titulo: a > b ? `Quem tem dificuldade para encontrar desiste mais: ${a}% contra ${b}%` : `Ter dificuldade não aumenta a desistência: ${a}% contra ${b}% de quem não tem`,
         descoberta: `Entre quem costuma ter dificuldade para encontrar um produto, ${a}% já desistiram de uma compra. Entre quem quase nunca tem essa dificuldade, ${b}%.`,
         significa: a > b ? "A dificuldade de encontrar está diretamente ligada às compras que não acontecem: é uma dor que custa dinheiro ao comércio." : "Outras razões além de encontrar a peça também levam à desistência, como preço ou qualidade.",
         oportunidade: a > b ? "Resolver a busca tem impacto direto em venda, um argumento forte para apresentar o Find Look às lojas." : "Antes de focar só na busca, vale entender nas conversas o que mais leva à desistência.",
@@ -1827,7 +1847,7 @@
     if (difs.length) {
       const t3 = difs.slice(0, 3);
       add("dor", {
-        tema: "O que mais dificulta", titulo: `O que mais dificulta a compra: ${difNat(t3[0].l)}`,
+        tema: "O que mais dificulta", titulo: `${capt(difNat(t3[0].l))} é difícil para ${t3[0].k} de ${t3[0].d} pessoas`,
         descoberta: `Quando procuram uma peça, o que mais gente acha difícil ou muito difícil é ${juntar(t3.map((d) => `${difNat(d.l)} (${pessoas(d.k, d.d)})`))}.`,
         significa: "Essas são as necessidades mais mal atendidas hoje. É nelas que a experiência de compra falha com mais frequência.",
         oportunidade: `Esses são os pontos que o Find Look precisa resolver primeiro, a começar por ${difNat(t3[0].l)}${t3[1] ? ` e ${difNat(t3[1].l)}` : ""}.`,
@@ -1842,10 +1862,10 @@
     if (atributos.length) {
       const a = atributos[0];
       add("dor", {
-        tema: "O que pesa na satisfação", titulo: `O que mais pesa na satisfação com as compras: ${difNat(a.l)}`,
-        descoberta: `Quem tem dificuldade com “${difNat(a.l)}” dá, em média, ${fmt1(a.gap)} ${a.gap === 1 ? "ponto" : "pontos"} a menos (de 1 a 10) para a qualidade, a estética e o quanto as peças compradas correspondiam ao que queria.`,
+        tema: "O que pesa na satisfação", titulo: `Quem acha difícil ${difNat(a.l)} fica ${fmt1(a.gap)} ${a.gap === 1 ? "ponto" : "pontos"} menos satisfeito com as compras`,
+        descoberta: `Quem acha difícil ${difNat(a.l)} dá, em média, ${fmt1(a.gap)} ${a.gap === 1 ? "ponto" : "pontos"} a menos (de 1 a 10) para a qualidade, a estética e o quanto as peças compradas correspondiam ao que queria.`,
         significa: "Não basta comprar: quando esse ponto falha, a pessoa fica menos satisfeita com o que levou para casa.",
-        oportunidade: `Priorizar “${difNat(a.l)}” na busca e nas informações das peças melhora a experiência depois da compra, não só a procura.`,
+        oportunidade: `Tornar mais fácil ${difNat(a.l)}, na busca e nas informações das peças, melhora a experiência depois da compra, não só a procura.`,
         base: baseN(n),
       });
     }
@@ -1854,7 +1874,7 @@
     if (perg.q_foto) {
       const enviou = comp.filter(foto), nunca = comp.filter((x) => x.respostas.q_foto === "nunca");
       if (enviou.length) add("busca", {
-        tema: "Busca por imagem", titulo: "As pessoas já procuram roupa por foto", destaque: true,
+        tema: "Busca por imagem", titulo: `${enviou.length} de ${n} pessoas já procuram roupa mandando foto para as lojas`, destaque: true,
         descoberta: `${pessoas(enviou.length, n)} (${qualif(enviou.length, n)}) já mandaram uma foto de referência para uma loja perguntando onde comprar algo igual ou parecido.`,
         significa: "Procurar por imagem já é um hábito, não uma ideia nova: as pessoas sabem o que querem pelo visual, mesmo sem saber o nome da peça ou onde ela está.",
         oportunidade: "Uma busca por foto no Find Look responde a um comportamento que já existe, feito hoje de forma manual, mandando mensagem para loja por loja. Vale testar com quem pediu os avisos.",
@@ -1863,7 +1883,7 @@
       if (comparar(enviou, nunca, "se quem procura por foto é quem mais tem dificuldade")) {
         const a = pc(enviou, temDif), b = pc(nunca, temDif);
         add("busca", {
-          tema: "Foto e dificuldade", titulo: a > b ? "Quem procura por foto é quem mais sofre para encontrar" : "Procurar por foto não está ligado à dificuldade",
+          tema: "Foto e dificuldade", titulo: a > b ? `Quem procura por foto sofre mais para encontrar: ${a}% contra ${b}%` : `Procurar por foto não depende da dificuldade: ${a}% contra ${b}%`,
           descoberta: `Entre quem já mandou foto de referência para uma loja, ${a}% costumam ter dificuldade para encontrar o que querem. Entre quem nunca fez isso, ${b}%.`,
           significa: a > b ? "A foto é um recurso de quem não está conseguindo encontrar a peça pelos caminhos comuns." : "Mandar foto parece ser um hábito geral, não só de quem tem dificuldade.",
           oportunidade: a > b ? "A busca por foto atende justamente o público com mais dor, um bom ponto de entrada para o Find Look." : "A busca por foto pode interessar a um público amplo, e não só a quem tem dificuldade.",
@@ -1875,7 +1895,7 @@
       const contata = comp.filter((x) => ["sempre", "as_vezes"].includes(x.respostas.q_disponibilidade));
       const naoContata = comp.filter((x) => ["raramente", "nunca"].includes(x.respostas.q_disponibilidade));
       if (contata.length) add("busca", {
-        tema: "Disponibilidade", titulo: "Antes de sair de casa, as pessoas querem saber se a peça está na loja",
+        tema: "Disponibilidade", titulo: `${contata.length} de ${n} pessoas perguntam à loja se a peça está lá antes de sair de casa`,
         descoberta: `${pessoas(contata.length, n)} costumam entrar em contato com a loja, por WhatsApp, Instagram ou telefone, para perguntar se a peça está disponível antes de ir.`,
         significa: "Ir até a loja e não encontrar a peça é um risco que as pessoas tentam evitar, e hoje fazem isso perguntando uma loja de cada vez.",
         oportunidade: "Mostrar se a peça está disponível antes de a pessoa sair de casa elimina essa etapa manual e dá segurança para escolher a loja física.",
@@ -1884,7 +1904,7 @@
       if (comparar(contata, naoContata, "se quem pergunta à loja antes de ir sofre mais com peça esgotada")) {
         const a = pc(contata, difItem("esgotada")), b = pc(naoContata, difItem("esgotada"));
         add("busca", {
-          tema: "Peça esgotada", titulo: a > b ? "Quem pergunta antes de ir é quem mais sofre com peça esgotada" : "Perguntar antes de ir não está ligado a encontrar peça esgotada",
+          tema: "Peça esgotada", titulo: a > b ? `Quem pergunta antes de ir sofre mais com peça esgotada: ${a}% contra ${b}%` : `Perguntar antes de ir não está ligado a peça esgotada: ${a}% contra ${b}%`,
           descoberta: `Entre quem pergunta à loja antes de ir, ${a}% acham difícil encontrar a peça disponível, sem estar esgotada. Entre quem raramente ou nunca pergunta, ${b}%.`,
           significa: a > b ? "A pergunta prévia é uma reação a frustrações com estoque: as pessoas aprenderam que não podem confiar que a peça vai estar lá." : "O hábito de perguntar antes parece não vir de frustrações com estoque.",
           oportunidade: a > b ? "Informação de estoque confiável é um diferencial claro para esse público." : "Vale entender nas conversas o que motiva o contato prévio.",
@@ -1896,7 +1916,7 @@
     const c6 = contar(perg.q6, comp);
     const top6 = perg.q6.opcoes.filter((o) => !o.exclusiva && !o.outro && !o.anula).map((o) => ({ rotulo: Q6_NATURAL[o.id] || lc(semOutro(o.texto)), k: c6[o.id] || 0 })).sort((a, b) => b.k - a.k);
     if (semSaber.length && top6[0] && top6[0].k) add("busca", {
-      tema: "Descoberta de lojas", titulo: "Muita gente não sabe em quais lojas procurar",
+      tema: "Descoberta de lojas", titulo: `${semSaber.length} de ${n} pessoas não sabem em quais lojas procurar o que querem`,
       descoberta: `${pessoas(semSaber.length, n)} acham difícil saber em quais lojas procurar o que querem. Hoje, a forma mais comum de conhecer lojas novas é ${top6[0].rotulo} (${pessoas(top6[0].k, n)})` + (top6[1] && top6[1].k ? `, seguida de ${top6[1].rotulo} (${top6[1].k}).` : "."),
       significa: "Parte da dificuldade não é falta de oferta, e sim de descoberta: a peça pode estar numa loja da cidade que a pessoa não conhece.",
       oportunidade: `O Find Look pode ser o caminho de descoberta das lojas da cidade. Para chegar a esse público, o canal com mais alcance hoje é: ${top6[0].rotulo}.`,
@@ -1909,7 +1929,7 @@
       const [a0, b0] = topF[0].split(">");
       const mesmo = (LOCAL.includes(a0) && LOCAL.includes(b0)) || a0 === b0;
       add("busca", {
-        tema: "Jornada de compra", titulo: mesmo ? "O caminho mais comum começa e termina no mesmo lugar" : "As pessoas procuram num lugar e compram em outro",
+        tema: "Jornada de compra", titulo: `O caminho mais comum é começar ${Q5_NATURAL[a0] || lc(txt("q5", a0))} e comprar em ${lc(txt("q2", b0)).replace(/ \(.*\)$/, "")}`,
         descoberta: `O caminho mais comum (${pessoas(topF[1], n)}) é começar ${Q5_NATURAL[a0] || lc(txt("q5", a0))} e acabar comprando principalmente em ${lc(txt("q2", b0)).replace(/ \(.*\)$/, "")}.`,
         significa: mesmo ? "Para esse grupo, procura e compra acontecem no mesmo canal: quem atende bem a procura fica com a venda." : "A procura e a compra estão separadas: quem ajuda na procura nem sempre fica com a venda.",
         oportunidade: "Estar presente no momento em que a procura começa é o que define onde a compra termina. É nesse primeiro momento que o Find Look precisa aparecer.",
@@ -1924,7 +1944,7 @@
     if (comparar(ate34, mais35, "se os hábitos mudam com a idade")) {
       const m = maiorDif(ate34, mais35);
       add("quem", {
-        tema: "Idade", titulo: m.va === m.vb ? "Os hábitos são parecidos entre as idades" : `A idade faz diferença em ${m.s}`,
+        tema: "Idade", titulo: m.va === m.vb ? "Os hábitos são parecidos entre quem tem até 34 anos e quem tem 35 ou mais" : `${m.va}% dos mais jovens ${m.t}, contra ${m.vb}% dos mais velhos`,
         descoberta: `Comparando quem tem até 34 anos com quem tem 35 ou mais, a maior diferença está aqui: ${m.va}% dos mais jovens ${m.t}, contra ${m.vb}% dos mais velhos.`,
         significa: m.va === m.vb ? "A dor parece atravessar as idades." : `O grupo ${m.va > m.vb ? "mais jovem" : "mais velho"} vive mais essa situação.`,
         oportunidade: m.va === m.vb ? "O Find Look pode falar com um público amplo de idades." : `Começar pelo grupo ${m.va > m.vb ? "mais jovem" : "mais velho"} pode tornar a mensagem do Find Look mais certeira.`,
@@ -1935,7 +1955,7 @@
     if (comparar(cwb, rmc, "se quem mora em Curitiba e na Região Metropolitana compra diferente")) {
       const m = maiorDif(cwb, rmc);
       add("quem", {
-        tema: "Onde moram", titulo: m.va === m.vb ? "Curitiba e Região Metropolitana se comportam de forma parecida" : `Morar em Curitiba ou na Região Metropolitana faz diferença em ${m.s}`,
+        tema: "Onde moram", titulo: m.va === m.vb ? "Curitiba e Região Metropolitana se comportam de forma parecida" : `${m.va}% de quem mora em Curitiba ${m.t}, contra ${m.vb}% na Região Metropolitana`,
         descoberta: `${m.va}% de quem mora em Curitiba ${m.t}, contra ${m.vb}% de quem mora na Região Metropolitana.`,
         significa: "Morar mais longe das lojas pode mudar a forma de procurar e de comprar.",
         oportunidade: "Considerar a Região Metropolitana como público do Find Look, com lojas próximas de quem mora fora da capital, se a diferença se confirmar.",
@@ -1944,7 +1964,7 @@
     }
     const sm = comp.filter(segMao).length;
     if (sm) add("quem", {
-      tema: "Segunda mão", titulo: sm > n / 2 ? "Comprar de segunda mão já faz parte da rotina" : "Uma parte do público compra de segunda mão",
+      tema: "Segunda mão", titulo: `${sm} de ${n} pessoas compraram roupas de segunda mão nos últimos tempos`,
       descoberta: `${pessoas(sm, n)} compraram peças de segunda mão, em brechós, nos últimos tempos.`,
       significa: sm > n / 2 ? "Brechó não é nicho para esse público: é mais um lugar onde a peça desejada pode estar." : "A segunda mão aparece, mas ainda não é o principal caminho de compra.",
       oportunidade: sm > n / 2 ? "Vale avaliar incluir brechós da cidade entre as lojas do Find Look." : "Os brechós podem entrar depois, conforme o interesse se confirmar.",
@@ -1958,7 +1978,7 @@
     /* ----- Por onde o Find Look pode começar ----- */
     const dores = perg.q8.linhas.map((l) => { const af = comp.filter(difItem(l.id)); return { l, af: af.length, des: af.filter(desistiu).length }; }).filter((d) => d.af).sort((a, b) => b.af - a.af || b.des - a.des).slice(0, 3);
     if (dores.length) add("caminho", {
-      tema: "Prioridades", titulo: "As dores que o Find Look deveria resolver primeiro", destaque: true,
+      tema: "Prioridades", titulo: `As maiores dores hoje: ${juntar(dores.map((d) => difNat(d.l)))}`, destaque: true,
       descoberta: dores.map((d, i) => `${i + 1}. ${difNat(d.l).charAt(0).toUpperCase() + difNat(d.l).slice(1)}: difícil para ${pessoas(d.af, n)}; ${d.des ? `${d.des} delas já desistiram de uma compra` : "nenhuma delas desistiu de comprar"}.`),
       significa: "São as dificuldades que atingem mais gente e que mais se ligam a compras perdidas. Juntas, mostram onde o problema é maior hoje.",
       oportunidade: "Começar o Find Look resolvendo bem essas dores, antes de qualquer outra funcionalidade, aumenta a chance de entregar valor desde o primeiro uso.",
@@ -1968,7 +1988,7 @@
     if (quer.length) {
       const dQ = pc(quer, temDif), dT = pc(comp, temDif);
       add("caminho", {
-        tema: "Primeiros usuários", titulo: `${quer.length === 1 ? "1 pessoa já quer" : `${quer.length} pessoas já querem`} acompanhar o lançamento`,
+        tema: "Primeiros usuários", titulo: `${quer.length} de ${n} pessoas querem acompanhar o lançamento, e ${dQ}% delas têm dificuldade para encontrar`,
         descoberta: `${pessoas(quer.length, n)} pediram para receber os avisos do lançamento. Entre elas, ${dQ}% têm dificuldade para encontrar o que querem, contra ${dT}% no total.`,
         significa: dQ > dT ? "Quem pediu os avisos sente mais a dor de encontrar do que a média: é um sinal de interesse real pela solução." : "O interesse pelos avisos não está concentrado em quem tem mais dificuldade; vale entender o que motiva esse grupo.",
         oportunidade: "Esse grupo é o melhor ponto de partida para validar o Find Look: conversar com 3 a 5 dessas pessoas, mostrar um protótipo e ouvir se resolveria o problema delas.",
@@ -1976,16 +1996,16 @@
       });
     }
     if (pendentes.length) add("caminho", {
-      tema: "Próximas descobertas", titulo: "O que vamos conseguir descobrir com mais respostas",
+      tema: "Próximas descobertas", titulo: `${pendentes.length === 1 ? "1 comparação ainda precisa" : `${pendentes.length} comparações ainda precisam`} de mais respostas`,
       descoberta: `Ainda não há pessoas suficientes em cada grupo para comparar com segurança: ${juntar(pendentes)}.`,
       significa: "Comparar grupos muito pequenos pode enganar. Por isso essas comparações só aparecem quando cada grupo tiver pelo menos 5 pessoas.",
       oportunidade: "Divulgar a pesquisa para mais pessoas, incluindo públicos menos representados até agora, vai liberar essas descobertas.",
     });
 
-    SECOES.forEach(([k, nome]) => {
+    SECOES.forEach(([k, nome, sub]) => {
       const cards = grupos[k]; if (!cards.length) return;
-      const sec = el("section", "pa-int-sec");
-      sec.append(el("h2", null, nome));
+      const sec = el("section", "pa-tema");
+      sec.append(el("h2", null, nome), el("p", "muted", `${sub} Com base em ${n === 1 ? "1 resposta completa" : `${n} respostas completas`}.`));
       const grade = el("div", "pa-ins-grade"); cards.forEach((c) => grade.appendChild(c)); sec.appendChild(grade);
       box.appendChild(sec);
     });
