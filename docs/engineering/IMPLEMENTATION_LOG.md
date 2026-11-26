@@ -596,10 +596,11 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-26 · Painel de pesquisas: Destaques na Inteligência, temas nas duas abas e títulos com a descoberta, não publicado
+## 2026-11-26 · Painel de pesquisas: Destaques na Inteligência, temas nas duas abas e títulos com a descoberta, publicado (#238)
 - **Pedidos da dona do produto:** (1) os Destaques fazem mais sentido na aba Inteligência; (2) a Inteligência deve seguir o padrão de cards e de organização da aba Resultado; (3) a aba Resultado dividida em assuntos, com setores para as perguntas; (4) o título de cada cartão de insight já deve trazer a descoberta.
 - **`public/admin/pesquisas/index.html`:** Destaques saem da aba Resultado e abrem a aba Inteligência (texto: "O principal da pesquisa em números…"; o selo "Amostra pequena" virou um aviso no texto). Resultado: depois de "Quem chegou até onde", as perguntas ficam em 5 temas com título e descrição (Onde compram, Notas das compras, Como procuram, Dificuldades, Quem respondeu), mantendo a ordem. Inteligência: mesmos temas com título e descrição acima de uma grade de 2 colunas (1 no celular) de cards brancos no padrão dos cards da aba Resultado. Títulos dos insights reescritos com a descoberta e o número (ex.: "24 de 36 pessoas já procuram roupa mandando foto para as lojas"); itens de dificuldade como ações ("encontrar roupas que vestem bem no corpo").
 - **Verificação executada:** painel com dados fictícios e servidor simulado (computador e iPhone 13), com 42 e 9 participações: Resultado sem Destaques e com os 5 temas (todas as perguntas e perfis distribuídos, nenhum card solto); Inteligência com Destaques no topo e 6 temas; títulos revisados no texto gerado; sem erros de JavaScript.
+- **Publicação (26/11):** painel publicado pelo PR #238 e conferido no ar. Só a área restrita mudou.
 
 ## 2026-11-25 · Painel de pesquisas: WhatsApp e e-mail na ficha da resposta, publicado (#236)
 - **Pedido da dona do produto:** mostrar telefone e e-mail na ficha de resposta de cada pessoa.
