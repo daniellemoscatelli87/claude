@@ -8,7 +8,10 @@
 // O resultado fica em cache (tabela pesquisa_relatos_ia) e só é gerado de novo quando os relatos mudam.
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
-const MODEL = Deno.env.get("GEMINI_MODEL") || "gemini-flash-latest";
+// Modelos rápidos primeiro (o agrupamento não precisa de raciocínio longo); cada tentativa tem tempo máximo
+// e a chamada toda tem um prazo, para a administradora não ficar esperando.
+const MODEL = Deno.env.get("GEMINI_MODEL_RELATOS") || "gemini-2.5-flash-lite";
+const TEMPO_TENTATIVA = 20000, PRAZO_TOTAL = 55000;
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -26,7 +29,7 @@ Regras:
 - Cada relato pode entrar em mais de um tema. Inclua em "ids" os números dos relatos de cada tema. Um relato que não diz nada sobre a experiência pode ficar sem tema.
 - Em "sintese", escreva de 2 a 3 frases com o que os relatos mostram em conjunto e o que vale investigar. Deixe claro que é uma leitura de relatos, não uma conclusão.
 - Use apenas o que está escrito nos relatos. Não invente causas, números, lojas ou pessoas. Não cite nomes.
-- Escreva em português do Brasil, com acentuação e ortografia corretas, frases curtas e diretas.
+- Escreva em português do Brasil, sempre com acentos e cedilha (ex.: frustrações, peças, padronização, calçados), ortografia correta e frases curtas e diretas.
 - Nunca use travessão (—) nem meia-risca (–).
 - Responda somente com JSON válido, sem texto antes ou depois, no formato:
 {"temas": [{"nome": "tema", "resumo": "frase", "ids": [1, 2]}], "sintese": "frases"}`;
@@ -66,20 +69,27 @@ Deno.serve(async (req) => {
 
   const key = Deno.env.get("GEMINI_API_KEY");
   if (!key) return json({ error: "sem_chave" }, 503);
-  const body = JSON.stringify({
+  // modelos 2.5 aceitam desligar o "raciocínio" (thinkingBudget 0), o que deixa a resposta bem mais rápida
+  const corpoPara = (m: string) => JSON.stringify({
     systemInstruction: { parts: [{ text: SISTEMA }] },
     contents: [{ role: "user", parts: [{ text: `Total de relatos: ${textos.length}.\nRelatos (número e texto):\n${JSON.stringify(textos)}` }] }],
-    generationConfig: { responseMimeType: "application/json", temperature: 0.2, maxOutputTokens: 8192 },
+    generationConfig: { responseMimeType: "application/json", temperature: 0.2, maxOutputTokens: 4096, ...(m.startsWith("gemini-2.5") ? { thinkingConfig: { thinkingBudget: 0 } } : {}) },
   });
   // No plano gratuito o modelo às vezes fica ocupado (503) ou no limite (429): tenta de novo e passa para outro modelo gratuito.
-  const modelos = [...new Set([MODEL, "gemini-flash-latest", "gemini-2.5-flash", "gemini-flash-lite-latest", "gemini-2.5-flash-lite"])];
+  const modelos = [...new Set([MODEL, "gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-flash-lite-latest", "gemini-flash-latest"])];
+  const inicio = Date.now();
   // deno-lint-ignore no-explicit-any
   let conteudo: any = null, ultimoStatus = 0;
   tentativas: for (const m of modelos) {
     for (let i = 0; i < 2; i++) {
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`, {
-        method: "POST", headers: { "x-goog-api-key": key, "content-type": "application/json" }, body,
-      });
+      const resta = PRAZO_TOTAL - (Date.now() - inicio);
+      if (resta < 3000) break tentativas;
+      let res: Response;
+      try {
+        res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`, {
+          method: "POST", headers: { "x-goog-api-key": key, "content-type": "application/json" }, body: corpoPara(m), signal: AbortSignal.timeout(Math.min(TEMPO_TENTATIVA, resta)),
+        });
+      } catch { console.error("Gemini", m, "demorou demais"); ultimoStatus = 504; break; } // próximo modelo
       const out = await res.json().catch(() => ({}));
       if (res.ok) {
         const cand = out.candidates?.[0];
@@ -89,12 +99,13 @@ Deno.serve(async (req) => {
       }
       ultimoStatus = res.status;
       console.error("Gemini", m, res.status, JSON.stringify(out?.error?.status ?? out?.error?.code ?? "").slice(0, 80));
+      if (res.status === 400 && m.startsWith("gemini-2.5")) break; // configuração não aceita por este modelo: tenta o próximo
       if (![429, 500, 503, 404].includes(res.status)) break tentativas;
       if (res.status === 404) break;
       await new Promise((r) => setTimeout(r, 1500));
     }
   }
-  if (!conteudo) return json({ error: [429, 503].includes(ultimoStatus) ? "ocupado" : `Falha ao agrupar os relatos (${ultimoStatus}).` }, 502);
+  if (!conteudo) return json({ error: [429, 503, 504].includes(ultimoStatus) ? "ocupado" : `Falha ao agrupar os relatos (${ultimoStatus}).` }, 502);
 
   const limpa = (s: unknown) => String(s ?? "").replace(/\s*[—–]\s*/g, ", ").trim();
   // os números voltam a ser os identificadores das respostas; números inventados são descartados
