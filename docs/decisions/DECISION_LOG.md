@@ -409,6 +409,21 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** Dona do produto ("campos de senha em toda a plataforma têm que ter o ícone para mostrar e ocultar"; "não divulgue o e-mail na redefinição").
 - **Decisão:** todo campo de senha da área restrita do site ganha o botão de mostrar/ocultar (o app já tinha); a mensagem de redefinição de senha não exibe o e-mail digitado nem confirma se ele tem acesso.
 
+## D-063 · 26/11/2026 · Pink do lenço do gato no FindLook; cabeçalho do DS Dani Moscatelli no celular (FindLook 1cfe75e, DM d78f165)
+
+- **Decisões dela (FindLook):**
+  - A cor principal é o rosa-cereja do lenço do gato mascote, #FC0256, e a escala pink inteira nasce dela (a de antes, com base em #E62040, puxava para o vermelho).
+  - Botão principal em #E8004E (pink-550, texto branco 4,6:1); ela escolheu esta opção em vez do tom exato do lenço, que dá 3,98:1.
+  - Destaques em texto grande usam #FC0256 (`--primary-destaque`); texto pequeno colorido usa o pink-600 #BC0A41.
+  - Logos oficiais, favicon e ícones passam ao #FC0256.
+  - Gráficos: tons 1 e 2 passam a #FC0256 e #FF6F95.
+- **DS Dani Moscatelli:** no cabeçalho do celular, o nome não encosta mais nos seletores. Abaixo de 420 px fica só o símbolo; "| Design System" aparece a partir de 640 px.
+- **Publicado e conferido no ar:** os dois DS.
+- **Produto FindLook:** recebe o pink novo pela sincronização; a adoção está em preparo numa branch, com publicação só após o sim dela.
+- **Ainda não publicado:**
+  - Regras de grid nos dois DS: texto nunca na coluna de tags ou ações, e hover na linha inteira, sem cantos (branch `claude/grid-colunas`).
+  - Falta a decisão dela sobre o padrão das listas no celular.
+
 ## D-062 · 24/11/2026 · Alerta com ação e todos os alertas no mesmo padrão; cores novas de aviso e erro no DS Dani Moscatelli (FindLook 292de01, DM 697a765)
 
 - **Decisões dela:**
