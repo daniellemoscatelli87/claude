@@ -1,0 +1,12 @@
+// Componente de cada página em React, pelo id de src/rotas.json. Usado pelo build para gravar o HTML pronto
+// (src/servidor.tsx); no navegador, cada página carrega só a própria entrada (src/paginas/<id>/entrada.tsx).
+import type { ComponentType } from "react";
+import { Descadastro } from "./descadastro/Descadastro";
+import { Erro404 } from "./erro-404/Erro404";
+import { Privacidade } from "./privacidade/Privacidade";
+
+export const PAGINAS: Record<string, ComponentType> = {
+  privacidade: Privacidade,
+  descadastro: Descadastro,
+  "erro-404": Erro404,
+};

@@ -573,6 +573,22 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Voltar atrás:** trocar `"publicada"` por `"previa"` no `rotas.json`; o próximo build volta a servir a Início de HTML. A página `public/admin/index.html` só sai do repositório na limpeza (lote A9), depois de conferida no ar.
 - **Trade-offs:** durante a migração, a pessoa alterna entre a Início em React e as páginas de HTML (aparências próximas, recarga ao trocar de página).
 
+## D-053 · 27/11/2026 · Site público refeito em React com os componentes do DS, página por página (site)
+
+- **Origem:** objetivo da dona do produto de o site e a área restrita consumirem 100% o Design System Dani Moscatelli (decisões de 27/11/2026). O site público consumia 0% do DS: nenhuma página carregava o `theme.css` nem componentes, o `menu.css` copiava valores do DS à mão e as páginas tinham milhares de cores soltas e estilos em linha. A dona do produto delegou a escolha de como o site consome o DS.
+- **Decisão:** levar as páginas para React com os componentes do DS, uma de cada vez, como a área restrita (D-051), mantendo endereços, textos, cabeça (título, descrição, canonical, compartilhamento) e comportamento:
+  - app próprio em `apps/site/` (Vite 6, React 18.3 e Tailwind 4.1.12, as versões do DS), no mesmo projeto do Cloudflare Pages: o `npm run build` da raiz também compila o app (`build:site`);
+  - o build grava o HTML pronto de cada página (renderização no servidor só no build) e o navegador só liga o React nele: bom para buscadores e para a primeira pintura;
+  - corte por `apps/site/src/rotas.json`: "previa" serve a página em `/site/previa/<caminho>` (sem indexação); "publicada" a coloca no lugar do HTML no mesmo endereço (só no `dist`; o HTML sai do repositório depois, num commit próprio); a cabeça de cada página fica no mapa e um teste compara com a do HTML;
+  - pasta `ui` inteira do DS sincronizada, conformidade com o DS em zero (`npm run conformidade`), teste do app na rotina diária do DS;
+  - `scripts/comparar-dist.mjs`: o dist do site precisa continuar igual byte a byte fora do app e das páginas publicadas;
+  - aviso de cookies e WhatsApp das páginas em React vêm do DS (`AvisoCookies`, `BotaoWhatsApp`), com a mesma chave de cookies do `analytics.js` e a mesma regra de medição.
+- **Alternativa descartada:** o DS publicar uma camada de CSS e HTML para as páginas estáticas (duplicaria o DS e manteria peças à mão).
+- **Publicação:** a dona do produto delegou a publicação dos lotes (decisões de 27/11/2026: autonomia total para finalizar os DS e publicar, sem parar para aprovação). Cada lote só vai ao ar depois de todos os testes, da comparação do dist e das capturas antes e depois. A limpeza (S0) não muda nada no ar.
+- **Feito (branch `claude/site-ds`, publicado no mesmo pull request):** S0 (app React antigo apagado, dist igual byte a byte); fundação do app; S7: 404 e descadastro publicadas, privacidade em prévia (falta a `Prosa` no DS). Plano, lotes S1 a S8 e lacunas do DS em `docs/engineering/SITE_REACT.md`.
+- **Trade-offs:** o build do site passa a instalar e compilar mais um app (mais tempo de build); a 404 e o descadastro passam a carregar o CSS e o JavaScript comuns do site em React (28 kB e 56 kB comprimidos, em cache entre as páginas); durante a migração, convivem as peças comuns em HTML e em React; as páginas grandes dependem de peças que ainda faltam no DS (cabeçalho do site, cadastro em etapas, cards de depoimento e de artigo, entre outras) e não serão feitas à mão.
+- **Pendente da dona do produto:** escolher qual das três páginas de apresentação do EI fica (`/experience-intelligence/`, `-2/`, `-3/`); nenhuma foi apagada.
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
