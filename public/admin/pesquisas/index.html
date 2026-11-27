@@ -577,10 +577,11 @@
   .pa-op-kpi-ic svg { width: 18px; height: 18px; }
   @media (max-width: 600px) { .pa-op-kpis { grid-template-columns: minmax(0, 1fr); gap: 8px; } .pa-op-kpi { padding: 14px 16px; align-items: center; } .pa-op-kpi > div { display: flex; flex-direction: row-reverse; justify-content: flex-end; align-items: baseline; gap: 10px; } .pa-op-kpi b { font-size: 22px; } }
   .pa-ops { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: op; }
-  .pa-op { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1.1fr) auto; padding: 20px 22px 14px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); counter-increment: op; }
+  .pa-op { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); padding: 20px 22px 14px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); counter-increment: op; }
   .pa-op > div:not(.pa-op-pe) { padding: 0 20px; }
   .pa-op > div:first-child { padding-left: 0; }
-  .pa-op > .pa-op-c2, .pa-op > .pa-op-c3 { border-left: 1px solid var(--border); }
+  .pa-op > .pa-op-c2, .pa-op > .pa-op-c3, .pa-op > .pa-op-c4 { border-left: 1px solid var(--border); }
+  .pa-op-c4 { display: grid; gap: 12px; align-content: start; justify-items: start; }
   .pa-op > .pa-op-c4 { padding-right: 0; }
   .pa-op-c1 { display: flex; gap: 14px; align-items: flex-start; }
   .pa-op-n::before { content: counter(op); }
@@ -591,7 +592,7 @@
   .pa-op h5 { display: flex; align-items: center; gap: 6px; margin: 0 0 4px; font-size: 13px; font-weight: 600; color: var(--foreground); }
   .pa-op h5 svg { width: 16px; height: 16px; flex: none; color: var(--primary-text); }
   .pa-op-rec { color: var(--primary-text) !important; }
-  .pa-op-c3 { display: grid; gap: 12px; }
+  .pa-op-c3 { display: grid; gap: 12px; align-content: start; }
   .pa-op-c3 ul { margin: 0; padding: 0 0 0 16px; font-size: 13px; line-height: 1.5; color: var(--muted-foreground); }
   .pa-op-imp { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 700; white-space: nowrap; }
   .pa-op-imp svg { width: 14px; height: 14px; }
@@ -609,15 +610,11 @@
     .pa-op-c1 { grid-column: 1 / -1; }
     .pa-op-c2 { padding-right: 16px !important; }
     .pa-op-c3 { padding-left: 16px !important; border-left: 1px solid var(--border) !important; }
-    .pa-op-c4 { grid-column: 1 / -1; grid-row: 1; justify-self: end; }
-    .pa-op-c1 { grid-row: 1; padding-right: 120px !important; }
+    .pa-op-c4 { grid-column: 1 / -1; padding-top: 14px !important; border-top: 1px solid var(--border); }
   }
   @media (max-width: 600px) {
     .pa-op { grid-template-columns: minmax(0, 1fr); padding: 16px 16px 12px; }
-    .pa-op-c1 { padding-right: 0 !important; }
-    .pa-op-c4 { grid-row: auto; justify-self: start; padding-left: 46px !important; order: -1; }
-    .pa-op-c2, .pa-op-c3 { padding: 14px 0 0 !important; border-left: 0 !important; border-top: 1px solid var(--border); }
-    .pa-op-c1 { order: -2; }
+    .pa-op-c2, .pa-op-c3, .pa-op-c4 { padding: 14px 0 0 !important; border-left: 0 !important; border-top: 1px solid var(--border); }
   }
   @media (prefers-reduced-motion: reduce) { .pa-tacc-corpo, .pa-tacc-bt > svg, .pa-ver-dados svg, .pa-hal-bola, .pa-op-link svg { transition: none; } .pa-int-entra, .pa-desc.pa-alvo { animation: none; } }
   #pa-print .pa-int-painel[hidden], #pa-print .pa-desc-dados[hidden] { display: block !important; }
@@ -2256,10 +2253,10 @@
       const c3 = el("div", "pa-op-c3");
       const ev = el("div"); const he = el("h5"); he.innerHTML = svg(IC_OP.barras); he.append("Evidências"); ev.appendChild(he); const ul = el("ul"); o.evid.forEach((e) => ul.appendChild(el("li", null, e))); ev.appendChild(ul);
       const ie = el("div"); const hi = el("h5"); hi.innerHTML = svg(IC_OP.alvo); hi.append("Impacto esperado"); ie.append(hi, el("p", null, o.esperado));
-      c3.append(ev, ie);
+      c3.append(ev);
       const c4 = el("div", "pa-op-c4"); const nv = nivel(o.parte);
       const chip = el("span", "pa-op-imp " + nv.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")); chip.innerHTML = svg(IC_OP.barras); chip.append(`Impacto: ${nv}`);
-      chip.title = `${o.parte}% das pessoas na base desta oportunidade`; c4.appendChild(chip);
+      chip.title = `${o.parte}% das pessoas na base desta oportunidade`; c4.append(chip, ie); // impacto esperado junto do selo
       li.append(c1, c2, c3, c4);
       if (o.id) {
         const pe = el("div", "pa-op-pe"); const a = el("a", "pa-op-link"); a.href = "#" + o.id; a.innerHTML = "Ver achado" + svg('<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>');
