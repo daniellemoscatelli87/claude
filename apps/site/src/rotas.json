@@ -35,7 +35,7 @@
       "id": "projeto-piloto",
       "caminho": "/projeto-piloto/",
       "saida": "projeto-piloto/index.html",
-      "origem": "projeto-piloto/index.html",
+      "origem": "apps/site/tests/referencia/projeto-piloto.html",
       "lote": "S2",
       "cabeca": {
         "titulo": "Programa Projeto Piloto | Dani Moscatelli Experience Design Studio",
@@ -61,7 +61,7 @@
       "id": "privacidade",
       "caminho": "/privacidade/",
       "saida": "privacidade/index.html",
-      "origem": "public/privacidade/index.html",
+      "origem": "apps/site/tests/referencia/privacidade.html",
       "lote": "S7",
       "cabeca": {
         "titulo": "Política de Privacidade • Dani Moscatelli | Experience Design Studio",
@@ -119,6 +119,6 @@
     "descadastro": "publicada",
     "erro-404": "publicada",
     "projeto-piloto": "publicada",
-    "inicio": "previa"
+    "inicio": "publicada"
   }
 }

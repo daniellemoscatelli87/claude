@@ -162,8 +162,8 @@ export function Inicio() {
         {/* Hero */}
         <section aria-labelledby="ih-titulo" className="relative overflow-hidden bg-background px-4 pb-8 pt-28 sm:px-6 lg:px-8 lg:pt-32">
           <LuzesDifusas variante="hero" dissolver />
-          <div className="relative z-[1] mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:gap-x-14 lg:gap-y-8">
-            <SurgirAoRolar escalonar className="flex flex-col items-start gap-6 lg:col-start-1 lg:row-start-1">
+          <div className="relative z-[1] mx-auto grid max-w-7xl gap-10 xl:grid-cols-2 xl:gap-x-14 xl:gap-y-8">
+            <SurgirAoRolar escalonar className="flex flex-col items-start gap-6 xl:col-start-1 xl:row-start-1">
               <Selo className="lg:hidden">Meaningful Experiences</Selo>
               <Selo className="hidden lg:inline-flex">Em breve</Selo>
               <Heading level={1} id="ih-titulo" size="hero" className="text-balance">
@@ -176,7 +176,7 @@ export function Inicio() {
               </div>
             </SurgirAoRolar>
 
-            <div className="relative flex justify-center lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:items-center">
+            <div className="relative flex justify-center xl:col-start-2 xl:row-span-2 xl:row-start-1 xl:items-center">
               <picture>
                 <source media="(max-width: 1023px)" srcSet="/dani-post-its-mobile.webp" type="image/webp" width={941} height={1672} />
                 <img
@@ -185,12 +185,12 @@ export function Inicio() {
                   height={1173}
                   {...{ fetchpriority: "high" }}
                   alt="Dani Moscatelli - Metodologia & Visão Sistêmica de Design de Experiência"
-                  className="h-auto max-h-112 w-full object-contain lg:max-h-150"
+                  className="h-auto max-h-112 w-full object-contain xl:max-h-150"
                 />
               </picture>
             </div>
 
-            <SurgirAoRolar escalonar className="flex flex-col items-start gap-6 lg:col-start-1 lg:row-start-2">
+            <SurgirAoRolar escalonar className="flex flex-col items-start gap-6 xl:col-start-1 xl:row-start-2">
               <Selo className="lg:hidden">Em breve</Selo>
               <p className="max-w-xl text-body font-semibold leading-relaxed text-foreground sm:text-body-lg">
                 Enquanto o novo site do estúdio ganha forma, sigo atendendo projetos de experiência digital, física e híbrida. Deixe seu e-mail para acompanhar o lançamento ou vamos conversar sobre os desafios do seu negócio.
@@ -198,9 +198,9 @@ export function Inicio() {
               <AvisoDeLancamento />
             </SurgirAoRolar>
 
-            <div className="flex flex-col items-start gap-3 lg:col-start-2 lg:row-start-3 lg:items-center">
+            <div className="flex flex-col items-start gap-3 xl:col-start-2 xl:row-start-3 xl:items-center">
               <p className="text-body font-semibold text-foreground sm:text-body-lg">Me siga nas redes sociais:</p>
-              <ul className="flex flex-wrap gap-2 lg:justify-center">
+              <ul className="flex flex-wrap gap-2 xl:justify-center">
                 {REDES.map(({ href, rotulo, rede, Icone }) => (
                   <li key={rede}>
                     <Button asChild variant="outline" size="lg">

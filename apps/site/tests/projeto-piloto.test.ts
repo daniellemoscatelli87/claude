@@ -6,7 +6,7 @@ import { CADASTRO_VAZIO, linhaDoCadastro, mensagemGeral, validarCadastro } from 
 import { inserir } from "../src/compartilhado/site/supabase";
 import { frasesDe, textoCorrido } from "./frases";
 
-const html = readFileSync(new URL("../../../projeto-piloto/index.html", import.meta.url), "utf8");
+const html = readFileSync(new URL("./referencia/projeto-piloto.html", import.meta.url), "utf8");
 const principal = html.slice(html.indexOf("<main"), html.indexOf("</main>"));
 const gaveta = html.slice(html.indexOf('<aside id="cadastro-gaveta"'), html.indexOf("</aside>", html.indexOf('<aside id="cadastro-gaveta"')));
 

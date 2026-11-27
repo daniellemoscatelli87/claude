@@ -13,6 +13,7 @@
 | Conformidade com o DS (`npm run conformidade`) | zero desvios |
 | Lote S0: app React antigo apagado (cerca de 3.000 linhas sem uso) | feito; o dist ficou igual byte a byte |
 | Lote S7: 404, descadastro e privacidade **publicadas** | feito e testado (seção 6) |
+| Lotes S1 (casca), S2 (Projeto Piloto) e S3 (página inicial) **publicados** | feito e testado (seções 6b e 6c) |
 | Páginas de HTML de hoje | intactas; continuam servidas até cada página ser trocada |
 
 ## 2. Como publicar
@@ -48,8 +49,8 @@ O estado de cada página fica em `apps/site/src/rotas.json` (campo `react`):
 | `"publicada"` | também grava `dist/<saida>` (por exemplo `dist/404.html` ou `dist/comunicados/descadastro/index.html`), **no lugar da cópia do HTML, só no `dist`** | o endereço de hoje passa a ser React, com a mesma cabeça da página de HTML |
 
 - **Voltar atrás:** trocar `"publicada"` por `"previa"`; o próximo build volta a servir o HTML, enquanto ele estiver em `public/`.
-- A página de HTML só sai de `public/` num commit posterior, depois de a versão em React estar publicada e conferida no ar. Ela vai para `apps/site/tests/referencia/` (o `origem` do mapa aponta para lá), só para os testes de cabeça e de textos. Depois disso, voltar atrás pede também devolver o arquivo a `public/`. Já saíram: `404.html` e `comunicados/descadastro/index.html` (conferidas no ar em 27/11/2026).
-- **Cabeça igual:** título, descrição, robots, referrer, canonical, Open Graph e Twitter ficam em `cabeca` no `rotas.json`. O teste `tests/cabeca.test.ts` compara com a página de HTML enquanto ela existir.
+- A página de HTML só sai de `public/` num commit posterior, depois de a versão em React estar publicada e conferida no ar. Ela vai para `apps/site/tests/referencia/` (o `origem` do mapa aponta para lá), só para os testes de cabeça e de textos. Depois disso, voltar atrás pede também devolver o arquivo a `public/`. Já saíram: `404.html` e `comunicados/descadastro/index.html` (conferidas no ar em 27/11/2026), `privacidade/index.html` e `projeto-piloto/index.html` (com `src/projeto-piloto.ts`/`.css`, no lote S3).
+- **Cabeça igual:** título, descrição, robots, referrer, canonical, Open Graph, Twitter e os dados estruturados (`jsonld`, só a página inicial tem) ficam em `cabeca` no `rotas.json`. O teste `tests/cabeca.test.ts` compara com a página de HTML enquanto ela existir.
 
 ### 3.4 Prova de que nada mais muda
 
@@ -81,9 +82,9 @@ Esforço: P = até 1 dia, M = 2 a 3 dias, G = 4 dias ou mais (sem contar a cria�
 | Lote | Páginas / peças | Endereço | Componentes do DS que já existem | FALTA NO DS | Esforço | Estado |
 |---|---|---|---|---|:---:|---|
 | **S0** | limpeza: app React antigo | — | — | — | P | **feito** (dist igual byte a byte) |
-| **S1** | peças de todas as páginas: cabeçalho, gaveta de contato, rodapé, WhatsApp, botão subir, cookies, janela da política, aviso "Tem um projeto?", entrada ao rolar | todas | `RodapeSite`, `BotaoWhatsApp`, `BotaoSubir`, `AvisoCookies`, `AvisoProjeto`, `SurgirAoRolar`/`TituloQueSurge`, `SidePanel`, `Input`, `Select`, `Textarea`, `Checkbox`, `Button`, `Accordion`, `Dialog` | — (`CabecalhoDoSite`, `CampoDeEmail` e o "Fechar" em português chegaram em `d2aeb40`) | M | **feito** na casca `CascaDoSite` (cabeçalho, gaveta de contato, rodapé, cookies, WhatsApp), usada pelas páginas em React; o aviso "Tem um projeto?" entra com a Início (S3) |
+| **S1** | peças de todas as páginas: cabeçalho, gaveta de contato, rodapé, WhatsApp, botão subir, cookies, janela da política, aviso "Tem um projeto?", entrada ao rolar | todas | `RodapeSite`, `BotaoWhatsApp`, `BotaoSubir`, `AvisoCookies`, `AvisoProjeto`, `SurgirAoRolar`/`TituloQueSurge`, `SidePanel`, `Input`, `Select`, `Textarea`, `Checkbox`, `Button`, `Accordion`, `Dialog` | — (`CabecalhoDoSite`, `CampoDeEmail` e o "Fechar" em português chegaram em `d2aeb40`) | M | **feito** na casca `CascaDoSite` (cabeçalho, gaveta de contato, rodapé, cookies, WhatsApp), usada pelas páginas em React; o aviso "Tem um projeto?" entrou com a Início (S3) |
 | **S2** | Projeto Piloto | `/projeto-piloto/` | `Selo`, `Heading`, `Button`, `CardDeFrente`, `GradeDeCards`, `Card`, `CurvaSecao`, `Timeline`, `Accordion`, `PartnerCard`, `SidePanel`, campos | — (todas as peças chegaram em `d2aeb40`) | M | **publicada** |
-| **S3** | Início | `/` | `Heading`, `Input`, `Button`, `Carousel`, `SeloSecao` | `CardDeDepoimento`, `CardDeArtigo`, `FaixaDeLogos`, `LinkSaibaMais`, `PilulaDeAcao`, `LuzesDifusas`, estado de envio e de sucesso no `Button` | G | planejado |
+| **S3** | Início | `/` | `Heading`, `Input`, `Button`, `Carousel`, `SeloSecao` | `CardDeDepoimento`, `CardDeArtigo`, `FaixaDeLogos`, `LinkSaibaMais`, `PilulaDeAcao`, `LuzesDifusas`, estado de envio e de sucesso no `Button` | G | **publicada** (seção 6c) |
 | **S4** | Rede de Parceiros | `/rede-parceiros/` | `Selo`, `Heading`, `AvatarCircles`, `Button`, `Tabs`/`ToggleGroup`, `Carousel`, `Accordion`, `PartnerCard`, `SidePanel` | `ListaDePilares`, `CartaoFlutuante`, `LinkSaibaMais`, `Simulacao`/`CursorDeDemonstracao`, `Quadro`, `CardDeParceiro`, diagrama do ecossistema | G | planejado |
 | **S5** | Cadastro de parceiro + autorizar galeria | `/rede-parceiros/cadastro/`, `/rede-parceiros/galeria/autorizar/` | `Input`, `Select`, `Checkbox`, `RadioGroup`, `Textarea`, `Label`, `Collapsible`, `Dialog`, `Upload`, `Alert`, `Card` | `Stepper` e o cadastro em etapas (`MolduraDoCadastro`, `EtapaDoCadastro`, `BarraDaEtapa`, `ListaDeRevisao`, `LinhaDeDado`), `Campo` (rótulo + ajuda + erro), `CampoDeEmail`, `CampoEstadoCidade`, máscaras de telefone e CNPJ, `EstadoFinal` | G | planejado |
 | **S6** | Pesquisa moda Curitiba | `/pesquisa/moda-curitiba/` | `Card`, `Heading`, `Button`, `RadioGroup`, `Checkbox`, `Textarea`, `Input`, `Progress`, `AlertDialog`, `Dialog` | `PerguntaGuiada`, `EstadoFinal`, cartões selecionáveis | M | planejado |
@@ -125,6 +126,22 @@ Ordem sugerida (junto com a área restrita): S7 (feito) → S1 → S2 → S3 →
 
 **Diferenças em relação ao HTML:** os campos passam a ter rótulo visível (antes, o rótulo estava no texto de exemplo) e cada campo mostra o próprio erro, além da mensagem geral de sempre; "Meu negócio é…" deixa de ser um acordeão e vira cartões de escolha; os dias viram caixas de seleção; o link da política no cadastro abre a página numa aba nova (como o texto já dizia), sem a janela da política; o hero sem a moldura arredondada. Textos, tabelas gravadas, rascunho do contato, identificador do envio do cadastro e eventos de medição: os mesmos (testes `tests/projeto-piloto.test.ts` e `tests/navegador/projeto-piloto.cjs`).
 
+## 6c. Lote S3 (página inicial): componentes do DS em cada peça
+
+| Peça | Componente do DS |
+|---|---|
+| Hero | `Selo` ("Em breve"; "Meaningful Experiences" no celular), `Heading size="hero"` com os destaques, `LuzesDifusas`, `SurgirAoRolar`, foto da página |
+| Notificar lançamento | `CampoDeEmail` (rótulo visível e sugestão de domínio), `BotaoDeEnvio` (Enviando… e Obrigado! Até breve!, volta em 4 s) |
+| Redes sociais | `Button variant="outline" size="lg"` com os ícones `Linkedin` e `Instagram` de `icones-preservados` |
+| Saiba mais | `LinkSaibaMais` |
+| Depoimentos | `CabecalhoDeSecao` (comum ao site: `Selo`, `Heading`, `SurgirAoRolar`), `Badge variant="outline"` com ícones, `Carousel` com `CardDeDepoimento` (1, 2 ou 3 por vez), `CarouselPrevious`/`CarouselNext` (44 px) e o contador "1 de N" |
+| Ver as 35 recomendações | `Card orientacao="horizontal"` + `CardMidia tipo="icone"`, divisor e `Button` no canto inferior direito |
+| Artigos | `CardDeArtigo` (destaque e horizontais) em `GradeDeCards` |
+| Empresas atendidas | `FaixaDeLogos` (com o botão Pausar; com menos movimento, grade parada) |
+| Fixos | `AvisoProjeto` ("Tem um projeto?", abre o WhatsApp), `BotaoWhatsApp`, `RodapeSite variante="claro"` |
+
+**Diferenças em relação ao HTML:** o campo de e-mail com rótulo visível e o botão embaixo dele; no celular, tudo alinhado à esquerda numa borda só (antes, centralizado); o hero em duas colunas a partir de 1280 px (em 1024 px o título ficava em cinco linhas); as aspas dos depoimentos viram o ícone do card; o card inteiro do artigo é clicável pelo título; as setas da faixa de logos dão lugar ao botão Pausar; o número do carrossel conta as posições (21 no celular, 20 no tablet, 19 no computador). Textos, links, tabela e eventos: os mesmos (testes `tests/inicio.test.ts` e `tests/navegador/inicio.cjs`).
+
 ## 7. Páginas de apresentação do EI: três versões (decisão da dona do produto pendente)
 
 Todas privadas (`noindex`, login de administrador pelas funções `functions/experience-intelligence*/_middleware.js`). Nenhuma página pública tem link para elas.
@@ -152,3 +169,9 @@ Em `apps/site/`:
 - **Duas versões das peças comuns** durante a migração (HTML com `analytics.js`/`whatsapp.js`, React com `AvisoCookies`/`BotaoWhatsApp`), com a mesma chave de cookies: a escolha vale nas duas.
 - **Lacunas do DS** que seguram páginas: seção 5 (coluna FALTA NO DS). Nenhuma peça foi feita à mão no app.
 - **Botão de 44 px no celular:** o `Button` padrão do DS ainda tem 40 px; as páginas usam `size="lg"` (44 px). Os links do `RodapeSite` têm 24 px (passa no WCAG 2.5.8, fica abaixo dos 44 px da regra da dona do produto).
+- **Lacunas do DS achadas no lote S3** (contornadas no site, sem editar o DS):
+  - `AvisoProjeto`: o `<style>` dentro do componente tem aspas, que o servidor grava escapadas, e a hidratação falha. O site monta o aviso só no navegador (ele já aparecia 0,6 s depois). Correção no DS: mover o CSS para o `theme.css`/classes ou usar `dangerouslySetInnerHTML`.
+  - `FaixaDeLogos`: falta um tom "silhueta" para logos coloridos ou com partes brancas (somem no fundo claro). O site passa `brightness-0` e opacidade pelos `className` das imagens, como o filtro da página de HTML.
+  - `CampoDeEmail`: o bloco de fora não recebe `className` (não ocupa a largura num `flex` com `items-start`); o formulário usa `items-stretch`.
+  - `Button`: sem quebra de linha para rótulos longos no celular ("Acessar Recomendações no LinkedIn" passava da borda do card); o site passa `whitespace-normal h-auto`.
+  - `CardDeArtigo`: "Ler artigo" fica escondido dos leitores de tela (o link é o título). Quatro artigos da página continuam com `href="#"`, como no HTML: falta o endereço dos textos (conteúdo da dona do produto).
