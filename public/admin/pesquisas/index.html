@@ -594,11 +594,6 @@
   .pa-op-rec { color: var(--primary-text) !important; }
   .pa-op-c3 { display: grid; gap: 12px; align-content: start; }
   .pa-op-c3 ul { margin: 0; padding: 0 0 0 16px; font-size: 13px; line-height: 1.5; color: var(--muted-foreground); }
-  .pa-op-imp { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 700; white-space: nowrap; }
-  .pa-op-imp svg { width: 14px; height: 14px; }
-  .pa-op-imp.alto { background: var(--primary-muted); color: var(--primary-text); }
-  .pa-op-imp.medio { background: var(--warning-muted); color: var(--warning-text); }
-  .pa-op-imp.baixo { background: var(--muted); color: var(--muted-foreground); }
   .pa-op-pe { grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); }
   .pa-op-link { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: var(--primary-text); text-decoration: none; border-radius: var(--radius-sm); }
   .pa-op-link:hover { text-decoration: underline; text-underline-offset: 3px; }
@@ -2233,10 +2228,9 @@
     if (pendentes.length) pnAch.appendChild(el("p", "pa-int-pend", `Ainda não há pessoas suficientes para comparar com segurança: ${juntar(pendentes)}. Essas comparações aparecem quando cada grupo tiver pelo menos ${MIN_SEG} pessoas.`));
 
     const pnOp = el("div", "pa-int-painel"); pnOp.dataset.intPainel = "oportunidades"; pnOp.hidden = true;
-    pnOp.appendChild(el("p", "pa-int-intro", "O que os achados sugerem para o produto Find Look, em recursos, fluxos e melhorias. São hipóteses a validar com as pessoas, não conclusões. O impacto vem da parte das pessoas que vive a dor."));
+    pnOp.appendChild(el("p", "pa-int-intro", "O que os achados sugerem para o produto Find Look, em recursos, fluxos e melhorias. São hipóteses a validar com as pessoas, não conclusões. A ordem é de impacto: da que atinge mais gente para a que atinge menos."));
     // ordem de prioridade: impacto (parte das pessoas atingidas), do maior para o menor
     const todas = [...opsGerais, ...ops].sort((a, b) => b.parte - a.parte);
-    const nivel = (p) => (p >= 50 ? "Alto" : p >= 25 ? "Médio" : "Baixo");
     // indicadores no topo (padrão CardsDeKpi do DS)
     const kpis = el("div", "pa-op-kpis");
     [["alvo", "Oportunidades", todas.length], ["estrela", "Impacto alto", todas.filter((o) => o.parte >= 50).length], ["busca", "Ligadas à busca", todas.filter((o) => o.cat === "busca").length]].forEach(([ic, rot, v]) => {
@@ -2254,9 +2248,8 @@
       const ev = el("div"); const he = el("h5"); he.innerHTML = svg(IC_OP.barras); he.append("Evidências"); ev.appendChild(he); const ul = el("ul"); o.evid.forEach((e) => ul.appendChild(el("li", null, e))); ev.appendChild(ul);
       const ie = el("div"); const hi = el("h5"); hi.innerHTML = svg(IC_OP.alvo); hi.append("Impacto esperado"); ie.append(hi, el("p", null, o.esperado));
       c3.append(ev);
-      const c4 = el("div", "pa-op-c4"); const nv = nivel(o.parte);
-      const chip = el("span", "pa-op-imp " + nv.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")); chip.innerHTML = svg(IC_OP.barras); chip.append(`Impacto: ${nv}`);
-      chip.title = `${o.parte}% das pessoas na base desta oportunidade`; c4.append(chip, ie); // impacto esperado junto do selo
+      // sem selo de impacto: a posição no ranking já mostra o impacto (pedido da dona do produto)
+      const c4 = el("div", "pa-op-c4"); c4.append(ie);
       li.append(c1, c2, c3, c4);
       if (o.id) {
         const pe = el("div", "pa-op-pe"); const a = el("a", "pa-op-link"); a.href = "#" + o.id; a.innerHTML = "Ver achado" + svg('<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>');
