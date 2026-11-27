@@ -37,10 +37,10 @@ describe("corte página a página", () => {
     expect(arquivoDaPrevia(porId("erro-404"))).toBe("site/previa/404/index.html");
     expect(arquivoDaPrevia(porId("inicio"))).toBe("site/previa/index.html");
   });
-  it("hoje: 404 e descadastro publicadas (no branch); privacidade em prévia (falta a Prosa no DS)", () => {
-    expect(REACT).toEqual({ privacidade: "previa", descadastro: "publicada", "erro-404": "publicada" });
+  it("hoje: as três páginas pequenas publicadas", () => {
+    expect(REACT).toMatchObject({ privacidade: "publicada", descadastro: "publicada", "erro-404": "publicada" });
     expect(planoDeSaida(rotas).map((p: { arquivo: string }) => p.arquivo)).toEqual([
-      "404.html", "comunicados/descadastro/index.html",
+      "404.html", "comunicados/descadastro/index.html", "privacidade/index.html",
       "site/previa/404/index.html", "site/previa/comunicados/descadastro/index.html", "site/previa/privacidade/index.html",
     ]);
   });

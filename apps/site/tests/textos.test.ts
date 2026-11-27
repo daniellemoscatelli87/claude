@@ -5,9 +5,13 @@ import { renderizar } from "../src/servidor";
 
 const antes = (rel: string) => readFileSync(new URL(`../../../public/${rel}`, import.meta.url), "utf8");
 
-/** Texto visível de um pedaço de HTML: sem comentários, scripts, estilos e marcas; espaços normalizados. */
+/** Texto visível de um pedaço de HTML: sem comentários, scripts, estilos, partes escondidas (aria-hidden, medidas
+ * invisíveis do BotaoDeEnvio) e marcas; espaços normalizados. */
 function texto(html: string) {
-  return html
+  let h = html;
+  // tira elementos aria-hidden sem filhos do mesmo tipo (spans e svgs decorativos)
+  for (let i = 0; i < 5; i++) h = h.replace(/<(span|svg|p|div)\b[^>]*aria-hidden="true"[^>]*>(?:(?!<\1\b)[\s\S])*?<\/\1>/g, "");
+  return h
     .replace(/<!--[\s\S]*?-->/g, "")
     .replace(/<(script|style)[\s\S]*?<\/\1>/g, "")
     .replace(/<[^>]+>/g, " ")
@@ -37,10 +41,11 @@ describe("mesmos textos", () => {
     // os e-mails continuam fora da ofuscação do Cloudflare
     expect(novo.match(/<!--email_off-->/g)?.length).toBe(4);
   });
-  it("404: os mesmos textos e o mesmo link", () => {
-    const novo = renderizar("erro-404");
-    expect(texto(novo)).toBe(texto(trecho(antes("404.html"), /<main>/, "</main>")));
-    expect(novo).toContain('href="/"');
+  it("404: os mesmos textos e o mesmo link (\"Erro 404\" vai para leitores de tela; o título vem antes)", () => {
+    const novo = texto(renderizar("erro-404"));
+    expect(texto(trecho(antes("404.html"), /<main>/, "</main>"))).toBe("Erro 404 Página não encontrada O endereço pode ter mudado ou não existe mais. Ir para a página inicial");
+    expect(novo).toBe("Página não encontrada Erro 404. O endereço pode ter mudado ou não existe mais. Ir para a página inicial");
+    expect(renderizar("erro-404")).toContain('href="/"');
   });
   it("Descadastro: os mesmos textos ao abrir (o botão só liga depois de conferir o link)", () => {
     const novo = renderizar("descadastro");

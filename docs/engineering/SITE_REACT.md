@@ -9,10 +9,10 @@
 | App em `apps/site/` (Vite 6 + React 18.3 + Tailwind 4.1.12, as versões do DS e da área restrita) | implementado e testado |
 | HTML pronto de cada página gravado no build (o React assume a página no navegador) | implementado e testado |
 | Mapa de páginas com o lote de cada uma e o estado "previa" ou "publicada" (`apps/site/src/rotas.json`) | implementado e testado |
-| Pasta `ui` inteira do DS sincronizada (`cb5847c`, a mesma da área restrita) | implementado |
+| Pasta `ui` inteira do DS sincronizada (`d2aeb40`, com as peças do site pedidas na lista "FALTA NO DS") | implementado |
 | Conformidade com o DS (`npm run conformidade`) | zero desvios |
 | Lote S0: app React antigo apagado (cerca de 3.000 linhas sem uso) | feito; o dist ficou igual byte a byte |
-| Lote S7: 404 e descadastro **publicadas**; privacidade **em prévia** | feito e testado (seção 6) |
+| Lote S7: 404, descadastro e privacidade **publicadas** | feito e testado (seção 6) |
 | Páginas de HTML de hoje | intactas; continuam servidas até cada página ser trocada |
 
 ## 2. Como publicar
@@ -87,25 +87,26 @@ Esforço: P = até 1 dia, M = 2 a 3 dias, G = 4 dias ou mais (sem contar a cria�
 | **S4** | Rede de Parceiros | `/rede-parceiros/` | `Selo`, `Heading`, `AvatarCircles`, `Button`, `Tabs`/`ToggleGroup`, `Carousel`, `Accordion`, `PartnerCard`, `SidePanel` | `ListaDePilares`, `CartaoFlutuante`, `LinkSaibaMais`, `Simulacao`/`CursorDeDemonstracao`, `Quadro`, `CardDeParceiro`, diagrama do ecossistema | G | planejado |
 | **S5** | Cadastro de parceiro + autorizar galeria | `/rede-parceiros/cadastro/`, `/rede-parceiros/galeria/autorizar/` | `Input`, `Select`, `Checkbox`, `RadioGroup`, `Textarea`, `Label`, `Collapsible`, `Dialog`, `Upload`, `Alert`, `Card` | `Stepper` e o cadastro em etapas (`MolduraDoCadastro`, `EtapaDoCadastro`, `BarraDaEtapa`, `ListaDeRevisao`, `LinhaDeDado`), `Campo` (rótulo + ajuda + erro), `CampoDeEmail`, `CampoEstadoCidade`, máscaras de telefone e CNPJ, `EstadoFinal` | G | planejado |
 | **S6** | Pesquisa moda Curitiba | `/pesquisa/moda-curitiba/` | `Card`, `Heading`, `Button`, `RadioGroup`, `Checkbox`, `Textarea`, `Input`, `Progress`, `AlertDialog`, `Dialog` | `PerguntaGuiada`, `EstadoFinal`, cartões selecionáveis | M | planejado |
-| **S7** | Privacidade, descadastro, 404 | `/privacidade/`, `/comunicados/descadastro/`, 404 | `Selo`, `Heading`, `Button`, `Card` (rodapé com divisor), `Alert`, `RodapeSite`, `AvisoCookies`, `BotaoWhatsApp` | `Prosa` (texto longo), `Logo`, `PaginaDeErro`/`EstadoVazio`, links do `RodapeSite` com 44 px no celular | P | **feito**: 404 e descadastro publicadas; privacidade em prévia |
+| **S7** | Privacidade, descadastro, 404 | `/privacidade/`, `/comunicados/descadastro/`, 404 | `Selo`, `Heading`, `Button`, `Card` (rodapé com divisor), `Alert`, `RodapeSite`, `AvisoCookies`, `BotaoWhatsApp` | `Prosa` (texto longo), `Logo`, `PaginaDeErro`/`EstadoVazio`, links do `RodapeSite` com 44 px no celular | P | **feito**: as três publicadas (privacidade com a `Prosa` desde `d2aeb40`) |
 | **S8** | Apresentação do EI (a versão escolhida) | `/experience-intelligence*` | `Selo`, `SeloSecao`, `Heading`, `Timeline`, `GlassCard`, `Card`, `Accordion`, `Carousel`, `SidePanel` | as de S3 e `Citacao`; antes, a dona do produto escolhe a versão (seção 7) | G | aguarda a escolha |
 
 Ordem sugerida (junto com a área restrita): S7 (feito) → S1 → S2 → S3 → S4 → S5 → S6 → S8. S1 vem primeiro porque o cabeçalho e a gaveta de contato estão em todas as páginas grandes.
 
-## 6. Lote S7: componentes do DS em cada peça
+## 6. Lote S7: componentes do DS em cada peça (DS `d2aeb40`)
 
 | Página | Peça | Componente do DS |
 |---|---|---|
-| 404 | selo "Erro 404", título, texto, botão | `Selo tone="primary"`, `Heading level={1}`, `Button size="lg" asChild` (link para `/`) |
-| Descadastro | cartão com título, texto e ação | `Card`, `CardHeader`, `CardDescription`, `CardFooter` com divisor (`border-t`) e o botão no canto inferior direito, `Heading` |
+| 404 | logo, título, texto, botão | `PaginaDeErro` (com o `Logo` como ilustração), `Button size="lg" asChild` (link para `/`); "Erro 404" fica para leitores de tela |
+| Descadastro | moldura (logo com link para o início, título, texto) | `MolduraDeConta` com o `Logo` |
 | Descadastro | link inválido, erro do servidor | `Alert variant="error"` + `AlertTitle` (+ `AlertDescription`), ícone `CircleAlert` (Lucide) |
-| Descadastro | envio e "Pronto!" | `Button` desligado com "Confirmando…"; `Heading` "Pronto!" recebe o foco; `Button variant="outline"` "Ir para o site" |
-| Privacidade | selo, títulos, voltar ao site | `Selo`, `Heading` (página e `size="card"` nos tópicos), `Button variant="link"` |
+| Descadastro | envio e "Pronto!" | `BotaoDeEnvio` ("Confirmando…"), `EstadoFinal` ("Pronto!", com foco e anúncio), `Button variant="outline"` "Ir para o site" |
+| Privacidade | logo, voltar ao site, selo, título | `Logo`, `Button variant="link"`, `Selo`, `Heading` |
+| Privacidade | texto longo | `Prosa` (parágrafos, listas e links sem classes próprias) |
 | Privacidade | rodapé, cookies, WhatsApp | `RodapeSite variante="compacto"` (mesmo texto de direitos; sem o crédito do DS, como hoje), `AvisoCookies`, `BotaoWhatsApp` |
 
-**Diferenças visíveis em relação ao HTML** (capturas em 390, 768, 1024 e 1280 px): botões com os cantos do DS (12 px) em vez de pílula; selo do DS (borda e ponto) em vez da etiqueta rosa; fundo cinza do DS na 404; no descadastro, o logo sai de dentro do cartão e o texto fica alinhado à esquerda, com o botão no canto inferior direito depois do divisor (regra dos cards com ação); na privacidade, o rodapé compacto do DS (fundo cinza, "Política de privacidade" a mais entre os links, cidade ao lado dos direitos). Textos e links: os mesmos (teste `tests/textos.test.ts`).
+**Diferenças visíveis em relação ao HTML** (capturas em 390, 768, 1024 e 1280 px): botões com os cantos do DS em vez de pílula (no celular, o da 404 ocupa a largura, regra das ações do DS); na 404, o "Erro 404" vira texto para leitores de tela e o título vem antes do texto; no descadastro, a moldura das telas de conta do DS (logo, título e texto alinhados à esquerda, botão na largura do cartão) e o "Pronto!" com o ícone de sucesso; na privacidade, a tipografia da `Prosa` e o rodapé compacto do DS. Textos e links: os mesmos (teste `tests/textos.test.ts`).
 
-**Por que a privacidade fica em prévia:** o texto longo (parágrafos, listas, links no meio do texto) não tem componente no DS (`Prosa`); hoje usa só classes de layout e tokens na própria página. Quando a `Prosa` chegar ao DS, a página passa a usá-la e pode ser publicada.
+**Correção pedida ao DS:** o `Logo` desenha os caminhos sem `fill-rule="evenodd"` (os SVGs oficiais do próprio DS usam), e os miolos de letras como D, o e a saem preenchidos. O site passa `fillRule="evenodd"` pelo próprio componente (`LOGO_CORRIGIDO` em `src/compartilhado/marca.ts`), sem editar o DS; quando o DS corrigir, a propriedade pode sair.
 
 ## 7. Páginas de apresentação do EI: três versões (decisão da dona do produto pendente)
 

@@ -65,7 +65,7 @@
     { "id": "experience-intelligence-3", "caminho": "/experience-intelligence-3/", "saida": "experience-intelligence-3/index.html", "origem": "public/experience-intelligence-3/index.html", "lote": "S8" }
   ],
   "react": {
-    "privacidade": "previa",
+    "privacidade": "publicada",
     "descadastro": "publicada",
     "erro-404": "publicada"
   }
