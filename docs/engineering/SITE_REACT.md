@@ -2,7 +2,7 @@
 
 > Decisão de 27/11/2026 (D-053): o site público do estúdio (início, Projeto Piloto, Rede de Parceiros, cadastro, galeria, pesquisa, privacidade, descadastro, 404 e as páginas de apresentação do EI) passa a ser refeito em React, página por página, com os componentes reais do Design System Dani Moscatelli, como a área restrita (D-051, `docs/engineering/ADMIN_REACT.md`). Endereços, textos, cabeça (título, descrição, canonical, compartilhamento) e comportamento continuam os mesmos. A dona do produto delegou a escolha de como o site consome o DS.
 
-## 1. Situação em 27/11/2026 (branch `claude/site-ds`, sem publicar)
+## 1. Situação em 27/11/2026
 
 | O quê | Estado |
 |---|---|
@@ -12,12 +12,12 @@
 | Pasta `ui` inteira do DS sincronizada (`cb5847c`, a mesma da área restrita) | implementado |
 | Conformidade com o DS (`npm run conformidade`) | zero desvios |
 | Lote S0: app React antigo apagado (cerca de 3.000 linhas sem uso) | feito; o dist ficou igual byte a byte |
-| Lote S7: 404 e descadastro **publicadas no branch**; privacidade **em prévia** | feito e testado (seção 6) |
+| Lote S7: 404 e descadastro **publicadas**; privacidade **em prévia** | feito e testado (seção 6) |
 | Páginas de HTML de hoje | intactas; continuam servidas até cada página ser trocada |
 
 ## 2. Como publicar
 
-A regra da dona do produto para a área restrita vale aqui (D-051): **lote com mudança visível só é publicado depois do "sim" dela para aquele lote.** As páginas em React mudam a aparência (componentes do DS no lugar das cópias à mão), então todo lote desta migração é "com mudança visível". O S0 (limpeza) não muda nada no ar.
+A dona do produto delegou a publicação (decisões de 27/11/2026: autonomia total para finalizar os DS e publicar, sem parar para aprovação). Cada lote vai ao `main` por pull request só depois de todos os testes abaixo, e o resumo com as capturas antes e depois vai para ela em seguida. O S0 (limpeza) não muda nada no ar.
 
 Cada lote leva: tipos, testes, conformidade em zero, build, comparação do dist (seção 3.4), o teste no navegador em 390, 768, 1024 e 1280 px, capturas antes e depois e a lista de componentes do DS de cada peça.
 
@@ -87,7 +87,7 @@ Esforço: P = até 1 dia, M = 2 a 3 dias, G = 4 dias ou mais (sem contar a cria�
 | **S4** | Rede de Parceiros | `/rede-parceiros/` | `Selo`, `Heading`, `AvatarCircles`, `Button`, `Tabs`/`ToggleGroup`, `Carousel`, `Accordion`, `PartnerCard`, `SidePanel` | `ListaDePilares`, `CartaoFlutuante`, `LinkSaibaMais`, `Simulacao`/`CursorDeDemonstracao`, `Quadro`, `CardDeParceiro`, diagrama do ecossistema | G | planejado |
 | **S5** | Cadastro de parceiro + autorizar galeria | `/rede-parceiros/cadastro/`, `/rede-parceiros/galeria/autorizar/` | `Input`, `Select`, `Checkbox`, `RadioGroup`, `Textarea`, `Label`, `Collapsible`, `Dialog`, `Upload`, `Alert`, `Card` | `Stepper` e o cadastro em etapas (`MolduraDoCadastro`, `EtapaDoCadastro`, `BarraDaEtapa`, `ListaDeRevisao`, `LinhaDeDado`), `Campo` (rótulo + ajuda + erro), `CampoDeEmail`, `CampoEstadoCidade`, máscaras de telefone e CNPJ, `EstadoFinal` | G | planejado |
 | **S6** | Pesquisa moda Curitiba | `/pesquisa/moda-curitiba/` | `Card`, `Heading`, `Button`, `RadioGroup`, `Checkbox`, `Textarea`, `Input`, `Progress`, `AlertDialog`, `Dialog` | `PerguntaGuiada`, `EstadoFinal`, cartões selecionáveis | M | planejado |
-| **S7** | Privacidade, descadastro, 404 | `/privacidade/`, `/comunicados/descadastro/`, 404 | `Selo`, `Heading`, `Button`, `Card` (rodapé com divisor), `Alert`, `RodapeSite`, `AvisoCookies`, `BotaoWhatsApp` | `Prosa` (texto longo), `Logo`, `PaginaDeErro`/`EstadoVazio`, links do `RodapeSite` com 44 px no celular | P | **feito**: 404 e descadastro publicadas no branch; privacidade em prévia |
+| **S7** | Privacidade, descadastro, 404 | `/privacidade/`, `/comunicados/descadastro/`, 404 | `Selo`, `Heading`, `Button`, `Card` (rodapé com divisor), `Alert`, `RodapeSite`, `AvisoCookies`, `BotaoWhatsApp` | `Prosa` (texto longo), `Logo`, `PaginaDeErro`/`EstadoVazio`, links do `RodapeSite` com 44 px no celular | P | **feito**: 404 e descadastro publicadas; privacidade em prévia |
 | **S8** | Apresentação do EI (a versão escolhida) | `/experience-intelligence*` | `Selo`, `SeloSecao`, `Heading`, `Timeline`, `GlassCard`, `Card`, `Accordion`, `Carousel`, `SidePanel` | as de S3 e `Citacao`; antes, a dona do produto escolhe a versão (seção 7) | G | aguarda a escolha |
 
 Ordem sugerida (junto com a área restrita): S7 (feito) → S1 → S2 → S3 → S4 → S5 → S6 → S8. S1 vem primeiro porque o cabeçalho e a gaveta de contato estão em todas as páginas grandes.

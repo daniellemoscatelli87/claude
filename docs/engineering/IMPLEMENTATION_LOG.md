@@ -6,7 +6,7 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
-## 2026-11-27 · Site público em React com o DS: limpeza (S0), fundação (`apps/site`) e páginas pequenas (S7), não publicado (D-053)
+## 2026-11-27 · Site público em React com o DS: limpeza (S0), fundação (`apps/site`) e páginas pequenas (S7): 404 e descadastro publicadas, privacidade em prévia (D-053)
 
 - **S0, limpeza (sem mudança no ar):** apagado o app React antigo que nenhuma página carregava (`src/App.tsx`, `main.tsx`, `index.css`, `components/` (13), `pages/`, `hooks/`, `i18n/`, `data/`: 2.999 linhas) e as dependências que só ele usava (`react`, `react-dom`, `react-router-dom`, `uuid`, `zustand`, `lucide-react`, tipos do React, plugin do React no Vite). Conferido: nenhum HTML, CSS (`@source`) ou TS do site importava esses arquivos; `tsc -b` e o build passam; **o dist ficou igual byte a byte** ao do `main` (303 arquivos).
 - **Fundação (`apps/site/`, plano em `docs/engineering/SITE_REACT.md`):** Vite 6, React 18.3, Tailwind 4.1.12 e a pasta `ui` inteira do DS (`cb5847c`, a mesma da área restrita; `design-system/arquivos.txt` ganhou as linhas do app); uma entrada por página; o build grava o HTML pronto de cada página (versão para o servidor, só no build) e o React assume no navegador; `src/rotas.json` com as 12 páginas públicas, o lote de cada uma e o estado "previa"/"publicada"; `scripts/montar-saida.mjs` (prévias em `/site/previa/`, publicadas no lugar do HTML, arquivos em `/site/assets/`); `scripts/comparar-dist.mjs`; conformidade com o DS em zero; o `npm run build` da raiz chama `build:site`; a rotina diária do DS testa o app.
@@ -17,7 +17,8 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
   - na raiz: `npm run build` (passa); `node apps/site/scripts/comparar-dist.mjs <dist do main cd2aab0> dist`: 301 arquivos iguais byte a byte, 11 diferenças esperadas (arquivos do app, 3 prévias, 404 e descadastro publicadas); o build do commit S0 sozinho deu o dist igual ao do `main`; os dois builds são determinísticos;
   - `apps/site/tests/navegador/paginas.cjs` (Playwright, Supabase e Google simulados): 60 conferências passaram, 1 aviso (links do `RodapeSite` com 24 px no celular, lacuna do DS); axe sem violações WCAG A/AA nas três páginas a 1280 e 390 px; capturas antes e depois em 390, 768, 1024 e 1280 px.
   - Não se aplicam a estas páginas (são das páginas dos DS): `todas-paginas.js`, `quebras-paginas.js`, `grid-colunas-check.cjs`, `cards-altura-check.cjs`, `tons-check.js`, `fl-cadastro-teste.cjs`. As regras deles que valem aqui (alinhamento no celular, card com ação, sem rolagem horizontal) estão no teste do navegador.
-- **Pendências:** "sim" da dona do produto para publicar o S7; `Prosa` no DS para publicar a privacidade; lacunas do DS para S1 a S8 (SITE_REACT.md, seção 5); escolha da versão do EI; apagar `public/404.html` e `public/comunicados/descadastro/index.html` depois de publicadas e conferidas no ar.
+- **Publicação:** a dona do produto delegou a publicação (decisões de 27/11/2026: "autonomia total… publicar… sem parar para aprovação"); o S7 vai para o `main` por pull request depois de todos os testes acima.
+- **Pendências:** `Prosa` no DS para publicar a privacidade; lacunas do DS para S1 a S8 (SITE_REACT.md, seção 5); escolha da versão do EI; apagar `public/404.html` e `public/comunicados/descadastro/index.html` depois de publicadas e conferidas no ar.
 
 ## 2026-11-27 · Área restrita em React: Início publicada em /admin/ (D-051, D-052)
 
