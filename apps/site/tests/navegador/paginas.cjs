@@ -28,7 +28,7 @@ const ok = (c, m) => { console.log((c ? "PASSOU " : "FALHOU ") + m); if (!c) fal
 const aviso = (m) => { console.log("AVISO  " + m); avisos++; };
 
 const PAGINAS = [
-  { id: "privacidade", antes: "/privacidade/", depois: "/site/previa/privacidade/" },
+  { id: "privacidade", antes: "/privacidade/", depois: "/site/previa/privacidade/", publicada: "/privacidade/" },
   { id: "descadastro", antes: `/comunicados/descadastro/?t=${TOKEN}`, depois: `/site/previa/comunicados/descadastro/?t=${TOKEN}`, publicada: `/comunicados/descadastro/?t=${TOKEN}` },
   { id: "404", antes: "/endereco-que-nao-existe/", depois: "/site/previa/404/", publicada: "/endereco-que-nao-existe/" },
 ];
@@ -113,20 +113,13 @@ async function axe(p) {
   {
     const { ctx, p } = await novaPagina(b, 390);
     await p.goto(BASE + "/site/previa/privacidade/", { waitUntil: "networkidle" });
-    const priv = await bordas(p, ["article [data-slot=selo]", "article h1", "article h1 + p", "article > p", "article h2", "article section > p"]);
+    const priv = await bordas(p, ["article [data-slot=selo]", "article h1", "article h1 + p", "[data-slot=prosa] > p", "[data-slot=prosa] h2", "[data-slot=prosa] ul"]);
     ok(new Set(priv.map((x) => x.x)).size === 1, "privacidade 390px: selo, título, data, textos e subtítulos na mesma borda " + JSON.stringify(priv));
-    const cab = await bordas(p, ["header img", "article [data-slot=selo]"]);
+    const cab = await bordas(p, ["header [data-slot=logo]", "article [data-slot=selo]"]);
     ok(cab[0].x === cab[1].x, "privacidade 390px: logo na mesma borda do texto " + JSON.stringify(cab));
     await p.goto(BASE + "/site/previa/comunicados/descadastro/?t=x", { waitUntil: "networkidle" });
-    const desc = await bordas(p, ["main h1", "[data-slot=card-description]", "[data-slot=alert]"]);
-    ok(new Set(desc.map((x) => x.x)).size === 1, "descadastro 390px: título, texto e alerta na mesma borda " + JSON.stringify(desc));
-    const direita = await p.evaluate(() => {
-      const card = document.querySelector("[data-slot=card]").getBoundingClientRect();
-      const bt = document.querySelector("[data-slot=card-footer] [data-slot=button]").getBoundingClientRect();
-      const h1 = document.querySelector("main h1").getBoundingClientRect();
-      return { margemDireita: Math.round(card.right - bt.right), margemEsquerda: Math.round(h1.left - card.left) };
-    });
-    ok(direita.margemDireita === direita.margemEsquerda, "descadastro 390px: botão no canto inferior direito, com o mesmo respiro do texto " + JSON.stringify(direita));
+    const desc = await bordas(p, ["main [data-slot=logo]", "main h1", "main h1 + p", "[data-slot=alert]", "[data-slot=botao-de-envio]"]);
+    ok(new Set(desc.map((x) => x.x)).size === 1, "descadastro 390px: logo, título, texto, alerta e botão na mesma borda " + JSON.stringify(desc));
     await ctx.close();
   }
 

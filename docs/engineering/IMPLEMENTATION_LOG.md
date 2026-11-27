@@ -6,6 +6,20 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-27 · Site em React: casca do site (S1) e Programa Projeto Piloto publicado (S2, D-053)
+
+- **S1 (`apps/site/src/compartilhado/site/`):** `CascaDoSite` com o `CabecalhoDoSite`, a gaveta de contato (`GavetaDeContato`: mesmos campos, tabela `contatos`, rascunho `dm-contato-rascunho`, eventos `contato_aberto` e `contato_enviado`), o `RodapeSite`, o aviso de cookies com a medição e o WhatsApp. As páginas de HTML continuam com `partes.ts`, `menu.ts`, `menu.css`, `analytics.js` e `whatsapp.js` até serem migradas.
+- **S2:** `/projeto-piloto/` em React (componentes por seção em `SITE_REACT.md`, seção 6b), marcada "publicada". Cadastro com a mesma tabela (`parceiro_piloto`), o mesmo identificador de envio (sem gravar duas vezes) e o mesmo tempo limite.
+- **Verificação executada:** em `apps/site`: tipos sem erros, 40 de 40 testes (inclui todas as frases da página de HTML presentes na versão em React e as regras do cadastro), conformidade em 0, build. Na raiz: build e `comparar-dist` contra o `main`: só as diferenças esperadas. Navegador: páginas pequenas 61 de 61; Projeto Piloto 34 de 34 (390, 768, 1024 e 1280 px; axe sem violações; menu do celular; contato com validação, sugestão de e-mail, máscara, envio e rascunho; cadastro com validação, envio, sucesso e abertura por botão, convite e endereço `#inscricao`; guia; pílula; botão subir).
+- **Pendências:** apagar `projeto-piloto/index.html`, `src/projeto-piloto.ts` e `src/projeto-piloto.css` depois de conferida no ar (com o próximo lote). O build mostra avisos do React sobre `useLayoutEffect` no servidor, vindos de componentes do DS (`SurgirAoRolar` e outros); não afetam a página, mas o DS pode trocar por um efeito que funcione nos dois lados.
+
+## 2026-11-27 · Site em React: DS `d2aeb40` no site e Política de Privacidade publicada (S7 completo, D-053)
+
+- **Sincronização:** `DS_REF=d2aeb40 bash scripts/sincronizar-design-system.sh`, aplicada só ao site em React (`apps/site`), ao catálogo e ao `versao.txt`. A área restrita em React, o `public/design-system/theme.css` e o app EI (stand-by) ficaram como estavam: a área restrita é de outra frente e recebe a versão nova pela sincronização diária (o PR dela testa o app antes).
+- **404:** `PaginaDeErro` com o `Logo`. **Descadastro:** `MolduraDeConta`, `BotaoDeEnvio`, `EstadoFinal`. **Privacidade:** `Prosa` e `Logo`; passa a "publicada".
+- **HTML substituído saiu de `public/`:** `404.html` e `comunicados/descadastro/index.html` (conferidas no ar depois do PR #255) foram para `apps/site/tests/referencia/`, só para os testes de cabeça e de textos. O build continua gravando as duas páginas no mesmo lugar do `dist`.
+- **Lacuna do DS encontrada:** o `Logo` sem `fill-rule="evenodd"` (miolos das letras preenchidos); contornado pela propriedade do próprio componente (`LOGO_CORRIGIDO`).
+- **Verificação executada:** em `apps/site`: tipos sem erros, 34 de 34 testes, conformidade em 0, build. Na raiz: build e `comparar-dist` contra o `main` (`118f573`): 303 arquivos iguais, só as diferenças esperadas (arquivos do app, 3 prévias e as 3 páginas publicadas). Navegador: 61 conferências passaram, sem avisos (os links do `RodapeSite` agora têm 44 px no celular); axe sem violações.
 ## 2026-11-27 · Área restrita em React: lista do Contato em prévia (A6, D-051), não publicada
 
 - **Feito:** `apps/area-restrita/src/telas/Contatos.tsx` em `/admin/app/contatos/` (`rotas.json`: `"contatos": "previa"`): abas Recebidos e Enviados com os números (`Tabs` + `Badge`), busca sem acento por nome, e-mail, empresa, assunto, mensagem, destinatários e origem (`Input`), situação (`Select`, também por `?situacao=`), aba guardada no endereço, `LinhaDeLista` + `IconeComBase` + `ChipDeEstado` com a origem (Site, E-mail, Enviado) e o estado (Não lida, Lida, Respondida, Reunião agendada) em texto. Cada linha abre a conversa na página de HTML.

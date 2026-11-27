@@ -37,12 +37,14 @@ describe("corte página a página", () => {
     expect(arquivoDaPrevia(porId("erro-404"))).toBe("site/previa/404/index.html");
     expect(arquivoDaPrevia(porId("inicio"))).toBe("site/previa/index.html");
   });
-  it("hoje: 404 e descadastro publicadas (no branch); privacidade em prévia (falta a Prosa no DS)", () => {
-    expect(REACT).toEqual({ privacidade: "previa", descadastro: "publicada", "erro-404": "publicada" });
-    expect(planoDeSaida(rotas).map((p: { arquivo: string }) => p.arquivo)).toEqual([
-      "404.html", "comunicados/descadastro/index.html",
-      "site/previa/404/index.html", "site/previa/comunicados/descadastro/index.html", "site/previa/privacidade/index.html",
-    ]);
+  it("cada página em React tem a prévia; as publicadas também o endereço de hoje", () => {
+    expect(REACT).toMatchObject({ privacidade: "publicada", descadastro: "publicada", "erro-404": "publicada" });
+    const plano = planoDeSaida(rotas).map((p: { arquivo: string }) => p.arquivo);
+    for (const [id, estado] of Object.entries(REACT)) {
+      const pagina = PAGINAS_DO_SITE.find((p) => p.id === id)!;
+      expect(plano, id).toContain(arquivoDaPrevia(pagina));
+      expect(plano.includes(pagina.saida), id).toBe(estado === "publicada");
+    }
   });
   it("publicar grava também no lugar do HTML de hoje (mesmo endereço)", () => {
     const plano = planoDeSaida({ ...rotas, react: { "erro-404": "publicada", privacidade: "publicada" } });
