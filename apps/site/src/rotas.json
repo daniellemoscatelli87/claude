@@ -5,7 +5,7 @@
       "id": "inicio",
       "caminho": "/",
       "saida": "index.html",
-      "origem": "index.html",
+      "origem": "apps/site/tests/referencia/inicio.html",
       "lote": "S3",
       "cabeca": {
         "titulo": "Dani Moscatelli | Experience Design Studio",
@@ -53,7 +53,31 @@
         "canonical": "https://www.danimoscatelli.com.br/projeto-piloto/"
       }
     },
-    { "id": "rede-parceiros", "caminho": "/rede-parceiros/", "saida": "rede-parceiros/index.html", "origem": "rede-parceiros/index.html", "lote": "S4" },
+    {
+      "id": "rede-parceiros",
+      "caminho": "/rede-parceiros/",
+      "saida": "rede-parceiros/index.html",
+      "origem": "rede-parceiros/index.html",
+      "lote": "S4",
+      "cabeca": {
+        "titulo": "Dani Moscatelli | Partners & Connections",
+        "meta": [
+          ["name", "description", "Rede de parceiros da Dani Moscatelli | Experience Design Studio: profissionais independentes para colaborar em projetos de Design, Experiência Humana, Negócios, Tecnologia e Inovação."],
+          ["property", "og:type", "website"],
+          ["property", "og:locale", "pt_BR"],
+          ["property", "og:site_name", "Dani Moscatelli | Experience Design Studio"],
+          ["property", "og:title", "Dani Moscatelli | Partners & Connections"],
+          ["property", "og:description", "Rede de parceiros da Dani Moscatelli | Experience Design Studio: profissionais independentes para colaborar em projetos de Design, Experiência Humana, Negócios, Tecnologia e Inovação."],
+          ["property", "og:url", "https://www.danimoscatelli.com.br/rede-parceiros/"],
+          ["property", "og:image", "https://www.danimoscatelli.com.br/compartilhar.png"],
+          ["property", "og:image:width", "1200"],
+          ["property", "og:image:height", "630"],
+          ["property", "og:image:alt", "Logo Dani Moscatelli | Experience Design Studio"],
+          ["name", "twitter:card", "summary_large_image"]
+        ],
+        "canonical": "https://www.danimoscatelli.com.br/rede-parceiros/"
+      }
+    },
     { "id": "rede-parceiros-cadastro", "caminho": "/rede-parceiros/cadastro/", "saida": "rede-parceiros/cadastro/index.html", "origem": "rede-parceiros/cadastro/index.html", "lote": "S5" },
     { "id": "galeria-autorizar", "caminho": "/rede-parceiros/galeria/autorizar/", "saida": "rede-parceiros/galeria/autorizar/index.html", "origem": "public/rede-parceiros/galeria/autorizar/index.html", "lote": "S5" },
     { "id": "pesquisa-moda", "caminho": "/pesquisa/moda-curitiba/", "saida": "pesquisa/moda-curitiba/index.html", "origem": "pesquisa/moda-curitiba/index.html", "lote": "S6" },
@@ -119,6 +143,7 @@
     "descadastro": "publicada",
     "erro-404": "publicada",
     "projeto-piloto": "publicada",
-    "inicio": "publicada"
+    "inicio": "publicada",
+    "rede-parceiros": "publicada"
   }
 }

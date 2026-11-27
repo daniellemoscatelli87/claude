@@ -9,13 +9,8 @@ import { Prosa } from "@/components/ui/prosa";
 import { RodapeSite } from "@/components/ui/rodape-site";
 import { Selo } from "@/components/ui/selo";
 import { PecasDoSite } from "@/compartilhado/PecasDoSite";
-import { EMAIL_DE_CONTATO, LOGO_CORRIGIDO } from "@/compartilhado/marca";
-
-/** O e-mail do estúdio fora da ofuscação de e-mails do Cloudflare (marcas email_off, como na página de HTML). */
-function EmailDoEstudio({ link = false }: { link?: boolean }) {
-  const conteudo = link ? `<a href="mailto:${EMAIL_DE_CONTATO}">${EMAIL_DE_CONTATO}</a>` : EMAIL_DE_CONTATO;
-  return <span dangerouslySetInnerHTML={{ __html: `<!--email_off-->${conteudo}<!--/email_off-->` }} />;
-}
+import { EmailDoEstudio } from "@/compartilhado/EmailDoEstudio";
+import { LOGO_CORRIGIDO } from "@/compartilhado/marca";
 
 function PreferenciasDeCookies() {
   return (

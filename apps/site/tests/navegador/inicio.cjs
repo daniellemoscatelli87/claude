@@ -9,7 +9,7 @@
 //   PORTA=4320 CAMINHO=/site/previa/ AXE=/caminho/axe.min.js node apps/site/tests/navegador/inicio.cjs
 const { chromium } = require(process.env.PLAYWRIGHT || "playwright");
 const fs = require("fs");
-const BASE = "http://localhost:" + (process.env.PORTA || 4320);
+const BASE = process.env.BASE || "http://localhost:" + (process.env.PORTA || 4320);
 const CAMINHO = process.env.CAMINHO || "/site/previa/";
 const AXE = process.env.AXE ? fs.readFileSync(process.env.AXE, "utf8") : null;
 let falhas = 0;
