@@ -238,11 +238,13 @@
   .pa-dest-bt.aberto .seta { transform: rotate(180deg); }
   /* Destaques no padrão do cartão de indicador do DS (CardsDeKpi): card branco, borda e sombra do DS,
      rótulo 13 px médio em cinza, valor 26 px negrito na cor do texto, ícone 18 px cinza numa base cinza de 36 px à direita */
-  .pa-dest-it { display: flex; flex-direction: column; gap: 16px; padding: 20px; border-radius: var(--radius-lg); background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  /* card dentro do card "Destaques": regra de cards aninhados do DS (só o card externo tem elevação;
+     o interno usa borda e fundo tonal, sem sombra) */
+  .pa-dest-it { display: flex; flex-direction: column; gap: 16px; padding: 16px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--muted) 40%, var(--card)); border: 1px solid var(--border); box-shadow: none; }
   .pa-dest-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
   .pa-dest-topo > div { min-width: 0; }
   .pa-dest-tema { display: block; margin-bottom: 4px; font-size: 13px; font-weight: 500; line-height: 1.35; color: var(--muted-foreground); }
-  .pa-dest-ic { flex: none; width: 36px; height: 36px; border-radius: var(--radius-md); display: grid; place-items: center; background: var(--muted); color: var(--muted-foreground); }
+  .pa-dest-ic { flex: none; width: 36px; height: 36px; border-radius: var(--radius-md); display: grid; place-items: center; background: var(--card); border: 1px solid var(--border); color: var(--muted-foreground); }
   .pa-dest-ic svg { width: 18px; height: 18px; }
   .pa-dest-v { display: block; font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.025em; color: var(--foreground); }
   .pa-dest-it p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--muted-foreground); }
@@ -530,17 +532,30 @@
   /* Inteligência: cartões de insight (texto corrido, sem gráficos) */
   /* temas (Resultado e Inteligência): título e descrição do tema acima da grade de cards */
   .pa-tema { margin-top: 28px; }
+  .pa-macro { margin-top: 32px; }
+  .pa-macro:first-child { margin-top: 8px; }
+  .pa-macro + .pa-macro { padding-top: 32px; border-top: 1px solid var(--border); }
+  .pa-macro > h2 { margin: 0 0 4px; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+  .pa-macro > .muted { margin: 0; font-size: 14px; }
+  .pa-macro > .pa-ins-grade { margin-top: 20px; }
+  .pa-tema > h3 { margin: 0 0 4px; font-size: 18px; }
   .pa-tema > h2 { margin: 0 0 4px; font-size: 19px; }
   .pa-tema > .muted { margin: 0; font-size: 13px; }
   /* um cartão por linha, na largura toda: sem buracos quando a seção tem número ímpar de cartões */
   .pa-ins-grade { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 16px; }
-  .pa-ins-corpo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 24px; align-items: start; }
-  @media (max-width: 900px) { .pa-ins-corpo { grid-template-columns: minmax(0, 1fr); } }
+  .pa-ins-corpo { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 16px 24px; align-items: start; }
+  @media (max-width: 900px) { .pa-ins-corpo { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); } }
   @media (max-width: 560px) { .pa-ins { padding: 16px; } }
   /* cartão de insight no mesmo padrão dos cards da aba Resultado (card branco do DS) */
   .pa-ins { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 20px; display: grid; gap: 14px; transition: box-shadow .25s, transform .25s; }
   .pa-ins:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
   .pa-ins.destaque { border-color: color-mix(in srgb, var(--primary) 35%, var(--border)); }
+  .pa-ins-cab { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px 24px; }
+  .pa-ins-tt { display: grid; gap: 10px; min-width: 0; }
+  .pa-ins-num { flex: none; display: grid; gap: 4px; max-width: 220px; padding: 12px 16px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: color-mix(in srgb, var(--muted) 40%, var(--card)); }
+  .pa-ins-num b { font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.025em; color: var(--foreground); }
+  .pa-ins-num span { font-size: 12.5px; line-height: 1.4; color: var(--muted-foreground); }
+  @media (max-width: 700px) { .pa-ins-cab { flex-direction: column; } .pa-ins-num { max-width: none; width: 100%; box-sizing: border-box; } }
   .pa-ins-tema { justify-self: start; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-full); background: var(--muted); color: var(--foreground); }
   .pa-ins.destaque .pa-ins-tema { background: var(--primary-muted); color: var(--primary-text); }
   .pa-ins h3 { margin: 0; font-size: 18px; line-height: 1.35; }
@@ -558,20 +573,45 @@
   @media (prefers-reduced-motion: reduce) { .pa-ins { transition: none; } .pa-ins:hover { transform: none; } }
   /* Voz do cliente: resumo no topo e um bloco por tema com as falas lado a lado */
   .pa-voz-sec { margin-top: 16px; }
-  .pa-voz { display: grid; gap: 16px; }
+  /* Voz do cliente: um card único com o resumo e os temas em accordion (padrão Accordion do DS) */
+  .pa-voz { display: block; }
   .pa-voz-resumo { display: grid; gap: 14px; padding: 24px; border-radius: var(--radius-xl); background: var(--card); border: 1px solid var(--border); }
   .pa-voz-resumo .pa-ins-tema { justify-self: start; }
   .pa-voz-resumo h3 { margin: 0; font-size: 20px; line-height: 1.35; }
   .pa-voz-sintese { margin: 0; max-width: 880px; font-size: 15px; line-height: 1.65; }
-  .pa-voz-tema { display: grid; grid-template-columns: minmax(200px, 280px) minmax(0, 1fr); gap: 16px 28px; padding: 22px 24px; border-radius: var(--radius-xl); background: var(--card); border: 1px solid var(--border); }
-  .pa-voz-cab h3 { margin: 0 0 6px; font-size: 16px; line-height: 1.35; }
+  .pa-voz-temas { margin-top: 8px; padding-top: 18px; border-top: 1px solid var(--border); }
+  .pa-voz-temas-t { margin: 0 0 4px; font-size: 13px; font-weight: 600; color: var(--muted-foreground); }
+  .pa-acc-item { border-bottom: 1px solid var(--border); }
+  .pa-acc-item:last-of-type { border-bottom: 0; }
+  .pa-acc-bt { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; border: 0; border-radius: var(--radius-md); background: none; font: inherit; font-size: 15px; font-weight: 600; text-align: left; color: var(--foreground); cursor: pointer; }
+  .pa-acc-bt:hover .pa-rank-nome { text-decoration: underline; text-underline-offset: 3px; }
+  .pa-acc-bt:focus-visible { outline: 2px solid var(--ring, var(--primary)); outline-offset: 2px; }
+  .pa-acc-bt > svg { width: 16px; height: 16px; flex: none; color: var(--muted-foreground); transition: transform .2s; }
+  .pa-acc-item.aberto .pa-acc-bt > svg { transform: rotate(180deg); }
+  .pa-acc-bt { justify-content: flex-start; }
+  .pa-acc-bt > svg { margin-left: 4px; }
+  .pa-acc-nome { display: grid; gap: 8px; flex: 1 1 auto; min-width: 0; }
+  .pa-rank-pos { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: var(--radius-full); background: var(--muted); font-size: 13px; font-weight: 800; color: var(--muted-foreground); }
+  .pa-acc-item:first-of-type .pa-rank-pos { background: var(--primary-muted); color: var(--primary-text); }
+  .pa-rank-barra { display: block; height: 6px; max-width: 420px; border-radius: 999px; background: var(--muted); overflow: hidden; }
+  .pa-rank-barra > span { display: block; height: 100%; border-radius: 999px; background: var(--primary); transform-origin: left; animation: pa-rank-enche .6s cubic-bezier(.16, 1, .3, 1) both; }
+  @keyframes pa-rank-enche { from { transform: scaleX(0); } }
+  @media (prefers-reduced-motion: reduce) { .pa-rank-barra > span { animation: none; } }
+  .pa-acc-bt .pa-voz-n { flex: none; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .pa-acc-corpo { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s cubic-bezier(.16, 1, .3, 1); }
+  .pa-acc-item.aberto .pa-acc-corpo { grid-template-rows: 1fr; }
+  .pa-acc-dentro { overflow: hidden; display: grid; gap: 12px; }
+  .pa-acc-item.aberto .pa-acc-dentro { padding-bottom: 18px; }
+  @media (prefers-reduced-motion: reduce) { .pa-acc-corpo, .pa-acc-bt > svg { transition: none; } }
+  .pa-voz-tema-resumo { margin: 0; max-width: 880px; font-size: 14px; line-height: 1.6; color: var(--muted-foreground); }
   .pa-voz-n { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: var(--radius-full); background: var(--muted); color: var(--muted-foreground); }
-  .pa-voz-cab p { margin: 10px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--muted-foreground); }
   .pa-voz-falas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 12px; align-content: start; }
   .pa-voz-fala { position: relative; margin: 0; padding: 14px 16px 14px 18px; border-radius: var(--radius-lg); background: var(--muted); font-size: 14px; line-height: 1.6; color: var(--foreground); }
   .pa-voz-fala::before { content: ""; position: absolute; left: 0; top: 12px; bottom: 12px; width: 3px; border-radius: 3px; background: var(--primary); }
-  .pa-voz-mais { margin: 0; font-size: 12.5px; color: var(--muted-foreground); align-self: center; }
-  @media (max-width: 760px) { .pa-voz-tema { grid-template-columns: minmax(0, 1fr); padding: 18px; } .pa-voz-resumo { padding: 18px; } }
+  .pa-voz-mais { margin: 0; font-size: 12.5px; color: var(--muted-foreground); }
+  .pa-voz-sem { margin-top: 12px; }
+  @media (max-width: 760px) { .pa-voz-resumo { padding: 18px; } }
   .pa-ia-barra { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin: 0; padding-top: 12px; border-top: 1px solid var(--border); }
   .pa-ia-status { font-size: 12.5px; color: var(--muted-foreground); }
   .pa-ia-bt { min-height: 36px; padding: 0 14px; font-size: 13px; }
@@ -1716,6 +1756,7 @@
     box.append(cab);
     ABAS_EXP.forEach(([id, t]) => { const sec = el("section", "pa-print-aba"); sec.append(el("h2", "pa-print-tit", t), montarAba(id)); box.appendChild(sec); });
     box.querySelectorAll("details").forEach((d) => { d.open = true; });
+    box.querySelectorAll(".pa-acc-item").forEach((d) => { d.classList.add("aberto"); const c = d.querySelector(".pa-acc-corpo"); if (c) c.inert = false; });
     box.querySelectorAll("[data-w]").forEach((i) => { i.style.width = i.dataset.w; });
     box.querySelectorAll("[data-h]").forEach((i) => { i.style.height = i.dataset.h; });
     box.querySelectorAll("[data-g]").forEach((i) => { i.style.flexGrow = i.dataset.g; });
@@ -1749,7 +1790,7 @@
   const prim = (x) => valores(x.respostas.q2)[0];
   const svgI = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
   // quantidade em linguagem natural: "6 de 9 pessoas", com "a maioria", "metade"... quando ajuda a ler
-  const qualif = (k, n) => { const r = n ? k / n : 0; return r === 1 ? "todas" : r >= 0.75 ? "a grande maioria" : r > 0.5 ? "a maioria" : r === 0.5 ? "metade" : r >= 0.3 ? "cerca de um terço" : r > 0 ? "uma parte menor" : "ninguém"; };
+  const qualif = (k, n) => { const r = n ? k / n : 0; return r === 1 ? "todas" : r >= 0.75 ? "a grande maioria" : r > 0.5 ? "a maioria" : r === 0.5 ? "metade" : r >= 0.3 ? "cerca de um terço" : r > 0 ? "uma minoria" : "ninguém"; };
   // itens de dificuldade (o que a pessoa procura) em linguagem natural
   const DIF_NATURAL = { estilo: "encontrar roupas que combinam com o próprio estilo", tamanho: "encontrar peças no tamanho certo", modelagem: "encontrar roupas que vestem bem no corpo", tecido: "encontrar peças com o tecido e a qualidade desejados", acessorios: "encontrar acessórios que combinam com o próprio gosto", precos: "encontrar preços dentro do orçamento", onde_encontrar: "saber em quais lojas procurar", muitas_lojas: "achar o que quer sem rodar muitas lojas e sites", esgotada: "encontrar a peça disponível, sem estar esgotada", tempo: "ter tempo para procurar e comparar", distancia: "chegar até as lojas", avaliar_online: "avaliar tecido e caimento pelas fotos" };
   const Q6_NATURAL = { passando: "passar em frente às lojas, na rua ou no shopping", redes: "ver publicações de lojas nas redes sociais", indicacao: "indicação de amigos, familiares e conhecidos", google: "pesquisar no Google ou no Google Maps", anuncios: "anúncios de lojas na internet e nas redes sociais", influenciadores: "recomendações de influenciadores" };
@@ -1766,8 +1807,11 @@
   // cartão de insight: tema, título, descoberta, significado e oportunidade, em texto corrido
   function insight(c) {
     const card = el("article", "pa-ins" + (c.destaque ? " destaque" : ""));
-    card.appendChild(el("span", "pa-ins-tema", c.tema));
-    card.appendChild(el("h3", null, c.titulo));
+    // cabeçalho: tema e título à esquerda; o número principal da descoberta à direita (vindo dos antigos Destaques)
+    const cab = el("div", "pa-ins-cab"); const tt = el("div", "pa-ins-tt");
+    tt.append(el("span", "pa-ins-tema", c.tema), el("h3", null, c.titulo)); cab.appendChild(tt);
+    if (c.numero) { const nu = el("div", "pa-ins-num"); nu.append(el("b", null, c.numero.valor), el("span", null, c.numero.rotulo)); cab.appendChild(nu); }
+    card.appendChild(cab);
     const bloco = (tipo, titulo, texto) => {
       if (!texto) return null;
       const b = el("div", "pa-ins-bloco " + tipo); const ic = el("span", "pa-ins-ic"); ic.innerHTML = svgI(ICONES_INSIGHT[tipo]);
@@ -1815,14 +1859,10 @@
       // resumo: a frustração mais comum, a leitura geral e a oportunidade
       const resumo = el("article", "pa-voz-resumo");
       resumo.appendChild(el("span", "pa-ins-tema", "Resumo dos relatos"));
-      resumo.appendChild(el("h3", null, temas.length ? `Nos relatos, a frustração mais comum é com ${lc(temas[0].nome)}` : "Os relatos ainda não repetem um mesmo tema"));
+      resumo.appendChild(el("h3", null, temas.length ? `A frustração que mais aparece nos relatos: ${lc(temas[0].nome)}` : "Os relatos ainda não repetem um mesmo tema"));
       const texto = r && r.sintese ? r.sintese : temas.length ? `Dos ${relatos(n)} escritos na pergunta aberta, ${temas[0].itens.length} falam de ${lc(temas[0].nome)}` + (temas.length > 1 ? `, e os outros assuntos mais citados são ${juntar(temas.slice(1, 3).map((t) => `${lc(t.nome)} (${t.itens.length})`))}.` : ".") : `Há ${relatos(n)}, mas nenhum tema se repete o suficiente para agrupar.`;
       resumo.appendChild(el("p", "pa-voz-sintese", texto));
-      if (temas.length) {
-        const op = el("div", "pa-ins-bloco oportunidade"); const ic = el("span", "pa-ins-ic"); ic.innerHTML = svgI(ICONES_INSIGHT.oportunidade);
-        const tx = el("div"); tx.append(el("h4", null, "Oportunidade para o Find Look"), el("p", null, `Tratar ${lc(temas[0].nome)}${temas[1] ? ` e ${lc(temas[1].nome)}` : ""} como as primeiras frustrações que o Find Look precisa resolver, e usar essas falas como roteiro das conversas com quem pediu os avisos.`));
-        op.append(ic, tx); resumo.appendChild(op);
-      }
+      // a oportunidade dos relatos fica na seção Oportunidades, não dentro do card
       const barra = el("div", "pa-ia-barra");
       const status = el("span", "pa-ia-status"); status.setAttribute("aria-live", "polite");
       status.textContent = `Com base em ${relatos(n)}. ` + (r ? `Temas organizados com IA (Google Gemini) em ${fmtDate(r.gerado_em)}${r.desatualizada ? "; chegaram relatos novos desde então" : ""}. Só o texto dos relatos foi enviado, sem nome nem contatos.` : "Temas encontrados por palavras-chave, sem IA.");
@@ -1844,20 +1884,43 @@
       });
       box.appendChild(resumo);
 
-      // um bloco por tema: à esquerda o tema, quantos relatos e o resumo; à direita as falas
-      temas.forEach((t) => {
-        const bl = el("article", "pa-voz-tema");
-        const cab = el("div", "pa-voz-cab");
-        cab.append(el("h3", null, t.nome), el("span", "pa-voz-n", `${t.itens.length} de ${relatos(n)}`));
-        if (t.resumo) cab.appendChild(el("p", null, t.resumo));
-        const falas = el("div", "pa-voz-falas");
-        t.itens.slice(0, 3).forEach((x) => falas.appendChild(fala(x)));
-        if (t.itens.length > 3) falas.appendChild(el("p", "pa-voz-mais", `E mais ${relatos(t.itens.length - 3)} na aba Dados › Relatos.`));
-        bl.append(cab, falas);
-        box.appendChild(bl);
-      });
-      const semTema = rel.filter((x) => !temas.some((t) => t.itens.includes(x))).length;
-      if (semTema && temas.length) box.appendChild(el("p", "pa-voz-mais", `${semTema === 1 ? "1 relato não entrou" : `${semTema} relatos não entraram`} em nenhum tema; leia todos na aba Dados › Relatos.`));
+      // temas em accordion (padrão Accordion do DS), dentro do mesmo card; o primeiro já vem aberto
+      if (temas.length) {
+        const lista = el("div", "pa-voz-temas");
+        lista.appendChild(el("h4", "pa-voz-temas-t", "Ranking das dores nos relatos"));
+        const maxK = temas[0].itens.length;
+        temas.forEach((t, i) => {
+          const id = "pa-voz-t" + i;
+          const item = el("div", "pa-acc-item" + (i === 0 ? " aberto" : ""));
+          const bt = el("button", "pa-acc-bt"); bt.type = "button"; bt.id = id + "-bt";
+          bt.setAttribute("aria-expanded", i === 0 ? "true" : "false"); bt.setAttribute("aria-controls", id);
+          // ranking: posição, nome, barra proporcional ao número de relatos e quantos relatos
+          const pos = el("span", "pa-rank-pos", `${i + 1}º`); pos.setAttribute("aria-hidden", "true");
+          const nome = el("span", "pa-acc-nome");
+          const barra = el("span", "pa-rank-barra"); barra.setAttribute("aria-hidden", "true");
+          const enche = el("span"); enche.style.width = Math.max(4, Math.round((t.itens.length / maxK) * 100)) + "%"; barra.appendChild(enche);
+          nome.append(el("span", "pa-rank-nome", t.nome), barra);
+          const sr = el("span", "sr-only", `${i + 1}º lugar: `);
+          bt.append(pos, sr, nome, el("span", "pa-voz-n", `${t.itens.length} de ${relatos(n)}`)); bt.insertAdjacentHTML("beforeend", svg('<path d="m6 9 6 6 6-6"/>'));
+          const corpo = el("div", "pa-acc-corpo"); corpo.id = id; corpo.setAttribute("role", "region"); corpo.setAttribute("aria-labelledby", bt.id);
+          const dentro = el("div", "pa-acc-dentro");
+          if (t.resumo) dentro.appendChild(el("p", "pa-voz-tema-resumo", t.resumo));
+          const falas = el("div", "pa-voz-falas");
+          t.itens.slice(0, 3).forEach((x) => falas.appendChild(fala(x)));
+          dentro.appendChild(falas);
+          if (t.itens.length > 3) dentro.appendChild(el("p", "pa-voz-mais", `E mais ${relatos(t.itens.length - 3)} na aba Dados › Relatos.`));
+          corpo.appendChild(dentro);
+          if (i !== 0) corpo.inert = true;
+          bt.addEventListener("click", () => {
+            const abre = !item.classList.contains("aberto");
+            item.classList.toggle("aberto", abre); bt.setAttribute("aria-expanded", abre ? "true" : "false"); corpo.inert = !abre;
+          });
+          item.append(bt, corpo); lista.appendChild(item);
+        });
+        const semTema = rel.filter((x) => !temas.some((t) => t.itens.includes(x))).length;
+        if (semTema) lista.appendChild(el("p", "pa-voz-mais pa-voz-sem", `${semTema === 1 ? "1 relato não entrou" : `${semTema} relatos não entraram`} em nenhum tema; leia todos na aba Dados › Relatos.`));
+        resumo.insertBefore(lista, barra);
+      }
     }
     desenhar();
     // análise com IA já guardada: aparece sem gastar uma nova chamada
@@ -1874,7 +1937,7 @@
     const perg = Object.fromEntries(Q.perguntas.map((p) => [p.id, p]));
     const txt = (pid, id) => semOutro(((perg[pid].opcoes || []).find((o) => o.id === id) || {}).texto || id);
     const n = comp.length;
-    if (R.length) box.appendChild(cardInsights(comp));
+    // os números dos antigos "Destaques" ficam agora dentro dos cards de insight a que correspondem
     if (n < MIN_SEG) { box.appendChild(vazio("Ainda há poucas respostas completas", `As descobertas aparecem a partir de ${MIN_SEG} respostas completas. Agora: ${n}.`)); return box; }
 
     const SECOES = [
@@ -1883,10 +1946,11 @@
       ["busca", "Como as pessoas procuram", "Busca por foto, contato com a loja antes de ir e descoberta de lojas."],
       ["quem", "Quem são essas pessoas", "Diferenças entre grupos de idade e entre quem mora em Curitiba e na Região Metropolitana."],
       ["voz", "Voz do cliente", "O que as pessoas contam, com as palavras delas, na pergunta aberta."],
-      ["caminho", "Por onde o Find Look pode começar", "Prioridades, primeiros usuários e o que ainda vamos descobrir."],
+      ["caminho", "Oportunidades", "Por onde o Find Look pode começar: prioridades, primeiros usuários e o que ainda vamos descobrir."],
     ];
     const grupos = Object.fromEntries(SECOES.map(([k]) => [k, []]));
-    const add = (g, c) => grupos[g].push(c.nodeType ? c : insight(c));
+    // nos achados, o card não traz mais o bloco "Oportunidade": as oportunidades ficam só na seção Oportunidades
+    const add = (g, c) => { if (!c.nodeType && g !== "caminho") c = { ...c, oportunidade: null }; grupos[g].push(c.nodeType ? c : insight(c)); };
     const baseN = (k) => `Com base em ${k === 1 ? "1 pessoa" : `${k} pessoas`}.`;
     const pendentes = []; // comparações que ainda não têm gente suficiente
 
@@ -1912,22 +1976,24 @@
       descoberta: `Para ${qualif(fora1, n)} das pessoas (${fora1} de ${n}), o lugar onde mais compraram roupas, calçados e acessórios este ano foi um marketplace ou uma loja de outra cidade. Só ${pessoas(local1, n)} compram principalmente em lojas de Curitiba, físicas ou online.`,
       significa: "O comércio local está perdendo a compra principal para canais de fora, mesmo para quem mora aqui. Existe demanda; o que falta é ela encontrar o caminho até as lojas da cidade.",
       oportunidade: "Mostrar que a peça procurada existe numa loja de Curitiba, com a mesma facilidade de buscar num marketplace, pode trazer parte dessa compra de volta para a cidade.",
+      numero: { valor: `${pct(fora1, n)}%`, rotulo: "compram principalmente em marketplaces ou lojas de outras cidades" },
       base: baseN(n),
     } : {
       tema: "Comércio local", titulo: "As lojas de Curitiba ainda são a primeira escolha da maioria",
       descoberta: `Para ${qualif(local1, n)} das pessoas (${local1} de ${n}), o lugar onde mais compraram este ano foi uma loja de Curitiba, física ou online. ${pessoas(fora1, n)} compram principalmente em marketplaces ou lojas de outras cidades.`,
       significa: "Há uma base de clientes que já prefere o comércio da cidade. O desafio é ajudar essa preferência a virar compra com menos esforço.",
       oportunidade: "Facilitar a busca nas lojas locais pode fortalecer um hábito que já existe e evitar que ele migre para o online de fora.",
+      numero: { valor: `${pct(local1, n)}%`, rotulo: "compram principalmente em lojas de Curitiba, físicas ou online" },
       base: baseN(n),
     });
     const comecaLocal = comp.filter((x) => LOCAL.includes(valores(x.respostas.q5)[0]));
     if (comecaLocal.length >= MIN_SEG) {
       const fogem = comecaLocal.filter(foraPrin).length;
       if (fogem) add("vazamento", {
-        tema: "Procura aqui, compra fora", titulo: fogem === comecaLocal.length ? "Todo mundo que começa procurando em Curitiba acaba comprando fora" : `${capt(qualif(fogem, comecaLocal.length))} de quem começa procurando em Curitiba acaba comprando fora`,
-        descoberta: `Entre as ${comecaLocal.length} pessoas que costumam começar a procura nas lojas de Curitiba, ${fogem} acabam comprando principalmente em marketplaces ou lojas de outras cidades.`,
-        significa: "Essas pessoas querem comprar aqui, tanto que começam por aqui. Algo entre a procura e a compra não funciona: a peça não aparece, não está disponível ou dá trabalho demais encontrar.",
-        oportunidade: "É o público mais fácil de recuperar: já tem intenção de comprar na cidade. O Find Look pode atuar exatamente nesse momento em que a procura local falha.",
+        tema: "Procura aqui, compra fora", titulo: fogem === comecaLocal.length ? "Todos que começam procurando em Curitiba acabam comprando fora" : fogem > comecaLocal.length / 2 ? "A maioria de quem começa procurando em Curitiba acaba comprando fora" : "Começar a procura em Curitiba nem sempre significa comprar aqui",
+        descoberta: `Das ${comecaLocal.length} pessoas que começam a procura pelas lojas de Curitiba, ${fogem} ${fogem === 1 ? "termina" : "terminam"} comprando principalmente em marketplaces ou lojas de outras cidades.`,
+        significa: "Essas pessoas tentaram comprar na cidade primeiro, mas em algum momento entre procurar e comprar a loja local deixou de ser a escolha. A pesquisa mostra que isso acontece, não o porquê.",
+        oportunidade: "É o público mais fácil de trazer de volta, porque já procura aqui. Vale conversar com essas pessoas para entender em que momento a procura local falhou.",
         base: baseN(comecaLocal.length),
       });
     }
@@ -1953,6 +2019,7 @@
           descoberta: `Entre as ${b21.length} pessoas que compram em marketplaces ou lojas online de outras cidades, ${g0.k} citam ${g0.rotulo}.` + (gr[1].k ? ` Em seguida aparece ${gr[1].rotulo} (${gr[1].k}).` : ""),
           significa: g0.id === "preco" ? "A decisão de comprar fora está mais ligada ao bolso do que ao que existe na cidade." : g0.id === "comodidade" ? "A conveniência pesa mais do que preço ou variedade." : "A decisão de comprar fora está mais ligada ao que a pessoa consegue encontrar do que ao preço.",
           oportunidade: OPORT[g0.id],
+          numero: { valor: `${pct(g0.k, b21.length)}%`, rotulo: `de quem compra fora citam ${{ sortimento: "a variedade", preco: "preço e condições de pagamento", indisp: "não achar o produto na cidade", comodidade: "a comodidade" }[g0.id]}` },
           base: baseN(b21.length),
         });
       }
@@ -1962,20 +2029,22 @@
     const viveu = comp.filter((x) => x.respostas.q9 && !valores(x.respostas.q9).includes("nao_passei"));
     const nDes = comp.filter(desistiu).length, nTro = comp.filter(trocou).length;
     if (viveu.length) add("dor", {
-      tema: "Vendas perdidas", titulo: nDes ? "Não encontrar a peça faz as pessoas desistirem de comprar" : "Quem não encontra a peça acaba levando outra coisa",
-      descoberta: `${pessoas(viveu.length, n)} já passaram este ano pela situação de não encontrar o que queriam. Nesses casos, ${pessoas(nDes, n)} desistiram da compra e ${pessoas(nTro, n)} compraram algo diferente ou só parecido com o que procuravam.`,
+      tema: "Vendas perdidas", titulo: nDes ? "Quando não encontram a peça, as pessoas desistem ou levam outra coisa" : "Quando não encontram a peça, as pessoas levam outra coisa",
+      descoberta: `${pessoas(viveu.length, n)} já ficaram sem encontrar o que queriam este ano. Nessas vezes, ${nDes} ${nDes === 1 ? "desistiu" : "desistiram"} de comprar e ${nTro} ${nTro === 1 ? "levou" : "levaram"} algo diferente ou só parecido com o que procurava${nTro === 1 ? "" : "m"}.`,
       significa: "Cada desistência é uma venda que existia e não aconteceu. E quem leva uma peça “parecida” compra, mas sai menos satisfeito e com menos chance de voltar.",
       oportunidade: "Ajudar a pessoa a encontrar exatamente a peça que procura, e não uma parecida, transforma desistência em compra. Esse é o valor central a provar.",
+      numero: nDes ? { valor: `${pct(nDes, viveu.length)}%`, rotulo: "de quem não encontrou a peça desistiu da compra" } : { valor: `${pct(nTro, viveu.length)}%`, rotulo: "de quem não encontrou a peça levou outra coisa" },
       base: baseN(n),
     });
     const comDif = comp.filter(temDif), semD = comp.filter(semDif);
     if (comparar(comDif, semD, "se quem tem dificuldade para encontrar desiste mais de comprar")) {
       const a = pc(comDif, desistiu), b = pc(semD, desistiu);
+      const ka = comDif.filter(desistiu).length, kb = semD.filter(desistiu).length;
       add("dor", {
-        tema: "Dificuldade e desistência", titulo: a > b ? "Quem tem dificuldade para encontrar desiste mais de comprar" : "Desistir de comprar não depende só de encontrar a peça",
-        descoberta: `Entre quem costuma ter dificuldade para encontrar um produto, ${a}% já desistiram de uma compra. Entre quem quase nunca tem essa dificuldade, ${b}%.`,
-        significa: a > b ? "A dificuldade de encontrar está diretamente ligada às compras que não acontecem: é uma dor que custa dinheiro ao comércio." : "Outras razões além de encontrar a peça também levam à desistência, como preço ou qualidade.",
-        oportunidade: a > b ? "Resolver a busca tem impacto direto em venda, um argumento forte para apresentar o Find Look às lojas." : "Antes de focar só na busca, vale entender nas conversas o que mais leva à desistência.",
+        tema: "Quem mais desiste", titulo: a > b ? "Quem mais desiste de comprar é quem costuma ter dificuldade para encontrar" : a === b ? "Desistir de comprar acontece tanto com quem tem dificuldade quanto com quem não tem" : "Desistir de comprar não parece estar ligado à dificuldade de encontrar",
+        descoberta: `Das ${comDif.length} pessoas que costumam ter dificuldade para encontrar o que querem, ${ka} já ${ka === 1 ? "desistiu" : "desistiram"} de uma compra (${a}%). Das ${semD.length} que quase nunca têm essa dificuldade, ${kb} (${b}%).`,
+        significa: a > b ? "A desistência não está espalhada por todo mundo: ela se concentra em quem enfrenta a dificuldade com frequência." : "A desistência não parece depender só de encontrar a peça; outras razões, como preço ou qualidade, também podem pesar.",
+        oportunidade: a > b ? "Esse grupo é quem mais tem a ganhar com o Find Look e o melhor perfil para os primeiros testes. Para as lojas, é a prova de que resolver a busca recupera vendas." : "Antes de focar só na busca, vale entender nas conversas o que mais leva à desistência.",
         base: baseN(comDif.length + semD.length),
       });
     }
@@ -1987,6 +2056,7 @@
         descoberta: `Quando procuram uma peça, o que mais gente acha difícil ou muito difícil é ${juntar(t3.map((d) => `${difNat(d.l)} (${pessoas(d.k, d.d)})`))}.`,
         significa: "Essas são as necessidades mais mal atendidas hoje. É nelas que a experiência de compra falha com mais frequência.",
         oportunidade: `Esses são os pontos que o Find Look precisa resolver primeiro, a começar por ${difNat(t3[0].l)}${t3[1] ? ` e ${difNat(t3[1].l)}` : ""}.`,
+        numero: { valor: `${pct(t3[0].k, t3[0].d)}%`, rotulo: `acham difícil ou muito difícil ${difNat(t3[0].l)}` },
         base: baseN(n),
       });
     }
@@ -2104,6 +2174,7 @@
       descoberta: `${pessoas(sm, n)} compraram peças de segunda mão, em brechós, nos últimos tempos.`,
       significa: sm > n / 2 ? "Brechó não é nicho para esse público: é mais um lugar onde a peça desejada pode estar." : "A segunda mão aparece, mas ainda não é o principal caminho de compra.",
       oportunidade: sm > n / 2 ? "Vale avaliar incluir brechós da cidade entre as lojas do Find Look." : "Os brechós podem entrar depois, conforme o interesse se confirmar.",
+      numero: { valor: `${pct(sm, n)}%`, rotulo: "compraram de segunda mão (brechós) este ano" },
       base: baseN(n),
     });
 
@@ -2138,13 +2209,25 @@
       oportunidade: "Divulgar a pesquisa para mais pessoas, incluindo públicos menos representados até agora, vai liberar essas descobertas.",
     });
 
-    SECOES.forEach(([k, nome, sub]) => {
+    // duas seções: Achados (os assuntos mapeados, cada um com seus insights) e Oportunidades
+    const baseTxt = `Com base em ${n === 1 ? "1 resposta completa" : `${n} respostas completas`}.`;
+    const achados = el("section", "pa-macro");
+    achados.append(el("h2", null, "Achados"), el("p", "muted", `O que as respostas mostram, organizado por assunto. ${baseTxt}`));
+    SECOES.filter(([k]) => k !== "caminho").forEach(([k, nome, sub]) => {
       const cards = grupos[k]; if (!cards.length) return;
       const sec = el("section", "pa-tema");
-      sec.append(el("h2", null, nome), el("p", "muted", `${sub} Com base em ${n === 1 ? "1 resposta completa" : `${n} respostas completas`}.`));
+      sec.append(el("h3", null, nome), el("p", "muted", sub));
       const grade = el("div", k === "voz" ? "pa-voz-sec" : "pa-ins-grade"); cards.forEach((c) => grade.appendChild(c)); sec.appendChild(grade);
-      box.appendChild(sec);
+      achados.appendChild(sec);
     });
+    if (achados.querySelector(".pa-tema")) box.appendChild(achados);
+    const [, nomeOp, subOp] = SECOES.find(([k]) => k === "caminho");
+    if (grupos.caminho.length) {
+      const ops = el("section", "pa-macro");
+      ops.append(el("h2", null, nomeOp), el("p", "muted", `${subOp} ${baseTxt}`));
+      const grade = el("div", "pa-ins-grade"); grupos.caminho.forEach((c) => grade.appendChild(c)); ops.appendChild(grade);
+      box.appendChild(ops);
+    }
     return box;
   }
 
