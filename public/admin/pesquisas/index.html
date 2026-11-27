@@ -20,27 +20,58 @@
   .pa-status.off { background: var(--muted); color: var(--foreground); }
   .pa-status.off::before { background: var(--muted-foreground); animation: none; }
   @keyframes pa-pulso { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 45%, transparent); } 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
-  /* cabeçalho: título à esquerda, Exportar relatório e Apagar pesquisa no canto superior direito */
-  /* cabeçalho único do painel (card): situação, título e descrição, link e barra de ações */
+  /* cabeçalho: título e descrição à esquerda, Exportar relatório e Apagar pesquisa no canto superior direito;
+     embaixo, o card do link: situação e última resposta, o link (copiar dentro do campo), Abrir, QR Code,
+     Compartilhar e, separado, Tirar do ar */
   .pa-cabecalho { margin: 4px 0 20px; }
   .pa-cabecalho h1 { margin: 0 0 6px; }
   .pa-cabecalho #sub { margin: 0; max-width: 46rem; }
-  .pa-cab-status:empty, #cab-link:empty, .pa-cab-acoes:empty { display: none; }
-  .pa-cabecalho.painel { position: relative; z-index: 5; padding: 22px 24px 0; border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--card); }
-  .pa-cabecalho.painel .pa-cab-status { margin-bottom: 12px; }
-  .pa-cabecalho.painel h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; text-wrap: balance; }
-  .pa-cabecalho.painel #sub { font-size: 14.5px; line-height: 1.6; }
-  .pa-cabecalho.painel #cab-link { margin-top: 18px; }
-  .pa-cab-acoes { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin: 20px -24px 0; padding: 14px 24px; border-top: 1px solid var(--border); }
-  .pa-cab-acoes .pa-ult { margin: 0; padding-top: 0; border-top: 0; }
-  .pa-cab-botoes { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-left: auto; }
-  .pa-cab-sep { align-self: stretch; width: 1px; min-height: 24px; margin: 4px 4px; background: var(--border); }
-  @media (max-width: 600px) {
-    .pa-cabecalho.painel { padding: 18px 18px 0; } .pa-cabecalho.painel h1 { font-size: 22px; }
-    .pa-cab-acoes { margin: 18px -18px 0; padding: 14px 18px; }
-    .pa-cab-botoes { width: 100%; margin-left: 0; } .pa-cab-botoes > * { flex: 1 1 100%; } .pa-cab-sep { width: 100%; min-height: 0; height: 1px; margin: 2px 0; } .pa-cab-botoes .pa-btn, .pa-cab-botoes .pa-menu-btn { width: 100%; justify-content: center; }
+  .pa-cab-acoes:empty, .pa-cab-link:empty { display: none; }
+  .pa-cab-topo { position: relative; z-index: 6; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px 24px; }
+  .pa-cab-texto { min-width: 0; }
+  .pa-cabecalho.painel h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; text-wrap: balance; max-width: 34ch; }
+  .pa-cabecalho.painel #sub { margin-top: 10px; font-size: 15px; line-height: 1.6; max-width: 40rem; }
+  .pa-cab-acoes { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; flex-shrink: 0; }
+  .pa-cab-acoes .pa-menu-btn > svg:first-child { width: 18px; height: 18px; }
+  .pa-cab-acoes .pa-del-pesq { border-color: color-mix(in srgb, var(--primary-text) 45%, var(--border)); }
+  .pa-cab-link { position: relative; z-index: 5; margin-top: 22px; padding: 16px 20px 18px; border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--card); }
+  .pa-cab-info { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: 14px; }
+  .pa-cab-info .pa-ult { margin: 0; padding: 0 0 0 14px; border: 0; border-left: 1px solid var(--border); }
+  .pa-cab-linha { display: flex; align-items: center; gap: 10px; }
+  .pa-cab-sep { align-self: stretch; flex: none; width: 1px; margin: 4px 6px; background: var(--border); }
+  .pa-link-campo { position: relative; flex: 1 1 auto; min-width: 0; }
+  .pa-link-campo input { width: 100%; box-sizing: border-box; min-height: 44px; font: inherit; font-size: 14px; padding: 10px 52px 10px 14px; border: 1px solid transparent; border-radius: var(--radius-md); background: var(--muted); color: var(--foreground); text-overflow: ellipsis; }
+  .pa-link-campo input:focus-visible { outline: none; border-color: var(--ring, var(--primary)); }
+  .pa-link-copiar { position: absolute; top: 50%; right: 4px; transform: translateY(-50%); display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--muted-foreground); cursor: pointer; transition: background-color .15s, color .15s; }
+  .pa-link-copiar:hover { background: var(--card); color: var(--foreground); }
+  .pa-link-copiar:focus-visible { outline: 2px solid var(--ring, var(--primary)); outline-offset: -2px; }
+  .pa-link-copiar svg { width: 18px; height: 18px; }
+  .pa-link-copiar.ok { color: var(--success); }
+  .pa-cab-linha > .pa-btn { flex-shrink: 0; }
+  .pa-cab-linha > .pa-btn.perigo { background: var(--primary-muted); border-color: transparent; }
+  .pa-cab-linha > .pa-btn.perigo:hover { background: color-mix(in srgb, var(--primary-muted) 80%, var(--primary-text) 12%); }
+  .pa-cab-btns { display: contents; }
+  @media (max-width: 860px) {
+    .pa-cab-linha { flex-wrap: wrap; }
+    .pa-link-campo { flex-basis: 100%; }
+    .pa-cab-linha > .pa-cab-sep { display: none; }
+    .pa-cab-btns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; flex: 1 1 auto; }
+    .pa-cab-btns .pa-btn { justify-content: center; }
   }
-  .pa-del-pesq.bloqueado { opacity: .55; cursor: not-allowed; }
+  @media (max-width: 600px) {
+    .pa-cab-topo { flex-direction: column; }
+    .pa-cabecalho.painel h1 { font-size: 23px; }
+    .pa-cab-acoes { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+    .pa-cab-acoes .pa-btn, .pa-cab-acoes .pa-menu-btn, .pa-cab-acoes .pa-menu-caixa { width: 100%; justify-content: center; }
+    .pa-cab-link { padding: 14px 14px 16px; }
+    .pa-cab-linha > .pa-btn.perigo { flex: 1 1 100%; justify-content: center; }
+    .pa-cab-info .pa-ult { flex-basis: 100%; padding-left: 0; border-left: 0; }
+  }
+  @media (max-width: 400px) {
+    .pa-cab-acoes { grid-template-columns: 1fr; }
+    .pa-cab-btns .pa-btn { flex-direction: column; gap: 4px; min-height: 60px; padding: 8px 4px; font-size: 12.5px; }
+  }
+  .pa-del-pesq[aria-disabled="true"] { cursor: not-allowed; }
   .pa-treme { animation: pa-treme .4s ease both; }
   @keyframes pa-treme { 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }
   .pa-link { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
@@ -647,10 +678,11 @@
 <main class="wrap hidden" id="app">
   <a class="back hidden" id="voltar" href="/admin/pesquisas/">← Pesquisas</a>
   <header class="pa-cabecalho">
-    <div class="pa-cab-status" id="cab-status"></div>
-    <div class="pa-cab-texto"><h1 id="titulo">Pesquisas</h1><p class="muted" id="sub">Pesquisas do Studio: acompanhe as respostas, compartilhe o link e tire do ar quando quiser.</p></div>
-    <div id="cab-link"></div>
-    <div class="pa-cab-acoes" id="cab-acoes"></div>
+    <div class="pa-cab-topo">
+      <div class="pa-cab-texto"><h1 id="titulo">Pesquisas</h1><p class="muted" id="sub">Pesquisas do Studio: acompanhe as respostas, compartilhe o link e tire do ar quando quiser.</p></div>
+      <div class="pa-cab-acoes" id="cab-acoes"></div>
+    </div>
+    <div class="pa-cab-link" id="cab-link"></div>
   </header>
   <p class="msg err hidden" id="load-err" role="alert"></p>
   <div id="conteudo"><div class="pa-esqueleto"></div></div>
@@ -674,6 +706,7 @@
     play: svg('<path d="m6 3 14 9-14 9z"/>'),
     pesquisa: svg('<path d="M9 11h6M9 15h4"/><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3v3h6V3"/>'),
     info: svg('<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>'),
+    compartilhar: svg('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/>'),
     lixo: svg('<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'),
   };
   const pct = (n, d) => (d ? Math.round((n / d) * 100) : 0);
@@ -775,50 +808,59 @@
   // Cabeçalho único do painel: situação (no ar / fora do ar) em cima, título e descrição, o link com Copiar, Abrir e
   // QR Code, e embaixo a barra de ações: última resposta à esquerda; Tirar do ar, Exportar relatório e Apagar pesquisa à direita.
   function topo() {
-    const st = el("span", "pa-status" + (P.ativa ? "" : " off"));
-    st.append(el("b", null, P.ativa ? "No ar" : "Fora do ar"), el("span", "pa-status-d", P.ativa ? "recebendo respostas" : "não recebe respostas"));
     const url = SITE + (PAGINAS[P.slug] || "/pesquisa/" + P.slug + "/");
-    // o que diz respeito ao link (no ar / fora do ar, abrir) fica aqui, junto dele; o menu "Ações" fica acima das abas
-    const tog = el("button", "pa-btn" + (P.ativa ? " perigo" : " liga")); tog.type = "button";
-    tog.innerHTML = (P.ativa ? IC.pausa : IC.play) + "<span>" + (P.ativa ? "Tirar do ar" : "Colocar no ar") + "</span>";
-    tog.addEventListener("click", () => alternar(tog));
-    $("cab-status").replaceChildren(st);
-    const link = el("div", "pa-link");
+    // canto superior direito: Exportar relatório e Apagar pesquisa
+    const exp = menuAcoes("pa-relatorio-btn", "Exportar relatório", (item, btn) => [
+      item(IC_BAIXAR, "PDF", "", { fn: exportarPdf }),
+      item(IC_BAIXAR, "Excel", "", { fn: () => exportarExcel(btn) }),
+    ]);
+    exp.querySelector(".pa-menu-btn").insertAdjacentHTML("afterbegin", IC_RELATORIO);
+    const del = el("button", "pa-btn perigo pa-del-pesq"); del.type = "button";
+    del.innerHTML = IC.lixo + "<span>Apagar pesquisa</span>";
+    if (P.ativa) { del.setAttribute("aria-disabled", "true"); del.title = "Para apagar, primeiro tire a pesquisa do ar."; }
+    del.addEventListener("click", () => apagarPesquisa(del));
+    $("cab-acoes").replaceChildren(exp, del);
+    // card do link: situação e última resposta; link com copiar dentro do campo; Abrir, QR Code, Compartilhar; Tirar do ar
+    const st = el("span", "pa-status" + (P.ativa ? "" : " off"));
+    st.append(el("b", null, P.ativa ? "No ar" : "Fora do ar"));
+    const ult = el("p", "pa-ult");
+    ult.innerHTML = svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>');
+    ult.append(R[0] ? "Última resposta em " + fmtDate(R[0].created_at) : "Ainda sem respostas");
+    const info = el("div", "pa-cab-info"); info.append(st, ult);
+    const campo = el("div", "pa-link-campo");
     const inp = el("input"); inp.type = "text"; inp.readOnly = true; inp.value = url; inp.setAttribute("aria-label", "Link da pesquisa");
     inp.addEventListener("focus", () => inp.select());
-    const copiar = el("button", "pa-btn"); copiar.type = "button"; copiar.innerHTML = IC.copiar + '<span class="pa-rot">Copiar link</span>';
-    copiar.setAttribute("aria-label", "Copiar link da pesquisa");
-    copiar.addEventListener("click", async () => {
+    const copiar = el("button", "pa-link-copiar"); copiar.type = "button"; copiar.innerHTML = IC.copiar;
+    copiar.setAttribute("aria-label", "Copiar link da pesquisa"); copiar.title = "Copiar link";
+    const copiarLink = async () => {
       try { await navigator.clipboard.writeText(url); } catch { inp.select(); document.execCommand && document.execCommand("copy"); }
-      copiar.classList.add("ok"); copiar.innerHTML = IC.ok + '<span class="pa-rot">Link copiado</span>';
-      setTimeout(() => { copiar.classList.remove("ok"); copiar.innerHTML = IC.copiar + '<span class="pa-rot">Copiar link</span>'; }, 2200);
+    };
+    copiar.addEventListener("click", async () => {
+      await copiarLink();
+      copiar.classList.add("ok"); copiar.innerHTML = IC.ok; copiar.setAttribute("aria-label", "Link copiado"); toast("Link copiado");
+      setTimeout(() => { copiar.classList.remove("ok"); copiar.innerHTML = IC.copiar; copiar.setAttribute("aria-label", "Copiar link da pesquisa"); }, 2200);
     });
+    campo.append(inp, copiar);
     const abrirL = el("a", "pa-btn"); abrirL.href = url; abrirL.target = "_blank"; abrirL.rel = "noopener";
     abrirL.innerHTML = IC.abrir + '<span class="pa-rot">Abrir</span>'; abrirL.setAttribute("aria-label", "Abrir a pesquisa numa nova aba");
     const qrBt = el("button", "pa-btn"); qrBt.type = "button";
     qrBt.innerHTML = svg('<rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/>') + '<span class="pa-rot">QR Code</span>';
     qrBt.setAttribute("aria-label", "Mostrar o QR Code da pesquisa"); qrBt.setAttribute("aria-haspopup", "dialog");
     qrBt.addEventListener("click", () => abrirQr(url, qrBt));
-    link.append(inp, copiar, abrirL, qrBt);
-    const ult = el("p", "pa-ult");
-    ult.innerHTML = svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>');
-    ult.append(R[0] ? "Última resposta em " + fmtDate(R[0].created_at) : "Ainda sem respostas");
-    $("cab-link").replaceChildren(link);
-    const bar = $("cab-acoes"); bar.replaceChildren(ult);
-    const botoes = el("div", "pa-cab-botoes"); bar.appendChild(botoes);
+    // Compartilhar: abre o compartilhamento do aparelho (WhatsApp, e-mail…); onde não houver, copia o link
+    const comp = el("button", "pa-btn"); comp.type = "button";
+    comp.innerHTML = IC.compartilhar + '<span class="pa-rot">Compartilhar</span>'; comp.setAttribute("aria-label", "Compartilhar a pesquisa");
+    comp.addEventListener("click", async () => {
+      if (navigator.share) { try { await navigator.share({ title: P.titulo, url }); } catch {} return; }
+      await copiarLink(); toast("Link copiado. Cole onde quiser compartilhar.");
+    });
+    const btns = el("div", "pa-cab-btns"); btns.append(abrirL, qrBt, comp);
+    const tog = el("button", "pa-btn" + (P.ativa ? " perigo" : " liga")); tog.type = "button";
+    tog.innerHTML = (P.ativa ? IC.pausa : IC.play) + "<span>" + (P.ativa ? "Tirar do ar" : "Colocar no ar") + "</span>";
+    tog.addEventListener("click", () => alternar(tog));
     const sep = () => { const d = el("span", "pa-cab-sep"); d.setAttribute("aria-hidden", "true"); return d; };
-    botoes.appendChild(tog);
-    botoes.appendChild(sep());
-    botoes.appendChild(menuAcoes("pa-relatorio-btn", "Exportar relatório", (item, btn) => [
-      item(IC_BAIXAR, "PDF", "", { fn: exportarPdf }),
-      item(IC_BAIXAR, "Excel", "", { fn: () => exportarExcel(btn) }),
-    ]));
-    const del = el("button", "pa-btn perigo pa-del-pesq" + (P.ativa ? " bloqueado" : "")); del.type = "button";
-    del.innerHTML = IC.lixo + "<span>Apagar pesquisa</span>";
-    if (P.ativa) { del.setAttribute("aria-disabled", "true"); del.title = "Para apagar, primeiro tire a pesquisa do ar."; }
-    del.addEventListener("click", () => apagarPesquisa(del));
-    botoes.appendChild(sep());
-    botoes.appendChild(del);
+    const linha = el("div", "pa-cab-linha"); linha.append(campo, sep(), btns, sep(), tog);
+    $("cab-link").replaceChildren(info, linha);
   }
   // Menu "Ações": abre abaixo do botão, alinhado à direita; Esc, clique fora ou escolher uma ação fecham.
   // Setas para cima e para baixo navegam entre os itens. O próprio botão mostra o andamento (ex.: gerando planilha).
@@ -1576,6 +1618,7 @@
      Excel: uma aba da planilha para cada aba do painel (mais o Resumo). Resultados e Inteligência saem do que o
      painel mostra (títulos, leituras e tabelas de números); Respostas, Relatos e Interessados saem direto dos dados.
      PDF: monta todas as abas numa página só e abre a janela de impressão ("Salvar como PDF"). */
+  const IC_RELATORIO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>';
   const IC_BAIXAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>';
   const ABAS_EXP = [["resultados", "Resultados"], ["inteligencia", "Inteligência"]]; // o relatório é a visão analítica; respostas, relatos e interessados saem em "Exportar respostas"
   const relatosR = () => R.filter((x) => x.relato && x.relato.trim());
