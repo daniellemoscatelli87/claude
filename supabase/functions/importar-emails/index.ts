@@ -59,6 +59,9 @@ class Imap {
 const q = (s: string) => '"' + s.replace(/\\/g, "\\\\").replace(/"/g, '\\"') + '"';
 const bytesDe = (s: string) => Uint8Array.from(s, (ch) => ch.charCodeAt(0));
 
+// O banco recusa o caractere nulo (\u0000) e pedaços soltos de emoji (metade de um par UTF-16): alguns e-mails trazem
+// esses caracteres invisíveis e a gravação falhava com "unsupported Unicode escape sequence", travando a fila.
+const limpo = (t: string) => String(t ?? "").replace(/\u0000/g, "").replace(/[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/g, "");
 const semHtml = (h: string) => h.replace(/<style[\s\S]*?<\/style>/gi, "").replace(/<br\s*\/?>/gi, "\n").replace(/<\/(p|div|li|tr)>/gi, "\n").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/\n{3,}/g, "\n\n").trim();
 
 async function importar() {
@@ -107,25 +110,26 @@ async function guardar(uid: number, validade: number, bruto: Uint8Array, notific
   ]);
   if (j1 || j2) return;
   const e = await PostalMime.parse(bruto);
-  const de = (e.from?.address ?? "").trim().toLowerCase();
+  const de = limpo(e.from?.address ?? "").trim().toLowerCase();
   if (!de || DOMINIO_PROPRIO.test(de)) return; // avisos do próprio site e cópias de respostas
-  const nome = (e.from?.name ?? "").trim() || de;
-  const assunto = (e.subject ?? "").trim() || "(sem assunto)";
+  const nomeDe = limpo(e.from?.name ?? "").trim();
+  const nome = nomeDe || de;
+  const assunto = limpo(e.subject ?? "").trim() || "(sem assunto)";
   const anexos = (e.attachments ?? []).filter((a) => a.disposition !== "inline").length;
-  let texto = ((e.text ?? "").trim() || semHtml(e.html ?? "")).slice(0, 20000);
+  let texto = limpo(limpo((e.text ?? "").trim() || semHtml(e.html ?? "")).slice(0, 20000)); // cortar pode partir um emoji
   if (anexos) texto += `\n\n[Este e-mail tem ${anexos} ${anexos === 1 ? "anexo" : "anexos"}. Veja na caixa de entrada.]`;
   const quando = e.date ? new Date(e.date) : new Date();
   const criado = isNaN(quando.getTime()) ? new Date().toISOString() : quando.toISOString();
 
   const { data: c } = await db.from("contatos").select("id").ilike("email", de).order("created_at", { ascending: false }).limit(1).maybeSingle();
   if (c) {
-    const { error } = await db.from("mensagens_recebidas").insert({ contato_id: c.id, de: e.from?.name ? `${e.from.name} <${de}>` : de, assunto, texto, texto_completo: texto, anexos: [], resend_email_id: ref });
+    const { error } = await db.from("mensagens_recebidas").insert({ contato_id: c.id, de: nomeDe ? `${nomeDe} <${de}>` : de, assunto, texto, texto_completo: texto, anexos: [], resend_email_id: ref });
     if (error && !/duplicate/i.test(error.message)) throw new Error(error.message);
     if (!error) { await db.from("contatos").update({ visualizado_em: null }).eq("id", c.id); await avisar(notificarPara, nome, de, assunto, texto, c.id); }
     return;
   }
   const { data: novo, error } = await db.from("contatos").insert({
-    origem: "email", email_ref: ref, created_at: criado, nome: nome.slice(0, 200), email: de, assunto: assunto.slice(0, 300), mensagem: texto,
+    origem: "email", email_ref: ref, created_at: criado, nome: limpo(nome.slice(0, 200)), email: de, assunto: limpo(assunto.slice(0, 300)), mensagem: texto,
     telefone: "", empresa: "", cargo: "", tipo_negocio: "", periodo: "", dias_preferidos: [],
   }).select("id").maybeSingle();
   if (error && !/duplicate/i.test(error.message)) throw new Error(error.message);
