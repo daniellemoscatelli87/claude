@@ -53,6 +53,16 @@ A dona do produto não deve precisar vigiar isto. Vale para qualquer conversa do
 3. **Proibido no código do produto:** cor, tamanho de texto, raio, sombra ou espaçamento fora dos tokens; botão, campo, alerta, card ou chip feitos à mão quando o DS tem o componente.
 4. **Ao delegar uma tarefa a um agente ou subagente,** a instrução precisa incluir esta regra e o caminho do catálogo, e o relatório precisa dizer qual componente do DS cada peça usa.
 5. **Antes de mostrar capturas à dona do produto,** confira você mesmo cada peça contra o catálogo e corrija o que estiver fora.
+6. **Crítica de design obrigatória antes de mostrar qualquer tela à dona do produto (regra dela, 27/11/2026: "você tem que ter capacidade analítica de olhar uma tela e perceber que ela não está estética, não está intuitiva, que componentes estão espremidos, redundantes, não contextualizam a funcionalidade, não têm variedade").** Para cada tela, escreva uma crítica curta e corrija o que ela encontrar:
+   - **prioridade:** o que a pessoa precisa entender ou fazer primeiro está em destaque?
+   - **redundância:** rótulos, textos e ações repetidos;
+   - **contexto:** números e estados dizem o que significam e o que fazer;
+   - **variedade:** a tela não é uma sequência de blocos iguais;
+   - **densidade e ritmo:** nada espremido, nada com ar demais; espaçamento em múltiplos de 8;
+   - **intuição:** a ação certa é óbvia;
+   - **estética de alto padrão.**
+   
+   Use também a skill de UX/UI do repositório (`.claude/skills/ui-ux-pro-max`, se existir) e confira contraste (≥ 4,5:1), um só botão cheio por área, cards só com borda sobre o fundo, o padrão de seleção, ícones da mesma família e do mesmo tamanho, nada escondido atrás de barras fixas e tamanhos de botão e campo do DS. **Só mostre a tela quando ela passar.**
 
 ## Padrão de interface e interação (regra permanente da dona do produto, 17/11/2026)
 
