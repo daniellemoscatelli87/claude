@@ -589,6 +589,17 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Trade-offs:** o build do site passa a instalar e compilar mais um app (mais tempo de build); a 404 e o descadastro passam a carregar o CSS e o JavaScript comuns do site em React (28 kB e 56 kB comprimidos, em cache entre as páginas); durante a migração, convivem as peças comuns em HTML e em React; as páginas grandes dependem de peças que ainda faltam no DS (cabeçalho do site, cadastro em etapas, cards de depoimento e de artigo, entre outras) e não serão feitas à mão.
 - **Pendente da dona do produto:** escolher qual das três páginas de apresentação do EI fica (`/experience-intelligence/`, `-2/`, `-3/`); nenhuma foi apagada.
 
+## D-054 · 27/11/2026 · Lançamento, Configurações e Comunicados da área restrita em React publicadas (lotes A2 a A4 da D-051); Reuniões espera o DS
+
+- **Origem:** publicação delegada pela dona do produto (27/11/2026), com a mesma régua da Início (D-052): mesmos dados, comportamento e textos das páginas de HTML; só componentes do DS; testes, capturas e autocrítica.
+- **Decisão:**
+  - `rotas.json`: `lancamento`, `configuracoes` e `comunicados` em `"publicada"`; as páginas de HTML continuam no repositório até a limpeza (A9);
+  - as janelas de escrever e-mail (Lançamento e Comunicados) e de ver o comunicado enviado passam a ser o `SidePanel` do DS (painel lateral com cabeçalho, corpo e barra de ação), porque o `Dialog` do DS ainda diz "Close" em inglês para leitores de tela; as confirmações são o `AlertDialog` do DS, com a palavra APAGAR nas exclusões definitivas;
+  - Configurações em cards separados (Dados pessoais, E-mail de acesso, Senha, Gestão de dados, Log), cada um com o botão no canto inferior direito depois do divisor; campos com largura de leitura (até 36rem);
+  - "Apagar tudo" usa o botão de contorno neutro com a lixeira (o DS ainda não tem o botão de exclusão em contorno); o vermelho fica na confirmação;
+  - **Reuniões não foi feita**: o `Calendar` do DS é um seletor de datas (dia selecionado em vermelho cheio, dias de 32 px, sem marcação de eventos), não uma agenda. Fica como FALTA NO DS (`AgendaDoMes`) e a página continua a de HTML.
+- **Voltar atrás:** trocar `"publicada"` por `"previa"` no `rotas.json` da página.
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:

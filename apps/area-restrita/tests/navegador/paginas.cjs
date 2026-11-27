@@ -149,7 +149,8 @@ async function lancamento(page, L, registro) {
   await page.getByText("Lançamento enviado para 2 pessoas.").waitFor({ timeout: 4000 });
   ok(registro.funcoes.some((f) => f.nome === "lancamento" && f.acao === "enviar" && f.titulo === "O novo site está no ar"), `${L} Lançamento: envio pela função lancamento com os campos do painel`);
   ok(registro.log.some((l) => l.acao === "Disparou o e-mail de lançamento"), `${L} Lançamento: envio registrado no log da plataforma`);
-  await espera(400);
+  await page.getByText("Todas as pessoas já foram notificadas.").waitFor({ timeout: 4000 }).catch(() => {});
+  await painel.waitFor({ state: "hidden", timeout: 2000 }).catch(() => {});
   ok(!(await painel.isVisible()) && (await page.getByRole("tab", { name: /Novas/ }).innerText()).replace(/\s+/g, " ").trim() === "Novas 0" && await page.getByText("Todas as pessoas já foram notificadas.").isVisible(), `${L} Lançamento: depois do envio, o painel fecha e a lista se atualiza`);
 }
 

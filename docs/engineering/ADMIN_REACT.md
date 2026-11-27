@@ -10,6 +10,9 @@
 | Casca do painel (menu lateral, cabeçalho, notificações, perfil, fundo cinza) | implementado com o `sidebar` do DS (provisório, ver seção 6) |
 | Entrar, definir senha, nova senha e sem acesso (mesma conta e mesma sessão das páginas de HTML) | implementado e testado |
 | Início em React, com a mesma informação da página de HTML | **publicada em `/admin/`** (D-052) |
+| Lançamento, Configurações e Comunicados em React | **publicadas** (D-054) |
+| Reuniões | continua de HTML: falta a agenda do mês no DS (seção 7.1) |
+| Contato, Parceiros e Pesquisas | plano na seção 8.1 |
 | Conferência de conformidade com o DS (`npm run conformidade`) | em zero desvios desde o primeiro dia |
 | Sincronização da pasta `ui` inteira do DS (`arquivos.txt` com pasta e `excluir`) | implementado |
 | Teste na rotina diária do DS (tipos, testes, conformidade e build do app) | implementado no workflow |
@@ -53,7 +56,7 @@ O estado de cada página fica em `apps/area-restrita/src/rotas.json` (campo `rea
 - Cada pasta recebe o próprio `index.html` porque o site tem `404.html` (o Cloudflare não faz o "SPA fallback"); assim, abrir direto `/admin/contatos/?id=…` funciona.
 - **Voltar atrás** é trocar `"publicada"` por `"previa"`: a página de HTML volta no próximo build.
 - A página de HTML em `public/admin/<página>/` só é apagada num commit posterior, depois que a versão em React estiver publicada e conferida. Até lá, as duas convivem.
-- Hoje: `{ "inicio": "publicada" }` (D-052). A Início de HTML (`public/admin/index.html`) sai do repositório na limpeza (A9).
+- Hoje: Início (D-052), Lançamento, Configurações e Comunicados (D-054) em `"publicada"`. As páginas de HTML delas saem do repositório na limpeza (A9).
 
 ### 3.4 Sessão e login
 
@@ -114,6 +117,23 @@ Nenhuma foi feita à mão no app; enquanto não chegam, a fundação usa o compo
 7. **Caixa de entrada** (`InboxTemplate`, só demonstração) para Contato; **agenda do mês com eventos** para Reuniões (o `Calendar` do DS é um seletor de datas; servir como agenda precisa ser conferido no DS); **chip de estado** com ícone e texto (a FindLook tem `status-chip.tsx`).
 8. `ui/dialog` com o botão fechar "Close" em inglês para leitores de tela (já registrado em D-047): necessário antes das páginas com janelas (Contato, Comunicados, Lançamento).
 
+### 7.1 FALTA NO DS (lotes A2 a A8, 27/11/2026)
+
+Peças que as páginas precisam e o DS ainda não tem. Nenhuma foi feita na área restrita; cada uma vai para o DS pelo processo formal (D-050) e chega pela sincronização.
+
+1. **`AgendaDoMes`** (bloqueia Reuniões). Calendário do mês para ver compromissos, não para escolher data. Cabeçalho com mês e ano e botões "Mês anterior" e "Próximo mês" (44 px no celular); grade de 7 colunas (Dom a Sáb); dia com compromissos marcado com até 3 pontos e o número em texto para leitores de tela ("27/11/2026: 2 reuniões"); hoje com contorno; dia escolhido no rosa do meio (`--primary-suave`, texto `--primary-text`), nunca vermelho cheio; dias de outro mês esmaecidos; dias sem compromisso não focáveis; dia só com compromissos passados em cinza. Props: `mes`, `aoMudarMes`, `eventos: { data: Date; passado?: boolean }[]`, `selecionado`, `aoSelecionar`, `rotuloDoDia`. Alvos de 44 px no celular; navegação por setas; respeita "menos movimento". O `Calendar` atual (react-day-picker) continua como seletor de data.
+2. **`CampoDeBusca`**. `Input` de busca com a lupa à esquerda, botão "Limpar" (×) quando há texto e o rótulo para leitores de tela; 44 px no celular. Usado em Lançamento, Comunicados, Contato e Parceiros (hoje: `Input type="search"` simples).
+3. **`Button` variante `exclusao-contorno`**. Contorno e texto `--error-text`, hover com `--error-muted`, foco com anel de erro; para "Apagar tudo" (Configurações) e "Excluir" (Contato, Parceiros), quando o vermelho cheio fica só na confirmação. Hoje: `outline` neutro com a lixeira.
+4. **`EstadoVazio`**. Ícone com base neutra, frase principal e, opcional, uma ação; versões "lista" (dentro de card, alinhada à coluna do texto) e "página". Hoje: frase simples em `--muted-foreground`.
+5. **`Dialog` em português** (já em D-047): o botão fechar diz "Close" para leitores de tela. Hoje as janelas usam o `SidePanel`, que já diz "Fechar".
+6. **Alvos de toque de 44 px no celular** (decisão de 27/11/2026) em peças do DS que ficam abaixo: `TabsTrigger` (~36 px), botão fechar do `SidePanel` (36 px), olho do `PasswordInput` (36 px), dias do `Calendar` (32 px).
+7. **`CaixaDeEntrada`** (Contato): lista à esquerda e leitura à direita no computador; no celular, a lista e, ao tocar, a conversa em tela cheia com "Voltar". Promover o `InboxTemplate` (hoje só demonstração).
+8. **`Conversa`** (Contato): mensagens recebidas à esquerda e enviadas à direita, com remetente, data, anexos (`UploadItem` só leitura) e o estado do e-mail enviado (aberto, clicado) em texto; marca de "não lida".
+9. **`CampoDeEmails`** (Contato > Novo e-mail): vários endereços em etiquetas removíveis (Para, Cc, Cco), validação por endereço, colar vários de uma vez, sugestão de domínio; 44 px no celular.
+10. **`CampoDeHorario`** (Contato > marcar reunião; Parceiros > agendar envio): hora e minuto em passos de 15 min, com o fuso de Brasília escrito; combina com o `Calendar` para data e hora.
+11. **`TabelaAdaptavel`** (Parceiros): tabela no computador que vira lista de `LinhaDeLista` no celular, com as colunas menos importantes escondidas e o aviso de quantas ficaram de fora; ordenação por coluna. Promover a vitrine `TabelaQueQuebra`.
+12. **`CampoCopiavel`** (Pesquisas): o link da pesquisa num campo só de leitura com o botão "Copiar" e o retorno "Copiado" (ícone de check, 2 s, anunciado para leitores de tela).
+
 ## 8. Ordem das páginas e estimativa
 
 P = até 1 dia de trabalho, M = 2 a 3 dias, G = 4 dias ou mais (sem contar a criação das peças no DS).
@@ -131,6 +151,14 @@ P = até 1 dia de trabalho, M = 2 a 3 dias, G = 4 dias ou mais (sem contar a cri
 | 8 | **Pesquisas** (painel de cada pesquisa, gráficos, matriz, relatos com IA, respostas) | gráficos do DS (`GraficoDeLinhas`, `BarrasOrdenadas`, `BarrasEmpilhadas100`, `MapaDeCalorMatricial`, `DescobertaVisual`, `TabelaDeDados`…), `Timeline`, cards de indicador, `LinhaDeLista`, `Tabs`, `SegmentedControl` | item 3 | G |
 
 A ordem vai do mais simples ao mais complexo, para a casca e as peças novas do DS se firmarem antes das telas grandes. Pesquisas fica por último também porque outra conversa está mexendo em `public/admin/pesquisas/` agora.
+
+### 8.1 Plano dos lotes grandes (A6 a A8)
+
+| Lote | O que já dá para fazer com o DS | O que espera o DS (seção 7.1) |
+|---|---|---|
+| **A6 Contato** | `CabecalhoDaPagina` com `Tabs` (Recebidos, Enviados) e o botão "Novo e-mail"; lista das mensagens com `LinhaDeLista` + `IconeComBase` + `ChipDeEstado` (não lida, lida, respondida, reunião), filtro de situação com `SegmentedControl`, abrir `?id=`; detalhe em `SidePanel` com `Accordion` (seções do formulário), `Textarea` e `UploadDropzone`/`UploadList` para responder; `AlertDialog` para excluir. | `CaixaDeEntrada`, `Conversa`, `CampoDeEmails`, `CampoDeHorario`, `CampoDeBusca`, `Button` exclusão em contorno |
+| **A7 Parceiros** | Aba Dashboard: `GradeDeCards` + `CardIndicador`, `BarrasOrdenadas`, `GraficoDeRosca`, `Select` (área de atuação); aba Parceiros: filtros (`Input`, `Select`), perfil em `SidePanel` com `Accordion`, `Timeline` (histórico), `Switch` (galeria), `AlertaComAcao`; e-mails com `LinhaDeLista` + `ChipDeEstado` | `TabelaAdaptavel`, `CampoDeBusca`, `CampoDeHorario` (agendar envio), `EstadoVazio` |
+| **A8 Pesquisas** | Painel de cada pesquisa: `CardIndicador`, `GraficoDeRosca`, `BarrasOrdenadas`, `BarrasEmpilhadas100` (fácil, médio, difícil), `Funil` (quem chegou até onde), `MapaDeCalorMatricial`, `DescobertaVisual`, `TabelaDeDados`; `Tabs`, `Accordion`, `DropdownMenu` (ações), `LinhaDeLista` (respostas, relatos), `SegmentedControl` | `CampoCopiavel`; conferir no DS a nota de 0 a 10 com média e três faixas (hoje desenhada à mão na página de HTML) |
 
 ## 9. Riscos e cuidados
 
