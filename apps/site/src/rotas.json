@@ -57,7 +57,7 @@
       "id": "rede-parceiros",
       "caminho": "/rede-parceiros/",
       "saida": "rede-parceiros/index.html",
-      "origem": "rede-parceiros/index.html",
+      "origem": "apps/site/tests/referencia/rede-parceiros.html",
       "lote": "S4",
       "cabeca": {
         "titulo": "Dani Moscatelli | Partners & Connections",
