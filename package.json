@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run build:area-restrita",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:area-restrita": "npm --prefix apps/area-restrita ci && npm --prefix apps/area-restrita run build"
   },
   "dependencies": {
     "lucide-react": "^1.27.0",

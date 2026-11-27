@@ -1,5 +1,8 @@
 # Arquivos copiados do Design System Dani Moscatelli para o site.
-# Formato: <caminho no design system> <caminho no site>
+# Formato de cada linha (mesma regra do produto FindLook):
+#   <arquivo no design system>  <arquivo no site>   um arquivo;
+#   <pasta no design system>/   <pasta no site>/    a pasta inteira, inclusive componentes novos;
+#   excluir <arquivo no design system>              arquivo de pasta inteira que o site não copia (sempre com o motivo).
 # Arquivos desta lista são sobrescritos pela sincronização: nunca edite a cópia no site.
 
 # Catálogo do design system (gerado no DS a cada build): consultar antes de montar qualquer interface (regra de consumo do DS)
@@ -35,3 +38,13 @@ src/app/components/ui/dropdown-menu.tsx  apps/experience-intelligence/src/compon
 src/app/components/ui/side-panel.tsx     apps/experience-intelligence/src/components/ui/side-panel.tsx
 src/app/components/ui/heading.tsx        apps/experience-intelligence/src/components/ui/heading.tsx
 src/app/components/ui/selo.tsx           apps/experience-intelligence/src/components/ui/selo.tsx
+
+# Área restrita em React (apps/area-restrita, decisão de 27/11/2026, D-051): tokens, fontes e Tailwind v4,
+# como o app Experience Intelligence, e a pasta ui inteira (src/components/ui/ do app é só do design system:
+# o que sair do DS é apagado ali). Sem exclusões: o app usa React 18.3, a mesma versão do DS, então todos os
+# componentes compilam (inclusive o calendar, que a FindLook exclui por usar React 19).
+src/styles/index.css     apps/area-restrita/src/styles/index.css
+src/styles/fonts.css     apps/area-restrita/src/styles/fonts.css
+src/styles/tailwind.css  apps/area-restrita/src/styles/tailwind.css
+src/styles/theme.css     apps/area-restrita/src/styles/theme.css
+src/app/components/ui/   apps/area-restrita/src/components/ui/

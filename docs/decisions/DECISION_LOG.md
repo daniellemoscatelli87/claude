@@ -550,6 +550,19 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Origem:** dona do produto ("toda vez que eu pedir uma tela X… a primeira coisa é consultar o DS… se algo diferente for pedido que não esteja no DS, ambos os projetos têm autonomia para criar esse componente e enviá-lo para o DS de maneira formal e documental. Não podemos ter mais furos").
 - **Decisão:** toda tela começa pela consulta ao DS. Se faltar algo, o projeto cria o componente dentro do DS, com a branch `componente/<nome>`, o componente em `ui/`, a documentação, o changelog, o catálogo e o registro em `propostas/`. O produto só o usa depois da sincronização, nunca como cópia local. Substitui o "parar e perguntar" da D-049.
 
+## D-051 · 27/11/2026 · Área restrita refeita em React, com os componentes do DS, em lotes por tela (site)
+
+- **Origem:** dona do produto: a área restrita (`/admin/`) passa a ser feita em React para usar os componentes reais do Design System Dani Moscatelli, porque as telas novas em HTML saíam fora do DS (cards com sombra no fundo cinza, bases de ícone com cores trocadas, linhas do tempo e cards de número feitos à mão). E, sobre a publicação: "Migração para o DS em lotes por tela. Lotes sem mudança visível podem ser publicados pelo Claude depois de todos os testes, da conferência e das capturas antes e depois, com resumo e imagens enviados à dona do produto em seguida. Lotes com mudança visível são aprovados por ela antes, com um 'sim' por lote."
+- **Decisão:**
+  - app em `apps/area-restrita/` (Vite 6, React 18.3 e Tailwind 4.1.12, as mesmas versões do DS), publicado no mesmo projeto do Cloudflare Pages do site: o `npm run build` da raiz também compila o app;
+  - corte página a página por `apps/area-restrita/src/rotas.json`: "previa" serve a página em React em `/admin/app/<página>`; "publicada" a coloca no lugar da de HTML em `/admin/<página>` (só no build; a de HTML sai do repositório depois). As páginas de HTML continuam até cada uma ser substituída;
+  - mesma conta, mesma sessão e mesmas chaves de armazenamento das páginas de HTML (entrar numa vale para a outra);
+  - pasta `ui` inteira do DS sincronizada (o script do site passou a aceitar pastas e `excluir`, como o da FindLook);
+  - conferência de conformidade com o DS (`npm run conformidade`, a da FindLook com paleta pink e sombra parada proibidas) em zero desde o primeiro dia, também na rotina diária do DS;
+  - **as páginas em React mudam a aparência, então todo lote desta migração precisa do "sim" da dona do produto antes de publicar**; o merge da fundação publica só a prévia em `/admin/app/`.
+- **Feito no branch `claude/admin-react` (sem publicar):** fundação, casca provisória com o `sidebar` do DS, login e a Início em prévia. Plano, ordem das páginas e estimativas em `docs/engineering/ADMIN_REACT.md`.
+- **Trade-offs:** o build do site passa a depender do app (o workflow testa o app antes do PR); a casca aprovada (D-039, D-041), o card de número e o ícone com base de estado não existem como componentes no DS Dani Moscatelli (existem no DS da FindLook): a fundação usa o `sidebar` e o `Card` do DS e a diferença aparece nas capturas até as peças chegarem ao DS pelo processo formal (D-050); o `Button` principal e o `Badge` padrão do DS ficam em 4,2:1 de contraste (abaixo do AA), decisão no DS.
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:

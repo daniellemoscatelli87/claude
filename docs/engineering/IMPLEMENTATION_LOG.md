@@ -1298,6 +1298,23 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** painel com login e dados simulados (validações, conversão do horário de Brasília, criar, alterar, excluir); migração num Postgres 16 local sem o `pg_cron` (RLS, colunas alteráveis, chave protegida, função protegida); `esbuild` da função; `npm run build`.
 - **Pendente:** aplicar a migração, publicar a função e o site; teste real com um agendamento para o e-mail de teste.
 
+## 2026-11-27 · Área restrita em React: fundação, login e Início em prévia (D-051), não publicado
+
+- **Branch:** `claude/admin-react` (sem pull request, sem publicação). Plano: `docs/engineering/ADMIN_REACT.md`.
+- **Implementado:**
+  - `apps/area-restrita/`: Vite 6 + React 18.3 + Tailwind 4.1.12 (versões do DS), `src/components/ui/` e `src/styles/` sincronizados do DS (versão `30d1ef0`), casca (`src/casca/`), Entrar/definir senha/nova senha/sem acesso (`src/telas/Acesso.tsx`), Início (`src/telas/Inicio.tsx`), dados (`src/dados/`), rotas e corte (`src/rotas.json`, `src/rotas.ts`, `scripts/montar-saida.mjs`);
+  - conformidade: `scripts/conformidade/verificar.mjs` e `conformidade-base.json` (zero);
+  - `scripts/sincronizar-design-system.sh` aceita pasta inteira e `excluir`; `design-system/arquivos.txt` com as linhas do app;
+  - `package.json` da raiz: `build` chama `build:area-restrita`;
+  - workflow do DS: passo de tipos, testes, conformidade e build do app.
+- **Comandos executados (27/11/2026):**
+  - `DS_REF=30d1ef0 bash scripts/sincronizar-design-system.sh`: 79 arquivos da pasta `ui` copiados; nenhum arquivo já sincronizado mudou;
+  - em `apps/area-restrita`: `npm run typecheck` ok; `npm test` 28 testes ok; `npm run conformidade` "OK", total 0; `npm audit` 0 vulnerabilidades;
+  - na raiz: `npm ci` e `npm run build` ok (site igual; `dist/admin/app/` criado; `dist/admin/index.html` continua o de HTML);
+  - `tests/navegador/inicio.cjs` (Playwright, Supabase simulado com dados fictícios, 1280 e 390 px): 55 verificações ok; axe sem violações na Início; no Entrar, o axe aponta o contraste do botão principal do DS (4,2:1);
+  - falhas encontradas e corrigidas no caminho: divisão manual dos pacotes do Vite (React e Radix separados) quebrava a página por dependência circular (ficou só o Supabase separado); selos e texto de apoio abaixo do AA (trocados pelo `Badge` de contorno e `--foreground`); o primeiro Esc não fechava o menu no celular (dica do `sidebar`; sem dica no celular); card de número com selo ao lado estourava a largura (selo embaixo).
+- **Pendente:** "sim" da dona do produto para a fundação; peças do DS (casca do painel, cabeçalho da página, card de indicador, ícone com base) pelo processo formal; decisão de contraste no DS; lotes 1 a 8 do plano.
+
 ## Estado do repositório encontrado (19/10/2026)
 
 Levantamento feito antes de propor o plano do Corte 1:
