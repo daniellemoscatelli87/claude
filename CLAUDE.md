@@ -71,6 +71,8 @@ A dona do produto não deve precisar vigiar isto. Vale para qualquer conversa do
 
    Ao mesmo tempo, toda interface precisa ter **motion** (tokens de movimento do DS e respeito a "menos movimento"), **design de interação** (retorno a cada ação, estados de hover, foco, toque e carregamento), **sofisticação e modernidade**. A crítica de design do item 6 confere esses fundamentos um a um.
 
+   **Comunicação sempre não técnica (regra da dona do produto, 27/11/2026):** todo texto que explica uma funcionalidade, na interface e nas mensagens para ela, usa linguagem natural, didática e objetiva, sem jargão técnico.
+
 ## Padrão de interface e interação (regra permanente da dona do produto, 17/11/2026)
 
 Vale para o produto e para todo o site do estúdio (página inicial, área restrita, Rede de Parceiros e Store). A dona do produto preza muito por design de interação e não quer precisar pedir isso. **Por iniciativa própria, sem esperar pedido,** toda página, tela ou funcionalidade nova ou refeita deve trazer:
