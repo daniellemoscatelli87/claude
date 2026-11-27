@@ -2,6 +2,9 @@
 # Formato: <caminho no design system> <caminho no site>
 # Arquivos desta lista são sobrescritos pela sincronização: nunca edite a cópia no site.
 
+# Catálogo do design system (gerado no DS a cada build): consultar antes de montar qualquer interface (regra de consumo do DS)
+CATALOGO.md              design-system/CATALOGO.md
+
 # Tokens (cores, sombras, raio, movimento, gráficos), usados pela área restrita (public/admin/)
 src/styles/theme.css     public/design-system/theme.css
 
