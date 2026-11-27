@@ -118,8 +118,6 @@ jobs:
             echo "Build do site aprovado. Área restrita e site em React aprovados em tipos, testes, conformidade com o DS e build. App Experience Intelligence aprovado em tipos, lint, testes e build."
             echo "Os testes não avaliam a aparência: confira a área restrita e as telas do app se a mudança for visual."
             echo
-            echo "Lembrete: troque o ?v= do theme.css nas páginas de public/admin/ para o navegador não usar a cópia antiga."
-            echo
             echo "Ao aprovar (merge), o site publica a versão atualizada."
           } > "$RUNNER_TEMP/corpo.md"
           TITULO="Sincroniza o design system Dani Moscatelli ($CURTA)"

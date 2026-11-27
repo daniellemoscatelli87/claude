@@ -1,17 +1,15 @@
 # Design System Dani Moscatelli no site
 
-A área restrita do site (`public/admin/` e, em migração, `apps/area-restrita/`) e o app DM | Experience Intelligence (`apps/experience-intelligence/`) usam cópias de arquivos do Design System Dani Moscatelli (decisões da dona do produto, 23/11/2026: "tudo deve consumir o Design System" e "app EI consome tokens e componentes do DS Dani Moscatelli, com atualização diária", D-047):
+A área restrita do site (`apps/area-restrita/`, toda em React desde 27/11/2026) e o app DM | Experience Intelligence (`apps/experience-intelligence/`) usam cópias de arquivos do Design System Dani Moscatelli (decisões da dona do produto, 23/11/2026: "tudo deve consumir o Design System" e "app EI consome tokens e componentes do DS Dani Moscatelli, com atualização diária", D-047):
 
 - Repositório: https://github.com/daniellemoscatelli87/DaniMoscatelli-DesignSystem
 - Publicado: https://designsystem.danimoscatelli.com.br
 - Versão copiada: o commit registrado em `versao.txt`
 - Arquivos copiados: a lista em `arquivos.txt`
 
-## Como a área restrita usa
+## Como a área restrita usava (até 27/11/2026)
 
-As páginas de `public/admin/` são HTML e JavaScript puros, sem Tailwind. Cada página carrega `/design-system/theme.css` (cópia do `src/styles/theme.css` do DS) antes de `/admin/admin.css`. O navegador lê as variáveis de `:root` (cores, sombras, raio, movimento, gráficos) e ignora os blocos do Tailwind (`@custom-variant`, `@theme inline` e o `@apply` da camada base). `admin.css` e os estilos das páginas usam só esses tokens: não há paleta própria.
-
-A fonte (Plus Jakarta Sans) já vem do Google Fonts em cada página, por isso o `fonts.css` do DS não é copiado.
+As páginas de HTML de `public/admin/` carregavam uma cópia do `theme.css` do DS em `public/design-system/theme.css`. Com a última página em React (Parceiros e Pesquisas, D-056), as páginas de HTML, o `admin.css`, o `admin.js` e essa cópia saíram do site e da sincronização.
 
 ## Como a área restrita em React usa (D-051)
 
