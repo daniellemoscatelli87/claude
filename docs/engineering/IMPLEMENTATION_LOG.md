@@ -603,7 +603,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Publicação (23/11):** site publicado; página e painel conferidos no ar.
 - **Pendente:** teste real de ponta a ponta; validar o tempo de resposta (3 a 5 min).
 
-## 2026-11-27 · Painel de pesquisas: Inteligência em abas, assuntos em accordion e cards de descoberta com gráfico, não publicado
+## 2026-11-27 · Painel de pesquisas: Inteligência em abas, assuntos em accordion e cards de descoberta com gráfico, publicado (#250)
 
 - **Pedido da dona do produto:** depois de ver o protótipo no padrão do DS: "Achados" e "Oportunidades" viram abas; os assuntos (Para onde vai a compra, A dor de encontrar…) viram accordions com os cards dentro, horizontais, um por linha; feito direto no código; as Oportunidades são para o produto Find Look, não para novas pesquisas. Ela também pediu, daqui para frente, protótipo funcional junto de toda proposta.
 - **Referências do DS consultadas:** página "Escrita de Inteligência" (conversa, não relatório; hipótese marcada; dados técnicos em "Ver dados"), `graficos-inteligencia.tsx` (`DescobertaVisual`, rosca, barras ordenadas, halteres), Accordion e regra de cards aninhados.
@@ -613,7 +613,7 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Movimento:** gráficos se preenchem ao abrir um assunto ou trocar de aba; accordion e aba com transição; tudo respeita "menos movimento". PDF: abas e assuntos saem todos abertos, com os dados.
 - **Verificação executada:** dados fictícios e servidor simulado (computador e iPhone 13): 16 cards horizontais em 5 assuntos, 17 oportunidades, link de oportunidade leva ao card certo, "Ver dados" abre, halteres posicionados, PDF com 16 cards e 17 oportunidades, cabeçalho e QR Code sem regressão, sem rolagem lateral, sem erros de JavaScript.
 
-## 2026-11-27 · Painel de pesquisas: Inteligência em Achados e Oportunidades, Voz do cliente em card único com ranking, não publicado
+## 2026-11-27 · Painel de pesquisas: Inteligência em Achados e Oportunidades, Voz do cliente em card único com ranking, publicado (#250)
 
 - **Pedido da dona do produto:** os textos dos insights estavam confusos e dois cards pareciam iguais; Destaques fora do padrão de card; Voz do cliente em card único com accordions e ranking das dores; diluir os Destaques nos cards; dividir a Inteligência em duas seções; tirar a oportunidade de dentro dos cards de achados.
 - **Textos dos insights (`public/admin/pesquisas/index.html`, `inteligencia()`):** "Procura aqui, compra fora" com título claro ("Começar a procura em Curitiba nem sempre significa comprar aqui") e sem afirmar uma causa que a pesquisa não mede; "Vendas perdidas" fala do que acontece quando não encontram a peça; o card de comparação virou "Quem mais desiste", com números absolutos e porcentagem, e título correto quando a diferença é inversa; o qualificador "uma parte menor" virou "uma minoria".
