@@ -2,6 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { linhasDaAba, resumoDoLancamento, TEXTO_PADRAO, type Cadastro } from "../src/telas/Lancamento";
 import { AREAS, caminhoFoto, erroAuth, iconeDoLog } from "../src/telas/Configuracoes";
+import { destinatariosTexto, estadoDaMensagem, listaDoContato, norm, type Mensagem } from "../src/telas/Contatos";
 import { filtrar, limpa, opcoes, paraTexto, recebe, type Parceiro } from "../src/telas/Comunicados";
 
 const c = (id: string, email: string, avisado: string | null = null): Cadastro => ({ id, email, created_at: "2026-11-20T10:00:00Z", avisado_em: avisado });
@@ -72,5 +73,37 @@ describe("Comunicados", () => {
     expect(paraTexto(["1", "2", "3", "x"], lista, 3)).toBe("Ana, Bruno, Carla e mais 1");
     expect(paraTexto(["x"], lista, 3)).toBe("Parceiro excluído");
     expect(paraTexto([], lista, 3)).toBe("Ninguém recebeu");
+  });
+});
+
+describe("Contato (lista, prévia)", () => {
+  const m = (id: string, x: Partial<Mensagem>): Mensagem => ({ id, created_at: "2026-11-20T10:00:00Z", nome: "Nome " + id, email: id + "@exemplo.com", empresa: null, assunto: null, mensagem: null, origem: "site", destinatarios: null, copias: null, copias_ocultas: null, visualizado_em: null, respondido_em: null, reuniao_em: null, ...x });
+  const todas = [
+    m("1", { nome: "Ana Ribeiro", assunto: "Experiência do paciente" }),
+    m("2", { visualizado_em: "x", respondido_em: "x", origem: "email" }),
+    m("3", { visualizado_em: "x", respondido_em: "x", reuniao_em: "x", empresa: "Clínica" }),
+    m("4", { origem: "enviado", destinatarios: ["a@b.com"], copias: ["c@d.com"], nome: "Conversa" }),
+  ];
+  it("estado: não lida, lida, respondida, reunião", () => {
+    expect(["1", "2", "3"].map((id) => estadoDaMensagem(todas.find((r) => r.id === id)!))).toEqual(["", "respondida", "reuniao"]);
+    expect(estadoDaMensagem({ visualizado_em: "x", respondido_em: null, reuniao_em: null })).toBe("lida");
+  });
+  it("abas, situação e busca sem acento", () => {
+    expect(listaDoContato(todas, "recebidos", "", "").linhas.map((r) => r.id)).toEqual(["1", "2", "3"]);
+    expect(listaDoContato(todas, "enviados", "", "").linhas.map((r) => r.id)).toEqual(["4"]);
+    expect(listaDoContato(todas, "recebidos", "", "pendentes").linhas.map((r) => r.id)).toEqual(["1"]);
+    expect(listaDoContato(todas, "recebidos", "", "reunioes").linhas.map((r) => r.id)).toEqual(["3"]);
+    expect(listaDoContato(todas, "recebidos", "experiencia", "").linhas.map((r) => r.id)).toEqual(["1"]);
+    expect(listaDoContato(todas, "recebidos", "e-mail", "").linhas.map((r) => r.id)).toEqual(["2"]);
+    expect(listaDoContato(todas, "enviados", "c@d", "").linhas.map((r) => r.id)).toEqual(["4"]);
+  });
+  it("resumo e vazios com os textos da página de HTML", () => {
+    expect(listaDoContato(todas, "recebidos", "", "").resumo).toBe("3 mensagens recebidas");
+    expect(listaDoContato(todas, "recebidos", "", "pendentes").resumo).toBe("1 de 3 mensagens recebidas");
+    expect(listaDoContato(todas, "enviados", "", "").resumo).toBe("1 e-mail enviado");
+    expect(listaDoContato([], "enviados", "", "").vazio).toBe("Nenhum e-mail enviado ainda. Use \u201cNovo e-mail\u201d para escrever o primeiro.");
+    expect(listaDoContato(todas, "recebidos", "zzz", "").vazio).toBe("Nenhuma mensagem encontrada.");
+    expect(destinatariosTexto(todas[3])).toBe("Para: a@b.com · Cc: c@d.com");
+    expect(norm("Clínica")).toBe("clinica");
   });
 });

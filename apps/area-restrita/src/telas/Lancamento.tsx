@@ -4,7 +4,7 @@
 // - Input de busca com Label só para leitores de tela;
 // - CardComCabecalho: a lista da aba, com o botão "Disparar lançamento" na ação do cabeçalho (só na aba Novas);
 // - LinhaDeLista + IconeComBase + ChipDeEstado ("Avisado em …", tom sucesso) em cada cadastro;
-// - PainelDeEmail (SidePanel) para escrever, pré-visualizar e enviar; PerguntaDeConfirmação (AlertDialog) antes do envio;
+// - JanelaDeEmail (Dialog) para escrever, pré-visualizar e enviar; PerguntaDeConfirmação (AlertDialog) antes do envio;
 // - Toaster (sonner) com o resultado; Alert no erro; Skeleton no carregamento.
 import * as React from "react";
 import { toast } from "sonner";
@@ -13,8 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChipDeEstado } from "@/components/ui/chip-de-estado";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { CampoDeBusca } from "@/components/ui/campo-de-busca";
 import { LinhaDeLista } from "@/components/ui/linha-de-lista";
 import { CabecalhoDaPagina } from "@/components/ui/painel-cabecalho";
 import { CardComCabecalho, IconeComBase } from "@/components/ui/painel-dados";
@@ -23,7 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { registrar, sb } from "@/lib/supabase";
 import { plural } from "@/lib/formatar";
 import { chamarFuncao, dataHora, usePerguntaDeConfirmacao, Vazio } from "./comum";
-import { PainelDeEmail, type CamposDoEmail } from "./email";
+import { JanelaDeEmail, type CamposDoEmail } from "./email";
 
 export type Cadastro = { id: string; created_at: string; email: string; avisado_em: string | null };
 type Aba = "novas" | "avisadas";
@@ -132,10 +131,8 @@ export function Lancamento() {
         </Alert>
       )}
 
-      <div className="grid max-w-md gap-2">
-        <Label htmlFor="busca-lancamento" className="sr-only">Buscar e-mail</Label>
-        {/* Campo simples do DS: o DS ainda não tem o campo de busca com ícone (FALTA NO DS: CampoDeBusca). */}
-        <Input id="busca-lancamento" type="search" placeholder="Buscar e-mail" value={busca} onChange={(e) => setBusca(e.target.value)} />
+      <div className="max-w-md">
+        <CampoDeBusca id="busca-lancamento" rotulo="Buscar e-mail" valor={busca} onValorChange={setBusca} resultados={busca ? linhas.length : undefined} />
       </div>
 
       {!todas && !erro ? (
@@ -154,12 +151,12 @@ export function Lancamento() {
           )}
           className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300"
         >
-          {linhas.length ? <ul aria-live="polite">{linhas.map((r) => <Linha key={r.id} r={r} />)}</ul> : <Vazio className="px-5 pb-2 sm:px-6">{vazio}</Vazio>}
+          {linhas.length ? <ul aria-live="polite">{linhas.map((r) => <Linha key={r.id} r={r} />)}</ul> : <Vazio className="px-5 sm:px-6" icone={<Rocket />}>{vazio}</Vazio>}
         </CardComCabecalho>
         </TabsContent>
       ))}
 
-      <PainelDeEmail
+      <JanelaDeEmail
         aberto={aberto} mudar={setAberto} titulo="Disparar lançamento"
         descricao={"O e-mail vai para " + (pendentes === 1 ? "1 pessoa que ainda não foi avisada." : pendentes + " pessoas que ainda não foram avisadas.")}
         valores={email} aoMudar={setEmail} exemplos={EXEMPLOS}

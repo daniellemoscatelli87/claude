@@ -1,11 +1,12 @@
 // Peças comuns às telas da área restrita, todas compostas com componentes do Design System Dani Moscatelli:
 // - Mensagem: Alert do DS (erro ou sucesso), anunciado para leitores de tela;
-// - Vazio: frase de estado vazio (o DS ainda não tem EstadoVazio: ver ADMIN_REACT.md, peças que faltam);
+// - Vazio: EstadoVazio do DS na variante "lista" (dentro do card, na coluna do texto das linhas);
 // - PreviaDoEmail: o e-mail como a pessoa vai receber, numa moldura com a borda do DS;
 // - PerguntaDeConfirmacao: AlertDialog do DS (com a palavra de confirmação para ações definitivas), no lugar do
 //   Admin.confirmDialog das páginas de HTML.
 import * as React from "react";
-import { CircleAlert, CircleCheck } from "lucide-react";
+import { CircleAlert, CircleCheck, Inbox } from "lucide-react";
+import { EstadoVazio } from "@/components/ui/estado-vazio";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -13,6 +14,8 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Campo } from "@/components/ui/campo";
+import { Textarea } from "@/components/ui/textarea";
 import { sb } from "@/lib/supabase";
 
 export type Aviso = { tom: "erro" | "sucesso"; texto: string } | null;
@@ -31,8 +34,8 @@ export function Mensagem({ aviso, className }: { aviso: Aviso; className?: strin
   );
 }
 
-export function Vazio({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <p className={"text-sm text-muted-foreground " + (className || "")}>{children}</p>;
+export function Vazio({ children, descricao, icone, className }: { children: React.ReactNode; descricao?: React.ReactNode; icone?: React.ReactNode; className?: string }) {
+  return <EstadoVazio variante="lista" tamanho="sm" icone={icone ?? <Inbox />} titulo={children} descricao={descricao} className={className} />;
 }
 
 /** "27/11/2026, 14:05" (as mesmas datas das páginas de HTML). */
@@ -67,14 +70,21 @@ export type Confirmacao = {
   destrutiva?: boolean;
   /** Palavra que a pessoa precisa digitar para liberar o botão (ações definitivas). */
   palavra?: string;
+  /** Campo de texto obrigatório (por exemplo, o motivo do cancelamento): `pedir` devolve o que foi escrito. */
+  campo?: { rotulo: string; placeholder?: string };
 };
 
-/** Pergunta antes de uma ação importante. `pedir` abre e devolve true se a pessoa confirmar. */
+/**
+ * Pergunta antes de uma ação importante. `pedir` abre e devolve true se a pessoa confirmar (ou o texto do `campo`),
+ * e false se cancelar.
+ */
 export function usePerguntaDeConfirmacao() {
-  const [pergunta, setPergunta] = React.useState<(Confirmacao & { responder: (v: boolean) => void }) | null>(null);
+  const [pergunta, setPergunta] = React.useState<(Confirmacao & { responder: (v: boolean | string) => void }) | null>(null);
   const [digitado, setDigitado] = React.useState("");
-  const pedir = React.useCallback((c: Confirmacao) => new Promise<boolean>((responder) => { setDigitado(""); setPergunta({ ...c, responder }); }), []);
-  const fechar = (v: boolean) => { pergunta?.responder(v); setPergunta(null); };
+  const [texto, setTexto] = React.useState("");
+  const [faltaTexto, setFaltaTexto] = React.useState(false);
+  const pedir = React.useCallback((c: Confirmacao) => new Promise<boolean | string>((responder) => { setDigitado(""); setTexto(""); setFaltaTexto(false); setPergunta({ ...c, responder }); }), []);
+  const fechar = (v: boolean | string) => { pergunta?.responder(v); setPergunta(null); };
   const liberado = !pergunta?.palavra || digitado.trim().toUpperCase() === pergunta.palavra;
   const elemento = (
     <AlertDialog open={!!pergunta} onOpenChange={(aberto) => { if (!aberto) fechar(false); }}>
@@ -83,6 +93,11 @@ export function usePerguntaDeConfirmacao() {
           <AlertDialogTitle>{pergunta?.titulo}</AlertDialogTitle>
           <AlertDialogDescription>{pergunta?.mensagem}</AlertDialogDescription>
         </AlertDialogHeader>
+        {pergunta?.campo && (
+          <Campo id="confirmar-campo" rotulo={pergunta.campo.rotulo} erro={faltaTexto ? "Preencha o motivo para continuar." : null}>
+            {(p) => <Textarea {...p} rows={3} maxLength={1000} placeholder={pergunta.campo?.placeholder} value={texto} onChange={(e) => { setTexto(e.target.value); setFaltaTexto(false); }} />}
+          </Campo>
+        )}
         {pergunta?.palavra && (
           <div className="grid gap-2">
             <Label htmlFor="confirmar-palavra">Para confirmar, digite {pergunta.palavra}</Label>
@@ -94,7 +109,14 @@ export function usePerguntaDeConfirmacao() {
           <AlertDialogAction
             disabled={!liberado}
             className={pergunta?.destrutiva ? buttonVariants({ variant: "destructive" }) : undefined}
-            onClick={(e) => { if (!liberado) { e.preventDefault(); return; } fechar(true); }}
+            onClick={(e) => {
+              if (!liberado) { e.preventDefault(); return; }
+              if (pergunta?.campo) {
+                if (!texto.trim()) { e.preventDefault(); setFaltaTexto(true); document.getElementById("confirmar-campo")?.focus(); return; }
+                return fechar(texto.trim());
+              }
+              fechar(true);
+            }}
           >
             {pergunta?.ok}
           </AlertDialogAction>

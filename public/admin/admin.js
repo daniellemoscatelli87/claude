@@ -86,43 +86,11 @@
     return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
   };
 
-  // Linha clicável com iniciais, título, data e resumo.
-  // Mensagem de contato: envelope fechado (não lida), aberto em cinza (lida), envelope com check em verde
-  // (respondida) ou calendário com check em azul (virou reunião agendada).
-  // Não aberta vem primeiro: uma resposta nova do contato volta a mensagem para "não lida".
-  const mailState = (r) => (!r.visualizado_em ? "" : r.reuniao_em ? "reuniao" : r.respondido_em ? "respondida" : "lida");
-  const MAIL_ICONS = { "": ["mail", "Não lida"], lida: ["mailOpen", "Lida"], respondida: ["mailCheck", "Respondida"], reuniao: ["meeting", "Reunião agendada"] };
-  function mailIcon(state) {
-    const [name, label] = MAIL_ICONS[state || ""];
-    const s = el("span", "ini mail");
-    s.innerHTML = icon(name);
-    s.setAttribute("aria-label", label);
-    s.title = label;
-    return s;
-  }
-
-  function rowLink(href, title, sub, date, seen, mail) {
-    const a = el("a", "rowlink" + (seen ? " seen" : "") + (seen === "respondida" ? " answered" : "") + (seen === "reuniao" ? " meeting" : ""));
-    a.href = href;
-    a.append(mail ? mailIcon(seen) : el("span", "ini", initials(title)), el("span", "t", title || "Sem nome"), el("span", "d", fmtDay(date)), el("span", "s", sub || ""));
-    return a;
-  }
-
   // Ao abrir um registro pela primeira vez, guarda quando foi visto (a lista passa a mostrá-lo em cinza).
   async function markSeen(table, r) {
     if (!r || r.visualizado_em) return;
     const { error } = await sb.from(table).update({ visualizado_em: new Date().toISOString() }).eq("id", r.id);
     if (error) console.error(error);
-  }
-
-  // Link que abre o Google Agenda com a reunião preenchida e o contato como convidado (duração de 1 hora).
-  const gcalDate = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-  function googleCalendarLink(r) {
-    const start = new Date(r.reuniao_em), end = new Date(start.getTime() + 60 * 6e4);
-    const details = ["Reunião agendada a partir de mensagem de contato do site.", r.assunto && "Assunto: " + r.assunto, r.empresa && "Empresa: " + r.empresa, r.cargo && "Cargo: " + r.cargo, r.telefone && "Telefone: " + r.telefone, r.mensagem && "\nMensagem:\n" + r.mensagem].filter(Boolean).join("\n");
-    const q = new URLSearchParams({ action: "TEMPLATE", text: "Reunião com " + (r.nome || "contato") + (r.empresa ? " (" + r.empresa + ")" : ""), dates: gcalDate(start) + "/" + gcalDate(end), details });
-    if (r.email) q.set("add", r.email);
-    return "https://calendar.google.com/calendar/render?" + q.toString();
   }
 
   function valueNode(v) {
@@ -588,12 +556,6 @@
   }
   const notifications = () => notifPromise || loadNotifications();
 
-  const CONTATO_SECOES = [{ title: "Contato", fields: [
-    ["nome", "Nome completo"], ["email", "E-mail corporativo"], ["telefone", "Telefone / WhatsApp"],
-    ["empresa", "Empresa"], ["cargo", "Cargo / Função"], ["tipo_negocio", "Meu negócio é..."],
-    ["tipo_negocio_outro", "Outro (descrição)"], ["assunto", "Assunto"], ["mensagem", "Mensagem"],
-    ["dias_preferidos", "Melhor dia da semana"], ["periodo", "Período de preferência"],
-  ]}];
 
   // Confirmação em janela (modal) antes de ações que não podem ser desfeitas.
   // Com field ({ label, placeholder, required }), mostra um campo de texto e devolve o que foi digitado.
@@ -664,5 +626,5 @@
   if (document.readyState === "loading") addEventListener("DOMContentLoaded", olhosNaPagina); else olhosNaPagina();
   new MutationObserver(olhosNaPagina).observe(document.documentElement, { childList: true, subtree: true });
 
-  window.Admin = { sb, el, init, log, profile, applyProfile, icon, notifications, refreshNotifications: loadNotifications, googleCalendarLink, rowLink, mailIcon, mailState, markSeen, detail, fmtDate, fmtDay, initials, CONTATO_SECOES, confirmDialog, toast };
+  window.Admin = { sb, el, init, log, profile, applyProfile, icon, notifications, refreshNotifications: loadNotifications, markSeen, detail, fmtDate, fmtDay, initials, confirmDialog, toast };
 })();

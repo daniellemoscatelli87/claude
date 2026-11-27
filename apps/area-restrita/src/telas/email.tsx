@@ -1,13 +1,10 @@
-// Painel de escrever um e-mail em massa (Lançamento e Comunicados): os mesmos campos, regras e textos das janelas das
-// páginas de HTML, montados com o SidePanel do DS (cabeçalho fixo, corpo rolável e barra de ação fixa), Label, Input,
-// Textarea, Button e Alert. O painel lateral substitui a janela central: o DS ainda tem o "Close" em inglês no Dialog
-// (D-047), e o SidePanel já fecha com "Fechar".
+// Janela de escrever um e-mail em massa (Lançamento e Comunicados): os mesmos campos, regras e textos das janelas das
+// páginas de HTML, com o Dialog do DS (que agora fecha com "Fechar" em português), Campo, Input, Textarea e Button.
 import * as React from "react";
 import { Eye, LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { SidePanel, SidePanelActions, SidePanelBody, SidePanelContent, SidePanelHeader } from "@/components/ui/side-panel";
+import { Campo } from "@/components/ui/campo";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Mensagem, PreviaDoEmail, type Aviso } from "./comum";
 
@@ -31,7 +28,10 @@ type Props = {
   enviar: (v: CamposDoEmail) => Promise<string | void>;
 };
 
-export function PainelDeEmail({ aberto, mudar, titulo, descricao, valores, aoMudar, exemplos, dica, rotuloEnviar, iconeEnviar, previa, enviar }: Props) {
+/** Classes da janela grande do DS: mais larga que o padrão e com rolagem por dentro quando a tela é baixa. */
+export const JANELA_GRANDE = "max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-2xl";
+
+export function JanelaDeEmail({ aberto, mudar, titulo, descricao, valores, aoMudar, exemplos, dica, rotuloEnviar, iconeEnviar, previa, enviar }: Props) {
   const [aviso, setAviso] = React.useState<Aviso>(null);
   const [html, setHtml] = React.useState<string | null>(null);
   const [gerando, setGerando] = React.useState(false);
@@ -77,46 +77,37 @@ export function PainelDeEmail({ aberto, mudar, titulo, descricao, valores, aoMud
   };
 
   return (
-    <SidePanel open={aberto} onOpenChange={(v) => !enviando && mudar(v)}>
-      <SidePanelContent width="lg" closeLabel="Fechar">
-        <SidePanelHeader title={titulo} description={descricao} />
-        <SidePanelBody>
-          <div className="grid gap-5 py-2">
-            <div className="grid gap-2">
-              <Label htmlFor="email-assunto">Assunto do e-mail</Label>
-              <Input id="email-assunto" maxLength={200} placeholder={exemplos.assunto} value={valores.assunto} onChange={mudarCampo("assunto")} />
+    <Dialog open={aberto} onOpenChange={(v) => !enviando && mudar(v)}>
+      <DialogContent className={JANELA_GRANDE}>
+        <DialogHeader>
+          <DialogTitle>{titulo}</DialogTitle>
+          <DialogDescription>{descricao}</DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-5">
+          <Campo id="email-assunto" rotulo="Assunto do e-mail" maxLength={200} placeholder={exemplos.assunto} value={valores.assunto} onChange={mudarCampo("assunto")} />
+          <Campo id="email-titulo" rotulo="Título da mensagem" maxLength={200} placeholder={exemplos.titulo} value={valores.titulo} onChange={mudarCampo("titulo")} />
+          <Campo id="email-mensagem" rotulo="Mensagem" ajuda={dica}>
+            {(p) => <Textarea {...p} maxLength={10000} rows={8} placeholder={exemplos.mensagem} value={valores.mensagem} onChange={mudarCampo("mensagem")} />}
+          </Campo>
+          {html && (
+            <div ref={fimDaPrevia} className="grid gap-2 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300">
+              <p className="text-body-sm font-semibold text-foreground">Pré-visualização</p>
+              <PreviaDoEmail html={html} titulo="Pré-visualização do e-mail" />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email-titulo">Título da mensagem</Label>
-              <Input id="email-titulo" maxLength={200} placeholder={exemplos.titulo} value={valores.titulo} onChange={mudarCampo("titulo")} />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email-mensagem">Mensagem</Label>
-              <Textarea id="email-mensagem" maxLength={10000} rows={8} placeholder={exemplos.mensagem} value={valores.mensagem} onChange={mudarCampo("mensagem")} aria-describedby="email-dica" />
-              <p id="email-dica" className="text-sm text-muted-foreground">{dica}</p>
-            </div>
-            {html && (
-              <div ref={fimDaPrevia} className="grid gap-2 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300">
-                <p className="text-sm font-semibold text-foreground">Pré-visualização</p>
-                <PreviaDoEmail html={html} titulo="Pré-visualização do e-mail" />
-              </div>
-            )}
-            <Mensagem aviso={aviso} />
-          </div>
-        </SidePanelBody>
-        <SidePanelActions>
-          <div className="flex flex-wrap items-center justify-end gap-2">
-            <Button type="button" variant="outline" onClick={verPrevia} disabled={gerando || enviando}>
-              {gerando ? <LoaderCircle aria-hidden className="motion-safe:animate-spin" /> : <Eye aria-hidden />}
-              {gerando ? "Gerando…" : "Pré-visualizar e-mail"}
-            </Button>
-            <Button type="button" onClick={mandar} disabled={enviando || gerando}>
-              {enviando ? <LoaderCircle aria-hidden className="motion-safe:animate-spin" /> : iconeEnviar}
-              {enviando ? "Enviando…" : rotuloEnviar}
-            </Button>
-          </div>
-        </SidePanelActions>
-      </SidePanelContent>
-    </SidePanel>
+          )}
+          <Mensagem aviso={aviso} className="empty:hidden" />
+        </div>
+        <DialogFooter>
+          <Button type="button" variant="outline" onClick={verPrevia} disabled={gerando || enviando}>
+            {gerando ? <LoaderCircle aria-hidden className="motion-safe:animate-spin" /> : <Eye aria-hidden />}
+            {gerando ? "Gerando…" : "Pré-visualizar e-mail"}
+          </Button>
+          <Button type="button" onClick={mandar} disabled={enviando || gerando}>
+            {enviando ? <LoaderCircle aria-hidden className="motion-safe:animate-spin" /> : iconeEnviar}
+            {enviando ? "Enviando…" : rotuloEnviar}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

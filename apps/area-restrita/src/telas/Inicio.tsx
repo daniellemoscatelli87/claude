@@ -26,6 +26,7 @@ import { diaCurto, plural, segmentos, situacaoDaMensagem, type SituacaoDaMensage
 import { LinkDaArea } from "@/casca/base";
 import { useNotificacoes } from "@/casca/notificacoes";
 import { useSessao } from "@/casca/sessao";
+import { Vazio } from "./comum";
 
 /** Quantas linhas cada lista mostra na Início (o resto fica em "Ver todas"). */
 const LINHAS_NA_INICIO = 5;
@@ -114,14 +115,11 @@ function FimDaLinha({ iso, estado }: { iso: string; estado?: React.ReactNode }) 
   return (
     <span className="flex items-center gap-2 sm:flex-col sm:items-end sm:gap-1.5">
       {estado}
-      <span className="whitespace-nowrap text-sm tabular-nums text-muted-foreground">{diaCurto(iso)}</span>
+      <span className="whitespace-nowrap text-body-sm tabular-nums text-muted-foreground">{diaCurto(iso)}</span>
     </span>
   );
 }
 
-function Vazio({ children }: { children: React.ReactNode }) {
-  return <p className="px-5 text-sm text-muted-foreground sm:px-6">{children}</p>;
-}
 
 /** Situação das últimas mensagens (só as carregadas), para ver de relance como está a resposta. */
 function SituacaoDasMensagens({ linhas }: { linhas: Contato[] }) {
@@ -223,14 +221,14 @@ export function Inicio() {
                         descricao={juntar(r.empresa, r.cargo) || undefined}
                         fim={<FimDaLinha iso={r.created_at} estado={<ChipDeEstado tom={e.tom}>{e.rotulo}</ChipDeEstado>} />}
                       >
-                        {r.assunto && <span className="mt-0.5 line-clamp-2 block text-sm text-foreground">{r.assunto}</span>}
+                        {r.assunto && <span className="mt-0.5 line-clamp-2 block text-body-sm text-foreground">{r.assunto}</span>}
                       </LinhaDeLista>
                     </li>
                   );
                 })}
               </ul>
             ) : (
-              <Vazio>Nenhuma mensagem ainda. As mensagens do formulário de contato do site aparecem aqui.</Vazio>
+              <Vazio className="px-5 sm:px-6">Nenhuma mensagem ainda. As mensagens do formulário de contato do site aparecem aqui.</Vazio>
             )}
           </CardComCabecalho>
 
@@ -257,14 +255,14 @@ export function Inicio() {
                         descricao={juntar(r.empresa, r.principal_especializacao) || undefined}
                         fim={<FimDaLinha iso={r.created_at} estado={<ChipDeEstado tom={nova ? "marca" : "neutro"}>{nova ? "Não vista" : "Vista"}</ChipDeEstado>} />}
                       >
-                        {segmentos(r.segmentos) && <span className="mt-0.5 block text-sm text-foreground">{segmentos(r.segmentos)}</span>}
+                        {segmentos(r.segmentos) && <span className="mt-0.5 block text-body-sm text-foreground">{segmentos(r.segmentos)}</span>}
                       </LinhaDeLista>
                     </li>
                   );
                 })}
               </ul>
             ) : (
-              <Vazio>Nenhuma candidatura ainda. Quem se candidatar à Rede de Parceiros aparece aqui.</Vazio>
+              <Vazio className="px-5 sm:px-6">Nenhuma candidatura ainda. Quem se candidatar à Rede de Parceiros aparece aqui.</Vazio>
             )}
           </CardComCabecalho>
 
@@ -287,7 +285,7 @@ export function Inicio() {
                 ))}
               </ul>
             ) : (
-              <Vazio>Ninguém se cadastrou ainda. Quem pedir aviso do lançamento no site aparece aqui.</Vazio>
+              <Vazio className="px-5 sm:px-6">Ninguém se cadastrou ainda. Quem pedir aviso do lançamento no site aparece aqui.</Vazio>
             )}
           </CardComCabecalho>
         </div>

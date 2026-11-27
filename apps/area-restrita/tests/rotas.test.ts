@@ -10,9 +10,12 @@ describe("menu", () => {
     expect(PAGINAS.find((p) => p.id === "parceiros")?.sub?.map((s) => s.rotulo)).toEqual(["Perfis e candidaturas", "Comunicados"]);
     expect(PAGINAS.find((p) => p.id === "projetos")?.sub?.map((s) => s.rotulo)).toEqual(["Pesquisas"]);
   });
-  it("cada página aponta para uma pasta que existe em public/admin", async () => {
+  it("página ainda não publicada em React tem a de HTML em public/admin; publicada não tem mais (limpeza A9)", async () => {
     const { existsSync } = await import("node:fs");
-    for (const p of todasAsPaginas()) expect(existsSync(new URL(`../../../public/admin/${p.caminho}index.html`, import.meta.url)), p.id).toBe(true);
+    for (const p of todasAsPaginas()) {
+      const html = existsSync(new URL(`../../../public/admin/${p.caminho}index.html`, import.meta.url));
+      expect(html, p.id).toBe(REACT[p.id] !== "publicada");
+    }
   });
 });
 
@@ -36,9 +39,11 @@ describe("corte página a página", () => {
     expect(resolverHref("/admin/parceiros/?id=1#emails", "/admin/app", {})).toEqual({ interno: false, href: "/admin/parceiros/?id=1#emails" });
     expect(resolverHref("https://exemplo.com/", "/admin", {})).toEqual({ interno: false, href: "https://exemplo.com/" });
   });
-  it("hoje: Início, Lançamento, Configurações e Comunicados publicadas (substituem as de HTML só no dist)", () => {
-    expect(REACT).toEqual({ inicio: "publicada", lancamento: "publicada", configuracoes: "publicada", comunicados: "publicada" });
-    expect(planoDeSaida(rotas)).toEqual(["app/comunicados/index.html", "app/configuracoes/index.html", "app/index.html", "app/lancamento/index.html", "comunicados/index.html", "configuracoes/index.html", "index.html", "lancamento/index.html"]);
+  it("hoje: Início, Lançamento, Configurações, Comunicados, Contato e Reuniões publicadas (substituem as de HTML só no dist)", () => {
+    expect(REACT).toEqual({ inicio: "publicada", lancamento: "publicada", configuracoes: "publicada", comunicados: "publicada", contatos: "publicada", reunioes: "publicada" });
+    expect(planoDeSaida(rotas)).toContain("contatos/index.html");
+    expect(planoDeSaida(rotas)).toContain("reunioes/index.html");
+    expect(planoDeSaida(rotas)).not.toContain("parceiros/index.html");
   });
   it("publicar uma página grava o index também no lugar da de HTML", () => {
     expect(planoDeSaida({ ...rotas, react: { inicio: "publicada", contatos: "previa" } })).toEqual(["app/contatos/index.html", "app/index.html", "index.html"]);

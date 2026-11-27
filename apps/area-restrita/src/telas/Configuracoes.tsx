@@ -167,7 +167,7 @@ function DadosPessoais() {
         </div>
       </div>
       <Mensagem aviso={aviso} className="mt-4 empty:hidden" />
-      <form onSubmit={salvarNome} noValidate className="mt-6 grid gap-2">
+      <form onSubmit={salvarNome} noValidate className="mt-6 grid gap-4">
         <div className="grid max-w-xl gap-2">
           <Label htmlFor="cfg-nome">Nome</Label>
           <Input id="cfg-nome" maxLength={80} autoComplete="name" value={nome} onChange={(e) => { setNome(e.target.value); setAvisoNome(null); }} />
@@ -221,7 +221,7 @@ function EmailDeAcesso() {
             <Input id="cfg-email-novo" type="email" autoComplete="email" placeholder="seu@email.com" value={novo} onChange={(e) => { setNovo(e.target.value); setAviso(null); }} />
           </div>
           <PasswordInput id="cfg-email-senha" label="Senha atual" autoComplete="current-password" value={senha} onValueChange={(v) => { setSenha(v); setAviso(null); }} textos={TEXTOS_SENHA} describedBy="cfg-email-dica" />
-          <p id="cfg-email-dica" className="text-sm text-muted-foreground">A troca só vale depois que você confirmar pelo link enviado por e-mail. Os avisos do site (novas mensagens e cadastros) continuam indo para contato@danimoscatelli.com.br.</p>
+          <p id="cfg-email-dica" className="text-body-sm text-muted-foreground">A troca só vale depois que você confirmar pelo link enviado por e-mail. Os avisos do site (novas mensagens e cadastros) continuam indo para contato@danimoscatelli.com.br.</p>
           <Mensagem aviso={aviso} className="empty:hidden" />
         </div>
         <div>
@@ -266,7 +266,9 @@ function Senha() {
           <PasswordConfirm senha={nova} confirmacao={conf} onSenhaChange={(v) => { setNova(v); setAviso(null); }} onConfirmacaoChange={(v) => { setConf(v); setAviso(null); }} regras={REGRAS_DA_SENHA} textos={{ senha: "Nova senha", confirmar: "Repita a nova senha" }} />
           <Mensagem aviso={aviso} className="empty:hidden" />
         </div>
-        <div>
+        {/* O PasswordConfirm reserva uma linha (20 px + 4) para "As senhas coincidem": o divisor sobe o mesmo tanto, para
+            ficar à mesma distância do último campo que nos outros cards. */}
+        <div className="-mt-6">
           <AcaoDoCard><BotaoDeEnviar ocupado={ocupado} rotulo="Alterar senha" rotuloOcupado="Alterando…" /></AcaoDoCard>
         </div>
       </form>
@@ -330,9 +332,8 @@ function GestaoDeDados({ aoApagar }: { aoApagar: () => void }) {
                   inicio={<IconeComBase tom="neutro" redonda><Icone /></IconeComBase>}
                   titulo={a.nome} descricao={a.desc(contagem)}
                   fim={
-                    // O DS ainda não tem o botão de exclusão em contorno (FALTA NO DS): o contorno neutro com a lixeira; o
-                    // vermelho fica na confirmação, que pede a palavra APAGAR.
-                    <Button type="button" variant="outline" disabled={a.vazia(contagem) || apagando === a.id} onClick={() => void apagar(a)} aria-label={"Apagar todos os dados de " + a.nome}>
+                    // Exclusão em contorno do DS; o vermelho cheio fica na confirmação, que pede a palavra APAGAR.
+                    <Button type="button" variant="exclusao-contorno" disabled={a.vazia(contagem) || apagando === a.id} onClick={() => void apagar(a)} aria-label={"Apagar todos os dados de " + a.nome}>
                       {apagando === a.id ? <LoaderCircle aria-hidden className="motion-safe:animate-spin" /> : <Trash2 aria-hidden />}
                       {apagando === a.id ? "Apagando…" : "Apagar tudo"}
                     </Button>
@@ -389,13 +390,13 @@ function LogDaPlataforma({ versao }: { versao: number }) {
                   titulo={<span className="[overflow-wrap:anywhere]">{r.acao}</span>}
                   descricao={r.detalhe ? <span className="[overflow-wrap:anywhere]">{r.detalhe}</span> : undefined}
                 >
-                  <span className="mt-0.5 block text-sm text-muted-foreground tabular-nums">{dataHora(r.created_at)}</span>
+                  <span className="mt-0.5 block text-body-sm text-muted-foreground tabular-nums">{dataHora(r.created_at)}</span>
                 </LinhaDeLista>
               </li>
             );
           })}
         </ul>
-      ) : <Vazio className="px-5 sm:px-6">Nenhuma ação registrada ainda.</Vazio>)}
+      ) : <Vazio className="px-5 sm:px-6" icone={<ScrollText />}>Nenhuma ação registrada ainda.</Vazio>)}
       {mais && (
         <div className="flex justify-center px-5 pt-4 sm:px-6">
           <Button type="button" variant="outline" disabled={carregando} onClick={() => void carregar(log?.length || 0, log || [])}>

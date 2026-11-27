@@ -600,6 +600,18 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - **Reuniões não foi feita**: o `Calendar` do DS é um seletor de datas (dia selecionado em vermelho cheio, dias de 32 px, sem marcação de eventos), não uma agenda. Fica como FALTA NO DS (`AgendaDoMes`) e a página continua a de HTML.
 - **Voltar atrás:** trocar `"publicada"` por `"previa"` no `rotas.json` da página.
 
+## D-055 · 27/11/2026 · Reuniões e Contato da área restrita em React publicadas, janelas no Dialog do DS e limpeza das páginas de HTML (lotes A5, A6 e A9 da D-051)
+
+- **Origem:** o DS Dani Moscatelli publicou (`d2aeb40`) as peças que faltavam (`AgendaDoMes`, `CampoDeBusca`, `Button exclusao-contorno`, `EstadoVazio`/`EstadoFinal`, `CaixaDeEntrada`, `Conversa`, `CampoDeEmails`, `CampoDeHorario`, `TabelaAdaptavel`, `CampoCopiavel`, `Campo`, `ChipFiltravel`, `BotaoDeEnvio`), o `Dialog` com "Fechar", alvos de 44 px no toque e os tokens de tamanho de texto. Publicação delegada pela dona do produto.
+- **Decisão:**
+  - área restrita sincronizada com o DS `d2aeb40` (`apps/area-restrita` e `public/design-system/theme.css`); o app Experience Intelligence continua fora;
+  - Reuniões (`AgendaDoMes` + lista) e Contato (`CaixaDeEntrada` + leitura com `Conversa`, responder, reunião em `Dialog`, novo e-mail com `CampoDeEmails`) em `"publicada"`;
+  - as janelas de escrever e-mail (Lançamento, Comunicados), ver o comunicado enviado, reunião e novo e-mail voltam a ser janelas centrais (`Dialog`), como nas páginas de HTML; o painel lateral fica para o menu do celular e as notificações;
+  - busca com `CampoDeBusca`, estados vazios com `EstadoVazio`, "Apagar tudo" e exclusões com `Button exclusao-contorno`, textos com os tokens `text-body`, `text-body-sm`, `text-label`;
+  - páginas apagadas de `public/admin/` (A9): Início, Lançamento, Configurações, Comunicados, Contato e Reuniões; do `admin.js` saem as funções que só elas usavam; do `admin.css`, as regras sem uso. Parceiros e Pesquisas continuam de HTML.
+- **O que mudou em relação à página de HTML (forma, não conteúdo):** a busca de endereço da reunião presencial (sugestões do OpenStreetMap) ficou de fora: o DS não tem campo de endereço com sugestões (FALTA NO DS, `ADMIN_REACT.md` §7.2); o endereço é digitado. O calendário da data da reunião abre embaixo do campo, dentro da janela (o `Popover` do DS não se posiciona dentro do `Dialog`).
+- **Voltar atrás:** trocar `"publicada"` por `"previa"` no `rotas.json` e restaurar a página de HTML do histórico do git (commit anterior a este lote).
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:

@@ -6,6 +6,16 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-27 · Área restrita em React: DS d2aeb40, Reuniões e Contato publicadas, limpeza das páginas de HTML (D-055)
+
+- **Sincronização:** `DS_REF=main bash scripts/sincronizar-design-system.sh` (`versao.txt` = `d2aeb40`), com `apps/experience-intelligence/` de volta ao `main`.
+- **Páginas já publicadas, com o DS novo:** `CampoDeBusca` (Lançamento, Comunicados, Contato), `EstadoVazio` em todas as listas (`telas/comum.tsx`), `Button exclusao-contorno` em "Apagar tudo", janelas de e-mail no `Dialog` (`telas/email.tsx`, com `Campo`), tamanhos de texto pelos tokens. Configurações: o card Senha tinha 24 px a mais antes do divisor (linha reservada do `PasswordConfirm`); agora os três cards de formulário ficam com o mesmo espaço. O aviso "Não foi possível falar com o servidor" em Gestão de dados aparecia só na captura (o script de captura não simulava a função `admin-dados`); na página real a função responde, como na de HTML.
+- **Reuniões (`telas/Reunioes.tsx`, `dados/reunioes.ts`):** `AlertaComAcao` do Google Agenda, `AgendaDoMes` (dias com reunião; começa no dia da próxima), "Próximas reuniões" com a ação principal (Entrar no Meet ou Ver no mapa) e as outras num `DropdownMenu`, "Mostrar reuniões anteriores (N)".
+- **Contato (`telas/Contatos.tsx`, `telas/contato/`):** `CaixaDeEntrada` (abas, busca, situação, `?id=`, `?aba=`, `?situacao=`, `?reuniao=1`); leitura com `Accordion` (dados do formulário), `Stepper` (etapas) e `AlertaComAcao` (próximo passo), `Conversa alinhamento="lados"` com eventos em `SeparadorDaConversa`, anexos com links temporários; responder com `Campo`, anexos (`Button` + `UploadList`) e `BotaoDeEnvio`; reunião em `Dialog` (`Calendar`, `CampoDeHorario`, `Select`, `SegmentedControl`, `CampoCopiavel`); novo e-mail em `Dialog` (`CampoDeEmails` Para/Cc/Cco, `EstadoFinal`); excluir com o motivo quando há reunião.
+- **Carregamento por página:** cada página em arquivo próprio (`React.lazy`), carregado só quando é aberta (Contato 141 kB, as outras de 6 a 17 kB); o arquivo principal, com a casca, a Início e as peças comuns, tem 587 kB (186 kB comprimido).
+- **Limpeza (A9):** apagadas `public/admin/index.html`, `lancamento/`, `configuracoes/`, `comunicados/`, `contatos/`, `reunioes/`; `admin.js` sem `rowLink`, `mailIcon`, `mailState`, `googleCalendarLink`, `CONTATO_SECOES`; `admin.css` sem 12 regras sem uso.
+- **Testes:** `npm run typecheck` ok; `npm test` 41 ok; conformidade 0; `npm run build` na raiz ok; `tests/navegador/paginas.cjs publicada` em 1280, 390, 768 e 1024 px: 392 verificações, tudo passou (axe sem violações em todas as páginas e janelas); `tests/navegador/inicio.cjs` 95, tudo passou; suíte das páginas de HTML que continuam (Parceiros e Pesquisas, `public/` na porta 4173): 91 casos, tudo passou.
+
 ## 2026-11-27 · Site em React: casca do site (S1) e Programa Projeto Piloto publicado (S2, D-053)
 
 - **S1 (`apps/site/src/compartilhado/site/`):** `CascaDoSite` com o `CabecalhoDoSite`, a gaveta de contato (`GavetaDeContato`: mesmos campos, tabela `contatos`, rascunho `dm-contato-rascunho`, eventos `contato_aberto` e `contato_enviado`), o `RodapeSite`, o aviso de cookies com a medição e o WhatsApp. As páginas de HTML continuam com `partes.ts`, `menu.ts`, `menu.css`, `analytics.js` e `whatsapp.js` até serem migradas.
@@ -20,6 +30,11 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 - **HTML substituído saiu de `public/`:** `404.html` e `comunicados/descadastro/index.html` (conferidas no ar depois do PR #255) foram para `apps/site/tests/referencia/`, só para os testes de cabeça e de textos. O build continua gravando as duas páginas no mesmo lugar do `dist`.
 - **Lacuna do DS encontrada:** o `Logo` sem `fill-rule="evenodd"` (miolos das letras preenchidos); contornado pela propriedade do próprio componente (`LOGO_CORRIGIDO`).
 - **Verificação executada:** em `apps/site`: tipos sem erros, 34 de 34 testes, conformidade em 0, build. Na raiz: build e `comparar-dist` contra o `main` (`118f573`): 303 arquivos iguais, só as diferenças esperadas (arquivos do app, 3 prévias e as 3 páginas publicadas). Navegador: 61 conferências passaram, sem avisos (os links do `RodapeSite` agora têm 44 px no celular); axe sem violações.
+## 2026-11-27 · Área restrita em React: lista do Contato em prévia (A6, D-051), não publicada
+
+- **Feito:** `apps/area-restrita/src/telas/Contatos.tsx` em `/admin/app/contatos/` (`rotas.json`: `"contatos": "previa"`): abas Recebidos e Enviados com os números (`Tabs` + `Badge`), busca sem acento por nome, e-mail, empresa, assunto, mensagem, destinatários e origem (`Input`), situação (`Select`, também por `?situacao=`), aba guardada no endereço, `LinhaDeLista` + `IconeComBase` + `ChipDeEstado` com a origem (Site, E-mail, Enviado) e o estado (Não lida, Lida, Respondida, Reunião agendada) em texto. Cada linha abre a conversa na página de HTML.
+- **Falta para publicar:** conversa, responder, reunião e novo e-mail (esperam `CaixaDeEntrada`, `Conversa`, `CampoDeEmails` e `CampoDeHorario` no DS; `ADMIN_REACT.md` 7.1).
+- **Testes:** `npm test` 41 ok; conformidade 0; `tests/navegador/paginas.cjs` 134 verificações (17 do Contato) em 1280 e 390 px, tudo passou, axe sem violações; capturas em 390, 768, 1024 e 1280 px.
 
 ## 2026-11-27 · Área restrita em React: Lançamento, Configurações e Comunicados publicadas (D-051, D-054)
 

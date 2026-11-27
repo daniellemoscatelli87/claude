@@ -5,8 +5,8 @@
 // - CardComCabecalho "Parceiros": a seleção no subtítulo e "Escrever comunicado" na ação do cabeçalho; a primeira linha
 //   seleciona todos da lista (Checkbox com o estado "alguns"); cada parceiro é uma LinhaDeLista (rótulo) com Checkbox e
 //   Avatar, selecionada no rosa do meio; quem não recebe comunicados aparece desligado, com ChipDeEstado;
-// - CardComCabecalho "Enviados": LinhaDeLista com "Ver e-mail" (Button) que abre o SidePanel com o e-mail enviado;
-// - PainelDeEmail (SidePanel) para escrever; PerguntaDeConfirmacao (AlertDialog) antes de enviar; Toaster no fim.
+// - CardComCabecalho "Enviados": LinhaDeLista com "Ver e-mail" (Button) que abre o Dialog com o e-mail enviado;
+// - JanelaDeEmail (Dialog) para escrever; PerguntaDeConfirmacao (AlertDialog) antes de enviar; Toaster no fim.
 import * as React from "react";
 import { toast } from "sonner";
 import { CircleAlert, Eye, Megaphone, Send, Users } from "lucide-react";
@@ -15,18 +15,18 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChipDeEstado } from "@/components/ui/chip-de-estado";
-import { Input } from "@/components/ui/input";
+import { CampoDeBusca } from "@/components/ui/campo-de-busca";
 import { Label } from "@/components/ui/label";
 import { LinhaDeLista } from "@/components/ui/linha-de-lista";
 import { CabecalhoDaPagina } from "@/components/ui/painel-cabecalho";
 import { CardComCabecalho } from "@/components/ui/painel-dados";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { SidePanel, SidePanelBody, SidePanelContent, SidePanelHeader } from "@/components/ui/side-panel";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { registrar, sb } from "@/lib/supabase";
 import { iniciais } from "@/lib/formatar";
 import { chamarFuncao, dataHora, Mensagem, PreviaDoEmail, usePerguntaDeConfirmacao, Vazio, type Aviso } from "./comum";
-import { PainelDeEmail, type CamposDoEmail } from "./email";
+import { JANELA_GRANDE, JanelaDeEmail, type CamposDoEmail } from "./email";
 
 export type Parceiro = {
   id: string; nome: string | null; email: string | null; principal_especializacao: string | null; areas_experiencia: string[] | null; segmentos: string[] | null;
@@ -94,15 +94,18 @@ function VerEnviado({ c, lista, mudar }: { c: Comunicado | null; lista: Parceiro
   }, [c]);
   const itens: [string, string][] = c ? [["Para", paraTexto(c.destinatarios, lista, 1000)], ["Enviado em", dataHora(c.created_at)], ["Assunto", c.assunto], ["Título", c.titulo], ...(c.falhas ? [["Não enviados", String(c.falhas)] as [string, string]] : [])] : [];
   return (
-    <SidePanel open={!!c} onOpenChange={mudar}>
-      <SidePanelContent width="lg" closeLabel="Fechar">
-        <SidePanelHeader title="Comunicado enviado" description={c?.assunto} />
-        <SidePanelBody>
+    <Dialog open={!!c} onOpenChange={mudar}>
+      <DialogContent className={JANELA_GRANDE}>
+        <DialogHeader>
+          <DialogTitle>Comunicado enviado</DialogTitle>
+          <DialogDescription>{c?.assunto}</DialogDescription>
+        </DialogHeader>
+        <div>
           <dl className="grid gap-3 py-2 sm:grid-cols-[auto_minmax(0,1fr)] sm:gap-x-6">
             {itens.map(([r, v]) => (
               <React.Fragment key={r}>
-                <dt className="text-sm font-semibold text-foreground">{r}</dt>
-                <dd className="-mt-2 text-sm text-foreground [overflow-wrap:anywhere] sm:mt-0">{v}</dd>
+                <dt className="text-body-sm font-semibold text-foreground">{r}</dt>
+                <dd className="-mt-2 text-body-sm text-foreground [overflow-wrap:anywhere] sm:mt-0">{v}</dd>
               </React.Fragment>
             ))}
           </dl>
@@ -110,9 +113,9 @@ function VerEnviado({ c, lista, mudar }: { c: Comunicado | null; lista: Parceiro
             {html ? <PreviaDoEmail html={html} titulo="E-mail enviado" /> : !aviso && <Skeleton aria-busy="true" aria-label="Carregando o e-mail" className="h-128 rounded-md" />}
             <Mensagem aviso={aviso} className="empty:hidden" />
           </div>
-        </SidePanelBody>
-      </SidePanelContent>
-    </SidePanel>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -187,7 +190,7 @@ export function Comunicados() {
       <section aria-label="Filtros" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div className="grid min-w-0 gap-2">
           <Label htmlFor="cm-busca">Buscar</Label>
-          <Input id="cm-busca" type="search" placeholder="Nome, e-mail ou especialização" value={filtros.busca} onChange={(e) => mudarFiltro("busca")(e.target.value)} />
+          <CampoDeBusca id="cm-busca" rotulo="Buscar" placeholder="Nome, e-mail ou especialização" valor={filtros.busca} onValorChange={mudarFiltro("busca")} resultados={filtros.busca ? visiveis.length : undefined} />
         </div>
         <Filtro id="cm-area" rotulo="Cargo / área de atuação" todos="Todas" valores={opcoes(todos.flatMap((r) => r.areas_experiencia || []))} valor={filtros.area} mudar={mudarFiltro("area")} />
         <Filtro id="cm-segmento" rotulo="Segmento" todos="Todos" valores={opcoes(todos.flatMap((r) => r.segmentos || []))} valor={filtros.segmento} mudar={mudarFiltro("segmento")} />
@@ -240,7 +243,7 @@ export function Comunicados() {
               })}
             </ul>
           ) : (
-            <Vazio className="px-5 sm:px-6">{todos.length ? "Nenhum parceiro com esses filtros." : "Ainda não há parceiros cadastrados."}</Vazio>
+            <Vazio className="px-5 sm:px-6" icone={<Users />}>{todos.length ? "Nenhum parceiro com esses filtros." : "Ainda não há parceiros cadastrados."}</Vazio>
           )}
         </CardComCabecalho>
       )}
@@ -262,8 +265,8 @@ export function Comunicados() {
                       </Button>
                     }
                   >
-                    <span className="mt-0.5 block text-sm text-foreground [overflow-wrap:anywhere]"><span className="font-semibold">Para: </span>{paraTexto(c.destinatarios, todos, 3)}</span>
-                    <span className="mt-0.5 block text-sm text-muted-foreground tabular-nums">
+                    <span className="mt-0.5 block text-body-sm text-foreground [overflow-wrap:anywhere]"><span className="font-semibold">Para: </span>{paraTexto(c.destinatarios, todos, 3)}</span>
+                    <span className="mt-0.5 block text-body-sm text-muted-foreground tabular-nums">
                       {dataHora(c.created_at) + " · " + plural(c.enviados, "enviado", "enviados") + (c.falhas ? " · " + plural(c.falhas, "não enviado", "não enviados") : "")}
                     </span>
                   </LinhaDeLista>
@@ -271,12 +274,12 @@ export function Comunicados() {
               ))}
             </ul>
           ) : (
-            <Vazio className="px-5 sm:px-6">{erroHistorico ? "Não foi possível carregar o histórico." : "Nenhum comunicado enviado ainda."}</Vazio>
+            <Vazio className="px-5 sm:px-6" icone={<Megaphone />}>{erroHistorico ? "Não foi possível carregar o histórico." : "Nenhum comunicado enviado ainda."}</Vazio>
           )}
         </CardComCabecalho>
       )}
 
-      <PainelDeEmail
+      <JanelaDeEmail
         aberto={aberto} mudar={setAberto} titulo="Escrever comunicado"
         descricao={"Vai para " + plural(sel.size, "parceiro selecionado.", "parceiros selecionados.")}
         valores={email} aoMudar={setEmail} exemplos={EXEMPLOS}

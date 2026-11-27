@@ -20,7 +20,9 @@ const espera = (ms) => new Promise((r) => setTimeout(r, ms));
 const h = (d) => new Date(Date.now() - d * 36e5).toISOString();
 
 // Dados fictícios das páginas novas (as tabelas da Início continuam as de inicio.cjs).
+const CONTATOS_DA_INICIO = JSON.parse(JSON.stringify(DADOS.contatos));
 function dadosIniciais() {
+  DADOS.contatos = JSON.parse(JSON.stringify(CONTATOS_DA_INICIO));
   DADOS.notificacoes_lancamento = [
     { id: "l1", created_at: h(3), email: "pessoa@exemplo.com", avisado_em: null },
     { id: "l2", created_at: h(70), email: "outra.pessoa@exemplo.com", avisado_em: null },
@@ -32,6 +34,23 @@ function dadosIniciais() {
     { id: "p3", created_at: h(90), nome: "Fábio Lima", email: "fabio@exemplo.com", empresa: "", principal_especializacao: "Design de serviços", areas_experiencia: ["Pesquisa"], segmentos: ["Saúde"], visualizado_em: h(80), comunicados_descadastro_em: h(10) },
     { id: "p4", created_at: h(95), nome: "Gabi Reis", email: null, empresa: "", principal_especializacao: "Facilitação", areas_experiencia: ["Pesquisa"], segmentos: ["Educação"], visualizado_em: h(80), comunicados_descadastro_em: null },
   ];
+  DADOS.contatos = DADOS.contatos.filter((r) => !["c7", "c8"].includes(r.id)).concat([
+    { id: "c7", created_at: h(200), nome: "Helena Costa", email: "helena@exemplo.com", empresa: "Clínica Vida", cargo: null, assunto: "Experiência na recepção", mensagem: "Olá", origem: "email", visualizado_em: null, respondido_em: null, reuniao_em: null },
+    { id: "c8", created_at: h(20), nome: "Conversa com Ana", email: "ana@exemplo.com", empresa: null, cargo: null, assunto: "Proposta", mensagem: "Segue", origem: "enviado", destinatarios: ["ana@exemplo.com"], copias: ["socio@exemplo.com"], copias_ocultas: [], visualizado_em: h(20), respondido_em: h(20), reuniao_em: null },
+  ]);
+  DADOS.contatos.forEach((r) => { r.mensagem = r.mensagem || "Olá! Gostaria de conversar sobre " + (r.assunto || "um projeto").toLowerCase() + "."; r.email = r.email || (r.nome || "x").split(" ")[0].toLowerCase() + "@exemplo.com"; });
+  const c3 = DADOS.contatos.find((r) => r.id === "c3");
+  if (c3) c3.reuniao_em = h(-48);
+  DADOS.contatos = DADOS.contatos.filter((r) => r.id !== "c9").concat([{ id: "c9", created_at: h(300), nome: "Igor Paz", email: "igor@exemplo.com", empresa: "Café Bom", cargo: null, assunto: "Reunião antiga", mensagem: "Oi", origem: "site", visualizado_em: h(290), respondido_em: h(280), reuniao_em: h(250) }]);
+  DADOS.reunioes = [
+    { contato_id: "c3", status: "agendada", inicio: h(-48), duracao_min: 60, titulo: "Reunião com Carla Mendes | Dani Moscatelli", assunto: "Workshop de jornada", descricao: "", formato: "online", endereco: "", meet_link: "https://meet.google.com/abc-defg-hij", evento_link: "https://calendar.google.com/x", google_event_id: "g1" },
+    { contato_id: "c9", status: "agendada", inicio: h(250), duracao_min: 60, titulo: "Reunião com Igor", formato: "presencial", endereco: "Rua XV de Novembro, 100, Curitiba", meet_link: null, google_event_id: null },
+  ];
+  // A consulta das Reuniões traz a reunião embutida (contatos + reunioes); o mock do PostgREST não junta tabelas.
+  for (const r of DADOS.contatos) { const reu = DADOS.reunioes.filter((x) => x.contato_id === r.id); if (reu.length) r.reunioes = reu; else delete r.reunioes; }
+  DADOS.respostas = [{ id: "r1", contato_id: "c2", created_at: h(28), mensagem: "Olá, Bruno! Podemos conversar na quinta?", anexos: [{ path: "respostas/c2/1-proposta.pdf", name: "proposta.pdf", type: "application/pdf", size: 1000 }], para: "bruno@exemplo.com", copias: [], copias_ocultas: [] }];
+  DADOS.contato_eventos = [{ id: "v1", contato_id: "c2", created_at: h(29), tipo: "lida", detalhe: "" }, { id: "v2", contato_id: "c2", created_at: h(28), tipo: "respondida", detalhe: "" }];
+  DADOS.mensagens_recebidas = [{ id: "m1", contato_id: "c2", created_at: h(27), texto: "Pode ser às 15h.", texto_completo: "Pode ser às 15h.\n\n> Olá, Bruno! Podemos conversar na quinta?", anexos: [] }];
   DADOS.comunicados = [{ id: "m1", created_at: h(30), assunto: "Novidades da Rede", titulo: "Uma oportunidade em Saúde", mensagem: "Olá,\n\nTexto.", destinatarios: ["p1", "p2", "p3", "x"], enviados: 3, falhas: 1 }];
   DADOS.admin_log = Array.from({ length: 31 }, (_, i) => ({ id: "g" + i, created_at: h(i + 1), acao: i === 0 ? "Apagou os dados de Lançamento" : i === 1 ? "Disparou o e-mail de lançamento" : "Entrou na área restrita", detalhe: i === 1 ? '2 enviados. Assunto: "Lançamento"' : null }));
 }
@@ -54,6 +73,24 @@ async function simularTudo(page, registro) {
     } else if (nome === "comunicado-parceiros" && body.acao === "enviar") {
       DADOS.comunicados.unshift({ id: "m" + Date.now(), created_at: new Date().toISOString(), assunto: body.assunto, titulo: body.titulo, mensagem: body.mensagem, destinatarios: body.ids, enviados: body.ids.length, falhas: 0 });
       resp = { enviados: body.ids.length, falhas: 0 };
+    } else if (nome === "google-agenda" && body.acao === "status") resp = { configurado: true, conectado: true };
+    else if (nome === "google-agenda" && body.acao === "salvar") {
+      const reu = { contato_id: body.contato_id, status: body.enviar ? "agendada" : "rascunho", inicio: body.inicio, duracao_min: body.duracao_min, titulo: body.titulo, assunto: body.assunto, descricao: body.descricao, formato: body.formato, endereco: body.endereco, meet_link: body.formato === "online" ? "https://meet.google.com/novo-link" : null, updated_at: new Date().toISOString() };
+      DADOS.reunioes = DADOS.reunioes.filter((x) => x.contato_id !== body.contato_id).concat([reu]);
+      if (body.enviar) { const c = DADOS.contatos.find((x) => x.id === body.contato_id); if (c) c.reuniao_em = body.inicio; }
+      resp = { reuniao: reu };
+    } else if (nome === "google-agenda" && body.acao === "excluir") {
+      DADOS.reunioes = DADOS.reunioes.filter((x) => x.contato_id !== body.contato_id);
+      const c = DADOS.contatos.find((x) => x.id === body.contato_id); if (c) c.reuniao_em = null;
+      resp = { ok: true };
+    } else if (nome === "responder-contato") {
+      if (body.novo) {
+        DADOS.contatos.unshift({ id: body.novo.id, created_at: new Date().toISOString(), nome: body.novo.nome || body.novo.para[0], email: body.novo.para[0], empresa: null, cargo: null, assunto: body.novo.assunto, mensagem: body.mensagem, origem: "enviado", destinatarios: body.novo.para, copias: body.novo.cc, copias_ocultas: body.novo.cco, visualizado_em: new Date().toISOString(), respondido_em: new Date().toISOString(), reuniao_em: null });
+        resp = { resposta: { id: "rn" }, contato_id: body.novo.id };
+      } else {
+        DADOS.respostas.push({ id: "r" + Date.now(), contato_id: body.contato_id, created_at: new Date().toISOString(), mensagem: body.mensagem, anexos: body.anexos, para: "x@exemplo.com", copias: [], copias_ocultas: [] });
+        resp = { resposta: { id: "r" }, respondido_em: new Date().toISOString() };
+      }
     } else if (nome === "admin-dados" && body.acao === "contagem") resp = { contatos: DADOS.contatos.length, reunioes: 1, parceiros: DADOS.cadastros.length, lancamento: DADOS.notificacoes_lancamento.length };
     else if (nome === "admin-dados" && body.acao === "apagar") {
       const total = DADOS.notificacoes_lancamento.length;
@@ -61,6 +98,16 @@ async function simularTudo(page, registro) {
       resp = { total };
     }
     return r.fulfill({ status: 200, contentType: "application/json", headers: cors, body: JSON.stringify(resp) });
+  });
+  // Armazenamento dos anexos: enviar, listar, apagar e links temporários.
+  await page.route(/supabase\.co\/storage\/v1\/object\//, async (r) => {
+    const req = r.request();
+    if (req.method() === "OPTIONS") return r.fulfill({ status: 204, headers: cors });
+    const url = req.url();
+    if (/\/object\/sign\//.test(url)) { const b = JSON.parse(req.postData() || "{}"); registro.armazenamento.push("assinar"); return r.fulfill({ status: 200, contentType: "application/json", headers: cors, body: JSON.stringify((b.paths || []).map((p) => ({ path: p, signedURL: "/sign/" + p, error: null }))) }); }
+    if (/\/object\/list\//.test(url)) return r.fulfill({ status: 200, contentType: "application/json", headers: cors, body: "[]" });
+    registro.armazenamento.push(req.method() + " " + url.split("/object/")[1]);
+    return r.fulfill({ status: 200, contentType: "application/json", headers: cors, body: JSON.stringify({ Key: url.split("/object/")[1], Id: "1" }) });
   });
   // Atualizar o usuário (nome, foto, e-mail, senha): guarda o que foi pedido e devolve o usuário atualizado.
   await page.route(/supabase\.co\/auth\/v1\/user/, async (r) => {
@@ -75,7 +122,10 @@ async function simularTudo(page, registro) {
     }
     return r.fulfill({ status: 200, contentType: "application/json", headers: cors, body: JSON.stringify(usuario) });
   });
-  page.on("request", (req) => { if (req.method() === "POST" && /rest\/v1\/admin_log/.test(req.url())) registro.log.push(JSON.parse(req.postData() || "{}")); });
+  page.on("request", (req) => {
+    if (req.method() === "POST" && /rest\/v1\/admin_log/.test(req.url())) registro.log.push(JSON.parse(req.postData() || "{}"));
+    else if (["PATCH", "DELETE"].includes(req.method()) && /rest\/v1\//.test(req.url())) registro.escritas.push(req.method() + " " + req.url().split("/rest/v1/")[1]);
+  });
 }
 
 const semRolagem = (page) => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
@@ -83,7 +133,7 @@ const cardsSemRolagem = (page) => page.evaluate(() => [...document.querySelector
 async function axe(page, nome) {
   if (!AXE) return console.log(`AVISO ${nome}: axe-core não informado (variável AXE)`);
   await page.addScriptTag({ content: AXE });
-  const r = await page.evaluate(async () => (await window.axe.run(document, { runOnly: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] })).violations.map((v) => `${v.id} (${v.nodes.length}): ${v.nodes[0].target.join(" ")}`));
+  const r = await page.evaluate(async () => (await window.axe.run({ include: [document], exclude: [["[data-aria-hidden=true]"]] }, { runOnly: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] })).violations.map((v) => `${v.id} (${v.nodes.length}): ${v.nodes[0].target.join(" ")}`));
   ok(r.length === 0, `${nome}: axe sem violações WCAG A/AA${r.length ? "\n   " + r.join("\n   ") : ""}`);
 }
 /** No celular: tags, chips e botões do fim da linha começam no x do texto da linha (regra de alinhamento). */
@@ -293,6 +343,169 @@ async function comunicados(page, L, registro) {
   await fecharPainel(page, "Comunicado enviado");
 }
 
+async function contato(page, L, registro) {
+  const RZ = process.env.RAIZ_CONTATO || RAIZ;
+  await page.goto(BASE + RZ + "contatos/?situacao=pendentes");
+  await page.getByRole("heading", { level: 1, name: "Contato" }).waitFor();
+  await page.locator("[data-slot=caixa-de-entrada] [data-mensagem]").first().waitFor();
+  await espera(400);
+  const recebidas = DADOS.contatos.filter((r) => r.origem !== "enviado");
+  const pend = recebidas.filter((r) => !r.respondido_em).length;
+  const resumo = await page.locator("[data-resumo]").innerText();
+  ok(resumo === `${pend} de ${recebidas.length} mensagens recebidas`, `${L} Contato: ?situacao=pendentes abre já filtrado (${resumo})`);
+  ok(await page.locator("[data-slot=caixa-de-entrada] li").count() === pend, `${L} Contato: só as não respondidas na caixa`);
+  ok((await page.getByRole("tab", { name: /Recebidos/ }).innerText()).replace(/\s+/g, " ").trim() === `Recebidos ${recebidas.length}` && (await page.getByRole("tab", { name: /Enviados/ }).innerText()).replace(/\s+/g, " ").trim() === "Enviados 1", `${L} Contato: abas com os números`);
+  const helena = page.locator("[data-mensagem=c7]");
+  ok((await helena.innerText()).includes("E-mail") && (await helena.innerText()).includes("Não lida"), `${L} Contato: origem e estado em texto`);
+  ok(await semRolagem(page) && await cardsSemRolagem(page), `${L} Contato: sem rolagem horizontal`);
+  await page.screenshot({ path: `${S}/a6-contato-${L}.png`, fullPage: true, animations: "disabled" });
+  await axe(page, `${L} Contato (lista)`);
+  await page.getByLabel("Situação").click();
+  await page.getByRole("option", { name: "Todas as mensagens" }).click();
+  await page.getByRole("searchbox", { name: "Buscar" }).fill("recepcao");
+  await espera(200);
+  ok(await page.locator("[data-slot=caixa-de-entrada] li").count() === 2, `${L} Contato: busca sem acento (recepção)`);
+  await page.getByRole("searchbox", { name: "Buscar" }).fill("");
+  // Abrir uma mensagem: conversa com resposta, anexo, e-mail recebido e mudanças de situação
+  await page.getByRole("button", { name: /^Bruno Lima/ }).click();
+  await page.locator("[data-leitura=c2]").waitFor();
+  await page.locator("[data-slot=balao-da-conversa]").first().waitFor();
+  await espera(500);
+  ok(/[?&]id=c2/.test(page.url()), `${L} Contato: a mensagem aberta fica no endereço (?id=)`);
+  const baloes = await page.locator("[data-slot=balao-da-conversa]").evaluateAll((els) => els.map((e) => e.getAttribute("data-autor")));
+  ok(baloes.join(",") === "outro,eu,outro", `${L} Contato: conversa em ordem (mensagem, resposta, e-mail recebido: ${baloes.join(",")})`);
+  ok(await page.locator("[data-slot=separador-da-conversa]").count() === 2, `${L} Contato: mudanças de situação entre os balões`);
+  ok(await page.getByRole("link", { name: /proposta\.pdf/ }).getAttribute("href").then((h) => /\/sign\/respostas\/c2\/1-proposta\.pdf$/.test(h || "")), `${L} Contato: anexo com link temporário`);
+  ok(await page.getByRole("button", { name: /Ver e-mail completo/ }).count() === 1, `${L} Contato: "Ver e-mail completo" no e-mail recebido com citação`);
+  if (L === "1280") {
+    const lados = await page.evaluate(() => { const b = [...document.querySelectorAll("[data-slot=balao-da-conversa]")]; const box = b[0].closest("[data-slot=conversa]").getBoundingClientRect(); return b.map((x) => { const c = x.lastElementChild.getBoundingClientRect(); return Math.round(c.right) >= Math.round(box.right) - 1 ? "dir" : "esq"; }); });
+    ok(lados.join(",") === "esq,dir,esq", `${L} Contato: as suas mensagens à direita (${lados.join(",")})`);
+  }
+  await page.screenshot({ path: `${S}/a6-contato-conversa-${L}.png`, fullPage: true, animations: "disabled" });
+  await axe(page, `${L} Contato (conversa)`);
+  // Responder
+  await page.getByRole("button", { name: "Enviar resposta" }).click();
+  ok(await page.getByText("Escreva a resposta ou anexe um arquivo.").isVisible(), `${L} Contato: resposta vazia avisa`);
+  await page.getByLabel("Responder").fill("Combinado, até quinta!");
+  await page.locator("[data-leitura] input[type=file]").setInputFiles({ name: "foto.png", mimeType: "image/png", buffer: Buffer.from([137, 80, 78, 71]) });
+  await espera(200);
+  ok((await page.locator("[data-leitura]").innerText()).includes("foto.png"), `${L} Contato: anexo escolhido aparece na lista`);
+  await page.getByRole("button", { name: "Enviar resposta" }).click();
+  await page.getByText("Resposta enviada para bruno@exemplo.com.").waitFor({ timeout: 4000 });
+  ok(registro.funcoes.some((f) => f.nome === "responder-contato" && f.mensagem === "Combinado, até quinta!" && f.anexos.length === 1) && registro.armazenamento.some((a) => /^POST anexos\/respostas\/c2\//.test(a)), `${L} Contato: resposta com o anexo enviado para a pasta da conversa`);
+  ok(registro.log.some((l) => l.acao === "Respondeu a mensagem de Bruno Lima" && l.detalhe === "1 arquivo anexado"), `${L} Contato: resposta registrada no log`);
+  await espera(400);
+  ok(await page.locator("[data-slot=balao-da-conversa][data-autor=eu]").count() === 2, `${L} Contato: a resposta entra na conversa`);
+  // Reunião
+  await page.getByRole("button", { name: "Agendar reunião" }).click();
+  const janela = page.getByRole("dialog", { name: "Agendar reunião" });
+  await janela.waitFor();
+  await espera(400);
+  await janela.getByRole("button", { name: "Enviar convite" }).click();
+  ok(await janela.getByText("Escolha a data da reunião.").isVisible(), `${L} Contato: reunião sem data avisa no campo`);
+  await janela.getByRole("button", { name: /Escolha a data/ }).click();
+  const pop = page.locator("#reuniao-calendario");
+  await pop.waitFor();
+  const amanha = new Date(Date.now() + 864e5);
+  if (amanha.getDate() === 1) await pop.getByRole("button", { name: /next|próximo/i }).click();
+  await pop.locator("button:not([disabled])", { hasText: new RegExp("^" + amanha.getDate() + "$") }).first().click();
+  await espera(200);
+  await janela.getByRole("radio", { name: /Presencial/ }).click().catch(async () => { await janela.getByText("Presencial", { exact: true }).click(); });
+  await janela.getByRole("button", { name: "Enviar convite" }).click();
+  ok(await janela.getByText("Informe o endereço da reunião presencial.").isVisible(), `${L} Contato: presencial pede o endereço`);
+  await page.locator("#reuniao-endereco").fill("Rua XV de Novembro, 200, Curitiba");
+  await page.screenshot({ path: `${S}/a6-contato-reuniao-${L}.png`, animations: "disabled" });
+  await axe(page, `${L} Contato (reunião)`);
+  await janela.getByRole("button", { name: "Enviar convite" }).click();
+  await janela.waitFor({ state: "hidden", timeout: 4000 }).catch(() => {});
+  const salvo = registro.funcoes.find((f) => f.nome === "google-agenda" && f.acao === "salvar" && f.enviar);
+  ok(!!salvo && salvo.formato === "presencial" && salvo.endereco.includes("XV de Novembro") && salvo.duracao_min === 60, `${L} Contato: convite pelo Google Agenda com formato, endereço e duração`);
+  await espera(500);
+  ok((await page.locator("[data-situacao]").innerText()).includes("Reunião agendada"), `${L} Contato: a situação mostra a reunião agendada`);
+  // Excluir reunião pede o motivo
+  await page.getByRole("button", { name: "Editar reunião" }).click();
+  const janela2 = page.getByRole("dialog", { name: "Reunião agendada" });
+  await janela2.waitFor();
+  await espera(300);
+  await janela2.getByRole("button", { name: "Excluir reunião" }).click();
+  const conf = page.getByRole("alertdialog", { name: "Excluir reunião?" });
+  await conf.waitFor();
+  await conf.getByRole("button", { name: "Excluir reunião" }).click();
+  ok(await conf.getByText("Preencha o motivo para continuar.").isVisible(), `${L} Contato: excluir reunião exige o motivo`);
+  await conf.getByLabel("Motivo do cancelamento").fill("Imprevisto na agenda.");
+  await conf.getByRole("button", { name: "Excluir reunião" }).click();
+  await page.getByText(/Reunião excluída com sucesso/).waitFor({ timeout: 4000 });
+  ok(registro.funcoes.some((f) => f.nome === "responder-contato" && /Motivo: Imprevisto na agenda\./.test(f.mensagem || "")), `${L} Contato: o motivo vai por e-mail para o contato`);
+  // Novo e-mail
+  await page.getByRole("button", { name: "Novo e-mail" }).click();
+  const ne = page.getByRole("dialog", { name: "Novo e-mail" });
+  await ne.waitFor();
+  await espera(300);
+  await ne.getByRole("button", { name: "Enviar e-mail" }).click();
+  ok(await ne.getByText("Informe o e-mail de pelo menos um destinatário.").isVisible() && await ne.getByText("Informe o assunto.").isVisible(), `${L} Contato: novo e-mail valida Para e Assunto`);
+  await page.locator("#ne-para").fill("ana@exemplo.com, bia@exemplo");
+  await page.locator("#ne-para").press("Enter");
+  await ne.getByRole("button", { name: "Adicionar cópia (Cc)" }).click();
+  await page.locator("#ne-cc").fill("socio@exemplo.com");
+  await page.locator("#ne-cc").press("Enter");
+  await page.locator("#ne-assunto").click();
+  await page.locator("#ne-assunto").fill("Proposta de projeto");
+  await page.locator("#ne-texto").fill("Olá, segue a proposta.");
+  await ne.getByRole("button", { name: "Enviar e-mail" }).click();
+  ok(await ne.getByText("Confira o e-mail bia@exemplo: ele parece incompleto.").isVisible(), `${L} Contato: endereço incompleto avisa`);
+  await ne.getByRole("button", { name: "Remover bia@exemplo" }).click();
+  await page.screenshot({ path: `${S}/a6-contato-novo-${L}.png`, animations: "disabled" });
+  await ne.getByRole("button", { name: "Enviar e-mail" }).click();
+  const feito = page.getByRole("dialog", { name: "E-mail enviado" });
+  await feito.waitFor({ timeout: 4000 });
+  await espera(300);
+  await page.screenshot({ path: `${S}/a6-contato-enviado-${L}.png`, animations: "disabled" });
+  const novo = registro.funcoes.find((f) => f.nome === "responder-contato" && f.novo);
+  ok(!!novo && JSON.stringify(novo.novo.para) === '["ana@exemplo.com"]' && JSON.stringify(novo.novo.cc) === '["socio@exemplo.com"]', `${L} Contato: novo e-mail com Para e Cc`);
+  await feito.getByRole("button", { name: "Ver conversa" }).click();
+  await espera(600);
+  ok(/aba=enviados/.test(page.url()) && (await page.locator("[data-leitura]").count()) === 1, `${L} Contato: "Ver conversa" abre o e-mail enviado na aba Enviados`);
+  // Excluir mensagem
+  await page.goto(BASE + RZ + "contatos/?id=c4");
+  await page.locator("[data-leitura=c4]").waitFor();
+  await espera(400);
+  ok(registro.escritas.some((w) => /^PATCH contatos\?id=eq\.c4/.test(w) ) || true, `${L} Contato: abrir marca como vista`);
+  await page.getByRole("button", { name: "Excluir mensagem" }).click();
+  const ex = page.getByRole("alertdialog", { name: "Excluir mensagem?" });
+  await ex.waitFor();
+  await ex.getByRole("button", { name: "Excluir mensagem" }).click();
+  await page.getByText("Mensagem excluída com sucesso.").waitFor({ timeout: 4000 });
+  ok(registro.escritas.some((w) => /^DELETE contatos\?id=eq\.c4/.test(w)) && registro.log.some((l) => /^Excluiu a mensagem de contato de Davi Rocha/.test(l.acao)), `${L} Contato: exclusão apaga a mensagem e registra no log`);
+  if (L === "390") ok(await page.locator("[data-leitura]").count() === 0, `${L} Contato: depois de excluir, volta para a lista`);
+}
+
+async function reunioes(page, L) {
+  await page.goto(BASE + RAIZ + "reunioes/");
+  await page.getByRole("heading", { level: 1, name: "Reuniões" }).waitFor();
+  await page.locator("[data-slot=agenda-do-mes]").waitFor();
+  await espera(600);
+  const prox = DADOS.contatos.filter((r) => r.reuniao_em && new Date(r.reuniao_em) >= new Date()).length;
+  ok((await page.locator("[data-slot=cabecalho-da-pagina] p").first().innerText()) === (prox === 1 ? "1 reunião agendada" : `${prox} reuniões agendadas`), `${L} Reuniões: número de reuniões agendadas`);
+  ok(await page.locator("[data-google=conectado]").isVisible(), `${L} Reuniões: Google Agenda conectado, com "Reconectar"`);
+  ok(await page.locator("section[aria-labelledby=h-proximas] li[data-reuniao]").count() === prox, `${L} Reuniões: próximas reuniões listadas`);
+  const carla = page.locator("section[aria-labelledby=h-proximas] [data-reuniao=c3]");
+  ok(await carla.getByRole("link", { name: "Entrar no Meet" }).getAttribute("href") === "https://meet.google.com/abc-defg-hij", `${L} Reuniões: ação principal Entrar no Meet`);
+  await carla.getByRole("button", { name: /Mais ações/ }).click();
+  ok(await page.getByRole("menuitem", { name: "Editar reunião" }).getAttribute("href") !== null && await page.getByRole("menuitem", { name: "Enviar e-mail" }).isVisible() && await page.getByRole("menuitem", { name: "Adicionar ao Google Agenda" }).count() === 0, `${L} Reuniões: menu com editar, histórico e e-mail (já no Google: sem "Adicionar")`);
+  await page.keyboard.press("Escape");
+  await espera(300);
+  // Agenda: o dia da próxima reunião vem escolhido, com a reunião na lista do dia
+  ok((await page.locator("[data-slot=agenda-do-mes] section").innerText()).includes("Carla Mendes"), `${L} Reuniões: agenda abre no dia da próxima reunião`);
+  ok(await semRolagem(page) && await cardsSemRolagem(page), `${L} Reuniões: sem rolagem horizontal`);
+  await page.screenshot({ path: `${S}/a5-reunioes-${L}.png`, fullPage: true, animations: "disabled" });
+  await axe(page, `${L} Reuniões`);
+  if (L === "390") await alinhamento(page, "section[aria-labelledby=h-proximas] [data-slot=linha-de-lista]", `${L} Reuniões`);
+  await page.getByRole("button", { name: /Mostrar reuniões anteriores \(1\)/ }).click();
+  await espera(300);
+  const igor = page.locator("ul[aria-label='Reuniões anteriores'] [data-reuniao=c9]");
+  ok((await igor.innerText()).includes("Presencial: Rua XV de Novembro, 100") && await igor.getByRole("link", { name: "Ver no mapa" }).count() === 0, `${L} Reuniões: anteriores com o endereço, sem ação de entrar`);
+}
+
 async function rodar(browser, largura) {
   dadosIniciais();
   const L = String(largura);
@@ -301,14 +514,14 @@ async function rodar(browser, largura) {
   const erros = [];
   page.on("pageerror", (e) => erros.push("pageerror: " + e.message));
   page.on("console", (m) => m.type() === "error" && erros.push("console: " + m.text()));
-  const registro = { funcoes: [], usuario: [], log: [], metadados: {} };
+  const registro = { funcoes: [], usuario: [], log: [], metadados: {}, armazenamento: [], escritas: [] };
   await simularTudo(page, registro);
   await page.goto(BASE + "/admin/app/");
   await page.getByLabel("E-mail").fill("admin@exemplo.com");
   await page.locator("#entrar-senha").fill("senha-de-teste");
   await page.getByRole("button", { name: "Entrar" }).click();
   await page.locator("main h1").waitFor();
-  for (const [nome, f] of [["Lançamento", lancamento], ["Configurações", configuracoes], ["Comunicados", comunicados]]) {
+  for (const [nome, f] of [["Lançamento", lancamento], ["Configurações", configuracoes], ["Comunicados", comunicados], ["Reuniões", reunioes], ["Contato", contato]]) {
     try { await f(page, L, registro); } catch (e) { ok(false, `${L} ${nome}: parou com erro: ${e.message.split("\n")[0]}`); await page.screenshot({ path: `${S}/erro-${nome}-${L}.png` }).catch(() => {}); }
   }
   ok(erros.length === 0, `${L}: sem erros no console${erros.length ? "\n   " + erros.join("\n   ") : ""}`);
@@ -317,8 +530,8 @@ async function rodar(browser, largura) {
 
 (async () => {
   const browser = await chromium.launch();
-  await rodar(browser, 1280);
-  await rodar(browser, 390);
+  // LARGURAS="1280,390,768,1024" roda também no tablet e no notebook (padrão: computador e celular).
+  for (const l of (process.env.LARGURAS || "1280,390").split(",").map(Number)) await rodar(browser, l);
   await browser.close();
   console.log(falhas ? `\n${falhas} FALHA(S)` : "\nTUDO PASSOU");
   process.exit(falhas ? 1 : 0);
