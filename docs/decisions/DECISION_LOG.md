@@ -539,6 +539,12 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Decisão:** nenhum trabalho novo no app até ela retomá-lo. O app segue no ar (Cloudflare Pages, com senha) e recebe a atualização diária do DS.
 - **Ao retomar:** avisar a dona do produto da adequação pendente, a atualização do Next.js por causa de uma falha de segurança conhecida. O aviso está no `CLAUDE.md`, para qualquer sessão ver.
 
+## D-049 · 27/11/2026 · Consumo obrigatório do design system por qualquer conversa e agente
+
+- **Origem:** dona do produto ("quem está sendo o cérebro disso sou eu… gasta token à toa fazendo algo diferente do que já foi desenhado no DS").
+- **Decisão:** regra fixa no `CLAUDE.md`: consultar o catálogo do DS antes de criar qualquer elemento visual e usar o componente ou template existente; se não existir, parar e perguntar; nada de valores ou componentes à mão; toda tarefa delegada leva a regra e o relatório diz qual componente cada peça usa; conferir antes de mostrar capturas.
+- **Próximos passos:** catálogo gerado automaticamente nos dois DS e sincronizado com os projetos; conferência automática.
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
