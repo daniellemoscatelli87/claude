@@ -29,6 +29,7 @@ Esta documentação é parte integrante do produto, não material de apoio desca
 | [`security/DADOS_PESSOAIS.md`](security/DADOS_PESSOAIS.md) | Dados pessoais: estado atual do CPF, necessidade e proposta de proteção | Criado em 21/10/2026 |
 | [`legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md`](legal/REQUISITOS_TERMOS_E_PRIVACIDADE.md) | Requisitos dos Termos de Uso e da Política de Privacidade | Criado em 21/10/2026 |
 | [`design-system/COMPONENTES.md`](design-system/COMPONENTES.md) | Componentes do produto e origem no site | Criado em 21/10/2026 |
+| [`engineering/SITE_REACT.md`](engineering/SITE_REACT.md) | Site: páginas públicas refeitas em React com os componentes do DS (arquitetura, HTML pronto no build, corte página a página, lotes S0 a S8, lacunas do DS) | Criado em 27/11/2026 (D-053) |
 | [`engineering/ADMIN_REACT.md`](engineering/ADMIN_REACT.md) | Site: área restrita refeita em React com os componentes do DS (arquitetura, corte página a página, conformidade, ordem das páginas) | Criado em 27/11/2026 (D-051) |
 | [`engineering/FIRST_INCREMENT_PROMPT.md`](engineering/FIRST_INCREMENT_PROMPT.md) | Escopo aprovado do primeiro incremento (Cortes 1 e 2) | `02-prompt-claude-code-primeiro-incremento.md` |
 | [`research/VALIDATION_LOG.md`](research/VALIDATION_LOG.md) | Aprendizados de validação de mercado e com usuários | Criado na organização |

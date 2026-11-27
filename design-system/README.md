@@ -17,6 +17,8 @@ A fonte (Plus Jakarta Sans) já vem do Google Fonts em cada página, por isso o 
 
 O app `apps/area-restrita/` (Vite, React 18.3 e Tailwind 4.1.12, as versões do DS) recebe os quatro arquivos de estilo do DS e **a pasta `src/app/components/ui/` inteira** (`apps/area-restrita/src/components/ui/`): componente novo no DS chega sozinho, e o que sair do DS é apagado ali. `npm run conformidade` (no app) confere que o código do app não tem nada fora do DS (base em zero). Plano e regras em `docs/engineering/ADMIN_REACT.md`.
 
+O app `apps/site/` (site público em React, D-053) recebe os mesmos arquivos de estilo e a mesma pasta `ui` inteira (`apps/site/src/components/ui/`), com a mesma conferência (`npm run conformidade`, base em zero). As fontes entram por `<link>` na cabeça de cada página, com o endereço lido do `fonts.css` sincronizado. Plano e regras em `docs/engineering/SITE_REACT.md`.
+
 ## Como o app Experience Intelligence usa
 
 O app (Next.js) usa Tailwind v4 com os arquivos do DS, como mandam as páginas Integração e Desenvolvimento do DS:

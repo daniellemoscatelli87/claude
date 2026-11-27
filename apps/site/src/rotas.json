@@ -1,0 +1,72 @@
+{
+  "_leia": "Páginas do site público e o corte página a página para React com o Design System (D-053). Cada página tem o endereço de hoje (caminho), o arquivo que o build grava no dist do site (saida), o HTML que a serve hoje (origem) e o lote da migração. Em 'react', cada página já feita em React tem um estado: 'previa' = servida só em /site/previa/<caminho>, sem indexação; 'publicada' = também substitui, só no dist, o HTML de hoje no mesmo endereço. Página fora de 'react' continua sendo a de HTML. Cabeça (título, descrição, canonical, compartilhamento) fica em 'cabeca' e precisa ser igual à da página de HTML (teste tests/cabeca.test.ts).",
+  "paginas": [
+    { "id": "inicio", "caminho": "/", "saida": "index.html", "origem": "index.html", "lote": "S3" },
+    { "id": "projeto-piloto", "caminho": "/projeto-piloto/", "saida": "projeto-piloto/index.html", "origem": "projeto-piloto/index.html", "lote": "S2" },
+    { "id": "rede-parceiros", "caminho": "/rede-parceiros/", "saida": "rede-parceiros/index.html", "origem": "rede-parceiros/index.html", "lote": "S4" },
+    { "id": "rede-parceiros-cadastro", "caminho": "/rede-parceiros/cadastro/", "saida": "rede-parceiros/cadastro/index.html", "origem": "rede-parceiros/cadastro/index.html", "lote": "S5" },
+    { "id": "galeria-autorizar", "caminho": "/rede-parceiros/galeria/autorizar/", "saida": "rede-parceiros/galeria/autorizar/index.html", "origem": "public/rede-parceiros/galeria/autorizar/index.html", "lote": "S5" },
+    { "id": "pesquisa-moda", "caminho": "/pesquisa/moda-curitiba/", "saida": "pesquisa/moda-curitiba/index.html", "origem": "pesquisa/moda-curitiba/index.html", "lote": "S6" },
+    {
+      "id": "privacidade",
+      "caminho": "/privacidade/",
+      "saida": "privacidade/index.html",
+      "origem": "public/privacidade/index.html",
+      "lote": "S7",
+      "cabeca": {
+        "titulo": "Política de Privacidade • Dani Moscatelli | Experience Design Studio",
+        "meta": [
+          ["name", "description", "Como Dani Moscatelli | Experience Design Studio trata os dados pessoais coletados no site danimoscatelli.com.br."],
+          ["property", "og:type", "website"],
+          ["property", "og:locale", "pt_BR"],
+          ["property", "og:site_name", "Dani Moscatelli | Experience Design Studio"],
+          ["property", "og:title", "Política de Privacidade • Dani Moscatelli | Experience Design Studio"],
+          ["property", "og:description", "Como Dani Moscatelli | Experience Design Studio trata os dados pessoais coletados no site danimoscatelli.com.br."],
+          ["property", "og:url", "https://www.danimoscatelli.com.br/privacidade/"],
+          ["property", "og:image", "https://www.danimoscatelli.com.br/compartilhar.png"],
+          ["property", "og:image:width", "1200"],
+          ["property", "og:image:height", "630"],
+          ["property", "og:image:alt", "Logo Dani Moscatelli | Experience Design Studio"],
+          ["name", "twitter:card", "summary_large_image"],
+          ["name", "twitter:title", "Política de Privacidade • Dani Moscatelli | Experience Design Studio"],
+          ["name", "twitter:description", "Como Dani Moscatelli | Experience Design Studio trata os dados pessoais coletados no site danimoscatelli.com.br."],
+          ["name", "twitter:image", "https://www.danimoscatelli.com.br/compartilhar.png"]
+        ],
+        "canonical": "https://www.danimoscatelli.com.br/privacidade/"
+      }
+    },
+    {
+      "id": "descadastro",
+      "caminho": "/comunicados/descadastro/",
+      "saida": "comunicados/descadastro/index.html",
+      "origem": "public/comunicados/descadastro/index.html",
+      "lote": "S7",
+      "cabeca": {
+        "titulo": "Deixar de receber comunicados | Dani Moscatelli",
+        "meta": [
+          ["name", "robots", "noindex,nofollow"],
+          ["name", "referrer", "no-referrer"]
+        ]
+      }
+    },
+    {
+      "id": "erro-404",
+      "caminho": null,
+      "saida": "404.html",
+      "origem": "public/404.html",
+      "lote": "S7",
+      "cabeca": {
+        "titulo": "Página não encontrada • Dani Moscatelli | Experience Design Studio",
+        "meta": [["name", "robots", "noindex"]]
+      }
+    },
+    { "id": "experience-intelligence", "caminho": "/experience-intelligence/", "saida": "experience-intelligence/index.html", "origem": "public/experience-intelligence/index.html", "lote": "S8" },
+    { "id": "experience-intelligence-2", "caminho": "/experience-intelligence-2/", "saida": "experience-intelligence-2/index.html", "origem": "public/experience-intelligence-2/index.html", "lote": "S8" },
+    { "id": "experience-intelligence-3", "caminho": "/experience-intelligence-3/", "saida": "experience-intelligence-3/index.html", "origem": "public/experience-intelligence-3/index.html", "lote": "S8" }
+  ],
+  "react": {
+    "privacidade": "previa",
+    "descadastro": "publicada",
+    "erro-404": "publicada"
+  }
+}

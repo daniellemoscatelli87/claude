@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && npm run build:area-restrita",
+    "build": "tsc -b && vite build && npm run build:area-restrita && npm run build:site",
     "lint": "oxlint",
     "preview": "vite preview",
-    "build:area-restrita": "npm --prefix apps/area-restrita ci && npm --prefix apps/area-restrita run build"
+    "build:area-restrita": "npm --prefix apps/area-restrita ci && npm --prefix apps/area-restrita run build",
+    "build:site": "npm --prefix apps/site ci && npm --prefix apps/site run build"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

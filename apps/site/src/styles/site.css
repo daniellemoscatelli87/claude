@@ -1,0 +1,5 @@
+/* Entrada de estilos do site em React (D-053): Tailwind v4 e os tokens do DS, sincronizados.
+   As fontes do DS (fonts.css) vão por <link> na cabeça de cada página (scripts/montar-saida.mjs lê o endereço do
+   próprio fonts.css), como nas páginas de HTML, para não atrasar a primeira pintura com um @import encadeado. */
+@import './tailwind.css';
+@import './theme.css';

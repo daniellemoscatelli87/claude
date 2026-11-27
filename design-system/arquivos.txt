@@ -11,6 +11,15 @@ CATALOGO.md              design-system/CATALOGO.md
 # Tokens (cores, sombras, raio, movimento, gráficos), usados pela área restrita (public/admin/)
 src/styles/theme.css     public/design-system/theme.css
 
+# Site público em React (apps/site, decisão de 27/11/2026, D-053): tokens, fontes e Tailwind v4 e a pasta ui inteira,
+# como a área restrita em React (D-051). src/components/ui/ do app é só do design system: o que sair do DS é apagado ali.
+# Sem exclusões: o app usa React 18.3, a mesma versão do DS, então todos os componentes compilam.
+src/styles/index.css     apps/site/src/styles/index.css
+src/styles/fonts.css     apps/site/src/styles/fonts.css
+src/styles/tailwind.css  apps/site/src/styles/tailwind.css
+src/styles/theme.css     apps/site/src/styles/theme.css
+src/app/components/ui/   apps/site/src/components/ui/
+
 # App DM | Experience Intelligence (apps/experience-intelligence): tokens, fontes e Tailwind v4 (decisão de 23/11/2026, D-047)
 src/styles/index.css     apps/experience-intelligence/src/styles/index.css
 src/styles/fonts.css     apps/experience-intelligence/src/styles/fonts.css
