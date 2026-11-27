@@ -6,6 +6,12 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-27 · Área restrita em React: lista do Contato em prévia (A6, D-051), não publicada
+
+- **Feito:** `apps/area-restrita/src/telas/Contatos.tsx` em `/admin/app/contatos/` (`rotas.json`: `"contatos": "previa"`): abas Recebidos e Enviados com os números (`Tabs` + `Badge`), busca sem acento por nome, e-mail, empresa, assunto, mensagem, destinatários e origem (`Input`), situação (`Select`, também por `?situacao=`), aba guardada no endereço, `LinhaDeLista` + `IconeComBase` + `ChipDeEstado` com a origem (Site, E-mail, Enviado) e o estado (Não lida, Lida, Respondida, Reunião agendada) em texto. Cada linha abre a conversa na página de HTML.
+- **Falta para publicar:** conversa, responder, reunião e novo e-mail (esperam `CaixaDeEntrada`, `Conversa`, `CampoDeEmails` e `CampoDeHorario` no DS; `ADMIN_REACT.md` 7.1).
+- **Testes:** `npm test` 41 ok; conformidade 0; `tests/navegador/paginas.cjs` 134 verificações (17 do Contato) em 1280 e 390 px, tudo passou, axe sem violações; capturas em 390, 768, 1024 e 1280 px.
+
 ## 2026-11-27 · Área restrita em React: Lançamento, Configurações e Comunicados publicadas (D-051, D-054)
 
 - **Páginas:** `apps/area-restrita/src/telas/Lancamento.tsx`, `Configuracoes.tsx`, `Comunicados.tsx`; peças comuns em `telas/comum.tsx` (Mensagem com `Alert`, `PerguntaDeConfirmacao` com `AlertDialog`, prévia do e-mail, chamada das funções) e `telas/email.tsx` (painel de escrever e-mail com `SidePanel`, `Input`, `Textarea`, `Button`). Mesmas consultas, funções (`lancamento`, `comunicado-parceiros`, `admin-dados`), regras, textos e registros no log das páginas de HTML.

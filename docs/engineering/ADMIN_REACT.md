@@ -12,7 +12,8 @@
 | Início em React, com a mesma informação da página de HTML | **publicada em `/admin/`** (D-052) |
 | Lançamento, Configurações e Comunicados em React | **publicadas** (D-054) |
 | Reuniões | continua de HTML: falta a agenda do mês no DS (seção 7.1) |
-| Contato, Parceiros e Pesquisas | plano na seção 8.1 |
+| Contato | lista em prévia (`/admin/app/contatos/`); a conversa continua de HTML (seção 8.1) |
+| Parceiros e Pesquisas | plano na seção 8.1 |
 | Conferência de conformidade com o DS (`npm run conformidade`) | em zero desvios desde o primeiro dia |
 | Sincronização da pasta `ui` inteira do DS (`arquivos.txt` com pasta e `excluir`) | implementado |
 | Teste na rotina diária do DS (tipos, testes, conformidade e build do app) | implementado no workflow |
@@ -156,7 +157,7 @@ A ordem vai do mais simples ao mais complexo, para a casca e as peças novas do 
 
 | Lote | O que já dá para fazer com o DS | O que espera o DS (seção 7.1) |
 |---|---|---|
-| **A6 Contato** | `CabecalhoDaPagina` com `Tabs` (Recebidos, Enviados) e o botão "Novo e-mail"; lista das mensagens com `LinhaDeLista` + `IconeComBase` + `ChipDeEstado` (não lida, lida, respondida, reunião), filtro de situação com `SegmentedControl`, abrir `?id=`; detalhe em `SidePanel` com `Accordion` (seções do formulário), `Textarea` e `UploadDropzone`/`UploadList` para responder; `AlertDialog` para excluir. | `CaixaDeEntrada`, `Conversa`, `CampoDeEmails`, `CampoDeHorario`, `CampoDeBusca`, `Button` exclusão em contorno |
+| **A6 Contato** | `CabecalhoDaPagina` com `Tabs` (Recebidos, Enviados) e o botão "Novo e-mail"; lista das mensagens com `LinhaDeLista` + `IconeComBase` + `ChipDeEstado` (não lida, lida, respondida, reunião), filtro de situação com `SegmentedControl`, abrir `?id=`; detalhe em `SidePanel` com `Accordion` (seções do formulário), `Textarea` e `UploadDropzone`/`UploadList` para responder; `AlertDialog` para excluir. **Começado (prévia em `/admin/app/contatos/`, 27/11/2026):** a lista de Recebidos e Enviados, com busca, situação (também por `?situacao=`), aba no endereço (`?aba=enviados`), origem e estado em texto; cada linha abre a conversa na página de HTML. Não publicar antes da conversa: `/admin/contatos/?id=` ainda depende da página de HTML | `CaixaDeEntrada`, `Conversa`, `CampoDeEmails`, `CampoDeHorario`, `CampoDeBusca`, `Button` exclusão em contorno |
 | **A7 Parceiros** | Aba Dashboard: `GradeDeCards` + `CardIndicador`, `BarrasOrdenadas`, `GraficoDeRosca`, `Select` (área de atuação); aba Parceiros: filtros (`Input`, `Select`), perfil em `SidePanel` com `Accordion`, `Timeline` (histórico), `Switch` (galeria), `AlertaComAcao`; e-mails com `LinhaDeLista` + `ChipDeEstado` | `TabelaAdaptavel`, `CampoDeBusca`, `CampoDeHorario` (agendar envio), `EstadoVazio` |
 | **A8 Pesquisas** | Painel de cada pesquisa: `CardIndicador`, `GraficoDeRosca`, `BarrasOrdenadas`, `BarrasEmpilhadas100` (fácil, médio, difícil), `Funil` (quem chegou até onde), `MapaDeCalorMatricial`, `DescobertaVisual`, `TabelaDeDados`; `Tabs`, `Accordion`, `DropdownMenu` (ações), `LinhaDeLista` (respostas, relatos), `SegmentedControl` | `CampoCopiavel`; conferir no DS a nota de 0 a 10 com média e três faixas (hoje desenhada à mão na página de HTML) |
 

@@ -32,6 +32,10 @@ function dadosIniciais() {
     { id: "p3", created_at: h(90), nome: "Fábio Lima", email: "fabio@exemplo.com", empresa: "", principal_especializacao: "Design de serviços", areas_experiencia: ["Pesquisa"], segmentos: ["Saúde"], visualizado_em: h(80), comunicados_descadastro_em: h(10) },
     { id: "p4", created_at: h(95), nome: "Gabi Reis", email: null, empresa: "", principal_especializacao: "Facilitação", areas_experiencia: ["Pesquisa"], segmentos: ["Educação"], visualizado_em: h(80), comunicados_descadastro_em: null },
   ];
+  DADOS.contatos = DADOS.contatos.filter((r) => !["c7", "c8"].includes(r.id)).concat([
+    { id: "c7", created_at: h(200), nome: "Helena Costa", email: "helena@exemplo.com", empresa: "Clínica Vida", cargo: null, assunto: "Experiência na recepção", mensagem: "Olá", origem: "email", visualizado_em: null, respondido_em: null, reuniao_em: null },
+    { id: "c8", created_at: h(20), nome: "Conversa com Ana", email: "ana@exemplo.com", empresa: null, cargo: null, assunto: "Proposta", mensagem: "Segue", origem: "enviado", destinatarios: ["ana@exemplo.com"], copias: ["socio@exemplo.com"], copias_ocultas: [], visualizado_em: h(20), respondido_em: h(20), reuniao_em: null },
+  ]);
   DADOS.comunicados = [{ id: "m1", created_at: h(30), assunto: "Novidades da Rede", titulo: "Uma oportunidade em Saúde", mensagem: "Olá,\n\nTexto.", destinatarios: ["p1", "p2", "p3", "x"], enviados: 3, falhas: 1 }];
   DADOS.admin_log = Array.from({ length: 31 }, (_, i) => ({ id: "g" + i, created_at: h(i + 1), acao: i === 0 ? "Apagou os dados de Lançamento" : i === 1 ? "Disparou o e-mail de lançamento" : "Entrou na área restrita", detalhe: i === 1 ? '2 enviados. Assunto: "Lançamento"' : null }));
 }
@@ -293,6 +297,34 @@ async function comunicados(page, L, registro) {
   await fecharPainel(page, "Comunicado enviado");
 }
 
+async function contato(page, L) {
+  // Só em prévia: a conversa de cada mensagem ainda é a página de HTML (ADMIN_REACT.md, 8.1).
+  await page.goto(BASE + "/admin/app/contatos/?situacao=pendentes");
+  await page.getByRole("heading", { level: 1, name: "Contato" }).waitFor();
+  await page.locator("[data-mensagem]").first().waitFor();
+  await espera(400);
+  const recebidas = DADOS.contatos.filter((r) => r.origem !== "enviado");
+  const pend = recebidas.filter((r) => !r.respondido_em).length;
+  ok((await page.locator("[data-resumo]").innerText()) === `${pend} de ${recebidas.length} mensagens recebidas`, `${L} Contato: ?situacao=pendentes abre já filtrado (${await page.locator("[data-resumo]").innerText()})`);
+  ok(await page.locator("[data-mensagem]").count() === pend, `${L} Contato: só as não respondidas`);
+  ok((await page.getByRole("tab", { name: /Recebidos/ }).innerText()).replace(/\s+/g, " ").trim() === `Recebidos ${recebidas.length}` && (await page.getByRole("tab", { name: /Enviados/ }).innerText()).replace(/\s+/g, " ").trim() === "Enviados 1", `${L} Contato: abas com os números`);
+  const helena = page.locator("[data-mensagem=c7]");
+  ok((await helena.innerText()).includes("E-mail") && (await helena.innerText()).includes("Não lida") && await helena.locator("a, [href]").first().getAttribute("href") === "/admin/contatos/?id=c7" || await page.locator("[data-mensagem=c7] a").getAttribute("href") === "/admin/contatos/?id=c7", `${L} Contato: origem e estado em texto; a linha abre a conversa (página de HTML)`);
+  ok(await semRolagem(page) && await cardsSemRolagem(page), `${L} Contato: sem rolagem horizontal na página e nos cards`);
+  await page.screenshot({ path: `${S}/a6-contato-${L}.png`, fullPage: true, animations: "disabled" });
+  await axe(page, `${L} Contato`);
+  if (L === "390") await alinhamento(page, "[data-mensagem] [data-slot=linha-de-lista]", `${L} Contato`);
+  await page.getByLabel("Situação").click();
+  await page.getByRole("option", { name: "Todas as mensagens" }).click();
+  await page.getByRole("searchbox", { name: "Buscar" }).fill("recepcao");
+  await espera(200);
+  ok(await page.locator("[data-mensagem]").count() === 2, `${L} Contato: busca sem acento (recepção)`);
+  await page.getByRole("searchbox", { name: "Buscar" }).fill("");
+  await page.getByRole("tab", { name: /Enviados/ }).click();
+  await espera(200);
+  ok(/aba=enviados/.test(page.url()) && (await page.locator("[data-mensagem=c8]").innerText()).includes("Para: ana@exemplo.com · Cc: socio@exemplo.com"), `${L} Contato: aba Enviados no endereço, com Para e Cc`);
+}
+
 async function rodar(browser, largura) {
   dadosIniciais();
   const L = String(largura);
@@ -308,7 +340,7 @@ async function rodar(browser, largura) {
   await page.locator("#entrar-senha").fill("senha-de-teste");
   await page.getByRole("button", { name: "Entrar" }).click();
   await page.locator("main h1").waitFor();
-  for (const [nome, f] of [["Lançamento", lancamento], ["Configurações", configuracoes], ["Comunicados", comunicados]]) {
+  for (const [nome, f] of [["Lançamento", lancamento], ["Configurações", configuracoes], ["Comunicados", comunicados], ["Contato", contato]]) {
     try { await f(page, L, registro); } catch (e) { ok(false, `${L} ${nome}: parou com erro: ${e.message.split("\n")[0]}`); await page.screenshot({ path: `${S}/erro-${nome}-${L}.png` }).catch(() => {}); }
   }
   ok(erros.length === 0, `${L}: sem erros no console${erros.length ? "\n   " + erros.join("\n   ") : ""}`);
