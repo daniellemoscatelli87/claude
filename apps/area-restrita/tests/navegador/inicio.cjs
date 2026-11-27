@@ -85,6 +85,8 @@ function consultar(linhas, params) {
     const [col, dir] = ordem.split(",")[0].split(".");
     out = [...out].sort((a, b) => (String(a[col] ?? "") < String(b[col] ?? "") ? -1 : String(a[col] ?? "") > String(b[col] ?? "") ? 1 : 0) * (dir === "desc" ? -1 : 1));
   }
+  const inicio = Number(params.get("offset")) || 0;
+  if (inicio) out = out.slice(inicio);
   const limite = Number(params.get("limit"));
   if (limite) out = out.slice(0, limite);
   return { linhas: out, total };
