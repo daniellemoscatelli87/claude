@@ -129,8 +129,11 @@ function Situacao({ r, reu, aoAgendar }: { r: Mensagem; reu: Reuniao | null; aoA
     <div className="grid gap-4" data-situacao="">
       <Stepper
         rotulo="Situação da mensagem" atual={atual === -1 ? etapas.length - 1 : atual} concluidas={feitas}
-        etapas={etapas.map((e) => ({ titulo: e.titulo + (r[e.chave] ? " " + ddmm(r[e.chave] as string) : "") }))}
+        etapas={etapas.map((e) => ({ titulo: e.titulo, descricao: r[e.chave] ? ddmm(r[e.chave] as string) : undefined }))}
       />
+      <p className="text-body-sm text-muted-foreground tabular-nums">
+        {etapas.filter((e) => r[e.chave]).map((e) => e.titulo + " em " + ddmm(r[e.chave] as string)).join(" · ")}
+      </p>
       {r.reuniao_em ? (
         <AlertaComAcao
           tom="sucesso" titulo="Reunião agendada"

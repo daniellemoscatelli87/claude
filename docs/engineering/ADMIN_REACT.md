@@ -11,9 +11,9 @@
 | Entrar, definir senha, nova senha e sem acesso (mesma conta e mesma sessão das páginas de HTML) | implementado e testado |
 | Início em React, com a mesma informação da página de HTML | **publicada em `/admin/`** (D-052) |
 | Lançamento, Configurações e Comunicados em React | **publicadas** (D-054) |
-| Reuniões | continua de HTML: falta a agenda do mês no DS (seção 7.1) |
-| Contato | lista em prévia (`/admin/app/contatos/`); a conversa continua de HTML (seção 8.1) |
-| Parceiros e Pesquisas | plano na seção 8.1 |
+| Reuniões e Contato | **publicadas** (D-055) |
+| Parceiros e Pesquisas | continuam de HTML (plano na seção 8.1) |
+| Páginas de HTML das páginas publicadas | apagadas de `public/admin/` (A9, D-055) |
 | Conferência de conformidade com o DS (`npm run conformidade`) | em zero desvios desde o primeiro dia |
 | Sincronização da pasta `ui` inteira do DS (`arquivos.txt` com pasta e `excluir`) | implementado |
 | Teste na rotina diária do DS (tipos, testes, conformidade e build do app) | implementado no workflow |
@@ -57,7 +57,7 @@ O estado de cada página fica em `apps/area-restrita/src/rotas.json` (campo `rea
 - Cada pasta recebe o próprio `index.html` porque o site tem `404.html` (o Cloudflare não faz o "SPA fallback"); assim, abrir direto `/admin/contatos/?id=…` funciona.
 - **Voltar atrás** é trocar `"publicada"` por `"previa"`: a página de HTML volta no próximo build.
 - A página de HTML em `public/admin/<página>/` só é apagada num commit posterior, depois que a versão em React estiver publicada e conferida. Até lá, as duas convivem.
-- Hoje: Início (D-052), Lançamento, Configurações e Comunicados (D-054) em `"publicada"`. As páginas de HTML delas saem do repositório na limpeza (A9).
+- Hoje: Início (D-052), Lançamento, Configurações, Comunicados (D-054), Contato e Reuniões (D-055) em `"publicada"`; as páginas de HTML delas já saíram do repositório (A9). Voltar atrás: `"previa"` e restaurar a página de HTML pelo histórico do git.
 
 ### 3.4 Sessão e login
 
@@ -118,7 +118,7 @@ Nenhuma foi feita à mão no app; enquanto não chegam, a fundação usa o compo
 7. **Caixa de entrada** (`InboxTemplate`, só demonstração) para Contato; **agenda do mês com eventos** para Reuniões (o `Calendar` do DS é um seletor de datas; servir como agenda precisa ser conferido no DS); **chip de estado** com ícone e texto (a FindLook tem `status-chip.tsx`).
 8. `ui/dialog` com o botão fechar "Close" em inglês para leitores de tela (já registrado em D-047): necessário antes das páginas com janelas (Contato, Comunicados, Lançamento).
 
-### 7.1 FALTA NO DS (lotes A2 a A8, 27/11/2026)
+### 7.1 FALTA NO DS (lotes A2 a A8, 27/11/2026) — publicado no DS `d2aeb40`
 
 Peças que as páginas precisam e o DS ainda não tem. Nenhuma foi feita na área restrita; cada uma vai para o DS pelo processo formal (D-050) e chega pela sincronização.
 
@@ -134,6 +134,14 @@ Peças que as páginas precisam e o DS ainda não tem. Nenhuma foi feita na áre
 10. **`CampoDeHorario`** (Contato > marcar reunião; Parceiros > agendar envio): hora e minuto em passos de 15 min, com o fuso de Brasília escrito; combina com o `Calendar` para data e hora.
 11. **`TabelaAdaptavel`** (Parceiros): tabela no computador que vira lista de `LinhaDeLista` no celular, com as colunas menos importantes escondidas e o aviso de quantas ficaram de fora; ordenação por coluna. Promover a vitrine `TabelaQueQuebra`.
 12. **`CampoCopiavel`** (Pesquisas): o link da pesquisa num campo só de leitura com o botão "Copiar" e o retorno "Copiado" (ícone de check, 2 s, anunciado para leitores de tela).
+
+### 7.2 Observações para o DS depois de `d2aeb40` (27/11/2026)
+
+1. **`UploadDropzone`**: o axe acusa o campo de arquivo sem nome (`label`) e um botão dentro de outro (`nested-interactive`). O Contato usa `Button` "Anexar arquivo" + `Input type="file"` escondido + `UploadList`.
+2. **`Popover` dentro do `Dialog`**: o conteúdo não se posiciona (fica em `translate(0, -200%)`, fora da tela). A data da reunião abre o `Calendar` embaixo do campo, dentro da janela.
+3. **Campo de endereço com sugestões** (`CampoDeEndereco`): a página de HTML sugeria endereços (OpenStreetMap) para a reunião presencial; hoje o endereço é digitado num `Campo`.
+4. **`MenuLateral`**: os rótulos repetem a entrada (aparecem claros) quando a janela muda de tamanho.
+5. **`Stepper`** como situação (não formulário): com as datas no nome das etapas, o Stepper vai para o modo compacto mesmo com 600 px; as datas ficaram numa linha embaixo.
 
 ## 8. Ordem das páginas e estimativa
 

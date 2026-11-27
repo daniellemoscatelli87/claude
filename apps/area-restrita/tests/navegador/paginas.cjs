@@ -530,8 +530,8 @@ async function rodar(browser, largura) {
 
 (async () => {
   const browser = await chromium.launch();
-  await rodar(browser, 1280);
-  await rodar(browser, 390);
+  // LARGURAS="1280,390,768,1024" roda também no tablet e no notebook (padrão: computador e celular).
+  for (const l of (process.env.LARGURAS || "1280,390").split(",").map(Number)) await rodar(browser, l);
   await browser.close();
   console.log(falhas ? `\n${falhas} FALHA(S)` : "\nTUDO PASSOU");
   process.exit(falhas ? 1 : 0);
