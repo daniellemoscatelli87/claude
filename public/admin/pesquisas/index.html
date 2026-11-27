@@ -538,8 +538,6 @@
   .pa-desc h4 { margin: 0; font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -0.01em; text-wrap: balance; }
   .pa-desc-ctx { margin: 6px 0 0; font-size: 13px; line-height: 1.55; color: var(--muted-foreground); }
   .pa-desc-pq { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
-  .pa-desc-pq h5 { display: flex; align-items: center; gap: 6px; margin: 0 0 6px; font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
-  .pa-desc-pq h5 svg { width: 14px; height: 14px; }
   .pa-desc-pq p { margin: 0; font-size: 13.5px; line-height: 1.6; }
   .pa-hipotese { display: inline-flex; align-items: center; height: 20px; margin-left: 4px; padding: 0 8px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent); background: var(--primary-muted); font-size: 11px; font-weight: 600; color: var(--primary-text); vertical-align: 1px; }
   .pa-ver-dados { display: inline-flex; align-items: center; gap: 4px; margin-top: 14px; padding: 0; border: 0; background: none; font: inherit; font-size: 13px; font-weight: 600; color: var(--primary-text); cursor: pointer; border-radius: var(--radius-sm); }
@@ -574,24 +572,38 @@
   .pa-op-kpi span { font-size: 13px; font-weight: 500; color: var(--muted-foreground); }
   .pa-op-kpi b { font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.025em; }
   .pa-op-kpi-ic { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--primary-muted); color: var(--primary-text); }
-  .pa-op-kpi-ic svg { width: 18px; height: 18px; }
+  .pa-op-kpi-ic svg { width: 18px; height: 18px; stroke-width: 1.75; }
   @media (max-width: 600px) { .pa-op-kpis { grid-template-columns: minmax(0, 1fr); gap: 8px; } .pa-op-kpi { padding: 14px 16px; align-items: center; } .pa-op-kpi > div { display: flex; flex-direction: row-reverse; justify-content: flex-end; align-items: baseline; gap: 10px; } .pa-op-kpi b { font-size: 22px; } }
-  .pa-ops { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: op; }
-  .pa-op { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); padding: 20px 22px 14px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); counter-increment: op; }
+  /* Timeline do DS (sem alternar): marcador redondo com o número, trilho vertical e o card à direita */
+  .pa-ops { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .pa-tl-it { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 14px; align-items: start; }
+  .pa-tl-it::before { content: ""; position: absolute; left: 21px; top: -14px; bottom: -14px; width: 2px; background: var(--primary); }
+  .pa-tl-it:first-child::before { top: 22px; }
+  .pa-tl-it:last-child::before { bottom: auto; height: 36px; }
+  .pa-tl-it:only-child::before { display: none; }
+  .pa-tl-m { position: relative; z-index: 1; margin-top: 18px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 999px; border: 2px solid var(--primary); background: var(--card); color: var(--primary-text); font-size: 15px; font-weight: 800; box-shadow: var(--shadow-md); transition: background-color .3s, border-color .3s, color .3s, transform .3s cubic-bezier(.34, 1.56, .64, 1); }
+  .pa-tl.animado .pa-tl-it::before { background: var(--graphite-200, var(--border)); }
+  .pa-tl.animado .pa-tl-it[data-estado="feita"]::before, .pa-tl.animado .pa-tl-it[data-estado="atual"]::before { background: var(--primary); transition: background-color .3s; }
+  .pa-tl.animado .pa-tl-m { border-color: var(--graphite-200, var(--border)); color: var(--graphite-400, var(--muted-foreground)); box-shadow: none; }
+  .pa-tl.animado [data-estado="feita"] .pa-tl-m, .pa-tl.animado [data-estado="atual"] .pa-tl-m { border-color: var(--primary); background: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-md); }
+  .pa-tl.animado [data-estado="atual"] .pa-tl-m { transform: scale(1.15); }
+  .pa-tl.animado .pa-op { opacity: 0; transform: translateY(16px); transition: opacity .7s cubic-bezier(.16, 1, .3, 1), transform .7s cubic-bezier(.16, 1, .3, 1), box-shadow .2s; }
+  .pa-tl.animado .visto .pa-op { opacity: 1; transform: none; }
+  .pa-op { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); padding: 18px 20px 12px; border: 1px solid var(--border); border-radius: 20px; background: var(--card); box-shadow: var(--shadow-sm); transition: transform .2s, box-shadow .2s; }
+  .pa-op:hover, .pa-tl.animado .visto .pa-op:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
   .pa-op > div:not(.pa-op-pe) { padding: 0 20px; }
   .pa-op > div:first-child { padding-left: 0; }
   .pa-op > .pa-op-c2, .pa-op > .pa-op-c3, .pa-op > .pa-op-c4 { border-left: 1px solid var(--border); }
   .pa-op-c4 { display: grid; gap: 12px; align-content: start; justify-items: start; }
   .pa-op > .pa-op-c4 { padding-right: 0; }
-  .pa-op-c1 { display: flex; gap: 14px; align-items: flex-start; }
-  .pa-op-n::before { content: counter(op); }
-  .pa-op-n { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 999px; background: var(--primary-muted); color: var(--primary-text); font-size: 13px; font-weight: 800; }
-  .pa-op h4 { margin: 4px 0 6px; font-size: 16px; font-weight: 700; line-height: 1.35; text-wrap: balance; }
+  @media (max-width: 600px) { .pa-tl-it { grid-template-columns: 36px minmax(0, 1fr); column-gap: 10px; } .pa-tl-it::before { left: 17px; } .pa-tl-m { width: 36px; height: 36px; font-size: 13px; margin-top: 14px; } .pa-tl-it:first-child::before { top: 18px; } }
+  @media (prefers-reduced-motion: reduce) { .pa-tl-m, .pa-op { transition: none !important; } .pa-op:hover { transform: none; } }
+  /* rótulos com ícone (iconografia do DS: 16 px, traço 1,75, cor secundária) */
+  .pa-rot { display: flex; align-items: center; gap: 6px; margin: 0 0 6px; font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
+  .pa-rot svg { width: 16px; height: 16px; flex: none; stroke-width: 1.75; color: var(--muted-foreground); }
+  .pa-op h4 { margin: 0 0 6px; font-size: 16px; font-weight: 700; line-height: 1.35; text-wrap: balance; }
   .pa-op p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted-foreground); }
   .pa-op p b { color: var(--foreground); font-weight: 600; }
-  .pa-op h5 { display: flex; align-items: center; gap: 6px; margin: 0 0 4px; font-size: 13px; font-weight: 600; color: var(--foreground); }
-  .pa-op h5 svg { width: 16px; height: 16px; flex: none; color: var(--primary-text); }
-  .pa-op-rec { color: var(--primary-text) !important; }
   .pa-op-c3 { display: grid; gap: 12px; align-content: start; }
   .pa-op-c3 ul { margin: 0; padding: 0 0 0 16px; font-size: 13px; line-height: 1.5; color: var(--muted-foreground); }
   .pa-op-pe { grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); }
@@ -2238,27 +2250,30 @@
       const i = el("span", "pa-op-kpi-ic"); i.innerHTML = svg(IC_OP[ic]); k.append(t, i); kpis.appendChild(k);
     });
     pnOp.appendChild(kpis);
-    const lista = el("ol", "pa-ops");
-    todas.forEach((o) => {
-      const li = el("li", "pa-op");
-      const c1 = el("div", "pa-op-c1"); const nEl = el("span", "pa-op-n"); nEl.setAttribute("aria-hidden", "true");
-      const t1 = el("div"); t1.appendChild(el("h4", null, o.titulo)); const dor = el("p"); dor.append(el("b", null, "Dor observada: "), o.dor); t1.appendChild(dor); c1.append(nEl, t1);
-      const c2 = el("div", "pa-op-c2"); const h2 = el("h5", "pa-op-rec"); h2.innerHTML = svg(IC_OP[o.ic] || IC_OP.busca); h2.append("Sugestão de recurso"); c2.append(h2, el("p", null, o.recurso));
+    // linha do tempo do DS (Timeline, sem alternar): o número fica no marcador, fora do card; a ordem é o ranking
+    const lista = el("ol", "pa-ops pa-tl");
+    todas.forEach((o, k) => {
+      const li = el("li", "pa-tl-it"); const marco = el("span", "pa-tl-m", String(k + 1)); marco.setAttribute("aria-hidden", "true");
+      const card = el("div", "pa-op");
+      const c1 = el("div", "pa-op-c1");
+      const t1 = el("div"); t1.appendChild(el("h4", null, o.titulo)); const dor = el("p"); dor.append(el("b", null, "Dor observada: "), o.dor); t1.appendChild(dor); c1.append(t1);
+      const c2 = el("div", "pa-op-c2"); const h2 = el("h5", "pa-rot"); h2.innerHTML = svg(IC_OP.lampada); h2.append("Sugestão de recurso"); c2.append(h2, el("p", null, o.recurso));
       const c3 = el("div", "pa-op-c3");
-      const ev = el("div"); const he = el("h5"); he.innerHTML = svg(IC_OP.barras); he.append("Evidências"); ev.appendChild(he); const ul = el("ul"); o.evid.forEach((e) => ul.appendChild(el("li", null, e))); ev.appendChild(ul);
-      const ie = el("div"); const hi = el("h5"); hi.innerHTML = svg(IC_OP.alvo); hi.append("Impacto esperado"); ie.append(hi, el("p", null, o.esperado));
+      const ev = el("div"); const he = el("h5", "pa-rot"); he.innerHTML = svg(IC_OP.barras); he.append("Evidências"); ev.appendChild(he); const ul = el("ul"); o.evid.forEach((e) => ul.appendChild(el("li", null, e))); ev.appendChild(ul);
+      const ie = el("div"); const hi = el("h5", "pa-rot"); hi.innerHTML = svg(IC_OP.alvo); hi.append("Impacto esperado"); ie.append(hi, el("p", null, o.esperado));
       c3.append(ev);
       // sem selo de impacto: a posição no ranking já mostra o impacto (pedido da dona do produto)
       const c4 = el("div", "pa-op-c4"); c4.append(ie);
-      li.append(c1, c2, c3, c4);
+      card.append(c1, c2, c3, c4); li.append(marco, card);
       if (o.id) {
         const pe = el("div", "pa-op-pe"); const a = el("a", "pa-op-link"); a.href = "#" + o.id; a.innerHTML = "Ver achado" + svg('<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>');
         a.setAttribute("aria-label", `Ver o achado: ${o.achado}`);
-        a.addEventListener("click", (e) => { e.preventDefault(); irParaAchado(box, o.id); }); pe.appendChild(a); li.appendChild(pe);
+        a.addEventListener("click", (e) => { e.preventDefault(); irParaAchado(box, o.id); }); pe.appendChild(a); card.appendChild(pe);
       }
       lista.appendChild(li);
     });
     pnOp.appendChild(lista);
+    linhaDoTempo(lista);
 
     const defs = [["achados", "Achados", null], ["oportunidades", "Oportunidades", lista.children.length]];
     const { bar, marcar } = linhaDeAbas(defs, "Inteligência", (id) => abrirInt(id), "int-");
@@ -2275,10 +2290,33 @@
     return box;
   }
 
+  // Linha do tempo (Timeline do DS, "Step Indicator"): ao rolar, a etapa cujo marcador passa de 60% da janela vira
+  // a atual (cresce, preenchida); as anteriores ficam feitas e a linha entre elas se preenche; cada card entra uma vez.
+  // Com "menos movimento", tudo aparece preenchido e parado.
+  function linhaDoTempo(ol) {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+    ol.classList.add("animado");
+    const itens = [...ol.children];
+    let pedido = false;
+    const atualizar = () => {
+      pedido = false;
+      if (!ol.isConnected) { removeEventListener("scroll", pedir, true); return; }
+      if (!ol.offsetParent) return;
+      const lim = innerHeight * 0.6; let atual = -1;
+      itens.forEach((li, i) => { const r = li.querySelector(".pa-tl-m").getBoundingClientRect(); if (r.top + r.height / 2 < lim) atual = i; });
+      itens.forEach((li, i) => { li.dataset.estado = i < atual ? "feita" : i === atual ? "atual" : "pendente"; if (i <= atual) li.classList.add("visto"); });
+    };
+    const pedir = () => { if (!pedido) { pedido = true; requestAnimationFrame(atualizar); } };
+    addEventListener("scroll", pedir, { passive: true, capture: true }); addEventListener("resize", pedir);
+    // ao abrir a aba, os cards que já estão na tela entram de uma vez
+    new IntersectionObserver((es, io) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visto"); io.unobserve(e.target); pedir(); } }), { threshold: 0.2 }).observe(ol);
+    itens.forEach((li) => new IntersectionObserver((es, io) => es.forEach((e) => { if (e.isIntersecting) { li.classList.add("visto"); io.unobserve(li); } }), { threshold: 0.25 }).observe(li));
+  }
   // Card de descoberta horizontal (DS: DescobertaVisual): texto à esquerda (tema, conclusão, contexto, por que importa,
   // ver dados) e o gráfico à direita; no celular, um embaixo do outro. A oportunidade fica na aba Oportunidades.
   const IC_OP = {
     alvo: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    lampada: '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
     estrela: '<path d="M11.5 3.2a.6.6 0 0 1 1 0l2.6 5.3 5.8.8a.6.6 0 0 1 .3 1l-4.2 4.1 1 5.8a.6.6 0 0 1-.8.6L12 18l-5.2 2.8a.6.6 0 0 1-.8-.6l1-5.8-4.2-4.1a.6.6 0 0 1 .3-1l5.8-.8z"/>',
     busca: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
     barras: '<path d="M4 20v-3"/><path d="M9 20v-7"/><path d="M14 20v-11"/><path d="M19 20V5"/>',
@@ -2299,7 +2337,7 @@
     t.append(el("p", "pa-desc-tema", c.tema), el("h4", null, c.titulo));
     if (c.contexto) t.appendChild(el("p", "pa-desc-ctx", c.contexto));
     if (c.significa) {
-      const d = el("div", "pa-desc-pq"); const h = el("h5"); h.innerHTML = svg(IC_INFO); h.append("Por que importa");
+      const d = el("div", "pa-desc-pq"); const h = el("h5", "pa-rot"); h.innerHTML = svg(IC_INFO); h.append("Por que importa");
       // o selo "Hipótese" fica na linha do rótulo, à direita de "Por que importa"
       if (c.hipotese) h.appendChild(el("span", "pa-hipotese", "Hipótese"));
       const p = el("p", null, c.significa);
