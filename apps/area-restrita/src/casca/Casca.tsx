@@ -107,16 +107,16 @@ function PainelDeNotificacoes({ aberto, mudar }: { aberto: boolean; mudar: (v: b
         <SidePanelBody className="px-0 sm:px-0">
           {dados.novas.length > 0 ? (
             <section aria-label="Novas">
-              <p className="px-4 pt-2 pb-2 text-sm font-semibold text-foreground">Novas</p>
+              <p className="px-4 pt-2 pb-2 text-body-sm font-semibold text-foreground">Novas</p>
               <ul>{dados.novas.map((a, i) => <LinhaDoAviso key={i} aviso={a} nova aoAbrir={() => mudar(false)} />)}</ul>
             </section>
           ) : (
-            !carregando && <p className="p-4 text-sm text-muted-foreground">Nenhuma notificação nova. Mensagens, candidaturas, e-mails abertos pelos parceiros e respostas das pesquisas aparecem aqui.</p>
+            !carregando && <p className="p-4 text-body-sm text-muted-foreground">Nenhuma notificação nova. Mensagens, candidaturas, e-mails abertos pelos parceiros e respostas das pesquisas aparecem aqui.</p>
           )}
           {dados.vistas.length > 0 && (
             <section aria-label="Já visualizadas">
               <Separator className="my-2" />
-              <p className="px-4 pt-2 pb-2 text-sm font-semibold text-foreground">Já visualizadas</p>
+              <p className="px-4 pt-2 pb-2 text-body-sm font-semibold text-foreground">Já visualizadas</p>
               <ul>{dados.vistas.map((a, i) => <LinhaDoAviso key={i} aviso={a} nova={false} aoAbrir={() => mudar(false)} />)}</ul>
             </section>
           )}
@@ -136,7 +136,7 @@ function MenuDaConta() {
       <DropdownMenuContent align="end" className="min-w-56">
         <DropdownMenuLabel>
           <span className="block">{perfil.nome}</span>
-          <span className="block text-xs font-normal text-muted-foreground">{perfil.email}</span>
+          <span className="block text-label font-normal text-muted-foreground">{perfil.email}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
@@ -188,7 +188,7 @@ export function Casca({ children }: { children: React.ReactNode }) {
           </Button>
           <LinkDaArea href="/admin/" aria-label="Dani Moscatelli, ir para o Início" className="flex min-h-11 min-w-11 items-center justify-center gap-2.5 rounded-md px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <img src="/favicon-dm.png" alt="" width={32} height={32} className="size-8 shrink-0" />
-            <span className="hidden whitespace-nowrap text-base font-semibold tracking-tight text-foreground min-[420px]:inline">Dani Moscatelli</span>
+            <span className="hidden whitespace-nowrap text-body font-semibold tracking-tight text-foreground min-[420px]:inline">Dani Moscatelli</span>
           </LinkDaArea>
           <div className="ml-auto flex items-center gap-1 sm:gap-2">
             <BotaoDeNotificacoes naoLidas={dados.total} aria-haspopup="dialog" onClick={() => setAvisosAbertos(true)} />

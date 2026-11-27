@@ -13,10 +13,13 @@ import { ProvedorDeNotificacoes } from "@/casca/notificacoes";
 import { ProvedorDeSessao, useSessao } from "@/casca/sessao";
 import { DefinirSenha, Entrar, NovaSenha, SemAcesso } from "@/telas/Acesso";
 import { Inicio } from "@/telas/Inicio";
-import { Comunicados } from "@/telas/Comunicados";
-import { Contatos } from "@/telas/Contatos";
-import { Configuracoes } from "@/telas/Configuracoes";
-import { Lancamento } from "@/telas/Lancamento";
+// As outras páginas carregam só quando abertas (arquivo próprio por página): a primeira visita fica leve.
+const Comunicados = React.lazy(() => import("@/telas/Comunicados").then((m) => ({ default: m.Comunicados })));
+const Contatos = React.lazy(() => import("@/telas/Contatos").then((m) => ({ default: m.Contatos })));
+const Reunioes = React.lazy(() => import("@/telas/Reunioes").then((m) => ({ default: m.Reunioes })));
+const Configuracoes = React.lazy(() => import("@/telas/Configuracoes").then((m) => ({ default: m.Configuracoes })));
+const Lancamento = React.lazy(() => import("@/telas/Lancamento").then((m) => ({ default: m.Lancamento })));
+const CarregandoPagina = () => <Skeleton aria-busy="true" aria-label="Carregando a página" className="h-96 w-full rounded-xl" />;
 
 function NaoEncontrada() {
   return (
@@ -74,14 +77,17 @@ function Portao() {
           <BrowserRouter basename={base}>
             <ProvedorDeNotificacoes>
               <Casca>
+                <React.Suspense fallback={<CarregandoPagina />}>
                 <Routes>
                   <Route path="/" element={<Inicio />} />
                   <Route path="/lancamento/" element={<Lancamento />} />
                   <Route path="/configuracoes/" element={<Configuracoes />} />
                   <Route path="/comunicados/" element={<Comunicados />} />
                   <Route path="/contatos/" element={<Contatos />} />
+                  <Route path="/reunioes/" element={<Reunioes />} />
                   <Route path="*" element={<NaoEncontrada />} />
                 </Routes>
+                </React.Suspense>
               </Casca>
             </ProvedorDeNotificacoes>
           </BrowserRouter>

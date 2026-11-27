@@ -14,6 +14,9 @@ const BASE = "http://localhost:" + (process.env.PORTA || 4310);
 const UMD = fs.readFileSync(path.join(__dirname, "../../node_modules/@supabase/supabase-js/dist/umd/supabase.js"), "utf8");
 const AXE = process.env.AXE ? fs.readFileSync(process.env.AXE, "utf8") : null;
 let falhas = 0;
+// Endereço esperado de um link da área na prévia (/admin/app): a página que já é React navega por dentro.
+const ROTAS = JSON.parse(fs.readFileSync(path.join(__dirname, "../../src/rotas.json"), "utf8"));
+const naPrevia = (id, resto) => (ROTAS.react[id] ? "/admin/app/" : "/admin/") + resto;
 const ok = (c, m) => { console.log((c ? "PASSOU " : "FALHOU ") + m); if (!c) falhas++; };
 const espera = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -148,8 +151,8 @@ async function rodar(browser, largura) {
   ok(await page.locator("[data-kpi]").count() === 4, `${L}: 4 cards de número`);
   const prioridade = page.locator("[data-prioridade]");
   ok((await prioridade.innerText()).includes("Responda as mensagens") && (await prioridade.getAttribute("data-tom")) === "aviso", `${L}: o que pede ação vem primeiro, no tom de atenção (âmbar), dizendo o que fazer`);
-  ok(await prioridade.getByRole("link", { name: "Responder mensagens" }).getAttribute("href") === "/admin/contatos/?situacao=pendentes", `${L}: com pendentes, a ação leva às não respondidas`);
-  ok(await page.locator('[data-kpi="mensagens"] a').getAttribute("href") === "/admin/contatos/", `${L}: o card de mensagens inteiro leva à caixa de entrada`);
+  ok(await prioridade.getByRole("link", { name: "Responder mensagens" }).getAttribute("href") === naPrevia("contatos", "contatos/?situacao=pendentes"), `${L}: com pendentes, a ação leva às não respondidas`);
+  ok(await page.locator('[data-kpi="mensagens"] a').getAttribute("href") === naPrevia("contatos", "contatos/"), `${L}: o card de mensagens inteiro leva à caixa de entrada`);
   ok((await page.locator('[data-kpi="mensagens"] a').innerText()).trim() === "Mensagens", `${L}: o link do card é o rótulo, sem "Ver ..." repetido`);
   // Números: 4 lado a lado no computador, 2 × 2 no celular; mesma altura; contexto em todos (escondido no celular).
   const kpis = await page.locator("[data-kpi]").evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); const apoio = [...e.querySelectorAll("p")].find((p) => /dias|site|aviso/.test(p.textContent)); return { l: Math.round(r.width), a: Math.round(r.height), t: Math.round(r.top), apoio: !!apoio && getComputedStyle(apoio).display !== "none" }; }));
@@ -249,7 +252,7 @@ async function rodar(browser, largura) {
     const nav = page.getByRole("navigation", { name: "Páginas da área restrita" });
     ok((await nav.getByRole("link").allInnerTexts()).map((t) => t.trim().split("\n")[0]).slice(0, 4).join("|").startsWith("Início|Contato|Reuniões"), `${L}: menu com os itens de hoje`);
     ok(await nav.getByRole("link", { name: "Início" }).getAttribute("aria-current") === "page", `${L}: Início marcado como página atual`);
-    ok(await nav.getByRole("link", { name: /Contato/ }).getAttribute("href") === "/admin/contatos/", `${L}: Contato abre a página de HTML`);
+    ok(await nav.getByRole("link", { name: /Contato/ }).getAttribute("href") === naPrevia("contatos", "contatos/"), `${L}: Contato abre a página certa (React na prévia quando já existe)`);
     await nav.getByRole("button", { name: /Parceiros/ }).click();
     ok(await nav.getByRole("link", { name: "Comunicados" }).isVisible(), `${L}: grupo Parceiros abre os subitens`);
     await page.getByRole("button", { name: "Recolher menu" }).click();
@@ -299,7 +302,7 @@ async function rodar(browser, largura) {
   await publicada.getByRole("heading", { level: 1, name: /(Bom dia|Boa tarde|Boa noite), Dani!/ }).waitFor({ timeout: 8000 });
   await publicada.locator('[data-kpi="mensagens"]').waitFor();
   ok(await publicada.locator("#tot-novas").count() === 0, `${L}: /admin/ serve a Início em React (não a de HTML), já logada com a mesma sessão`);
-  ok(await publicada.locator('[data-kpi="mensagens"] a').getAttribute("href") === "/admin/contatos/", `${L}: em /admin/, os cards levam às páginas de HTML das outras áreas`);
+  ok(await publicada.locator('[data-kpi="mensagens"] a').getAttribute("href") === "/admin/contatos/", `${L}: em /admin/, o card de mensagens leva a /admin/contatos/`);
   await publicada.evaluate(() => { window.__semRecarga = 1; });
   await publicada.locator('a[aria-label="Dani Moscatelli, ir para o Início"]').click();
   await espera(300);
@@ -311,12 +314,12 @@ async function rodar(browser, largura) {
   await simularSupabase(antiga);
   const errosAntiga = [];
   antiga.on("pageerror", (e) => errosAntiga.push(e.message));
-  await antiga.goto(BASE + "/admin/reunioes/");
+  await antiga.goto(BASE + "/admin/parceiros/");
   await antiga.waitForSelector("#app:not(.hidden)", { timeout: 8000 });
   await espera(500);
   ok(true, `${L}: a página de HTML abre já logada com a sessão do React`);
   ok(await antiga.evaluate(() => [...document.querySelectorAll("a")].some((a) => a.getAttribute("href") === "/admin/")), `${L}: a página de HTML leva de volta à Início (/admin/)`);
-  await antiga.screenshot({ path: `${S}/admin-html-reunioes-${L}.png`, fullPage: true });
+  await antiga.screenshot({ path: `${S}/admin-html-parceiros-${L}.png`, fullPage: true });
   ok(errosAntiga.length === 0, `${L}: página de HTML sem erros${errosAntiga.length ? ": " + errosAntiga.join("; ") : ""}`);
   await ctx.close();
 }
