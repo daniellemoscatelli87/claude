@@ -30,7 +30,10 @@
   .pa-cab-topo { position: relative; z-index: 6; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px 24px; }
   .pa-cab-texto { min-width: 0; }
   .pa-cabecalho.painel h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; text-wrap: balance; max-width: 34ch; }
-  .pa-cabecalho.painel #sub { margin-top: 10px; font-size: 15px; line-height: 1.6; max-width: 40rem; }
+  .pa-cabecalho.painel #sub { margin-top: 10px; font-size: 15px; line-height: 1.6; max-width: 46rem; }
+  /* a quebra depois de "em" só vale quando a primeira linha cabe inteira; se não couber, o texto corre normalmente */
+  .pa-cabecalho.painel .pa-cab-texto { flex: 1 1 auto; container-type: inline-size; }
+  @container (max-width: 500px) { .pa-quebra { display: none; } }
   .pa-cab-acoes { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; flex-shrink: 0; }
   .pa-cab-acoes .pa-menu-btn > svg:first-child { width: 18px; height: 18px; }
   .pa-cab-acoes .pa-del-pesq { border-color: color-mix(in srgb, var(--primary-text) 45%, var(--border)); }
@@ -59,7 +62,7 @@
     .pa-cab-btns .pa-btn { justify-content: center; }
   }
   @media (max-width: 600px) {
-    .pa-cab-topo { flex-direction: column; }
+    .pa-cab-topo { flex-direction: column; align-items: stretch; }
     .pa-cabecalho.painel h1 { font-size: 23px; }
     .pa-cab-acoes { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
     .pa-cab-acoes .pa-btn, .pa-cab-acoes .pa-menu-btn, .pa-cab-acoes .pa-menu-caixa { width: 100%; justify-content: center; }
@@ -758,7 +761,8 @@
     P = p.data; Q = q.questionario; I = i.data || []; separar(r.data || []);
     document.title = P.titulo + " | Área restrita";
     $("titulo").textContent = P.titulo; document.querySelector(".pa-cabecalho").classList.add("painel");
-    $("sub").textContent = "Projeto do Dani Moscatelli Studio. Resultados analisados em conjunto; os nomes aparecem só na aba Dados.";
+    // quebra de linha depois de "em" (no computador); no celular o texto corre normalmente
+    $("sub").innerHTML = 'Projeto do Dani Moscatelli Studio. Resultados analisados em<br class="pa-quebra"> conjunto; os nomes aparecem só na aba Dados.';
     desenhar();
   }
   // as respostas novas deixam de aparecer como notificação só quando a aba Dados é aberta
