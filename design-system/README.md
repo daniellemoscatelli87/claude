@@ -1,6 +1,6 @@
 # Design System Dani Moscatelli no site
 
-A área restrita do site (`public/admin/`) e o app DM | Experience Intelligence (`apps/experience-intelligence/`) usam cópias de arquivos do Design System Dani Moscatelli (decisões da dona do produto, 23/11/2026: "tudo deve consumir o Design System" e "app EI consome tokens e componentes do DS Dani Moscatelli, com atualização diária", D-047):
+A área restrita do site (`public/admin/` e, em migração, `apps/area-restrita/`) e o app DM | Experience Intelligence (`apps/experience-intelligence/`) usam cópias de arquivos do Design System Dani Moscatelli (decisões da dona do produto, 23/11/2026: "tudo deve consumir o Design System" e "app EI consome tokens e componentes do DS Dani Moscatelli, com atualização diária", D-047):
 
 - Repositório: https://github.com/daniellemoscatelli87/DaniMoscatelli-DesignSystem
 - Publicado: https://designsystem.danimoscatelli.com.br
@@ -12,6 +12,10 @@ A área restrita do site (`public/admin/`) e o app DM | Experience Intelligence 
 As páginas de `public/admin/` são HTML e JavaScript puros, sem Tailwind. Cada página carrega `/design-system/theme.css` (cópia do `src/styles/theme.css` do DS) antes de `/admin/admin.css`. O navegador lê as variáveis de `:root` (cores, sombras, raio, movimento, gráficos) e ignora os blocos do Tailwind (`@custom-variant`, `@theme inline` e o `@apply` da camada base). `admin.css` e os estilos das páginas usam só esses tokens: não há paleta própria.
 
 A fonte (Plus Jakarta Sans) já vem do Google Fonts em cada página, por isso o `fonts.css` do DS não é copiado.
+
+## Como a área restrita em React usa (D-051)
+
+O app `apps/area-restrita/` (Vite, React 18.3 e Tailwind 4.1.12, as versões do DS) recebe os quatro arquivos de estilo do DS e **a pasta `src/app/components/ui/` inteira** (`apps/area-restrita/src/components/ui/`): componente novo no DS chega sozinho, e o que sair do DS é apagado ali. `npm run conformidade` (no app) confere que o código do app não tem nada fora do DS (base em zero). Plano e regras em `docs/engineering/ADMIN_REACT.md`.
 
 ## Como o app Experience Intelligence usa
 
@@ -27,8 +31,8 @@ O app (Next.js) usa Tailwind v4 com os arquivos do DS, como mandam as páginas I
 
 A rotina `.github/workflows/sincronizar-design-system.yml` roda todos os dias e também pode ser disparada pelo botão "Run workflow" na aba Actions do GitHub. Ela:
 
-1. copia a versão mais recente dos arquivos listados em `arquivos.txt` (script `scripts/sincronizar-design-system.sh`);
-2. se algo mudou, testa o site (build) e o app Experience Intelligence (`npm ci`, tipos, lint, testes e build em `apps/experience-intelligence`);
+1. copia a versão mais recente dos arquivos listados em `arquivos.txt` (script `scripts/sincronizar-design-system.sh`; uma linha pode ser um arquivo, uma pasta inteira terminada em `/` ou `excluir <arquivo>`, como no produto FindLook);
+2. se algo mudou, testa a área restrita em React (tipos, testes, conformidade e build em `apps/area-restrita`), o site (build) e o app Experience Intelligence (`npm ci`, tipos, lint, testes e build em `apps/experience-intelligence`);
 3. com o teste aprovado, abre ou atualiza um pull request "Sincroniza o design system Dani Moscatelli", com a lista de mudanças do design system;
 4. se um arquivo da lista não existir mais ou o teste falhar, não aplica nada e abre uma issue avisando.
 

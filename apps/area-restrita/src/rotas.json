@@ -1,0 +1,73 @@
+{
+  "_leia": "Menu e páginas da área restrita (D-051). Em 'react', cada página já feita em React tem um estado: 'previa' = servida só em /admin/app/<caminho>; 'publicada' = também substitui a página de HTML em /admin/<caminho> (corte). Página fora de 'react' continua sendo a de HTML (public/admin/). Só a dona do produto autoriza 'publicada': as páginas em React mudam a aparência, então cada lote precisa do 'sim' dela.",
+  "paginas": [
+    {
+      "id": "inicio",
+      "caminho": "",
+      "rotulo": "Início",
+      "icone": "inicio"
+    },
+    {
+      "id": "contatos",
+      "caminho": "contatos/",
+      "rotulo": "Contato",
+      "icone": "contato",
+      "contador": "contatos"
+    },
+    {
+      "id": "reunioes",
+      "caminho": "reunioes/",
+      "rotulo": "Reuniões",
+      "icone": "reunioes"
+    },
+    {
+      "id": "parceiros",
+      "caminho": "parceiros/",
+      "rotulo": "Parceiros",
+      "icone": "parceiros",
+      "contador": "parceiros",
+      "sub": [
+        {
+          "id": "parceiros",
+          "caminho": "parceiros/",
+          "rotulo": "Perfis e candidaturas"
+        },
+        {
+          "id": "comunicados",
+          "caminho": "comunicados/",
+          "rotulo": "Comunicados"
+        }
+      ]
+    },
+    {
+      "id": "projetos",
+      "caminho": "pesquisas/",
+      "rotulo": "Projetos",
+      "icone": "projetos",
+      "contador": "projetos",
+      "sub": [
+        {
+          "id": "pesquisas",
+          "caminho": "pesquisas/",
+          "rotulo": "Pesquisas"
+        }
+      ]
+    },
+    {
+      "id": "lancamento",
+      "caminho": "lancamento/",
+      "rotulo": "Lançamento",
+      "icone": "lancamento"
+    }
+  ],
+  "outras": [
+    {
+      "id": "configuracoes",
+      "caminho": "configuracoes/",
+      "rotulo": "Configurações"
+    }
+  ],
+  "react": {
+    "inicio": "publicada"
+  }
+}

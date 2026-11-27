@@ -75,10 +75,10 @@ body:has(#app:not(.hidden)) { padding-top: 64px; }
 img.avatar { object-fit: cover; background: var(--muted); }
 .drawer nav { padding: 12px; display: grid; gap: 2px; flex: 1; align-content: start; overflow-y: auto; overflow-x: hidden; }
 /* Itens do menu (como a navegação do site do DS): ícone 16px, nome 14px médio, texto cinza; hover --accent;
-   ativo com fundo rosa claro (--primary-muted) e texto vermelho (--primary-text). */
+   ativo com fundo rosa claro (--primary-suave, o rosa do meio: regra de 27/11/2026) e texto vermelho (--primary-text). */
 #drawer-nav > a, #drawer-nav .nav-pai { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 8px 12px; border: 0; border-radius: var(--radius-sm); background: none; font: inherit; font-size: 14px; font-weight: 500; line-height: 1.3; color: var(--muted-foreground); text-decoration: none; text-align: left; cursor: pointer; position: relative; transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); }
 #drawer-nav > a:hover, #drawer-nav .nav-pai:hover { background: var(--sidebar-accent); color: var(--foreground); }
-#drawer-nav > a[aria-current=page], .nav-grupo:not(.aberto) > .nav-pai.pai-ativo { background: var(--primary-muted); color: var(--primary-text); }
+#drawer-nav > a[aria-current=page], .nav-grupo:not(.aberto) > .nav-pai.pai-ativo { background: var(--primary-suave); color: var(--primary-text); }
 .nav-grupo.aberto > .nav-pai.pai-ativo { color: var(--foreground); }
 .drawer svg { width: 16px; height: 16px; flex-shrink: 0; }
 .nav-seta { margin-left: auto; display: inline-flex; color: var(--muted-foreground); }
@@ -90,7 +90,7 @@ img.avatar { object-fit: cover; background: var(--muted); }
 .nav-grupo.aberto > .nav-sub { display: grid; }
 .nav-sub a { display: block; padding: 6px 12px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 400; color: var(--muted-foreground); text-decoration: none; transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); }
 .nav-sub a:hover { color: var(--foreground); background: var(--sidebar-accent); }
-.nav-sub a[aria-current=page] { background: var(--primary-muted); color: var(--primary-text); font-weight: 500; }
+.nav-sub a[aria-current=page] { background: var(--primary-suave); color: var(--primary-text); font-weight: 500; }
 /* Botão "Menu" no topo do menu lateral (recolhe e expande; só no computador) */
 .menu-topo { display: none; }
 .drawer .recolher { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 8px 0 0; border: 0; border-radius: var(--radius-sm); background: none; cursor: pointer; font: inherit; color: var(--muted-foreground); position: relative; }
@@ -286,7 +286,7 @@ input[type=search] { padding-left: 40px; background: var(--input-background) url
   html.menu-recolhido #drawer nav { padding: 8px; overflow: visible; }
   html.menu-recolhido #drawer-nav > a, html.menu-recolhido #drawer-nav .nav-pai { justify-content: center; padding: 8px 0; gap: 0; }
   html.menu-recolhido .nav-seta { display: none; }
-  html.menu-recolhido #drawer-nav .nav-pai.pai-ativo { background: var(--primary-muted); color: var(--primary-text); }
+  html.menu-recolhido #drawer-nav .nav-pai.pai-ativo { background: var(--primary-suave); color: var(--primary-text); }
   /* recolhido, o contador vira um ponto no canto do ícone (o número continua no nome acessível do item) */
   html.menu-recolhido #drawer .nav-count { position: absolute; top: 7px; left: calc(50% + 3px); min-width: 0; width: 12px; height: 12px; padding: 0; font-size: 0; border: 2px solid var(--sidebar); margin: 0; }
   /* dica (Tooltip do DS: popover, borda, sombra média, cantos pequenos, 13px médio) */
@@ -329,7 +329,7 @@ input[type=search] { padding-left: 40px; background: var(--input-background) url
 .perfil-menu a, .perfil-menu button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 8px 12px; border-radius: var(--radius-sm); border: 0; background: none; font: inherit; font-size: 14px; font-weight: 600; color: var(--foreground); text-decoration: none; text-align: left; cursor: pointer; }
 .perfil-menu svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--muted-foreground); }
 .perfil-menu a:hover, .perfil-menu button:hover { background: var(--accent); color: var(--accent-foreground); }
-.perfil-menu a[aria-current=page] { background: var(--primary-muted); color: var(--primary-text); }
+.perfil-menu a[aria-current=page] { background: var(--primary-suave); color: var(--primary-text); }
 .perfil-menu a[aria-current=page] svg { color: var(--primary-text); }
 .perfil-menu #logout:hover, .perfil-menu #logout:hover svg { color: var(--primary-text); }
 @media (prefers-reduced-motion: reduce) { .perfil-menu { animation: none; } .perfil-btn svg { transition: none; } }

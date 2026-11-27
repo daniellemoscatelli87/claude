@@ -30,6 +30,7 @@ jobs:
           cache-dependency-path: |
             package-lock.json
             apps/experience-intelligence/package-lock.json
+            apps/area-restrita/package-lock.json
 
       - name: Copiar a versão mais recente do design system
         run: bash scripts/sincronizar-design-system.sh
@@ -45,7 +46,19 @@ jobs:
             echo "houve=sim" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Testar o site (build)
+      # A área restrita em React (D-051) recebe a pasta ui inteira do DS: o PR só abre se ela continuar passando nos
+      # tipos, nos testes, na conformidade com o DS (zero desvios) e no build.
+      - name: Testar a área restrita em React (tipos, testes, conformidade com o DS e build)
+        if: steps.mudanca.outputs.houve == 'sim'
+        working-directory: apps/area-restrita
+        run: |
+          npm ci
+          npm run typecheck
+          npm test
+          npm run conformidade
+          npm run build
+
+      - name: Testar o site (build, que inclui a área restrita em React)
         if: steps.mudanca.outputs.houve == 'sim'
         run: |
           npm ci
@@ -90,7 +103,7 @@ jobs:
             echo
             echo "## Teste automático"
             echo
-            echo "Build do site aprovado. App Experience Intelligence aprovado em tipos, lint, testes e build."
+            echo "Build do site aprovado. Área restrita em React aprovada em tipos, testes, conformidade com o DS e build. App Experience Intelligence aprovado em tipos, lint, testes e build."
             echo "Os testes não avaliam a aparência: confira a área restrita e as telas do app se a mudança for visual."
             echo
             echo "Lembrete: troque o ?v= do theme.css nas páginas de public/admin/ para o navegador não usar a cópia antiga."
@@ -114,7 +127,7 @@ jobs:
           if [ -z "$ABERTA" ]; then
             gh issue create --title "$TITULO" --body "A sincronização automática não foi aplicada. Detalhes da execução: $LINK
 
-          Causas mais comuns: um arquivo listado em design-system/arquivos.txt foi renomeado ou removido no design system, ou a mudança quebrou o build do site ou os testes do app Experience Intelligence (apps/experience-intelligence)."
+          Causas mais comuns: um arquivo listado em design-system/arquivos.txt foi renomeado ou removido no design system, ou a mudança quebrou o build do site, os testes do app Experience Intelligence (apps/experience-intelligence) ou os da área restrita em React (apps/area-restrita)."
           else
             gh issue comment "$ABERTA" --body "Nova falha: $LINK"
           fi

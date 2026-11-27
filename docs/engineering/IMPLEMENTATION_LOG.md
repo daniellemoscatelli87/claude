@@ -6,6 +6,14 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-27 · Área restrita em React: Início publicada em /admin/ (D-051, D-052)
+
+- **Sincronização:** `DS_REF=main bash scripts/sincronizar-design-system.sh`; `design-system/versao.txt` = `cb5847c` (DS com as peças do painel publicadas). Os arquivos de `apps/experience-intelligence/` voltaram ao que está no `main` (fora do escopo, D-048).
+- **Corte:** `apps/area-restrita/src/rotas.json` com `"inicio": "publicada"`; o build grava `dist/admin/index.html` (React) e `dist/admin/app/index.html`. `public/admin/index.html` continua no repositório até a limpeza (A9).
+- **Páginas de HTML:** `public/admin/admin.css` com o item ativo do menu em `--primary-suave` (#FCEEEE, regra de selecionado de 27/11/2026); `?v=cb5847c` no `theme.css` e `?v=20261127a` no `admin.css` das 8 páginas.
+- **Testes:** `npm run typecheck` ok; `npm test` 28 ok; `npm run conformidade` 0; `npm run build` na raiz ok; `tests/navegador/inicio.cjs` (1280 e 390 px, agora também abre `/admin/` e confere que é a Início em React, com a mesma sessão e navegação interna, e uma página de HTML ainda não migrada já logada) 95 verificações, tudo passou, axe sem violações; suíte da área restrita de HTML (`public/` servido na porta 4173) 130 casos passaram, com as cores novas (item ativo #FCEEEE, texto de apoio #5A6A80). Capturas em 390, 768, 1024 e 1280 px.
+- **Observação do DS:** a captura de página inteira do Playwright redimensiona a janela e faz os rótulos do `MenuLateral` repetirem a entrada (aparecem claros na captura); com animações desligadas na captura, ficam normais. Registrar no DS se repetir ao redimensionar a janela de verdade.
+
 ## 2026-11-27 · Contatos: e-mails de contato@ voltaram a travar na cópia para o painel, corrigido e publicado
 
 - **Pedido da dona do produto:** os e-mails não estavam chegando na página Contatos do painel.
@@ -1323,6 +1331,39 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Área restrita (Parceiros > Autorização da galeria):** botão "Agendar envio"; janela com "Para quem" (todos que ainda não decidiram ou escolher pessoas, com busca), data e hora, "Ver o e-mail"; lista "Envios agendados" com situação, "Alterar" e "Excluir" enquanto agendado.
 - **Verificação executada:** painel com login e dados simulados (validações, conversão do horário de Brasília, criar, alterar, excluir); migração num Postgres 16 local sem o `pg_cron` (RLS, colunas alteráveis, chave protegida, função protegida); `esbuild` da função; `npm run build`.
 - **Pendente:** aplicar a migração, publicar a função e o site; teste real com um agendamento para o e-mail de teste.
+
+## 2026-11-27 · Área restrita em React: Início v3, depois da revisão de design (D-051), não publicado
+
+- **DS (`claude/pecas-do-painel`, `e1c3ee9`):** novos `ChipDeEstado` e `BarraDeComposicao`; `MenuLateral grudarAbaixoDe`; `CardIndicador compacto` e `soNumeroNoCelular`; propostas `2026-11-27-chip-de-estado.md` e `2026-11-27-barra-de-composicao.md`.
+- **Início:** números 4 lado a lado a partir de 44rem de conteúdo (1024 px de tela) e 2 × 2 no celular, todos com rótulo, número e contexto; alerta de atenção em âmbar dizendo o que fazer; descrição numa linha; gráfico com título, barra e legenda com valores; estado de cada mensagem e candidatura em texto (chip); Contato, Parceiros e Lançamento um por linha (a diferença de altura entre Parceiros e Lançamento deixava área vazia: regra da GradeDeCards). Casca: menu branco da altura da página; contador de Parceiros soma os e-mails abertos pelos parceiros, então o sino é igual à soma dos contadores do menu.
+- **Celular (pedido da dona do produto, 27/11/2026):** alerta com ação e linhas de lista corrigidos no DS (`claude/pecas-do-painel`, `cc88127`, que também integra `claude/correcoes-revisao`) e sincronizados aqui: no alerta, descrição, botão e link na mesma borda (x = 33 px a 390 px) e botão e link na mesma linha; nas linhas, a tag no x do nome (89 px) e a data a 8 px. O teste do navegador mede os dois (85 verificações, tudo passou). Os arquivos do app Experience Intelligence que a sincronização também traria ficaram de fora deste branch.
+- **Números coerentes (revisão de 27/11/2026):** o Supabase simulado do teste do navegador passou a aplicar os filtros do PostgREST (`is`, `not.is`, `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `in`, `or`) às linhas e à contagem; antes, toda contagem devolvia a tabela inteira (o subtítulo dizia "6 sem resposta" e o gráfico, 3). Rótulos: "Lida, sem resposta" no gráfico e nos chips (o "sem resposta" do subtítulo inclui as não lidas); o subtítulo de Contato mostra também as não lidas (= contador do menu) e o de Parceiros os e-mails abertos (contador do menu = candidaturas não vistas + e-mails abertos). O teste confere cada número contra a consulta: 83 verificações, tudo passou.
+- **Comandos:** `npm run typecheck` ok; `npm test` 28 ok; `npm run conformidade` 0; `npm run build` ok; `tests/navegador/inicio.cjs` 74 verificações, tudo passou (o teste do Esc das notificações passou a esperar o painel sumir, em vez de 400 ms fixos). `versao.txt` continua `30d1ef0`.
+
+## 2026-11-27 · Área restrita em React: casca do painel e Início com as peças novas do DS (D-051), não publicado
+
+- **Branch:** `claude/admin-react`. Depende do branch `claude/pecas-do-painel` do DS (casca do painel, cabeçalho da página, card de indicador e ícone com base, trazidos da FindLook com as cores do DS), ainda sem o "sim" da dona do produto.
+- **Implementado:** `src/casca/Casca.tsx` com `painel-shell` (barra branca na largura toda, menu 240/64 px que empurra o conteúdo, "≡ MENU", contadores redondos, sino com contador vermelho no canto, gaveta `SidePanel` no celular); `src/telas/Inicio.tsx` reorganizada por prioridade (alerta "Precisa da sua atenção" com a ação direta, ou "Tudo em dia"; 4 números em `CardIndicador` clicáveis, sem apertar; listas compactas com nome, empresa · cargo, assunto e data; situação das últimas mensagens em `BarrasEmpilhadas100`); teste do navegador atualizado (prioridade, cards não apertados, contador do sino, 6 mensagens fictícias para testar o limite de 5 linhas).
+- **Sincronização:** `DS_REF=claude/pecas-do-painel bash scripts/sincronizar-design-system.sh` (pasta `ui`); `design-system/versao.txt` **não** foi mudado (continua `30d1ef0`): só muda quando o DS publicar no `main`.
+- **Comandos executados:** em `apps/area-restrita`: `npm run typecheck` ok; `npm test` 28 ok; `npm run conformidade` "OK", total 0; na raiz `npm run build` ok; `tests/navegador/inicio.cjs` em 1280 e 390 px: tudo passou, axe sem violações na Início.
+- **Pendente:** o DS publicar as peças no `main`; depois, nova sincronização pelo `main` e `versao.txt`; decisão da dona do produto sobre a cor do contador (`--primary-text`, 6,2:1, no lugar de `--primary`, 4,2:1).
+
+## 2026-11-27 · Área restrita em React: fundação, login e Início em prévia (D-051), não publicado
+
+- **Branch:** `claude/admin-react` (sem pull request, sem publicação). Plano: `docs/engineering/ADMIN_REACT.md`.
+- **Implementado:**
+  - `apps/area-restrita/`: Vite 6 + React 18.3 + Tailwind 4.1.12 (versões do DS), `src/components/ui/` e `src/styles/` sincronizados do DS (versão `30d1ef0`), casca (`src/casca/`), Entrar/definir senha/nova senha/sem acesso (`src/telas/Acesso.tsx`), Início (`src/telas/Inicio.tsx`), dados (`src/dados/`), rotas e corte (`src/rotas.json`, `src/rotas.ts`, `scripts/montar-saida.mjs`);
+  - conformidade: `scripts/conformidade/verificar.mjs` e `conformidade-base.json` (zero);
+  - `scripts/sincronizar-design-system.sh` aceita pasta inteira e `excluir`; `design-system/arquivos.txt` com as linhas do app;
+  - `package.json` da raiz: `build` chama `build:area-restrita`;
+  - workflow do DS: passo de tipos, testes, conformidade e build do app.
+- **Comandos executados (27/11/2026):**
+  - `DS_REF=30d1ef0 bash scripts/sincronizar-design-system.sh`: 79 arquivos da pasta `ui` copiados; nenhum arquivo já sincronizado mudou;
+  - em `apps/area-restrita`: `npm run typecheck` ok; `npm test` 28 testes ok; `npm run conformidade` "OK", total 0; `npm audit` 0 vulnerabilidades;
+  - na raiz: `npm ci` e `npm run build` ok (site igual; `dist/admin/app/` criado; `dist/admin/index.html` continua o de HTML);
+  - `tests/navegador/inicio.cjs` (Playwright, Supabase simulado com dados fictícios, 1280 e 390 px): 55 verificações ok; axe sem violações na Início; no Entrar, o axe aponta o contraste do botão principal do DS (4,2:1);
+  - falhas encontradas e corrigidas no caminho: divisão manual dos pacotes do Vite (React e Radix separados) quebrava a página por dependência circular (ficou só o Supabase separado); selos e texto de apoio abaixo do AA (trocados pelo `Badge` de contorno e `--foreground`); o primeiro Esc não fechava o menu no celular (dica do `sidebar`; sem dica no celular); card de número com selo ao lado estourava a largura (selo embaixo).
+- **Pendente:** "sim" da dona do produto para a fundação; peças do DS (casca do painel, cabeçalho da página, card de indicador, ícone com base) pelo processo formal; decisão de contraste no DS; lotes 1 a 8 do plano.
 
 ## Estado do repositório encontrado (19/10/2026)
 

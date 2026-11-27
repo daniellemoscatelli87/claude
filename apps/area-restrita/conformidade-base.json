@@ -1,0 +1,19 @@
+{
+  "_leia": "Catraca da conformidade da área restrita em React com o Design System Dani Moscatelli: contagem de desvios por arquivo e regra. Começou em zero (27/11/2026) e só desce. Gerado por npm run conformidade:atualizar; ver docs/engineering/ADMIN_REACT.md.",
+  "total": {
+    "cor-solta": 0,
+    "tw-cor": 0,
+    "cor-paleta-tailwind": 0,
+    "tw-texto": 0,
+    "tw-raio": 0,
+    "tw-sombra": 0,
+    "tw-espaco": 0,
+    "sombra-parada": 0,
+    "html-button": 0,
+    "html-input": 0,
+    "html-select": 0,
+    "html-textarea": 0,
+    "componente-duplicado": 0
+  },
+  "arquivos": {}
+}
