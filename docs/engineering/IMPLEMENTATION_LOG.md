@@ -6,6 +6,13 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-27 · Site em React: Rede de Parceiros publicada (S4, D-053) e limpeza da página inicial em HTML
+
+- **S4 (`apps/site/src/paginas/rede-parceiros/`):** `/rede-parceiros/` em React com o DS (peças em `SITE_REACT.md`, seção 6d), marcada "publicada". Cenas da simulação em `Cenas.tsx`; e-mail do estúdio com `email_off` num componente comum (`compartilhado/EmailDoEstudio.tsx`, também usado pela privacidade).
+- **Limpeza:** `index.html` movido para `apps/site/tests/referencia/inicio.html`; `src/em-breve.ts`, `src/em-breve.css` e `public/inicio/ie3-secoes.*` apagados; entrada `main` saiu do `vite.config.ts`. A página inicial em React foi conferida no ar antes (`tests/navegador/inicio.cjs` com `BASE=https://www.danimoscatelli.com.br`, Supabase simulado: 37 de 37).
+- **Verificação executada:** em `apps/site`: tipos, 49 de 49 testes, conformidade em 0, build. Na raiz: build e `comparar-dist` contra o `main` anterior: 300 iguais; fora o app e as páginas publicadas, só os arquivos de `assets/` das páginas de HTML apagadas (sumiram) e os nomes novos dos pedaços que elas dividiam. Navegador (`tests/navegador/rede-parceiros.cjs`): 390, 768, 1024 e 1280 px sem erros (também sem "menos movimento"), sem rolagem horizontal, axe sem violações, alvos de 44 px, uma borda esquerda a 390 px, setores com a mesma altura; gaveta do cadastro (abre pelos links, carrega o formulário, fecha no Esc e no X); simulação por clique e pelas setas; dúvidas; pílula; botão subir.
+- **Pendências:** apagar `rede-parceiros/index.html`, `src/rede-parceiros-inicio.ts`/`.css` depois de conferida no ar. Lacunas do DS: `SITE_REACT.md`, seção 9.
+
 ## 2026-11-27 · Site em React: página inicial publicada (S3, D-053) e limpeza do Projeto Piloto e da privacidade em HTML
 
 - **S3 (`apps/site/src/paginas/inicio/`):** `/` em React com o DS (peças por seção em `SITE_REACT.md`, seção 6c), marcada "publicada". "Notificar lançamento" grava só o e-mail em `notificacoes_lancamento` (como o `src/em-breve.ts`), com "Informe um e-mail válido.", "Não foi possível enviar. Tente novamente.", "Enviando…" e "Obrigado! Até breve!" por 4 s; evento `cadastro_lancamento`. Redes sociais com `clique_rede_social`; aviso "Tem um projeto?" com `clique_aviso_whatsapp`. A cabeça ganhou os dados estruturados (`cabeca.jsonld` no `rotas.json`, gravados pelo `montar-saida.mjs` e comparados por `tests/cabeca.test.ts`). `CabecalhoDeSecao` passou a ser comum (`compartilhado/site/`), usado pelo Projeto Piloto e pela Início.
