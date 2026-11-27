@@ -193,6 +193,26 @@ async function rodar(browser, largura) {
       `${L}: contadores do menu = consultas (${JSON.stringify(contadores)}; esperado Contato ${esperado.naoLidas}, Parceiros ${esperado.naoVistas}+${esperado.emails}, Projetos ${esperado.respostas})`);
   }
 
+  // Alinhamento no celular (dona do produto, 27/11/2026): no alerta, descrição, botão e link na mesma borda esquerda
+  // (o link na mesma linha do botão, centralizado com ele, ou embaixo, na mesma borda); nas linhas, a tag no x do nome.
+  if (largura < 640) {
+    const al = await page.evaluate(() => {
+      const a = document.querySelector("[data-prioridade]");
+      const r = (s) => a.querySelector(s).getBoundingClientRect();
+      const ic = r("[data-slot=alerta-com-acao-icone]"), ti = r("[data-slot=alerta-com-acao-titulo]"), de = r("[data-slot=alerta-com-acao-descricao]"), bo = r("[data-slot=botao-do-alerta]"), li = r("[data-slot=link-do-alerta]");
+      const mesmaLinha = Math.abs((bo.top + bo.height / 2) - (li.top + li.height / 2)) < 1;
+      return { icone: Math.round(ic.left), descricao: Math.round(de.left), botao: Math.round(bo.left), link: Math.round(li.left), mesmaLinha, tituloCentrado: Math.abs((ic.top + ic.height / 2) - (ti.top + ti.height / 2)) < 2 };
+    });
+    ok(al.descricao === al.icone && al.botao === al.icone && (al.mesmaLinha || al.link === al.icone) && al.tituloCentrado,
+      `${L}: alerta com uma borda esquerda só (${JSON.stringify(al)})`);
+    const linhas = await page.evaluate(() => [...document.querySelectorAll("section[aria-labelledby=h-contato] [data-slot=linha-de-lista], section[aria-labelledby=h-parceiros] [data-slot=linha-de-lista]")].map((l) => {
+      const t = l.querySelector("[data-slot=linha-de-lista-conteudo]").getBoundingClientRect(), c = l.querySelector("[data-slot=chip-de-estado]").getBoundingClientRect();
+      const data = [...l.querySelector("[data-slot=linha-de-lista-fim]").querySelectorAll("span")].pop().getBoundingClientRect();
+      return { nome: Math.round(t.left), tag: Math.round(c.left), vao: Math.round(data.left - c.right), centro: Math.abs((c.top + c.height / 2) - (data.top + data.height / 2)) < 1.5 };
+    }));
+    ok(linhas.every((x) => x.tag === x.nome && x.vao === 8 && x.centro), `${L}: tag no x do nome, data a 8 px, centralizadas (${JSON.stringify(linhas.slice(0, 2))} …)`);
+  }
+
   // O número do sino é a soma dos contadores do menu (mesmo número, mesmo sentido).
   const somaDoMenu = await page.evaluate(() => { const nav = document.querySelector('nav[aria-label="Páginas da área restrita"]'); return nav ? [...nav.querySelectorAll("[data-slot=contador-do-painel]")].reduce((s, c) => s + Number(c.firstChild.textContent), 0) : null; });
   const doSino = Number(await page.locator('[data-slot="notificacoes"] [data-slot="contador-do-painel"]').innerText());
