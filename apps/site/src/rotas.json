@@ -1,5 +1,5 @@
 {
-  "_leia": "Páginas do site público e o corte página a página para React com o Design System (D-053). Cada página tem o endereço de hoje (caminho), o arquivo que o build grava no dist do site (saida), o HTML que a serve hoje (origem) e o lote da migração. Em 'react', cada página já feita em React tem um estado: 'previa' = servida só em /site/previa/<caminho>, sem indexação; 'publicada' = também substitui, só no dist, o HTML de hoje no mesmo endereço. Página fora de 'react' continua sendo a de HTML. Cabeça (título, descrição, canonical, compartilhamento) fica em 'cabeca' e precisa ser igual à da página de HTML (teste tests/cabeca.test.ts).",
+  "_leia": "Páginas do site público e o corte página a página para React com o Design System (D-053). Cada página tem o endereço de hoje (caminho), o arquivo que o build grava no dist do site (saida), o HTML que a servia antes do React (origem; depois de publicada e conferida no ar, a cópia sai de public/ e fica em apps/site/tests/referencia/ só para os testes) e o lote da migração. Em 'react', cada página já feita em React tem um estado: 'previa' = servida só em /site/previa/<caminho>, sem indexação; 'publicada' = também substitui, só no dist, o HTML de hoje no mesmo endereço. Página fora de 'react' continua sendo a de HTML. Cabeça (título, descrição, canonical, compartilhamento) fica em 'cabeca' e precisa ser igual à da página de HTML (teste tests/cabeca.test.ts).",
   "paginas": [
     { "id": "inicio", "caminho": "/", "saida": "index.html", "origem": "index.html", "lote": "S3" },
     { "id": "projeto-piloto", "caminho": "/projeto-piloto/", "saida": "projeto-piloto/index.html", "origem": "projeto-piloto/index.html", "lote": "S2" },
@@ -39,7 +39,7 @@
       "id": "descadastro",
       "caminho": "/comunicados/descadastro/",
       "saida": "comunicados/descadastro/index.html",
-      "origem": "public/comunicados/descadastro/index.html",
+      "origem": "apps/site/tests/referencia/comunicados-descadastro.html",
       "lote": "S7",
       "cabeca": {
         "titulo": "Deixar de receber comunicados | Dani Moscatelli",
@@ -53,7 +53,7 @@
       "id": "erro-404",
       "caminho": null,
       "saida": "404.html",
-      "origem": "public/404.html",
+      "origem": "apps/site/tests/referencia/404.html",
       "lote": "S7",
       "cabeca": {
         "titulo": "Página não encontrada • Dani Moscatelli | Experience Design Studio",

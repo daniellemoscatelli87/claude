@@ -10,6 +10,7 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 - **Sincronização:** `DS_REF=d2aeb40 bash scripts/sincronizar-design-system.sh`, aplicada só ao site em React (`apps/site`), ao catálogo e ao `versao.txt`. A área restrita em React, o `public/design-system/theme.css` e o app EI (stand-by) ficaram como estavam: a área restrita é de outra frente e recebe a versão nova pela sincronização diária (o PR dela testa o app antes).
 - **404:** `PaginaDeErro` com o `Logo`. **Descadastro:** `MolduraDeConta`, `BotaoDeEnvio`, `EstadoFinal`. **Privacidade:** `Prosa` e `Logo`; passa a "publicada".
+- **HTML substituído saiu de `public/`:** `404.html` e `comunicados/descadastro/index.html` (conferidas no ar depois do PR #255) foram para `apps/site/tests/referencia/`, só para os testes de cabeça e de textos. O build continua gravando as duas páginas no mesmo lugar do `dist`.
 - **Lacuna do DS encontrada:** o `Logo` sem `fill-rule="evenodd"` (miolos das letras preenchidos); contornado pela propriedade do próprio componente (`LOGO_CORRIGIDO`).
 - **Verificação executada:** em `apps/site`: tipos sem erros, 34 de 34 testes, conformidade em 0, build. Na raiz: build e `comparar-dist` contra o `main` (`118f573`): 303 arquivos iguais, só as diferenças esperadas (arquivos do app, 3 prévias e as 3 páginas publicadas). Navegador: 61 conferências passaram, sem avisos (os links do `RodapeSite` agora têm 44 px no celular); axe sem violações.
 

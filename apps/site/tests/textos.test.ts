@@ -3,7 +3,10 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { renderizar } from "../src/servidor";
 
-const antes = (rel: string) => readFileSync(new URL(`../../../public/${rel}`, import.meta.url), "utf8");
+import { PAGINAS_DO_SITE } from "../src/rotas";
+
+/** O HTML de antes de cada página (em public/ ou, depois de publicada e conferida, em tests/referencia/). */
+const antes = (id: string) => readFileSync(new URL(`../../../${PAGINAS_DO_SITE.find((p) => p.id === id)!.origem}`, import.meta.url), "utf8");
 
 /** Texto visível de um pedaço de HTML: sem comentários, scripts, estilos, partes escondidas (aria-hidden, medidas
  * invisíveis do BotaoDeEnvio) e marcas; espaços normalizados. */
@@ -29,7 +32,7 @@ const trecho = (html: string, abre: RegExp, fecha: string) => {
 describe("mesmos textos", () => {
   it("Política de Privacidade: o artigo inteiro, palavra por palavra", () => {
     const novo = renderizar("privacidade");
-    const esperado = texto(trecho(antes("privacidade/index.html"), /<article/, "</article>"));
+    const esperado = texto(trecho(antes("privacidade"), /<article/, "</article>"));
     expect(esperado.length).toBeGreaterThan(5000);
     expect(texto(trecho(novo, /<article/, "</article>"))).toBe(esperado);
   });
@@ -43,13 +46,13 @@ describe("mesmos textos", () => {
   });
   it("404: os mesmos textos e o mesmo link (\"Erro 404\" vai para leitores de tela; o título vem antes)", () => {
     const novo = texto(renderizar("erro-404"));
-    expect(texto(trecho(antes("404.html"), /<main>/, "</main>"))).toBe("Erro 404 Página não encontrada O endereço pode ter mudado ou não existe mais. Ir para a página inicial");
+    expect(texto(trecho(antes("erro-404"), /<main>/, "</main>"))).toBe("Erro 404 Página não encontrada O endereço pode ter mudado ou não existe mais. Ir para a página inicial");
     expect(novo).toBe("Página não encontrada Erro 404. O endereço pode ter mudado ou não existe mais. Ir para a página inicial");
     expect(renderizar("erro-404")).toContain('href="/"');
   });
   it("Descadastro: os mesmos textos ao abrir (o botão só liga depois de conferir o link)", () => {
     const novo = renderizar("descadastro");
-    const pedir = texto(trecho(antes("comunicados/descadastro/index.html"), /<section id="pedir">/, "</section>"));
+    const pedir = texto(trecho(antes("descadastro"), /<section id="pedir">/, "</section>"));
     expect(pedir).toMatch(/^Deixar de receber comunicados Confirme .+ Confirmar$/);
     expect(texto(novo)).toBe(pedir);
     expect(novo).toMatch(/<button[^>]*disabled/);

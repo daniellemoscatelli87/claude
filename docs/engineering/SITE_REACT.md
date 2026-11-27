@@ -47,8 +47,8 @@ O estado de cada página fica em `apps/site/src/rotas.json` (campo `react`):
 | `"previa"` | grava `dist/site/previa/<caminho>index.html` (a 404 em `/site/previa/404/`), sempre com `noindex, nofollow` | a página em React no endereço da prévia; o endereço de hoje continua HTML |
 | `"publicada"` | também grava `dist/<saida>` (por exemplo `dist/404.html` ou `dist/comunicados/descadastro/index.html`), **no lugar da cópia do HTML, só no `dist`** | o endereço de hoje passa a ser React, com a mesma cabeça da página de HTML |
 
-- **Voltar atrás:** trocar `"publicada"` por `"previa"`; o próximo build volta a servir o HTML.
-- A página de HTML só sai do repositório num commit posterior, depois de a versão em React estar publicada e conferida no ar.
+- **Voltar atrás:** trocar `"publicada"` por `"previa"`; o próximo build volta a servir o HTML, enquanto ele estiver em `public/`.
+- A página de HTML só sai de `public/` num commit posterior, depois de a versão em React estar publicada e conferida no ar. Ela vai para `apps/site/tests/referencia/` (o `origem` do mapa aponta para lá), só para os testes de cabeça e de textos. Depois disso, voltar atrás pede também devolver o arquivo a `public/`. Já saíram: `404.html` e `comunicados/descadastro/index.html` (conferidas no ar em 27/11/2026).
 - **Cabeça igual:** título, descrição, robots, referrer, canonical, Open Graph e Twitter ficam em `cabeca` no `rotas.json`. O teste `tests/cabeca.test.ts` compara com a página de HTML enquanto ela existir.
 
 ### 3.4 Prova de que nada mais muda
