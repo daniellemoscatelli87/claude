@@ -229,7 +229,7 @@ async function rodar(browser, largura) {
     const i = b.querySelector("svg").getBoundingClientRect(), r = c.getBoundingClientRect(), cs = getComputedStyle(c);
     return { alto: r.height, largo: r.width, raio: parseFloat(cs.borderRadius), fundo: cs.backgroundColor, cor: cs.color, dx: Math.round(r.left + r.height / 2 - i.right), dy: Math.round(r.top + r.height / 2 - i.top), botao: b.getBoundingClientRect().height };
   });
-  ok(sino.alto === 20 && sino.largo >= 20 && sino.raio >= 10 && sino.fundo === "rgb(184, 40, 40)" && sino.cor === "rgb(255, 255, 255)" && Math.abs(sino.dx) <= 1 && Math.abs(sino.dy) <= 1 && sino.botao >= 44, `${L}: contador do sino redondo, vermelho (--primary-text, 6,2:1), no canto do ícone, botão de 44 px (${JSON.stringify(sino)})`);
+  ok(sino.alto === 20 && sino.largo >= 20 && sino.raio >= 10 && sino.fundo === "rgb(204, 69, 69)" && sino.cor === "rgb(255, 255, 255)" && Math.abs(sino.dx) <= 1 && Math.abs(sino.dy) <= 1 && sino.botao >= 44, `${L}: contador do sino redondo, vermelho (--primary, 4,66:1), no canto do ícone, botão de 44 px (${JSON.stringify(sino)})`);
   ok(await page.locator('section[aria-labelledby=h-contato] [role=img]').count() === 1, `${L}: barra com a situação das últimas mensagens`);
   ok(await page.locator("section[aria-labelledby=h-contato] [data-slot=linha-de-lista]").count() === 5, `${L}: lista Contato com as 5 mensagens mais recentes (das 6)`);
   ok(await page.locator("section[aria-labelledby=h-parceiros] [data-slot=linha-de-lista]").count() === 2, `${L}: lista Parceiros com 2 candidaturas`);

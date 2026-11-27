@@ -13,8 +13,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
  * embaixo dela, o menu lateral branco com linha à direita, sobre o fundo cinza da página (--background). No topo do
  * menu, o botão "≡ Menu" (BotaoRecolherMenu, dentro de TopoDoMenu) recolhe e expande: expandido (ícone + nome, 240 px)
  * ou recolhido (só ícones, 64 px, com dica ao lado), a partir de 1024 px; o menu empurra o conteúdo, nunca o cobre.
- * Item ativo e hover iguais aos do menu do site do DS: ativo com fundo --primary a 10% e texto --primary-text; hover
- * com --accent e texto --foreground. Contadores redondos em --primary (ContadorDoPainel), no item, no grupo e no sino.
+ * Item ativo e hover iguais aos do menu do site do DS: ativo no rosa do meio (--primary-suave) com texto
+ * --primary-text, que continua rosa com o mouse em cima; hover dos outros itens no cinza claro (--accent). Contadores redondos em --primary (ContadorDoPainel), no item, no grupo e no sino.
  * MenuLateralProvider guarda a escolha (localStorage, uma chave por painel). Fora do MenuLateral (gaveta do celular,
  * em um SidePanel side="left"), tudo aparece expandido. O perfil (GatilhoDaConta) fica sempre no cabeçalho, à direita.
  */
@@ -233,15 +233,15 @@ type ContadorDoPainelProps = React.ComponentProps<"span"> & {
  * Contador redondo do painel: fundo vermelho e número branco em negrito, números tabulares. Círculo de 20 px com um
  * algarismo; com dois ou mais, vira pílula com as pontas redondas (largura mínima de 20 px, nunca um oval alto).
  * Acima de 99, "99+". O mesmo contador do item do menu, do grupo e do sino de notificações.
- * Cor: --primary-text (6,2:1 com o branco). Com --primary, o número branco de 11 px fica em 4,2:1, abaixo do AA (4,5:1);
- * decisão pendente da dona do produto (ver a proposta). O ponto do menu recolhido, sem texto, continua --primary.
+ * Cor: --primary (#CC4545, 4,66:1 com o branco, desde a decisão de cores da dona do produto de 27/11/2026; antes, com
+ * #D44D4D, o contador usava --primary-text). O ponto do menu recolhido, sem texto, também é --primary.
  */
 function ContadorDoPainel({ valor, rotulo, anel, className, ...props }: ContadorDoPainelProps) {
   return (
     <span
       data-slot="contador-do-painel"
       className={cn(
-        "inline-flex h-5 min-w-5 shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-primary-text px-1.5 text-[0.6875rem] font-bold leading-none tabular-nums text-primary-foreground",
+        "inline-flex h-5 min-w-5 shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-primary px-1.5 text-[0.6875rem] font-bold leading-none tabular-nums text-primary-foreground",
         anel && "ring-2 ring-card",
         className,
       )}
@@ -350,8 +350,9 @@ const classeDoItem = (ativo: boolean | undefined, recolhido: boolean, dentro: bo
     dentro ? "min-h-9" : "min-h-11",
     "group relative flex w-full items-center gap-2.5 rounded-sm px-3 py-2 text-left text-[0.875rem] font-medium transition-[background-color,color] duration-150",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-    // Mesmo visual do menu do site do DS (App.tsx): ativo bg-primary/10 + text-primary-text; hover bg-accent + text-foreground.
-    ativo ? "bg-primary/10 text-primary-text" : "text-muted-foreground hover:bg-accent hover:text-foreground",
+    // Regra dos rosas claros (dona do produto, 27/11/2026): ativo no rosa do meio (--primary-suave) com --primary-text,
+    // e continua rosa com o mouse em cima; hover dos outros itens no cinza claro (--accent), nunca rosa.
+    ativo ? "bg-[var(--primary-suave)] text-primary-text" : "text-muted-foreground hover:bg-accent hover:text-foreground",
     recolhido && "justify-center px-0",
   );
 
