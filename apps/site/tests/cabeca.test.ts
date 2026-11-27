@@ -13,7 +13,8 @@ function cabecaDe(html: string) {
   const titulo = decodificar(/<title>([\s\S]*?)<\/title>/.exec(cab)?.[1] ?? "");
   const meta = [...cab.matchAll(/<meta\s+(name|property)="([^"]+)"\s+content="([^"]*)"/g)].filter((m) => m[2] !== "viewport").map((m) => `${m[1]} ${m[2]} = ${decodificar(m[3])}`).sort();
   const canonical = /<link rel="canonical" href="([^"]+)"/.exec(cab)?.[1] ?? null;
-  return { titulo, meta, canonical };
+  const ld = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(cab)?.[1];
+  return { titulo, meta, canonical, jsonld: ld ? JSON.parse(ld) : null };
 }
 
 describe("cabeça igual à da página de HTML", () => {

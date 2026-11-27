@@ -60,6 +60,8 @@ export function montarCabeca(cabeca, { previa = false } = {}) {
   }
   if (previa && !temRobots) linhas.push('<meta name="robots" content="noindex, nofollow">');
   if (cabeca.canonical) linhas.push(`<link rel="canonical" href="${escapar(cabeca.canonical)}">`);
+  // Dados estruturados (schema.org) da página, como no HTML de antes; "<" escapado para não fechar o <script>.
+  if (cabeca.jsonld) linhas.push(`<script type="application/ld+json">${JSON.stringify(cabeca.jsonld).replace(/</g, "\\u003c")}</script>`);
   return linhas;
 }
 
