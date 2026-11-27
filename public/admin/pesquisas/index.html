@@ -541,7 +541,7 @@
   .pa-desc-pq h5 { display: flex; align-items: center; gap: 6px; margin: 0 0 6px; font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
   .pa-desc-pq h5 svg { width: 14px; height: 14px; }
   .pa-desc-pq p { margin: 0; font-size: 13.5px; line-height: 1.6; }
-  .pa-hipotese { display: inline-flex; align-items: center; height: 20px; margin-left: 4px; padding: 0 8px; border-radius: 999px; border: 1px solid var(--border); background: var(--muted); font-size: 11px; font-weight: 600; color: var(--muted-foreground); vertical-align: 1px; }
+  .pa-hipotese { display: inline-flex; align-items: center; height: 20px; margin-left: 4px; padding: 0 8px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent); background: var(--primary-muted); font-size: 11px; font-weight: 600; color: var(--primary-text); vertical-align: 1px; }
   .pa-ver-dados { display: inline-flex; align-items: center; gap: 4px; margin-top: 14px; padding: 0; border: 0; background: none; font: inherit; font-size: 13px; font-weight: 600; color: var(--primary-text); cursor: pointer; border-radius: var(--radius-sm); }
   .pa-ver-dados svg { width: 16px; height: 16px; transition: transform .2s; }
   .pa-ver-dados[aria-expanded="true"] svg { transform: rotate(180deg); }
@@ -567,17 +567,59 @@
   .pa-hal-v > span { display: flex; align-items: center; gap: 8px; }
   .pa-hal-v i { width: 10px; height: 10px; border-radius: 999px; flex: none; }
   .pa-hal-v b { font-weight: 700; }
+  /* Oportunidades: indicadores (CardsDeKpi do DS) e lista em linhas com colunas separadas por divisórias */
+  .pa-op-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .pa-op-kpi { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 20px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); box-shadow: var(--shadow); }
+  .pa-op-kpi > div { display: grid; gap: 4px; }
+  .pa-op-kpi span { font-size: 13px; font-weight: 500; color: var(--muted-foreground); }
+  .pa-op-kpi b { font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.025em; }
+  .pa-op-kpi-ic { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--primary-muted); color: var(--primary-text); }
+  .pa-op-kpi-ic svg { width: 18px; height: 18px; }
+  @media (max-width: 600px) { .pa-op-kpis { grid-template-columns: minmax(0, 1fr); gap: 8px; } .pa-op-kpi { padding: 14px 16px; align-items: center; } .pa-op-kpi > div { display: flex; flex-direction: row-reverse; justify-content: flex-end; align-items: baseline; gap: 10px; } .pa-op-kpi b { font-size: 22px; } }
   .pa-ops { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: op; }
-  .pa-op { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; padding: 18px 20px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); counter-increment: op; }
+  .pa-op { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1.1fr) auto; padding: 20px 22px 14px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); counter-increment: op; }
+  .pa-op > div:not(.pa-op-pe) { padding: 0 20px; }
+  .pa-op > div:first-child { padding-left: 0; }
+  .pa-op > .pa-op-c2, .pa-op > .pa-op-c3 { border-left: 1px solid var(--border); }
+  .pa-op > .pa-op-c4 { padding-right: 0; }
+  .pa-op-c1 { display: flex; gap: 14px; align-items: flex-start; }
   .pa-op-n::before { content: counter(op); }
-  .pa-op-n { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 999px; background: var(--primary-muted); color: var(--primary-text); font-size: 13px; font-weight: 800; }
-  .pa-op h4 { margin: 4px 0 4px; font-size: 16px; font-weight: 700; line-height: 1.4; }
-  .pa-op p { margin: 0; font-size: 13.5px; line-height: 1.6; color: var(--muted-foreground); }
-  .pa-op-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; font-size: 13px; font-weight: 600; color: var(--primary-text); text-decoration: none; border-radius: var(--radius-sm); }
+  .pa-op-n { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 999px; background: var(--primary-muted); color: var(--primary-text); font-size: 13px; font-weight: 800; }
+  .pa-op h4 { margin: 4px 0 6px; font-size: 16px; font-weight: 700; line-height: 1.35; text-wrap: balance; }
+  .pa-op p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted-foreground); }
+  .pa-op p b { color: var(--foreground); font-weight: 600; }
+  .pa-op h5 { display: flex; align-items: center; gap: 6px; margin: 0 0 4px; font-size: 13px; font-weight: 600; color: var(--foreground); }
+  .pa-op h5 svg { width: 16px; height: 16px; flex: none; color: var(--primary-text); }
+  .pa-op-rec { color: var(--primary-text) !important; }
+  .pa-op-c3 { display: grid; gap: 12px; }
+  .pa-op-c3 ul { margin: 0; padding: 0 0 0 16px; font-size: 13px; line-height: 1.5; color: var(--muted-foreground); }
+  .pa-op-imp { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+  .pa-op-imp svg { width: 14px; height: 14px; }
+  .pa-op-imp.alto { background: var(--primary-muted); color: var(--primary-text); }
+  .pa-op-imp.medio { background: var(--warning-muted); color: var(--warning-text); }
+  .pa-op-imp.baixo { background: var(--muted); color: var(--muted-foreground); }
+  .pa-op-pe { grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .pa-op-link { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: var(--primary-text); text-decoration: none; border-radius: var(--radius-sm); }
   .pa-op-link:hover { text-decoration: underline; text-underline-offset: 3px; }
-  .pa-op-link svg { width: 14px; height: 14px; }
-  @media (max-width: 600px) { .pa-op { padding: 16px; gap: 12px; } }
-  @media (prefers-reduced-motion: reduce) { .pa-tacc-corpo, .pa-tacc-bt > svg, .pa-ver-dados svg, .pa-hal-bola { transition: none; } .pa-int-entra, .pa-desc.pa-alvo { animation: none; } }
+  .pa-op-link svg { width: 14px; height: 14px; transition: transform .2s; }
+  .pa-op-link:hover svg { transform: translateX(3px); }
+  @media (max-width: 1000px) {
+    .pa-op { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); row-gap: 16px; }
+    .pa-op > div:not(.pa-op-pe) { padding: 0; border-left: 0 !important; }
+    .pa-op-c1 { grid-column: 1 / -1; }
+    .pa-op-c2 { padding-right: 16px !important; }
+    .pa-op-c3 { padding-left: 16px !important; border-left: 1px solid var(--border) !important; }
+    .pa-op-c4 { grid-column: 1 / -1; grid-row: 1; justify-self: end; }
+    .pa-op-c1 { grid-row: 1; padding-right: 120px !important; }
+  }
+  @media (max-width: 600px) {
+    .pa-op { grid-template-columns: minmax(0, 1fr); padding: 16px 16px 12px; }
+    .pa-op-c1 { padding-right: 0 !important; }
+    .pa-op-c4 { grid-row: auto; justify-self: start; padding-left: 46px !important; order: -1; }
+    .pa-op-c2, .pa-op-c3 { padding: 14px 0 0 !important; border-left: 0 !important; border-top: 1px solid var(--border); }
+    .pa-op-c1 { order: -2; }
+  }
+  @media (prefers-reduced-motion: reduce) { .pa-tacc-corpo, .pa-tacc-bt > svg, .pa-ver-dados svg, .pa-hal-bola, .pa-op-link svg { transition: none; } .pa-int-entra, .pa-desc.pa-alvo { animation: none; } }
   #pa-print .pa-int-painel[hidden], #pa-print .pa-desc-dados[hidden] { display: block !important; }
   #pa-print .pa-tacc-corpo { grid-template-rows: 1fr; }
   #pa-print .pa-int-abas, #pa-print .pa-ver-dados { display: none !important; }
@@ -1906,12 +1948,12 @@
     const grupos = Object.fromEntries(SECOES.map(([k]) => [k, []]));
     const ops = []; // oportunidades para o produto, cada uma ligada ao achado de origem
     let seq = 0;
-    // cada achado vira um card de descoberta (DS: DescobertaVisual); a oportunidade dele vai para a aba Oportunidades
+    // cada achado vira um card de descoberta (DS: DescobertaVisual); a oportunidade dele (op) vai para a aba Oportunidades
     const add = (g, c) => {
       if (c.nodeType) { grupos[g].push(c); return; }
       const id = "achado-" + (++seq);
       grupos[g].push(descoberta({ ...c, id }));
-      if (c.oportunidade) ops.push({ id, tema: c.tema, titulo: c.titulo, texto: c.oportunidade, grupo: g });
+      if (c.op) ops.push({ ...c.op, id, achado: c.titulo, grupo: g });
     };
     const pendentes = []; // comparações que ainda não têm gente suficiente
     const linhaPct = (rot, k, tot) => [rot, k, tot, pct(k, tot) + "%"];
@@ -1936,6 +1978,16 @@
     const cmp = (rotulo, ga, gb, f) => halteres({ rotulo, a: { rot: ga.rot, v: pc(ga.l, f), k: ct(ga.l, f), n: ga.l.length }, b: { rot: gb.rot, v: pc(gb.l, f), k: ct(gb.l, f), n: gb.l.length } });
     const dadosCmp = (ga, gb, f, nota) => ({ colunas: ["Grupo", "Pessoas", "Base", "Parte"], linhas: [linhaPct(ga.rot, ct(ga.l, f), ga.l.length), linhaPct(gb.rot, ct(gb.l, f), gb.l.length)], nota });
 
+    // sugestões de recurso por motivo de comprar fora e por item de dificuldade (pergunta 8)
+    const OPS_MOTIVO = {
+      sortimento: { titulo: "Reunir num só lugar a variedade das lojas da cidade", dor: "A variedade é o motivo mais citado para comprar fora.", recurso: "Catálogo único das lojas de Curitiba, com filtro por tamanho, modelo e tipo de peça.", ic: "loja" },
+      preco: { titulo: "Trazer promoções e faixas de preço das lojas locais", dor: "O preço é o motivo mais citado para comprar fora.", recurso: "Promoções, faixa de preço e a vantagem de ver e provar a peça na loja.", ic: "preco" },
+      indisp: { titulo: "Mostrar em qual loja da cidade a peça está", dor: "Não achar o produto na cidade é o motivo mais citado para comprar fora.", recurso: "Busca que mostra quais lojas de Curitiba têm a peça.", ic: "mapa" },
+      comodidade: { titulo: "Dizer antes de sair de casa se a peça está na loja", dor: "A comodidade é o motivo mais citado para comprar fora.", recurso: "Disponibilidade da peça por loja, antes de a pessoa sair de casa.", ic: "estoque" },
+    };
+    const REC_DIF = { tempo: "Comparar peças de várias lojas numa só tela, sem rodar lojas e sites.", muitas_lojas: "Comparar peças de várias lojas numa só tela, sem rodar lojas e sites.", onde_encontrar: "Busca que mostra em quais lojas da cidade procurar cada tipo de peça.", tamanho: "Filtro por tamanho, com a disponibilidade em cada loja.", modelagem: "Medidas e informações de caimento de cada peça.", tecido: "Fotos de detalhe e informações de tecido de cada peça.", avaliar_online: "Fotos de detalhe, medidas e informações de tecido de cada peça.", estilo: "Busca por estilo e por foto de referência.", acessorios: "Busca por estilo e por foto de referência.", precos: "Filtro por faixa de preço.", esgotada: "Disponibilidade por loja, atualizada.", distancia: "Lojas mais próximas de quem procura." };
+    const recursoDif = (id) => REC_DIF[id] || "Busca que resolva esse ponto.";
+
     /* ----- Para onde vai a compra ----- */
     const local1 = comp.filter((x) => LOCAL.includes(prim(x))).length, fora1 = comp.filter(foraPrin).length;
     const roscaCompra = roscaD(fora1 > local1
@@ -1947,13 +1999,13 @@
       contexto: `Onde as ${n} pessoas que responderam tudo mais compraram roupas, calçados e acessórios este ano.`,
       vis: roscaCompra, dados: dadosCompra,
       significa: "Pode indicar que quem mora aqui não está encontrando nas lojas da cidade o que procura.", hipotese: true,
-      oportunidade: "Mostrar que a peça procurada existe numa loja de Curitiba, com a mesma facilidade de buscar num marketplace, pode trazer parte dessa compra de volta para a cidade.",
+      op: { titulo: "Mostrar que a peça existe numa loja de Curitiba", dor: "A maior parte das pessoas compra principalmente fora da cidade.", recurso: "Resultados de lojas de Curitiba com foto, preço e bairro, tão fáceis de achar quanto num marketplace.", ic: "loja", evid: [`${fora1} de ${n} pessoas compram mais fora de Curitiba`], esperado: "Trazer parte da compra de volta para as lojas da cidade.", parte: pct(fora1, n), cat: "busca" },
     } : {
       tema: "Comércio local", titulo: "As lojas de Curitiba ainda são a primeira escolha da maioria",
       contexto: `Onde as ${n} pessoas que responderam tudo mais compraram roupas, calçados e acessórios este ano.`,
       vis: roscaCompra, dados: dadosCompra,
       significa: "Há uma base de clientes que já prefere o comércio da cidade.",
-      oportunidade: "Facilitar a busca nas lojas locais pode fortalecer um hábito que já existe e evitar que ele migre para o online de fora.",
+      op: { titulo: "Facilitar a busca nas lojas da cidade", dor: "A compra local já é a preferida, mas pode migrar para o online de fora.", recurso: "Busca que reúne as lojas de Curitiba por tipo de peça e bairro.", ic: "busca", evid: [`${local1} de ${n} pessoas compram mais em Curitiba`], esperado: "Fortalecer um hábito que já existe.", parte: pct(local1, n), cat: "busca" },
     });
     const comecaLocal = comp.filter((x) => LOCAL.includes(valores(x.respostas.q5)[0]));
     if (comecaLocal.length >= MIN_SEG) {
@@ -1964,7 +2016,7 @@
         vis: roscaD([{ rotulo: "Compram mais fora de Curitiba", v: fogem }, { rotulo: "Compram mais em Curitiba", v: m - fogem, fixo: true }], m),
         dados: { colunas: COLS, linhas: [linhaPct("Compram mais fora de Curitiba", fogem, m), linhaPct("Compram mais em Curitiba", m - fogem, m)], nota: `Base: ${m} pessoas que começam a procura em lojas de Curitiba (pergunta 5) e onde mais compraram (pergunta 2).` },
         significa: "Essas pessoas tentaram comprar na cidade primeiro. A pesquisa mostra que a compra sai daqui, não o porquê.",
-        oportunidade: "É o público mais fácil de trazer de volta, porque já procura aqui. O Find Look pode atuar no momento em que a procura local não encontra a peça.",
+        op: { titulo: "Agir quando a procura local não encontra a peça", dor: "Parte de quem começa procurando em Curitiba acaba comprando fora.", recurso: "Quando a busca não encontra a peça, sugerir peças parecidas e outras lojas da cidade que têm o item.", ic: "rota", evid: [`${fogem} de ${m} pessoas que começam a procura em Curitiba compram mais fora`], esperado: "Manter na cidade a compra de quem já quer comprar aqui.", parte: pct(fogem, m), cat: "busca" },
       });
     }
     if (perg.q2_1) {
@@ -1978,19 +2030,13 @@
           { id: "comodidade", rotulo: "Comodidade de comprar sem sair de casa", ids: ["comodidade"] },
         ].map((x) => ({ ...x, v: cita(x.ids) })).sort((a, b) => b.v - a.v);
         const g0 = gr[0];
-        const OPORT = {
-          sortimento: "Mostrar a variedade que já existe espalhada pelas lojas da cidade, reunida num só lugar, responde ao principal motivo para comprar fora.",
-          preco: "Mostrar promoções e faixas de preço das lojas locais, junto com a vantagem de ver e provar a peça, pode pesar na decisão de quem compra fora pelo preço.",
-          indisp: "Se a peça existe em alguma loja da cidade mas a pessoa não sabe onde, mostrar onde ela está resolve o motivo principal.",
-          comodidade: "Saber antes de sair de casa se a peça está na loja reduz o esforço de ir até ela, o principal motivo para comprar fora.",
-        };
         add("vazamento", {
           tema: "Por que compram fora", titulo: { sortimento: "A variedade é o motivo mais citado para comprar fora", preco: "O preço é o motivo mais citado para comprar fora", indisp: "Não achar o produto na cidade é o motivo mais citado para comprar fora", comodidade: "A comodidade é o motivo mais citado para comprar fora" }[g0.id],
           contexto: `Motivos citados pelas ${b21.length} pessoas que compram em marketplaces ou lojas online de outras cidades. Cada pessoa podia citar mais de um.`,
           vis: barras(gr, b21.length),
           dados: { colunas: ["Motivo", "Pessoas", "Base", "Parte"], linhas: gr.map((x) => linhaPct(x.rotulo, x.v, b21.length)), nota: `Base: ${b21.length} pessoas. Pergunta 2.1, várias respostas por pessoa.` },
           significa: g0.id === "preco" ? "Competir só em preço com marketplaces é difícil para uma loja local." : g0.id === "comodidade" ? "A conveniência pesa mais do que preço ou variedade." : "A decisão de comprar fora parece estar mais ligada ao que a pessoa consegue encontrar do que ao preço.", hipotese: g0.id !== "preco",
-          oportunidade: OPORT[g0.id],
+          op: { ...OPS_MOTIVO[g0.id], evid: [`${g0.v} de ${b21.length} pessoas que compram fora citam esse motivo`], esperado: "Responder ao principal motivo para comprar fora.", parte: pct(g0.v, b21.length), cat: g0.id === "preco" ? "outros" : "busca" },
         });
       }
     }
@@ -2007,7 +2053,7 @@
         vis: barras(itens, v, { ordem: "fixa" }),
         dados: { colunas: ["O que fizeram", "Pessoas", "Base", "Parte"], linhas: itens.map((x) => linhaPct(x.rotulo, x.v, v)), nota: `Base: ${v} de ${n} pessoas passaram por isso este ano. Pergunta 9.` },
         significa: "Cada desistência é uma venda que existia e não aconteceu. Quem leva algo só parecido compra, mas não o que queria.",
-        oportunidade: "Ajudar a pessoa a encontrar exatamente a peça que procura, e não uma parecida, transforma desistência em compra. Esse é o valor central do Find Look.",
+        op: { titulo: "Ajudar a encontrar exatamente a peça procurada", dor: "Quando não encontram a peça, muita gente desiste ou leva algo só parecido.", recurso: "Busca pela peça exata, com filtros de modelo, cor e tamanho, e busca por foto.", ic: "busca", evid: [`${v} de ${n} pessoas ficaram sem encontrar o que queriam`, `${nDes} desistiram da compra`], esperado: "Transformar desistência em compra.", parte: pct(v, n), cat: "busca" },
       });
     }
     const comDif = comp.filter(temDif), semD = comp.filter(semDif);
@@ -2019,7 +2065,7 @@
         contexto: `Parte de cada grupo que já desistiu de uma compra, entre as ${comDif.length + semD.length} pessoas que responderam tudo.`,
         vis: cmp("Já desistiram de uma compra", GA, GB, desistiu), dados: dadosCmp(GA, GB, desistiu, "Dificuldade: pergunta 7 (às vezes, frequentemente ou quase sempre). Desistência: pergunta 9."),
         significa: a > b ? "A desistência parece se concentrar em quem enfrenta a dificuldade com frequência." : "Outras razões além de encontrar a peça, como preço ou qualidade, podem pesar na desistência.", hipotese: true,
-        oportunidade: a > b ? "Quem tem dificuldade com frequência é quem mais ganha com o Find Look: é o público para começar. Para as lojas, resolver a busca é recuperar vendas." : null,
+        op: a > b ? { titulo: "Começar por quem tem dificuldade com frequência", dor: "Quem costuma ter dificuldade para encontrar desiste mais de comprar.", recurso: "Primeiros convites e testes do Find Look para quem relata dificuldade frequente.", ic: "pessoas", evid: [`${a}% de quem tem dificuldade já desistiu de uma compra, contra ${b}% de quem quase nunca tem`], esperado: "Testar o produto com quem mais ganha com ele.", parte: pct(comDif.length, n), cat: "outros" } : null,
       });
     }
     const difs = perg.q8.linhas.map((l) => { const v = comp.map((x) => (x.respostas.q8 || {})[l.id]).filter((y) => y && y !== "na"); return { l, k: v.filter((y) => y === "4" || y === "5").length, d: v.length }; }).filter((x) => x.d && x.k).sort((a, b) => b.k / b.d - a.k / a.d);
@@ -2031,7 +2077,7 @@
         vis: barrasPct(t5.map((d) => ({ rotulo: capt(difNat(d.l)), k: d.k, n: d.d })), 3),
         dados: { colunas: ["Item", "Acham difícil", "Avaliaram", "Parte"], linhas: t5.map((d) => linhaPct(capt(difNat(d.l)), d.k, d.d)), nota: "Base: quem avaliou cada item (sem “não se aplica”). Pergunta 8, notas 4 e 5." },
         significa: "São as necessidades mais mal atendidas hoje: é nelas que a procura falha com mais frequência.",
-        oportunidade: `Esses são os pontos que o Find Look precisa resolver primeiro, a começar por ${difNat(t5[0].l)}${t5[1] ? ` e ${difNat(t5[1].l)}` : ""}.`,
+        op: { titulo: `Resolver primeiro: ${difNat(t5[0].l)}`, dor: `${capt(difNat(t5[0].l))} é o que mais pesa na procura.`, recurso: recursoDif(t5[0].l.id), ic: "alvo", evid: t5.slice(0, 2).map((d) => `${d.k} de ${d.d} acham difícil ${difNat(d.l)}`), esperado: "Atacar a necessidade mais mal atendida hoje.", parte: pct(t5[0].k, t5[0].d), cat: "busca" },
       });
     }
     const atributos = perg.q8.linhas.map((l) => {
@@ -2047,7 +2093,7 @@
         vis: halteres({ rotulo: "Nota média do que compraram", max: 10, min: 1, fmt: fmt1, a: { rot: "Acham fácil", v: a.nf, n: a.fac.length }, b: { rot: "Acham difícil", v: a.nd, n: a.dif.length } }),
         dados: { colunas: ["Grupo", "Pessoas", "Nota média"], linhas: [["Acham fácil", a.fac.length, fmt1(a.nf)], ["Acham difícil", a.dif.length, fmt1(a.nd)]], nota: "Nota geral: média de qualidade, estética e correspondência (pergunta 4)." },
         significa: "Quando esse ponto falha, a pessoa parece ficar menos satisfeita com o que levou para casa.", hipotese: true,
-        oportunidade: `Tornar mais fácil ${difNat(a.l)}, na busca e nas informações das peças, melhora a experiência depois da compra, não só a procura.`,
+        op: { titulo: `Facilitar ${difNat(a.l)}`, dor: `Quem não consegue ${difNat(a.l)} fica menos satisfeito com o que compra.`, recurso: recursoDif(a.l.id), ic: "estrela", evid: [`Nota média ${fmt1(a.nd)} de quem acha difícil, contra ${fmt1(a.nf)} de quem acha fácil`], esperado: "Melhorar a experiência depois da compra, não só a procura.", parte: pct(a.dif.length, n), cat: "busca" },
       });
     }
 
@@ -2060,7 +2106,7 @@
         vis: roscaD([{ rotulo: "Já mandaram foto", v: enviou.length }, { rotulo: "Nunca mandaram", v: n - enviou.length, fixo: true }], n),
         dados: { colunas: COLS, linhas: [linhaPct("Já mandaram foto", enviou.length, n), linhaPct("Nunca mandaram", n - enviou.length, n)], nota: `Base: ${n} respostas completas.` },
         significa: "As pessoas sabem o que querem pelo visual, mesmo sem saber o nome da peça ou onde ela está. Hoje fazem isso à mão, loja por loja.",
-        oportunidade: "Uma busca por foto no Find Look responde a um comportamento que já existe.",
+        op: { titulo: "Busca por foto", dor: "As pessoas mandam foto de referência loja por loja para achar a peça.", recurso: "Enviar uma foto e ver peças iguais ou parecidas nas lojas da cidade.", ic: "camera", evid: [`${enviou.length} de ${n} já mandaram foto de referência para uma loja`], esperado: "Responder a um comportamento que já existe, hoje feito à mão.", parte: pct(enviou.length, n), cat: "busca" },
       });
       if (comparar(enviou, nunca, "se quem procura por foto é quem mais tem dificuldade")) {
         const a = pc(enviou, temDif), b = pc(nunca, temDif);
@@ -2070,7 +2116,7 @@
           contexto: "Parte de cada grupo que costuma ter dificuldade para encontrar o que quer.",
           vis: cmp("Costumam ter dificuldade para encontrar", GA, GB, temDif), dados: dadosCmp(GA, GB, temDif, "Foto: pergunta sobre foto de referência. Dificuldade: pergunta 7."),
           significa: a > b ? "A foto parece ser um recurso de quem não consegue encontrar a peça pelos caminhos comuns." : "Mandar foto parece ser um hábito geral.", hipotese: true,
-          oportunidade: a > b ? "A busca por foto atende justamente o público com mais dificuldade, um bom ponto de entrada para o Find Look." : "A busca por foto pode interessar a um público amplo.",
+          op: a > b ? { titulo: "Usar a busca por foto como porta de entrada", dor: "Quem procura por foto é quem mais sofre para encontrar.", recurso: "Busca por foto em destaque logo na primeira tela.", ic: "camera", evid: [`${a}% de quem manda foto tem dificuldade, contra ${b}% de quem nunca manda`], esperado: "Atender primeiro o público com mais dificuldade.", parte: pct(enviou.length, n), cat: "busca" } : null,
         });
       }
     }
@@ -2083,7 +2129,7 @@
         vis: roscaD([{ rotulo: "Perguntam antes de ir", v: contata.length }, { rotulo: "Raramente ou nunca", v: n - contata.length, fixo: true }], n),
         dados: { colunas: COLS, linhas: [linhaPct("Sempre ou às vezes perguntam", contata.length, n), linhaPct("Raramente, nunca ou não responderam", n - contata.length, n)], nota: `Base: ${n} respostas completas.` },
         significa: "Ir até a loja e não encontrar a peça é um risco que as pessoas tentam evitar, perguntando uma loja de cada vez.",
-        oportunidade: "Mostrar se a peça está disponível antes de a pessoa sair de casa elimina essa etapa e dá segurança para escolher a loja física.",
+        op: { titulo: "Mostrar a disponibilidade antes de sair de casa", dor: "As pessoas perguntam loja por loja se a peça está disponível.", recurso: "Disponibilidade da peça em cada loja, com a opção de falar com a loja.", ic: "estoque", evid: [`${contata.length} de ${n} perguntam à loja antes de ir`], esperado: "Eliminar essa etapa e dar segurança para ir à loja física.", parte: pct(contata.length, n), cat: "busca" },
       });
       if (comparar(contata, naoContata, "se quem pergunta à loja antes de ir sofre mais com peça esgotada")) {
         const a = pc(contata, difItem("esgotada")), b = pc(naoContata, difItem("esgotada"));
@@ -2093,7 +2139,7 @@
           contexto: "Parte de cada grupo que acha difícil encontrar a peça disponível, sem estar esgotada.",
           vis: cmp("Acham difícil encontrar a peça disponível", GA, GB, difItem("esgotada")), dados: dadosCmp(GA, GB, difItem("esgotada"), "Pergunta sobre contato antes de ir e pergunta 8 (peça esgotada, notas 4 e 5)."),
           significa: a > b ? "A pergunta prévia parece uma reação a frustrações com estoque." : "O hábito de perguntar antes parece ter outros motivos.", hipotese: true,
-          oportunidade: a > b ? "Informação de estoque confiável é um diferencial claro para esse público." : null,
+          op: a > b ? { titulo: "Informação de estoque confiável", dor: "Quem pergunta antes de ir já se frustrou com peça esgotada.", recurso: "Estoque atualizado pelas lojas, com a data da última atualização.", ic: "estoque", evid: [`${a}% de quem pergunta antes acha difícil encontrar a peça disponível, contra ${b}% de quem não pergunta`], esperado: "Ganhar a confiança de quem já se frustrou com estoque.", parte: pct(contata.length, n), cat: "busca" } : null,
         });
       }
     }
@@ -2106,7 +2152,7 @@
       vis: barras(top6.slice(0, 5), n),
       dados: { colunas: ["Como conhecem lojas novas", "Pessoas", "Base", "Parte"], linhas: [linhaPct("Acham difícil saber onde procurar", semSaber.length, n), ...top6.map((o) => linhaPct(o.rotulo, o.v, n))], nota: `Base: ${n} respostas completas. Perguntas 6 e 8.` },
       significa: "Parte da dificuldade pode não ser falta de oferta, e sim de descoberta: a peça pode estar numa loja da cidade que a pessoa não conhece.", hipotese: true,
-      oportunidade: `O Find Look pode ser o caminho de descoberta das lojas da cidade. Para chegar a esse público, o canal com mais alcance hoje é: ${lc(top6[0].rotulo)}.`,
+      op: { titulo: "Ajudar a saber em quais lojas procurar", dor: "Muitas pessoas não sabem em quais lojas procurar o que querem.", recurso: "Busca por tipo de peça que mostra as lojas da cidade que vendem aquilo.", ic: "mapa", evid: [`${semSaber.length} de ${n} acham difícil saber onde procurar`, `Canal com mais alcance hoje: ${lc(top6[0].rotulo)}`], esperado: "Ser o caminho de descoberta das lojas da cidade.", parte: pct(semSaber.length, n), cat: "busca" },
     });
     const fluxos = {};
     comp.forEach((x) => { const q5 = valores(x.respostas.q5)[0]; if (!q5 || q5 === "nao_procuro" || !prim(x)) return; const k = q5 + ">" + prim(x); fluxos[k] = (fluxos[k] || 0) + 1; });
@@ -2121,7 +2167,7 @@
         vis: barras(topF.slice(0, 4).map(([k, v]) => ({ rotulo: rotF(k), v })), n),
         dados: { colunas: ["Caminho", "Pessoas", "Base", "Parte"], linhas: topF.slice(0, 6).map(([k, v]) => linhaPct(rotF(k), v, n)), nota: "Onde começa a procura (pergunta 5, 1º lugar) e onde mais compra (pergunta 2, 1º lugar)." },
         significa: mesmo ? "Para esse grupo, quem atende bem a procura fica com a venda." : "Quem ajuda na procura nem sempre fica com a venda.",
-        oportunidade: "Estar presente no momento em que a procura começa é o que define onde a compra termina. É nesse momento que o Find Look precisa aparecer.",
+        op: { titulo: "Aparecer no momento em que a procura começa", dor: mesmo ? "Quem atende bem a procura fica com a venda." : "As pessoas procuram num lugar e compram em outro.", recurso: "Presença do Find Look nos canais onde a procura começa, com link direto para a busca.", ic: "rota", evid: [`Caminho mais comum: ${topF[0][1]} de ${n} pessoas`], esperado: "Influenciar onde a compra termina.", parte: pct(topF[0][1], n), cat: "outros" },
       });
     }
 
@@ -2137,7 +2183,7 @@
         contexto: `Onde está a maior diferença entre quem tem até 34 anos e quem tem 35 ou mais: parte de cada grupo que ${m.t}.`,
         vis: cmp(capt(m.t), GA, GB, m.f), dados: dadosCmp(GA, GB, m.f, "Comparação entre 5 hábitos; aparece o de maior diferença."),
         significa: m.va === m.vb ? "A dor parece atravessar as idades." : `O grupo ${m.va > m.vb ? "mais jovem" : "mais velho"} parece viver mais essa situação.`, hipotese: true,
-        oportunidade: m.va === m.vb ? "O Find Look pode falar com um público amplo de idades." : `Começar pelo grupo ${m.va > m.vb ? "mais jovem" : "mais velho"} pode tornar a mensagem do Find Look mais certeira.`,
+        op: m.va === m.vb ? null : { titulo: `Começar pelo público ${m.va > m.vb ? "mais jovem" : "mais velho"}`, dor: `${m.va > m.vb ? "Os mais jovens" : "Os mais velhos"} ${m.c}.`, recurso: "Comunicação e primeiros testes voltados a esse grupo.", ic: "pessoas", evid: [`${m.va}% de quem tem até 34 anos, contra ${m.vb}% de quem tem 35 ou mais`], esperado: "Tornar a mensagem do Find Look mais certeira.", parte: Math.max(m.va, m.vb), cat: "outros" },
       });
     }
     const cwb = comp.filter((x) => x.respostas.q1 === "sim"), rmc = comp.filter((x) => x.respostas.q1 === "rmc");
@@ -2149,7 +2195,7 @@
         contexto: `Onde está a maior diferença entre quem mora em Curitiba e na Região Metropolitana: parte de cada grupo que ${m.t}.`,
         vis: cmp(capt(m.t), GA, GB, m.f), dados: dadosCmp(GA, GB, m.f, "Comparação entre 5 hábitos; aparece o de maior diferença."),
         significa: "Morar mais longe das lojas pode mudar a forma de procurar e de comprar.", hipotese: true,
-        oportunidade: "Considerar a Região Metropolitana como público do Find Look, com lojas próximas de quem mora fora da capital, se a diferença se confirmar.",
+        op: m.va === m.vb ? null : { titulo: "Incluir a Região Metropolitana", dor: `${m.va > m.vb ? "Quem mora em Curitiba" : "Quem mora na Região Metropolitana"} ${m.c1}.`, recurso: "Busca que considera a distância e mostra lojas próximas de quem mora fora da capital.", ic: "mapa", evid: [`${m.va}% em Curitiba, contra ${m.vb}% na Região Metropolitana`], esperado: "Atender também quem mora fora da capital.", parte: pct(rmc.length, n), cat: "outros" },
       });
     }
     const sm = comp.filter(segMao).length;
@@ -2159,7 +2205,7 @@
       vis: roscaD([{ rotulo: "Compraram de segunda mão", v: sm }, { rotulo: "Não compraram", v: n - sm, fixo: true }], n),
       dados: { colunas: COLS, linhas: [linhaPct("Compraram de segunda mão", sm, n), linhaPct("Não compraram", n - sm, n)], nota: `Base: ${n} respostas completas. Pergunta 3.` },
       significa: sm > n / 2 ? "Para esse público, brechó é mais um lugar onde a peça desejada pode estar." : "A segunda mão aparece, mas ainda não é o principal caminho de compra.",
-      oportunidade: sm > n / 2 ? "Incluir brechós da cidade entre as lojas do Find Look." : "Os brechós podem entrar depois, conforme o interesse se confirmar.",
+      op: { titulo: "Incluir brechós da cidade", dor: "Comprar de segunda mão faz parte da rotina de muita gente.", recurso: "Brechós de Curitiba entre as lojas da busca.", ic: "brecho", evid: [`${sm} de ${n} compraram de segunda mão este ano`], esperado: "Mais lugares onde a peça desejada pode estar.", parte: pct(sm, n), cat: "busca" },
     });
 
     /* ----- Voz do cliente ----- */
@@ -2169,11 +2215,11 @@
     /* ----- Oportunidades que não vêm de um achado só ----- */
     const dores = perg.q8.linhas.map((l) => { const af = comp.filter(difItem(l.id)); return { l, af: af.length, des: af.filter(desistiu).length }; }).filter((d) => d.af).sort((a, b) => b.af - a.af || b.des - a.des).slice(0, 3);
     const opsGerais = [];
-    if (dores.length) opsGerais.push({ titulo: "Começar pelas dores que mais custam vendas", texto: `Resolver bem, antes de qualquer outra funcionalidade: ${juntar(dores.map((d) => `${difNat(d.l)} (difícil para ${d.af} pessoas; ${d.des} já desistiram de uma compra)`))}.` });
+    if (dores.length) opsGerais.push({ titulo: "Começar pelas dores que mais custam vendas", dor: `${capt(juntar(dores.map((d) => difNat(d.l))))}: as dificuldades que atingem mais gente.`, recurso: "Resolver bem essas dores antes de qualquer outra funcionalidade.", ic: "alvo", evid: dores.slice(0, 2).map((d) => `${d.af} acham difícil ${difNat(d.l)}; ${d.des} já desistiram de uma compra`), esperado: "Entregar valor desde o primeiro uso.", parte: pct(dores[0].af, n), cat: "busca" });
     const quer = comp.filter((x) => x.quer_novidades);
     if (quer.length) {
       const dQ = pc(quer, temDif), dT = pc(comp, temDif);
-      opsGerais.push({ titulo: "Começar pelas pessoas que pediram os avisos", texto: `${quer.length} pessoas pediram os avisos do lançamento; ${dQ}% delas têm dificuldade para encontrar o que querem (${dT}% no total). ${dQ > dT ? "É o grupo que mais sente a dor que o Find Look resolve." : "O interesse vai além de quem tem dificuldade."}` });
+      opsGerais.push({ titulo: "Começar por quem pediu para ser avisado", dor: "Existe um grupo já interessado no lançamento.", recurso: "Alertas de lançamento, novas peças e disponibilidade por interesse.", ic: "sino", evid: [`${quer.length} ${quer.length === 1 ? "pessoa pediu" : "pessoas pediram"} os avisos`, `${dQ}% delas têm dificuldade para encontrar o que querem (${dT}% no total)`], esperado: "Ativar o público mais propenso a testar o Find Look.", parte: dQ, cat: "outros" });
     }
 
     // ----- montagem: abas Achados e Oportunidades -----
@@ -2190,23 +2236,38 @@
     if (pendentes.length) pnAch.appendChild(el("p", "pa-int-pend", `Ainda não há pessoas suficientes para comparar com segurança: ${juntar(pendentes)}. Essas comparações aparecem quando cada grupo tiver pelo menos ${MIN_SEG} pessoas.`));
 
     const pnOp = el("div", "pa-int-painel"); pnOp.dataset.intPainel = "oportunidades"; pnOp.hidden = true;
-    pnOp.appendChild(el("p", "pa-int-intro", "O que os achados sugerem para o produto Find Look. São hipóteses a validar com as pessoas, não conclusões."));
+    pnOp.appendChild(el("p", "pa-int-intro", "O que os achados sugerem para o produto Find Look, em recursos, fluxos e melhorias. São hipóteses a validar com as pessoas, não conclusões. O impacto vem da parte das pessoas que vive a dor."));
+    // ordem de prioridade: impacto (parte das pessoas atingidas), do maior para o menor
+    const todas = [...opsGerais, ...ops].sort((a, b) => b.parte - a.parte);
+    const nivel = (p) => (p >= 50 ? "Alto" : p >= 25 ? "Médio" : "Baixo");
+    // indicadores no topo (padrão CardsDeKpi do DS)
+    const kpis = el("div", "pa-op-kpis");
+    [["alvo", "Oportunidades", todas.length], ["estrela", "Impacto alto", todas.filter((o) => o.parte >= 50).length], ["busca", "Ligadas à busca", todas.filter((o) => o.cat === "busca").length]].forEach(([ic, rot, v]) => {
+      const k = el("div", "pa-op-kpi"); const t = el("div"); t.append(el("span", null, rot), el("b", null, String(v)));
+      const i = el("span", "pa-op-kpi-ic"); i.innerHTML = svg(IC_OP[ic]); k.append(t, i); kpis.appendChild(k);
+    });
+    pnOp.appendChild(kpis);
     const lista = el("ol", "pa-ops");
-    const opItem = (titulo, texto, link) => {
-      const li = el("li", "pa-op"); const nEl = el("span", "pa-op-n"); nEl.setAttribute("aria-hidden", "true");
-      // a oportunidade é o título; embaixo, de qual achado ela vem (link para o card)
-      const corpo = el("div"); corpo.append(el("h4", null, link ? texto : titulo));
-      if (!link) corpo.appendChild(el("p", null, texto));
-      if (link) {
-        corpo.appendChild(el("p", null, `Vem do achado “${titulo}”.`));
-        const a = el("a", "pa-op-link"); a.href = "#" + link.id; a.innerHTML = "Ver o achado" + svg('<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>');
-        a.addEventListener("click", (e) => { e.preventDefault(); irParaAchado(box, link.id); });
-        corpo.appendChild(a);
+    todas.forEach((o) => {
+      const li = el("li", "pa-op");
+      const c1 = el("div", "pa-op-c1"); const nEl = el("span", "pa-op-n"); nEl.setAttribute("aria-hidden", "true");
+      const t1 = el("div"); t1.appendChild(el("h4", null, o.titulo)); const dor = el("p"); dor.append(el("b", null, "Dor observada: "), o.dor); t1.appendChild(dor); c1.append(nEl, t1);
+      const c2 = el("div", "pa-op-c2"); const h2 = el("h5", "pa-op-rec"); h2.innerHTML = svg(IC_OP[o.ic] || IC_OP.busca); h2.append("Sugestão de recurso"); c2.append(h2, el("p", null, o.recurso));
+      const c3 = el("div", "pa-op-c3");
+      const ev = el("div"); const he = el("h5"); he.innerHTML = svg(IC_OP.barras); he.append("Evidências"); ev.appendChild(he); const ul = el("ul"); o.evid.forEach((e) => ul.appendChild(el("li", null, e))); ev.appendChild(ul);
+      const ie = el("div"); const hi = el("h5"); hi.innerHTML = svg(IC_OP.alvo); hi.append("Impacto esperado"); ie.append(hi, el("p", null, o.esperado));
+      c3.append(ev, ie);
+      const c4 = el("div", "pa-op-c4"); const nv = nivel(o.parte);
+      const chip = el("span", "pa-op-imp " + nv.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")); chip.innerHTML = svg(IC_OP.barras); chip.append(`Impacto: ${nv}`);
+      chip.title = `${o.parte}% das pessoas na base desta oportunidade`; c4.appendChild(chip);
+      li.append(c1, c2, c3, c4);
+      if (o.id) {
+        const pe = el("div", "pa-op-pe"); const a = el("a", "pa-op-link"); a.href = "#" + o.id; a.innerHTML = "Ver achado" + svg('<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>');
+        a.setAttribute("aria-label", `Ver o achado: ${o.achado}`);
+        a.addEventListener("click", (e) => { e.preventDefault(); irParaAchado(box, o.id); }); pe.appendChild(a); li.appendChild(pe);
       }
-      li.append(nEl, corpo); return li;
-    };
-    opsGerais.forEach((o) => lista.appendChild(opItem(o.titulo, o.texto)));
-    ops.forEach((o) => lista.appendChild(opItem(o.titulo, o.texto, o)));
+      lista.appendChild(li);
+    });
     pnOp.appendChild(lista);
 
     const defs = [["achados", "Achados", null], ["oportunidades", "Oportunidades", lista.children.length]];
@@ -2226,6 +2287,21 @@
 
   // Card de descoberta horizontal (DS: DescobertaVisual): texto à esquerda (tema, conclusão, contexto, por que importa,
   // ver dados) e o gráfico à direita; no celular, um embaixo do outro. A oportunidade fica na aba Oportunidades.
+  const IC_OP = {
+    alvo: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    estrela: '<path d="M11.5 3.2a.6.6 0 0 1 1 0l2.6 5.3 5.8.8a.6.6 0 0 1 .3 1l-4.2 4.1 1 5.8a.6.6 0 0 1-.8.6L12 18l-5.2 2.8a.6.6 0 0 1-.8-.6l1-5.8-4.2-4.1a.6.6 0 0 1 .3-1l5.8-.8z"/>',
+    busca: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    barras: '<path d="M4 20v-3"/><path d="M9 20v-7"/><path d="M14 20v-11"/><path d="M19 20V5"/>',
+    camera: '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>',
+    loja: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+    mapa: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+    preco: '<path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+    estoque: '<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+    pessoas: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    rota: '<path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/>',
+    brecho: '<path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>',
+    sino: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+  };
   const IC_INFO = '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>';
   function descoberta(c) {
     const card = el("article", "pa-desc" + (c.vis ? " h" : "")); card.id = c.id; card.tabIndex = -1;
