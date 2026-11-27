@@ -26,7 +26,6 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        redeParceiros: resolve(import.meta.dirname, 'rede-parceiros/index.html'),
         redeParceirosCadastro: resolve(import.meta.dirname, 'rede-parceiros/cadastro/index.html'),
         pesquisaModa: resolve(import.meta.dirname, 'pesquisa/moda-curitiba/index.html'),
       },

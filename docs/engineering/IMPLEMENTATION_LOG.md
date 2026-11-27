@@ -6,6 +6,11 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-27 · Site em React: Rede de Parceiros em HTML sai do repositório (S4, D-053)
+
+- A Rede de Parceiros em React foi conferida no ar (`tests/navegador/rede-parceiros.cjs` com `BASE=https://www.danimoscatelli.com.br`, sem enviar formulário: 25 de 25). `rede-parceiros/index.html` foi para `apps/site/tests/referencia/rede-parceiros.html` (só testes); `src/rede-parceiros-inicio.ts` e `.css` apagados; entrada `redeParceiros` saiu do `vite.config.ts`.
+- **Verificação executada:** tipos, testes, conformidade e build do app; build da raiz e `comparar-dist` contra o `main`.
+
 ## 2026-11-27 · Site em React: Rede de Parceiros publicada (S4, D-053) e limpeza da página inicial em HTML
 
 - **S4 (`apps/site/src/paginas/rede-parceiros/`):** `/rede-parceiros/` em React com o DS (peças em `SITE_REACT.md`, seção 6d), marcada "publicada". Cenas da simulação em `Cenas.tsx`; e-mail do estúdio com `email_off` num componente comum (`compartilhado/EmailDoEstudio.tsx`, também usado pela privacidade).
