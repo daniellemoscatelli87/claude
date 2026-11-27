@@ -81,8 +81,8 @@ Esforço: P = até 1 dia, M = 2 a 3 dias, G = 4 dias ou mais (sem contar a cria�
 | Lote | Páginas / peças | Endereço | Componentes do DS que já existem | FALTA NO DS | Esforço | Estado |
 |---|---|---|---|---|:---:|---|
 | **S0** | limpeza: app React antigo | — | — | — | P | **feito** (dist igual byte a byte) |
-| **S1** | peças de todas as páginas: cabeçalho, gaveta de contato, rodapé, WhatsApp, botão subir, cookies, janela da política, aviso "Tem um projeto?", entrada ao rolar | todas | `RodapeSite`, `BotaoWhatsApp`, `BotaoSubir`, `AvisoCookies`, `AvisoProjeto`, `SurgirAoRolar`/`TituloQueSurge`, `SidePanel`, `Input`, `Select`, `Textarea`, `Checkbox`, `Button`, `Accordion`, `Dialog` | `CabecalhoDoSite` (+ menu do celular), `CampoDeEmail` (sugestão de domínio), `Dialog`/`Sheet` com "Fechar" em português (hoje "Close") | M | cookies, WhatsApp e rodapé já prontos no app (`PecasDoSite`) |
-| **S2** | Projeto Piloto | `/projeto-piloto/` | `Selo`, `Heading`, `Button`, `CardDeFrente`, `GradeDeCards`, `Card`, `CurvaSecao`, `Timeline`, `Accordion`, `PartnerCard`, `SidePanel`, campos | `Citacao`, `ListaDePilares` (ou confirmar `GradeDeCards` + `Card`) | M | planejado |
+| **S1** | peças de todas as páginas: cabeçalho, gaveta de contato, rodapé, WhatsApp, botão subir, cookies, janela da política, aviso "Tem um projeto?", entrada ao rolar | todas | `RodapeSite`, `BotaoWhatsApp`, `BotaoSubir`, `AvisoCookies`, `AvisoProjeto`, `SurgirAoRolar`/`TituloQueSurge`, `SidePanel`, `Input`, `Select`, `Textarea`, `Checkbox`, `Button`, `Accordion`, `Dialog` | — (`CabecalhoDoSite`, `CampoDeEmail` e o "Fechar" em português chegaram em `d2aeb40`) | M | **feito** na casca `CascaDoSite` (cabeçalho, gaveta de contato, rodapé, cookies, WhatsApp), usada pelas páginas em React; o aviso "Tem um projeto?" entra com a Início (S3) |
+| **S2** | Projeto Piloto | `/projeto-piloto/` | `Selo`, `Heading`, `Button`, `CardDeFrente`, `GradeDeCards`, `Card`, `CurvaSecao`, `Timeline`, `Accordion`, `PartnerCard`, `SidePanel`, campos | — (todas as peças chegaram em `d2aeb40`) | M | **publicada** |
 | **S3** | Início | `/` | `Heading`, `Input`, `Button`, `Carousel`, `SeloSecao` | `CardDeDepoimento`, `CardDeArtigo`, `FaixaDeLogos`, `LinkSaibaMais`, `PilulaDeAcao`, `LuzesDifusas`, estado de envio e de sucesso no `Button` | G | planejado |
 | **S4** | Rede de Parceiros | `/rede-parceiros/` | `Selo`, `Heading`, `AvatarCircles`, `Button`, `Tabs`/`ToggleGroup`, `Carousel`, `Accordion`, `PartnerCard`, `SidePanel` | `ListaDePilares`, `CartaoFlutuante`, `LinkSaibaMais`, `Simulacao`/`CursorDeDemonstracao`, `Quadro`, `CardDeParceiro`, diagrama do ecossistema | G | planejado |
 | **S5** | Cadastro de parceiro + autorizar galeria | `/rede-parceiros/cadastro/`, `/rede-parceiros/galeria/autorizar/` | `Input`, `Select`, `Checkbox`, `RadioGroup`, `Textarea`, `Label`, `Collapsible`, `Dialog`, `Upload`, `Alert`, `Card` | `Stepper` e o cadastro em etapas (`MolduraDoCadastro`, `EtapaDoCadastro`, `BarraDaEtapa`, `ListaDeRevisao`, `LinhaDeDado`), `Campo` (rótulo + ajuda + erro), `CampoDeEmail`, `CampoEstadoCidade`, máscaras de telefone e CNPJ, `EstadoFinal` | G | planejado |
@@ -107,6 +107,23 @@ Ordem sugerida (junto com a área restrita): S7 (feito) → S1 → S2 → S3 →
 **Diferenças visíveis em relação ao HTML** (capturas em 390, 768, 1024 e 1280 px): botões com os cantos do DS em vez de pílula (no celular, o da 404 ocupa a largura, regra das ações do DS); na 404, o "Erro 404" vira texto para leitores de tela e o título vem antes do texto; no descadastro, a moldura das telas de conta do DS (logo, título e texto alinhados à esquerda, botão na largura do cartão) e o "Pronto!" com o ícone de sucesso; na privacidade, a tipografia da `Prosa` e o rodapé compacto do DS. Textos e links: os mesmos (teste `tests/textos.test.ts`).
 
 **Correção pedida ao DS:** o `Logo` desenha os caminhos sem `fill-rule="evenodd"` (os SVGs oficiais do próprio DS usam), e os miolos de letras como D, o e a saem preenchidos. O site passa `fillRule="evenodd"` pelo próprio componente (`LOGO_CORRIGIDO` em `src/compartilhado/marca.ts`), sem editar o DS; quando o DS corrigir, a propriedade pode sair.
+
+## 6b. Lotes S1 e S2: componentes do DS em cada peça
+
+| Peça | Componente do DS |
+|---|---|
+| Cabeçalho (todas as páginas em React) | `CabecalhoDoSite` (pílula no computador, folha inferior no celular, some ao rolar para baixo), com o `Logo` e a ação "Contato" |
+| Gaveta de contato | `SidePanel` + `SidePanelHeader`/`Body`/`Actions`/`Footer`, `Campo`, `GradeDeCampos`, `CampoDeEmail` (sugestão de domínio), `CampoDeTelefone` (máscara), `GrupoDeCartoesDeEscolha` + `CartaoDeEscolha` ("Meu negócio é…"), `Select`, `Textarea`, `Checkbox` (dias), `MensagemDeErro`, `Alert`, `BotaoDeEnvio`, `EstadoFinal` |
+| Rodapé, cookies, WhatsApp | `RodapeSite` (claro, escuro ou compacto), `AvisoCookies` (com a medição), `BotaoWhatsApp` |
+| Projeto Piloto: hero | foto da página, `LinkSaibaMais`; o título e o texto do programa ficam para leitores de tela e buscadores, como no HTML |
+| Projeto Piloto: sobre o programa | `Selo`, `Heading`, `ListaDePilares`, `GradeDeCards` + `Card`, `SurgirAoRolar`, `Button` |
+| Projeto Piloto: onde podemos atuar | `CurvaSecao`, `LuzesDifusas`, `GradeDeFrentes` + `CardDeFrente tom="escuro"` |
+| Projeto Piloto: como funciona | `Timeline`, `Card` horizontal com `CardMidia` |
+| Projeto Piloto: guia | `Accordion` (uma pergunta aberta por vez; as respostas ficam no HTML mesmo fechadas), `Prosa` nas respostas |
+| Projeto Piloto: convite e cadastro | `PartnerCard`, `SidePanel` com `Campo`, `CampoDeEmail`, `CampoDeTelefone`, `Select`, `Textarea`, `Checkbox`, `BotaoDeEnvio`, `EstadoFinal` |
+| Projeto Piloto: fixos | `PilulaDeAcao` ("Cadastrar empresa", depois do hero), `BotaoSubir` |
+
+**Diferenças em relação ao HTML:** os campos passam a ter rótulo visível (antes, o rótulo estava no texto de exemplo) e cada campo mostra o próprio erro, além da mensagem geral de sempre; "Meu negócio é…" deixa de ser um acordeão e vira cartões de escolha; os dias viram caixas de seleção; o link da política no cadastro abre a página numa aba nova (como o texto já dizia), sem a janela da política; o hero sem a moldura arredondada. Textos, tabelas gravadas, rascunho do contato, identificador do envio do cadastro e eventos de medição: os mesmos (testes `tests/projeto-piloto.test.ts` e `tests/navegador/projeto-piloto.cjs`).
 
 ## 7. Páginas de apresentação do EI: três versões (decisão da dona do produto pendente)
 
