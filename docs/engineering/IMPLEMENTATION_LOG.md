@@ -6,12 +6,12 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
-## 2026-11-27 · Contatos: e-mails de contato@ voltaram a travar na cópia para o painel, correção não publicada
+## 2026-11-27 · Contatos: e-mails de contato@ voltaram a travar na cópia para o painel, corrigido e publicado
 
 - **Pedido da dona do produto:** os e-mails não estavam chegando na página Contatos do painel.
 - **Diagnóstico (só leitura no banco e nos logs):** o agendamento roda a cada 5 minutos e a função `importar-emails` responde normalmente; o MX do domínio aponta para a Hostinger (correto). Entre 24/11 19:30 e 27/11 10:10 a caixa de entrada não teve e-mail novo (respostas "novos: 0"). Às 10:15 de 27/11 chegou um e-mail que a função não conseguiu gravar: "unsupported Unicode escape sequence" (o banco recusa o caractere nulo e pedaços soltos de emoji). Como a fila anda em ordem, esse e-mail trava todos os seguintes.
 - **Correção (`supabase/functions/importar-emails/index.ts`):** remetente, nome, assunto e texto passam por uma limpeza que tira o caractere nulo e pedaços soltos de emoji antes de gravar, inclusive depois de cortar textos longos.
-- **Verificação executada:** teste local da limpeza (texto com caractere nulo e emoji partido sai sem eles, emojis inteiros ficam) e checagem de sintaxe. A função ainda não foi publicada no Supabase.
+- **Verificação executada:** teste local da limpeza (texto com caractere nulo e emoji partido sai sem eles, emojis inteiros ficam) e checagem de sintaxe. Publicada com autorização da dona do produto (função `importar-emails` versão 4, mesma configuração de acesso). Na rodada das 10:20 o e-mail travado (do Facebook) entrou na página Contatos; a rodada seguinte respondeu sem erro.
 
 ## Estado atual (20/10/2026)
 
