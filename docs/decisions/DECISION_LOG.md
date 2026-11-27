@@ -545,6 +545,11 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Decisão:** regra fixa no `CLAUDE.md`: consultar o catálogo do DS antes de criar qualquer elemento visual e usar o componente ou template existente; se não existir, parar e perguntar; nada de valores ou componentes à mão; toda tarefa delegada leva a regra e o relatório diz qual componente cada peça usa; conferir antes de mostrar capturas.
 - **Próximos passos:** catálogo gerado automaticamente nos dois DS e sincronizado com os projetos; conferência automática.
 
+## D-050 · 27/11/2026 · Componente que falta é criado no DS, de forma formal e documentada
+
+- **Origem:** dona do produto ("toda vez que eu pedir uma tela X… a primeira coisa é consultar o DS… se algo diferente for pedido que não esteja no DS, ambos os projetos têm autonomia para criar esse componente e enviá-lo para o DS de maneira formal e documental. Não podemos ter mais furos").
+- **Decisão:** toda tela começa pela consulta ao DS. Se faltar algo, o projeto cria o componente dentro do DS, com a branch `componente/<nome>`, o componente em `ui/`, a documentação, o changelog, o catálogo e o registro em `propostas/`. O produto só o usa depois da sincronização, nunca como cópia local. Substitui o "parar e perguntar" da D-049.
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:

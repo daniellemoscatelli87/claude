@@ -42,7 +42,14 @@ Se os arquivos estiverem ausentes, informe precisamente quais faltam e peça ape
 A dona do produto não deve precisar vigiar isto. Vale para qualquer conversa do Claude e para todo agente ou subagente.
 
 1. **Antes de criar ou alterar qualquer elemento visual** (tela, seção, card, botão, campo, alerta, lista, tabela, gráfico, estado vazio), consulte o catálogo do Design System Dani Moscatelli: `design-system/CATALOGO.md` (cópia sincronizada) ou https://designsystem.danimoscatelli.com.br; enquanto o catálogo não chegar, use `apps/experience-intelligence/src/components/ui/` (app), `public/design-system/` (área restrita) e o site do DS. **Use o componente ou o padrão que já existe, inclusive os templates** (por exemplo, card de preço, card de plano, cadastro em etapas, painel). Não recriar à mão o que o DS já tem.
-2. **Se o que é preciso não existir no DS, pare e pergunte à dona do produto.** A peça nova é criada primeiro no DS e só depois chega aqui.
+2. **Toda tela pedida começa pela consulta ao DS,** e é montada com o que já existe. **Se for pedido algo que não está no DS, o projeto tem autonomia para criar o componente, mas sempre dentro do DS (`daniellemoscatelli87/DaniMoscatelli-DesignSystem`) e de forma formal e documentada** (regra da dona do produto, 27/11/2026: "não podemos ter mais furos"):
+   - branch `componente/<nome>` no repositório do DS;
+   - componente em `src/app/components/ui/`, usando só tokens e regras do DS;
+   - seção na documentação do DS, com variações, estados, acessibilidade e exemplo;
+   - entrada no changelog e no catálogo;
+   - registro da proposta em `propostas/AAAA-MM-DD-<nome>.md` no DS, com motivo, tela de origem, API, variações, acessibilidade, testes e capturas.
+   
+   O produto só usa o componente depois que ele chega pela sincronização; **nunca uma cópia local no produto.** A publicação do DS e a do produto continuam com o "sim" da dona do produto, mostradas juntas.
 3. **Proibido no código do produto:** cor, tamanho de texto, raio, sombra ou espaçamento fora dos tokens; botão, campo, alerta, card ou chip feitos à mão quando o DS tem o componente.
 4. **Ao delegar uma tarefa a um agente ou subagente,** a instrução precisa incluir esta regra e o caminho do catálogo, e o relatório precisa dizer qual componente do DS cada peça usa.
 5. **Antes de mostrar capturas à dona do produto,** confira você mesmo cada peça contra o catálogo e corrija o que estiver fora.
