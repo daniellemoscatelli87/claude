@@ -29,6 +29,9 @@ const DADOS = {
     { id: "c1", created_at: h(2), nome: "Ana Ribeiro", empresa: "Clínica Bem Viver", cargo: "Diretora de operações", assunto: "Projeto de experiência do paciente", visualizado_em: null, respondido_em: null, reuniao_em: null },
     { id: "c2", created_at: h(30), nome: "Bruno Lima", empresa: "Varejo Sul", cargo: "Gerente", assunto: "Pesquisa com clientes", visualizado_em: h(29), respondido_em: h(28), reuniao_em: null },
     { id: "c3", created_at: h(80), nome: "Carla Mendes", empresa: null, cargo: "Coordenadora", assunto: "Workshop de jornada", visualizado_em: h(79), respondido_em: h(78), reuniao_em: h(-48) },
+    { id: "c4", created_at: h(100), nome: "Davi Rocha", empresa: "Rede Saúde Mais", cargo: "Gerente de qualidade", assunto: "Diagnóstico da recepção", visualizado_em: h(99), respondido_em: null, reuniao_em: null },
+    { id: "c5", created_at: h(130), nome: "Eva Martins", empresa: "Escola Horizonte", cargo: "Diretora", assunto: "Pesquisa com famílias", visualizado_em: h(120), respondido_em: h(110), reuniao_em: null },
+    { id: "c6", created_at: h(170), nome: "Fábio Teixeira", empresa: "Loja Central", cargo: null, assunto: "Atendimento no balcão", visualizado_em: null, respondido_em: null, reuniao_em: null },
   ],
   cadastros: [
     { id: "p1", created_at: h(5), nome: "Diego Souza", empresa: "Estúdio DS", principal_especializacao: "Pesquisa com usuários", segmentos: ["Saúde.", "Varejo", "Educação"], visualizado_em: null },
@@ -95,13 +98,29 @@ async function rodar(browser, largura) {
   await espera(600);
   ok(true, `${L}: login leva à Início com a saudação`);
   ok(await page.locator("[data-kpi]").count() === 4, `${L}: 4 cards de número`);
-  ok((await page.locator('[data-kpi="mensagens"]').innerText()).includes("3 não respondidas"), `${L}: card de mensagens mostra as não respondidas`);
-  ok(await page.locator('[data-kpi="mensagens"] a').getAttribute("href") === "/admin/contatos/?situacao=pendentes", `${L}: com pendentes, o card leva às não respondidas`);
-  ok(await page.locator("section[aria-labelledby=h-contato] li").count() === 3, `${L}: lista Contato com 3 mensagens`);
-  ok(await page.locator("section[aria-labelledby=h-parceiros] li").count() === 2, `${L}: lista Parceiros com 2 candidaturas`);
-  ok(await page.locator("section[aria-labelledby=h-lancamento] li").count() === 2, `${L}: lista Lançamento com 2 cadastros`);
+  const prioridade = page.locator("[data-prioridade]");
+  ok(/\d+ mensagens esperam resposta/.test(await prioridade.innerText()), `${L}: o que pede ação vem primeiro (mensagens sem resposta)`);
+  ok(await prioridade.getByRole("link", { name: "Responder mensagens" }).getAttribute("href") === "/admin/contatos/?situacao=pendentes", `${L}: com pendentes, a ação leva às não respondidas`);
+  ok(await page.locator('[data-kpi="mensagens"] a').getAttribute("href") === "/admin/contatos/", `${L}: o card de mensagens inteiro leva à caixa de entrada`);
+  ok((await page.locator('[data-kpi="mensagens"] a').innerText()).trim() === "Mensagens na semana", `${L}: o link do card é o rótulo, sem "Ver ..." repetido`);
+  // Números lado a lado nunca apertados: 4 só com 14rem (224 px) por card; senão 2 × 2 ou 1 coluna.
+  const larguras = await page.locator("[data-kpi]").evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().width)));
+  const tops = await page.locator("[data-kpi]").evaluateAll((els) => new Set(els.map((e) => Math.round(e.getBoundingClientRect().top))).size);
+  ok(Math.min(...larguras) >= 224, `${L}: cards de número com pelo menos 224 px (${larguras.join(", ")}; ${tops} linha(s))`);
+  // Contador do sino: redondo, vermelho (--primary), número branco, no canto do ícone.
+  const sino = await page.evaluate(() => {
+    const b = document.querySelector('[data-slot="notificacoes"]');
+    const c = b.querySelector('[data-slot="contador-do-painel"]');
+    const i = b.querySelector("svg").getBoundingClientRect(), r = c.getBoundingClientRect(), cs = getComputedStyle(c);
+    return { alto: r.height, largo: r.width, raio: parseFloat(cs.borderRadius), fundo: cs.backgroundColor, cor: cs.color, dx: Math.round(r.left + r.height / 2 - i.right), dy: Math.round(r.top + r.height / 2 - i.top), botao: b.getBoundingClientRect().height };
+  });
+  ok(sino.alto === 20 && sino.largo >= 20 && sino.raio >= 10 && sino.fundo === "rgb(184, 40, 40)" && sino.cor === "rgb(255, 255, 255)" && Math.abs(sino.dx) <= 1 && Math.abs(sino.dy) <= 1 && sino.botao >= 44, `${L}: contador do sino redondo, vermelho (--primary-text, 6,2:1), no canto do ícone, botão de 44 px (${JSON.stringify(sino)})`);
+  ok(await page.locator('section[aria-labelledby=h-contato] [role=img]').count() === 1, `${L}: barra com a situação das últimas mensagens`);
+  ok(await page.locator("section[aria-labelledby=h-contato] [data-slot=linha-de-lista]").count() === 5, `${L}: lista Contato com as 5 mensagens mais recentes (das 6)`);
+  ok(await page.locator("section[aria-labelledby=h-parceiros] [data-slot=linha-de-lista]").count() === 2, `${L}: lista Parceiros com 2 candidaturas`);
+  ok(await page.locator("section[aria-labelledby=h-lancamento] [data-slot=linha-de-lista]").count() === 2, `${L}: lista Lançamento com 2 cadastros`);
   ok((await page.locator("section[aria-labelledby=h-parceiros]").innerText()).includes("Saúde, Varejo +1"), `${L}: segmentos resumidos como hoje`);
-  ok(await page.locator("section[aria-labelledby=h-contato] a").first().getAttribute("href") === "/admin/contatos/?id=c1", `${L}: mensagem abre a página de HTML de Contato`);
+  ok(await page.locator("section[aria-labelledby=h-contato] a[data-slot=linha-de-lista]").first().getAttribute("href") === "/admin/contatos/?id=c1", `${L}: mensagem abre a página de HTML de Contato`);
   ok(await page.evaluate(() => getComputedStyle(document.body).backgroundColor) === "rgb(237, 240, 245)", `${L}: fundo cinza do DS (--background)`);
   ok(await page.evaluate(() => [...document.querySelectorAll('[data-slot="card"]')].every((c) => getComputedStyle(c).boxShadow === "none")), `${L}: cards só com borda, sem sombra parada`);
   ok(await semRolagem(page), `${L}: Início sem rolagem horizontal`);
@@ -148,6 +167,7 @@ async function rodar(browser, largura) {
   await page.getByRole("button", { name: "Perfil de Dani Moscatelli" }).click();
   ok(await page.getByRole("menuitem", { name: "Configurações" }).isVisible() && await page.getByRole("menuitem", { name: "Sair" }).isVisible(), `${L}: perfil com Configurações e Sair`);
   await page.keyboard.press("Escape");
+  await espera(400); // o menu da conta fecha com animação; só depois o resto da página volta a ser lido
 
   await axe(page, `${L} Início`);
   ok(erros.length === 0, `${L}: sem erros no console${erros.length ? "\n   " + erros.join("\n   ") : ""}`);

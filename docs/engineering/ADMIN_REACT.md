@@ -90,11 +90,11 @@ A base (`apps/area-restrita/conformidade-base.json`) está em **zero**; qualquer
 
 | Peça | Componentes do DS |
 |---|---|
-| Menu lateral | `SidebarProvider`, `Sidebar` (recolhível em ícones), `SidebarHeader`, `SidebarContent`, `SidebarGroup`, `SidebarMenu`, `SidebarMenuItem`, `SidebarMenuButton` (com dica no recolhido), `SidebarMenuBadge` (contadores), `SidebarMenuSub*`, `Collapsible` (grupos Parceiros e Projetos); no celular, o `Sheet` que o próprio `Sidebar` usa |
-| Cabeçalho | `SidebarInset`, `SidebarTrigger`, `Button` (sino), `Badge` (número no sino), `DropdownMenu*` (perfil: Configurações e Sair), `Avatar` |
-| Notificações | `SidePanel`, `SidePanelContent`, `SidePanelHeader`, `SidePanelBody`, `LinhaDeLista`, `Avatar`, `Badge`, `Separator` |
+| Menu lateral | `painel-shell`: `MenuLateralProvider` (chave `dm-admin-menu-recolhido`, a mesma das páginas de HTML), `MenuLateral` (240/64 px, empurra o conteúdo), `TopoDoMenu` ("≡ MENU"), `NavDoMenu`, `GrupoDoMenu` (Parceiros e Projetos, com contador), `ItemDoMenu` (com `as={LinkDaArea}` e `ContadorDoPainel`); abaixo de 1024 px, os mesmos itens num `SidePanel side="left"` |
+| Cabeçalho | `BarraSuperiorDoPainel` (branca, na largura toda), `Button` ghost (abrir o menu no celular), `BotaoDeNotificacoes` (contador redondo vermelho no canto do sino), `GatilhoDaConta` + `DropdownMenu*` (perfil: Configurações e Sair) |
+| Notificações | `SidePanel`, `SidePanelContent`, `SidePanelHeader`, `SidePanelBody`, `LinhaDeLista`, `IconeComBase` (rosa = nova, cinza = já vista), `Badge`, `Separator` |
 | Entrar e senha | `Card`, `CardHeader`, `CardDescription`, `CardContent`, `Heading`, `Selo`, `Label`, `Input`, `PasswordInput`, `PasswordConfirm`, `Checkbox`, `Button`, `Alert` |
-| Início | `Heading`, `Alert`, `GradeDeCards`, `Card`, `CardMidia` (ícone com base rosa), `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`, `CardContent`, `CardFooter`, `Badge`, `Button` (link), `LinhaDeLista`, `Avatar`, `Skeleton` |
+| Início | `CabecalhoDaPagina` (Opção A), `AlertaComAcao` + `BotaoDoAlerta` + `LinkDoAlerta` (o que pede ação agora, ou "Tudo em dia"), `GradeDeCards` + `CardIndicador` (card inteiro clicável; 4 lado a lado só com contêiner de 66rem, senão 2 × 2, 1 no celular), `CardComCabecalho` + `LinkVerTudo` + `DivisorSuave`, `BarrasEmpilhadas100` (situação das últimas mensagens, com 5 ou mais carregadas), `LinhaDeLista` + `IconeComBase`, `Alert` (erro), `Skeleton` |
 | Avisos rápidos | `Toaster` (`sonner`) |
 
 Fora dos componentes, o código do app só usa classes de layout (grid, flex, gap, padding da escala) e tokens.
@@ -102,6 +102,8 @@ Fora dos componentes, o código do app só usa classes de layout (grid, flex, ga
 ## 7. Peças que faltam no DS (vão para o DS primeiro, pelo processo formal)
 
 Nenhuma foi feita à mão no app; enquanto não chegam, a fundação usa o componente mais próximo do DS e a diferença aparece nas capturas.
+
+**Atualização (27/11/2026):** os itens 1 a 4 foram trazidos da FindLook para o DS Dani Moscatelli no branch `claude/pecas-do-painel` do DS (proposta `propostas/2026-11-27-pecas-do-painel.md`, ainda sem o "sim") e a casca e a Início já usam essas peças. **Atenção:** a pasta `src/components/ui/` deste branch veio da sincronização com `DS_REF=claude/pecas-do-painel`, mas `design-system/versao.txt` continua em `30d1ef0` de propósito: só muda (com nova sincronização pelo `main`) depois que o DS publicar as peças no `main`. Antes disso, este branch não pode ir para o `main`.
 
 1. **Casca do painel (`PainelShell`).** A casca aprovada (D-039, D-041: cabeçalho branco na largura toda, menu embaixo com o botão "Menu", 240/64 px, item ativo rosa claro com texto vermelho, grupos com linha-guia e painel ao lado no recolhido) existe no site do DS só como marcação do `App.tsx` e, como componente, **só no DS da FindLook** (`ui/painel-shell.tsx`, "moldura igual à do site do design system"). O `ui/sidebar` do DS Dani Moscatelli é o do shadcn sem adaptação: item ativo cinza, menu na altura toda (o cabeçalho fica ao lado, não acima), textos em inglês para leitores de tela ("Toggle Sidebar", "Sidebar", "Displays the mobile sidebar."), botão de grupo em seminegrito (herda o `button` da base) e, no celular, a dica invisível ainda abre uma camada que o primeiro Esc fecha (contornado no app sem dica no celular). **Proposta:** trazer `painel-shell.tsx` da FindLook para o DS Dani Moscatelli (com os tokens deste DS) e corrigir os textos do `sidebar`.
 2. **Cabeçalho da página do painel (`CabecalhoDaPagina`)** e o layout "Opção A" (título, descrição e abas fora dos cards, no fundo cinza; conteúdo em cards com cabeçalho de ícone): decisão de 23/11 no DS da FindLook (`ui/painel-cabecalho.tsx` e `PainelTemplates`); no DS Dani Moscatelli os templates (Dashboard, Configurações, Equipe, Caixa de entrada) são só demonstração, em moldura de navegador.

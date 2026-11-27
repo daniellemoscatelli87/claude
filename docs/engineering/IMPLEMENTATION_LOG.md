@@ -1298,6 +1298,14 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** painel com login e dados simulados (validações, conversão do horário de Brasília, criar, alterar, excluir); migração num Postgres 16 local sem o `pg_cron` (RLS, colunas alteráveis, chave protegida, função protegida); `esbuild` da função; `npm run build`.
 - **Pendente:** aplicar a migração, publicar a função e o site; teste real com um agendamento para o e-mail de teste.
 
+## 2026-11-27 · Área restrita em React: casca do painel e Início com as peças novas do DS (D-051), não publicado
+
+- **Branch:** `claude/admin-react`. Depende do branch `claude/pecas-do-painel` do DS (casca do painel, cabeçalho da página, card de indicador e ícone com base, trazidos da FindLook com as cores do DS), ainda sem o "sim" da dona do produto.
+- **Implementado:** `src/casca/Casca.tsx` com `painel-shell` (barra branca na largura toda, menu 240/64 px que empurra o conteúdo, "≡ MENU", contadores redondos, sino com contador vermelho no canto, gaveta `SidePanel` no celular); `src/telas/Inicio.tsx` reorganizada por prioridade (alerta "Precisa da sua atenção" com a ação direta, ou "Tudo em dia"; 4 números em `CardIndicador` clicáveis, sem apertar; listas compactas com nome, empresa · cargo, assunto e data; situação das últimas mensagens em `BarrasEmpilhadas100`); teste do navegador atualizado (prioridade, cards não apertados, contador do sino, 6 mensagens fictícias para testar o limite de 5 linhas).
+- **Sincronização:** `DS_REF=claude/pecas-do-painel bash scripts/sincronizar-design-system.sh` (pasta `ui`); `design-system/versao.txt` **não** foi mudado (continua `30d1ef0`): só muda quando o DS publicar no `main`.
+- **Comandos executados:** em `apps/area-restrita`: `npm run typecheck` ok; `npm test` 28 ok; `npm run conformidade` "OK", total 0; na raiz `npm run build` ok; `tests/navegador/inicio.cjs` em 1280 e 390 px: tudo passou, axe sem violações na Início.
+- **Pendente:** o DS publicar as peças no `main`; depois, nova sincronização pelo `main` e `versao.txt`; decisão da dona do produto sobre a cor do contador (`--primary-text`, 6,2:1, no lugar de `--primary`, 4,2:1).
+
 ## 2026-11-27 · Área restrita em React: fundação, login e Início em prévia (D-051), não publicado
 
 - **Branch:** `claude/admin-react` (sem pull request, sem publicação). Plano: `docs/engineering/ADMIN_REACT.md`.
