@@ -563,6 +563,16 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Feito no branch `claude/admin-react` (sem publicar):** fundação, casca provisória com o `sidebar` do DS, login e a Início em prévia. Plano, ordem das páginas e estimativas em `docs/engineering/ADMIN_REACT.md`.
 - **Trade-offs:** o build do site passa a depender do app (o workflow testa o app antes do PR); a casca aprovada (D-039, D-041), o card de número e o ícone com base de estado não existem como componentes no DS Dani Moscatelli (existem no DS da FindLook): a fundação usa o `sidebar` e o `Card` do DS e a diferença aparece nas capturas até as peças chegarem ao DS pelo processo formal (D-050); o `Button` principal e o `Badge` padrão do DS ficam em 4,2:1 de contraste (abaixo do AA), decisão no DS.
 
+## D-052 · 27/11/2026 · Início da área restrita em React publicada (lote 1 da D-051)
+
+- **Origem:** a dona do produto aprovou o desenho da Início em React e delegou a publicação (27/11/2026). O DS Dani Moscatelli publicou no `main` (`cb5847c`) as peças do painel (`painel-shell`, `painel-cabecalho`, `painel-dados`, `ChipDeEstado`, `BarraDeComposicao`, `MenuLateral grudarAbaixoDe`), as correções de alinhamento no celular e as cores aprovadas.
+- **Decisão:**
+  - `apps/area-restrita/src/rotas.json`: `"inicio": "publicada"`. O build grava a Início em React em `/admin/` (no lugar da de HTML, só no `dist`); as outras páginas continuam as de HTML até cada lote;
+  - sincronização da área restrita pelo `main` do DS (`versao.txt` = `cb5847c`); o app Experience Intelligence fica de fora (stand-by, D-048): os arquivos dele continuam como no `main` do site;
+  - páginas de HTML que continuam no ar: item ativo do menu no rosa do meio (`--primary-suave`, #FCEEEE), a regra de selecionado de 27/11/2026, e `?v=` novo no `theme.css` e no `admin.css` para o navegador não usar a versão antiga.
+- **Voltar atrás:** trocar `"publicada"` por `"previa"` no `rotas.json`; o próximo build volta a servir a Início de HTML. A página `public/admin/index.html` só sai do repositório na limpeza (lote A9), depois de conferida no ar.
+- **Trade-offs:** durante a migração, a pessoa alterna entre a Início em React e as páginas de HTML (aparências próximas, recarga ao trocar de página).
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:

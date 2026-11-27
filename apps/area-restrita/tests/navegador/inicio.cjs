@@ -1,5 +1,5 @@
 // Login -> Início da área restrita em React (/admin/app/), com o Supabase simulado na rede (as páginas usam o cliente
-// real, que conversa com respostas falsas, com dados fictícios). Compara com a Início de HTML (/admin/), que reaproveita
+// real, que conversa com respostas falsas, com dados fictícios). Confere a Início publicada em /admin/ e uma página de HTML ainda não migrada, que reaproveitam
 // a mesma sessão. 1280 e 390 px: sem erros no console, sem rolagem horizontal e axe sem violações WCAG A/AA na Início.
 //
 // Uso, na raiz do repositório, depois de "npm run build":
@@ -288,17 +288,33 @@ async function rodar(browser, largura) {
   await axe(page, `${L} Início`);
   ok(erros.length === 0, `${L}: sem erros no console${erros.length ? "\n   " + erros.join("\n   ") : ""}`);
 
-  // A mesma sessão abre a Início de HTML (corte página a página sem novo login)
+  // Início publicada (D-051, lote 1): /admin/ é a Início em React, com a mesma sessão e a base /admin.
+  const publicada = await ctx.newPage();
+  await simularSupabase(publicada);
+  const errosPublicada = [];
+  publicada.on("pageerror", (e) => errosPublicada.push(e.message));
+  await publicada.goto(BASE + "/admin/");
+  await publicada.getByRole("heading", { level: 1, name: /(Bom dia|Boa tarde|Boa noite), Dani!/ }).waitFor({ timeout: 8000 });
+  await publicada.locator('[data-kpi="mensagens"]').waitFor();
+  ok(await publicada.locator("#tot-novas").count() === 0, `${L}: /admin/ serve a Início em React (não a de HTML), já logada com a mesma sessão`);
+  ok(await publicada.locator('[data-kpi="mensagens"] a').getAttribute("href") === "/admin/contatos/", `${L}: em /admin/, os cards levam às páginas de HTML das outras áreas`);
+  await publicada.evaluate(() => { window.__semRecarga = 1; });
+  await publicada.locator('a[aria-label="Dani Moscatelli, ir para o Início"]').click();
+  await espera(300);
+  ok(await publicada.evaluate(() => window.__semRecarga === 1 && /^\/admin\/?$/.test(location.pathname)), `${L}: em /admin/, o logo volta à Início sem recarregar (navegação interna)`);
+  ok(errosPublicada.length === 0, `${L}: Início publicada sem erros${errosPublicada.length ? ": " + errosPublicada.join("; ") : ""}`);
+
+  // A mesma sessão abre uma página de HTML que ainda não foi migrada (corte página a página sem novo login).
   const antiga = await ctx.newPage();
   await simularSupabase(antiga);
   const errosAntiga = [];
   antiga.on("pageerror", (e) => errosAntiga.push(e.message));
-  await antiga.goto(BASE + "/admin/");
+  await antiga.goto(BASE + "/admin/reunioes/");
   await antiga.waitForSelector("#app:not(.hidden)", { timeout: 8000 });
-  await antiga.waitForFunction(() => document.getElementById("tot-novas").textContent !== "-");
   await espera(500);
   ok(true, `${L}: a página de HTML abre já logada com a sessão do React`);
-  await antiga.screenshot({ path: `${S}/admin-html-inicio-${L}.png`, fullPage: true });
+  ok(await antiga.evaluate(() => [...document.querySelectorAll("a")].some((a) => a.getAttribute("href") === "/admin/")), `${L}: a página de HTML leva de volta à Início (/admin/)`);
+  await antiga.screenshot({ path: `${S}/admin-html-reunioes-${L}.png`, fullPage: true });
   ok(errosAntiga.length === 0, `${L}: página de HTML sem erros${errosAntiga.length ? ": " + errosAntiga.join("; ") : ""}`);
   await ctx.close();
 }

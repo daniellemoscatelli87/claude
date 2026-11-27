@@ -6,6 +6,14 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-27 · Área restrita em React: Início publicada em /admin/ (D-051, D-052)
+
+- **Sincronização:** `DS_REF=main bash scripts/sincronizar-design-system.sh`; `design-system/versao.txt` = `cb5847c` (DS com as peças do painel publicadas). Os arquivos de `apps/experience-intelligence/` voltaram ao que está no `main` (fora do escopo, D-048).
+- **Corte:** `apps/area-restrita/src/rotas.json` com `"inicio": "publicada"`; o build grava `dist/admin/index.html` (React) e `dist/admin/app/index.html`. `public/admin/index.html` continua no repositório até a limpeza (A9).
+- **Páginas de HTML:** `public/admin/admin.css` com o item ativo do menu em `--primary-suave` (#FCEEEE, regra de selecionado de 27/11/2026); `?v=cb5847c` no `theme.css` e `?v=20261127a` no `admin.css` das 8 páginas.
+- **Testes:** `npm run typecheck` ok; `npm test` 28 ok; `npm run conformidade` 0; `npm run build` na raiz ok; `tests/navegador/inicio.cjs` (1280 e 390 px, agora também abre `/admin/` e confere que é a Início em React, com a mesma sessão e navegação interna, e uma página de HTML ainda não migrada já logada) 95 verificações, tudo passou, axe sem violações; suíte da área restrita de HTML (`public/` servido na porta 4173) 130 casos passaram, com as cores novas (item ativo #FCEEEE, texto de apoio #5A6A80). Capturas em 390, 768, 1024 e 1280 px.
+- **Observação do DS:** a captura de página inteira do Playwright redimensiona a janela e faz os rótulos do `MenuLateral` repetirem a entrada (aparecem claros na captura); com animações desligadas na captura, ficam normais. Registrar no DS se repetir ao redimensionar a janela de verdade.
+
 ## 2026-11-27 · Contatos: e-mails de contato@ voltaram a travar na cópia para o painel, corrigido e publicado
 
 - **Pedido da dona do produto:** os e-mails não estavam chegando na página Contatos do painel.

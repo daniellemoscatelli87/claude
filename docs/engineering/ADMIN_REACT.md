@@ -1,6 +1,6 @@
 # Área restrita em React: plano de migração
 
-> Decisão da dona do produto (27/11/2026, D-051): a área restrita do site do estúdio (`/admin/`) será refeita em React, para usar os componentes reais do Design System Dani Moscatelli em vez de cópias em HTML feitas à mão. Este documento é o plano. A fundação está no branch `claude/admin-react`, **sem publicação**.
+> Decisão da dona do produto (27/11/2026, D-051): a área restrita do site do estúdio (`/admin/`) será refeita em React, para usar os componentes reais do Design System Dani Moscatelli em vez de cópias em HTML feitas à mão. Este documento é o plano. A casca e a Início estão publicadas desde 27/11/2026 (D-052); as outras páginas seguem em lotes.
 
 ## 1. Situação em 27/11/2026
 
@@ -9,11 +9,11 @@
 | App em `apps/area-restrita/` (Vite 6 + React 18.3 + Tailwind 4.1.12, os mesmos do DS) | implementado, testado, não publicado |
 | Casca do painel (menu lateral, cabeçalho, notificações, perfil, fundo cinza) | implementado com o `sidebar` do DS (provisório, ver seção 6) |
 | Entrar, definir senha, nova senha e sem acesso (mesma conta e mesma sessão das páginas de HTML) | implementado e testado |
-| Início em React, com a mesma informação da página de HTML | implementado e testado, só em prévia (`/admin/app/`) |
+| Início em React, com a mesma informação da página de HTML | **publicada em `/admin/`** (D-052) |
 | Conferência de conformidade com o DS (`npm run conformidade`) | em zero desvios desde o primeiro dia |
 | Sincronização da pasta `ui` inteira do DS (`arquivos.txt` com pasta e `excluir`) | implementado |
 | Teste na rotina diária do DS (tipos, testes, conformidade e build do app) | implementado no workflow |
-| Páginas de HTML em `public/admin/` | **intactas** e servidas como hoje |
+| Páginas de HTML em `public/admin/` | servidas como hoje, menos a Início (substituída no build); item ativo do menu no rosa do meio (#FCEEEE) |
 
 ## 2. Como publicar (regra da dona do produto, 27/11/2026)
 
@@ -53,7 +53,7 @@ O estado de cada página fica em `apps/area-restrita/src/rotas.json` (campo `rea
 - Cada pasta recebe o próprio `index.html` porque o site tem `404.html` (o Cloudflare não faz o "SPA fallback"); assim, abrir direto `/admin/contatos/?id=…` funciona.
 - **Voltar atrás** é trocar `"publicada"` por `"previa"`: a página de HTML volta no próximo build.
 - A página de HTML em `public/admin/<página>/` só é apagada num commit posterior, depois que a versão em React estiver publicada e conferida. Até lá, as duas convivem.
-- Hoje: `{ "inicio": "previa" }`.
+- Hoje: `{ "inicio": "publicada" }` (D-052). A Início de HTML (`public/admin/index.html`) sai do repositório na limpeza (A9).
 
 ### 3.4 Sessão e login
 
@@ -103,7 +103,7 @@ Fora dos componentes, o código do app só usa classes de layout (grid, flex, ga
 
 Nenhuma foi feita à mão no app; enquanto não chegam, a fundação usa o componente mais próximo do DS e a diferença aparece nas capturas.
 
-**Atualização (27/11/2026):** os itens 1 a 4 foram trazidos da FindLook para o DS Dani Moscatelli no branch `claude/pecas-do-painel` do DS (proposta `propostas/2026-11-27-pecas-do-painel.md`, ainda sem o "sim") e a casca e a Início já usam essas peças. **Atenção:** a pasta `src/components/ui/` deste branch veio da sincronização com `DS_REF=claude/pecas-do-painel`, mas `design-system/versao.txt` continua em `30d1ef0` de propósito: só muda (com nova sincronização pelo `main`) depois que o DS publicar as peças no `main`. Antes disso, este branch não pode ir para o `main`.
+**Atualização (27/11/2026):** os itens 1 a 4 foram trazidos da FindLook para o DS Dani Moscatelli no branch `claude/pecas-do-painel` do DS (proposta `propostas/2026-11-27-pecas-do-painel.md`, ainda sem o "sim") e a casca e a Início já usam essas peças. **Publicado (27/11/2026):** o DS publicou as peças no `main` (`cb5847c`) e a área restrita é sincronizada pelo `main` (`versao.txt` = `cb5847c`).
 
 1. **Casca do painel (`PainelShell`).** A casca aprovada (D-039, D-041: cabeçalho branco na largura toda, menu embaixo com o botão "Menu", 240/64 px, item ativo rosa claro com texto vermelho, grupos com linha-guia e painel ao lado no recolhido) existe no site do DS só como marcação do `App.tsx` e, como componente, **só no DS da FindLook** (`ui/painel-shell.tsx`, "moldura igual à do site do design system"). O `ui/sidebar` do DS Dani Moscatelli é o do shadcn sem adaptação: item ativo cinza, menu na altura toda (o cabeçalho fica ao lado, não acima), textos em inglês para leitores de tela ("Toggle Sidebar", "Sidebar", "Displays the mobile sidebar."), botão de grupo em seminegrito (herda o `button` da base) e, no celular, a dica invisível ainda abre uma camada que o primeiro Esc fecha (contornado no app sem dica no celular). **Proposta:** trazer `painel-shell.tsx` da FindLook para o DS Dani Moscatelli (com os tokens deste DS) e corrigir os textos do `sidebar`.
 2. **Cabeçalho da página do painel (`CabecalhoDaPagina`)** e o layout "Opção A" (título, descrição e abas fora dos cards, no fundo cinza; conteúdo em cards com cabeçalho de ícone): decisão de 23/11 no DS da FindLook (`ui/painel-cabecalho.tsx` e `PainelTemplates`); no DS Dani Moscatelli os templates (Dashboard, Configurações, Equipe, Caixa de entrada) são só demonstração, em moldura de navegador.
