@@ -68,6 +68,9 @@
     }
   ],
   "react": {
-    "inicio": "publicada"
+    "inicio": "publicada",
+    "lancamento": "previa",
+    "configuracoes": "previa",
+    "comunicados": "previa"
   }
 }

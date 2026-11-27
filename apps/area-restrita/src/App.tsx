@@ -13,6 +13,9 @@ import { ProvedorDeNotificacoes } from "@/casca/notificacoes";
 import { ProvedorDeSessao, useSessao } from "@/casca/sessao";
 import { DefinirSenha, Entrar, NovaSenha, SemAcesso } from "@/telas/Acesso";
 import { Inicio } from "@/telas/Inicio";
+import { Comunicados } from "@/telas/Comunicados";
+import { Configuracoes } from "@/telas/Configuracoes";
+import { Lancamento } from "@/telas/Lancamento";
 
 function NaoEncontrada() {
   return (
@@ -72,6 +75,9 @@ function Portao() {
               <Casca>
                 <Routes>
                   <Route path="/" element={<Inicio />} />
+                  <Route path="/lancamento/" element={<Lancamento />} />
+                  <Route path="/configuracoes/" element={<Configuracoes />} />
+                  <Route path="/comunicados/" element={<Comunicados />} />
                   <Route path="*" element={<NaoEncontrada />} />
                 </Routes>
               </Casca>

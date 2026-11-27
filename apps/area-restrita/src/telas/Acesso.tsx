@@ -3,8 +3,7 @@
 // Checkbox, Button, Alert). O DS ainda não tem o template de autenticação importável (AuthTemplate é só
 // demonstração): ver docs/engineering/ADMIN_REACT.md, peças que faltam.
 import * as React from "react";
-import { CircleAlert, CircleCheck, LoaderCircle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
@@ -16,6 +15,7 @@ import { Selo } from "@/components/ui/selo";
 import { armazenamento, registrar, sb } from "@/lib/supabase";
 import { CHAVE_SESSAO } from "@/lib/armazenamento";
 import { useSessao } from "@/casca/sessao";
+import { Mensagem, type Aviso } from "./comum";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TEXTOS_SENHA = { mostrar: "Mostrar senha", ocultar: "Ocultar senha" };
@@ -26,21 +26,6 @@ export function mensagemDeErro(m: string) {
   if (/rate limit/i.test(m)) return "Muitos e-mails pedidos em pouco tempo. Aguarde alguns minutos e tente de novo.";
   if (/invalid login credentials/i.test(m)) return "E-mail ou senha incorretos.";
   return "Não foi possível concluir: " + m;
-}
-
-type Aviso = { tom: "erro" | "sucesso"; texto: string } | null;
-
-function Mensagem({ aviso }: { aviso: Aviso }) {
-  return (
-    <div aria-live="polite">
-      {aviso && (
-        <Alert variant={aviso.tom === "erro" ? "error" : "success"}>
-          {aviso.tom === "erro" ? <CircleAlert aria-hidden /> : <CircleCheck aria-hidden />}
-          <AlertDescription>{aviso.texto}</AlertDescription>
-        </Alert>
-      )}
-    </div>
-  );
 }
 
 function Moldura({ titulo, descricao, children }: { titulo: string; descricao: React.ReactNode; children: React.ReactNode }) {
