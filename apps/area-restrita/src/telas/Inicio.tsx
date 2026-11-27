@@ -36,7 +36,7 @@ const LINHAS_NA_INICIO = 5;
  */
 const ESTADO_DA_MENSAGEM: Record<SituacaoDaMensagem, { rotulo: string; icone: LucideIcon; tom: TomDoChip & ("marca" | "neutro"); tomDoGrafico: number }> = {
   "nao-lida": { rotulo: "Não lida", icone: Mail, tom: "marca", tomDoGrafico: 1 },
-  lida: { rotulo: "Sem resposta", icone: MailOpen, tom: "marca", tomDoGrafico: 2 },
+  lida: { rotulo: "Lida, sem resposta", icone: MailOpen, tom: "marca", tomDoGrafico: 2 },
   respondida: { rotulo: "Respondida", icone: MailCheck, tom: "neutro", tomDoGrafico: 6 },
   reuniao: { rotulo: "Reunião marcada", icone: CalendarCheck, tom: "neutro", tomDoGrafico: 5 },
 };
@@ -199,7 +199,12 @@ export function Inicio() {
 
           <CardComCabecalho
             idDoTitulo="h-contato" icone={<Mail />} titulo="Contato" sangria
-            descricao={<EmPartes partes={[plural(dados.contatos.total, "mensagem recebida", "mensagens recebidas"), t.pendentes ? `${t.pendentes} sem resposta` : null]} />}
+            descricao={<EmPartes partes={[
+              plural(dados.contatos.total, "mensagem recebida", "mensagens recebidas"),
+              // "sem resposta" (respondido_em vazio) inclui as não lidas; "não lidas" é o mesmo número do contador do menu
+              t.pendentes ? `${t.pendentes} sem resposta` : null,
+              avisos.contadores.contatos ? plural(avisos.contadores.contatos, "não lida", "não lidas") : null,
+            ]} />}
             acao={dados.contatos.total > 0 && <LinkVerTudo as={LinkDaArea} href="/admin/contatos/" rotulo="Ver todas as mensagens">Ver todas</LinkVerTudo>}
           >
             <SituacaoDasMensagens linhas={dados.contatos.linhas} />
@@ -231,7 +236,12 @@ export function Inicio() {
 
           <CardComCabecalho
             idDoTitulo="h-parceiros" icone={<Users />} titulo="Parceiros" sangria
-            descricao={<EmPartes partes={[plural(dados.candidaturas.total, "candidatura", "candidaturas"), naoVistas ? plural(naoVistas, "não vista", "não vistas") : null]} />}
+            descricao={<EmPartes partes={[
+              plural(dados.candidaturas.total, "candidatura", "candidaturas"),
+              naoVistas ? plural(naoVistas, "não vista", "não vistas") : null,
+              // o contador de Parceiros no menu soma as candidaturas não vistas e os e-mails abertos pelos parceiros
+              avisos.contadores.emails ? plural(avisos.contadores.emails, "e-mail aberto", "e-mails abertos") : null,
+            ]} />}
             acao={dados.candidaturas.total > 0 && <LinkVerTudo as={LinkDaArea} href="/admin/parceiros/?aba=candidaturas" rotulo="Ver todas as candidaturas">Ver todas</LinkVerTudo>}
           >
             {dados.candidaturas.linhas.length ? (

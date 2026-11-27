@@ -39,10 +39,56 @@ const DADOS = {
   ],
   notificacoes_lancamento: [{ id: "l1", created_at: h(3), email: "pessoa@exemplo.com" }, { id: "l2", created_at: h(70), email: "outra.pessoa@exemplo.com" }],
   email_envios: [{ id: "e1", cadastro_id: "p2", assunto: "Boas-vindas à Rede", aberto_em: h(6), clicado_em: null, cadastros: { nome: "Elisa Prado" } }],
-  pesquisa_respostas: [{ pesquisa: "moda-curitiba", nome: "Fernanda", created_at: h(8), atualizado_em: h(7) }],
+  pesquisa_respostas: [{ pesquisa: "moda-curitiba", nome: "Fernanda", situacao: "completa", created_at: h(8), atualizado_em: h(7) }],
   pesquisas: [{ slug: "moda-curitiba", titulo: "Moda em Curitiba" }],
   mensagens_recebidas: [],
 };
+
+/**
+ * Filtros do PostgREST que o app e as páginas de HTML usam (is, not.is, eq, neq, gt, gte, lt, lte, in, or), aplicados
+ * às linhas e à contagem do content-range, com a mesma regra do SQL para nulos (comparar com nulo nunca é verdadeiro,
+ * só "is.null"). Assim cada número da tela vem da mesma consulta que no banco de verdade.
+ */
+function testar(v, expr) {
+  let negar = false;
+  if (expr.startsWith("not.")) { negar = true; expr = expr.slice(4); }
+  const i = expr.indexOf(".");
+  const op = expr.slice(0, i), arg = expr.slice(i + 1);
+  const nulo = v === null || v === undefined;
+  const comparar = (a, b) => { const da = Date.parse(a), db = Date.parse(b); return !isNaN(da) && !isNaN(db) && /\d{4}-\d{2}-\d{2}/.test(String(b)) ? da - db : String(a).localeCompare(String(b)); };
+  let r;
+  switch (op) {
+    case "is": r = arg === "null" ? nulo : arg === "true" ? v === true : arg === "false" ? v === false : false; break;
+    case "eq": r = !nulo && String(v) === arg; break;
+    case "neq": r = !nulo && String(v) !== arg; break;
+    case "gt": r = !nulo && comparar(v, arg) > 0; break;
+    case "gte": r = !nulo && comparar(v, arg) >= 0; break;
+    case "lt": r = !nulo && comparar(v, arg) < 0; break;
+    case "lte": r = !nulo && comparar(v, arg) <= 0; break;
+    case "in": r = !nulo && arg.replace(/^\(|\)$/g, "").split(",").map((x) => x.replace(/^"|"$/g, "")).includes(String(v)); break;
+    default: throw new Error("Filtro não simulado: " + op);
+  }
+  return negar ? !r : r;
+}
+function consultar(linhas, params) {
+  let out = linhas;
+  for (const [chave, valor] of params) {
+    if (["select", "order", "limit", "offset", "columns", "on_conflict"].includes(chave)) continue;
+    if (chave === "or") {
+      const condicoes = valor.replace(/^\(|\)$/g, "").split(",");
+      out = out.filter((l) => condicoes.some((c) => { const [col, ...resto] = c.split("."); return testar(l[col], resto.join(".")); }));
+    } else out = out.filter((l) => testar(l[chave], valor));
+  }
+  const total = out.length;
+  const ordem = params.get("order");
+  if (ordem) {
+    const [col, dir] = ordem.split(",")[0].split(".");
+    out = [...out].sort((a, b) => (String(a[col] ?? "") < String(b[col] ?? "") ? -1 : String(a[col] ?? "") > String(b[col] ?? "") ? 1 : 0) * (dir === "desc" ? -1 : 1));
+  }
+  const limite = Number(params.get("limit"));
+  if (limite) out = out.slice(0, limite);
+  return { linhas: out, total };
+}
 
 async function simularSupabase(page) {
   await page.route(/cdn\.jsdelivr\.net\/npm\/@supabase/, (r) => r.fulfill({ contentType: "application/javascript", body: UMD }));
@@ -54,8 +100,8 @@ async function simularSupabase(page) {
     const cors = { "access-control-allow-origin": "*", "access-control-allow-headers": "*", "access-control-expose-headers": "content-range" };
     if (req.method() === "OPTIONS") return r.fulfill({ status: 204, headers: { ...cors, "access-control-allow-methods": "*" } });
     if (req.method() === "POST") return r.fulfill({ status: 201, headers: cors, body: "" });
-    const d = DADOS[tabela] || [];
-    r.fulfill({ status: 200, contentType: "application/json", headers: { ...cors, "content-range": `0-${Math.max(d.length - 1, 0)}/${d.length}` }, body: req.method() === "HEAD" ? "" : JSON.stringify(d) });
+    const { linhas: d, total } = consultar(DADOS[tabela] || [], new URL(req.url()).searchParams);
+    r.fulfill({ status: 200, contentType: "application/json", headers: { ...cors, "content-range": `${d.length ? "0-" + (d.length - 1) : "*"}/${total}` }, body: req.method() === "HEAD" ? "" : JSON.stringify(d) });
   });
 }
 
@@ -110,10 +156,43 @@ async function rodar(browser, largura) {
   ok(kpis.every((k) => k.apoio === largura >= 640), `${L}: linha de contexto em todos os números ${largura >= 640 ? "(visível)" : "(escondida no celular)"}`);
   // Estado das mensagens sempre em texto (chip), não só no ícone.
   const chips = await page.locator("section[aria-labelledby=h-contato] [data-slot=chip-de-estado]").allInnerTexts();
-  ok(chips.length === 5 && chips.every((c) => /Não lida|Sem resposta|Respondida|Reunião marcada/.test(c)), `${L}: cada mensagem com o estado em texto (${chips.join(", ")})`);
+  ok(chips.length === 5 && chips.every((c) => /^(Não lida|Lida, sem resposta|Respondida|Reunião marcada)$/.test(c.trim())), `${L}: cada mensagem com o estado em texto (${chips.join(", ")})`);
   // Gráfico: título, barra e legenda embaixo, com ponto, quantidade e percentual.
   const grafico = await page.evaluate(() => { const f = document.querySelector("section[aria-labelledby=h-contato] [data-slot=barra-de-composicao]"); if (!f) return null; const [cap, barra, leg] = [f.querySelector("figcaption"), f.querySelector("[role=img]"), f.querySelector("ul")]; return { ordem: cap.getBoundingClientRect().top < barra.getBoundingClientRect().top && barra.getBoundingClientRect().bottom <= leg.getBoundingClientRect().top, itens: [...leg.querySelectorAll("li")].map((li) => li.textContent) }; });
   ok(!!grafico && grafico.ordem && grafico.itens.every((t) => /\d+\s*\d+%/.test(t)), `${L}: gráfico com título, barra e legenda embaixo com valores (${grafico && grafico.itens.join(" | ")})`);
+  // Os números concordam entre si e com as consultas (os filtros do PostgREST são simulados de verdade).
+  const contar = (tabela, filtros) => consultar(DADOS[tabela], new URLSearchParams(filtros)).total;
+  const seteDias = new Date(Date.now() - 7 * 864e5).toISOString();
+  const esperado = {
+    novas: contar("contatos", { created_at: "gte." + seteDias }),
+    semResposta: contar("contatos", { respondido_em: "is.null" }),
+    naoLidas: contar("contatos", { visualizado_em: "is.null" }),
+    reunioes: contar("contatos", { reuniao_em: "not.is.null" }),
+    candidaturas7d: contar("cadastros", { created_at: "gte." + seteDias }),
+    naoVistas: contar("cadastros", { visualizado_em: "is.null" }),
+    emails: contar("email_envios", { visualizado_em: "is.null", or: "(aberto_em.not.is.null,clicado_em.not.is.null)" }),
+    respostas: contar("pesquisa_respostas", { visualizado_em: "is.null", situacao: "neq.parcial" }),
+    aguardando: contar("notificacoes_lancamento", { avisado_em: "is.null" }),
+  };
+  const numeroDoKpi = async (id) => Number((await page.locator(`[data-kpi="${id}"] p.tabular-nums`).first().innerText()).match(/\d+/)[0]);
+  const subtitulo = async (id) => (await page.locator(`section[aria-labelledby=${id}] [data-slot=cabecalho-do-card] p`).first().innerText()).replace(/\s+/g, " ");
+  const kpi = { novas: await numeroDoKpi("mensagens"), reunioes: await numeroDoKpi("reunioes"), candidaturas: await numeroDoKpi("parceiros"), lancamento: await numeroDoKpi("lancamento") };
+  ok(kpi.novas === esperado.novas && kpi.reunioes === esperado.reunioes && kpi.candidaturas === esperado.candidaturas7d && kpi.lancamento === esperado.aguardando,
+    `${L}: números = consultas (mensagens 7 dias ${kpi.novas}/${esperado.novas}, reuniões ${kpi.reunioes}/${esperado.reunioes}, candidaturas 7 dias ${kpi.candidaturas}/${esperado.candidaturas7d}, aguardando ${kpi.lancamento}/${esperado.aguardando})`);
+  const subContato = await subtitulo("h-contato");
+  ok(subContato.includes(`${esperado.semResposta} sem resposta`) && subContato.includes(`${esperado.naoLidas} não lida`), `${L}: subtítulo de Contato = consultas (${subContato})`);
+  const legenda = (await page.locator("section[aria-labelledby=h-contato] [data-slot=barra-de-composicao] li").allInnerTexts()).map((t) => t.replace(/\s+/g, " "));
+  const daLegenda = (nome) => Number((legenda.find((t) => t.startsWith(nome + " ")) || "").slice(nome.length).trim().split(" ")[0] || 0);
+  ok(daLegenda("Não lida") === esperado.naoLidas && daLegenda("Não lida") + daLegenda("Lida, sem resposta") === esperado.semResposta && daLegenda("Reunião marcada") === esperado.reunioes,
+    `${L}: gráfico concorda com o subtítulo e o card de reuniões (${legenda.join(" | ")})`);
+  const subParceiros = await subtitulo("h-parceiros");
+  ok(subParceiros.includes(`${esperado.naoVistas} não vista`) && subParceiros.includes(`${esperado.emails} e-mail`), `${L}: subtítulo de Parceiros explica o contador do menu (${subParceiros})`);
+  if (largura >= 1024) {
+    const contadores = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('nav[aria-label="Páginas da área restrita"] [data-slot=contador-do-painel]')].map((c) => [c.closest("a,button").textContent.replace(/\d.*$/s, "").trim(), Number(c.firstChild.textContent)])));
+    ok(contadores.Contato === esperado.naoLidas && contadores.Parceiros === esperado.naoVistas + esperado.emails && contadores.Projetos === esperado.respostas,
+      `${L}: contadores do menu = consultas (${JSON.stringify(contadores)}; esperado Contato ${esperado.naoLidas}, Parceiros ${esperado.naoVistas}+${esperado.emails}, Projetos ${esperado.respostas})`);
+  }
+
   // O número do sino é a soma dos contadores do menu (mesmo número, mesmo sentido).
   const somaDoMenu = await page.evaluate(() => { const nav = document.querySelector('nav[aria-label="Páginas da área restrita"]'); return nav ? [...nav.querySelectorAll("[data-slot=contador-do-painel]")].reduce((s, c) => s + Number(c.firstChild.textContent), 0) : null; });
   const doSino = Number(await page.locator('[data-slot="notificacoes"] [data-slot="contador-do-painel"]').innerText());
@@ -204,7 +283,7 @@ async function rodar(browser, largura) {
   await ctx.close();
 }
 
-module.exports = { simularSupabase, BASE };
+module.exports = { simularSupabase, BASE, DADOS, consultar };
 if (require.main === module) (async () => {
   const browser = await chromium.launch();
   await rodar(browser, 1280);
