@@ -32,7 +32,19 @@ const CHAVE_MENU = "dm-admin-menu-recolhido";
 
 const href = (p: Pagina) => "/admin/" + p.caminho;
 
-/** Itens do menu (menu fixo e gaveta do celular): os mesmos da página de HTML, com os contadores de não lidas. */
+/**
+ * Contador de cada área do menu. O sino soma todos (contato + parceiros + e-mails abertos pelos parceiros + respostas
+ * das pesquisas); os e-mails abertos ou clicados são de parceiros (abrem o perfil, aba E-mails), então entram no
+ * contador de Parceiros. Assim, a soma dos contadores do menu é sempre o número do sino.
+ */
+function contagemDaArea(contador: string | undefined, n: Record<string, number>) {
+  if (!contador) return 0;
+  if (contador === "parceiros") return (n.parceiros || 0) + (n.emails || 0);
+  return n[contador] || 0;
+}
+const ROTULO_DO_CONTADOR: Record<string, string> = { contatos: "não lidas", parceiros: "novidades", projetos: "respostas novas" };
+
+/** Itens do menu (menu fixo e gaveta do celular): os mesmos da página de HTML, com os contadores de novidades. */
 function ItensDoMenu({ ativo, aoNavegar }: { ativo: string | undefined; aoNavegar?: () => void }) {
   const { dados } = useNotificacoes();
   const n = dados.contadores as Record<string, number>;
@@ -41,8 +53,8 @@ function ItensDoMenu({ ativo, aoNavegar }: { ativo: string | undefined; aoNavega
       <GrupoDoMenu>
         {PAGINAS.map((p) => {
           const Icone = ICONES[p.icone || ""] ?? House;
-          const numero = p.contador ? n[p.contador] || 0 : 0;
-          const rotulo = p.contador === "parceiros" ? "não vistas" : "não lidas";
+          const numero = contagemDaArea(p.contador, n);
+          const rotulo = ROTULO_DO_CONTADOR[p.contador || ""] ?? "novidades";
           if (!p.sub) {
             return (
               <ItemDoMenu key={p.id} as={LinkDaArea} href={href(p)} icone={<Icone />} ativo={ativo === p.id} contador={numero} rotuloContador={rotulo} onClick={aoNavegar}>
@@ -169,7 +181,7 @@ export function Casca({ children }: { children: React.ReactNode }) {
 
   return (
     <MenuLateralProvider chave={CHAVE_MENU}>
-      <div className="min-h-dvh bg-background">
+      <div className="flex min-h-dvh flex-col bg-background">
         <BarraSuperiorDoPainel className="sticky top-0 z-30">
           <Button variant="ghost" size="icon" onClick={() => setGaveta(true)} aria-label="Abrir menu" aria-haspopup="dialog" aria-expanded={gaveta} className="size-11 lg:hidden">
             <Menu aria-hidden className="size-5" />
@@ -184,13 +196,17 @@ export function Casca({ children }: { children: React.ReactNode }) {
           </div>
         </BarraSuperiorDoPainel>
 
-        <div className="flex">
-          <MenuLateral aria-label="Menu lateral" className="sticky top-16 hidden h-[calc(100dvh-4rem)] self-start lg:flex">
+        <div className="flex flex-1">
+          {/* Coluna branca da altura da página toda; os itens ficam grudados logo abaixo do cabeçalho de 64 px. */}
+          <MenuLateral aria-label="Menu lateral" grudarAbaixoDe={64} className="hidden lg:flex">
             <TopoDoMenu />
             <ItensDoMenu ativo={ativo} />
           </MenuLateral>
-          <main className="@container/conteudo min-w-0 flex-1">
-            <div className="mx-auto w-full max-w-(--content-wide) p-4 sm:p-6 lg:p-8">{children}</div>
+          <main className="min-w-0 flex-1">
+            {/* O contêiner é a área do conteúdo, sem o respiro: as colunas dos cards seguem a largura real deles. */}
+            <div className="mx-auto w-full max-w-(--content-wide) p-4 sm:p-6 lg:p-8">
+              <div className="@container/conteudo">{children}</div>
+            </div>
           </main>
         </div>
 

@@ -1298,6 +1298,12 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
 - **Verificação executada:** painel com login e dados simulados (validações, conversão do horário de Brasília, criar, alterar, excluir); migração num Postgres 16 local sem o `pg_cron` (RLS, colunas alteráveis, chave protegida, função protegida); `esbuild` da função; `npm run build`.
 - **Pendente:** aplicar a migração, publicar a função e o site; teste real com um agendamento para o e-mail de teste.
 
+## 2026-11-27 · Área restrita em React: Início v3, depois da revisão de design (D-051), não publicado
+
+- **DS (`claude/pecas-do-painel`, `e1c3ee9`):** novos `ChipDeEstado` e `BarraDeComposicao`; `MenuLateral grudarAbaixoDe`; `CardIndicador compacto` e `soNumeroNoCelular`; propostas `2026-11-27-chip-de-estado.md` e `2026-11-27-barra-de-composicao.md`.
+- **Início:** números 4 lado a lado a partir de 44rem de conteúdo (1024 px de tela) e 2 × 2 no celular, todos com rótulo, número e contexto; alerta de atenção em âmbar dizendo o que fazer; descrição numa linha; gráfico com título, barra e legenda com valores; estado de cada mensagem e candidatura em texto (chip); Contato, Parceiros e Lançamento um por linha (a diferença de altura entre Parceiros e Lançamento deixava área vazia: regra da GradeDeCards). Casca: menu branco da altura da página; contador de Parceiros soma os e-mails abertos pelos parceiros, então o sino é igual à soma dos contadores do menu.
+- **Comandos:** `npm run typecheck` ok; `npm test` 28 ok; `npm run conformidade` 0; `npm run build` ok; `tests/navegador/inicio.cjs` 74 verificações, tudo passou (o teste do Esc das notificações passou a esperar o painel sumir, em vez de 400 ms fixos). `versao.txt` continua `30d1ef0`.
+
 ## 2026-11-27 · Área restrita em React: casca do painel e Início com as peças novas do DS (D-051), não publicado
 
 - **Branch:** `claude/admin-react`. Depende do branch `claude/pecas-do-painel` do DS (casca do painel, cabeçalho da página, card de indicador e ícone com base, trazidos da FindLook com as cores do DS), ainda sem o "sim" da dona do produto.

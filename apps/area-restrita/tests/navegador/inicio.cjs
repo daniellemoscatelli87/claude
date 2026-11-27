@@ -99,14 +99,30 @@ async function rodar(browser, largura) {
   ok(true, `${L}: login leva à Início com a saudação`);
   ok(await page.locator("[data-kpi]").count() === 4, `${L}: 4 cards de número`);
   const prioridade = page.locator("[data-prioridade]");
-  ok(/\d+ mensagens esperam resposta/.test(await prioridade.innerText()), `${L}: o que pede ação vem primeiro (mensagens sem resposta)`);
+  ok((await prioridade.innerText()).includes("Responda as mensagens") && (await prioridade.getAttribute("data-tom")) === "aviso", `${L}: o que pede ação vem primeiro, no tom de atenção (âmbar), dizendo o que fazer`);
   ok(await prioridade.getByRole("link", { name: "Responder mensagens" }).getAttribute("href") === "/admin/contatos/?situacao=pendentes", `${L}: com pendentes, a ação leva às não respondidas`);
   ok(await page.locator('[data-kpi="mensagens"] a').getAttribute("href") === "/admin/contatos/", `${L}: o card de mensagens inteiro leva à caixa de entrada`);
-  ok((await page.locator('[data-kpi="mensagens"] a').innerText()).trim() === "Mensagens na semana", `${L}: o link do card é o rótulo, sem "Ver ..." repetido`);
-  // Números lado a lado nunca apertados: 4 só com 14rem (224 px) por card; senão 2 × 2 ou 1 coluna.
-  const larguras = await page.locator("[data-kpi]").evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().width)));
-  const tops = await page.locator("[data-kpi]").evaluateAll((els) => new Set(els.map((e) => Math.round(e.getBoundingClientRect().top))).size);
-  ok(Math.min(...larguras) >= 224, `${L}: cards de número com pelo menos 224 px (${larguras.join(", ")}; ${tops} linha(s))`);
+  ok((await page.locator('[data-kpi="mensagens"] a').innerText()).trim() === "Mensagens", `${L}: o link do card é o rótulo, sem "Ver ..." repetido`);
+  // Números: 4 lado a lado no computador, 2 × 2 no celular; mesma altura; contexto em todos (escondido no celular).
+  const kpis = await page.locator("[data-kpi]").evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); const apoio = [...e.querySelectorAll("p")].find((p) => /dias|site|aviso/.test(p.textContent)); return { l: Math.round(r.width), a: Math.round(r.height), t: Math.round(r.top), apoio: !!apoio && getComputedStyle(apoio).display !== "none" }; }));
+  const linhasDeKpi = new Set(kpis.map((k) => k.t)).size;
+  ok(linhasDeKpi === (largura >= 1024 ? 1 : 2) && new Set(kpis.map((k) => k.a)).size === 1 && Math.min(...kpis.map((k) => k.l)) >= 160, `${L}: números ${largura >= 1024 ? "4 lado a lado" : "2 × 2"}, mesma altura, nenhum abaixo de 160 px (${kpis.map((k) => k.l + "×" + k.a).join(", ")})`);
+  ok(kpis.every((k) => k.apoio === largura >= 640), `${L}: linha de contexto em todos os números ${largura >= 640 ? "(visível)" : "(escondida no celular)"}`);
+  // Estado das mensagens sempre em texto (chip), não só no ícone.
+  const chips = await page.locator("section[aria-labelledby=h-contato] [data-slot=chip-de-estado]").allInnerTexts();
+  ok(chips.length === 5 && chips.every((c) => /Não lida|Sem resposta|Respondida|Reunião marcada/.test(c)), `${L}: cada mensagem com o estado em texto (${chips.join(", ")})`);
+  // Gráfico: título, barra e legenda embaixo, com ponto, quantidade e percentual.
+  const grafico = await page.evaluate(() => { const f = document.querySelector("section[aria-labelledby=h-contato] [data-slot=barra-de-composicao]"); if (!f) return null; const [cap, barra, leg] = [f.querySelector("figcaption"), f.querySelector("[role=img]"), f.querySelector("ul")]; return { ordem: cap.getBoundingClientRect().top < barra.getBoundingClientRect().top && barra.getBoundingClientRect().bottom <= leg.getBoundingClientRect().top, itens: [...leg.querySelectorAll("li")].map((li) => li.textContent) }; });
+  ok(!!grafico && grafico.ordem && grafico.itens.every((t) => /\d+\s*\d+%/.test(t)), `${L}: gráfico com título, barra e legenda embaixo com valores (${grafico && grafico.itens.join(" | ")})`);
+  // O número do sino é a soma dos contadores do menu (mesmo número, mesmo sentido).
+  const somaDoMenu = await page.evaluate(() => { const nav = document.querySelector('nav[aria-label="Páginas da área restrita"]'); return nav ? [...nav.querySelectorAll("[data-slot=contador-do-painel]")].reduce((s, c) => s + Number(c.firstChild.textContent), 0) : null; });
+  const doSino = Number(await page.locator('[data-slot="notificacoes"] [data-slot="contador-do-painel"]').innerText());
+  if (largura >= 1024) ok(somaDoMenu === doSino, `${L}: sino (${doSino}) = soma dos contadores do menu (${somaDoMenu})`);
+  // Menu branco da altura da página toda (não termina no meio da página).
+  if (largura >= 1024) {
+    const menu = await page.evaluate(() => { const a = document.querySelector('[data-slot="menu-lateral"]').getBoundingClientRect(); return { fim: Math.round(a.bottom + scrollY), pagina: document.documentElement.scrollHeight }; });
+    ok(menu.fim >= menu.pagina - 1, `${L}: menu lateral até o fim da página (${menu.fim} de ${menu.pagina} px)`);
+  }
   // Contador do sino: redondo, vermelho (--primary), número branco, no canto do ícone.
   const sino = await page.evaluate(() => {
     const b = document.querySelector('[data-slot="notificacoes"]');
@@ -160,7 +176,8 @@ async function rodar(browser, largura) {
   ok((await painel.innerText()).includes("Nova mensagem de Ana Ribeiro") && (await painel.innerText()).includes("Fernanda respondeu a pesquisa"), `${L}: notificações com mensagens e respostas de pesquisa`);
   await page.screenshot({ path: `${S}/admin-react-notificacoes-${L}.png` });
   await page.keyboard.press("Escape");
-  await espera(400);
+  // O painel sai com animação (300 ms); espera ele sumir, até 2 s, em vez de um tempo fixo.
+  await painel.waitFor({ state: "hidden", timeout: 2000 }).catch(() => {});
   ok(!(await painel.isVisible()), `${L}: Esc fecha as notificações`);
 
   // Perfil
