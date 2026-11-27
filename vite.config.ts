@@ -1,5 +1,4 @@
 import { defineConfig, type Plugin } from 'vite'
-import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'node:path'
 import { cabecalhoHtml, GAVETA_HTML, rodapeHtml, rodapeCompactoHtml } from './src/compartilhado/partes.ts'
@@ -23,7 +22,7 @@ function partesCompartilhadas(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [partesCompartilhadas(), react(), tailwindcss()],
+  plugins: [partesCompartilhadas(), tailwindcss()],
   build: {
     rollupOptions: {
       input: {
