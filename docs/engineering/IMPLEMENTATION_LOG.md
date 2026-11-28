@@ -6,7 +6,6 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
-<<<<<<< HEAD
 ## 2026-11-28 · Área restrita em React: Parceiros e Pesquisas publicadas, páginas de HTML de /admin/ apagadas (D-056)
 
 - **Status:** implementado e testado; publicado pelo PR deste lote (ver o PR para a conferência ao vivo).
@@ -16,7 +15,13 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 - **DS `0685afb`:** sincronizado em `apps/area-restrita` e `apps/site` (pastas `ui` inteiras e estilos; `campo-de-endereco.tsx` e `links.tsx` chegam pela pasta inteira; `apps/experience-intelligence` não foi tocado). Contato: `CampoDeEndereco` + `buscaNoPhoton` (sugestões de endereço), `UploadDropzone` (anexos), `Popover` com `Calendar` na data da reunião, `Stepper` com `detalhe`; `tests/navegador/paginas.cjs` confere as sugestões (Photon simulado) e o Popover na tela. Site em React: tipos, testes e conformidade em ordem depois da sincronização.
 - **Achados para o DS:** `Button` sem `forwardRef` (React 18): com `asChild` em gatilhos do Radix (`DropdownMenuTrigger`, `PopoverTrigger`), o menu fica em `translate(0, -200%)`, fora da tela; é a causa do "Popover dentro do Dialog" da §7.2. `Funil` com `<ol role="img">` falha no axe (`listitem`). Detalhes em `ADMIN_REACT.md` §7.3.
 
-=======
+## 2026-11-28 · Site em React: cadastro de parceiro publicado (S5, D-053) e DS `0685afb` no site
+
+- **S5 (`apps/site/src/paginas/rede-parceiros-cadastro/`):** `conteudo.ts` (as perguntas copiadas do script da página de HTML), `cadastro.ts` (valor, validação, linha da tabela, consentimento, rascunho: funções puras), `Perguntas.tsx` (cada tipo de pergunta com o DS) e `CadastroDeParceiro.tsx` (etapas, envio, telas finais, Esc). Peças em `SITE_REACT.md`, seção 6e. `rotas.json`: cabeça do cadastro e da pesquisa; cadastro "publicada". A gaveta da Rede de Parceiros alinha o formulário ao título (`SidePanelBody` com `px-2 sm:px-4`).
+- **DS:** pasta `ui` e estilos do app do site sincronizados com o DS `0685afb` (só `apps/site` e `design-system/CATALOGO.md`; a área restrita e o app EI ficam como estavam; `design-system/versao.txt` continua `d2aeb40` até a sincronização de todos). Saíram `LOGO_CORRIGIDO`, `forceMount`/`hidden` nas respostas do acordeão (agora `manterNoHtml`) e o link de pular do site (agora `LinkPularConteudo`).
+- **Verificação executada:** em `apps/site`: tipos, 60 de 60 testes (inclui `tests/rede-parceiros-cadastro.test.ts`, que roda o script original e compara perguntas, estados, máscara e texto do consentimento), conformidade em 0, build. Na raiz: build e `comparar-dist` contra o `main` (`02fe3eb`): fora do site em React e das páginas publicadas, dist igual. Navegador, com o Supabase simulado (nada enviado): ver o PR.
+- **Pendências:** apagar `rede-parceiros/cadastro/index.html` (e a entrada no `vite.config.ts`) depois de conferido no ar; autorizar galeria espera o `RecorteDeFoto` no DS; S6 (pesquisa) não iniciado.
+
 ## 2026-11-27 · Site em React: Rede de Parceiros em HTML sai do repositório (S4, D-053)
 
 - A Rede de Parceiros em React foi conferida no ar (`tests/navegador/rede-parceiros.cjs` com `BASE=https://www.danimoscatelli.com.br`, sem enviar formulário: 25 de 25). `rede-parceiros/index.html` foi para `apps/site/tests/referencia/rede-parceiros.html` (só testes); `src/rede-parceiros-inicio.ts` e `.css` apagados; entrada `redeParceiros` saiu do `vite.config.ts`.
@@ -35,7 +40,6 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 - **Limpeza:** `projeto-piloto/index.html` e `public/privacidade/index.html` movidos para `apps/site/tests/referencia/` (só testes); `src/projeto-piloto.ts`, `src/projeto-piloto.css` e a entrada `projetoPiloto` do `vite.config.ts` apagados.
 - **Verificação executada:** em `apps/site`: tipos sem erros, 46 de 46 testes (inclui todas as frases da página de HTML na versão em React, os 21 depoimentos na mesma ordem, os links das redes e as regras do aviso de lançamento), conformidade em 0, build. Na raiz: build e `comparar-dist` contra o `main` (`bd46af8`): 299 iguais; diferenças só no app, nas páginas publicadas e em 2 arquivos que somem de propósito (`assets/projetoPiloto-*.js`/`.css`, que nenhuma página usava desde o S2). Navegador (`tests/navegador/inicio.cjs`, em `/` e na prévia): 390, 768, 1024 e 1280 px sem rolagem horizontal nem erros de hidratação, axe sem violações, alvos de 44 px, uma borda esquerda a 390 px, cards lado a lado com a mesma altura; aviso de lançamento vazio, inválido, sugestão de domínio, envio, obrigado e volta, falha do servidor; carrossel; aviso "Tem um projeto?" (WhatsApp, fechar, não volta na sessão); faixa de logos com Pausar; "Saiba mais". Projeto Piloto e páginas pequenas: todas as conferências passaram de novo.
 - **Pendências:** apagar `index.html`, `src/em-breve.ts`/`.css` e `public/inicio/ie3-secoes.*` depois de conferida no ar (próximo lote). Lacunas do DS achadas: `SITE_REACT.md`, seção 9.
->>>>>>> origin/main
 ## 2026-11-27 · Área restrita em React: DS d2aeb40, Reuniões e Contato publicadas, limpeza das páginas de HTML (D-055)
 
 - **Sincronização:** `DS_REF=main bash scripts/sincronizar-design-system.sh` (`versao.txt` = `d2aeb40`), com `apps/experience-intelligence/` de volta ao `main`.
@@ -858,7 +862,6 @@ Conferido também: nenhuma função do produto é executável por visitante sem 
   - P1 respondeu até a pergunta 3 e fechou a página. No banco: `parcial`, `parou_em` = `q4`, perguntas 1 a 3 e o bairro.
   - P2 parou na pergunta 2, fechou e voltou pelo link. Retomou na pergunta 3 e terminou. No banco: uma única linha `completa`, com as 12 perguntas e o perfil completo, aparecendo no sino.
 - A pedido da dona do produto ("resete todo o formulário" antes de divulgar), foram apagados os 2 envios, ambos de teste. Estado final: 0 respostas, 0 interessados, pesquisa no ar.
-
 
 - Pedido da dona do produto: guardar no servidor as respostas de quem para no meio, para ela ver quem parou e em qual pergunta. Antes, o progresso ficava só no aparelho da pessoa (rascunho de 30 dias), e o servidor só recebia a resposta no fim.
 - **Migração `20261124200000_pesquisa_incompletas.sql`:** `situacao` passa a aceitar `parcial`. Entram as colunas `parou_em` (etapa em que a pessoa estava) e `atualizado_em`.

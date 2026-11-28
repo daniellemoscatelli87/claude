@@ -76,7 +76,7 @@ export function RedeDeParceiros() {
           <SidePanel open={cadastro} onOpenChange={setCadastro}>
             <SidePanelContent closeLabel="Fechar cadastro" onCloseAutoFocus={(e) => { if (origem.current?.isConnected) { e.preventDefault(); origem.current.focus(); } }}>
               <SidePanelHeader eyebrow="Rede de Parceiros" title="Quero ser parceiro" />
-              <SidePanelBody className="flex p-0">
+              <SidePanelBody className="flex px-2 py-0 sm:px-4">
                 {cadastro && <iframe title="Formulário de cadastro na Rede de Parceiros" src={CADASTRO} className="min-h-0 w-full flex-1 border-0" />}
               </SidePanelBody>
             </SidePanelContent>
@@ -221,7 +221,7 @@ export function RedeDeParceiros() {
                       <span>{g.pergunta}</span>
                     </span>
                   </AccordionTrigger>
-                  <AccordionContent forceMount hidden={pergunta !== g.numero}>
+                  <AccordionContent manterNoHtml>
                     <Prosa tamanho="sm" className="pl-0 sm:pl-9">{g.resposta}</Prosa>
                   </AccordionContent>
                 </AccordionItem>

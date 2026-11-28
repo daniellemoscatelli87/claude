@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { EstadoFinal } from "@/components/ui/estado-vazio";
 import { MolduraDeConta } from "@/components/ui/moldura-de-conta";
 import { Logo } from "@/components/ui/logo";
-import { EMAIL_DE_CONTATO, LOGO_CORRIGIDO } from "@/compartilhado/marca";
+import { EMAIL_DE_CONTATO } from "@/compartilhado/marca";
 import { lerToken, pedirDescadastro, tokenValido } from "./descadastro";
 
 type Fase = "carregando" | "pronto" | "enviando" | "feito";
@@ -43,7 +43,7 @@ export function Descadastro() {
   const feito = fase === "feito";
   return (
     <MolduraDeConta
-      logo={<Logo variante="horizontal" className="h-12" {...LOGO_CORRIGIDO} />}
+      logo={<Logo variante="horizontal" className="h-12" />}
       titulo="Deixar de receber comunicados"
       descricao={
         feito

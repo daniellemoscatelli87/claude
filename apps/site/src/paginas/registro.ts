@@ -7,6 +7,7 @@ import { Inicio } from "./inicio/Inicio";
 import { Privacidade } from "./privacidade/Privacidade";
 import { ProjetoPiloto } from "./projeto-piloto/ProjetoPiloto";
 import { RedeDeParceiros } from "./rede-parceiros/RedeDeParceiros";
+import { CadastroDeParceiro } from "./rede-parceiros-cadastro/CadastroDeParceiro";
 
 export const PAGINAS: Record<string, ComponentType> = {
   privacidade: Privacidade,
@@ -15,4 +16,5 @@ export const PAGINAS: Record<string, ComponentType> = {
   "projeto-piloto": ProjetoPiloto,
   inicio: Inicio,
   "rede-parceiros": RedeDeParceiros,
+  "rede-parceiros-cadastro": CadastroDeParceiro,
 };

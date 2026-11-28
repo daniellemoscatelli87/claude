@@ -3,13 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 import { PaginaDeErro } from "@/components/ui/estado-vazio";
-import { LOGO_CORRIGIDO, NOME_DO_ESTUDIO } from "@/compartilhado/marca";
+import { NOME_DO_ESTUDIO } from "@/compartilhado/marca";
 
 export function Erro404() {
   return (
     <PaginaDeErro
       className="bg-background"
-      ilustracao={<Logo rotulo={NOME_DO_ESTUDIO} className="mx-auto h-14" {...LOGO_CORRIGIDO} />}
+      ilustracao={<Logo rotulo={NOME_DO_ESTUDIO} className="mx-auto h-14" />}
       titulo="Página não encontrada"
       descricao={
         <>
