@@ -158,7 +158,7 @@ function Dashboard({ todos, ia, gerando, aoGerar }: { todos: Parceiro[]; ia: Ana
   const textoIA = ia?.perfis || {};
   return (
     <>
-      <GradeDeCards larguraMinima="13rem" aria-label="Números da rede">
+      <GradeDeCards larguraMinima="11rem" aria-label="Números da rede">
         {numeros.map((k, i) => {
           const Icone = ICONES_DOS_KPIS[k.chave];
           return <CardIndicador key={k.chave} compacto icone={<Icone />} tom={i === 0 ? "marca" : "neutro"} valor={k.valor} total={k.total} rotulo={k.rotulo} apoio={k.apoio} />;
@@ -387,7 +387,7 @@ function PainelDeFiltros({ todos, busca, setBusca, filtros, setFiltros, mostrand
             ))}
           </ul>
         )}
-        <Button type="button" variant="ghost" className="sm:ml-auto" disabled={!n} onClick={() => { setBusca(""); setFiltros(FILTROS_VAZIOS); }}>Limpar filtros</Button>
+        <Button type="button" variant="link" className="px-0 sm:ml-auto" disabled={!n} onClick={() => { setBusca(""); setFiltros(FILTROS_VAZIOS); }}>Limpar filtros</Button>
       </div>
     </Card>
   );

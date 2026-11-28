@@ -108,7 +108,7 @@ function maisComum(rows: Parceiro[], get: (r: Parceiro) => string | string[] | n
   rows.forEach((r) => ([] as string[]).concat(get(r) || []).forEach((v) => m.set(v, (m.get(v) || 0) + 1)));
   return [...m.entries()].sort((a, b) => b[1] - a[1])[0] || null;
 }
-export type Kpi = { chave: string; valor: number; total?: number; rotulo: string; apoio: string };
+export type Kpi = { chave: string; valor: number | null; total?: number; rotulo: string; apoio: string };
 /**
  * Os cinco números do topo: os mesmos cálculos e textos da página de HTML. Os percentuais ("67% de especialistas em…")
  * viram "6 de 9" no número do card (o CardIndicador do DS só mostra números) e o percentual vai no apoio, sem perder nada.
@@ -123,13 +123,13 @@ export function kpis(rows: Parceiro[], totalGeral: number): Kpi[] {
   const tempoTxt = tempo ? limpar(tempo[0]).replace(/^Mais de/, "mais de").replace(/^Entre/, "entre").replace(/^Menos de/, "menos de") : "";
   return [
     { chave: "total", valor: t, rotulo: "Parceiros na rede", apoio: t === totalGeral ? "Total recebido" : "de " + totalGeral + " no total" },
-    { chave: "segmentos", valor: segs.size, total: totalSegs, rotulo: segs.size === 1 ? "Segmento atendido" : "Segmentos atendidos", apoio: "de " + totalSegs + " setores do formulário" },
+    { chave: "segmentos", valor: segs.size, rotulo: segs.size === 1 ? "Segmento atendido" : "Segmentos atendidos", apoio: "de " + totalSegs + " setores do formulário" },
     area
       ? { chave: "area", valor: area[1], total: t, rotulo: "Especialistas em " + area[0], apoio: pct(area[1], t) + "% dos parceiros (" + plural(area[1], "parceiro", "parceiros") + ")" }
-      : { chave: "area", valor: 0, rotulo: "Especialistas por área", apoio: "Sem dados" },
+      : { chave: "area", valor: null, rotulo: "Especialistas por área", apoio: "Sem dados" },
     tempo
       ? { chave: "tempo", valor: tempo[1], total: t, rotulo: "Têm " + tempoTxt + " de carreira", apoio: pct(tempo[1], t) + "% dos parceiros, na principal especialidade" }
-      : { chave: "tempo", valor: 0, rotulo: "Tempo de carreira", apoio: "Sem dados" },
+      : { chave: "tempo", valor: null, rotulo: "Tempo de carreira", apoio: "Sem dados" },
     { chave: "galeria", valor: vis, rotulo: vis === 1 ? "Perfil visível na galeria" : "Perfis visíveis na galeria", apoio: vis >= 3 ? "Galeria no ar no site" : "A galeria aparece no site a partir de 3" },
   ];
 }

@@ -6,6 +6,14 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Área restrita em React: Parceiros e Pesquisas publicadas, páginas de HTML de /admin/ apagadas (D-056)
+
+- **Status:** implementado e testado; publicado pelo PR deste lote (ver o PR para a conferência ao vivo).
+- **Caminhos:** `apps/area-restrita/src/telas/Parceiros.tsx`, `telas/parceiros/{Galeria,Ficha}.tsx`, `telas/Pesquisas.tsx`, `telas/pesquisas/{Resultados,Inteligencia,Dados,Graficos}.tsx`, `src/dados/{parceiros,pesquisas,pesquisas-resultados,pesquisas-inteligencia,pesquisas-relatorio}.ts`, `src/dados/form-parceiros.json`, `src/rotas.json` (parceiros, projetos e pesquisas em `"publicada"`), `tests/parceiros-pesquisas.test.ts`, `tests/navegador/parceiros-pesquisas.cjs`, `tests/rotas.test.ts`.
+- **Apagados (A9):** `public/admin/parceiros/`, `public/admin/pesquisas/`, `public/admin/admin.css`, `public/admin/admin.js`, `public/admin/form-parceiros.js`, `public/design-system/theme.css` (e a linha em `design-system/arquivos.txt`; o lembrete do `?v=` saiu do workflow de sincronização).
+- **Testes executados:** `npm run typecheck`, `npm test` (49 testes), `npm run conformidade` (zero desvios), `npm run build` (raiz); `tests/navegador/parceiros-pesquisas.cjs` em 1280, 390, 768 e 1024 px (Supabase simulado; funcionalidades da §8.2, axe WCAG A/AA, sem rolagem horizontal, alvos de 44 px e bordas esquerdas no celular).
+- **Achados para o DS:** `Button` sem `forwardRef` (React 18): com `asChild` em gatilhos do Radix (`DropdownMenuTrigger`, `PopoverTrigger`), o menu fica em `translate(0, -200%)`, fora da tela; é a causa do "Popover dentro do Dialog" da §7.2. `Funil` com `<ol role="img">` falha no axe (`listitem`). Detalhes em `ADMIN_REACT.md` §7.3.
+
 ## 2026-11-27 · Área restrita em React: DS d2aeb40, Reuniões e Contato publicadas, limpeza das páginas de HTML (D-055)
 
 - **Sincronização:** `DS_REF=main bash scripts/sincronizar-design-system.sh` (`versao.txt` = `d2aeb40`), com `apps/experience-intelligence/` de volta ao `main`.

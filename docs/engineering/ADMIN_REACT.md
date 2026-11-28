@@ -1,6 +1,6 @@
 # Área restrita em React: plano de migração
 
-> Decisão da dona do produto (27/11/2026, D-051): a área restrita do site do estúdio (`/admin/`) será refeita em React, para usar os componentes reais do Design System Dani Moscatelli em vez de cópias em HTML feitas à mão. Este documento é o plano. A casca e a Início estão publicadas desde 27/11/2026 (D-052); as outras páginas seguem em lotes.
+> Decisão da dona do produto (27/11/2026, D-051): a área restrita do site do estúdio (`/admin/`) será refeita em React, para usar os componentes reais do Design System Dani Moscatelli em vez de cópias em HTML feitas à mão. Este documento é o plano. A casca e a Início estão publicadas desde 27/11/2026 (D-052); desde 28/11/2026 todas as páginas estão em React (D-056).
 
 ## 1. Situação em 27/11/2026
 
@@ -12,12 +12,11 @@
 | Início em React, com a mesma informação da página de HTML | **publicada em `/admin/`** (D-052) |
 | Lançamento, Configurações e Comunicados em React | **publicadas** (D-054) |
 | Reuniões e Contato | **publicadas** (D-055) |
-| Parceiros e Pesquisas | continuam de HTML (plano na seção 8.1) |
-| Páginas de HTML das páginas publicadas | apagadas de `public/admin/` (A9, D-055) |
+| Parceiros e Pesquisas | **publicadas** (D-056; lista de conferência na seção 8.2) |
+| Páginas de HTML | todas apagadas de `public/admin/`, com `admin.css`, `admin.js`, `form-parceiros.js` e a cópia `public/design-system/theme.css` (A9, D-055 e D-056); fica só `avatar-dani.webp` |
 | Conferência de conformidade com o DS (`npm run conformidade`) | em zero desvios desde o primeiro dia |
 | Sincronização da pasta `ui` inteira do DS (`arquivos.txt` com pasta e `excluir`) | implementado |
 | Teste na rotina diária do DS (tipos, testes, conformidade e build do app) | implementado no workflow |
-| Páginas de HTML em `public/admin/` | servidas como hoje, menos a Início (substituída no build); item ativo do menu no rosa do meio (#FCEEEE) |
 
 ## 2. Como publicar (regra da dona do produto, 27/11/2026)
 
@@ -57,7 +56,7 @@ O estado de cada página fica em `apps/area-restrita/src/rotas.json` (campo `rea
 - Cada pasta recebe o próprio `index.html` porque o site tem `404.html` (o Cloudflare não faz o "SPA fallback"); assim, abrir direto `/admin/contatos/?id=…` funciona.
 - **Voltar atrás** é trocar `"publicada"` por `"previa"`: a página de HTML volta no próximo build.
 - A página de HTML em `public/admin/<página>/` só é apagada num commit posterior, depois que a versão em React estiver publicada e conferida. Até lá, as duas convivem.
-- Hoje: Início (D-052), Lançamento, Configurações, Comunicados (D-054), Contato e Reuniões (D-055) em `"publicada"`; as páginas de HTML delas já saíram do repositório (A9). Voltar atrás: `"previa"` e restaurar a página de HTML pelo histórico do git.
+- Hoje: todas as páginas em `"publicada"`: Início (D-052), Lançamento, Configurações, Comunicados (D-054), Contato e Reuniões (D-055), Parceiros e Pesquisas (D-056; `projetos`, o grupo do menu, também, porque leva a `pesquisas/`); nenhuma página de HTML ficou em `public/admin/` (A9). Voltar atrás: `"previa"` e restaurar a página de HTML pelo histórico do git.
 
 ### 3.4 Sessão e login
 
@@ -143,6 +142,13 @@ Peças que as páginas precisam e o DS ainda não tem. Nenhuma foi feita na áre
 4. **`MenuLateral`**: os rótulos repetem a entrada (aparecem claros) quando a janela muda de tamanho.
 5. **`Stepper`** como situação (não formulário): com as datas no nome das etapas, o Stepper vai para o modo compacto mesmo com 600 px; as datas ficaram numa linha embaixo.
 
+### 7.3 Observações para o DS depois de A7 e A8 (28/11/2026)
+
+1. **`Button` sem `forwardRef` (React 18).** O `Button` do DS é uma função sem `forwardRef`; no React 18 a `ref` não chega ao `<button>`. Com `asChild` em gatilhos do Radix que precisam medir o gatilho (`DropdownMenuTrigger`, `PopoverTrigger`, `TooltipTrigger`), o conteúdo nunca se posiciona e fica em `translate(0, -200%)`, fora da tela (conferido no menu "Exportar relatório"). É a causa do item 2 da §7.2 ("Popover dentro do Dialog"). **Proposta:** `React.forwardRef` no `Button` (e no `Input`/`Textarea`, que também não repassam ref). Na área restrita, os gatilhos de menu usam o gatilho do Radix com `buttonVariants` (aparência do DS) até a correção.
+2. **`Funil`:** `<ol role="img">` com `<li>` dentro: o axe acusa `listitem` (itens fora de lista para a tecnologia assistiva). **Proposta:** `role="img"` num `div` em volta (ou `ol` sem `role`, com o resumo em `aria-label` de um elemento próprio). Na Pesquisa, "Quem chegou até onde" usa `BarrasOrdenadas` com "% da etapa anterior" no nome.
+3. **`CardIndicador` com unidade:** só aceita número (`valor: number`); "67%" não cabe. Na área restrita, "6 de 9" com o percentual no apoio. **Proposta:** `formatar` ou `unidade` opcional.
+4. **`BarrasOrdenadas` com destaque fora do topo:** o destaque é sempre o(s) primeiro(s) da lista; em ordem natural (escala), a resposta mais escolhida não fica em destaque. **Proposta:** `destacar?: (item) => boolean`.
+
 ## 8. Ordem das páginas e estimativa
 
 P = até 1 dia de trabalho, M = 2 a 3 dias, G = 4 dias ou mais (sem contar a criação das peças no DS).
@@ -166,8 +172,14 @@ A ordem vai do mais simples ao mais complexo, para a casca e as peças novas do 
 | Lote | O que já dá para fazer com o DS | O que espera o DS (seção 7.1) |
 |---|---|---|
 | **A6 Contato** | `CabecalhoDaPagina` com `Tabs` (Recebidos, Enviados) e o botão "Novo e-mail"; lista das mensagens com `LinhaDeLista` + `IconeComBase` + `ChipDeEstado` (não lida, lida, respondida, reunião), filtro de situação com `SegmentedControl`, abrir `?id=`; detalhe em `SidePanel` com `Accordion` (seções do formulário), `Textarea` e `UploadDropzone`/`UploadList` para responder; `AlertDialog` para excluir. **Começado (prévia em `/admin/app/contatos/`, 27/11/2026):** a lista de Recebidos e Enviados, com busca, situação (também por `?situacao=`), aba no endereço (`?aba=enviados`), origem e estado em texto; cada linha abre a conversa na página de HTML. Não publicar antes da conversa: `/admin/contatos/?id=` ainda depende da página de HTML | feito e publicado (D-055) |
-| **A7 Parceiros** | Aba Dashboard: `GradeDeCards` + `CardIndicador`, `BarrasOrdenadas`, `GraficoDeRosca`, `Select` (área de atuação); aba Parceiros: filtros (`Input`, `Select`), perfil em `SidePanel` com `Accordion`, `Timeline` (histórico), `Switch` (galeria), `AlertaComAcao`; e-mails com `LinhaDeLista` + `ChipDeEstado` | nada: as peças chegaram no DS `d2aeb40` (`TabelaAdaptavel`, `CampoDeBusca`, `CampoDeHorario`, `EstadoVazio`, `ChipFiltravel` para os filtros). Ainda não começado |
-| **A8 Pesquisas** | Painel de cada pesquisa: `CardIndicador`, `GraficoDeRosca`, `BarrasOrdenadas`, `BarrasEmpilhadas100` (fácil, médio, difícil), `Funil` (quem chegou até onde), `MapaDeCalorMatricial`, `DescobertaVisual`, `TabelaDeDados`; `Tabs`, `Accordion`, `DropdownMenu` (ações), `LinhaDeLista` (respostas, relatos), `SegmentedControl` | `CampoCopiavel` chegou (`d2aeb40`); falta conferir no DS a nota de 0 a 10 com média e três faixas (hoje desenhada à mão na página de HTML). Ainda não começado |
+| **A7 Parceiros** | Aba Dashboard: `GradeDeCards` + `CardIndicador`, `BarrasOrdenadas`, `GraficoDeRosca`, `Select` (área de atuação); aba Parceiros: filtros (`Input`, `Select`), perfil em `SidePanel` com `Accordion`, `Timeline` (histórico), `Switch` (galeria), `AlertaComAcao`; e-mails com `LinhaDeLista` + `ChipDeEstado` | **feito e publicado (D-056)** |
+| **A8 Pesquisas** | Painel de cada pesquisa: `CardIndicador`, `GraficoDeRosca`, `BarrasOrdenadas`, `BarrasEmpilhadas100` (fácil, médio, difícil), `Funil` (quem chegou até onde), `MapaDeCalorMatricial`, `DescobertaVisual`, `TabelaDeDados`; `Tabs`, `Accordion`, `DropdownMenu` (ações), `LinhaDeLista` (respostas, relatos), `SegmentedControl` | **feito e publicado (D-056)**. Nota de 1 a 10: `Pirulito` (máximo 10, nota geral como referência) e as três faixas na tabela, como na página de HTML |
+
+### 8.2 Lista de conferência de A7 e A8 (cada funcionalidade da página de HTML, conferida no teste `tests/navegador/parceiros-pesquisas.cjs`)
+
+**Parceiros** — Dashboard: cinco números (parceiros na rede, segmentos atendidos, área com mais especialistas, tempo de carreira mais comum, perfis visíveis na galeria e a regra dos 3) ✔ · análise da rede guardada (resumo; Pontos fortes, Lacunas e Recomendações com a aba lembrada em `ai-aba`; números em negrito; aviso de desatualizada com "Atualizar análise"; erros sem chave e IA ocupada; "Gerar análise") ✔ · perfis no padrão da galeria (foto ou iniciais, LinkedIn como link próprio, especialidade curta, senioridade, tags), ordenados pelo tempo na especialidade, card inteiro abre a candidatura ✔ · filtro de área de atuação ✔ · desafio com IA (mínimo de 20 caracteres, erros, ordem por aderência, percentual, motivo, "Limpar desafio", log) ✔. Aba Parceiros: `?aba=candidaturas` ✔ · busca sem acento em 12 campos e os 8 filtros (Estado derivado da cidade), "Mostrando X de N", "Limpar filtros", número na aba ✔ · respostas antigas do formulário (segmentos, PJ, como conheceu, contratação, etapas) convertidas ✔ · autorização da galeria (4 situações + "visualizaram o e-mail" com a explicação; ver o e-mail; enviar aos não convidados; reenviar a quem não respondeu; confirmações com quantos recebem; log; aviso) ✔ · envios agendados (para quem, situação, enviados/falhas/ignorados, pausado; alterar e excluir só os agendados) ✔ · agendar (marcar todos que não decidiram, busca, pessoas marcadas, data sugerida amanhã às 9h, a partir do próximo minuto, ver o e-mail, salvar, log) ✔ · tabela (parceiro, senioridade, área, disponibilidade e horas, galeria, publicado, cadastro; nova em texto) ✔. Candidatura (`?id=`): marca como vista ✔ · resumo (senioridade, especialidade, área, entrega de valor da IA ou a frase padrão) ✔ · respostas por seção em acordeão com "Abrir todas/Fechar todas", autorizações em tópicos, "Outro" com o texto, links ✔ · galeria (convite enviado, status, exibir sim/não, perfil enviado e o que a pessoa mandou, histórico de decisões com o texto aceito, enviar/reenviar convite, excluir perfil da galeria e a foto) ✔ · e-mails enviados (entregue, aberto N vezes, clique, datas; avisos saem do sino; `#emails`) ✔ · LGPD (consentimento, texto aceito, excluir cadastro com as fotos, log, volta à lista) ✔ · candidatura inexistente ✔.
+
+**Pesquisas** — lista (situação, data, respostas novas) ✔ · painel `?p=` (título, descrição, no ar/fora do ar, última resposta) ✔ · link com Copiar e "Link copiado", Abrir, QR Code gerado no navegador, Compartilhar (ou copia) ✔ · tirar do ar / colocar no ar com confirmação e log ✔ · apagar pesquisa (bloqueado no ar, palavra APAGAR, log, volta à lista) ✔ · exportar relatório em Excel (Resumo, Resultados, Inteligência) e PDF (Resultado e Inteligência abertos, impressão) ✔. Resultado: "Quem chegou até onde" com quem ficou fora do público e os contatos guardados ✔ · um card por pergunta (número, respostas, resumo, gráfico, notas, "outro", "Ver números"), 1.1 logo depois da 1, temas, perfil (bairro por regional), nota final ✔ · no celular, gráfico recolhido no card ✔ · estado vazio ✔. Inteligência: achados por assunto (selo Hipótese, "Ver dados", comparações que ainda faltam, mínimo de 5) ✔ · Voz do cliente (temas por palavras-chave ou IA, IA guardada, "Organizar/Atualizar com IA", log) ✔ · Oportunidades (números, ordem de impacto, dor, recurso, evidências, impacto, "Ver achado") ✔. Dados: abrir marca as respostas como vistas ✔ · filtros por situação com contagem, seleção, excluir uma, várias ou tudo (com APAGAR), interesse ligado apagado junto ✔ · ficha com contato, perfil, blocos, relato, avisos, incompleta e fora do público, Anterior/Próxima e setas ✔ · exportar respostas (Respostas, Relatos, Interessados) ✔ · Relatos ✔ · Interessados (quantos, parte das completas, perfil, contatos sem resposta) ✔.
 
 ## 9. Riscos e cuidados
 

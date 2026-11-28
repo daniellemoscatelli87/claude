@@ -311,7 +311,7 @@ function EmailsEnviados({ r }: { r: Parceiro }) {
           : envios === "erro" ? <p className="text-body-sm text-muted-foreground">Não foi possível carregar os e-mails.</p>
           : !envios.length ? <EstadoVazio variante="lista" tamanho="sm" icone={<Mail />} titulo="Nenhum e-mail rastreado ainda." descricao="O acompanhamento vale para os e-mails enviados a partir de agora." />
           : (
-            <ul className="-mx-6 -mb-2">
+            <ul>
               {envios.map((e) => {
                 const linhas: [string, string | null][] = [
                   ["Entregue", e.entregue_em && fmtData(e.entregue_em)], ["Primeira abertura", e.aberto_em && fmtData(e.aberto_em)],
@@ -320,7 +320,7 @@ function EmailsEnviados({ r }: { r: Parceiro }) {
                 ];
                 return (
                   <LinhaDeLista
-                    key={e.id} as="li" className="border-t border-border px-6 first:border-t-0" data-envio={e.id}
+                    key={e.id} as="li" className="border-t border-border first:border-t-0" data-envio={e.id}
                     titulo={e.assunto}
                     descricao={
                       <span className="grid gap-2">

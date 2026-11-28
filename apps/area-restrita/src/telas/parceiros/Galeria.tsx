@@ -108,12 +108,12 @@ export function AutorizacaoDaGaleria({ todos, aoMudar }: Props) {
         {agendamentos.length > 0 && (
           <section aria-labelledby="ag-titulo" className="grid gap-2">
             <h3 id="ag-titulo" className="text-body font-semibold text-foreground">Envios agendados</h3>
-            <ul className="-mx-6 border-y border-border">
+            <ul className="border-y border-border">
               {agendamentos.map((a) => {
                 const sit = SITUACAO_DO_AGENDAMENTO[a.situacao] || { rotulo: a.situacao, tom: "neutro" as const };
                 return (
                   <LinhaDeLista
-                    key={a.id} as="li" className="px-6" data-agendamento={a.id}
+                    key={a.id} as="li" className="border-b border-border last:border-b-0" data-agendamento={a.id}
                     inicio={<CalendarClock aria-hidden className="mt-0.5 size-5 text-muted-foreground" />}
                     titulo={<span className="flex flex-wrap items-center gap-2"><span className="font-semibold">{fmtQuando(a.agendado_para)}</span><ChipDeEstado tom={sit.tom}>{sit.rotulo}</ChipDeEstado></span>}
                     descricao={<span className="grid gap-0.5"><span title={paraQuem(a, todos, 1000)}>Para: {paraQuem(a, todos, 6)}</span>{detalheDoAgendamento(a).map((t) => <span key={t}>{t}</span>)}</span>}
@@ -130,7 +130,7 @@ export function AutorizacaoDaGaleria({ todos, aoMudar }: Props) {
           </section>
         )}
         <Separator />
-        <div className="flex flex-wrap justify-end gap-2" data-galeria-acoes="">
+        <div className="grid gap-2 sm:flex sm:flex-wrap sm:justify-end [&>button]:w-full sm:[&>button]:w-auto" data-galeria-acoes="">
           <Button type="button" variant="ghost" onClick={() => void verEmail()} disabled={ocupado === "previa"}>
             {ocupado === "previa" ? <LoaderCircle aria-hidden className="motion-safe:animate-spin" /> : previa ? <EyeOff aria-hidden /> : <Eye aria-hidden />}{previa ? "Fechar o e-mail" : "Ver o e-mail"}
           </Button>

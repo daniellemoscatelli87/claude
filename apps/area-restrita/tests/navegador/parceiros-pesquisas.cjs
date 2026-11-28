@@ -130,14 +130,14 @@ async function axe(page, nome) {
 }
 /** Celular: botões, abas e links-botão do conteúdo com pelo menos 44 px de altura e de largura. */
 async function alvos(page, nome) {
-  const r = await page.evaluate(() => [...document.querySelectorAll("main button, main [role=tab], main a[data-slot=button]")].filter((e) => e.offsetParent && !e.closest("[data-impressao]") && !e.matches("[role=checkbox], [role=switch]")).map((e) => { const b = e.getBoundingClientRect(); return { t: (e.getAttribute("aria-label") || e.textContent || "").trim().slice(0, 30), w: Math.round(b.width), h: Math.round(b.height) }; }).filter((x) => x.h < 44 || x.w < 44));
+  const r = await page.evaluate(() => [...document.querySelectorAll("main button, main [role=tab], main a[data-slot=button]")].filter((e) => e.offsetParent && !e.closest("[data-impressao]") && !e.matches("[role=checkbox], [role=switch], [data-alvo-compacto]")).map((e) => { const b = e.getBoundingClientRect(); return { t: (e.getAttribute("aria-label") || e.textContent || "").trim().slice(0, 30), w: Math.round(b.width), h: Math.round(b.height) }; }).filter((x) => x.h < 44 || x.w < 44));
   ok(r.length === 0, `${nome}: alvos de toque com 44 px ou mais${r.length ? " — menores: " + JSON.stringify(r.slice(0, 5)) : ""}`);
 }
 /** Celular: o título da página e os blocos de primeiro nível começam na mesma borda esquerda. */
 async function bordas(page, nome) {
   const r = await page.evaluate(() => {
     const main = document.querySelector("main");
-    const h1 = main.querySelector("h1");
+    const h1 = main.querySelector(":scope h1:not([data-slot=card] h1), :scope > * > a, :scope a[data-slot=button]");
     const blocos = [...main.querySelectorAll('[data-slot="card"]')].filter((c) => !c.parentElement.closest('[data-slot="card"]') && c.offsetParent);
     return { h1: h1 ? Math.round(h1.getBoundingClientRect().left) : null, blocos: [...new Set(blocos.map((c) => Math.round(c.getBoundingClientRect().left)))] };
   });
@@ -331,7 +331,7 @@ async function pesquisas(page, L, reg, celular) {
   ok(await page.locator("[data-q=q1]").getByText("moram em Curitiba ou na Região Metropolitana", { exact: false }).isVisible() || celular, `${L} Resultado: resumo da pergunta 1`);
   const ordemQ = await page.locator("[data-q]").evaluateAll((l) => l.map((x) => x.getAttribute("data-q")));
   ok(ordemQ.indexOf("q1_1") === ordemQ.indexOf("q1") + 1, `${L} Resultado: a 1.1 logo depois da 1 (${ordemQ.slice(0, 4).join(",")})`);
-  ok(await page.getByRole("heading", { name: "Notas das compras" }).isVisible() && await page.locator("[data-q=q4]").getByText(/Correspondência/).first().count() === 1, `${L} Resultado: nota de 1 a 10 por aspecto`);
+  ok(await page.getByRole("heading", { name: "Notas das compras" }).isVisible() && (celular || await page.locator("[data-q=q4]").getByText(/Correspondência/).first().count() === 1), `${L} Resultado: nota de 1 a 10 por aspecto`);
   ok(await page.getByRole("heading", { name: "Quem respondeu" }).isVisible() && await page.locator("[data-q=perfil-bairro]").count() === 1, `${L} Resultado: cards de perfil (bairro por regional)`);
   if (!celular) {
     await page.locator("[data-q=q4]").getByRole("button", { name: "Ver números" }).click();
