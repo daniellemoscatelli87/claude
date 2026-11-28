@@ -272,7 +272,7 @@ export function PesquisaModa() {
   const campoErro = (id: string) => erros?.campos[id];
   const legenda = (id: string, eyebrow: string, titulo: string, trechos?: string | string[], apoio?: ReactNode) => (
     <>
-      <legend id={`${id}-legenda`} tabIndex={-1} className="mb-2 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring">
+      <legend id={`${id}-legenda`} tabIndex={-1} className="mb-2 outline-none">
         <span className="sr-only">{eyebrow}: </span>
         <Heading level={1} size="section" className="text-balance"><Realce texto={titulo} trechos={trechos} /></Heading>
       </legend>
