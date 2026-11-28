@@ -6,6 +6,24 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Rede de Parceiros e cadastro de parceiro originais de volta, com as cores e os cards do DS (D-064)
+
+- **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-rede-original`.
+- **Arquivos restaurados** (do `155ab15`; iguais até o #261 e o #263): `rede-parceiros/index.html`, `rede-parceiros/cadastro/index.html`, `src/rede-parceiros-inicio.{ts,css}`, `src/rede-parceiros.{ts,css}`. `vite.config.ts` com as entradas `redeParceiros` e `redeParceirosCadastro`; `rotas.json` com as duas páginas em `previa`. O cadastro volta a abrir na janela grande sobre a Rede de Parceiros, com a página do cadastro dentro.
+- **Cores e cards:**
+  - cores por token do DS (folhas, estilos em linha, atributos de SVG da roda do ecossistema, o feixe e o cursor da simulação);
+  - no cadastro, as variáveis próprias `--muted`, `--card` e `--error` ganharam o prefixo `--pg-`, para não sobrepor os tokens do DS;
+  - campos com `--input`;
+  - o aviso "Recuperamos o seu preenchimento" passa ao tom info (`--info-muted`), com o "Começar do zero" em `--foreground`;
+  - o confete usa as cores do `Confete` do DS;
+  - os pilares e a carta final perdem a sombra parada.
+- **Testes executados:**
+  - `npm run build` da raiz (passou);
+  - `apps/site`: typecheck sem erros, 62 testes passaram, conformidade com zero desvios;
+  - fidelidade em 390, 768, 1024 e 1280 px contra o `155ab15`:
+    - cadastro: geometria e estilos fora a cor iguais em todas as larguras;
+    - Rede de Parceiros: as mesmas, com as outras diferenças sendo só as sombras dos pilares e da carta, dois degradês escritos de outro jeito pelo navegador (só cor) e as barrinhas da simulação, que mudam a cada execução também no original;
+  - com o Supabase simulado: "Quero ser parceiro" abre o cadastro na janela sobre a página; no cadastro, os erros da etapa 1, `email_ja_cadastrado`, o rascunho recuperado e o envio a `cadastros` com a tela "Boas-vindas, Maria!"; a gaveta de contato. Tudo passou, sem erros no console.
 ## 2026-11-28 · Projeto Piloto original de volta, com as cores e os cards do DS (D-064)
 
 - **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-piloto-original`.
