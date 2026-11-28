@@ -567,7 +567,8 @@ function montarNovidades() {
       const nota = el('span', 'pq-nota-consent'); nota.id = 'pq-novidades-consent';
       nota.append('Autorizo o uso dos meus contatos exclusivamente para essa finalidade, conforme a ');
       const a = el('a', undefined, 'Política de Privacidade'); a.href = '/privacidade/#pesquisa-moda'; a.dataset.politica = '';
-      nota.append(a, '. Posso revogar meu consentimento a qualquer momento.');
+      // quebra de linha depois da política (pedido da dona do produto, 28/11/2026); o texto é o mesmo
+      nota.append(a, '.', el('br'), 'Posso revogar meu consentimento a qualquer momento.');
       lab.querySelector('.pq-op-txt')!.appendChild(nota);
       inp.setAttribute('aria-describedby', nota.id);
     }
