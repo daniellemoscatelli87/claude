@@ -4,12 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "node scripts/copiar-public.mjs && npm run build:area-restrita && npm run build:site",
+    "dev": "vite",
+    "build": "tsc -b && vite build && npm run build:area-restrita && npm run build:site",
     "lint": "oxlint",
+    "preview": "vite preview",
     "build:area-restrita": "npm --prefix apps/area-restrita ci && npm --prefix apps/area-restrita run build",
     "build:site": "npm --prefix apps/site ci && npm --prefix apps/site run build"
   },
   "devDependencies": {
-    "oxlint": "^1.71.0"
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.13.2",
+    "oxlint": "^1.71.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.1"
   }
 }
