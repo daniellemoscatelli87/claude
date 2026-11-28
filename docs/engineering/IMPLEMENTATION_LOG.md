@@ -6,6 +6,12 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Pesquisa de moda original: contorno dos campos com o --input do DS (D-064)
+
+- **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-pesquisa-campos`.
+- **O que mudou:** os campos da pesquisa (texto, seleção, busca, marcas de opção, caixa de marcar, notas, pílulas e o link de indicar) passam a ter o contorno na cor de campo do DS (`--input`, grafite 400, 3:1 de contraste), como os campos do DS; antes usavam a cor de borda de card. Os cards continuam com `--border`. Só cor: `src/pesquisa-moda.css` (variável `--pq-campo`).
+- **Testes executados:** `tsc -b` e `vite build` (passaram); as mesmas 36 capturas contra o `5d5eeb9`: mesma geometria e mesmos estilos fora a cor em todas (só as sombras paradas dos cards, como antes); fluxo com a função `pesquisa` simulada: passou.
+
 ## 2026-11-28 · Pesquisa de moda: volta a página original, com as cores e os cards do DS (D-064)
 
 - **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-pesquisa-original`.
