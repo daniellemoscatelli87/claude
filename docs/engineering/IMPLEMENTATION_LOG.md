@@ -6,12 +6,17 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Site em React: cadastro de parceiro em HTML sai do repositório (S5, D-053)
+
+- O cadastro em React foi conferido no ar sem enviar nada (`tests/navegador/rede-parceiros-cadastro.cjs` com `BASE=https://www.danimoscatelli.com.br SO_LEITURA=1`: 69 de 69; Rede de Parceiros 27 de 27, Início 39 de 39, Projeto Piloto 34 de 34, todos no ar com o DS `0685afb`). `rede-parceiros/cadastro/index.html` saiu (cópia em `apps/site/tests/referencia/`, para os testes); com ele, `src/rede-parceiros.ts`/`.css` e as peças de HTML que só ele usava (`src/compartilhado/partes.ts`, `menu.ts`/`.css`, `textos-surgem.ts`/`.css`) e o plugin que as inseria no `vite.config.ts`. Sobra no build de HTML só a pesquisa de moda.
+- **Verificação executada:** tipos, 60 de 60 testes e build; `comparar-dist` contra o `main`: só a pesquisa muda (o pré-carregamento do Vite entra no próprio script, por ser a única entrada) e os arquivos do cadastro de HTML somem; a pesquisa abre e começa sem erros no navegador.
+
 ## 2026-11-28 · Site em React: cadastro de parceiro publicado (S5, D-053) e DS `0685afb` no site
 
 - **S5 (`apps/site/src/paginas/rede-parceiros-cadastro/`):** `conteudo.ts` (as perguntas copiadas do script da página de HTML), `cadastro.ts` (valor, validação, linha da tabela, consentimento, rascunho: funções puras), `Perguntas.tsx` (cada tipo de pergunta com o DS) e `CadastroDeParceiro.tsx` (etapas, envio, telas finais, Esc). Peças em `SITE_REACT.md`, seção 6e. `rotas.json`: cabeça do cadastro e da pesquisa; cadastro "publicada". A gaveta da Rede de Parceiros alinha o formulário ao título (`SidePanelBody` com `px-2 sm:px-4`).
 - **DS:** pasta `ui` e estilos do app do site sincronizados com o DS `0685afb` (só `apps/site` e `design-system/CATALOGO.md`; a área restrita e o app EI ficam como estavam; `design-system/versao.txt` continua `d2aeb40` até a sincronização de todos). Saíram `LOGO_CORRIGIDO`, `forceMount`/`hidden` nas respostas do acordeão (agora `manterNoHtml`) e o link de pular do site (agora `LinkPularConteudo`).
 - **Verificação executada:** em `apps/site`: tipos, 60 de 60 testes (inclui `tests/rede-parceiros-cadastro.test.ts`, que roda o script original e compara perguntas, estados, máscara e texto do consentimento), conformidade em 0, build. Na raiz: build e `comparar-dist` contra o `main` (`02fe3eb`): fora do site em React e das páginas publicadas, dist igual. Navegador, com o Supabase simulado (nada enviado): ver o PR.
-- **Pendências:** apagar `rede-parceiros/cadastro/index.html` (e a entrada no `vite.config.ts`) depois de conferido no ar; autorizar galeria espera o `RecorteDeFoto` no DS; S6 (pesquisa) não iniciado.
+- **Pendências:** autorizar galeria espera o `RecorteDeFoto` no DS; S6 (pesquisa) não iniciado.
 
 ## 2026-11-27 · Site em React: Rede de Parceiros em HTML sai do repositório (S4, D-053)
 

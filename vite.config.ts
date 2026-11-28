@@ -1,32 +1,14 @@
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'node:path'
-import { cabecalhoHtml, GAVETA_HTML, rodapeHtml, rodapeCompactoHtml } from './src/compartilhado/partes.ts'
 
-// Insere o cabeçalho e a gaveta de contato compartilhados em cada página (mesmo HTML no site todo).
-function partesCompartilhadas(): Plugin {
-  return {
-    name: 'partes-compartilhadas',
-    transformIndexHtml: {
-      order: 'pre',
-      handler(html) {
-        return html
-          .replace(/<!-- @cabecalho:(inicio|projeto|parceiros) -->/g, (_, p) => cabecalhoHtml(p))
-          .replace('<!-- @gaveta -->', GAVETA_HTML)
-          .replace('<!-- @rodape:compacto -->', rodapeCompactoHtml())
-          .replace(/<!-- @rodape:(claro|escuro) -->/g, (_, v) => rodapeHtml(v))
-      },
-    },
-  }
-}
-
+// Páginas de HTML que ainda não foram para o site em React (apps/site, D-053): só a pesquisa de moda.
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [partesCompartilhadas(), tailwindcss()],
+  plugins: [tailwindcss()],
   build: {
     rollupOptions: {
       input: {
-        redeParceirosCadastro: resolve(import.meta.dirname, 'rede-parceiros/cadastro/index.html'),
         pesquisaModa: resolve(import.meta.dirname, 'pesquisa/moda-curitiba/index.html'),
       },
     },
