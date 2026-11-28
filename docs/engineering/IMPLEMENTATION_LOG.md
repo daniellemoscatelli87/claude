@@ -6,6 +6,19 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Pesquisa de moda: caixa de consentimento e cores das marcas nos ícones de compartilhar (D-064)
+
+- **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-pesquisa-consentimento`.
+- **Caixa de consentimento** ("Sim, quero receber os avisos.", aprovada pela dona do produto; o DS ganha a `CaixaDeConsentimento` equivalente):
+  - borda neutra sem marcar; marcada, fundo `--primary-suave` e borda `--primary`;
+  - marca quadrada de 22 px com cantos de 6 px, cheia em `--primary` com o check branco; o cartão inteiro é o alvo (mais de 44 px);
+  - título 16 px semibold em `--foreground`; texto 14 px, entrelinha 1,55, em grafite 600; link da política em `--primary-text`, semibold e sublinhado;
+  - quebra de linha depois de "Política de Privacidade." (o texto é o mesmo).
+  
+  O aceite da identificação ganhou a mesma marca (cantos de 6 px) e o mesmo link.
+- **Marcas:** os ícones do Facebook e do LinkedIn em "Indique a pesquisa" voltam às cores oficiais (`#1877F2`, `#0A66C2`), como o WhatsApp (decisão da dona do produto).
+- **Arquivos:** `src/pesquisa-moda.css`, `src/pesquisa-moda.ts` (a quebra de linha).
+- **Testes executados:** build; capturas antes e depois a 390 px, sem marcar e marcado, da caixa de novidades e do aceite: marca de 22 px com cantos de 6 px e o cartão inteiro marcando; o fluxo com a função `pesquisa` simulada e o teste dos erros em cada etapa passaram.
 ## 2026-11-28 · Página inicial original de volta, com as cores e os cards do DS; descadastro centralizado (D-064)
 
 - **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-inicio-original`.
