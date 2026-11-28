@@ -10,13 +10,16 @@ import { EstadoFinal } from "@/components/ui/estado-vazio";
 import { MolduraDeConta } from "@/components/ui/moldura-de-conta";
 import { Logo } from "@/components/ui/logo";
 import { EMAIL_DE_CONTATO } from "@/compartilhado/marca";
+import { Erro404 } from "../erro-404/Erro404";
 import { lerToken, pedirDescadastro, tokenValido } from "./descadastro";
 
-type Fase = "carregando" | "pronto" | "enviando" | "feito";
+// "lendo": o código do link ainda não foi lido (o HTML gravado no build é o mesmo para todos); nada aparece até ler.
+// "invalido": sem código ou com código fora do formato, a página mostra o conteúdo da 404 (decisão da dona do produto).
+type Fase = "lendo" | "invalido" | "pronto" | "enviando" | "feito";
 type Erro = { titulo: string; texto?: string } | null;
 
 export function Descadastro() {
-  const [fase, setFase] = useState<Fase>("carregando");
+  const [fase, setFase] = useState<Fase>("lendo");
   const [erro, setErro] = useState<Erro>(null);
   const [token, setToken] = useState("");
 
@@ -24,8 +27,7 @@ export function Descadastro() {
   useEffect(() => {
     const t = lerToken(location.search);
     setToken(t);
-    if (tokenValido(t)) setFase("pronto");
-    else setErro({ titulo: "Este link não é válido.", texto: "Use o link que está no final do e-mail recebido." });
+    setFase(tokenValido(t) ? "pronto" : "invalido");
   }, []);
 
   async function confirmar() {
@@ -40,6 +42,8 @@ export function Descadastro() {
     }
   }
 
+  if (fase === "invalido") return <Erro404 />;
+  if (fase === "lendo") return <main className="min-h-svh bg-background" aria-busy="true" />;
   const feito = fase === "feito";
   return (
     // Conteúdo centralizado, como a página original (decisão da dona do produto, 28/11/2026): logo, título, texto e o
@@ -85,7 +89,6 @@ export function Descadastro() {
           <BotaoDeEnvio
             className="self-center rounded-full"
             onClick={confirmar}
-            disabled={fase === "carregando"}
             estado={fase === "enviando" ? "enviando" : "parado"}
             textos={{ enviando: "Confirmando…" }}
           >

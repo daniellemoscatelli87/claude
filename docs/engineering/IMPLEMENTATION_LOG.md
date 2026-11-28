@@ -6,6 +6,31 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · DS `4bbaaca` no site e na área restrita; 404 em card e links sem código válido mostrando a 404 (D-064)
+
+- **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-ds-4bbaaca`.
+- **Sincronização:** `DS_REF=4bbaaca bash scripts/sincronizar-design-system.sh`; `apps/experience-intelligence` devolvido como estava (fora do escopo). Chegam:
+  - a `PaginaDeErro moldura="card"`;
+  - o token `--espaco-abaixo-do-cabecalho`;
+  - os botões em pílula por padrão;
+  - o vermelho de erro carmim `#B82828`;
+  - `--input` `#B0B8C4`;
+  - a `CaixaDeConsentimento` e `--radius-xs`.
+  
+  As páginas originais leem as cores do `theme.css` sincronizado (`virtual:cores-ds.css` e `assets/cores-do-ds.css`) e já saem com o novo vermelho de erro e o novo contorno dos campos, sem mudança de código.
+- **404:** `apps/site/src/paginas/erro-404/Erro404.tsx` usa a casca do site (cabeçalho, rodapé compacto, WhatsApp e cookies) e a `PaginaDeErro moldura="card"`: selo "Erro 404", "Página não encontrada", "O endereço pode ter mudado ou não existe mais." e "Ir para a página inicial", a `--espaco-abaixo-do-cabecalho` do cabeçalho. `CascaDoSite` aceita página sem item atual.
+- **Links sem código válido (decisão da dona do produto):**
+  - descadastro: sem código ou com código fora do formato, mostra a 404 (sem formulário e sem botão desligado). Antes de ler o código, a página fica vazia, em vez de mostrar o formulário com o botão desligado;
+  - autorizar galeria (HTML original): sem código, com código fora do formato, ou com a resposta 400/404 da função ("Link inválido"), troca a página pelo conteúdo de `/404.html`, no mesmo endereço. Outras falhas continuam com a mensagem de erro de sempre.
+- **Testes executados:**
+  - build da raiz (passou);
+  - `apps/site`: typecheck sem erros, 62 testes passaram (o teste de textos agora confere o card da 404 e o descadastro sem formulário antes de ler o código), conformidade com zero desvios;
+  - `apps/area-restrita`: typecheck, 49 testes e conformidade com zero desvios;
+  - no navegador, com o Supabase simulado:
+    - 404, descadastro sem código e com código inválido, e galeria com código inválido e com código desconhecido (resposta 404): todos com o card da 404 sob o cabeçalho, sem formulário e sem erros no console;
+    - formulários de todas as páginas originais, o fluxo da pesquisa e os erros da pesquisa em cada etapa: passaram;
+    - fidelidade das páginas originais contra o `155ab15`, com as cores novas: mesma geometria e estilos fora a cor (fora as sombras tiradas, a simulação e diferenças de 0,03 px na largura de textos).
+
 ## 2026-11-28 · Autorizar galeria original de volta, com as cores e os cards do DS (D-064)
 
 - **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-galeria-original`.
