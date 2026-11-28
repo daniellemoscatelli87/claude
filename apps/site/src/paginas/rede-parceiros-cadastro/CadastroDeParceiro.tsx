@@ -109,10 +109,11 @@ export function CadastroDeParceiro() {
   }, [etapa, r, final]);
   const limparRascunho = () => { try { localStorage.removeItem(RASCUNHO); } catch { /* sem armazenamento */ } };
 
-  // Esc fecha a gaveta (como o X), menos quando uma lista do Select está aberta (o Esc fecha só a lista).
+  // Esc fecha a gaveta (como o X), menos quando uma lista do Select ou a janela da política está aberta (o Esc fecha só
+  // a lista ou a janela).
   useEffect(() => {
     const aoTeclar = (e: KeyboardEvent) => {
-      if (e.key !== "Escape" || document.querySelector("[data-radix-popper-content-wrapper]")) return;
+      if (e.key !== "Escape" || document.querySelector('[data-radix-popper-content-wrapper], [data-slot="dialog-content"]')) return;
       fechar();
     };
     window.addEventListener("keydown", aoTeclar, true);

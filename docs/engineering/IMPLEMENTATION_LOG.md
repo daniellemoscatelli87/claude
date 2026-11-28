@@ -6,6 +6,14 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Site e área restrita no DS `27ff621`: contornos retirados, roda do ecossistema, campos da simulação, confete, "https://" e janela da política (D-053)
+
+- **Status:** implementado e testado; publicado pelo pull request desta branch (`claude/site-ds-sync-27ff621`).
+- **Sincronização:** `DS_REF=27ff621 bash scripts/sincronizar-design-system.sh`; `apps/experience-intelligence` devolvido como estava (fora do escopo). Novos na pasta `ui` dos dois apps: `confete`, `diagrama-de-ecossistema`, `escala-de-notas`, `escolha-ordenada`, `recorte-de-foto` (pasta inteira, nada a acrescentar em `arquivos.txt`).
+- **Arquivos:** `apps/site/src/paginas/inicio/Inicio.tsx`, `rede-parceiros/{RedeDeParceiros,Cenas,conteudo}.tsx`, `rede-parceiros-cadastro/{CadastroDeParceiro,Perguntas}.tsx`, `privacidade/Privacidade.tsx`, `descadastro/Descadastro.tsx`, `projeto-piloto/GavetaDeCadastro.tsx`, `compartilhado/site/GavetaDeContato.tsx`, novo `compartilhado/TextoDaPolitica.tsx`; teste `tests/navegador/rede-parceiros-cadastro.cjs` (link com "https://" fixo, janela da política e Esc, confete).
+- **Testes executados:** nos dois apps, `npm run typecheck` (sem erros), `npm test` (site 60, área restrita 49, todos passaram), `npm run conformidade` (zero desvios), build da raiz; `comparar-dist` contra o build do `main` (`0fd98bd`): só mudam o app do site, as páginas publicadas e os arquivos do app da área restrita. No navegador (Playwright, Supabase e Google simulados): `paginas`, `inicio`, `projeto-piloto`, `rede-parceiros`, `rede-parceiros-cadastro` do site e `inicio`, `paginas`, `parceiros-pesquisas` da área restrita, todos passaram (axe, 44 px, bordas a 390, sem erros de hidratação). Roda do ecossistema em 390, 768, 1024 e 1280 px depois da animação: as 12 linhas terminam nas suas etiquetas, nenhuma etiqueta fora da tela, sem rolagem horizontal.
+- **Pendências:** o X do `Dialog` do DS com área de toque pequena (lacuna do DS; a janela tem o "Fechar" de 44 px).
+
 ## 2026-11-28 · Site em React: pesquisa de moda (S6) parada por FALTA NO DS (D-053)
 
 - **Status:** não implementado. A pesquisa (`/pesquisa/moda-curitiba/`) continua em HTML, sem mudança no código nem no ar.
