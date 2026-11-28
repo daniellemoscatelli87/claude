@@ -6,6 +6,14 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Pesquisas (área restrita): etiqueta "No ar" com a bolinha piscando e ícone clicável (D-056)
+
+- **Status:** feito e testado na branch `claude/pesquisas-card`; não publicado (depende do `ChipDeEstado aoVivo` da branch `claude/etiqueta-no-ar` dos DS chegar ao `main` do DS).
+- **Arquivos:** `apps/area-restrita/src/telas/Pesquisas.tsx`; `apps/area-restrita/src/components/ui/chip-de-estado.tsx` e `apps/site/src/components/ui/chip-de-estado.tsx` (cópia do arquivo da branch do DS, com a prop `aoVivo`); `apps/area-restrita/tests/navegador/parceiros-pesquisas.cjs` (conferências novas).
+- **O que mudou:** lista com o ícone sempre em `IconeComBase tom="marca"`; "No ar" (`ChipDeEstado tom="sucesso" aoVivo`) ou "Fora do ar" (neutro) na coluna do fim, antes do "N novas"; descrição "criada em …"; card com `overflow-hidden` (o hover da linha segue o raio do card) e foco do link por dentro (`ring-inset`). No painel, "No ar" com a bolinha. Com "menos movimento", a bolinha fica parada.
+- **Testes executados (área restrita):** `npm run typecheck` (passou); `npm test` (6 arquivos, 49 testes, passou); `npm run conformidade` (zero desvios); `npm run build` (passou); `tests/navegador/parceiros-pesquisas.cjs` em 1280 e 390 com axe (247 conferências, todas passaram), `inicio.cjs` (93) e `paginas.cjs` (206), todos passaram (com o dist montado pelo `montar-saida.mjs` e os arquivos de `public/`). Site (`apps/site`): typecheck, 62 testes, conformidade em zero e build, todos passaram.
+- **Conferido no navegador (dados simulados):** hover da primeira linha em 1280 antes (cantos quadrados para fora do card) e depois (cantos seguem o card); bolinha com o halo pulsando (`ping`) e, com "menos movimento", sem animação.
+
 ## 2026-11-28 · Projeto Piloto: novo título em "Para sua empresa"
 
 - **Status:** feito e testado; publicado pelo pull request da branch `claude/piloto-texto-clareza`.

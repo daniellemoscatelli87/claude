@@ -318,7 +318,10 @@ async function pesquisas(page, L, reg, celular) {
   await page.goto(BASE + RAIZ + "pesquisas/");
   await page.getByRole("heading", { level: 1, name: "Pesquisas" }).waitFor();
   await page.getByRole("link", { name: "Moda em Curitiba" }).waitFor();
-  ok(await page.getByText(/No ar · criada em/).isVisible() && await page.getByText("6 novas").isVisible(), `${L} Pesquisas: lista com situação, data e respostas novas`);
+  const linhaPq = page.locator("ul[aria-label=Pesquisas] > li").first();
+  ok(await linhaPq.getByText(/^criada em \d{2}\/\d{2}\/\d{4}$/).isVisible() && await linhaPq.locator("[data-slot=linha-de-lista-fim] [data-ao-vivo]").getByText("No ar", { exact: true }).isVisible() && await linhaPq.locator("[data-slot=linha-de-lista-fim]").getByText("6 novas").isVisible(), `${L} Pesquisas: lista com data, a etiqueta No ar (bolinha piscando) e as respostas novas no fim da linha`);
+  ok(await linhaPq.locator("[data-slot=linha-de-lista-fim] [data-slot=chip-de-estado]").evaluateAll((l) => l.map((c) => c.textContent.trim()).join(",")) === "No ar,6 novas", `${L} Pesquisas: situação antes da contagem`);
+  ok(await linhaPq.locator("[data-slot=linha-de-lista-inicio] > *").evaluate((e) => e.className.includes("--primary-muted")), `${L} Pesquisas: ícone colorido na base rosa (linha clicável)`);
   await foto(page, "pesquisas-lista", L);
   await geral(page, L, "Pesquisas lista", celular);
   await page.getByRole("link", { name: "Moda em Curitiba" }).click();
@@ -326,7 +329,7 @@ async function pesquisas(page, L, reg, celular) {
   await page.getByText("Quem chegou até onde").waitFor();
   await espera(800);
   ok(page.url().includes("p=moda-curitiba"), `${L} Painel: abre por ?p=`);
-  ok(await page.getByText("No ar", { exact: true }).isVisible() && await page.getByText(/Última resposta em/).isVisible(), `${L} Painel: situação e última resposta`);
+  ok(await page.locator("[data-cartao-do-link] [data-ao-vivo]").getByText("No ar", { exact: true }).isVisible() && await page.getByText(/Última resposta em/).isVisible(), `${L} Painel: situação (No ar com a bolinha piscando) e última resposta`);
   ok(await page.getByText(/Ficaram fora do público: 1 pessoa mora fora de Curitiba/).isVisible() && await page.getByText("3 contatos guardados de quem pediu os avisos do lançamento.", { exact: false }).isVisible(), `${L} Resultado: funil com quem ficou fora do público e os contatos guardados`);
   ok(await page.locator("[data-q=q1]").getByText("moram em Curitiba ou na Região Metropolitana", { exact: false }).isVisible() || celular, `${L} Resultado: resumo da pergunta 1`);
   const ordemQ = await page.locator("[data-q]").evaluateAll((l) => l.map((x) => x.getAttribute("data-q")));

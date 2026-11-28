@@ -1,8 +1,10 @@
 // Pesquisas (A8): a mesma informação, as mesmas consultas, funções e textos de public/admin/pesquisas/index.html, só com
 // componentes do Design System Dani Moscatelli:
-// - lista: LinhaDeLista + IconeComBase + ChipDeEstado ("N novas");
+// - lista: LinhaDeLista + IconeComBase (tom marca: a linha é clicável) e, na coluna do fim, ChipDeEstado da situação
+//   ("No ar" com a bolinha piscando, aoVivo; "Fora do ar" neutro, sem bolinha) e "N novas"; o card corta o hover nos
+//   cantos arredondados (overflow-hidden);
 // - painel (?p=): CabecalhoDaPagina com "Exportar relatório" (DropdownMenu: PDF e Excel) e "Apagar pesquisa"; card do
-//   link com ChipDeEstado (no ar / fora do ar), CampoCopiavel, Abrir, QR Code (Dialog), Compartilhar e Tirar do ar;
+//   link com ChipDeEstado (no ar, com a bolinha piscando / fora do ar), CampoCopiavel, Abrir, QR Code (Dialog), Compartilhar e Tirar do ar;
 // - abas Resultado, Inteligência e Dados (Tabs; pesquisas/Resultados.tsx, Inteligencia.tsx e Dados.tsx).
 // As respostas novas deixam de aparecer no sino só quando a aba Dados é aberta.
 import * as React from "react";
@@ -52,15 +54,20 @@ function Lista() {
         : "erro" in r ? <Alert variant="error" role="alert"><CircleAlert aria-hidden /><AlertTitle>Não foi possível carregar</AlertTitle><AlertDescription>{r.erro}</AlertDescription></Alert>
         : !r.pesquisas.length ? <Card><CardContent className="pt-6"><EstadoVazio icone={<ClipboardList />} titulo="Nenhuma pesquisa ainda" descricao="Quando houver uma pesquisa, ela aparece aqui." /></CardContent></Card>
         : (
-          <Card className="py-0">
+          <Card className="overflow-hidden py-0">
             <ul aria-label="Pesquisas" className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-300">
               {r.pesquisas.map((p) => (
                 <LinhaDeLista
                   key={p.slug} as="li" interativa className="relative border-b border-border px-6 last:border-b-0" alinhar="centro"
-                  inicio={<IconeComBase tom={r.contagem[p.slug] ? "marca" : "neutro"}><ClipboardList /></IconeComBase>}
-                  titulo={<LinkDaArea href={"/admin/pesquisas/?p=" + encodeURIComponent(p.slug)} className="font-semibold text-foreground outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-ring">{p.titulo}</LinkDaArea>}
-                  descricao={(p.ativa ? "No ar" : "Fora do ar") + " · criada em " + new Date(p.criada_em).toLocaleDateString("pt-BR")}
-                  fim={r.contagem[p.slug] ? <ChipDeEstado tom="marca">{plural(r.contagem[p.slug], "nova", "novas")}</ChipDeEstado> : undefined}
+                  inicio={<IconeComBase tom="marca"><ClipboardList /></IconeComBase>}
+                  titulo={<LinkDaArea href={"/admin/pesquisas/?p=" + encodeURIComponent(p.slug)} className="font-semibold text-foreground outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-ring">{p.titulo}</LinkDaArea>}
+                  descricao={"criada em " + new Date(p.criada_em).toLocaleDateString("pt-BR")}
+                  fim={
+                    <>
+                      <ChipDeEstado tom={p.ativa ? "sucesso" : "neutro"} aoVivo={p.ativa}>{p.ativa ? "No ar" : "Fora do ar"}</ChipDeEstado>
+                      {r.contagem[p.slug] ? <ChipDeEstado tom="marca">{plural(r.contagem[p.slug], "nova", "novas")}</ChipDeEstado> : null}
+                    </>
+                  }
                 />
               ))}
             </ul>
@@ -234,7 +241,7 @@ function Painel({ slug }: { slug: string }) {
       <Card className="gap-4" data-cartao-do-link="">
         <CardContent className="grid gap-4 pt-6">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <ChipDeEstado tom={P.ativa ? "sucesso" : "neutro"}>{P.ativa ? "No ar" : "Fora do ar"}</ChipDeEstado>
+            <ChipDeEstado tom={P.ativa ? "sucesso" : "neutro"} aoVivo={P.ativa}>{P.ativa ? "No ar" : "Fora do ar"}</ChipDeEstado>
             <p className="flex items-center gap-1.5 text-body-sm text-muted-foreground"><Clock aria-hidden className="size-4" />{d.R[0] ? "Última resposta em " + fmtDate(d.R[0].created_at) : "Ainda sem respostas"}</p>
           </div>
           <CampoCopiavel valor={url} rotulo="Link da pesquisa" onCopiar={() => toast.success("Link copiado")} />
