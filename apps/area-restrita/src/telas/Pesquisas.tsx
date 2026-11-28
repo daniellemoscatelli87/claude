@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, Check, CircleAlert, ClipboardList, Clock, ExternalLink, FileDown, LoaderCircle, Pause, Play, QrCode, Share2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { CampoCopiavel } from "@/components/ui/campo-copiavel";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChipDeEstado } from "@/components/ui/chip-de-estado";
@@ -214,11 +214,11 @@ function Painel({ slug }: { slug: string }) {
         acoes={
           <>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button type="button" variant="outline" disabled={ocupado === "excel"} id="pa-relatorio-btn">
-                  {ocupado === "excel" ? <LoaderCircle aria-hidden className="motion-safe:animate-spin" /> : excelOk ? <Check aria-hidden /> : <FileDown aria-hidden />}
-                  {ocupado === "excel" ? "Gerando planilha…" : excelOk ? "Planilha baixada" : "Exportar relatório"}
-                </Button>
+              {/* O gatilho é o do Radix com a aparência do Button do DS: o Button do DS não repassa ref no React 18 e,
+                  com asChild, o menu não se posiciona (ADMIN_REACT.md 7.3). */}
+              <DropdownMenuTrigger className={buttonVariants({ variant: "outline" })} disabled={ocupado === "excel"}>
+                {ocupado === "excel" ? <LoaderCircle aria-hidden className="motion-safe:animate-spin" /> : excelOk ? <Check aria-hidden /> : <FileDown aria-hidden />}
+                {ocupado === "excel" ? "Gerando planilha…" : excelOk ? "Planilha baixada" : "Exportar relatório"}
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onSelect={() => setImprimindo(true)}><FileDown aria-hidden />PDF</DropdownMenuItem>

@@ -4,13 +4,13 @@
 // - barras → BarrasOrdenadas (percentual e quantidade escritos no fim); com 1º lugar e "entre os 3" → BarrasAgrupadas;
 // - notas de 1 a 10 (pergunta 4) → número da nota geral + Pirulito com máximo 10 e a nota geral como referência;
 // - fácil x difícil → BarrasEmpilhadas100 (Difícil, Médio, Fácil; legenda e percentuais do DS);
-// - funil → Funil; dois grupos → GraficoDeHalteres; base própria por item → BarrasOrdenadas com "k de n".
+// - funil → BarrasOrdenadas (o Funil do DS falha no axe, ver ADMIN_REACT.md 7.3); dois grupos → GraficoDeHalteres; base própria por item → BarrasOrdenadas com "k de n".
 import * as React from "react";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { BarrasAgrupadas, Pirulito } from "@/components/ui/graficos-catalogo";
-import { BarrasEmpilhadas100, BarrasOrdenadas, Funil, GraficoDeHalteres, GraficoDeRosca, TabelaDeDados } from "@/components/ui/graficos-inteligencia";
+import { BarrasEmpilhadas100, BarrasOrdenadas, GraficoDeHalteres, GraficoDeRosca, TabelaDeDados } from "@/components/ui/graficos-inteligencia";
 import { fmt1, pct, semOutro, type Item } from "@/dados/pesquisas";
 import type { Grafico, Tabela } from "@/dados/pesquisas-resultados";
 
@@ -75,7 +75,14 @@ export function GraficoDaPesquisa({ g, rotulo }: { g: Grafico; rotulo: string })
       );
     }
     case "funil":
-      return <Funil rotulo={rotulo} etapas={g.etapas.map((e) => ({ rotulo: e.rotulo, valor: e.v }))} rotulos={{ seguiram: (p) => `${p} da etapa anterior` }} />;
+      // O Funil do DS usa <ol role="img"> e o axe acusa os itens fora de lista (listitem); até a correção no DS, as
+      // etapas vão em BarrasOrdenadas, na ordem, com quanto passou da etapa anterior no nome de cada uma.
+      return (
+        <BarrasOrdenadas
+          rotulo={rotulo} ordenar={false} posicao={false} destaques={0} formatar={(v) => quantasPessoas(v)}
+          itens={g.etapas.map((e, k) => ({ rotulo: e.rotulo + (k ? ` · ${pct(e.v, g.etapas[k - 1].v)}% da etapa anterior` : " · ponto de partida"), valor: e.v }))}
+        />
+      );
     case "halteres": {
       const fmt = (v: number) => (g.decimal ? fmt1(v) : v + "%");
       return (

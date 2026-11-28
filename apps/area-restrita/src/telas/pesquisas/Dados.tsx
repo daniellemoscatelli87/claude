@@ -5,7 +5,7 @@
 import * as React from "react";
 import { BellRing, Check, ChevronLeft, ChevronRight, Download, EllipsisVertical, Inbox, LoaderCircle, MessageSquareQuote, Percent, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChipDeEstado, type TomDoChip } from "@/components/ui/chip-de-estado";
@@ -72,10 +72,9 @@ export function Dados({ d, abaInicial, excluir, pedir, exportarRespostas }: Prop
 
   const acoes = (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button type="button" variant="outline" size="icon" aria-label="Ações" title="Ações" id="pa-acoes-btn" disabled={exportando === "gerando"}>
-          {exportando === "gerando" ? <LoaderCircle aria-hidden className="motion-safe:animate-spin" /> : exportando === "ok" ? <Check aria-hidden /> : <EllipsisVertical aria-hidden />}
-        </Button>
+      {/* gatilho do Radix com a aparência do Button do DS (o Button do DS não repassa ref no React 18) */}
+      <DropdownMenuTrigger className={buttonVariants({ variant: "outline", size: "icon" })} aria-label="Ações" title="Ações" disabled={exportando === "gerando"}>
+        {exportando === "gerando" ? <LoaderCircle aria-hidden className="motion-safe:animate-spin" /> : exportando === "ok" ? <Check aria-hidden /> : <EllipsisVertical aria-hidden />}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-56">
         <DropdownMenuItem onSelect={() => void exportar()}><Download aria-hidden />Exportar respostas</DropdownMenuItem>
