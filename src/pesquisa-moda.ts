@@ -6,6 +6,7 @@
    marketplaces ou lojas online de outras cidades (fora da contagem das 10). Depois das 10 perguntas: pergunta aberta
    (opcional) e convite para receber novidades (avisos só com autorização). O envio usa um identificador gerado
    aqui, então atualizar a página ou tocar de novo no botão não duplica a participação. */
+import 'virtual:cores-ds.css'; // cores do DS Dani Moscatelli (D-064)
 import './pesquisa-moda.css';
 import Q from '../supabase/functions/pesquisa/questionario.json';
 
@@ -825,7 +826,9 @@ function confete() {
   cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
   const alvo = document.querySelector('#pq-obrigada .pq-check')?.getBoundingClientRect();
   const ox = alvo ? alvo.left + alvo.width / 2 : W / 2, oy = alvo ? alvo.top + alvo.height / 2 : H * 0.3;
-  const cores = ['#D44D4D', '#D44D4D', '#FFB3AE', '#5C6986', '#A8AFBD', '#FFD166'];
+  // cores do confete do DS (as mesmas do Confete do design system), lidas das variáveis da página
+  const estilo = getComputedStyle(document.documentElement);
+  const cores = ['--primary', '--primary', '--primary-muted-foreground', '--muted-foreground', '--input', '--warning'].map((c) => estilo.getPropertyValue(c).trim());
   const ps = Array.from({ length: 170 }, () => {
     const ang = Math.random() * Math.PI * 2, vel = 4 + Math.random() * 9;
     return { x: ox, y: oy, vx: Math.cos(ang) * vel, vy: Math.sin(ang) * vel - 4, w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,

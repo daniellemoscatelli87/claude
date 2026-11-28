@@ -2,6 +2,8 @@
 
 > Decisão de 27/11/2026 (D-053): o site público do estúdio (início, Projeto Piloto, Rede de Parceiros, cadastro, galeria, pesquisa, privacidade, descadastro, 404 e as páginas de apresentação do EI) passa a ser refeito em React, página por página, com os componentes reais do Design System Dani Moscatelli, como a área restrita (D-051, `docs/engineering/ADMIN_REACT.md`). Endereços, textos, cabeça (título, descrição, canonical, compartilhamento) e comportamento continuam os mesmos. A dona do produto delegou a escolha de como o site consome o DS.
 
+> **Correção de 28/11/2026 (D-064):** a dona do produto pediu que as páginas originais não mudassem de estrutura: o trabalho era só identificar o que não está no DS e componentizar no DS. A página inicial, o Projeto Piloto, a Rede de Parceiros com o cadastro, a pesquisa de moda e a página de autorizar a galeria voltam às páginas de HTML de antes; só as **cores** (tokens do DS) e os **cards** (só borda, sem sombra parada) seguem o DS. As versões em React ficam só como prévia. Situação: **pesquisa de moda de volta** (HTML original com cores e cards do DS, 28/11/2026); as outras no próximo pull request. Como as cores chegam: seção 3.7.
+
 ## 1. Situação em 27/11/2026
 
 | O quê | Estado |
@@ -15,8 +17,8 @@
 | Lote S7: 404, descadastro e privacidade **publicadas** | feito e testado (seção 6) |
 | Lotes S1 (casca), S2 (Projeto Piloto), S3 (página inicial) e S4 (Rede de Parceiros) **publicados** | feito e testado (seções 6b, 6c e 6d); com o DS `27ff621`, a roda do ecossistema e os campos da simulação voltaram |
 | Lote S5: cadastro de parceiro **publicado** (desde o DS `27ff621`, com o confete, o `https://` fixo e a política na janela); autorizar galeria **publicada** em React no lote S5b (28/11/2026) | feito e testado (seção 6e) |
-| Lote S6: pesquisa moda Curitiba **publicada** (28/11/2026, DS `27ff621`) | feito e testado (seção 6f); o HTML de antes sai do repositório depois de conferido no ar |
-| Páginas de HTML | nenhuma página pública em HTML desde 28/11/2026 (só as três apresentações privadas do EI em `public/`, à espera da escolha da dona do produto); o build de HTML da raiz (Vite) saiu |
+| Lote S6: pesquisa moda Curitiba | publicada em React em 28/11/2026; **voltou ao HTML original pela D-064** (cores e cards do DS); o React fica em prévia |
+| Páginas de HTML | a pesquisa de moda voltou ao HTML original (D-064) e o build de HTML da raiz (Vite) voltou; as três apresentações do EI continuam em `public/` |
 
 ## 2. Como publicar
 
@@ -69,6 +71,13 @@ O estado de cada página fica em `apps/site/src/rotas.json` (campo `react`):
 ### 3.6 Tamanho
 
 CSS do site em React: 188 kB (28 kB comprimido), com todas as classes da pasta `ui` (o Tailwind lê a pasta inteira, como na área restrita). JavaScript comum: 174 kB (56 kB comprimido); cada página: 1 a 20 kB. Ficam no cache entre as páginas. Antes, a 404 e o descadastro não carregavam nada além do HTML.
+
+### 3.7 Cores do DS nas páginas originais (D-064)
+
+- As páginas originais em HTML (hoje: a pesquisa de moda) importam `virtual:cores-ds.css`, um módulo do `vite.config.ts` da raiz que lê `apps/site/src/styles/theme.css` (a cópia sincronizada do DS) e entrega só as variáveis de cor do tema claro. Quando o DS muda uma cor, o próximo build já usa a nova.
+- As cores escritas à mão nas folhas das páginas viraram `var(--token)` (ou `color-mix(in srgb, var(--token) N%, transparent)` para transparências). Dentro de SVG embutido em `url(data:...)`, onde `var()` não funciona, fica o valor hexadecimal do token. A troca foi feita por um script com a tabela de papéis (vermelho antigo → `--primary`, cinza de texto → `--muted-foreground`, erros → `--error*`, fundo → `--background`) e, sem papel conhecido, o token mais próximo; o resultado foi conferido à mão.
+- Cards: só borda, sem sombra parada (a sombra continua no passar do mouse e nas janelas).
+- Prova de fidelidade: capturas contra o build de antes da troca para React, comparando a geometria e os estilos de cada elemento fora a cor (seção 6g).
 
 ## 4. Design system no app
 
@@ -232,6 +241,14 @@ O que não muda (e o teste do lote deve conferir rodando o script de hoje, como 
 - **Aparência:** uma fileira de botões numerados do mesmo tamanho (44 px de altura no toque, 40 px no computador; cantos `--radius-md`), em grade de 5 colunas quando o espaço é estreito (duas linhas: 1 a 5 e 6 a 10) e de 10 ou 11 colunas quando cabe (a partir de cerca de 34 rem, pela largura do próprio bloco). Escolhido: fundo primário com texto branco; hover cinza; foco com o anel do DS. Embaixo, as pontas: "1 = Muito ruim" à esquerda e "10 = Excelente" à direita. Faltando no envio: borda de erro nos botões daquele aspecto e a `MensagemDeErro`.
 - **Acessibilidade:** rádios nativos (`role="radiogroup"` com o nome do aspecto; setas trocam a nota); o nome do primeiro e do último inclui a ponta ("1, Muito ruim", "10, Excelente"), como hoje; nunca só a cor (o escolhido também muda o peso do texto ou ganha contorno).
 - **Movimento:** a troca de cor com `--duration-fast`; nada além disso.
+
+## 6g. Páginas originais de volta (D-064): prova de fidelidade
+
+| Página | Comparada com | Estados e larguras | Resultado |
+|---|---|---|---|
+| Pesquisa de moda | build do `5d5eeb9` (antes do #268) | apresentação, identificação, classificação (pergunta 2), notas (pergunta 4), texto aberto, telas finais de obrigada, sem compras, encerrada e fora do ar; 390, 768, 1024 e 1280 px (36 capturas) | mesma altura, mesmos elementos, mesmas posições e tamanhos, mesmos estilos fora a cor em todas; outras diferenças: só a sombra parada tirada de `.pq-intro`, `.pq-fim`, `.pq-porque` e da opção marcada (regra dos cards) |
+
+Fluxo testado com a função `pesquisa` simulada nas duas versões (status, identificação, verificar, parcial, enviar, 409, 410, erro do servidor), sem erros no console.
 
 ## 7. Páginas de apresentação do EI: três versões (decisão da dona do produto pendente)
 
