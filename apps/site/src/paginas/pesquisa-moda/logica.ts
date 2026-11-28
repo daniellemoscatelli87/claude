@@ -1,5 +1,5 @@
 // Regras da pesquisa "Moda em Curitiba" (/pesquisa/moda-curitiba/), as mesmas do script da página de HTML
-// (tests/referencia/pesquisa-moda.ts): perguntas do mesmo questionario.json que a função `pesquisa` usa para validar,
+// (cópia em tests/referencia/pesquisa-moda.ts.txt): perguntas do mesmo questionario.json que a função `pesquisa` usa para validar,
 // condicionais, opções que encerram, rascunho, mensagens de erro e os corpos das chamadas status, verificar, parcial e
 // enviar. Sem nada de tela: a página (PesquisaModa.tsx) só desenha o estado.
 import Q from "../../../../../supabase/functions/pesquisa/questionario.json";

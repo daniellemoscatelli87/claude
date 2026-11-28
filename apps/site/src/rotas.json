@@ -106,12 +106,12 @@
         "canonical": "https://www.danimoscatelli.com.br/rede-parceiros/cadastro/"
       }
     },
-    { "id": "galeria-autorizar", "caminho": "/rede-parceiros/galeria/autorizar/", "saida": "rede-parceiros/galeria/autorizar/index.html", "origem": "public/rede-parceiros/galeria/autorizar/index.html", "lote": "S5" },
+    { "id": "galeria-autorizar", "caminho": "/rede-parceiros/galeria/autorizar/", "saida": "rede-parceiros/galeria/autorizar/index.html", "origem": "apps/site/tests/referencia/galeria-autorizar.html", "lote": "S5", "cabeca": { "titulo": "Galeria de profissionais | Dani Moscatelli", "meta": [["name", "robots", "noindex,nofollow"], ["name", "referrer", "no-referrer"]] } },
     {
       "id": "pesquisa-moda",
       "caminho": "/pesquisa/moda-curitiba/",
       "saida": "pesquisa/moda-curitiba/index.html",
-      "origem": "pesquisa/moda-curitiba/index.html",
+      "origem": "apps/site/tests/referencia/pesquisa-moda.html",
       "lote": "S6",
       "cabeca": {
         "titulo": "Vamos conversar sobre moda em Curitiba? | Dani Moscatelli",
@@ -198,6 +198,7 @@
     "inicio": "publicada",
     "rede-parceiros": "publicada",
     "rede-parceiros-cadastro": "publicada",
-    "pesquisa-moda": "publicada"
+    "pesquisa-moda": "publicada",
+    "galeria-autorizar": "publicada"
   }
 }

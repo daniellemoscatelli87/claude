@@ -6,6 +6,13 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Site em React: autorizar galeria publicada (S5b) e fim do build de HTML da raiz (D-053)
+
+- **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-ds-s5b-limpeza`.
+- **Arquivos:** novos `apps/site/src/paginas/galeria-autorizar/{GaleriaAutorizar,entrada}.tsx`, `apps/site/tests/navegador/galeria-autorizar.cjs`, `scripts/copiar-public.mjs`; `rotas.json` (galeria publicada, com a cabeça; `origem` das duas páginas em `tests/referencia/`), `registro.ts`, `tests/rotas.test.ts` (página sem cabeça agora é fictícia), `package.json`/`package-lock.json` da raiz (só `oxlint`). Apagados: `pesquisa/`, `src/`, `vite.config.ts`, `tsconfig*.json` da raiz e `public/rede-parceiros/galeria/autorizar/index.html` (cópias em `apps/site/tests/referencia/`, o script da pesquisa como `.ts.txt`).
+- **Testes executados:** `npm run typecheck`, `npm test` (62 passaram), `npm run conformidade` (zero), build; `comparar-dist` contra o build do `main` com a pesquisa publicada: só somem `assets/pesquisaModa-*` (o HTML de antes) e mudam os arquivos do app do site. No navegador: `galeria-autorizar.cjs` (mesmo corpo de `decidir` da página de HTML, autorização exigida, foto recortada em JPEG 600 × 600, axe, 44 px e bordas em 390, 768, 1024 e 1280 px), `pesquisa-moda.cjs` e `paginas.cjs`, todos passaram. A pesquisa publicada foi conferida no ar (390 e 1280 px, só o `status` simulado, nada enviado).
+- **Pendências:** S8 (apresentação do EI) aguarda a escolha da versão.
+
 ## 2026-11-28 · Site em React: pesquisa de moda publicada (S6, D-053)
 
 - **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-ds-s6-react`. O HTML de antes (`pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.ts`/`.css`) sai num commit seguinte, depois de conferido no ar.

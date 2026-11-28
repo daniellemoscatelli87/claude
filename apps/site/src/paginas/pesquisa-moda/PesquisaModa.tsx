@@ -3,7 +3,7 @@
 // isca `site`, respostas 409 e 410 e medição (só a do aviso de cookies). As regras ficam em logica.ts; as peças do DS
 // de cada parte estão em docs/engineering/SITE_REACT.md, seção 6f.
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
-import { ArrowRight, CircleAlert, Clock, Gift, Home, Lock, Share2, ShieldCheck, Sparkles, UserCheck, Users } from "lucide-react";
+import { ArrowRight, CircleAlert, Clock, Gift, Home, Lock, Share2, ShieldCheck, Sparkles, Star, UserCheck, Users } from "lucide-react";
 import { abrirAvisoCookies } from "@/components/ui/aviso-cookies";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
@@ -435,7 +435,7 @@ export function PesquisaModa() {
             <Card>
               <CardContent className="flex flex-col gap-4 pt-6">
                 <div className="flex items-start gap-3">
-                  <IconeComBase tom="marca"><Gift /></IconeComBase>
+                  <IconeComBase tom="marca"><Star /></IconeComBase>
                   <div>
                     <Heading level={2} size="card">Por que vale participar</Heading>
                     <p className="mt-1 text-body-sm text-muted-foreground">Ao final, você poderá escolher receber novidades do projeto e benefícios de lançamento.</p>
