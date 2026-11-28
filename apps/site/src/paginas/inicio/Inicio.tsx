@@ -136,17 +136,12 @@ function Depoimentos() {
 }
 
 export function Inicio() {
-  // O AvisoProjeto do DS (d2aeb40) traz um <style> com aspas, que o servidor grava escapadas: a hidratação falha.
-  // Como o aviso só aparece 0,6 s depois de a página abrir, ele entra só no navegador (lacuna do DS: SITE_REACT.md, seção 9).
-  const [noNavegador, setNoNavegador] = useState(false);
-  useEffect(() => setNoNavegador(true), []);
   return (
     <CascaDoSite
       atual="inicio"
       posicaoDoCabecalho="fixed"
       rodape="claro"
       flutuantes={
-        noNavegador && (
         <AvisoProjeto
           titulo="Tem um projeto?"
           texto="Vamos conversar sobre ele."
@@ -155,7 +150,6 @@ export function Inicio() {
           href={linkWhatsApp("5541997485414", "Olá, Dani! Vim pelo site danimoscatelli.com.br e gostaria de conversar sobre um projeto.")}
           onAcao={() => registrarEvento("clique_aviso_whatsapp")}
         />
-        )
       }
     >
       <main id="conteudo" className="bg-card">
@@ -246,7 +240,7 @@ export function Inicio() {
                   </p>
                 </CardContent>
                 <CardFooter className="justify-end border-t pt-4">
-                  <Button asChild size="lg" className="h-auto min-h-11 w-full whitespace-normal py-2 text-center sm:w-auto">
+                  <Button asChild className="w-full sm:w-auto">
                     <a href="https://www.linkedin.com/in/danimoscatelli/" target="_blank" rel="noopener noreferrer">
                       <Linkedin aria-hidden />
                       Acessar Recomendações no LinkedIn
@@ -288,9 +282,8 @@ export function Inicio() {
                 Projetos, diagnósticos e ecossistemas construídos em parceria com grandes marcas e lideranças de mercado para gerar impacto sustentável.
               </p>
             </CabecalhoDeSecao>
-            {/* Os logos originais têm cores e partes brancas (somem no fundo claro): como na página de HTML, viram silhuetas
-                cinza. Lacuna do DS: a FaixaDeLogos ainda não tem um tom "silhueta" (SITE_REACT.md, seção 9). */}
-            <FaixaDeLogos rotulo="Empresas atendidas" logos={LOGOS} colorirAoPassar={false} className="[&_img]:opacity-45 [&_img]:brightness-0" />
+            {/* Os logos originais têm cores e partes brancas (somem no fundo claro): viram silhuetas cinza, como na página de HTML. */}
+            <FaixaDeLogos rotulo="Empresas atendidas" logos={LOGOS} colorirAoPassar={false} silhueta />
           </div>
         </section>
       </main>

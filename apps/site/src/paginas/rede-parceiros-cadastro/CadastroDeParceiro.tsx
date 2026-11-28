@@ -220,7 +220,7 @@ export function CadastroDeParceiro() {
   const resumo = secao.questions
     .filter((q) => erros[q.id])
     .map((q) => ({ id: alvo(q), rotulo: `${q.n}. ${q.label}`, mensagem: erros[q.id] }));
-  const botaoFechar = <Button variant="outline" size="lg" onClick={fechar}>Fechar</Button>;
+  const botaoFechar = <Button variant="outline" onClick={fechar}>Fechar</Button>;
 
   return (
     <>
@@ -238,7 +238,7 @@ export function CadastroDeParceiro() {
           </div>
 
           {final === "sucesso" && (
-            <EstadoFinal titulo={nome ? `Boas-vindas, ${nome}!` : "Boas-vindas!"} acoes={!direto && botaoFechar} className="px-4">
+            <EstadoFinal titulo={nome ? `Boas-vindas, ${nome}!` : "Boas-vindas!"} acoes={!direto && botaoFechar} comemorar className="px-4">
               <Prosa>
                 <p>É um prazer receber você na rede de parceiros da <strong>Dani Moscatelli | Experience Design Studio</strong>!</p>
                 <p>Acreditamos no valor de conectar talentos, conhecimentos e diferentes perspectivas para criar novas oportunidades.</p>
@@ -309,8 +309,7 @@ export function CadastroDeParceiro() {
                       <Button
                         type="button"
                         variant="link"
-                        size="lg"
-                        className="h-auto px-0 py-2"
+                        className="px-0"
                         onClick={() => {
                           limparRascunho();
                           location.reload();

@@ -22,8 +22,9 @@ import { Prosa } from "@/components/ui/prosa";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { EmailDoEstudio } from "@/compartilhado/EmailDoEstudio";
+import { JanelaDaPolitica } from "@/compartilhado/TextoDaPolitica";
 import { WHATSAPP_GROUP, type Pergunta } from "./conteudo";
-import { idiomasIncompletos, isOther, mostrarDepois, opcoesDe, ufCidade, type Idioma, type Resposta, type Respostas } from "./cadastro";
+import { idiomasIncompletos, isOther, mostrarDepois, opcoesDe, semScheme, ufCidade, type Idioma, type Resposta, type Respostas } from "./cadastro";
 
 /** id do primeiro controle de cada pergunta (o resumo de erros e o foco levam até ele). */
 export const alvo = (q: Pergunta) => (["text", "email", "tel", "url", "paragraph"].includes(q.type) ? q.id : `${q.id}-alvo`);
@@ -37,8 +38,8 @@ type Props = {
 };
 
 const rotuloDe = (q: Pergunta) => `${q.n}. ${q.label}`;
-/* O Label do DS é flex: com o rótulo longo, o asterisco separado ia para a ponta direita. Texto e asterisco num
-   só bloco (lacuna registrada em SITE_REACT.md). */
+/* Legenda de grupo (Label asChild no <legend>): o Label com asChild não recebe o `obrigatorio` (ele envolveria o
+   <legend> num bloco), então texto e asterisco vão num só bloco, como o `obrigatorio` do Label faz. */
 const Rotulo = ({ q }: { q: Pergunta }) => (
   <span>
     {rotuloDe(q)}
@@ -149,7 +150,7 @@ function Detalhes({ children }: { children: ReactNode }) {
   return (
     <Collapsible open={aberto} onOpenChange={setAberto} className="pl-8">
       <CollapsibleTrigger asChild>
-        <Button type="button" variant="link" size="lg" className="group h-auto px-0 py-3 text-body-sm has-[>svg]:px-0">
+        <Button type="button" variant="link" className="group px-0 text-body-sm has-[>svg]:px-0">
           O que estou autorizando
           <ChevronDown aria-hidden className="transition-transform duration-[var(--duration-fast)] group-data-[state=open]:rotate-180 motion-reduce:transition-none" />
         </Button>
@@ -187,6 +188,30 @@ function Caixas({ q, r, mudar, opcoes, primeira }: Props & { opcoes: string[]; p
         );
       })}
     </div>
+  );
+}
+
+/** "Política de privacidade": abre a política numa janela, sem sair do formulário (como a página de HTML). Com Ctrl/⌘,
+    Shift ou o botão do meio, o link abre a página da política numa aba nova. */
+function LinkDaPolitica() {
+  const [aberta, setAberta] = useState(false);
+  return (
+    <>
+      <a
+        href="/privacidade/"
+        target="_blank"
+        rel="noopener"
+        aria-haspopup="dialog"
+        onClick={(e) => {
+          if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+          e.preventDefault();
+          setAberta(true);
+        }}
+      >
+        Política de privacidade
+      </a>
+      <JanelaDaPolitica aberta={aberta} onAbertaChange={setAberta} />
+    </>
   );
 }
 
@@ -232,9 +257,7 @@ function Marcar({ q, r, erro, mudar }: Props) {
         <Prosa tamanho="sm" className="text-muted-foreground">
           <p>
             Você pode pedir acesso, correção ou exclusão dos dados e retirar qualquer autorização a qualquer momento pelo e-mail <EmailDoEstudio link />, observadas as hipóteses legais de conservação. Leia a{" "}
-            <a href="/privacidade/" target="_blank" rel="noopener">
-              Política de privacidade<span className="sr-only"> (abre em nova aba)</span>
-            </a>{" "}
+            <LinkDaPolitica />{" "}
             completa.
           </p>
         </Prosa>
@@ -316,7 +339,7 @@ function Linhas({ q, r, erro, mudar }: Props) {
           </div>
         ))}
       </div>
-      <Button type="button" variant="outline" size="lg" onClick={acrescentar}>
+      <Button type="button" variant="outline" onClick={acrescentar}>
         <Plus aria-hidden /> {idiomas ? "Adicionar idioma" : "Adicionar item"}
       </Button>
     </Grupo>
@@ -331,7 +354,7 @@ const CARREGAR_CIDADES = async (uf: string): Promise<string[]> => {
 
 export function PerguntaDoCadastro(props: Props) {
   const { q, r, erro, mudar, aoSairDoEmail } = props;
-  const comum = { rotulo: <Rotulo q={q} />, required: q.required, erro, ajuda: q.help };
+  const comum = { rotulo: rotuloDe(q), obrigatorio: q.required, erro, ajuda: q.help };
   switch (q.type) {
     case "radio":
       return <Escolha {...props} />;
@@ -387,9 +410,12 @@ export function PerguntaDoCadastro(props: Props) {
           autoCapitalize="off"
           spellCheck={false}
           autoComplete="url"
+          // "https://" fixo na caixa (Input prefixo do DS), como na página de HTML: sai do que a pessoa digita ou cola e
+          // volta no valor gravado (withScheme).
+          prefixo="https://"
           placeholder={(q.placeholder || "").replace(/^https?:\/\//i, "") || undefined}
           value={textoDe(r, q.id)}
-          onChange={(e) => mudar(q.id, e.target.value)}
+          onChange={(e) => mudar(q.id, semScheme(e.target.value))}
         />
       );
     default:

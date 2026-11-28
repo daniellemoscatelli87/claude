@@ -65,7 +65,7 @@ export function Descadastro() {
             </>
           }
           acoes={
-            <Button asChild variant="outline" size="lg">
+            <Button asChild variant="outline">
               <a href="/">Ir para o site</a>
             </Button>
           }
@@ -80,7 +80,6 @@ export function Descadastro() {
             </Alert>
           )}
           <BotaoDeEnvio
-            size="lg"
             className="w-full"
             onClick={confirmar}
             disabled={fase === "carregando"}

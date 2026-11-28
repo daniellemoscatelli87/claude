@@ -116,7 +116,7 @@ export function GavetaDeContato({ aberta, aoMudar }: { aberta: boolean; aoMudar:
                 nivel={3}
                 titulo="Mensagem enviada com sucesso!"
                 descricao="Entraremos em contato em breve para agendarmos a nossa conversa."
-                acoes={<Button variant="outline" size="lg" onClick={() => aoMudar(false)}>Fechar</Button>}
+                acoes={<Button variant="outline" onClick={() => aoMudar(false)}>Fechar</Button>}
               />
             </SidePanelBody>
           </>
@@ -138,8 +138,8 @@ export function GavetaDeContato({ aberta, aoMudar }: { aberta: boolean; aoMudar:
                 </GradeDeCampos>
 
                 <div className="space-y-2" data-invalido={erro("tipo_negocio") ? "" : undefined}>
-                  <Label id="contato-negocio" className="text-body-sm font-semibold leading-snug">
-                    Meu negócio é... <span aria-hidden className="-ml-1 text-primary-text">*</span>
+                  <Label id="contato-negocio" obrigatorio className="text-body-sm font-semibold leading-snug">
+                    Meu negócio é...
                   </Label>
                   <GrupoDeCartoesDeEscolha
                     aria-labelledby="contato-negocio"
@@ -223,7 +223,7 @@ export function GavetaDeContato({ aberta, aoMudar }: { aberta: boolean; aoMudar:
               </form>
             </SidePanelBody>
             <SidePanelActions>
-              <BotaoDeEnvio type="submit" form="form-contato" size="lg" className="w-full" estado={envio} textos={{ enviando: "Enviando…" }}>
+              <BotaoDeEnvio type="submit" form="form-contato" className="w-full" estado={envio} textos={{ enviando: "Enviando…" }}>
                 Solicitar reunião
                 <ArrowRight aria-hidden />
               </BotaoDeEnvio>
