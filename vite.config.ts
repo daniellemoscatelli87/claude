@@ -2,6 +2,7 @@ import { defineConfig, type Plugin } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { cabecalhoHtml, GAVETA_HTML, rodapeHtml, rodapeCompactoHtml } from './src/compartilhado/partes.ts'
 
 // Cores do design system Dani Moscatelli (D-064): as páginas originais em HTML mantêm a estrutura de antes, mas as
 // cores vêm do DS. Este módulo lê o theme.css sincronizado (apps/site/src/styles/theme.css, nunca editado aqui) e
@@ -34,13 +35,31 @@ function coresDoDS(): Plugin {
   }
 }
 
-// Página original em HTML (D-064, fora do site em React): a pesquisa de moda.
+// Insere o cabeçalho e a gaveta de contato compartilhados em cada página (mesmo HTML no site todo).
+function partesCompartilhadas(): Plugin {
+  return {
+    name: 'partes-compartilhadas',
+    transformIndexHtml: {
+      order: 'pre',
+      handler(html) {
+        return html
+          .replace(/<!-- @cabecalho:(inicio|projeto|parceiros) -->/g, (_, p) => cabecalhoHtml(p))
+          .replace('<!-- @gaveta -->', GAVETA_HTML)
+          .replace('<!-- @rodape:compacto -->', rodapeCompactoHtml())
+          .replace(/<!-- @rodape:(claro|escuro) -->/g, (_, v) => rodapeHtml(v))
+      },
+    },
+  }
+}
+
+// Páginas originais em HTML (D-064, fora do site em React).
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [coresDoDS(), tailwindcss()],
+  plugins: [partesCompartilhadas(), coresDoDS(), tailwindcss()],
   build: {
     rollupOptions: {
       input: {
+        main: resolve(import.meta.dirname, 'index.html'),
         pesquisaModa: resolve(import.meta.dirname, 'pesquisa/moda-curitiba/index.html'),
       },
     },

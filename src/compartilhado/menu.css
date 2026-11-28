@@ -1,0 +1,282 @@
+/* Componentes compartilhados (cabeçalho, menu sanduíche e gaveta de contato). Importado pelo CSS de cada página. */
+@source "./partes.ts";
+@source "./menu.ts";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+
+  --color-brand-red: var(--primary);
+  --color-brand-dark-red: var(--primary-hover);
+  --color-brand-accent: var(--primary);
+  --color-brand-dark: var(--foreground);
+  --color-brand-charcoal: var(--graphite-800);
+  --color-brand-muted: var(--muted-foreground);
+  --color-brand-border: var(--graphite-50);
+  --color-brand-bg-light: var(--card);
+
+  --shadow-subtle-card: 0 10px 30px -5px color-mix(in srgb, var(--graphite-950) 4%, transparent), 0 4px 12px -2px color-mix(in srgb, var(--graphite-950) 2%, transparent);
+  --shadow-floating-input: 0 20px 40px -12px color-mix(in srgb, var(--foreground) 8%, transparent), 0 6px 18px -4px color-mix(in srgb, var(--foreground) 4%, transparent);
+  --shadow-btn-glow: 0 10px 25px -3px color-mix(in srgb, var(--primary) 35%, transparent);
+  --shadow-drawer: -10px 0 50px -10px color-mix(in srgb, var(--foreground) 15%, transparent);
+
+  /* Tokens do design system oficial usados no cabeçalho e no painel lateral de contato (SidePanel) */
+  --color-ds-fg: var(--foreground);
+  --color-ds-muted: var(--muted);
+  --color-ds-muted-fg: var(--muted-foreground);
+  --color-ds-accent: var(--muted);
+  --color-ds-border: var(--border);
+  --color-ds-primary: var(--primary);
+  --color-ds-primary-muted: var(--primary-muted);
+  --color-ds-ring: var(--ring);
+  --color-ds-error: var(--error-text);
+
+  /* Verde oficial do WhatsApp, só no botão flutuante (escolha da dona do produto, fora do design system) */
+  --color-whatsapp: #25D366;
+
+  /* Cores do Tailwind usadas nas páginas originais (slate, red, rose, white, black): apontam para os tokens de cor
+     do DS (D-064), para as classes de hoje (text-slate-600, bg-white…) já saírem com as cores do DS. */
+  --color-white: var(--card);
+  --color-black: var(--graphite-950);
+  --color-slate-50: var(--card);
+  --color-slate-100: var(--graphite-50);
+  --color-slate-200: var(--secondary);
+  --color-slate-300: var(--graphite-100);
+  --color-slate-400: var(--graphite-300);
+  --color-slate-500: var(--muted-foreground);
+  --color-slate-600: var(--graphite-500);
+  --color-slate-700: var(--graphite-600);
+  --color-slate-800: var(--graphite-800);
+  --color-slate-900: var(--foreground);
+  --color-red-100: var(--crimson-100);
+  --color-red-200: var(--crimson-200);
+  --color-rose-100: var(--primary-muted);
+  --shadow-ds-md: 0 4px 12px color-mix(in srgb, var(--graphite-950) 8%, transparent), 0 12px 36px color-mix(in srgb, var(--graphite-950) 6%, transparent);
+  --shadow-ds-xl: 0 16px 48px color-mix(in srgb, var(--graphite-950) 10%, transparent), 0 40px 96px color-mix(in srgb, var(--graphite-950) 8%, transparent);
+}
+
+/* Cabeçalho: ao rolar, ganha fundo e o logo completo dá lugar só ao ícone */
+/* Some ao rolar para baixo e volta ao rolar para cima */
+.site-header { transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1), background-color .2s, box-shadow .2s, backdrop-filter .2s; }
+.site-header.is-hidden { transform: translateY(-100%); }
+@media (prefers-reduced-motion: reduce) { .site-header { transition: none; } }
+/* Ao rolar: grafite do DS (G-900) translúcido com desfoque; textos e botão do menu em branco */
+.site-header.is-scrolled { background: color-mix(in srgb, var(--foreground) 92%, transparent); backdrop-filter: blur(20px) saturate(140%); box-shadow: 0 8px 24px -16px color-mix(in srgb, var(--graphite-950) 45%, transparent); }
+.site-header.is-scrolled nav[aria-label="Principal"] a { color: var(--primary-foreground); }
+.site-header.is-scrolled nav[aria-label="Principal"] a:hover { color: var(--crimson-100); }
+.site-header.is-scrolled nav[aria-label="Principal"] a[aria-current="page"] { color: var(--primary-foreground); text-decoration-color: var(--primary); }
+.site-header.is-scrolled #menu-botao { color: var(--primary-foreground); }
+.site-header.is-scrolled #menu-botao:hover { background: color-mix(in srgb, var(--card) 12%, transparent); }
+.site-header.is-scrolled .logo-completo { display: none; }
+.site-header.is-scrolled .logo-icone { display: block; animation: logo-icone-in .3s ease-out; }
+@keyframes logo-icone-in { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .site-header.is-scrolled .logo-icone { animation: none; } }
+
+/* Aviso "Tem um projeto?" (página inicial) */
+.cta-contato { animation: cta-entrada .45s ease-out .6s both, cta-flutua 2.6s ease-in-out 1.2s 3; }
+@keyframes cta-entrada { from { opacity: 0; transform: translateY(-6px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes cta-flutua { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+@media (prefers-reduced-motion: reduce) { .cta-contato { animation: none; } }
+.cta-contato.is-oculto { display: none; }
+
+.custom-scroll::-webkit-scrollbar { width: 6px; }
+.custom-scroll::-webkit-scrollbar-track { background: transparent; }
+.custom-scroll::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 9999px; }
+.custom-scroll::-webkit-scrollbar-thumb:hover { background: var(--graphite-100); }
+
+/* Campos do formulário de contato: padrão do painel lateral do design system (SidePanel) */
+.field {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--input);
+  background: color-mix(in srgb, var(--muted) 40%, transparent);
+  font-size: 0.8125rem;
+  color: var(--color-ds-fg);
+  line-height: 1.625;
+  outline: none;
+  transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s;
+}
+.field::placeholder { color: var(--color-ds-muted-fg); }
+.field:focus {
+  background: var(--card);
+  border-color: var(--color-ds-primary);
+  box-shadow: 0 0 0 2px var(--color-ds-ring);
+}
+.field.invalid, .box-invalid { border-color: var(--color-ds-error) !important; }
+select.field { appearance: none; cursor: pointer; padding-right: 2.5rem; }
+select.field:invalid { color: var(--color-ds-muted-fg); }
+select.field option { color: var(--color-ds-fg); }
+
+/* Celular: campos da gaveta com 16px evitam o zoom automático do iPhone */
+@media (max-width: 767px) {
+  #contact-drawer input, #contact-drawer select, #contact-drawer textarea, #contact-drawer .field, #contact-drawer .biz-label { font-size: 16px !important; }
+}
+#contact-drawer .biz-label { font-size: 13px; }
+#contact-drawer, #menu-mobile { font-family: var(--font-sans); }
+
+/* Botão Contato do cabeçalho: contorno (outline). Branco sobre fundo escuro (cabeçalho rolado e sobre a foto do hero);
+   grafite sobre fundo claro, onde o branco não apareceria. */
+.btn-contato { background: transparent; border-color: var(--foreground); color: var(--foreground); }
+.btn-contato:hover { background: var(--foreground); color: var(--primary-foreground); }
+.site-header.is-scrolled .btn-contato, .cabecalho-sobre-hero .site-header:not(.is-scrolled) .btn-contato { border-color: color-mix(in srgb, var(--card) 85%, transparent); color: var(--primary-foreground); }
+.site-header.is-scrolled .btn-contato:hover, .cabecalho-sobre-hero .site-header:not(.is-scrolled) .btn-contato:hover { background: var(--card); color: var(--foreground); }
+.btn-contato:focus-visible { outline: none; box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 40%, transparent); }
+
+/* ---------- Rodapé padrão (src/compartilhado/partes.ts) ----------
+   Mesma estrutura em todas as páginas: logo + links / copyright, cidade e crédito do design system.
+   Versão clara (Home, Rede de Parceiros) e escura (Projeto Piloto). Tokens do DS. */
+.rodape { max-width: 80rem; margin: 0 auto; padding: 0 1.5rem; font-family: "Plus Jakarta Sans", sans-serif; }
+@media (min-width: 1024px) { .rodape { padding: 0 2.5rem; } }
+.rodape-topo { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+@media (min-width: 768px) { .rodape-topo { flex-direction: row; justify-content: space-between; } }
+.rodape-logo { display: inline-flex; border-radius: 6px; }
+.rodape-logo img { height: 3.25rem; width: auto; display: block; }
+.rodape-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 1.5rem; font-size: .875rem; font-weight: 500; }
+.rodape-links a, .rodape-links button { color: var(--graphite-700); text-decoration: none; background: none; border: 0; padding: 0; font: inherit; cursor: pointer; transition: color .2s ease; }
+.rodape-links a:hover, .rodape-links button:hover { color: var(--primary); }
+.rodape-base { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding-top: 1.25rem; font-size: .75rem; line-height: 1.6; color: var(--graphite-500); text-align: center; }
+.rodape-base p { margin: 0; }
+@media (min-width: 640px) { .rodape-base { flex-direction: row; justify-content: space-between; text-align: left; } }
+.rodape-base span[aria-hidden] { margin: 0 .375rem; color: var(--graphite-200); }
+.rodape-ds { font-weight: 600; color: var(--primary); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--primary) 30%, transparent); text-underline-offset: 2px; }
+.rodape-ds:hover { text-decoration-color: var(--primary); }
+.rodape a:focus-visible, .rodape button:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 45%, transparent); border-radius: 4px; }
+/* Escuro */
+.rodape-escuro .rodape-topo { border-bottom-color: color-mix(in srgb, var(--card) 10%, transparent); }
+.rodape-escuro .rodape-logo img { height: 3.25rem; }
+.rodape-escuro .rodape-links a, .rodape-escuro .rodape-links button { color: var(--secondary); }
+.rodape-escuro .rodape-links a:hover, .rodape-escuro .rodape-links button:hover { color: var(--primary-foreground); }
+.rodape-escuro .rodape-base { color: var(--graphite-300); }
+.rodape-escuro .rodape-base span[aria-hidden] { color: color-mix(in srgb, var(--primary-foreground) 25%, transparent); }
+.rodape-escuro .rodape-ds { color: var(--crimson-100); text-decoration-color: color-mix(in srgb, var(--crimson-100) 40%, transparent); }
+.rodape-escuro .rodape-ds:hover { text-decoration-color: var(--crimson-100); }
+/* Rede de Parceiros: rodapé com espaço próprio e acima dos botões fixos do celular */
+.rodape-pagina-parceiros { border-top: 1px solid var(--border); padding: 2rem 0 2.5rem; margin-top: 3rem; }
+@media (max-width: 767px) { .rodape-pagina-parceiros { padding-bottom: 7rem; } }
+/* Rodapé compacto: uma faixa só, textos discretos */
+.rodape-compacto .rodape-base { padding-top: 0; align-items: center; }
+.rodape-compacto .rodape-base p + p { margin-top: .125rem; }
+.rodape-compacto .rodape-links { font-size: .75rem; font-weight: 400; gap: .5rem 1.25rem; }
+.rodape-compacto .rodape-links a, .rodape-compacto .rodape-links button { color: var(--graphite-500); }
+
+/* ---------- Menu do celular em "bottom sheet": sobe do rodapé da tela ao abrir e desce ao fechar ---------- */
+.menu-sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; max-height: 85dvh; overflow-y: auto;
+  border-radius: 24px 24px 0 0; border-top: 1px solid var(--border);
+  box-shadow: 0 -12px 36px color-mix(in srgb, var(--graphite-950) 12%, transparent); padding: .5rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  transform: translateY(100%); visibility: hidden;
+  transition: transform .26s cubic-bezier(0.4, 0, 1, 1), visibility 0s linear .26s; }
+.menu-sheet.aberto { transform: none; visibility: visible; transition: transform .38s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s; }
+.menu-fundo { position: fixed; inset: 0; z-index: 59; background: color-mix(in srgb, var(--graphite-950) 55%, transparent); opacity: 0; visibility: hidden;
+  transition: opacity .26s ease, visibility 0s linear .26s; }
+.menu-fundo.aberto { opacity: 1; visibility: visible; transition: opacity .3s ease, visibility 0s; }
+.menu-sheet-topo { position: relative; display: flex; justify-content: center; align-items: center; height: 2.5rem; margin-bottom: .25rem; }
+.menu-sheet-alca { width: 2.5rem; height: .3125rem; border-radius: 9999px; background: var(--graphite-100); }
+.menu-sheet-fechar { position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 2.25rem; height: 2.25rem; border-radius: 9999px;
+  display: flex; align-items: center; justify-content: center; color: var(--graphite-500); background: transparent; border: 0; cursor: pointer; }
+.menu-sheet-fechar:hover { background: var(--graphite-50); color: var(--foreground); }
+.menu-sheet-fechar:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 45%, transparent); }
+html.menu-aberto { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { .menu-sheet, .menu-sheet.aberto, .menu-fundo, .menu-fundo.aberto { transition: none; } }
+@media (min-width: 768px) { .menu-sheet, .menu-fundo { display: none; } }
+
+/* Desktop (todas as páginas): menu em pílula clara centralizada, só com o ícone e as opções; fica flutuando ao rolar */
+@media (min-width: 1024px) {
+  html body .site-header, html body .site-header.is-scrolled { padding-top: calc(2rem + 5px) !important; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; pointer-events: none; }
+  html body .site-header header { pointer-events: auto; width: fit-content !important; max-width: none !important; margin: 0 auto !important; padding: .5rem 1.75rem .5rem .75rem !important; justify-content: center !important; gap: 3rem !important;
+    background: color-mix(in srgb, var(--card) 92%, transparent); -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%); border: 1px solid color-mix(in srgb, var(--card) 60%, transparent); border-radius: 9999px;
+    box-shadow: 0 8px 24px -12px color-mix(in srgb, var(--graphite-950) 35%, transparent); }
+  html body .site-header.is-scrolled header { box-shadow: 0 10px 30px -10px color-mix(in srgb, var(--graphite-950) 35%, transparent); }
+  html body .site-header header > a:first-child { visibility: visible !important; height: 2.75rem !important; }
+  html body .site-header .logo-completo { display: none !important; }
+  html body .site-header .logo-icone { display: block !important; height: 2.5rem !important; animation: none !important; }
+  html body .site-header header > div { gap: 2.75rem !important; }
+  html body .site-header nav[aria-label="Principal"] { gap: 2.75rem !important; }
+  html body .site-header nav[aria-label="Principal"] a { color: var(--foreground) !important; text-shadow: none !important; font-size: .9375rem; font-weight: 500; }
+  html body .site-header nav[aria-label="Principal"] a:hover { color: var(--primary) !important; }
+  html body .site-header nav[aria-label="Principal"] a[aria-current="page"] { color: var(--primary) !important; text-decoration-color: var(--primary) !important; }
+  html body .site-header .btn-contato { padding: 0 !important; border: 0 !important; background: transparent !important; color: var(--foreground) !important; font-size: .9375rem; font-weight: 500; transform: none !important; box-shadow: none !important; }
+  html body .site-header .btn-contato:hover { color: var(--primary) !important; background: transparent !important; }
+}
+/* mais respiro nas laterais da pílula do menu */
+@media (min-width: 1024px) { html body .site-header header { padding: .5rem 2.75rem .5rem 2rem !important; } }
+@media (min-width: 1024px) { html body .site-header header.w-full, html body.cabecalho-sobre-hero .site-header header { padding: .5rem 2.75rem .5rem 2rem !important; gap: 3rem !important; } }
+@media (min-width: 1024px) { html body .site-header header.w-full > div, html body .site-header header.w-full nav[aria-label="Principal"] { gap: 2.75rem !important; } }
+/* pílula do menu sem desfoque de fundo (pesa na rolagem); quase opaca, o visual fica o mesmo */
+@media (min-width: 1024px) { html body .site-header header.w-full { background: color-mix(in srgb, var(--card) 96%, transparent) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; } }
+
+/* Desktop: aviso "Tem um projeto?" flutuando acima do botão do WhatsApp, com a seta apontando para ele;
+   o clique abre a conversa no WhatsApp (o script move o aviso para o fim da página e troca a ação) */
+@media (min-width: 1024px) {
+  #cta-contato.cta-whats { position: fixed !important; top: auto !important; left: auto !important; right: 1.5rem !important; bottom: calc(1.5rem + 3.5rem + 1rem) !important; margin: 0 !important; z-index: 30; }
+  #cta-contato.cta-whats > span[aria-hidden="true"] { top: auto !important; bottom: -7px !important; left: auto !important; right: 21px !important; rotate: 225deg; z-index: 2; }
+  .cta-contato.cta-whats { animation: cta-entrada-whats .45s ease-out .6s both, cta-flutua 2.6s ease-in-out 1.2s 3; }
+  @keyframes cta-entrada-whats { from { opacity: 0; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
+}
+/* Celular e tablet: o mesmo aviso fica fixo ao lado do botão do WhatsApp (à esquerda dele), com a seta apontando para o botão */
+@media (max-width: 1023px) {
+  /* ocupa todo o espaço que sobra à esquerda do botão (mesma margem de 20 px da borda) */
+  #cta-contato.cta-whats { position: fixed !important; top: auto !important; left: 20px !important; right: calc(20px + 56px + 12px) !important; bottom: 20px !important; margin: 0 !important; z-index: 30;
+    width: auto !important; min-height: 56px; display: flex; align-items: center; max-width: none !important; }
+  #cta-contato.cta-whats > span[aria-hidden="true"] { top: calc(50% - 7px) !important; bottom: auto !important; left: auto !important; right: -7px !important; rotate: 135deg; z-index: 2; }
+  #cta-contato.cta-whats > div { width: 100%; }
+  #cta-contato.cta-whats > div > button:first-of-type { padding: .625rem 2.5rem .625rem .75rem; gap: .625rem; }
+  #cta-contato.cta-whats > div > button:first-of-type > span:first-child { width: 2rem; height: 2rem; }
+  #cta-contato.cta-whats #cta-contato-texto > span:first-child { font-size: 13px; }
+  #cta-contato.cta-whats #cta-contato-texto > span:last-child { font-size: 12px; }
+  .cta-contato.cta-whats { animation: cta-entrada-whats .45s ease-out .6s both, cta-flutua 2.6s ease-in-out 1.2s 3; }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  #cta-contato.cta-whats { left: 24px !important; right: calc(24px + 56px + 12px) !important; bottom: 24px !important; }
+}
+/* Desktop: ao rolar, uma faixa clara translúcida com desfoque aparece por trás da pílula do menu e some em degradê para baixo */
+@media (min-width: 1024px) {
+  html body .site-header::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: calc(100% + 2.5rem); pointer-events: none; z-index: -1;
+    background: linear-gradient(to bottom, color-mix(in srgb, var(--background) 85%, transparent) 0%, color-mix(in srgb, var(--background) 55%, transparent) 55%, transparent 100%);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent 100%); mask-image: linear-gradient(to bottom, #000 45%, transparent 100%);
+    opacity: 0; transition: opacity .3s ease; }
+  html body .site-header.is-scrolled::before { opacity: 1; }
+}
+@media (min-width: 1024px) {
+  html body .site-header.sobre-escuro::before { background: linear-gradient(to bottom, color-mix(in srgb, var(--graphite-950) 80%, transparent) 0%, color-mix(in srgb, var(--graphite-950) 50%, transparent) 55%, transparent 100%); }
+}
+
+/* Celular e tablet: ao rolar, o cabeçalho fica claro (vidro claro com desfoque) em vez de grafite; ícones escuros */
+@media (max-width: 1023px) {
+  html body .site-header.is-scrolled { background: color-mix(in srgb, var(--card) 86%, transparent) !important; -webkit-backdrop-filter: blur(20px) saturate(160%) !important; backdrop-filter: blur(20px) saturate(160%) !important;
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--secondary) 90%, transparent), 0 8px 24px -18px color-mix(in srgb, var(--graphite-950) 35%, transparent) !important; }
+  html body .site-header.is-scrolled #menu-botao { color: var(--foreground) !important; }
+  html body .site-header.is-scrolled #menu-botao:hover { background: color-mix(in srgb, var(--foreground) 6%, transparent) !important; }
+  html body .site-header.is-scrolled nav[aria-label="Principal"] a, html body .site-header.is-scrolled nav[aria-label="Principal"] a[aria-current="page"] { color: var(--foreground) !important; }
+  html body .site-header.is-scrolled .btn-contato { border-color: var(--primary) !important; color: var(--primary) !important; }
+  html body .site-header.is-scrolled .btn-contato:hover { background: var(--primary) !important; color: var(--primary-foreground) !important; }
+}
+
+/* Celular e tablet: alça "Saiba mais" (tipografia pequena) recortada no centro da borda de cima da folha branca */
+.alca-movel { display: none; }
+@media (max-width: 1023px) {
+  .alca-movel { position: fixed; z-index: 22; left: 50%; top: calc(var(--alca-topo, 100vh) - 27px); transform: translateX(-50%); width: 132px; height: 28px;
+    display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 20px 20px 0 0; background: var(--card);
+    font-family: "Plus Jakarta Sans", sans-serif; font-size: 12px; font-weight: 600; color: var(--foreground); text-decoration: none; transition: opacity .25s ease; }
+  .alca-movel.oculta { opacity: 0; pointer-events: none; }
+  .alca-movel-seta { width: 14px; height: 20px; border-radius: 9999px; border: 1px solid var(--graphite-100); color: var(--primary); display: flex; align-items: center; justify-content: center; }
+  .alca-movel-seta svg { width: 10px; height: 10px; }
+  .alca-movel:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--primary); }
+}
+
+/* celular: descrição abaixo do título de cada seção no mesmo tamanho em todas as páginas (14px, como na Home) */
+@media (max-width: 767px) { html body .sec-desc { font-size: .875rem !important; line-height: 1.55 !important; } }
+
+/* Gavetas de contato e de cadastro: cabeçalho como o do cadastro do Seja Parceiro — fundo graphite-50 que se dissolve
+   num degradê sutil até o formulário, sem linha divisória */
+html body .gaveta-topo { padding-bottom: 2rem !important; border-bottom: 0 !important;
+  background: linear-gradient(180deg, var(--graphite-50) 0%, var(--graphite-50) 72%, transparent 100%) !important; }
+
+/* celular: a faixa escura atrás dos botões flutuantes continua 6rem abaixo da borda da tela. No Safari do iPhone, ao chegar
+   de outra página já rolada, a tela mostra um pedaço além da borda informada ao site; sem isso ele ficava branco.
+   Dentro da tela, o degradê é o mesmo de antes. */
+@media (max-width: 767px) {
+  html body .faixa-flutuante { bottom: -6rem; height: 13.5rem;
+    background: linear-gradient(to top, color-mix(in srgb, var(--graphite-950) 60%, transparent) 0, color-mix(in srgb, var(--graphite-950) 60%, transparent) 6rem, color-mix(in srgb, var(--graphite-950) 35%, transparent) 9.375rem, transparent 13.5rem);
+    -webkit-mask-image: linear-gradient(to top, #000 9rem, transparent 13.5rem); mask-image: linear-gradient(to top, #000 9rem, transparent 13.5rem); }
+}

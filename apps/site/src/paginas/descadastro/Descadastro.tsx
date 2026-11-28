@@ -42,7 +42,10 @@ export function Descadastro() {
 
   const feito = fase === "feito";
   return (
+    // Conteúdo centralizado, como a página original (decisão da dona do produto, 28/11/2026): logo, título, texto e o
+    // botão em pílula no centro; o alerta continua com o texto alinhado à esquerda dentro da caixa.
     <MolduraDeConta
+      className="text-center"
       logo={<Logo variante="horizontal" className="h-12" />}
       titulo="Deixar de receber comunicados"
       descricao={
@@ -65,7 +68,7 @@ export function Descadastro() {
             </>
           }
           acoes={
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" className="self-center rounded-full">
               <a href="/">Ir para o site</a>
             </Button>
           }
@@ -73,14 +76,14 @@ export function Descadastro() {
       ) : (
         <div className="flex flex-col gap-6">
           {erro && (
-            <Alert variant="error">
+            <Alert variant="error" className="text-left">
               <CircleAlert aria-hidden />
               <AlertTitle>{erro.titulo}</AlertTitle>
               {erro.texto && <AlertDescription>{erro.texto}</AlertDescription>}
             </Alert>
           )}
           <BotaoDeEnvio
-            className="w-full"
+            className="self-center rounded-full"
             onClick={confirmar}
             disabled={fase === "carregando"}
             estado={fase === "enviando" ? "enviando" : "parado"}

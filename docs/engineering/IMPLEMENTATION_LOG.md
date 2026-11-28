@@ -6,6 +6,26 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Página inicial original de volta, com as cores e os cards do DS; descadastro centralizado (D-064)
+
+- **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-inicio-original`.
+- **Arquivos restaurados** (do `155ab15`, antes do #258; iguais até o #261): `index.html`, `src/em-breve.{ts,css}`, `src/compartilhado/{menu,textos-surgem}.{ts,css}`, `src/compartilhado/partes.ts`, `public/inicio/ie3-secoes.{css,js}`. `vite.config.ts` com a entrada `main` e o plugin das partes compartilhadas. `rotas.json`: `inicio` em `previa`. Antes das cores, o build deu `index.html` e os arquivos dele iguais byte a byte ao build do `155ab15`.
+- **Cores e cards:**
+  - todas as cores passaram a tokens do DS: folhas, estilos em linha, `<style>`, atributos de SVG e classes;
+  - as classes `slate`, `red`, `rose`, `white` e `black` apontam para os tokens no `@theme` do `menu.css`;
+  - o `menu.ts` importa `virtual:cores-ds.css`;
+  - os campos usam `--input`;
+  - os ícones do LinkedIn e do Instagram ficam nas cores das marcas;
+  - perdem a sombra parada e ganham o contorno `--border` por dentro: os depoimentos, os artigos e o card "Veja todas as recomendações"; o card de clientes perde a sombra.
+- **Descadastro (React):** conteúdo centralizado, botões em pílula na largura do texto e o alerta com o texto à esquerda (`apps/site/src/paginas/descadastro/Descadastro.tsx`, só classes de layout).
+- **Testes executados:**
+  - `npm run build` da raiz (passou);
+  - `apps/site`: typecheck sem erros, 62 testes passaram, conformidade com zero desvios;
+  - dist comparado com o build do `main`: só mudam `index.html`, `inicio/ie3-secoes.*`, `assets/`, a pesquisa (a mesma página, com outros nomes de arquivos) e o descadastro;
+  - fidelidade: página inteira em 390, 768, 1024 e 1280 px contra o `155ab15`, com a mesma altura, elementos, posições, tamanhos e estilos fora a cor. Outras diferenças: as sombras paradas tiradas e um degradê que o navegador escreve de outro jeito (só cor);
+  - formulários com o Supabase simulado: notificar lançamento (só o e-mail em `notificacoes_lancamento`, estado de sucesso) e gaveta de contato (validação e envio a `contatos`); sem erros no console;
+  - descadastro: capturas em 390 e 1280 (formulário, erro e "Pronto!"), com a função simulada.
+
 ## 2026-11-28 · Pesquisa de moda: sem o aviso flutuante "Preencha os campos em vermelho" (D-064)
 
 - **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-pesquisa-sem-aviso`.
