@@ -204,7 +204,7 @@ export function ProjetoPiloto() {
                       <span>{g.pergunta}</span>
                     </span>
                   </AccordionTrigger>
-                  <AccordionContent forceMount hidden={pergunta !== g.numero}>
+                  <AccordionContent manterNoHtml>
                     <Prosa tamanho="sm" className="pl-0 sm:pl-9">{g.resposta}</Prosa>
                   </AccordionContent>
                 </AccordionItem>

@@ -10,7 +10,6 @@ import { RodapeSite } from "@/components/ui/rodape-site";
 import { Selo } from "@/components/ui/selo";
 import { PecasDoSite } from "@/compartilhado/PecasDoSite";
 import { EmailDoEstudio } from "@/compartilhado/EmailDoEstudio";
-import { LOGO_CORRIGIDO } from "@/compartilhado/marca";
 
 function PreferenciasDeCookies() {
   return (
@@ -32,7 +31,7 @@ export function Privacidade() {
       <header>
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-6 lg:px-10">
           <a href="/" aria-label="Dani Moscatelli - Experience Design Studio" className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-            <Logo className="h-12" {...LOGO_CORRIGIDO} />
+            <Logo className="h-12" />
           </a>
           <Button asChild variant="link" size="lg" className="px-0 has-[>svg]:px-0">
             <a href="/">Voltar ao site</a>

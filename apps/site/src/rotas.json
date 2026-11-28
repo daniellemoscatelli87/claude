@@ -78,9 +78,61 @@
         "canonical": "https://www.danimoscatelli.com.br/rede-parceiros/"
       }
     },
-    { "id": "rede-parceiros-cadastro", "caminho": "/rede-parceiros/cadastro/", "saida": "rede-parceiros/cadastro/index.html", "origem": "rede-parceiros/cadastro/index.html", "lote": "S5" },
+    {
+      "id": "rede-parceiros-cadastro",
+      "caminho": "/rede-parceiros/cadastro/",
+      "saida": "rede-parceiros/cadastro/index.html",
+      "origem": "rede-parceiros/cadastro/index.html",
+      "lote": "S5",
+      "cabeca": {
+        "titulo": "Dani Moscatelli | Partners & Connections",
+        "meta": [
+          ["name", "description", "Cadastre-se na rede de parceiros da Dani Moscatelli e conecte-se a projetos de Service Design, CX, UX, EX e inovação."],
+          ["property", "og:type", "website"],
+          ["property", "og:locale", "pt_BR"],
+          ["property", "og:site_name", "Dani Moscatelli | Experience Design Studio"],
+          ["property", "og:title", "Dani Moscatelli | Partners & Connections"],
+          ["property", "og:description", "Cadastre-se na rede de parceiros da Dani Moscatelli e conecte-se a projetos de Service Design, CX, UX, EX e inovação."],
+          ["property", "og:url", "https://www.danimoscatelli.com.br/rede-parceiros/cadastro/"],
+          ["property", "og:image", "https://www.danimoscatelli.com.br/compartilhar.png"],
+          ["property", "og:image:width", "1200"],
+          ["property", "og:image:height", "630"],
+          ["property", "og:image:alt", "Logo Dani Moscatelli | Experience Design Studio"],
+          ["name", "twitter:card", "summary_large_image"],
+          ["name", "twitter:title", "Dani Moscatelli | Partners & Connections"],
+          ["name", "twitter:description", "Cadastre-se na rede de parceiros da Dani Moscatelli e conecte-se a projetos de Service Design, CX, UX, EX e inovação."],
+          ["name", "twitter:image", "https://www.danimoscatelli.com.br/compartilhar.png"]
+        ],
+        "canonical": "https://www.danimoscatelli.com.br/rede-parceiros/cadastro/"
+      }
+    },
     { "id": "galeria-autorizar", "caminho": "/rede-parceiros/galeria/autorizar/", "saida": "rede-parceiros/galeria/autorizar/index.html", "origem": "public/rede-parceiros/galeria/autorizar/index.html", "lote": "S5" },
-    { "id": "pesquisa-moda", "caminho": "/pesquisa/moda-curitiba/", "saida": "pesquisa/moda-curitiba/index.html", "origem": "pesquisa/moda-curitiba/index.html", "lote": "S6" },
+    {
+      "id": "pesquisa-moda",
+      "caminho": "/pesquisa/moda-curitiba/",
+      "saida": "pesquisa/moda-curitiba/index.html",
+      "origem": "pesquisa/moda-curitiba/index.html",
+      "lote": "S6",
+      "cabeca": {
+        "titulo": "Vamos conversar sobre moda em Curitiba? | Dani Moscatelli",
+        "meta": [
+          ["name", "description", "Pesquisa sobre hábitos e experiências de compra de roupas, calçados e acessórios em Curitiba e Região Metropolitana, conduzida pelo Dani Moscatelli — Experience Design Studio."],
+          ["property", "og:type", "website"],
+          ["property", "og:locale", "pt_BR"],
+          ["property", "og:site_name", "Dani Moscatelli | Experience Design Studio"],
+          ["property", "og:title", "Vamos conversar sobre moda em Curitiba?"],
+          ["property", "og:description", "Conte como são suas experiências ao procurar e comprar roupas, calçados e acessórios em Curitiba e Região Metropolitana. Leva de 5 a 8 minutos."],
+          ["property", "og:url", "https://www.danimoscatelli.com.br/pesquisa/moda-curitiba/"],
+          ["property", "og:image", "https://www.danimoscatelli.com.br/compartilhar.png"],
+          ["property", "og:image:width", "1200"],
+          ["property", "og:image:height", "630"],
+          ["property", "og:image:alt", "Logo Dani Moscatelli | Experience Design Studio"],
+          ["name", "twitter:card", "summary_large_image"],
+          ["name", "theme-color", "#F6F7FA"]
+        ],
+        "canonical": "https://www.danimoscatelli.com.br/pesquisa/moda-curitiba/"
+      }
+    },
     {
       "id": "privacidade",
       "caminho": "/privacidade/",
@@ -144,6 +196,7 @@
     "erro-404": "publicada",
     "projeto-piloto": "publicada",
     "inicio": "publicada",
-    "rede-parceiros": "publicada"
+    "rede-parceiros": "publicada",
+    "rede-parceiros-cadastro": "publicada"
   }
 }
