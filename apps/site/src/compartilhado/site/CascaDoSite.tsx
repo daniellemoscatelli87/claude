@@ -4,10 +4,10 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { abrirAvisoCookies } from "@/components/ui/aviso-cookies";
 import { CabecalhoDoSite } from "@/components/ui/cabecalho-do-site";
+import { LinkPularConteudo } from "@/components/ui/links";
 import { Logo } from "@/components/ui/logo";
 import { RodapeSite } from "@/components/ui/rodape-site";
 import { PecasDoSite } from "@/compartilhado/PecasDoSite";
-import { LOGO_CORRIGIDO } from "@/compartilhado/marca";
 import { GavetaDeContato } from "./GavetaDeContato";
 import { ITENS_DO_MENU, registrarEvento, type PaginaDoMenu } from "./navegacao";
 
@@ -50,20 +50,15 @@ export function CascaDoSite({ atual, superficie = "clara", posicaoDoCabecalho = 
 
   return (
     <ContextoDoContato.Provider value={() => setContato(true)}>
-      <a
-        href="#conteudo"
-        className="sr-only z-50 rounded-full bg-card px-4 py-2 font-semibold text-primary-text focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        Pular para o conteúdo
-      </a>
+      <LinkPularConteudo />
       <CabecalhoDoSite
         itens={ITENS_DO_MENU}
         atual={atual}
         superficie={superficie}
         posicao={posicaoDoCabecalho}
         logo={{
-          completo: <Logo variante="horizontal" superficie={superficie === "escura" ? "escura" : "clara"} className="h-11" {...LOGO_CORRIGIDO} />,
-          simbolo: <Logo variante="simbolo" className="h-10" {...LOGO_CORRIGIDO} />,
+          completo: <Logo variante="horizontal" superficie={superficie === "escura" ? "escura" : "clara"} className="h-11" />,
+          simbolo: <Logo variante="simbolo" className="h-10" />,
         }}
         acao={{ rotulo: "Contato", onClick: () => setContato(true) }}
       />

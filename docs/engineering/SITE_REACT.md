@@ -9,11 +9,13 @@
 | App em `apps/site/` (Vite 6 + React 18.3 + Tailwind 4.1.12, as versões do DS e da área restrita) | implementado e testado |
 | HTML pronto de cada página gravado no build (o React assume a página no navegador) | implementado e testado |
 | Mapa de páginas com o lote de cada uma e o estado "previa" ou "publicada" (`apps/site/src/rotas.json`) | implementado e testado |
-| Pasta `ui` inteira do DS sincronizada (`d2aeb40`, com as peças do site pedidas na lista "FALTA NO DS") | implementado |
+| Pasta `ui` inteira do DS sincronizada no app (`0685afb` desde o lote S5, 28/11/2026; antes `d2aeb40`) | implementado; os contornos que o DS corrigiu saíram (seção 9) |
 | Conformidade com o DS (`npm run conformidade`) | zero desvios |
 | Lote S0: app React antigo apagado (cerca de 3.000 linhas sem uso) | feito; o dist ficou igual byte a byte |
 | Lote S7: 404, descadastro e privacidade **publicadas** | feito e testado (seção 6) |
 | Lotes S1 (casca), S2 (Projeto Piloto), S3 (página inicial) e S4 (Rede de Parceiros) **publicados** | feito e testado (seções 6b, 6c e 6d) |
+| Lote S5: cadastro de parceiro **publicado**; autorizar galeria continua em HTML (FALTA NO DS: `RecorteDeFoto`) | feito e testado (seção 6e) |
+| Lote S6: pesquisa moda Curitiba | não iniciado (seção 9) |
 | Páginas de HTML de hoje | intactas; continuam servidas até cada página ser trocada |
 
 ## 2. Como publicar
@@ -86,7 +88,7 @@ Esforço: P = até 1 dia, M = 2 a 3 dias, G = 4 dias ou mais (sem contar a cria�
 | **S2** | Projeto Piloto | `/projeto-piloto/` | `Selo`, `Heading`, `Button`, `CardDeFrente`, `GradeDeCards`, `Card`, `CurvaSecao`, `Timeline`, `Accordion`, `PartnerCard`, `SidePanel`, campos | — (todas as peças chegaram em `d2aeb40`) | M | **publicada** |
 | **S3** | Início | `/` | `Heading`, `Input`, `Button`, `Carousel`, `SeloSecao` | `CardDeDepoimento`, `CardDeArtigo`, `FaixaDeLogos`, `LinkSaibaMais`, `PilulaDeAcao`, `LuzesDifusas`, estado de envio e de sucesso no `Button` | G | **publicada** (seção 6c) |
 | **S4** | Rede de Parceiros | `/rede-parceiros/` | `Selo`, `Heading`, `AvatarCircles`, `Button`, `Tabs`/`ToggleGroup`, `Carousel`, `Accordion`, `PartnerCard`, `SidePanel` | `ListaDePilares`, `CartaoFlutuante`, `LinkSaibaMais`, `Simulacao`/`CursorDeDemonstracao`, `Quadro`, `CardDeParceiro`, diagrama do ecossistema | G | **publicada** (seção 6d) |
-| **S5** | Cadastro de parceiro + autorizar galeria | `/rede-parceiros/cadastro/`, `/rede-parceiros/galeria/autorizar/` | `Input`, `Select`, `Checkbox`, `RadioGroup`, `Textarea`, `Label`, `Collapsible`, `Dialog`, `Upload`, `Alert`, `Card` | `Stepper` e o cadastro em etapas (`MolduraDoCadastro`, `EtapaDoCadastro`, `BarraDaEtapa`, `ListaDeRevisao`, `LinhaDeDado`), `Campo` (rótulo + ajuda + erro), `CampoDeEmail`, `CampoEstadoCidade`, máscaras de telefone e CNPJ, `EstadoFinal` | G | planejado |
+| **S5** | Cadastro de parceiro + autorizar galeria | `/rede-parceiros/cadastro/`, `/rede-parceiros/galeria/autorizar/` | `Input`, `Select`, `Checkbox`, `RadioGroup`, `Textarea`, `Label`, `Collapsible`, `Dialog`, `Upload`, `Alert`, `Card` | `RecorteDeFoto` (galeria); campo com prefixo fixo (`https://`); `Confete` (as peças do cadastro chegaram em `d2aeb40`) | G | cadastro **publicado** (seção 6e); autorizar galeria em HTML |
 | **S6** | Pesquisa moda Curitiba | `/pesquisa/moda-curitiba/` | `Card`, `Heading`, `Button`, `RadioGroup`, `Checkbox`, `Textarea`, `Input`, `Progress`, `AlertDialog`, `Dialog` | `PerguntaGuiada`, `EstadoFinal`, cartões selecionáveis | M | planejado |
 | **S7** | Privacidade, descadastro, 404 | `/privacidade/`, `/comunicados/descadastro/`, 404 | `Selo`, `Heading`, `Button`, `Card` (rodapé com divisor), `Alert`, `RodapeSite`, `AvisoCookies`, `BotaoWhatsApp` | `Prosa` (texto longo), `Logo`, `PaginaDeErro`/`EstadoVazio`, links do `RodapeSite` com 44 px no celular | P | **feito**: as três publicadas (privacidade com a `Prosa` desde `d2aeb40`) |
 | **S8** | Apresentação do EI (a versão escolhida) | `/experience-intelligence*` | `Selo`, `SeloSecao`, `Heading`, `Timeline`, `GlassCard`, `Card`, `Accordion`, `Carousel`, `SidePanel` | as de S3 e `Citacao`; antes, a dona do produto escolhe a versão (seção 7) | G | aguarda a escolha |
@@ -158,6 +160,30 @@ Ordem sugerida (junto com a área restrita): S7 (feito) → S1 → S2 → S3 →
 
 **Diferenças em relação ao HTML:** a roda do ecossistema vira etiquetas e cards (sem a animação); as telas da simulação ficam sem campos e botões de mentira e cada etapa mostra uma cena (as 9 telas de antes viram 4); a galeria continua oculta (decisão da Dani de 23/11/2026) e a prévia `?galeria=exemplo` não foi levada; o cadastro abre numa gaveta lateral em vez da janela de tela cheia. Textos, links e eventos: os mesmos (testes `tests/rede-parceiros.test.ts` e `tests/navegador/rede-parceiros.cjs`).
 
+## 6e. Lote S5 (cadastro de parceiro): componentes do DS em cada peça (DS `0685afb`)
+
+| Peça | Componente do DS |
+|---|---|
+| Moldura e etapas | `MolduraDoCadastro` com o `Stepper` (9 etapas; sem espaço para os nomes, "Etapa N de 9 · nome"; etapas feitas reabrem) |
+| Cada etapa | `EtapaDoCadastro` (título com foco a cada troca, "Campos marcados com * são obrigatórios.", erro geral e `ResumoDeErros` com 2 erros ou mais), `BarraDaEtapa` (Voltar e Próxima; Enviar cadastro com "Enviando…") |
+| Texto, e-mail, telefone, link, parágrafo | `Campo`, `CampoDeEmail` (sugestão de domínio), `CampoDeTelefone` (máscara), `Textarea`; ajuda em lista com a `Prosa` |
+| Estado e cidade | `CampoEstadoCidade` (cidades de `/data/municipios/<UF>.json`, a mesma falha de antes) |
+| Escolha única | `GrupoDeCartoesDeEscolha` + `CartaoDeEscolha` (duas colunas quando as opções são curtas) |
+| Várias escolhas | `Checkbox` + `Label`; setores com `GrupoDeChipsFiltraveis`; áreas e ferramentas por categoria no `Accordion` (`manterNoHtml`) com a contagem num `Badge` |
+| "Outro" | `Input` "Qual? Escreva aqui" (abre e recebe o foco ao marcar) |
+| Listas e idiomas | `Input`, `Select` (nível), `Button` (remover e "Adicionar item"/"Adicionar idioma") |
+| Autorizações | `Checkbox`, `Collapsible` ("O que estou autorizando"), `Prosa` com o e-mail em `email_off` |
+| Grupo do WhatsApp | `Alert` informativo com o link |
+| Rascunho recuperado | `Alert` com "Começar do zero" |
+| Telas finais (boas-vindas, PJ, privacidade) | `EstadoFinal` com `Prosa`, `Avatar` e "Fechar" (manda `dm-fechar-cadastro`) |
+| Aberto direto pelo endereço | `Heading` e "Fechar cadastro" (`Button` de ícone), `AvisoCookies` |
+
+**Mesmo comportamento** (testes `tests/rede-parceiros-cadastro.test.ts` e `tests/navegador/rede-parceiros-cadastro.cjs`): as 40 perguntas iguais às do script de antes (o teste roda o script original e compara), as mesmas mensagens de erro, a consulta `email_ja_cadastrado` ao sair do campo e o 409 no envio, a linha da tabela `cadastros` no mesmo formato (inclusive `consentimento_texto`, `outros`, `galeria_aceite_cadastro`), o rascunho `dm-parceiros-rascunho` no mesmo formato, o fim "PJ" na etapa 2, o evento `cadastro_parceiro` e o Esc pedindo à Rede de Parceiros para fechar a gaveta (`dm-fechar-cadastro`; fora de uma lista aberta do `Select`).
+
+**Diferenças em relação ao HTML:** o cabeçalho próprio da janela (título, X e barra de progresso) sai, porque a gaveta já tem título e X; o progresso vira o `Stepper`. "Seção N" dá lugar ao número da etapa. A introdução (passo 0) não foi levada: ela nunca aparecia, porque a página sempre abria na etapa 1 (`show(EMBUTIDO ? 1 : 0)` com `embutido` sempre ligado); os textos dela já estão na Rede de Parceiros. A ajuda fica embaixo do campo (regra do `Campo`). O link fica sem o prefixo "https://" desenhado (o valor gravado continua com ele). A política abre em nova aba, sem a janela. Sem o confete. Nas telas finais, o botão "Fechar" (antes só o X). A gaveta da Rede de Parceiros passou a alinhar o formulário à borda do título.
+
+**Autorizar galeria** (`/rede-parceiros/galeria/autorizar/`, `functions/v1/galeria-autorizacao`): continua em HTML. Falta no DS o `RecorteDeFoto` (especificação: escolher a imagem com o `UploadDropzone`; área quadrada com máscara circular sobre o fundo `bg-sobreposicao`; arrastar com o dedo ou o mouse e mover com as setas do teclado; zoom de 1 a 3 com o `Slider`; "Usar esta foto" e "Cancelar"; devolve um `Blob` 600 x 600 px recortado no aparelho, sem os dados da foto; textos "Arraste a foto para enquadrar o rosto no círculo e use o zoom se precisar."; respeita "menos movimento"). A galeria continua oculta (decisão da Dani de 23/11/2026).
+
 ## 7. Páginas de apresentação do EI: três versões (decisão da dona do produto pendente)
 
 Todas privadas (`noindex`, login de administrador pelas funções `functions/experience-intelligence*/_middleware.js`). Nenhuma página pública tem link para elas.
@@ -180,11 +206,15 @@ Em `apps/site/`:
 
 ## 9. Riscos e pendências
 
+- **Contornos retirados com o DS `0685afb` (lote S5):** `LOGO_CORRIGIDO` (o `Logo` já desenha com evenodd), as respostas do `Accordion` mantidas no HTML à mão (agora `AccordionContent manterNoHtml`) e o link "Pular para o conteúdo" feito no site (agora `LinkPularConteudo`).
+- **Lacunas do DS achadas no lote S5:** `Label`/`Campo` são flex e, com rótulo longo, o asterisco de obrigatório vai para a ponta direita (o cadastro passa o texto e o asterisco num só bloco); falta campo com prefixo fixo (`https://`); falta `RecorteDeFoto` (seção 6e); falta um efeito de comemoração (`Confete`), opcional.
+- **Lote S6 (pesquisa) não feito:** a página tem perguntas de classificação, busca de bairro por regional numa janela, identificação antes das perguntas, conferência de participação, progresso no servidor e indicação por redes. Ficou para o próximo lote.
+
 - **Build do site depende do app** (como na área restrita): se ele não compilar, o site não publica. O workflow do DS testa o app antes do PR.
 - **Duas instalações de dependências** no build (área restrita e site, as mesmas versões): mais tempo de build. Otimização futura: um pacote só para os dois apps.
 - **Duas versões das peças comuns** durante a migração (HTML com `analytics.js`/`whatsapp.js`, React com `AvisoCookies`/`BotaoWhatsApp`), com a mesma chave de cookies: a escolha vale nas duas.
 - **Lacunas do DS** que seguram páginas: seção 5 (coluna FALTA NO DS). Nenhuma peça foi feita à mão no app.
-- **Botão de 44 px no celular:** o `Button` padrão do DS ainda tem 40 px; as páginas usam `size="lg"` (44 px). Os links do `RodapeSite` têm 24 px (passa no WCAG 2.5.8, fica abaixo dos 44 px da regra da dona do produto).
+- **Botão de 44 px no celular:** desde o DS `0685afb`, o `Button` tem 44 px no celular e em telas de toque (`max-sm:`/`pointer-coarse:`), conferido no app; as páginas continuam com `size="lg"` onde o desenho pede o botão maior. Os links do `RodapeSite` têm 24 px (passa no WCAG 2.5.8, fica abaixo dos 44 px da regra da dona do produto).
 - **Lacunas do DS achadas no lote S3** (contornadas no site, sem editar o DS):
   - `AvisoProjeto`: o `<style>` dentro do componente tem aspas, que o servidor grava escapadas, e a hidratação falha. O site monta o aviso só no navegador (ele já aparecia 0,6 s depois). Correção no DS: mover o CSS para o `theme.css`/classes ou usar `dangerouslySetInnerHTML`.
   - `FaixaDeLogos`: falta um tom "silhueta" para logos coloridos ou com partes brancas (somem no fundo claro). O site passa `brightness-0` e opacidade pelos `className` das imagens, como o filtro da página de HTML.
