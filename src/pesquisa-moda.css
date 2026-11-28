@@ -307,17 +307,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-aceite-q.pq-invalido .pq-caixa { border-width: 2px; background: var(--pq-erro-fundo); box-shadow: 0 0 0 3px color-mix(in srgb, var(--error) 14%, transparent); }
 .pq-perfil-campo.pq-invalido .pq-select, .pq-perfil-campo.pq-invalido .pq-escolher { border-width: 2px; background-color: var(--pq-erro-fundo); }
 .pq-linha.pq-faltando, .pq-aspecto.pq-faltando { background: var(--pq-erro-fundo); }
-/* aviso colado aos botões: sempre à vista, diz o que falta e leva até o campo */
-.pq-falta { position: absolute; left: 0; right: 0; bottom: calc(100% + 10px); z-index: 2; }
-.pq-falta-ir { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 10px 14px; border: 1.5px solid var(--pq-erro); border-radius: 14px; background: var(--error-muted);
-  color: var(--error-text); font: inherit; font-size: 14px; font-weight: 600; line-height: 1.4; text-align: left; cursor: pointer; box-shadow: 0 10px 28px -12px color-mix(in srgb, var(--error) 45%, transparent); }
-.pq-falta-ic { flex: none; width: 22px; height: 22px; border-radius: 999px; background: var(--pq-erro); color: var(--primary-foreground); font-size: 13px; font-weight: 800; display: grid; place-items: center; }
-.pq-falta-ir > span:nth-child(2) { flex: 1; min-width: 0; }
-.pq-falta-ver { flex: none; font-size: 13px; font-weight: 700; color: var(--pq-erro-texto); text-decoration: underline; text-underline-offset: 3px; }
-.pq-falta-ir:focus-visible { outline: 3px solid color-mix(in srgb, var(--error) 40%, transparent); outline-offset: 2px; }
-.pq-falta-entra { animation: pq-falta-entra .35s var(--pq-ease) both; }
-@keyframes pq-falta-entra { 0% { opacity: 0; transform: translateY(10px); } 60% { opacity: 1; transform: translateY(-2px); } 100% { transform: none; } }
-@media (prefers-reduced-motion: reduce) { .pq-falta-entra, .pq-erro { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .pq-erro { animation: none; } }
 .pq-campo .pq-erro { margin-top: 0; }
 /* só o que ainda falta fica em vermelho: em perguntas com vários itens (notas e grade), cada item sai do vermelho assim que é respondido */
 .pq-etapa.pq-invalido:not(:has(.pq-linha, .pq-aspecto)) .pq-op:not(:has(input:checked)), .pq-linha.pq-faltando .pq-op:not(:has(input:checked)) { border-color: color-mix(in srgb, var(--error) 60%, transparent); background: var(--pq-erro-fundo); }

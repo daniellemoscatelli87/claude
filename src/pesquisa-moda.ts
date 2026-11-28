@@ -619,27 +619,35 @@ function erroCampo(i: HTMLInputElement, msg: string) {
   i.closest('.pq-campo')?.classList.toggle('pq-invalido', !!msg);
 }
 
-/* ---------- Aviso de campo faltando ----------
-   Além da mensagem junto ao campo, um aviso aparece colado aos botões (sempre à vista, mesmo com a tela rolada):
-   diz o que falta e, ao tocar, leva até o campo. Some assim que a pessoa começa a corrigir ou muda de etapa. */
-let alvoFalta: HTMLElement | null = null;
-// mensagem única para qualquer campo faltando (o detalhe fica junto de cada campo); erros do servidor trazem o próprio texto
-const FALTA_MSG = 'Preencha os campos em vermelho para prosseguir.';
-function avisarFalta(alvo: HTMLElement | null, msg = FALTA_MSG) {
-  const box = $('pq-falta'), txt = $('pq-falta-txt');
-  txt.textContent = msg; alvoFalta = alvo;
-  box.hidden = false;
-  if (!reduzir) { box.classList.remove('pq-falta-entra'); void box.offsetWidth; box.classList.add('pq-falta-entra'); }
-  if (alvo) alvo.scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' });
+/* ---------- Campo faltando ----------
+   Ao tentar seguir com erro, a tela rola até o primeiro campo com erro e o foco vai para ele (sem rolagem suave com
+   "menos movimento"). Cada campo mostra a própria mensagem; não há aviso flutuante sobre os campos (pedido da dona do
+   produto, 28/11/2026). Para leitores de tela, a quantidade de campos a corrigir é anunciada numa região invisível. */
+const CONTROLES = 'input:not([type=hidden]), select, textarea, button';
+const visivel = (x: HTMLElement) => !!(x.offsetParent || x.getClientRects().length) && getComputedStyle(x).visibility !== 'hidden';
+function avisarFalta(alvo: HTMLElement | null, msg?: string) {
+  const etapa = alvo?.closest<HTMLElement>('.pq-etapa') ?? null;
+  const n = etapa ? [...etapa.querySelectorAll<HTMLElement>('.pq-erro')].filter((e) => !e.hidden && visivel(e)).length : 0;
+  anunciar(msg ?? (n > 1 ? `Confira ${n} campos marcados em vermelho.` : 'Confira o campo marcado em vermelho.'));
+  if (!alvo) return;
+  const lista = alvo.matches(CONTROLES) ? [alvo] : [...alvo.querySelectorAll<HTMLElement>(CONTROLES), ...(etapa?.querySelectorAll<HTMLElement>(CONTROLES) ?? [])];
+  const campo = lista.find(visivel);
+  const caixa = campo?.closest<HTMLElement>('.pq-campo, .pq-perfil-campo, .pq-aspecto, .pq-linha, .pq-op, .pq-chip') ?? alvo;
+  caixa.scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' });
+  campo?.focus({ preventScroll: true });
 }
-function esconderFalta() { const box = document.getElementById('pq-falta'); if (box) box.hidden = true; alvoFalta = null; }
+function anunciar(texto: string) {
+  const r = $('pq-falta'); r.textContent = '';
+  requestAnimationFrame(() => { r.textContent = texto; });
+}
+function esconderFalta() { const r = document.getElementById('pq-falta'); if (r) r.textContent = ''; }
 
 /* ---------- Validação de cada etapa ---------- */
 function mostrarErro(fs: HTMLElement, msg: string, avisoProprio = false) {
   const e = $(fs.id + '-erro'); e.textContent = msg; e.hidden = false;
   fs.classList.add('pq-invalido'); fs.setAttribute('aria-invalid', 'true');
   if (!reduzir) { fs.classList.remove('pq-treme'); void fs.offsetWidth; fs.classList.add('pq-treme'); }
-  avisarFalta(e, avisoProprio ? msg : FALTA_MSG);
+  avisarFalta(e, avisoProprio ? msg : undefined);
 }
 function limparErro(fs: HTMLElement) {
   const e = $(fs.id + '-erro'); if (e) { e.hidden = true; e.textContent = ''; }
@@ -1025,15 +1033,6 @@ function iniciar() {
     if (E.etapa === ETAPA_ID) { E.etapa = -1; salvar(); mostrarTela('pq-intro'); $('pq-comecar').focus(); return; }
     if (E.etapa <= 0) { irPara(ETAPA_ID, true); return; }
     irPara(anterior(E.etapa), true);
-  });
-  $('pq-falta-ir').addEventListener('click', () => {
-    if (!alvoFalta) return;
-    alvoFalta.scrollIntoView({ block: 'center', behavior: reduzir ? 'auto' : 'smooth' });
-    // primeiro campo visível do trecho com problema (no celular e no computador os controles podem ser diferentes)
-    const sel = 'input:not([type=hidden]), select, textarea, button';
-    const visivel = (x: HTMLElement) => !!(x.offsetParent || x.getClientRects().length) && getComputedStyle(x).visibility !== 'hidden';
-    const lista = alvoFalta.matches(sel) ? [alvoFalta] : [...alvoFalta.querySelectorAll<HTMLElement>(sel), ...(alvoFalta.closest('.pq-etapa')?.querySelectorAll<HTMLElement>(sel) ?? [])];
-    lista.find(visivel)?.focus({ preventScroll: true });
   });
   // começou a corrigir: o aviso some (a mensagem junto ao campo some quando ele fica certo)
   ['input', 'change'].forEach((t) => $('pq-etapas').addEventListener(t, () => esconderFalta()));
