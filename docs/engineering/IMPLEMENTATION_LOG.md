@@ -6,6 +6,12 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Projeto Piloto: novo título em "Para sua empresa"
+
+- **Status:** feito e testado; publicado pelo pull request da branch `claude/piloto-texto-clareza`.
+- **O que mudou (pedido da dona do produto):** no bloco "Para sua empresa", o título "Mais clareza para evoluir." passa a "Mais clareza para tomar decisões que impulsionam seu negócio.". Só essa frase muda. Arquivos: `projeto-piloto/index.html` (a página no ar), `apps/site/src/paginas/projeto-piloto/conteudo.tsx` (a prévia em React) e `apps/site/tests/referencia/projeto-piloto.html` (a referência dos testes de textos).
+- **Testes executados:** build da raiz (passou); `apps/site`: typecheck, 62 testes e conformidade em zero; conferido no ar em 390 e 1280 px.
+
 ## 2026-11-28 · Aba "Saiba mais" branca em todas as páginas (D-064)
 
 - **Status:** corrigido e testado; publicado pelo pull request da branch `claude/site-aba-saiba-mais`.

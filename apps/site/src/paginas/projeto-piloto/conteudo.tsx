@@ -11,7 +11,7 @@ export const PILARES = [
 export const LADOS = [
   {
     rotulo: "Para sua empresa",
-    titulo: "Mais clareza para evoluir.",
+    titulo: "Mais clareza para tomar decisões que impulsionam seu negócio.",
     itens: ["Diagnóstico especializado", "Identificação de fricções e oportunidades", "Recomendações priorizadas para decisões e melhorias concretas"],
   },
   {
