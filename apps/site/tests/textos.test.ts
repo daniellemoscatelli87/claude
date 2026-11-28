@@ -44,18 +44,20 @@ describe("mesmos textos", () => {
     // os e-mails continuam fora da ofuscação do Cloudflare
     expect(novo.match(/<!--email_off-->/g)?.length).toBe(4);
   });
-  it("404: os mesmos textos e o mesmo link (\"Erro 404\" vai para leitores de tela; o título vem antes)", () => {
-    const novo = texto(renderizar("erro-404"));
+  it("404: os mesmos textos e o mesmo link, no card da PaginaDeErro abaixo do cabeçalho (D-064)", () => {
+    const novo = renderizar("erro-404");
+    const card = texto(trecho(novo, /<main[^>]*data-slot="pagina-de-erro"[^>]*>/, "</main>"));
     expect(texto(trecho(antes("erro-404"), /<main>/, "</main>"))).toBe("Erro 404 Página não encontrada O endereço pode ter mudado ou não existe mais. Ir para a página inicial");
-    expect(novo).toBe("Página não encontrada Erro 404. O endereço pode ter mudado ou não existe mais. Ir para a página inicial");
-    expect(renderizar("erro-404")).toContain('href="/"');
+    expect(card).toBe("Erro 404 Página não encontrada O endereço pode ter mudado ou não existe mais. Ir para a página inicial");
+    expect(novo).toContain('data-moldura="card"');
+    expect(novo).toContain('data-slot="cabecalho-do-site"');
+    expect(novo).toContain('href="/"');
   });
-  it("Descadastro: os mesmos textos ao abrir (o botão só liga depois de conferir o link)", () => {
+  it("Descadastro: antes de ler o código do link, nem formulário nem botão desligado (D-064)", () => {
     const novo = renderizar("descadastro");
-    const pedir = texto(trecho(antes("descadastro"), /<section id="pedir">/, "</section>"));
-    expect(pedir).toMatch(/^Deixar de receber comunicados Confirme .+ Confirmar$/);
-    expect(texto(novo)).toBe(pedir);
-    expect(novo).toMatch(/<button[^>]*disabled/);
-    expect(novo).toContain('aria-label="Ir para a página inicial"');
+    expect(texto(trecho(antes("descadastro"), /<section id="pedir">/, "</section>"))).toMatch(/^Deixar de receber comunicados Confirme .+ Confirmar$/);
+    expect(novo).toContain('aria-busy="true"');
+    expect(novo).not.toMatch(/<button[^>]*disabled/);
+    expect(novo).not.toContain("Confirmar");
   });
 });

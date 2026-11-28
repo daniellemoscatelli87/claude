@@ -2,7 +2,7 @@
 
 > Decisão de 27/11/2026 (D-053): o site público do estúdio (início, Projeto Piloto, Rede de Parceiros, cadastro, galeria, pesquisa, privacidade, descadastro, 404 e as páginas de apresentação do EI) passa a ser refeito em React, página por página, com os componentes reais do Design System Dani Moscatelli, como a área restrita (D-051, `docs/engineering/ADMIN_REACT.md`). Endereços, textos, cabeça (título, descrição, canonical, compartilhamento) e comportamento continuam os mesmos. A dona do produto delegou a escolha de como o site consome o DS.
 
-> **Correção de 28/11/2026 (D-064):** a dona do produto pediu que as páginas originais não mudassem de estrutura: o trabalho era só identificar o que não está no DS e componentizar no DS. A página inicial, o Projeto Piloto, a Rede de Parceiros com o cadastro, a pesquisa de moda e a página de autorizar a galeria voltam às páginas de HTML de antes; só as **cores** (tokens do DS) e os **cards** (só borda, sem sombra parada) seguem o DS. As versões em React ficam só como prévia. Situação (28/11/2026): **pesquisa de moda, página inicial, Projeto Piloto e Rede de Parceiros com o cadastro de volta** (HTML original com as cores e os cards do DS); todas de volta, com a página de autorizar a galeria. Exceção de cor: ícones de marcas (WhatsApp, Facebook, LinkedIn, Instagram) nas cores oficiais. O descadastro continua em React, com o conteúdo centralizado como no original. Como as cores chegam: seção 3.7.
+> **Correção de 28/11/2026 (D-064):** a dona do produto pediu que as páginas originais não mudassem de estrutura: o trabalho era só identificar o que não está no DS e componentizar no DS. A página inicial, o Projeto Piloto, a Rede de Parceiros com o cadastro, a pesquisa de moda e a página de autorizar a galeria voltam às páginas de HTML de antes; só as **cores** (tokens do DS) e os **cards** (só borda, sem sombra parada) seguem o DS. As versões em React ficam só como prévia. Situação (28/11/2026): **pesquisa de moda, página inicial, Projeto Piloto e Rede de Parceiros com o cadastro de volta** (HTML original com as cores e os cards do DS); todas de volta, com a página de autorizar a galeria. Exceção de cor: ícones de marcas (WhatsApp, Facebook, LinkedIn, Instagram) nas cores oficiais. O descadastro continua em React, com o conteúdo centralizado como no original. A 404 é o card da `PaginaDeErro` abaixo do cabeçalho (DS `4bbaaca`), e os links de e-mail sem código válido mostram esse mesmo conteúdo. Como as cores chegam: seção 3.7.
 
 ## 1. Situação em 27/11/2026
 
@@ -11,7 +11,7 @@
 | App em `apps/site/` (Vite 6 + React 18.3 + Tailwind 4.1.12, as versões do DS e da área restrita) | implementado e testado |
 | HTML pronto de cada página gravado no build (o React assume a página no navegador) | implementado e testado |
 | Mapa de páginas com o lote de cada uma e o estado "previa" ou "publicada" (`apps/site/src/rotas.json`) | implementado e testado |
-| Pasta `ui` inteira do DS sincronizada no app (`27ff621` desde 28/11/2026; antes `0685afb` e `d2aeb40`) | implementado; os contornos que o DS corrigiu saíram (seção 9) |
+| Pasta `ui` inteira do DS sincronizada no app (`4bbaaca` desde 28/11/2026; antes `27ff621`, `0685afb` e `d2aeb40`) | implementado; os contornos que o DS corrigiu saíram (seção 9) |
 | Conformidade com o DS (`npm run conformidade`) | zero desvios |
 | Lote S0: app React antigo apagado (cerca de 3.000 linhas sem uso) | feito; o dist ficou igual byte a byte |
 | Lote S7: 404, descadastro e privacidade **publicadas** | feito e testado (seção 6) |

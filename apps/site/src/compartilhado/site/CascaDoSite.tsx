@@ -23,7 +23,8 @@ const LINKS_DO_RODAPE = [
 ];
 
 export type CascaDoSiteProps = {
-  atual: PaginaDoMenu;
+  /** Item do menu da página atual (nenhum na 404). */
+  atual?: PaginaDoMenu;
   /** Fundo atrás do cabeçalho no topo da página (foto ou fundo escuro: "escura"). */
   superficie?: "clara" | "escura";
   /** "fixed": o cabeçalho fica por cima do hero (foto de ponta a ponta); "sticky": no fluxo da página. */

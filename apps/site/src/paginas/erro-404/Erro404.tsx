@@ -1,26 +1,33 @@
-// Página 404 (public/404.html), em React com o DS (D-053, lote S7). Mesmos textos e o mesmo link.
-// Peças do DS: Logo (link para o início), PaginaDeErro (código, título, texto e ação), Button.
+// Página 404 (decisão da dona do produto, 28/11/2026): o card branco da PaginaDeErro do DS (moldura="card"), a uma
+// distância padrão abaixo do cabeçalho do site (--espaco-abaixo-do-cabecalho), com o cabeçalho, o rodapé e as peças
+// de todas as páginas (CascaDoSite). O mesmo conteúdo aparece quando um link de e-mail chega sem código válido
+// (descadastro e autorizar galeria): sem formulário e sem botão desligado.
+// Peças do DS: CabecalhoDoSite e RodapeSite (CascaDoSite), PaginaDeErro (selo "Erro 404", título, texto e ação), Button.
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/ui/logo";
 import { PaginaDeErro } from "@/components/ui/estado-vazio";
-import { NOME_DO_ESTUDIO } from "@/compartilhado/marca";
+import { CascaDoSite } from "@/compartilhado/site/CascaDoSite";
 
-export function Erro404() {
+/** Só o card da 404 (para usar dentro de uma página que já tem a casca). */
+export function ConteudoDoErro404() {
   return (
     <PaginaDeErro
-      className="bg-background"
-      ilustracao={<Logo rotulo={NOME_DO_ESTUDIO} className="mx-auto h-14" />}
+      moldura="card"
+      codigo="404"
       titulo="Página não encontrada"
-      descricao={
-        <>
-          <span className="sr-only">Erro 404. </span>O endereço pode ter mudado ou não existe mais.
-        </>
-      }
+      descricao="O endereço pode ter mudado ou não existe mais."
       acoes={
         <Button asChild size="lg">
           <a href="/">Ir para a página inicial</a>
         </Button>
       }
     />
+  );
+}
+
+export function Erro404() {
+  return (
+    <CascaDoSite rodape="compacto">
+      <ConteudoDoErro404 />
+    </CascaDoSite>
   );
 }
