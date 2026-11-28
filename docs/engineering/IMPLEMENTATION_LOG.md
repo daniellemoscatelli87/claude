@@ -6,6 +6,18 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Pesquisa de moda: volta a página original, com as cores e os cards do DS (D-064)
+
+- **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-pesquisa-original`.
+- **O que mudou:** `/pesquisa/moda-curitiba/` volta a ser a página de HTML de antes do PR #268 (estrutura, textos, comportamento e animações iguais); só as cores passam aos tokens do DS e os cards ficam só com borda. A versão em React fica como prévia (`/site/previa/pesquisa/moda-curitiba/`).
+- **Arquivos:** do commit `5d5eeb9` (antes do #268): `pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.ts`, `src/pesquisa-moda.css`, `vite.config.ts`, `tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`, `package.json`, `package-lock.json` (o build de HTML da raiz volta: `tsc -b && vite build`); sai `scripts/copiar-public.mjs`. Depois: `vite.config.ts` com o módulo `virtual:cores-ds.css` (variáveis de cor do `apps/site/src/styles/theme.css`), `src/pesquisa-moda.css` (cores por token; sem a sombra parada em `.pq-intro`, `.pq-fim`, `.pq-porque` e na opção marcada), `src/pesquisa-moda.ts` (importa as cores; confete com as cores do `Confete` do DS), `theme-color` com o `--background` do DS; `apps/site/src/rotas.json` (`pesquisa-moda: previa`).
+- **Testes executados:**
+  - `npm run build` da raiz (passou); `comparar` do dist contra o build do `main` (`96133a6`): só mudam `pesquisa/moda-curitiba/index.html` e `assets/` (os arquivos da pesquisa); todo o resto igual byte a byte;
+  - `apps/site`: `npm run typecheck` (sem erros), `npm test` (62 passaram), `npm run conformidade` (zero desvios);
+  - fidelidade: capturas de página inteira, com movimento reduzido, em 390, 768, 1024 e 1280 px, de 9 estados (apresentação, identificação, classificação da pergunta 2, notas da pergunta 4, texto aberto, telas finais de obrigada, sem compras, encerrada e fora do ar), contra o build de antes do #268 (`5d5eeb9`): nas 36 capturas, a mesma altura de página, os mesmos elementos nas mesmas posições e tamanhos e os mesmos estilos fora a cor; as únicas outras diferenças são as sombras paradas tiradas dos 4 cards (regra dos cards). Os pixels mudam (45% a 90%) por causa das cores, a maior parte pelo fundo da página (`#F6F7FA` para o `--background` `#EDF0F5`);
+  - fluxo com a função `pesquisa` simulada (nada real enviado; qualquer outra chamada ao Supabase bloqueada): `status`, identificação com a máscara do WhatsApp, `verificar`, "Não" na pergunta 1 encerrando com `enviar`, rascunho retomado na etapa salva, envio final com relato e novidades, `parcial`, respostas 409 (já participou) e 410 (fora do ar), erro do servidor com as respostas mantidas; sem erros no console. Passou nas duas versões (antes e agora).
+- **Pendências:** as outras páginas originais (início, Projeto Piloto, Rede de Parceiros e cadastro, autorizar galeria) no próximo pull request; a lista do que a pesquisa tem fora do DS vai para a dona do produto decidir.
+
 ## 2026-11-28 · Pesquisa de moda: Voltar e Continuar seguem o conteúdo (D-053)
 
 - **Status:** corrigido e testado; publicado pelo pull request da branch `claude/site-pesquisa-barra`.

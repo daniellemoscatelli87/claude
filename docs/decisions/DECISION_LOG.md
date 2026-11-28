@@ -637,6 +637,20 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **DS `0685afb` no mesmo lote (28/11/2026):** a área restrita e o site em React sincronizados com o DS `0685afb` (o app Experience Intelligence fica fora). Com ele, o Contato recupera o que a D-055 tinha deixado de fora: sugestões de endereço da reunião presencial (`CampoDeEndereco` com `buscaNoPhoton`, a mesma busca da página de HTML: Photon/komoot, 5 resultados, perto de Curitiba, só Brasil), anexos por arrastar e soltar (`UploadDropzone` acessível), data da reunião no `Popover` (o `Button` do DS passou a repassar a ref) e as datas embaixo das etapas no `Stepper` (`detalhe`), no lugar da linha separada.
 - **Voltar atrás:** trocar `"publicada"` por `"previa"` no `rotas.json` e restaurar do histórico do git as páginas de HTML, `admin.css`, `admin.js`, `form-parceiros.js` e `public/design-system/theme.css` (commit anterior a este lote).
 
+## D-064 · 28/11/2026 · Páginas originais do site voltam com a estrutura de antes; só as cores e os cards seguem o DS (site)
+
+- **Origem:** correção pedida pela dona do produto em 28/11/2026: "A home de dani moscatelli, projeto piloto, rede parceiros e às paginas intelligence experience 1, 2 e 3 não eram pra mudar a nível estrutural. Era só pra identificar o que não estava no DS e levar pra lá ou componentizar." Depois ela incluiu a pesquisa de moda e a página de autorizar a galeria, e definiu: "Única coisa que não precisa voltar é configuração de cor, card (com borda / sem borda / sombra), mas todo o resto volta."
+- **Decisão:**
+  - a página inicial (`/`), o Projeto Piloto, a Rede de Parceiros com o cadastro de parceiro, a pesquisa de moda (`/pesquisa/moda-curitiba/`) e a página de autorizar a galeria voltam às páginas originais em HTML, como eram antes da troca para React (PRs #258 a #269): estrutura, seções, componentes, tipografia, botões em pílula, ícones, espaçamentos, comportamento, animações e o jeito de abrir os formulários;
+  - só duas coisas seguem o DS atual: as **cores** (tokens de cor do DS Dani Moscatelli, lidos do `theme.css` sincronizado, sem copiar valores à mão) e os **cards** (só com borda, sem sombra parada);
+  - as versões em React dessas páginas ficam no repositório só como prévia (`/site/previa/...`, sem indexação), no `apps/site/src/rotas.json`;
+  - as três apresentações do EI (`/experience-intelligence/`, `-2/`, `-3/`) não mudaram e continuam como estão;
+  - o trabalho para essas páginas passa a ser: **identificar o que não está no DS e componentizar no DS, sem mudar as páginas**. A lista, página por página, vai para a dona do produto decidir o que entra no DS.
+- **Como as cores chegam:** o `vite.config.ts` da raiz lê `apps/site/src/styles/theme.css` (cópia sincronizada do DS, nunca editada no site) e entrega às páginas só as variáveis de cor do tema claro (`import 'virtual:cores-ds.css'`). Fontes, raios, sombras e tamanhos do DS ficam de fora, para não mudar o resto. Cada cor escrita à mão vira o token do mesmo papel (o vermelho antigo `#D44D4D` vira `--primary`, o cinza de texto `#627288` vira `--muted-foreground`, erros viram `--error`/`--error-text`/`--error-muted`, fundo da página `--background`) ou o token mais próximo; transparências com `color-mix`. Exceção: o verde do WhatsApp (exceção do próprio DS).
+- **Ordem:** a pesquisa de moda primeiro, num pull request próprio (prioridade da dona do produto); depois as outras páginas.
+- **Trade-offs:** volta o build de HTML da raiz (Vite 8 e Tailwind 4.3, além dos dois apps em React); as páginas originais não usam componentes do DS (só as cores), até a dona do produto decidir o que vai para o DS; o React feito para elas fica parado como prévia.
+- **Voltar atrás:** trocar `"previa"` por `"publicada"` no `rotas.json` (o build volta a pôr a versão em React no endereço).
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:
