@@ -6,6 +6,13 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Site em React: pesquisa de moda publicada (S6, D-053)
+
+- **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-ds-s6-react`. O HTML de antes (`pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.ts`/`.css`) sai num commit seguinte, depois de conferido no ar.
+- **Arquivos:** `apps/site/src/paginas/pesquisa-moda/{logica.ts,Perguntas.tsx,PesquisaModa.tsx,entrada.tsx}`, `apps/site/src/paginas/registro.ts`, `apps/site/src/rotas.json` (`pesquisa-moda: publicada`), `apps/site/tests/navegador/pesquisa-moda.cjs`.
+- **Testes executados:** `npm run typecheck` (sem erros), `npm test` (61 passaram, inclusive a cabeça igual à da página de HTML), `npm run conformidade` (zero), build da raiz; `comparar-dist` contra o build do `main` de antes do DS `27ff621`: 267 arquivos iguais; as diferenças são o app do site, as páginas publicadas e o app da área restrita (a sincronização do DS do pull request anterior). No navegador: `pesquisa-moda.cjs` (participação completa com os mesmos corpos nas duas versões, rascunho, encerramento, 409, fora do ar, mensagens, axe, 44 px e bordas em 390, 768, 1024 e 1280 px, na prévia e no endereço publicado) e `paginas.cjs`, todos passaram.
+- **Pendências:** lacunas do DS: `CabecalhoDoSite` sem itens mostra o Menu no celular; `CommandDialog` com o título fora da janela.
+
 ## 2026-11-28 · Site e área restrita no DS `27ff621`: contornos retirados, roda do ecossistema, campos da simulação, confete, "https://" e janela da política (D-053)
 
 - **Status:** implementado e testado; publicado pelo pull request desta branch (`claude/site-ds-sync-27ff621`).
