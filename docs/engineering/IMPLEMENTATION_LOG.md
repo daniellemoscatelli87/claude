@@ -6,6 +6,19 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Aba "Saiba mais" branca em todas as páginas (D-064)
+
+- **Status:** corrigido e testado; publicado pelo pull request da branch `claude/site-aba-saiba-mais`.
+- **Pedido da dona do produto:** a aba "Saiba mais" na base dos heros deve ser branca em todas as páginas. No Projeto Piloto, a aba e o fundo logo abaixo eram `#F6F7FA` no original (quase branco); a troca de cores levou esse tom ao `--background` do DS (`#EDF0F5`), e a aba ficou cinza.
+- **Correção (só no Projeto Piloto, `src/projeto-piloto.css` e `projeto-piloto/index.html`):** passam ao `--card` (branco), para a aba se fundir com a seção de baixo como no original:
+  - a aba (`.rolar-abaixo` e a tampa do celular, de onde a aba do celular copia a cor);
+  - o fundo da página e da divisão abaixo do hero;
+  - o cartão da seção "Uma nova perspectiva" (antes um degradê de `#F6F7FA` a branco);
+  - a curva que liga essa seção à seguinte.
+  
+  No início e na Rede de Parceiros a aba já era branca.
+- **Testes executados:** build da raiz; cor da aba e do que fica logo abaixo dela em 390 e 1280 px nas três páginas: branco (`#FFFFFF`) em todas; capturas da aba antes e depois.
+
 ## 2026-11-28 · Botões do site no celular e no tablet: o topo fixo deixava de cobrir a página (D-064)
 
 - **Status:** corrigido e testado; publicado pelo pull request da branch `claude/site-botoes-celular`.
