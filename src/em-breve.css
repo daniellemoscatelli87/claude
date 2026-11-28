@@ -288,7 +288,7 @@ html body #ie3-home .ih-rec-titulo { font-size: 1.25rem !important; font-weight:
 /* Celular e tablet (Home): os cantos arredondados abaixo do menu são um recorte do topo fixo (e não uma faixa de cor
    fixa), então o conteúdo que passa por baixo aparece com a cor dele */
 @media (max-width: 1023px) {
-  html body .ih-hero { clip-path: none !important;
+  html body .ih-hero { clip-path: inset(0 0 calc(100% - var(--ih-tampa, 100vh) - 28px) 0) !important; /* só para o toque: a máscara desenha os cantos; sem este recorte, o topo fixo cobria os botões da folha no celular e no tablet (o recorte acompanha a tampa, até 28 px abaixo dela, onde a máscara já é transparente) */
     -webkit-mask-image: linear-gradient(#000, #000), radial-gradient(circle at 100% 100%, transparent 27.5px, #000 28px), radial-gradient(circle at 0 100%, transparent 27.5px, #000 28px);
     mask-image: linear-gradient(#000, #000), radial-gradient(circle at 100% 100%, transparent 27.5px, #000 28px), radial-gradient(circle at 0 100%, transparent 27.5px, #000 28px);
     -webkit-mask-size: 100% var(--ih-tampa, 100vh), 28px 28px, 28px 28px; mask-size: 100% var(--ih-tampa, 100vh), 28px 28px, 28px 28px;

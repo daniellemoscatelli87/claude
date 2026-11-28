@@ -6,6 +6,24 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Botões do site no celular e no tablet: o topo fixo deixava de cobrir a página (D-064)
+
+- **Status:** corrigido e testado; publicado pelo pull request da branch `claude/site-botoes-celular`.
+- **Problema (dona do produto: "Botões do site Dani Moscatelli não estão funcionando"):** no celular e no tablet (até 1023 px), na página inicial, no Projeto Piloto e na Rede de Parceiros, o topo com a foto fica fixo (z-index 20) e a folha branca sobe por cima dele. Desde o #174 (antes da troca para React), o recorte do topo era só desenhado por uma máscara, com `clip-path: none`. Para o toque, o topo fixo continuava inteiro por cima da folha. Ficavam sem resposta, por exemplo:
+  - "Notificar lançamento", os artigos, "Acessar Recomendações no LinkedIn" e o rodapé do início;
+  - "Cadastrar minha empresa", o guia e o rodapé do Projeto Piloto;
+  - "Ver simulação", a roda dos setores e o "O que saber" da Rede de Parceiros.
+  
+  Era igual nas páginas originais (teste de toque no build do `155ab15`), por isso a restauração não mudou nada.
+- **Correção:** nas três regras (`html body .ih-hero`, `html body #hero-fundo`, `html body .rp-hero`), o `clip-path` volta a recortar o topo fixo até 28 px abaixo da tampa (`inset(0 0 calc(100% - var(--…-tampa) - 28px) 0)`), como antes do #174. A máscara continua desenhando os cantos, e o recorte só tira o que a máscara já deixava transparente. Capturas antes e depois em 390, 768 e 1280 px, no topo e com a página rolada: iguais (no máximo 5 pixels com 1/255 de diferença de suavização).
+- **Testes executados:**
+  - teste de toque em cada botão, link e campo visível das seis páginas originais, da 404 e do descadastro, em 390, 768, 1024 e 1280 px, também com o menu, a gaveta de contato, a gaveta do Projeto Piloto e a janela do cadastro abertos. Original e agora iguais antes da correção; depois dela, os elementos da folha passam a receber o toque;
+  - cliques de verdade (o navegador recusa se algo cobre) em 390 e 1280: menu e item do menu, "Notificar lançamento" (com o envio), Contato pelo menu e os campos e o envio da gaveta, "Cadastrar minha empresa" e o botão fixo "Cadastrar empresa", "Quero ser parceiro" e o "Próxima" dentro da janela, "Ver simulação", o acordeão, "Começar pesquisa" (também na primeira visita, depois de escolher os cookies). Todos passaram; no original, falhavam "Notificar lançamento", "Acessar Recomendações no LinkedIn" e "Ver simulação" no celular;
+  - build da raiz (passou).
+- **Fica como no original:**
+  - na primeira visita, o aviso de cookies cobre o "Começar pesquisa" no celular até a pessoa escolher;
+  - o balão "Tem um projeto?" pode ficar sobre links do rodapé enquanto aberto (tem o X).
+
 ## 2026-11-28 · DS `22c26c9` no site e na área restrita: botão de contorno sem fundo
 
 - **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-ds-22c26c9`.
