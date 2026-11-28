@@ -4,7 +4,7 @@
    Mobile-first: uma ação principal por tela, opções grandes para o toque, botões fixos no rodapé do celular. */
 :root {
   --pq-red: var(--primary); --pq-red-escuro: var(--primary-hover); --pq-tint: var(--primary-suave); --pq-ink: var(--foreground); --pq-texto: var(--graphite-600); --pq-muted: var(--muted-foreground);
-  --pq-linha: var(--border); --pq-fundo: var(--background); --pq-card: var(--card); --pq-erro: var(--error); --pq-erro-texto: var(--error-text); --pq-erro-fundo: var(--error-muted);
+  --pq-linha: var(--border); --pq-fundo: var(--background); --pq-card: var(--card); --pq-erro: var(--error); --pq-erro-texto: var(--error-text); --pq-campo: var(--input); --pq-erro-fundo: var(--error-muted);
   --pq-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 * { box-sizing: border-box; }
@@ -163,7 +163,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-op:hover { border-color: color-mix(in srgb, var(--primary) 45%, transparent); }
 .pq-op:active { transform: scale(.99); }
 .pq-op input { position: absolute; opacity: 0; pointer-events: none; }
-.pq-marca-op { flex: none; width: 22px; height: 22px; border-radius: 999px; border: 1.5px solid var(--graphite-200); background: var(--card); display: grid; place-items: center; color: var(--primary-foreground);
+.pq-marca-op { flex: none; width: 22px; height: 22px; border-radius: 999px; border: 1.5px solid var(--pq-campo); background: var(--card); display: grid; place-items: center; color: var(--primary-foreground);
   transition: background .2s ease, border-color .2s ease, transform .25s var(--pq-ease); }
 .pq-op input[type=checkbox] + .pq-marca-op { border-radius: 7px; }
 .pq-marca-op svg { width: 13px; height: 13px; opacity: 0; transform: scale(.4); transition: opacity .15s ease, transform .3s var(--pq-ease); }
@@ -183,7 +183,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* Campos de texto */
 .pq-main input[type=text], .pq-main input[type=email], .pq-main input[type=tel], .pq-main textarea {
-  width: 100%; font: inherit; font-size: 16px; color: var(--pq-ink); background: var(--card); border: 1.5px solid var(--pq-linha); border-radius: 12px; padding: 13px 14px;
+  width: 100%; font: inherit; font-size: 16px; color: var(--pq-ink); background: var(--card); border: 1.5px solid var(--pq-campo); border-radius: 12px; padding: 13px 14px;
   transition: border-color .2s ease, box-shadow .2s ease; }
 .pq-main textarea { margin-top: 20px; min-height: 160px; resize: vertical; line-height: 1.55; display: block; }
 .pq-main input:focus, .pq-main textarea:focus { outline: none; border-color: var(--pq-red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 14%, transparent); }
@@ -206,7 +206,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @media (min-width: 560px) { .pq-escala { grid-template-columns: repeat(11, minmax(0, 1fr)); } }
 .pq-nota { position: relative; cursor: pointer; }
 .pq-nota input { position: absolute; opacity: 0; pointer-events: none; }
-.pq-nota span { display: grid; place-items: center; height: 52px; border-radius: 12px; background: var(--card); border: 1.5px solid var(--pq-linha); font-weight: 700; font-size: 17px; color: var(--pq-ink);
+.pq-nota span { display: grid; place-items: center; height: 52px; border-radius: 12px; background: var(--card); border: 1.5px solid var(--pq-campo); font-weight: 700; font-size: 17px; color: var(--pq-ink);
   transition: background .2s ease, border-color .2s ease, color .2s ease, transform .25s var(--pq-ease); }
 .pq-nota:hover span { border-color: color-mix(in srgb, var(--primary) 45%, transparent); }
 .pq-nota input:checked + span { background: var(--pq-red); border-color: var(--pq-red); color: var(--primary-foreground); transform: translateY(-2px); box-shadow: 0 8px 18px -10px color-mix(in srgb, var(--primary) 80%, transparent); }
@@ -236,7 +236,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .pq-chip { position: relative; cursor: pointer; }
 .pq-chip input { position: absolute; opacity: 0; pointer-events: none; }
-.pq-chip span { display: inline-flex; align-items: center; min-height: 38px; padding: 6px 12px; border-radius: 999px; border: 1.5px solid var(--pq-linha); background: var(--pq-fundo);
+.pq-chip span { display: inline-flex; align-items: center; min-height: 38px; padding: 6px 12px; border-radius: 999px; border: 1.5px solid var(--pq-campo); background: var(--pq-fundo);
   font-size: 13px; font-weight: 600; color: var(--pq-texto); transition: background .2s ease, border-color .2s ease, color .2s ease; }
 .pq-chip:hover span { border-color: color-mix(in srgb, var(--primary) 45%, transparent); }
 .pq-chip input:checked + span { background: var(--pq-red); border-color: var(--pq-red); color: var(--primary-foreground); }
@@ -289,7 +289,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .pq-campo.pq-invalido input[type=text], .pq-campo.pq-invalido input[type=email], .pq-campo.pq-invalido input[type=tel] { border-color: var(--pq-erro); }
 .pq-aceite { position: relative; display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: 14px; line-height: 1.55; color: var(--pq-texto); }
 .pq-aceite input { position: absolute; opacity: 0; width: 22px; height: 22px; margin: 0; }
-.pq-caixa { flex: none; width: 22px; height: 22px; margin-top: 1px; border-radius: 7px; border: 1.5px solid var(--graphite-200); background: var(--card); display: grid; place-items: center;
+.pq-caixa { flex: none; width: 22px; height: 22px; margin-top: 1px; border-radius: 7px; border: 1.5px solid var(--pq-campo); background: var(--card); display: grid; place-items: center;
   transition: background .2s ease, border-color .2s ease; }
 .pq-caixa::after { content: ""; width: 6px; height: 11px; margin-top: -3px; border: solid var(--card); border-width: 0 2.5px 2.5px 0; transform: rotate(45deg) scale(.3); opacity: 0; transition: transform .25s var(--pq-ease), opacity .15s ease; }
 .pq-aceite input:checked + .pq-caixa { background: var(--pq-red); border-color: var(--pq-red); }
@@ -405,7 +405,7 @@ body:has(#pq-form:not([hidden])) .pq-rodape { display: none; }
 .pq-so-desk { display: none !important; }
 .pq-so-movel { display: block; }
 @media (min-width: 640px) { .pq-so-desk.pq-ops { display: grid !important; } .pq-so-desk.pq-perfil-chips { display: flex !important; } .pq-so-movel { display: none !important; } }
-.pq-select { width: 100%; height: 54px; font: inherit; font-size: 16px; color: var(--pq-ink); padding: 0 44px 0 16px; border-radius: 14px; border: 1.5px solid var(--pq-linha);
+.pq-select { width: 100%; height: 54px; font: inherit; font-size: 16px; color: var(--pq-ink); padding: 0 44px 0 16px; border-radius: 14px; border: 1.5px solid var(--pq-campo);
   background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235A6A80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center / 20px;
   -webkit-appearance: none; appearance: none; cursor: pointer; transition: border-color .2s ease, box-shadow .2s ease; }
 .pq-select:focus { outline: none; border-color: var(--pq-red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 14%, transparent); }
@@ -422,7 +422,7 @@ label.pq-perfil-titulo em { font-style: normal; color: var(--pq-red); }
 .pq-perfil-campo.pq-invalido .pq-op:not(:has(input:checked)), .pq-perfil-campo.pq-invalido .pq-chip span { border-color: color-mix(in srgb, var(--error) 45%, transparent); }
 
 /* Classificação (pergunta 2): selo com a posição (1º, 2º, 3º) no lugar da caixinha */
-.pq-rank-selo { flex: none; width: 30px; height: 30px; border-radius: 999px; border: 1.5px solid var(--graphite-200); background: var(--card); display: grid; place-items: center;
+.pq-rank-selo { flex: none; width: 30px; height: 30px; border-radius: 999px; border: 1.5px solid var(--pq-campo); background: var(--card); display: grid; place-items: center;
   font-size: 13px; font-weight: 800; color: var(--primary-foreground); transition: background .2s ease, border-color .2s ease; }
 .pq-rank-on .pq-rank-selo { background: var(--pq-red); border-color: var(--pq-red); }
 .pq-rank.pq-op-excl.pq-rank-on .pq-rank-selo::after { content: "✓"; }
@@ -442,7 +442,7 @@ label.pq-perfil-titulo em { font-style: normal; color: var(--pq-red); }
 .pq-fim .pq-indicar .pq-indicar-tit { margin: 0 0 4px; font-size: 16px; font-weight: 800; color: var(--pq-ink); }
 .pq-fim .pq-indicar .pq-indicar-txt { margin: 0 0 14px; font-size: 14px; line-height: 1.5; color: var(--pq-muted); }
 .pq-indicar-linha { display: flex; gap: 8px; align-items: stretch; }
-.pq-indicar-linha input { flex: 1 1 auto; min-width: 0; height: 48px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--pq-linha); background: var(--card); font: inherit; font-size: 14px; color: var(--pq-muted); text-overflow: ellipsis; }
+.pq-indicar-linha input { flex: 1 1 auto; min-width: 0; height: 48px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--pq-campo); background: var(--card); font: inherit; font-size: 14px; color: var(--pq-muted); text-overflow: ellipsis; }
 .pq-indicar-linha input:focus { outline: none; border-color: var(--pq-red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 14%, transparent); color: var(--pq-ink); }
 .pq-indicar-bt-principal { flex: 0 0 auto; min-height: 48px; height: 48px; padding: 0 16px; gap: 8px; font-size: 15px; }
 .pq-indicar-bt-principal svg { width: 18px; height: 18px; }
@@ -489,7 +489,7 @@ html.pq-trava { overflow: hidden; }
 .pq-busca-fechar svg { width: 20px; height: 20px; }
 .pq-busca-campo { position: relative; }
 .pq-busca-campo svg { position: absolute; left: 14px; top: 50%; width: 20px; height: 20px; transform: translateY(-50%); color: var(--pq-muted); pointer-events: none; }
-.pq-busca-campo input { width: 100%; height: 50px; padding: 0 14px 0 44px; font: inherit; font-size: 16px; color: var(--pq-ink); border: 1.5px solid var(--pq-linha); border-radius: 14px; background: var(--background);
+.pq-busca-campo input { width: 100%; height: 50px; padding: 0 14px 0 44px; font: inherit; font-size: 16px; color: var(--pq-ink); border: 1.5px solid var(--pq-campo); border-radius: 14px; background: var(--background);
   -webkit-appearance: none; appearance: none; transition: border-color .2s ease, box-shadow .2s ease, background .2s ease; }
 .pq-busca-campo input:focus { outline: none; background: var(--card); border-color: var(--pq-red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 14%, transparent); }
 .pq-busca-lista { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 8px 12px 16px; }
