@@ -1,13 +1,15 @@
 // Cenas da simulação "Da conexão à colaboração" (as telas de exemplo das etapas do match da página de HTML), feitas só
-// com peças do DS: Card, LinhaDeDado, ChipDeEstado, Badge, Avatar, Conversa e Quadro. Tudo é ilustração (pessoas
-// fictícias); não há campos nem botões de verdade dentro das cenas.
+// com peças do DS: MockDeCampo (os campos de exemplo, digitados quando a cena aparece), LinhaDeDado, ChipDeEstado,
+// Badge, Avatar, Conversa e Quadro. Tudo é ilustração (pessoas fictícias); não há campos nem botões de verdade.
 import { CheckCircle2, Sparkles } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { LinhaDeDado } from "@/components/ui/cadastro-em-etapas";
+import { GradeDeCampos } from "@/components/ui/campo";
 import { ChipDeEstado } from "@/components/ui/chip-de-estado";
 import { BalaoDaConversa, Conversa } from "@/components/ui/conversa";
 import { Quadro } from "@/components/ui/quadro";
+import { MockDeCampo } from "@/components/ui/simulacao";
 import { AVATAR, QUADRO, RANKING, TALENTOS, type Pessoa } from "./conteudo";
 
 function Foto({ foto, iniciais, nome, tamanho = "size-8" }: { foto?: number; iniciais?: string; nome: string; tamanho?: string }) {
@@ -57,14 +59,14 @@ export function CenaCadastro() {
     <div className="@container/cena flex flex-col gap-5">
       <div className="flex flex-col gap-3 rounded-lg border bg-card p-4">
         <TituloDaCena titulo="Quero ser parceiro" apoio="Cadastro na Rede de Parceiros" />
-        <dl className="grid gap-x-6 @min-[28rem]/cena:grid-cols-2">
-          <LinhaDeDado rotulo="Nome completo" valor="Marina Alves" />
-          <LinhaDeDado rotulo="E-mail" valor="marina@email.com" />
-          <LinhaDeDado rotulo="Especialidade principal" valor="UX Research" />
-          <LinhaDeDado rotulo="Tempo de experiência" valor="Entre 6 e 10 anos" />
-          <LinhaDeDado rotulo="Senioridade" valor="Sênior" />
-          <LinhaDeDado rotulo="Setores em que já atuou" valor="Saúde, Educação, Varejo, Indústria" />
-        </dl>
+        <GradeDeCampos>
+          <MockDeCampo rotulo="Nome completo" valor="Marina Alves" obrigatorio digitar />
+          <MockDeCampo rotulo="E-mail" valor="marina@email.com" obrigatorio digitar atraso={900} />
+          <MockDeCampo rotulo="Especialidade principal" valor="UX Research" obrigatorio digitar atraso={1900} largo />
+          <MockDeCampo rotulo="Tempo de experiência" tipo="selecao" valor="Entre 6 e 10 anos" opcoes={["Entre 3 e 5 anos", "Entre 6 e 10 anos", "Mais de 10 anos"]} obrigatorio />
+          <MockDeCampo rotulo="Senioridade" tipo="selecao" valor="Sênior" opcoes={["Pleno", "Sênior", "Especialista"]} obrigatorio />
+          <MockDeCampo rotulo="Setores em que já atuou" tipo="opcoes" opcoes={["Saúde", "Educação", "Varejo", "Indústria"]} selecionadas={["Saúde", "Educação", "Varejo", "Indústria"]} obrigatorio largo />
+        </GradeDeCampos>
         <ChipDeEstado tom="sucesso" icone={<CheckCircle2 />} className="self-end">Cadastro enviado</ChipDeEstado>
       </div>
       <ListaDeTalentos />
@@ -77,10 +79,7 @@ export function CenaOportunidades() {
     <div className="@container/cena flex flex-col gap-5">
       <div className="flex flex-col gap-3 rounded-lg border bg-card p-4">
         <TituloDaCena titulo="Novo projeto" apoio="Descreva o desafio para encontrarmos os profissionais mais compatíveis." />
-        <div>
-          <p className="text-label font-semibold text-muted-foreground">Briefing do projeto</p>
-          <p className="text-body-sm text-foreground">Um centro médico recebe muitas reclamações no atendimento. Queremos entender a jornada do paciente e propor melhorias no serviço.</p>
-        </div>
+        <MockDeCampo rotulo="Briefing do projeto" tipo="area" valor="Um centro médico recebe muitas reclamações no atendimento. Queremos entender a jornada do paciente e propor melhorias no serviço." digitar />
         <div className="flex flex-col gap-1">
           <p className="text-label font-semibold text-muted-foreground">Especialidades desejadas</p>
           <p className="flex flex-wrap gap-1">{["Pesquisa com usuários", "Jornada do paciente", "Saúde"].map((e) => <Badge key={e} variant="outline">{e}</Badge>)}</p>

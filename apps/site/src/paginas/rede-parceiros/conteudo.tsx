@@ -1,8 +1,9 @@
 // Conteúdo da Rede de Parceiros (rede-parceiros/index.html e src/rede-parceiros-inicio.ts), com os mesmos textos.
 // Pessoas da simulação: fictícias (fotos geradas por IA), como na página de HTML.
 import {
-  Banknote, Building2, Bus, Factory, GraduationCap, HandHeart, Heart, HeartPulse, Hotel, Landmark, Laptop, Leaf,
-  MessageCircle, ShoppingBag, ShoppingCart, UserPlus,
+  AppWindow, Banknote, Building2, Bus, ChartColumn, CodeXml, Factory, GraduationCap, HandHeart, Heart, HeartPulse, Hotel,
+  Landmark, Laptop, Leaf, Lightbulb, Megaphone, MessageCircle, PenTool, Search, ShoppingBag, ShoppingCart, Sparkle,
+  TrendingUp, UserPlus,
 } from "lucide-react";
 import type { Pilar } from "@/components/ui/lista-de-pilares";
 import { EmailDoEstudio } from "@/compartilhado/EmailDoEstudio";
@@ -16,7 +17,18 @@ export const PILARES: Pilar[] = [
   { icone: <UserPlus />, titulo: "Indicação", texto: "Quem conhece o seu trabalho conecta você às oportunidades certas." },
 ];
 
-export const ESPECIALIDADES = ["Design", "Dev", "Dados", "Marketing", "Inovação", "Negócios", "IA", "Pesquisa", "UX/UI"];
+// As especialidades da roda do ecossistema, na ordem e com os ícones da página de HTML (equivalentes do Lucide).
+export const ESPECIALIDADES = [
+  { nome: "Design", Icone: PenTool },
+  { nome: "Dev", Icone: CodeXml },
+  { nome: "Dados", Icone: ChartColumn },
+  { nome: "Marketing", Icone: Megaphone },
+  { nome: "Inovação", Icone: Lightbulb },
+  { nome: "Negócios", Icone: TrendingUp },
+  { nome: "IA", Icone: Sparkle },
+  { nome: "Pesquisa", Icone: Search },
+  { nome: "UX/UI", Icone: AppWindow },
+];
 
 export const SETORES = [
   { nome: "Saúde", Icone: HeartPulse },

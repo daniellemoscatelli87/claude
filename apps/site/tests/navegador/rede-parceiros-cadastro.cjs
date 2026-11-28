@@ -113,6 +113,8 @@ const COMPLETO = {
       await p.keyboard.press("Escape");
       await p.fill("#telefone", "41997485414");
       ok((await p.inputValue("#telefone")) === "(41) 99748-5414", "máscara do telefone");
+      await p.fill("#linkedin", "https://www.linkedin.com/in/maria");
+      ok((await p.inputValue("#linkedin")) === "www.linkedin.com/in/maria" && (await p.locator('[data-slot="input-com-afixo"]').first().innerText()).includes("https://"), "link: https:// fixo na caixa (Input prefixo) e fora do que se digita");
       ok(erros.length === 0, "etapa 1: sem erros no console " + erros.join(" / "));
       await ctx.close();
     }
@@ -144,9 +146,26 @@ const COMPLETO = {
       ok(await p.getByRole("heading", { name: "Informações profissionais e contato" }).first().isVisible(), "Começar do zero volta à etapa 1");
       await ctx.close();
     }
+    // Política de privacidade numa janela (Dialog do DS), como na página de HTML; o Esc fecha só a janela.
+    {
+      const { ctx, p, erros } = await abrir(b, 1280, { rascunho: { etapa: 8, r: COMPLETO, em: 1 } });
+      await p.getByRole("link", { name: "Política de privacidade" }).click();
+      const janela = p.getByRole("dialog", { name: "Política de Privacidade" });
+      await janela.waitFor();
+      ok(await janela.getByText("8. Pesquisa sobre compra de moda em Curitiba").isVisible() || (await janela.getByText("1. Quais dados coletamos").count()) > 0, "política: abre numa janela com o texto da página");
+      await p.waitForTimeout(400);
+      await p.screenshot({ path: `${process.env.CAPTURAS || "/tmp"}/cadastro-1280-politica.png` });
+      await p.keyboard.press("Escape");
+      await p.waitForTimeout(400);
+      ok((await janela.count()) === 0 && (await p.getByRole("button", { name: /Próxima/ }).isVisible()), "política: Esc fecha só a janela");
+      ok(erros.length === 0, "política: sem erros no console " + erros.join(" / "));
+      await ctx.close();
+    }
     // Envio: sucesso, 409 e falha.
     for (const [status, esperado] of [[201, "Boas-vindas, Maria!"], [409, "Este e-mail já está cadastrado na Rede de Parceiros. Para atualizar seus dados, escreva para contato@danimoscatelli.com.br."], [500, "Não foi possível enviar seu cadastro. Verifique sua conexão e tente novamente."]]) {
       const { ctx, p, envios, erros } = await abrir(b, 1280, { rascunho: { etapa: 9, r: COMPLETO, em: 1 }, envio: status });
+      // O contexto pede "menos movimento"; o envio que dá certo roda sem ele, para conferir o confete.
+      if (status === 201) await p.emulateMedia({ reducedMotion: "no-preference" });
       await p.getByRole("button", { name: /Enviar cadastro/ }).click();
       await p.waitForTimeout(800);
       ok(await p.getByText(esperado).first().isVisible(), `envio ${status}: "${esperado.slice(0, 40)}…"`);
@@ -155,6 +174,8 @@ const COMPLETO = {
         ok(d.nome === "maria da silva" && d.cidade_estado === "Curitiba - PR" && d.autoriza_dados === true && d.galeria_aceite_cadastro === false && typeof d.consentimento_texto === "string" && d.experiencia_colaboracao === null, "envio: linha da tabela cadastros no formato de antes");
         ok((await p.evaluate(() => window.__eventos)).includes("cadastro_parceiro"), "envio: evento cadastro_parceiro");
         ok(await p.evaluate(() => document.activeElement?.textContent === "Boas-vindas, Maria!"), "envio: foco no título da tela final");
+        ok(await p.evaluate(() => [...document.querySelectorAll("canvas")].some((c) => getComputedStyle(c).position === "fixed")), "envio: confete na tela final (EstadoFinal comemorar)");
+        await p.screenshot({ path: `${process.env.CAPTURAS || "/tmp"}/cadastro-1280-confete.png` });
       }
       ok(erros.length === 0, `envio ${status}: sem erros no console ${erros.join(" / ")}`);
       await ctx.close();

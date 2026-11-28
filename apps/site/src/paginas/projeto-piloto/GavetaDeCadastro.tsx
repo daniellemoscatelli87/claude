@@ -84,7 +84,7 @@ export function GavetaDeCadastro({ aberta, aoMudar }: { aberta: boolean; aoMudar
               nivel={3}
               titulo="Cadastro recebido"
               descricao="Obrigado pelo interesse no Programa Projeto Piloto. Se houver aderência entre o desafio da sua empresa e um projeto, o Studio entrará em contato. Não há prazo definido para esse contato."
-              acoes={<Button variant="outline" size="lg" onClick={() => aoMudar(false)}>Fechar</Button>}
+              acoes={<Button variant="outline" onClick={() => aoMudar(false)}>Fechar</Button>}
             />
           ) : (
             <form id="form-piloto" ref={formRef} noValidate onSubmit={enviar} className="flex flex-col gap-6 py-2">
@@ -123,12 +123,12 @@ export function GavetaDeCadastro({ aberta, aoMudar }: { aberta: boolean; aoMudar
                     aria-describedby={erros.consentimento ? "piloto-consentimento-erro" : undefined}
                     className="mt-0.5"
                   />
-                  <Label htmlFor="piloto-consentimento" className="block text-body-sm font-normal leading-relaxed text-foreground">
+                  <Label htmlFor="piloto-consentimento" obrigatorio className="block text-body-sm font-normal leading-relaxed text-foreground">
                     Li a{" "}
                     <a href="/privacidade/" target="_blank" rel="noopener" className="rounded-sm font-semibold text-primary-text underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                       Política de Privacidade<span className="sr-only"> (abre em nova aba)</span>
                     </a>{" "}
-                    e concordo com o uso dos dados informados para avaliação no Programa Projeto Piloto. Estou ciente de que o cadastro é uma manifestação de interesse e não garante seleção. <span aria-hidden className="text-primary-text">*</span>
+                    e concordo com o uso dos dados informados para avaliação no Programa Projeto Piloto. Estou ciente de que o cadastro é uma manifestação de interesse e não garante seleção.
                   </Label>
                 </div>
                 {erros.consentimento && <MensagemDeErro id="piloto-consentimento-erro">{erros.consentimento}</MensagemDeErro>}
@@ -145,7 +145,7 @@ export function GavetaDeCadastro({ aberta, aoMudar }: { aberta: boolean; aoMudar
         </SidePanelBody>
         {!feito && (
           <SidePanelActions>
-            <BotaoDeEnvio type="submit" form="form-piloto" size="lg" className="w-full" estado={envio} textos={{ enviando: "Enviando cadastro…" }}>
+            <BotaoDeEnvio type="submit" form="form-piloto" className="w-full" estado={envio} textos={{ enviando: "Enviando cadastro…" }}>
               Enviar cadastro
               <ChevronRight aria-hidden />
             </BotaoDeEnvio>

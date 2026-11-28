@@ -2,15 +2,14 @@
 // links e eventos. O cadastro continua sendo a página /rede-parceiros/cadastro/, aberta numa gaveta (como a janela
 // da página de HTML) ou no endereço próprio (Ctrl/⌘ + clique, sem JavaScript). Peças do DS: SITE_REACT.md, seção 6d.
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowRight, Code2, Palette, Search } from "lucide-react";
+import { ArrowDown, ArrowRight, Code2, Palette, Search, Users } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { AvatarCircles } from "@/components/ui/avatar-circles";
-import { Badge } from "@/components/ui/badge";
 import { BotaoSubir } from "@/components/ui/botao-subir";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { CartaoFlutuante } from "@/components/ui/cartao-flutuante";
-import { GradeDeCards } from "@/components/ui/grade-de-cards";
+import { DiagramaDeEcossistema } from "@/components/ui/diagrama-de-ecossistema";
 import { Heading } from "@/components/ui/heading";
 import { LinkSaibaMais } from "@/components/ui/link-saiba-mais";
 import { ListaDePilares } from "@/components/ui/lista-de-pilares";
@@ -28,8 +27,8 @@ import { registrarEvento } from "@/compartilhado/site/navegacao";
 import { CenaCadastro, CenaColaboracao, CenaConvite, CenaOportunidades } from "./Cenas";
 import { AVATAR, CADASTRO, ESPECIALIDADES, IconeDaRede, PERGUNTAS, PILARES, SETORES } from "./conteudo";
 
-// O AvatarCircles do DS sempre faz de cada foto um link: aqui, todos levam ao cadastro (a gaveta), com nome acessível.
-const avatares = (ns: number[]) => ns.map((n) => ({ imageUrl: AVATAR(n), profileUrl: CADASTRO, name: "Quero ser parceiro" }));
+// Fotos de enfeite (pessoas fictícias) ao lado da frase: AvatarCircles decorativo, sem links e fora dos leitores de tela.
+const avatares = (ns: number[]) => ns.map((n) => ({ imageUrl: AVATAR(n) }));
 
 export function RedeDeParceiros() {
   const [cadastro, setCadastro] = useState(false);
@@ -37,10 +36,6 @@ export function RedeDeParceiros() {
   const hero = useRef<HTMLElement>(null);
   const convite = useRef<HTMLDivElement>(null);
   const origem = useRef<HTMLElement | null>(null);
-  // A Simulacao do DS (d2aeb40) desenha o botão Pausar conforme "menos movimento" já na primeira pintura: no servidor
-  // não há essa preferência e a hidratação falha. O avanço automático só liga depois de a página abrir no navegador.
-  const [noNavegador, setNoNavegador] = useState(false);
-  useEffect(() => setNoNavegador(true), []);
 
   // Todo link para o cadastro abre a gaveta (Ctrl/⌘/Shift + clique e o botão do meio abrem a página, como antes).
   useEffect(() => {
@@ -99,7 +94,7 @@ export function RedeDeParceiros() {
                 Estamos formando uma rede multidisciplinar de profissionais independentes (PJ) para colaborar em projetos de Design, Experiência, Negócios, Tecnologia e Inovação.
               </p>
               <div className="flex items-center gap-3">
-                <AvatarCircles avatarUrls={avatares([1, 2, 3])} size="lg" />
+                <AvatarCircles avatarUrls={avatares([1, 2, 3])} size="lg" decorativo />
                 <p className="text-body-sm font-medium text-foreground">Junte-se ao nosso ecossistema de parceiros!</p>
               </div>
               <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
@@ -140,26 +135,15 @@ export function RedeDeParceiros() {
             <CabecalhoDeSecao id="quem-titulo" selo="Quem buscamos" titulo="Competências e vivência setorial que **somam ao ecossistema**">
               <p className="text-body leading-relaxed text-muted-foreground sm:text-body-lg">Uma rede de profissionais independentes que une diferentes especialidades ao conhecimento prático de quem vive cada setor. Juntos, formamos equipes multidisciplinares que entendem os desafios, as particularidades e as oportunidades de cada negócio.</p>
             </CabecalhoDeSecao>
-            <SurgirAoRolar className="flex flex-col items-center gap-4 text-center">
-              <p className="text-body font-bold text-foreground"><span className="text-primary-text">12 setores</span> · Expertises conectadas.</p>
-              <ul aria-label="Especialidades" className="flex flex-wrap justify-center gap-2">
-                {ESPECIALIDADES.map((e) => (
-                  <li key={e}><Badge variant="outline" className="px-3 py-1.5 text-body-sm">{e}</Badge></li>
-                ))}
-              </ul>
-            </SurgirAoRolar>
-            <SurgirAoRolar as="ul" escalonar aria-label="Setores" className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
-              {SETORES.map(({ nome, Icone }) => (
-                <li key={nome}>
-                  <Card className="h-full">
-                    <CardContent className="flex h-full items-center gap-3 px-4 py-4">
-                      <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-muted text-primary-text"><Icone className="size-5" /></span>
-                      <span className="text-body-sm font-semibold text-foreground">{nome}</span>
-                    </CardContent>
-                  </Card>
-                </li>
-              ))}
-            </SurgirAoRolar>
+            {/* A roda do ecossistema da página de HTML: especialidades em volta do centro e os setores no anel de fora. */}
+            <DiagramaDeEcossistema
+              rotulo="Ecossistema da Rede de Parceiros"
+              centro={{ titulo: "12 setores", descricao: "Expertises conectadas.", icone: <Users /> }}
+              itens={ESPECIALIDADES.map(({ nome, Icone }) => ({ id: nome, rotulo: nome, icone: <Icone /> }))}
+              rotuloDosItens="Especialidades da rede"
+              anelExterno={SETORES.map(({ nome, Icone }) => ({ id: nome, rotulo: nome, icone: <Icone /> }))}
+              rotuloDoAnelExterno="Setores"
+            />
           </div>
         </section>
 
@@ -171,7 +155,6 @@ export function RedeDeParceiros() {
             </CabecalhoDeSecao>
             <Simulacao
               rotulo="Simulação do match de parceiros"
-              autoAvancar={noNavegador}
               intro="Como sua participação acontece"
               topoDaTela={<span className="flex items-center gap-2"><IconeDaRede aria-hidden className="size-4 text-primary-text" />Rede de Parceiros</span>}
               topicos={[
@@ -184,12 +167,12 @@ export function RedeDeParceiros() {
             <Card orientacao="horizontal" className="mx-auto w-full max-w-4xl">
               <div className="flex min-w-0 flex-1 flex-col">
                 <CardContent className="flex flex-col gap-3 pt-6">
-                  <AvatarCircles avatarUrls={avatares([2, 1, 3, 4])} size="lg" />
+                  <AvatarCircles avatarUrls={avatares([2, 1, 3, 4])} size="lg" decorativo />
                   <Heading level={3} size="card">Sua expertise pode ser a próxima conexão</Heading>
                   <p className="text-body-sm leading-relaxed text-muted-foreground">Faça parte da Rede de Parceiros e receba convites para projetos alinhados ao seu perfil.</p>
                 </CardContent>
                 <CardFooter className="justify-end border-t pt-4">
-                  <Button asChild size="lg" className="w-full sm:w-auto">
+                  <Button asChild className="w-full sm:w-auto">
                     <a href={CADASTRO}>Quero ser parceiro<ArrowRight aria-hidden /></a>
                   </Button>
                 </CardFooter>
