@@ -629,6 +629,7 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
   - filtros ativos aparecem como `ChipFiltravel` (um toque tira o filtro); candidatura nova marcada com "Nova" em texto (antes, só um ponto rosa);
   - horário do envio agendado em passos de 15 minutos (`CampoDeHorario`), com a data no `Calendar` aberto embaixo do campo, dentro da janela;
   - o painel lateral "Ver mais" do perfil não foi refeito: na página de HTML ele não abria por nenhum caminho (código sem uso).
+- **DS `0685afb` no mesmo lote (28/11/2026):** a área restrita e o site em React sincronizados com o DS `0685afb` (o app Experience Intelligence fica fora). Com ele, o Contato recupera o que a D-055 tinha deixado de fora: sugestões de endereço da reunião presencial (`CampoDeEndereco` com `buscaNoPhoton`, a mesma busca da página de HTML: Photon/komoot, 5 resultados, perto de Curitiba, só Brasil), anexos por arrastar e soltar (`UploadDropzone` acessível), data da reunião no `Popover` (o `Button` do DS passou a repassar a ref) e as datas embaixo das etapas no `Stepper` (`detalhe`), no lugar da linha separada.
 - **Voltar atrás:** trocar `"publicada"` por `"previa"` no `rotas.json` e restaurar do histórico do git as páginas de HTML, `admin.css`, `admin.js`, `form-parceiros.js` e `public/design-system/theme.css` (commit anterior a este lote).
 
 ## Decisões pendentes

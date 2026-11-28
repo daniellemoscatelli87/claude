@@ -1,7 +1,7 @@
 // Autorização da galeria (aba Parceiros): o pedido por e-mail em massa, os números de cada situação, a prévia do e-mail
 // e os envios agendados, com as mesmas consultas, funções e textos da página de HTML. Componentes do DS:
 // CardComCabecalho, Explicacao, Button, PreviaDoEmail (moldura do DS), LinhaDeLista + ChipDeEstado (envios agendados),
-// Dialog + CampoDeBusca + Checkbox + Calendar + CampoDeHorario (agendar ou alterar).
+// Dialog + CampoDeBusca + Checkbox + Popover com Calendar + CampoDeHorario (agendar ou alterar).
 import * as React from "react";
 import { CalendarClock, CalendarDays, Eye, EyeOff, LoaderCircle, Pencil, RefreshCw, Send, Trash2, Users } from "lucide-react";
 import { toast } from "sonner";
@@ -17,6 +17,7 @@ import { EstadoVazio } from "@/components/ui/estado-vazio";
 import { Label } from "@/components/ui/label";
 import { LinhaDeLista } from "@/components/ui/linha-de-lista";
 import { CardComCabecalho, Explicacao } from "@/components/ui/painel-dados";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { plural } from "@/lib/formatar";
 import { registrar, sb } from "@/lib/supabase";
@@ -241,17 +242,18 @@ function JanelaDeAgendamento({ aberta, editando, todos, mudar, aoSalvar }: { abe
           <div className="grid gap-5 sm:grid-cols-2">
             <div className="min-w-0 space-y-2">
               <Label id="ag-dia-rotulo" htmlFor="ag-dia" className="text-body-sm font-semibold">Data do envio</Label>
-              {/* O calendário abre logo abaixo do campo, dentro da janela (um Popover dentro do Dialog não se posiciona). */}
-              <Button id="ag-dia" type="button" variant="outline" aria-labelledby="ag-dia-rotulo ag-dia-valor" aria-expanded={calendario} aria-controls="ag-calendario" className="w-full justify-start bg-card font-normal" onClick={() => setCalendario((v) => !v)}>
-                <CalendarDays aria-hidden className="text-muted-foreground" />
-                <span id="ag-dia-valor">{dataEscolhida ? dataEscolhida.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "long", year: "numeric" }) : "Escolha a data"}</span>
-              </Button>
-              {calendario && (
-                <div id="ag-calendario" className="w-fit rounded-md border border-border bg-card motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-200">
+              <Popover open={calendario} onOpenChange={setCalendario}>
+                <PopoverTrigger asChild>
+                  <Button id="ag-dia" type="button" variant="outline" aria-labelledby="ag-dia-rotulo ag-dia-valor" className="w-full justify-start bg-card font-normal">
+                    <CalendarDays aria-hidden className="text-muted-foreground" />
+                    <span id="ag-dia-valor">{dataEscolhida ? dataEscolhida.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "long", year: "numeric" }) : "Escolha a data"}</span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="w-auto p-0">
                   <Calendar mode="single" selected={dataEscolhida} defaultMonth={dataEscolhida} disabled={{ before: new Date(new Date().toDateString()) }}
-                    onSelect={(d) => { if (d) { setDia(diaLocal(d)); setErro(""); } setCalendario(false); document.getElementById("ag-dia")?.focus(); }} />
-                </div>
-              )}
+                    onSelect={(d) => { if (d) { setDia(diaLocal(d)); setErro(""); } setCalendario(false); }} />
+                </PopoverContent>
+              </Popover>
             </div>
             <CampoDeHorario id="ag-hora" rotulo="Hora do envio" valor={hora} onValorChange={(v) => { setHora(v); setErro(""); }} />
           </div>

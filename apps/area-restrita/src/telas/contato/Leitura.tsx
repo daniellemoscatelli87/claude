@@ -1,7 +1,7 @@
 // Mensagem aberta no Contato (painel de leitura da CaixaDeEntrada): a mesma informação e as mesmas ações de
 // public/admin/contatos/index.html (?id=), só com componentes do Design System Dani Moscatelli:
 // - Accordion: o cabeçalho da mensagem (nome, origem, data, e-mail, assunto) e, aberto, todos os dados do formulário;
-// - Stepper: as etapas (Recebida, Lida, Respondida, Reunião) com as datas; a próxima ação em AlertaComAcao;
+// - Stepper: as etapas (Recebida, Lida, Respondida, Reunião) com a data embaixo de cada uma (detalhe); a próxima ação em AlertaComAcao;
 // - Conversa (balões; as suas à direita) com BalaoDaConversa e SeparadorDaConversa (cada mudança de situação);
 //   anexos em links e imagens; "Ver e-mail completo" em Collapsible;
 // - responder: Campo + Textarea, Anexador (UploadDropzone + UploadList) e BotaoDeEnvio (enviando, enviado, de novo);
@@ -129,11 +129,8 @@ function Situacao({ r, reu, aoAgendar }: { r: Mensagem; reu: Reuniao | null; aoA
     <div className="grid gap-4" data-situacao="">
       <Stepper
         rotulo="Situação da mensagem" atual={atual === -1 ? etapas.length - 1 : atual} concluidas={feitas}
-        etapas={etapas.map((e) => ({ titulo: e.titulo, descricao: r[e.chave] ? ddmm(r[e.chave] as string) : undefined }))}
+        etapas={etapas.map((e) => ({ titulo: e.titulo, detalhe: r[e.chave] ? ddmm(r[e.chave] as string) : undefined }))}
       />
-      <p className="text-body-sm text-muted-foreground tabular-nums">
-        {etapas.filter((e) => r[e.chave]).map((e) => e.titulo + " em " + ddmm(r[e.chave] as string)).join(" · ")}
-      </p>
       {r.reuniao_em ? (
         <AlertaComAcao
           tom="sucesso" titulo="Reunião agendada"

@@ -134,7 +134,7 @@ Peças que as páginas precisam e o DS ainda não tem. Nenhuma foi feita na áre
 11. **`TabelaAdaptavel`** (Parceiros): tabela no computador que vira lista de `LinhaDeLista` no celular, com as colunas menos importantes escondidas e o aviso de quantas ficaram de fora; ordenação por coluna. Promover a vitrine `TabelaQueQuebra`.
 12. **`CampoCopiavel`** (Pesquisas): o link da pesquisa num campo só de leitura com o botão "Copiar" e o retorno "Copiado" (ícone de check, 2 s, anunciado para leitores de tela).
 
-### 7.2 Observações para o DS depois de `d2aeb40` (27/11/2026)
+### 7.2 Observações para o DS depois de `d2aeb40` (27/11/2026) — itens 1 a 5 resolvidos no DS `0685afb` (28/11/2026)
 
 1. **`UploadDropzone`**: o axe acusa o campo de arquivo sem nome (`label`) e um botão dentro de outro (`nested-interactive`). O Contato usa `Button` "Anexar arquivo" + `Input type="file"` escondido + `UploadList`.
 2. **`Popover` dentro do `Dialog`**: o conteúdo não se posiciona (fica em `translate(0, -200%)`, fora da tela). A data da reunião abre o `Calendar` embaixo do campo, dentro da janela.
@@ -143,6 +143,8 @@ Peças que as páginas precisam e o DS ainda não tem. Nenhuma foi feita na áre
 5. **`Stepper`** como situação (não formulário): com as datas no nome das etapas, o Stepper vai para o modo compacto mesmo com 600 px; as datas ficaram numa linha embaixo.
 
 ### 7.3 Observações para o DS depois de A7 e A8 (28/11/2026)
+
+Atualização (28/11/2026): o DS `0685afb` resolveu os itens 1 (`Button` com `forwardRef`; os menus voltaram a usar o `Button` com `asChild`) e 2 a 4 continuam como proposta; a área restrita foi sincronizada com o `0685afb` e o Contato voltou a ter as sugestões de endereço (`CampoDeEndereco` + `buscaNoPhoton`, a mesma busca da página de HTML), os anexos por arrastar (`UploadDropzone`), a data da reunião no `Popover` (também no agendamento da galeria) e as datas no `Stepper` (`detalhe`).
 
 1. **`Button` sem `forwardRef` (React 18).** O `Button` do DS é uma função sem `forwardRef`; no React 18 a `ref` não chega ao `<button>`. Com `asChild` em gatilhos do Radix que precisam medir o gatilho (`DropdownMenuTrigger`, `PopoverTrigger`, `TooltipTrigger`), o conteúdo nunca se posiciona e fica em `translate(0, -200%)`, fora da tela (conferido no menu "Exportar relatório"). É a causa do item 2 da §7.2 ("Popover dentro do Dialog"). **Proposta:** `React.forwardRef` no `Button` (e no `Input`/`Textarea`, que também não repassam ref). Na área restrita, os gatilhos de menu usam o gatilho do Radix com `buttonVariants` (aparência do DS) até a correção.
 2. **`Funil`:** `<ol role="img">` com `<li>` dentro: o axe acusa `listitem` (itens fora de lista para a tecnologia assistiva). **Proposta:** `role="img"` num `div` em volta (ou `ol` sem `role`, com o resumo em `aria-label` de um elemento próprio). Na Pesquisa, "Quem chegou até onde" usa `BarrasOrdenadas` com "% da etapa anterior" no nome.
