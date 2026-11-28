@@ -2,7 +2,7 @@
 
 > Decisão de 27/11/2026 (D-053): o site público do estúdio (início, Projeto Piloto, Rede de Parceiros, cadastro, galeria, pesquisa, privacidade, descadastro, 404 e as páginas de apresentação do EI) passa a ser refeito em React, página por página, com os componentes reais do Design System Dani Moscatelli, como a área restrita (D-051, `docs/engineering/ADMIN_REACT.md`). Endereços, textos, cabeça (título, descrição, canonical, compartilhamento) e comportamento continuam os mesmos. A dona do produto delegou a escolha de como o site consome o DS.
 
-> **Correção de 28/11/2026 (D-064):** a dona do produto pediu que as páginas originais não mudassem de estrutura: o trabalho era só identificar o que não está no DS e componentizar no DS. A página inicial, o Projeto Piloto, a Rede de Parceiros com o cadastro, a pesquisa de moda e a página de autorizar a galeria voltam às páginas de HTML de antes; só as **cores** (tokens do DS) e os **cards** (só borda, sem sombra parada) seguem o DS. As versões em React ficam só como prévia. Situação (28/11/2026): **pesquisa de moda e página inicial de volta** (HTML original com as cores e os cards do DS); depois, uma por pull request: Projeto Piloto, Rede de Parceiros com o cadastro, autorizar galeria. Exceção de cor: ícones de marcas (WhatsApp, Facebook, LinkedIn, Instagram) nas cores oficiais. O descadastro continua em React, com o conteúdo centralizado como no original. Como as cores chegam: seção 3.7.
+> **Correção de 28/11/2026 (D-064):** a dona do produto pediu que as páginas originais não mudassem de estrutura: o trabalho era só identificar o que não está no DS e componentizar no DS. A página inicial, o Projeto Piloto, a Rede de Parceiros com o cadastro, a pesquisa de moda e a página de autorizar a galeria voltam às páginas de HTML de antes; só as **cores** (tokens do DS) e os **cards** (só borda, sem sombra parada) seguem o DS. As versões em React ficam só como prévia. Situação (28/11/2026): **pesquisa de moda, página inicial e Projeto Piloto de volta** (HTML original com as cores e os cards do DS); depois, uma por pull request: Rede de Parceiros com o cadastro, autorizar galeria. Exceção de cor: ícones de marcas (WhatsApp, Facebook, LinkedIn, Instagram) nas cores oficiais. O descadastro continua em React, com o conteúdo centralizado como no original. Como as cores chegam: seção 3.7.
 
 ## 1. Situação em 27/11/2026
 
@@ -15,10 +15,10 @@
 | Conformidade com o DS (`npm run conformidade`) | zero desvios |
 | Lote S0: app React antigo apagado (cerca de 3.000 linhas sem uso) | feito; o dist ficou igual byte a byte |
 | Lote S7: 404, descadastro e privacidade **publicadas** | feito e testado (seção 6) |
-| Lotes S1 (casca), S2 (Projeto Piloto), S3 (página inicial) e S4 (Rede de Parceiros) | publicados em React em 27/11/2026; pela D-064, voltam ao HTML original: **página inicial de volta** (28/11/2026); Projeto Piloto e Rede de Parceiros a seguir |
+| Lotes S1 (casca), S2 (Projeto Piloto), S3 (página inicial) e S4 (Rede de Parceiros) | publicados em React em 27/11/2026; pela D-064, voltam ao HTML original: **página inicial e Projeto Piloto de volta** (28/11/2026); Rede de Parceiros a seguir |
 | Lote S5: cadastro de parceiro **publicado** (desde o DS `27ff621`, com o confete, o `https://` fixo e a política na janela); autorizar galeria **publicada** em React no lote S5b (28/11/2026) | feito e testado (seção 6e) |
 | Lote S6: pesquisa moda Curitiba | publicada em React em 28/11/2026; **voltou ao HTML original pela D-064** (cores e cards do DS); o React fica em prévia |
-| Páginas de HTML | pesquisa e página inicial de volta ao HTML original (D-064), com o build de HTML da raiz (Vite); as três apresentações do EI continuam em `public/` |
+| Páginas de HTML | pesquisa, página inicial e Projeto Piloto de volta ao HTML original (D-064), com o build de HTML da raiz (Vite); as três apresentações do EI continuam em `public/` |
 
 ## 2. Como publicar
 
@@ -249,6 +249,7 @@ O que não muda (e o teste do lote deve conferir rodando o script de hoje, como 
 |---|---|---|---|
 | Pesquisa de moda | build do `5d5eeb9` (antes do #268) | apresentação, identificação, classificação (pergunta 2), notas (pergunta 4), texto aberto, telas finais de obrigada, sem compras, encerrada e fora do ar; 390, 768, 1024 e 1280 px (36 capturas) | mesma altura, mesmos elementos, mesmas posições e tamanhos, mesmos estilos fora a cor em todas; outras diferenças: só a sombra parada tirada de `.pq-intro`, `.pq-fim`, `.pq-porque` e da opção marcada (regra dos cards) |
 | Página inicial | build do `155ab15` (antes do #258) | página inteira, animações no estado final, Supabase simulado; 390, 768, 1024 e 1280 px | mesma altura, mesmos elementos, posições, tamanhos e estilos fora a cor; outras diferenças: a sombra parada tirada dos depoimentos, artigos, card das recomendações e card de clientes, e um degradê escrito de outro jeito pelo navegador (só cor) |
+| Projeto Piloto | build do `155ab15` (antes do #258) | página inteira, animações no estado final, Supabase simulado; 390, 768, 1024 e 1280 px | mesma altura, mesmos elementos, posições, tamanhos e estilos fora a cor; outras diferenças: a sombra parada tirada dos cards de frente, do convite e do "depois do piloto", e um degradê escrito de outro jeito pelo navegador (só cor) |
 
 Fluxo testado com a função `pesquisa` simulada nas duas versões (status, identificação, verificar, parcial, enviar, 409, 410, erro do servidor), sem erros no console.
 

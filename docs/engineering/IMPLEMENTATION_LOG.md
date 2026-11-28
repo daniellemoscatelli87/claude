@@ -6,6 +6,20 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Projeto Piloto original de volta, com as cores e os cards do DS (D-064)
+
+- **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-piloto-original`.
+- **Arquivos restaurados** (do `155ab15`, antes do #258): `projeto-piloto/index.html`, `src/projeto-piloto.{ts,css}`. As peças compartilhadas já tinham voltado com o início. `vite.config.ts` com a entrada `projetoPiloto`; `rotas.json` com o `projeto-piloto` em `previa`.
+- **Cores e cards:**
+  - cores por token do DS (folha, classes, atributos de SVG; o feixe animado do diagrama usa `--primary` e `--crimson-200`);
+  - campos do cadastro com `--input`;
+  - os cards de frente, o convite e o "depois do piloto" perdem a sombra parada (a do passar do mouse continua).
+- **Testes executados:**
+  - `npm run build` da raiz (passou);
+  - `apps/site`: typecheck sem erros, 62 testes passaram, conformidade com zero desvios;
+  - fidelidade em 390, 768, 1024 e 1280 px contra o `155ab15`: mesma altura, elementos, posições, tamanhos e estilos fora a cor. As outras diferenças são as três sombras paradas tiradas e um degradê escrito de outro jeito pelo navegador (só cor);
+  - cadastro da empresa na gaveta (validação, envio a `parceiro_piloto` e tela de sucesso) e gaveta de contato, com o Supabase simulado: passaram, sem erros no console.
+
 ## 2026-11-28 · Pesquisa de moda: caixa de consentimento e cores das marcas nos ícones de compartilhar (D-064)
 
 - **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-pesquisa-consentimento`.

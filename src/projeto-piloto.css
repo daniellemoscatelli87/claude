@@ -1,0 +1,1574 @@
+@import "tailwindcss" source(none);
+@import "./compartilhado/menu.css";
+@source "../projeto-piloto/index.html";
+@source "./projeto-piloto.ts";
+
+/* Cores e fonte do protótipo aprovado, todas do design system oficial (primária #D44D4D). */
+@theme {
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+
+  --color-coral-50: var(--crimson-50);
+  --color-coral-100: var(--primary-muted);
+  --color-coral-200: var(--crimson-100);
+  --color-coral-500: var(--primary);
+  --color-coral-600: var(--primary);
+  --color-coral-700: var(--primary-hover);
+  --color-slate-850: var(--graphite-800);
+}
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  background-color: var(--card);
+  color: var(--graphite-800);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Accordion do Guia */
+.accordion-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+.accordion-content > div { overflow: hidden; }
+.accordion-item.active .accordion-content { grid-template-rows: 1fr; opacity: 1; }
+.accordion-item.active .accordion-chevron { transform: rotate(180deg); color: var(--primary); }
+.accordion-item.active .accordion-header { color: var(--primary); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  .accordion-content, .accordion-chevron { transition: none !important; }
+}
+
+
+/* ---------- Motion do design system (Slide Up .7s snappy, stagger .07s) ---------- */
+@keyframes ds-slide-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes ds-da-direita { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: none; } }
+@keyframes ds-da-esquerda { from { opacity: 0; transform: translateX(-32px); } to { opacity: 1; transform: none; } }
+@keyframes ds-scale-in { from { opacity: 0; transform: scale(.96) translateY(12px); } to { opacity: 1; transform: none; } }
+
+.hero-card { animation: ds-scale-in .65s cubic-bezier(0.16, 1, 0.3, 1) .1s both; }
+
+/* Só esconde quando o script confirmou que pode animar */
+.anima-pronto .rv:not(.visivel),
+.anima-pronto .rv-cabecalho:not(.visivel) > *,
+.anima-pronto .rv-grupo:not(.visivel) > *,
+.anima-pronto .cf-etapa:not(.visivel) .cf-cartao { opacity: 0; }
+
+.anima-pronto .rv.visivel { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.anima-pronto .rv-cabecalho.visivel > * { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.anima-pronto .rv-cabecalho.visivel > :nth-child(2) { animation-delay: .08s; }
+.anima-pronto .rv-cabecalho.visivel > :nth-child(3) { animation-delay: .16s; }
+.anima-pronto .rv-cabecalho.visivel > :nth-child(4) { animation-delay: .24s; }
+.anima-pronto .rv-grupo.visivel > * { animation: ds-slide-up .6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.anima-pronto .rv-grupo.visivel > :nth-child(2) { animation-delay: .07s; }
+.anima-pronto .rv-grupo.visivel > :nth-child(3) { animation-delay: .14s; }
+.anima-pronto .rv-grupo.visivel > :nth-child(4) { animation-delay: .21s; }
+.anima-pronto .rv-grupo.visivel > :nth-child(5) { animation-delay: .28s; }
+.anima-pronto .rv-grupo.visivel > :nth-child(6) { animation-delay: .35s; }
+.anima-pronto .rv-grupo.visivel > :nth-child(7) { animation-delay: .42s; }
+.anima-pronto .rv-grupo.visivel > :nth-child(8) { animation-delay: .49s; }
+.anima-pronto .rv-grupo.visivel > :nth-child(9) { animation-delay: .56s; }
+.anima-pronto .rv-grupo.visivel > :nth-child(10) { animation-delay: .63s; }
+
+/* Linha do tempo: Step Indicator. Cartões entram pelo lado oposto à linha; a linha se preenche com a rolagem */
+.anima-pronto .cf-etapa.visivel .cf-cartao { animation: ds-da-direita .7s cubic-bezier(0.16, 1, 0.3, 1) .1s both; }
+@media (min-width: 640px) {
+  .anima-pronto .cf-etapa.visivel:nth-child(even) .cf-cartao { animation-name: ds-da-esquerda; }
+}
+.cf-linha { height: 100%; transform: scaleY(var(--progresso, 0)); transition: transform .15s linear; }
+.cf-num { transition: background-color .25s ease, color .25s ease, scale .4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .25s ease; }
+.cf-num > span { transition: color .25s ease; }
+.cf-etapa.feita .cf-num, .cf-etapa.atual .cf-num { background-color: var(--primary); }
+.cf-etapa.feita .cf-num > span, .cf-etapa.atual .cf-num > span { color: var(--primary-foreground); }
+.cf-etapa.atual .cf-num { scale: 1.1; box-shadow: 0 0 0 6px color-mix(in srgb, var(--primary) 15%, transparent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-card, .anima-pronto .rv, .anima-pronto .rv-cabecalho > *, .anima-pronto .rv-grupo > *, .anima-pronto .cf-cartao { animation: none !important; opacity: 1 !important; }
+  .cf-linha, .cf-num { transition: none; }
+}
+
+/* Indicador "Saiba mais" na base do hero: seta quica suavemente (Bounce do design system) */
+@keyframes rolar-quica { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+.rolar-seta { animation: rolar-quica 1.6s cubic-bezier(0.42, 0, 0.58, 1) 1.3s 3; }
+.rolar-abaixo { animation: ds-slide-up .7s cubic-bezier(0.16, 1, 0.3, 1) .6s both; }
+@media (prefers-reduced-motion: reduce) { .rolar-seta, .rolar-abaixo { animation: none; } }
+
+/* Fundo "Gradient Animated" do design system: manchas desfocadas que se movem devagar */
+.fundo-gradiente { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.fundo-gradiente span { position: absolute; border-radius: 9999px; filter: blur(90px); will-change: transform; }
+.fundo-gradiente span:nth-child(1) { width: 620px; height: 620px; top: -12%; left: -8%; background: color-mix(in srgb, var(--crimson-200) 55%, transparent); animation: blob-a 18s ease-in-out infinite alternate; }
+.fundo-gradiente span:nth-child(2) { width: 520px; height: 520px; top: -10%; left: 60%; background: color-mix(in srgb, var(--graphite-100) 70%, transparent); animation: blob-b 23s ease-in-out infinite alternate; }
+.fundo-gradiente span:nth-child(3) { width: 460px; height: 460px; top: 55%; left: 30%; background: color-mix(in srgb, var(--primary-suave) 95%, transparent); animation: blob-c 16s ease-in-out infinite alternate; }
+.fundo-gradiente-escuro span:nth-child(1) { background: color-mix(in srgb, var(--crimson-600) 45%, transparent); }
+.fundo-gradiente-escuro span:nth-child(2) { background: color-mix(in srgb, var(--graphite-600) 60%, transparent); }
+.fundo-gradiente-escuro span:nth-child(3) { background: color-mix(in srgb, var(--primary) 18%, transparent); }
+@keyframes blob-a { 0% { transform: translate(0, 0); } 50% { transform: translate(28%, 22%); } 100% { transform: translate(-18%, 42%); } }
+@keyframes blob-b { 0% { transform: translate(0, 0); } 50% { transform: translate(-40%, 48%); } 100% { transform: translate(14%, 16%); } }
+@keyframes blob-c { 0% { transform: translate(0, 0); } 50% { transform: translate(-30%, -40%); } 100% { transform: translate(24%, -12%); } }
+@media (prefers-reduced-motion: reduce) { .fundo-gradiente span { animation: none; } }
+.secao-escura > :not(.fundo-gradiente):not(.curva-secao) { position: relative; z-index: 1; }
+.secao-escura .cf-etapa.feita .cf-num, .secao-escura .cf-etapa.atual .cf-num { background-color: var(--primary); }
+/* Sombras dos cartões no fundo escuro (a sombra clara vira "brilho" no escuro) */
+.secao-escura .cf-cartao, .secao-escura .rv.bg-white { box-shadow: 0 24px 48px -16px color-mix(in srgb, var(--graphite-950) 55%, transparent); }
+.secao-escura .cf-cartao:hover { box-shadow: 0 28px 56px -16px color-mix(in srgb, var(--graphite-950) 65%, transparent); }
+
+/* Âncoras ("Saiba mais", menu): a seção para exatamente abaixo do cabeçalho fixo, sem sobrar faixa do hero */
+html { scroll-padding-top: var(--altura-cabecalho, 96px); }
+/* Hero ocupa o resto da tela abaixo do cabeçalho */
+/* Cabeçalho transparente sobre a foto do hero: o hero sobe por baixo dele e ocupa a tela inteira */
+.hero-piloto { min-height: 100svh; margin-top: calc(-1 * var(--altura-cabecalho, 80px)); padding-top: calc(var(--altura-cabecalho, 80px) + 2rem) !important; }
+.cabecalho-sobre-hero .site-header:not(.is-scrolled) { background: transparent; }
+/* Sem logo enquanto está sobre a foto (o logo já aparece na parede); volta ao rolar */
+.cabecalho-sobre-hero .site-header:not(.is-scrolled) header > a:first-child { visibility: hidden; }
+/* Links e botão do menu em branco sobre a foto; a página atual mantém o sublinhado vermelho */
+.cabecalho-sobre-hero .site-header:not(.is-scrolled) nav[aria-label="Principal"] a { color: var(--primary-foreground); text-shadow: 0 1px 2px color-mix(in srgb, var(--graphite-950) 35%, transparent); text-decoration-color: var(--primary); }
+.cabecalho-sobre-hero .site-header:not(.is-scrolled) nav[aria-label="Principal"] a:hover { color: var(--crimson-100); }
+.cabecalho-sobre-hero .site-header:not(.is-scrolled) #menu-botao { color: var(--primary-foreground); }
+.cabecalho-sobre-hero .site-header:not(.is-scrolled) #menu-botao:hover { background: color-mix(in srgb, var(--card) 15%, transparent); }
+
+
+
+
+/* ---------- Escopo de atuação: mais vida (Motion do design system) ---------- */
+/* Luz que segue o cursor dentro do card */
+.frente-luz { opacity: 0; transition: opacity .3s ease; background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--primary) 8%, transparent), transparent 70%); }
+.card-frente:hover .frente-luz { opacity: 1; }
+/* Barra vermelha que cresce no topo */
+.frente-barra { width: 0; transition: width .5s cubic-bezier(0.16, 1, 0.3, 1); }
+.card-frente:hover .frente-barra { width: 100%; }
+/* Número grande decorativo desliza levemente */
+.frente-num { transition: color .3s ease, transform .5s cubic-bezier(0.16, 1, 0.3, 1); }
+.card-frente:hover .frente-num { transform: translateY(4px) scale(1.06); }
+/* Ícone: pequeno balanço no hover (Back easing) */
+@keyframes frente-balanco { 0% { transform: rotate(0) scale(1); } 30% { transform: rotate(-8deg) scale(1.12); } 60% { transform: rotate(5deg) scale(1.1); } 100% { transform: rotate(0) scale(1.08); } }
+.card-frente:hover .frente-icone { animation: frente-balanco .6s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+/* Entrada: ícone "salta" e tags aparecem em cascata depois do card */
+@keyframes frente-pop { from { opacity: 0; transform: scale(.6) rotate(-10deg); } to { opacity: 1; transform: none; } }
+@keyframes tag-entra { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.anima-pronto .rv-grupo:not(.visivel) .frente-icone, .anima-pronto .rv-grupo:not(.visivel) .tag-frente { opacity: 0; }
+.anima-pronto .rv-grupo.visivel .frente-icone { animation: frente-pop .55s cubic-bezier(0.34, 1.56, 0.64, 1) both; animation-delay: calc(var(--i, 0) * .07s + .2s); }
+.anima-pronto .rv-grupo.visivel .tag-frente { animation: tag-entra .45s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(var(--i, 0) * .07s + .35s + var(--t, 0) * .06s); }
+.anima-pronto .rv-grupo.visivel .card-frente:hover .frente-icone { animation: frente-balanco .6s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .frente-luz, .frente-barra, .frente-num { transition: none; }
+  .card-frente:hover .frente-icone, .anima-pronto .rv-grupo .frente-icone, .anima-pronto .rv-grupo .tag-frente { animation: none !important; opacity: 1 !important; }
+}
+
+/* ---------- Passagem entre as seções ----------
+   Fundos alternados (branco, G-50, grafite, branco, G-50) para nunca repetir a cor em seções seguidas; onde o fundo fica escuro (Como funciona e rodapé), a borda é uma curva suave. */
+.transicao-sobre  { background: var(--card); }
+.transicao-escopo { background: var(--foreground); }
+.transicao-como   { background: var(--graphite-50); }
+.transicao-guia   { background: linear-gradient(to bottom, var(--graphite-50) 0, var(--card) 240px); } /* transição difusa vinda do Como funciona (G-50) */
+.transicao-form   { background: linear-gradient(to bottom, var(--card) 0, var(--graphite-50) 140px); } /* transição difusa curta vinda do Guia (branco); o cadastro fica em G-50 */
+/* Brilhos da seção escura começam um pouco abaixo do topo, para a transição vinda do Escopo não marcar uma linha */
+.transicao-escopo.secao-escura::after { top: -60px; opacity: .8; }
+.transicao-escopo .fundo-gradiente-escuro span:nth-child(1) { top: 12%; }
+.transicao-escopo .fundo-gradiente-escuro { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%); }
+
+/* ---------- Seção escura (Escopo): tokens do modo escuro (.dark) do design system ----------
+   background graphite-950, card rgba(19,26,39,.75), border .07/.12, foreground #E4E9F0, muted graphite-300,
+   primary crimson-400, primary-muted .15 com crimson-300, muted rgba(40,48,67,.6), sombras escuras do DS. */
+.transicao-escopo.secao-escura { background: var(--graphite-950); }
+.secao-escura .rv-cabecalho > p:first-child { background: transparent; border-color: color-mix(in srgb, var(--crimson-300) 60%, transparent); color: var(--crimson-300); }
+.secao-escura .rv-cabecalho > p:first-child > span { background: var(--crimson-300); }
+.secao-escura .rv-cabecalho h2 { color: var(--secondary); }
+.secao-escura .rv-cabecalho .text-coral-600 { color: var(--crimson-300); }
+.secao-escura .rv-cabecalho > p:last-child { color: var(--graphite-300); }
+.secao-escura > .relative > p.rv { color: var(--muted-foreground); }
+/* Cards em vidro (GlassCard do DS, tom claro no tema escuro, intensidade leve):
+   branco 8%, borda branca 15%, desfoque xl com saturação, filete de luz no topo e sombra suave. */
+.secao-escura .card-frente { background: color-mix(in srgb, var(--card) 8%, transparent); border-color: color-mix(in srgb, var(--card) 15%, transparent); -webkit-backdrop-filter: blur(24px) saturate(150%); backdrop-filter: blur(24px) saturate(150%); box-shadow: 0 8px 32px color-mix(in srgb, var(--graphite-950) 8%, transparent); isolation: isolate; }
+.secao-escura .card-frente::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: linear-gradient(to right, transparent, color-mix(in srgb, var(--card) 30%, transparent), transparent); pointer-events: none; }
+.secao-escura .card-frente:hover { border-color: color-mix(in srgb, var(--card) 22%, transparent); box-shadow: 0 16px 40px color-mix(in srgb, var(--graphite-950) 16%, transparent); }
+@media (prefers-reduced-transparency: reduce) { .secao-escura .card-frente { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--graphite-800); } }
+.secao-escura .card-frente h3 { color: var(--secondary); }
+.secao-escura .card-frente h3 + p { color: var(--crimson-300); }
+.secao-escura .card-frente h3 + p + p { color: var(--graphite-300); }
+.secao-escura .card-frente ul { border-color: color-mix(in srgb, var(--card) 7%, transparent); }
+.secao-escura .card-frente .tag-frente { background: color-mix(in srgb, var(--graphite-700) 60%, transparent); border-color: color-mix(in srgb, var(--card) 7%, transparent); color: var(--graphite-300); }
+.secao-escura .card-frente:hover .tag-frente { background: color-mix(in srgb, var(--primary) 15%, transparent); border-color: transparent; color: var(--primary); }
+.secao-escura .card-frente .frente-icone { background: color-mix(in srgb, var(--primary) 15%, transparent); border-color: transparent; color: var(--primary); }
+.secao-escura .card-frente:hover .frente-icone { background: color-mix(in srgb, var(--card) 8%, transparent); border-color: color-mix(in srgb, var(--card) 15%, transparent); color: var(--primary-foreground); box-shadow: none; }
+.secao-escura .card-frente .frente-num { color: color-mix(in srgb, var(--primary-foreground) 4%, transparent); }
+.secao-escura .card-frente:hover .frente-num { color: color-mix(in srgb, var(--primary) 15%, transparent); }
+.secao-escura .frente-luz { background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), var(--primary-muted), transparent 70%); }
+
+/* ---------- Tipografia e contraste (escala do design system + WCAG AA) ----------
+   Escala DS: H1 2.5rem/700, H2 2rem/700, H3 1.5rem/600, H4 1.25rem/600, Subtítulo 1.125rem/500,
+   Corpo 1rem, Corpo pequeno 0.875rem, Rótulo 0.75rem/600 (0.08em).
+   Texto pequeno em vermelho sobre fundo claro usa crimson-500 (#D44D4D) e sobre fundo escuro crimson-300 (#D44D4D),
+   porque o crimson-400 (#D44D4D) não chega a 4,5:1 nesses tamanhos. */
+#hero-titulo { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+main section h2 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.015em; line-height: 1.2; }
+@media (min-width: 640px) { #hero-titulo { font-size: 2.5rem; } main section h2 { font-size: 2rem; } }
+.lado-troca h3 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; }
+.card-frente h3, .cf-cartao h3, #como-funciona .rv h3 { font-size: 1.25rem; font-weight: 600; }
+.accordion-header { font-size: 1.125rem; font-weight: 600; }
+.rv-cabecalho > p.text-coral-600 { font-size: 1.125rem; font-weight: 500; }
+.lado-troca + .lado-troca p.text-slate-500 { color: var(--graphite-500); }
+
+/* Rótulos (selos e eyebrows) */
+main .rv-cabecalho > p:first-child, .hero-card > p:first-child { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; }
+
+/* Vermelho com contraste AA sobre fundo claro */
+main .text-coral-600:not(.secao-escura *), #hero .text-coral-600 { color: var(--primary); }
+.accordion-item.active .accordion-header, .accordion-item.active .accordion-chevron { color: var(--primary); }
+.cf-num > span { color: var(--primary); }
+.cf-etapa.feita .cf-num > span, .cf-etapa.atual .cf-num > span { color: var(--primary-foreground); }
+/* Botões vermelhos: texto branco precisa de 4,5:1 → crimson-500, hover crimson-600 */
+main a.bg-coral-600, main button.bg-coral-600 { background-color: var(--primary); }
+main a.bg-coral-600:hover, main button.bg-coral-600:hover { background-color: var(--primary-hover); }
+
+/* Fundo escuro: vermelho claro (crimson-300) para texto pequeno e cinzas do tema escuro */
+.secao-escura .rv-cabecalho > p.text-coral-600 { color: var(--crimson-300); }
+.secao-escura .card-frente h3 + p { color: var(--crimson-300); }
+.secao-escura > .relative > p.rv { color: var(--graphite-300); }
+/* Números dos cards: decorativos, mas legíveis (≥ 3:1 para texto grande) */
+.secao-escura .card-frente .frente-num { color: var(--muted-foreground); font-weight: 700; font-size: 48px; }
+.secao-escura .card-frente:hover .frente-num { color: var(--primary); }
+/* Títulos grandes (≥ 24px) podem manter o vermelho primário: 3:1 basta para texto grande */
+main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: var(--primary); }
+/* Cards de vidro: ícone branco em repouso (vermelho só no hover) e tags só com borda */
+.secao-escura .card-frente .frente-icone { background: color-mix(in srgb, var(--card) 8%, transparent); border-color: color-mix(in srgb, var(--card) 15%, transparent); color: var(--primary-foreground); }
+.secao-escura .card-frente .tag-frente { background: transparent; border-color: color-mix(in srgb, var(--card) 20%, transparent); color: var(--graphite-200); }
+/* Card de vidro não é clicável: ícone e tags continuam em vidro no hover (decisão da dona do produto, 19/11/2026) */
+.secao-escura .card-frente:hover .tag-frente { background: transparent; border-color: color-mix(in srgb, var(--card) 20%, transparent); color: var(--graphite-200); }
+/* Vidro mais transparente (acabamento "translúcido" do GlassCard no tema escuro): branco 4%, borda 12%, desfoque menor */
+.secao-escura .card-frente { background: color-mix(in srgb, var(--card) 4%, transparent); border-color: color-mix(in srgb, var(--card) 12%, transparent); -webkit-backdrop-filter: blur(10px) saturate(150%); backdrop-filter: blur(10px) saturate(150%); }
+/* Números dos cards de vidro: mesma cor da base do ícone (branco 8%); no hover continuam em crimson-300 */
+.secao-escura .card-frente .frente-num { color: color-mix(in srgb, var(--primary-foreground) 8%, transparent); }
+/* Ícones e tags dos cards aparecem quase juntos (cascata curta) */
+.anima-pronto .rv-grupo.visivel .frente-icone { animation-delay: calc(var(--i, 0) * .03s + .1s); }
+.anima-pronto .rv-grupo.visivel .tag-frente { animation-delay: calc(var(--i, 0) * .03s + .2s + var(--t, 0) * .04s); }
+
+
+/* Botão flutuante "Cadastrar minha empresa": ao lado do WhatsApp depois que o hero sai da tela; some no formulário */
+.cta-flutuante { right: 88px; bottom: 24px; opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .3s ease, transform .4s cubic-bezier(0.16, 1, 0.3, 1); }
+.cta-flutuante.visivel { opacity: 1; transform: none; pointer-events: auto; }
+@media (min-width: 640px) { .cta-flutuante { right: 96px; bottom: 28px; } }
+@media (prefers-reduced-motion: reduce) { .cta-flutuante { transition: none; } }
+/* Celular: o botão ocupa toda a largura livre, da margem esquerda até o WhatsApp */
+@media (max-width: 639px) { .cta-flutuante { left: 20px; right: 88px; } }
+
+/* ---------- Citação de fechamento do bloco "Para sua empresa / Para o Studio" ----------
+   Toda em Plus Jakarta itálico; palavras de destaque em vermelho. */
+.citacao-equilibrio { position: relative; max-width: 46rem; margin-left: auto; margin-right: auto; padding: .75rem 0 .25rem; text-align: center; }
+.citacao-aspas { display: block; font-style: italic; font-weight: 700; font-size: 4rem; line-height: .6; height: 1.75rem; color: var(--primary); }
+.citacao-equilibrio blockquote { margin: 0; }
+.citacao-equilibrio blockquote p { font-style: italic; font-weight: 700; font-size: 1.25rem; line-height: 1.5; letter-spacing: -0.01em; color: var(--foreground); }
+@media (min-width: 640px) { .citacao-equilibrio blockquote p { font-size: 1.5rem; } }
+
+/* ---------- Divisão entre o hero e "Sobre o programa" ----------
+   Mesmo modelo da página Experience Intelligence 3: a seção seguinte é um grande cartão branco
+   com cantos arredondados (36/48/56px), recuado das laterais, sobre o fundo escuro que continua
+   do hero até o Escopo. A foto do hero esmaece para o grafite na base para o fundo seguir contínuo. */
+#hero-fundo::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 160px; background: linear-gradient(to bottom, transparent, var(--foreground)); pointer-events: none; }
+.divisao-hero { position: relative; z-index: 1; background: linear-gradient(to bottom, var(--foreground), var(--graphite-950)); padding: 0 .5rem; }
+.divisao-hero-cartao { max-width: 1400px; margin: 0 auto; border-radius: 36px; overflow: hidden; background: var(--card); }
+@media (min-width: 640px) { .divisao-hero { padding: 0 1rem; } .divisao-hero-cartao { border-radius: 48px; } }
+@media (min-width: 1024px) { .divisao-hero { padding: 0 1.5rem; } .divisao-hero-cartao { border-radius: 56px; } }
+/* Sobre o programa: sem a mancha avermelhada no canto superior esquerdo do cartão */
+#sobre-o-programa .fundo-gradiente span:nth-child(1) { display: none; }
+
+/* ---------- Guia completo: accordion no padrão do DS ("Card stack — FAQ style"), em branco ----------
+   Item: raio 10px, borda --border, fundo branco (a seção é branca); aberto: borda primary/40 e fundo primary/3%.
+   Gatilho: 16px x 14px, 0.875rem semibold --foreground; chevron 16px --muted-foreground (aberto: gira e fica primary).
+   Conteúdo: 0.8125rem, --muted-foreground, linha relaxada, divisor border/50. Numeração discreta (o texto cita "tópico 06"). */
+#accordion-group > * { margin-block: 0 !important; }
+#accordion-group > * + * { margin-top: .5rem !important; }
+#accordion-group .accordion-item { border-radius: 10px; border: 1px solid var(--border); background: var(--card); box-shadow: none; transition: border-color .2s ease, background-color .2s ease; }
+#accordion-group .accordion-item.active { border-color: var(--border); background: var(--card); } /* aberto sem destaque vermelho */
+#accordion-group .accordion-trigger { padding: .875rem 1rem; border-radius: 10px; gap: 1rem; }
+#accordion-group .accordion-header, #accordion-group .accordion-item.active .accordion-header { font-size: .875rem; font-weight: 600; line-height: 1.4; color: var(--foreground); gap: .625rem; }
+#accordion-group .accordion-header > span:first-child { font-size: .8125rem; font-weight: 600; letter-spacing: 0; color: var(--muted-foreground); }
+#accordion-group .accordion-chevron { width: 1rem; height: 1rem; color: var(--muted-foreground); transition: transform .2s ease, color .2s ease; }
+#accordion-group .accordion-item.active .accordion-chevron { color: var(--primary); transform: rotate(180deg); }
+#accordion-group .accordion-content > div > div { padding: .75rem 1rem 1rem; font-size: .8125rem; line-height: 1.625; color: var(--muted-foreground); border-top: 1px solid color-mix(in srgb, var(--foreground) 4.5%, transparent); }
+
+/* ---------- Sobre o programa: base G-50 com dois cards brancos elevados (DS) ----------
+   Card branco sobre fundo G-50: fundo --card, borda --border, raio 16px e sombra --shadow do DS.
+   Os dois lados ficam iguais (mesmo fundo, mesma elevação), separados por espaço em vez de divisor. */
+.divisao-hero-cartao, .transicao-sobre { background: var(--graphite-50); }
+#sobre-o-programa article { background: transparent; border: 0; border-radius: 0; overflow: visible; }
+#sobre-o-programa .troca-grade { column-gap: 1.5rem; row-gap: 0; }
+#sobre-o-programa .lado-troca { background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 2px 6px color-mix(in srgb, var(--graphite-950) 7%, transparent), 0 6px 20px color-mix(in srgb, var(--graphite-950) 5%, transparent); }
+@media (max-width: 1023px) { #sobre-o-programa .lado-troca + .lado-troca { margin-top: 1.5rem; } }
+#sobre-o-programa .lado-troca + .lado-troca p.text-slate-500 { color: var(--graphite-500); }
+
+/* ---------- Cabeçalho colorido de cada card (Sobre o programa) ----------
+   Versão leve: faixa em tom claro com filete de 3px no topo.
+   "Para sua empresa": crimson-50 (#FDF2F2), filete crimson-500, texto/ícone crimson-500.
+   "Para o Studio": graphite-50 (#EDF0F5), filete graphite-900, texto/ícone graphite-900. */
+#sobre-o-programa .lado-troca { overflow: hidden; }
+#sobre-o-programa .lado-troca > div:first-child { margin: -1.75rem -1.75rem 1.75rem; padding: 1.125rem 1.75rem; background: var(--primary-suave); border-top: 3px solid var(--primary); border-bottom: 1px solid var(--crimson-100); }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child { background: var(--graphite-50); border-top-color: var(--foreground); border-bottom-color: var(--graphite-100); }
+@media (min-width: 640px) { #sobre-o-programa .lado-troca > div:first-child { margin: -2.5rem -2.5rem 2rem; padding: 1.25rem 2.5rem; } }
+@media (min-width: 1024px) { #sobre-o-programa .lado-troca > div:first-child { margin: -3rem -3rem 2.25rem; padding: 1.25rem 3rem; } }
+#sobre-o-programa .lado-troca > div:first-child > p { color: var(--primary); }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child > p { color: var(--foreground); }
+#sobre-o-programa .lado-troca > div:first-child > span { background: var(--card); border-color: var(--crimson-100); color: var(--primary); }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child > span { border-color: var(--graphite-100); }
+
+/* Mobile: no topo, sobre a foto, o cabeçalho mostra o ícone da empresa (no desktop segue sem logo até rolar) */
+@media (max-width: 767px) {
+  .cabecalho-sobre-hero .site-header:not(.is-scrolled) header > a:first-child { visibility: visible; }
+  .cabecalho-sobre-hero .site-header:not(.is-scrolled) .logo-completo { display: none; }
+  .cabecalho-sobre-hero .site-header:not(.is-scrolled) .logo-icone { display: block; }
+}
+/* Cards do Sobre: topo reto (sem cantos arredondados), base arredondada */
+#sobre-o-programa .lado-troca { border-radius: 0 0 16px 16px; }
+/* Escopo: sem numeração nos cards */
+.card-frente .frente-num { display: none; }
+
+/* ---------- Botão "subir": aparece ao chegar no rodapé, ao lado do WhatsApp ---------- */
+.botao-subir { right: 88px; bottom: 28px; opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .3s ease, transform .4s cubic-bezier(0.16, 1, 0.3, 1), background-color .2s ease; }
+.botao-subir.visivel { opacity: 1; transform: none; pointer-events: auto; }
+@media (min-width: 640px) { .botao-subir { right: 96px; bottom: 32px; } }
+@media (prefers-reduced-motion: reduce) { .botao-subir { transition: none; } }
+@media (min-width: 1024px) { .citacao-equilibrio { max-width: 52rem; } }
+
+/* ---------- Sobre o programa: proposta sem "card sobre card" ----------
+   Os dois blocos deixam de ser cards: viram colunas abertas direto no cartão branco da seção.
+   A diferenciação fica no filete de 4px no topo de cada coluna (crimson-500 x graphite-900),
+   na cor do rótulo e nos ícones. Sem fundo, borda lateral ou sombra. */
+.divisao-hero-cartao, .transicao-sobre { background: var(--card); }
+#sobre-o-programa .troca-grade { column-gap: 4rem; }
+#sobre-o-programa .lado-troca { background: transparent; border: 0; border-top: 4px solid var(--primary); border-radius: 0; box-shadow: none; overflow: visible; padding: 1.75rem 0 0; }
+#sobre-o-programa .lado-troca + .lado-troca { border-top-color: var(--foreground); }
+@media (max-width: 1023px) { #sobre-o-programa .lado-troca + .lado-troca { margin-top: 3rem; } }
+#sobre-o-programa .lado-troca > div:first-child,
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child { margin: 0 0 1.5rem; padding: 0; background: transparent; border: 0; }
+@media (min-width: 640px) { #sobre-o-programa .lado-troca > div:first-child { margin: 0 0 1.5rem; padding: 0; } }
+@media (min-width: 1024px) { #sobre-o-programa .lado-troca > div:first-child { margin: 0 0 1.5rem; padding: 0; } }
+#sobre-o-programa .lado-troca > div:first-child > span { background: var(--primary-suave); border-color: var(--crimson-100); }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child > span { background: var(--graphite-50); border-color: var(--graphite-100); }
+/* Filete colorido abaixo do ícone + rótulo (e não no topo da coluna) */
+#sobre-o-programa .lado-troca, #sobre-o-programa .lado-troca + .lado-troca { border-top: 0; padding-top: 0; }
+#sobre-o-programa .lado-troca > div:first-child { padding-bottom: 1rem !important; border-bottom: 4px solid var(--primary) !important; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child { border-bottom-color: var(--foreground) !important; }
+/* Ícone de compromisso com base, no mesmo estilo dos checks de cada coluna */
+#sobre-o-programa .compromisso-icone { width: 2.25rem; height: 2.25rem; margin-top: -0.375rem; border-radius: .625rem; border: 1px solid var(--crimson-100); background: var(--primary-suave); display: inline-flex; align-items: center; justify-content: center; }
+#sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { border-color: var(--border); background: var(--card); }
+#sobre-o-programa .compromisso-icone svg { width: 1.125rem; height: 1.125rem; }
+/* Listas do Sobre: só o check, sem a base */
+#sobre-o-programa .lado-troca li > span:first-child { width: auto; height: auto; background: transparent; border: 0; border-radius: 0; margin-top: .125rem; }
+#sobre-o-programa .lado-troca li > span:first-child svg { width: 1.25rem; height: 1.25rem; stroke-width: 2.5; }
+#sobre-o-programa .lado-troca li > span:last-child { padding-top: 0; }
+/* Compromissos em boxes (sem divisor): tom claro de cada coluna; ícone com base branca */
+#sobre-o-programa .lado-troca p:has(.compromisso-icone) { border-top: 0; padding: 1rem 1.25rem; border-radius: 12px; background: var(--primary-suave); border: 1px solid var(--crimson-100); align-items: center; }
+#sobre-o-programa .lado-troca + .lado-troca p:has(.compromisso-icone) { background: var(--graphite-50); border-color: var(--graphite-100); }
+#sobre-o-programa .compromisso-icone, #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { margin-top: 0; background: var(--card); }
+#sobre-o-programa .lado-troca > div:first-child { border-bottom-width: 2px !important; } /* filete mais fino */
+/* Mais respiro: entre as duas colunas e entre elas e a citação */
+@media (min-width: 1024px) { #sobre-o-programa .troca-grade { column-gap: 6rem; } }
+#sobre-o-programa .citacao-equilibrio { margin-top: 4.5rem; }
+@media (min-width: 640px) { #sobre-o-programa .citacao-equilibrio { margin-top: 6.5rem; } }
+/* Base do ícone de compromisso no tom de cada bloco (um passo mais escuro que o box) */
+#sobre-o-programa .compromisso-icone { background: var(--crimson-100); border-color: var(--crimson-100); }
+#sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { background: var(--graphite-100); border-color: var(--graphite-100); }
+#sobre-o-programa .lado-troca > div:first-child { border-bottom-width: 1px !important; } /* filete fininho */
+/* Filete do rótulo em tom mais claro: crimson-300 / graphite-300 */
+#sobre-o-programa .lado-troca > div:first-child { border-bottom-color: var(--primary) !important; }
+#sobre-o-programa .lado-troca + .lado-troca > div:first-child { border-bottom-color: var(--graphite-300) !important; }
+/* Accordion do Guia: no hover, número, título e seta em vermelho */
+#accordion-group .accordion-trigger:hover .accordion-header,
+#accordion-group .accordion-trigger:hover .accordion-header > span:first-child,
+#accordion-group .accordion-trigger:hover .accordion-chevron { color: var(--primary); }
+#accordion-group .accordion-header, #accordion-group .accordion-header > span:first-child { transition: color .2s ease; }
+/* Escopo: tags numa linha só no computador (3 tags por card) */
+@media (min-width: 1280px) { .card-frente ul[aria-label="Temas"] { flex-wrap: nowrap; gap: .25rem; } .card-frente .tag-frente { white-space: nowrap; padding-left: .4375rem; padding-right: .4375rem; } }
+
+/* ---------- Shine Border do DS no hover (card do hero e cards do Escopo) ----------
+   Mesma receita do componente do design system: borda de 1px com gradiente radial (primary, chart-2, primary)
+   que percorre o contorno (keyframes "shine", 12s), máscara recortando só a borda, decorativa (sem eventos de ponteiro).
+   Aparece só no hover; com movimento reduzido a borda aparece parada. */
+@keyframes ds-shine { 0% { background-position: 0 0; } 50% { background-position: 100% 100%; } 100% { background-position: 0 0; } }
+.hero-card, .card-frente { position: relative; }
+.hero-card::after, .card-frente::after {
+  content: ""; position: absolute; inset: 0; z-index: 3; border-radius: inherit; padding: 1px; pointer-events: none;
+  background-image: radial-gradient(transparent, transparent, var(--primary), var(--graphite-500), var(--primary), transparent, transparent);
+  background-size: 300% 300%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude;
+  opacity: 0; transition: opacity .3s ease;
+}
+.secao-escura .card-frente::after { background-image: radial-gradient(transparent, transparent, var(--primary), var(--graphite-400), var(--primary), transparent, transparent); }
+.hero-card:hover::after, .card-frente:hover::after { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) { .hero-card:hover::after, .card-frente:hover::after { animation: ds-shine 12s linear infinite; } }
+/* Escopo: sem a barra vermelha do topo no hover (a Shine Border já marca o hover) */
+.card-frente .frente-barra { display: none; }
+/* Hero: Shine Border mais visível (2px, parâmetro borderWidth do componente do DS) */
+.hero-card::after { padding: 2px; }
+/* Hero: brilho mais concentrado e rápido, para aparecer no card grande sobre a foto */
+.hero-card::after { padding: 2px; background-image: radial-gradient(transparent, var(--primary), var(--primary), var(--primary), transparent); background-size: 250% 250%; }
+@media (prefers-reduced-motion: no-preference) { .hero-card:hover::after { animation-duration: 6s; } }
+/* Escopo: mesma Shine Border do hero (2px, brilho vermelho concentrado, 6s), em tons para fundo escuro */
+.secao-escura .card-frente::after { padding: 2px; background-image: radial-gradient(transparent, var(--primary), var(--primary), var(--primary), transparent); background-size: 250% 250%; }
+@media (prefers-reduced-motion: no-preference) { .card-frente:hover::after { animation-duration: 6s; } }
+/* Escopo: borda animada mais refinada, vermelho com grafite claro (receita do DS: primary, chart-2, primary), 1.5px */
+.secao-escura .card-frente::after { padding: 1.5px; background-image: radial-gradient(transparent, var(--primary), var(--graphite-200), var(--primary), transparent); }
+
+/* ---------- Guia: tipografia única dentro das respostas do accordion ----------
+   Corpo: 13px/400 --muted-foreground (#627288). Ênfases (frases de abertura, "Não.", negritos): 13px/600 --foreground (#131A27).
+   Notas finais no mesmo tamanho e cor do corpo. */
+#accordion-group .accordion-content p, #accordion-group .accordion-content li, #accordion-group .accordion-content span:not(.text-coral-600) { font-size: .8125rem; line-height: 1.625; }
+#accordion-group .accordion-content p.text-slate-500 { font-size: .8125rem; color: var(--muted-foreground); }
+#accordion-group .accordion-content p.text-slate-800, #accordion-group .accordion-content p.text-slate-900,
+#accordion-group .accordion-content strong { font-size: .8125rem; font-weight: 600; color: var(--foreground); }
+/* Botão subir com o mesmo tamanho (56px) e a mesma linha de base do botão do WhatsApp, 12px de distância */
+.botao-subir { width: 3.5rem; height: 3.5rem; right: 88px; bottom: 20px; }
+@media (min-width: 640px) { .botao-subir { right: 92px; bottom: 24px; } }
+.botao-subir svg { width: 1.5rem; height: 1.5rem; }
+/* Mobile: card do hero logo abaixo do cabeçalho (sem centralizar na tela) */
+@media (max-width: 767px) {
+  .hero-piloto { align-items: flex-start; padding-top: calc(var(--altura-cabecalho, 68px) + .75rem) !important; }
+}
+@media (max-width: 767px) { .rolar-abaixo { display: none !important; } } /* sem "Saiba mais" no celular */
+@media (max-width: 767px) { .hero-piloto { padding-bottom: 2.5rem !important; min-height: 0; } } /* sem o "Saiba mais", o hero termina logo após o card */
+
+/* ---------- Celular: "Sobre o programa" com cabeçalho e citação no fundo escuro e as duas abas num card branco ---------- */
+.sobre-abas[hidden] { display: none; }
+@media (max-width: 767px) {
+  .divisao-hero-cartao, .transicao-sobre { background: transparent !important; border-radius: 0; overflow: visible; }
+  #sobre-o-programa { padding-top: 1rem !important; padding-bottom: 3.5rem !important; overflow: visible; }
+  #sobre-o-programa .fundo-gradiente { display: none; }
+  #sobre-o-programa .rv-cabecalho { margin-bottom: 2rem; }
+  #sobre-o-programa .rv-cabecalho > p:first-child { background: color-mix(in srgb, var(--card) 10%, transparent); border-color: color-mix(in srgb, var(--card) 15%, transparent); color: color-mix(in srgb, var(--primary-foreground) 85%, transparent); }
+  #sobre-o-programa .rv-cabecalho > p:first-child > span { background: var(--primary); }
+  #sobre-o-programa .rv-cabecalho h2 { color: var(--secondary); }
+  #sobre-o-programa .rv-cabecalho h2 .text-coral-600 { color: var(--primary); }
+  #sobre-o-programa .rv-cabecalho > p:last-child { color: var(--graphite-200); }
+  #sobre-o-programa article { background: var(--card) !important; border-radius: 24px !important; padding: .5rem 1.25rem 1.5rem; }
+  #sobre-o-programa .lado-troca > div:first-child { display: none !important; }
+  #sobre-o-programa .lado-troca + .lado-troca { margin-top: 0 !important; }
+  #sobre-o-programa .lado-troca.aba-oculta { display: none !important; }
+  #sobre-o-programa .lado-troca > h3 { margin-top: 1.25rem; }
+  .sobre-abas { display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; padding: .25rem; margin: .75rem 0 0; border-radius: 12px; background: var(--graphite-50); }
+  #sobre-o-programa article { display: flex; flex-direction: column; }
+  .sobre-aba { height: 2.5rem; border: 0; border-radius: 9px; background: transparent; color: var(--muted-foreground); font: inherit; font-size: .875rem; font-weight: 600; cursor: pointer; transition: background-color .2s ease, color .2s ease, box-shadow .2s ease; }
+  .sobre-aba[aria-selected="true"] { background: var(--card); color: var(--foreground); box-shadow: 0 1px 3px color-mix(in srgb, var(--graphite-950) 7%, transparent), 0 2px 6px color-mix(in srgb, var(--graphite-950) 5%, transparent); }
+  .sobre-aba:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 45%, transparent); }
+  #sobre-o-programa .citacao-equilibrio { margin-top: 3rem; }
+  #sobre-o-programa .citacao-equilibrio blockquote p { color: var(--secondary); }
+  #sobre-o-programa .citacao-equilibrio blockquote p .text-coral-600 { color: var(--primary); }
+  #sobre-o-programa .citacao-aspas { color: var(--primary); }
+}
+
+/* ---------- Celular: Escopo como carrossel (rolagem lateral com encaixe), sempre mostrando parte do próximo card ---------- */
+@media (max-width: 767px) {
+  .escopo-carrossel { display: flex; gap: 1rem; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+    margin-left: -1rem; margin-right: -1rem; padding: .25rem 1rem 1rem; scroll-padding-inline: 1rem; scrollbar-width: none; }
+  .escopo-carrossel::-webkit-scrollbar { display: none; }
+  .escopo-carrossel { align-items: stretch !important; }
+  .escopo-carrossel > .card-frente { flex: 0 0 84%; scroll-snap-align: start; height: auto !important; align-self: stretch !important; }
+  .escopo-carrossel:focus-visible { outline: none; box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--crimson-300) 60%, transparent); border-radius: 1.5rem; }
+}
+/* Celular: "E depois do projeto-piloto?" centralizado e sem o botão (o botão flutuante já está sempre na tela) */
+@media (max-width: 767px) {
+  .depois-piloto { align-items: center; text-align: center; }
+  .depois-piloto > a[href="#inscricao"] { display: none; }
+}
+/* Celular: conteúdo do card do hero centralizado */
+@media (max-width: 767px) { .hero-card, .hero-card * { text-align: center !important; } .hero-card { align-items: center; } }
+
+/* ---------- Aviso de uso dos dados: alerta "warning" do DS (fundo --warning-muted, borda warning/20, ícone --warning) ---------- */
+.aviso-dados { display: flex; align-items: flex-start; gap: .75rem; margin: 0; padding: .875rem 1rem; border-radius: 12px;
+  background: color-mix(in srgb, var(--warning) 10%, transparent); border: 1px solid color-mix(in srgb, var(--warning) 20%, transparent);
+  font-size: .875rem; line-height: 1.625; color: var(--graphite-500); text-align: left; }
+.aviso-dados-icone { width: 1.25rem; height: 1.25rem; flex-shrink: 0; margin-top: .125rem; color: var(--warning-text); }
+
+/* ---------- Card de convite (DS: "Card de convite ao parceiro", horizontal, tamanho G, superfície card) ---------- */
+.convite-card { position: relative; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; gap: 1.5rem;
+  border-radius: 24px; border: 1px solid var(--border); background: var(--card); color: var(--foreground); padding: 2rem;
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--graphite-950) 7%, transparent), 0 2px 6px color-mix(in srgb, var(--graphite-950) 5%, transparent); transition: box-shadow .2s ease; }
+.convite-card:hover { box-shadow: 0 8px 24px color-mix(in srgb, var(--graphite-950) 9%, transparent), 0 20px 48px color-mix(in srgb, var(--graphite-950) 7%, transparent); }
+@media (min-width: 640px) { .convite-card { flex-direction: row; align-items: center; padding: 3rem; } }
+.convite-luz { position: absolute; z-index: -1; pointer-events: none; border-radius: 9999px; filter: blur(64px); }
+.convite-luz-1 { right: -4rem; top: -4rem; width: 14rem; height: 14rem; background: var(--primary-muted); }
+.convite-luz-2 { left: -2.5rem; bottom: -5rem; width: 10rem; height: 10rem; background: color-mix(in srgb, var(--primary) 5%, transparent); }
+.convite-visual { flex-shrink: 0; width: 6rem; height: 6rem; border-radius: 18px; background: var(--primary-suave); color: var(--primary); display: flex; align-items: center; justify-content: center; }
+.convite-visual svg { width: 3rem; height: 3rem; }
+@media (min-width: 640px) { .convite-visual { order: 2; } }
+.convite-conteudo { min-width: 0; flex: 1; }
+.convite-selo { display: inline-flex; align-items: center; gap: .5rem; margin: 0 0 .75rem; padding: .375rem .875rem; border-radius: 9999px; border: 1px solid var(--border); background: var(--card);
+  font-size: .75rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--graphite-700); white-space: nowrap; }
+.convite-selo span { width: .5rem; height: .5rem; border-radius: 9999px; background: var(--primary); }
+.convite-titulo { margin: 0; font-size: 2rem; line-height: 1.1; letter-spacing: -0.03em; font-weight: 700; color: var(--foreground); text-wrap: balance; }
+@media (min-width: 640px) { .convite-titulo { font-size: 2.5rem; } }
+.convite-texto { margin: .5rem 0 0; max-width: 65ch; font-size: 1.0625rem; line-height: 1.625; color: var(--graphite-500); }
+.convite-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin-top: 1.5rem; }
+.convite-cta { display: inline-flex; align-items: center; gap: .5rem; height: 3rem; padding: 0 1.5rem; border: 0; border-radius: 9999px; background: var(--primary); color: var(--primary-foreground);
+  font: inherit; font-size: .9375rem; font-weight: 600; cursor: pointer; box-shadow: 0 1px 3px color-mix(in srgb, var(--graphite-950) 7%, transparent), 0 2px 6px color-mix(in srgb, var(--graphite-950) 5%, transparent); transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease; }
+.convite-cta:hover { transform: translateY(-2px); background: var(--primary-hover); box-shadow: 0 4px 12px color-mix(in srgb, var(--graphite-950) 8%, transparent), 0 12px 36px color-mix(in srgb, var(--graphite-950) 6%, transparent); }
+.convite-cta:focus-visible, .convite-link:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--card), 0 0 0 4px color-mix(in srgb, var(--primary) 60%, transparent); border-radius: 9999px; }
+.convite-seta { width: 1.25rem; height: 1.25rem; transition: transform .2s ease; }
+.convite-cta:hover .convite-seta { transform: translateX(2px); }
+.convite-link { font-size: .8125rem; font-weight: 600; color: var(--primary); text-underline-offset: 4px; }
+.convite-link:hover { text-decoration: underline; }
+@media (max-width: 639px) { .convite-card { text-align: center; align-items: center; } .convite-acoes { justify-content: center; } .convite-texto { margin-left: auto; margin-right: auto; } }
+/* Gaveta do cadastro: o formulário ocupa a largura da gaveta */
+#cadastro-gaveta .cadastro-corpo form .grid { gap: 1rem; }
+/* Gaveta do cadastro fica fora do <main>: mesmas cores AA do formulário de antes (crimson-500 / -600) */
+#cadastro-gaveta .text-coral-600 { color: var(--primary); }
+#cadastro-gaveta button.bg-coral-600 { background-color: var(--primary); }
+#cadastro-gaveta button.bg-coral-600:hover { background-color: var(--primary-hover); }
+
+/* Celular: faixa escura com desfoque no pé da tela, por trás dos botões flutuantes (só quando eles aparecem) */
+.faixa-flutuante { display: none; }
+@media (max-width: 767px) {
+  .faixa-flutuante { display: block; position: fixed; left: 0; right: 0; bottom: 0; height: 7.5rem; z-index: 43; pointer-events: none;
+    background: linear-gradient(to top, color-mix(in srgb, var(--graphite-950) 60%, transparent) 0%, color-mix(in srgb, var(--graphite-950) 35%, transparent) 45%, transparent 100%);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    -webkit-mask-image: linear-gradient(to top, #000 40%, transparent); mask-image: linear-gradient(to top, #000 40%, transparent);
+    opacity: 0; transition: opacity .3s ease; }
+  body:has(.cta-flutuante.visivel) .faixa-flutuante, body:has(.botao-subir.visivel) .faixa-flutuante { opacity: 1; }
+}
+/* Card do hero sem a borda animada (desktop e celular) */
+.hero-card::after { display: none !important; }
+/* Celular: card do hero 5px mais alto */
+@media (max-width: 767px) { .hero-piloto { padding-top: calc(var(--altura-cabecalho, 68px) + .4375rem) !important; } }
+
+/* Celular (linha do tempo em coluna única): "E depois do projeto-piloto?" vira a última etapa, com o card em cores invertidas (vermelho) */
+.cf-etapa-depois { display: none !important; }
+@media (max-width: 639px) {
+  .cf-etapa-depois { display: flex !important; }
+  .depois-piloto-card { display: none !important; }
+  .cf-cartao-depois { background: var(--primary); border: 1px solid var(--primary); color: var(--primary-foreground); box-shadow: 0 16px 40px color-mix(in srgb, var(--primary) 25%, transparent); }
+  .cf-cartao-depois h3 { color: var(--primary-foreground); }
+  .cf-cartao-depois p { color: color-mix(in srgb, var(--primary-foreground) 90%, transparent); }
+}
+
+/* Celular: menos espaço entre as seções para encurtar a rolagem */
+@media (max-width: 639px) {
+  #atuacao { padding-top: 2.5rem !important; padding-bottom: 4rem !important; }
+  #como-funciona, #guia, #inscricao { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+  #sobre-o-programa { padding-bottom: 2.5rem !important; }
+  #sobre-o-programa .citacao-equilibrio { margin-top: 2rem !important; }
+  main .rv-cabecalho { margin-bottom: 2rem !important; }
+  .cf-etapas { row-gap: 0; }
+  .cf-etapas > * + * { margin-top: 2rem !important; }
+  .cf-etapas { margin-bottom: 0; }
+  #como-funciona .cf-etapas.relative { margin-bottom: 0; }
+  #como-funciona .max-w-4xl.mb-20 { margin-bottom: 0 !important; }
+  footer.relative { padding-top: 4rem !important; }
+}
+#cadastro-rodape { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
+
+/* Celular: card "E depois" no padrão do card de convite do DS, superfície grafite (dark) */
+@media (max-width: 639px) {
+  .cf-cartao-depois { position: relative; isolation: isolate; overflow: hidden; padding: 1.5rem; border-radius: 24px;
+    background: var(--graphite-950) !important; border: 1px solid color-mix(in srgb, var(--card) 10%, transparent) !important; color: var(--primary-foreground);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--graphite-950) 8%, transparent), 0 12px 36px color-mix(in srgb, var(--graphite-950) 6%, transparent) !important; }
+  .cf-cartao-depois .depois-luz { position: absolute; z-index: -1; right: -4rem; top: -4rem; width: 14rem; height: 14rem; border-radius: 9999px; background: var(--primary-muted); filter: blur(64px); pointer-events: none; }
+  .cf-cartao-depois .depois-visual { display: flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; margin-bottom: 1rem; border-radius: 16px; background: color-mix(in srgb, var(--card) 10%, transparent); color: var(--primary); }
+  .cf-cartao-depois h3 { margin: 0 0 .5rem; font-size: 1.375rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: var(--primary-foreground) !important; }
+  .cf-cartao-depois .depois-destaque { color: var(--primary); }
+  .cf-cartao-depois p { margin: 0; font-size: .9375rem; line-height: 1.6; color: color-mix(in srgb, var(--primary-foreground) 70%, transparent) !important; }
+  .cf-cartao-depois .depois-cta { display: inline-flex; align-items: center; gap: .5rem; height: 2.75rem; margin-top: 1.25rem; padding: 0 1.25rem; border: 0; border-radius: 9999px;
+    background: var(--primary); color: var(--primary-foreground); font: inherit; font-size: .875rem; font-weight: 600; cursor: pointer; }
+  .cf-cartao-depois .depois-cta svg { width: 1.125rem; height: 1.125rem; }
+  .cf-cartao-depois .depois-cta:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--graphite-950), 0 0 0 4px color-mix(in srgb, var(--primary) 60%, transparent); }
+}
+@media (max-width: 639px) { .cf-cartao-depois .depois-cta { white-space: nowrap; padding: 0 1rem; font-size: .8125rem; } }
+@media (max-width: 359px) { .cf-cartao-depois { padding: 1.25rem; } .cf-cartao-depois .depois-cta { width: 100%; justify-content: center; white-space: normal; height: auto; min-height: 2.75rem; padding: .625rem 1rem; text-align: center; } }
+/* Card "E depois" (celular): botão outline, só borda e rótulo */
+@media (max-width: 639px) {
+  .cf-cartao-depois .depois-cta { background: transparent; border: 1.5px solid color-mix(in srgb, var(--card) 85%, transparent); color: var(--primary-foreground); transition: background-color .2s ease, color .2s ease; }
+  .cf-cartao-depois .depois-cta:hover { background: var(--card); color: var(--foreground); }
+}
+@media (max-width: 359px) { .cf-cartao-depois .depois-cta { white-space: nowrap; height: 2.75rem; min-height: 0; padding: 0 1rem; } }
+/* Card "E depois" (celular): outline no padrão vermelho */
+@media (max-width: 639px) {
+  .cf-cartao-depois .depois-cta { border-color: var(--primary); color: var(--primary); }
+  .cf-cartao-depois .depois-cta:hover { background: var(--primary); border-color: var(--primary); color: var(--primary-foreground); }
+}
+
+/* Desktop/tablet: card horizontal "E depois" abaixo da timeline, no mesmo padrão escuro do card do celular */
+.depois-piloto-card { position: relative; isolation: isolate; overflow: hidden; background: var(--graphite-950) !important; border: 1px solid color-mix(in srgb, var(--card) 10%, transparent) !important;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--graphite-950) 8%, transparent), 0 12px 36px color-mix(in srgb, var(--graphite-950) 6%, transparent) !important; }
+.depois-piloto-card::before { content: ""; position: absolute; z-index: -1; right: -4rem; top: -4rem; width: 16rem; height: 16rem; border-radius: 9999px; background: var(--primary-muted); filter: blur(64px); pointer-events: none; }
+.depois-piloto-card > .depois-piloto > span:first-child { background: color-mix(in srgb, var(--card) 10%, transparent) !important; border-color: transparent !important; color: var(--primary) !important; box-shadow: none !important; }
+.depois-piloto-card h3 { color: var(--primary-foreground) !important; font-weight: 700; letter-spacing: -0.02em; }
+.depois-piloto-card .depois-destaque { color: var(--primary); }
+.depois-piloto-card h3 + p { color: color-mix(in srgb, var(--primary-foreground) 70%, transparent) !important; }
+.depois-cta-desk { display: inline-flex; align-items: center; gap: .5rem; height: 3rem; padding: 0 1.5rem; border-radius: 9999px; border: 1.5px solid var(--primary); color: var(--primary);
+  background: transparent; font-size: .9375rem; font-weight: 600; white-space: nowrap; text-decoration: none; transition: background-color .2s ease, color .2s ease, border-color .2s ease; }
+.depois-cta-desk svg { width: 1.125rem; height: 1.125rem; transition: transform .2s ease; }
+.depois-cta-desk:hover { background: var(--primary); border-color: var(--primary); color: var(--primary-foreground); }
+.depois-cta-desk:hover svg { transform: translateX(2px); }
+.depois-cta-desk:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--graphite-950), 0 0 0 4px color-mix(in srgb, var(--primary) 60%, transparent); }
+
+/* Card "E depois" (desktop e celular): mesma iluminação animada do fundo do Escopo */
+.depois-piloto-card::before { display: none; }
+.depois-piloto-card > .depois-piloto, .cf-cartao-depois > :not(.luz-card) { position: relative; z-index: 1; }
+.luz-card { z-index: 0; border-radius: inherit; }
+.luz-card span:nth-child(1) { width: 420px; height: 420px; top: -40%; left: -10%; }
+.luz-card span:nth-child(2) { width: 360px; height: 360px; top: -30%; left: 55%; }
+.luz-card span:nth-child(3) { width: 320px; height: 320px; top: 50%; left: 30%; }
+/* Celular: luzes menores e nos cantos, para o card manter o fundo escuro com pontos de cor */
+@media (max-width: 639px) {
+  .cf-cartao-depois .luz-card span { filter: blur(48px); }
+  .cf-cartao-depois .luz-card span:nth-child(1) { width: 180px; height: 180px; top: -60px; left: -60px; }
+  .cf-cartao-depois .luz-card span:nth-child(2) { width: 160px; height: 160px; top: 35%; left: 70%; }
+  .cf-cartao-depois .luz-card span:nth-child(3) { width: 150px; height: 150px; top: 80%; left: 5%; }
+}
+
+/* ---------- Card "E depois" (desktop e celular) no padrão claro: superfície "tint" do Card de convite do DS ---------- */
+.depois-piloto-card, .cf-cartao-depois { background: var(--primary-suave) !important; border: 1px solid color-mix(in srgb, var(--primary) 15%, transparent) !important;
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--graphite-950) 7%, transparent), 0 2px 6px color-mix(in srgb, var(--graphite-950) 5%, transparent) !important; color: var(--foreground) !important; }
+.depois-piloto-card .luz-card span, .cf-cartao-depois .luz-card span { animation: none !important; filter: blur(64px) !important; }
+.depois-piloto-card .luz-card span:nth-child(1), .cf-cartao-depois .luz-card span:nth-child(1) { width: 14rem !important; height: 14rem !important; top: -4rem !important; left: auto !important; right: -4rem; background: var(--primary-muted) !important; }
+.depois-piloto-card .luz-card span:nth-child(2), .cf-cartao-depois .luz-card span:nth-child(2) { width: 10rem !important; height: 10rem !important; top: auto !important; bottom: -5rem; left: -2.5rem !important; background: color-mix(in srgb, var(--primary) 5%, transparent) !important; }
+.depois-piloto-card .luz-card span:nth-child(3), .cf-cartao-depois .luz-card span:nth-child(3) { display: none; }
+.depois-piloto-card > .depois-piloto > span:first-child { background: var(--primary-muted) !important; color: var(--primary) !important; }
+.depois-piloto-card h3, .cf-cartao-depois h3 { color: var(--foreground) !important; }
+.depois-piloto-card .depois-destaque, .cf-cartao-depois .depois-destaque { color: var(--primary); }
+.depois-piloto-card h3 + p, .cf-cartao-depois p { color: var(--graphite-500) !important; }
+.depois-cta-desk, .cf-cartao-depois .depois-cta { background: var(--primary) !important; border-color: var(--primary) !important; color: var(--primary-foreground) !important; box-shadow: 0 1px 3px color-mix(in srgb, var(--graphite-950) 7%, transparent), 0 2px 6px color-mix(in srgb, var(--graphite-950) 5%, transparent); }
+.depois-cta-desk:hover, .cf-cartao-depois .depois-cta:hover { background: var(--primary-hover) !important; border-color: var(--primary-hover) !important; }
+.depois-cta-desk:focus-visible, .cf-cartao-depois .depois-cta:focus-visible { box-shadow: 0 0 0 2px var(--primary-suave), 0 0 0 4px color-mix(in srgb, var(--primary) 60%, transparent) !important; }
+
+/* "Para sua empresa" e "Para o Studio" como selo (mesmo padrão da tag do hero), sem divider */
+#sobre-o-programa .lado-troca > div.selo-lado { border-bottom: 0 !important; padding: 0 !important; margin: 0 0 1.25rem !important; background: transparent !important; }
+#sobre-o-programa .lado-troca > div.selo-lado > p { color: var(--primary); }
+#sobre-o-programa .lado-troca > div.selo-studio > p { background: var(--graphite-50); border: 1px solid var(--graphite-100); color: var(--foreground); }
+#sobre-o-programa .selo-studio p > span { background: var(--foreground); }
+/* divider vertical bem clarinho entre os 2 blocos (desktop) */
+@media (min-width: 1024px) {
+  #sobre-o-programa .troca-grade { position: relative; }
+  #sobre-o-programa .troca-grade::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: var(--graphite-100); opacity: .6; pointer-events: none; }
+}
+@media (max-width: 639px) { #hero-titulo { font-size: 1.625rem; } } /* título do hero menor no celular */
+/* celular: card perto da dobra, deixando a foto do hero aparecer em cima */
+@media (max-width: 767px) { .hero-piloto { min-height: 100svh; align-items: flex-end; padding-bottom: 1.25rem !important; } }
+/* celular: foto inteira (sem corte) no topo, acima do card, com fade suave para o fundo */
+@media (max-width: 767px) {
+  #hero-fundo img { position: absolute; top: var(--altura-cabecalho, 68px); left: 0; width: 100%; height: auto !important; aspect-ratio: 1672 / 941; object-fit: cover; object-position: center;
+    -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent); mask-image: linear-gradient(to bottom, #000 78%, transparent); }
+  .hero-piloto { padding-top: calc(var(--altura-cabecalho, 68px) + 56.3vw + .75rem) !important; }
+}
+/* celular: o botão do card do hero sai, porque o "Cadastrar empresa" flutuante fica sempre visível no rodapé */
+@media (max-width: 767px) { .hero-acoes { display: none !important; } .hero-card .space-y-3 { margin-bottom: 0; } }
+@media (max-width: 767px) { .hero-piloto { min-height: 0; padding-bottom: 5.5rem !important; } } /* card logo abaixo da foto, acima do botão flutuante */
+/* celular: primeira tela = 30% do topo para a foto do hero, o restante para o card */
+@media (max-width: 767px) {
+  #hero-fundo img { top: var(--altura-cabecalho, 68px); height: calc(30svh - var(--altura-cabecalho, 68px)) !important; aspect-ratio: auto; object-fit: cover; object-position: center 40%;
+    -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent); mask-image: linear-gradient(to bottom, #000 70%, transparent); }
+  .hero-piloto { padding-top: 30svh !important; padding-bottom: 5.5rem !important; align-items: stretch; }
+  .hero-piloto > div:has(.hero-card) { padding-top: 0; padding-bottom: 0; }
+  .hero-card { min-height: calc(70svh - 5.5rem); }
+}
+/* celular: 30% foto; 70% card + "Saiba mais" (acima do botão flutuante) */
+@media (max-width: 767px) {
+  .rolar-abaixo { display: flex !important; bottom: 5.25rem !important; }
+  .hero-piloto { padding-bottom: calc(5.5rem + 3.25rem) !important; }
+  .hero-card { min-height: calc(70svh - 8.75rem); }
+}
+/* seta do "Saiba mais" menor */
+.rolar-seta { width: 2rem !important; height: 2rem !important; }
+.rolar-seta svg { width: 1rem; height: 1rem; }
+/* celular: a foto começa no topo da tela, por trás do cabeçalho transparente */
+@media (max-width: 767px) { #hero-fundo img { top: 0 !important; height: 30svh !important; object-position: center 45%; } }
+/* celular: 25% foto + cabeçalho; 75% card + Saiba mais + botões */
+@media (max-width: 767px) {
+  #hero-fundo img { height: 25svh !important; }
+  .hero-piloto { padding-top: 25svh !important; }
+  .hero-card { min-height: calc(75svh - 8.75rem); }
+}
+/* celular: título do hero sempre em uma linha */
+@media (max-width: 639px) { #hero-titulo { font-size: min(1.625rem, 6.3vw); white-space: nowrap; } }
+/* celulares baixos: card mais para cima e um pouco mais compacto, para tudo caber na primeira tela */
+@media (max-width: 767px) and (max-height: 760px) {
+  #hero-fundo img { height: 19svh !important; }
+  .hero-piloto { padding-top: 19svh !important; }
+  .hero-card { min-height: 0; padding-top: 1.5rem; padding-bottom: 1.5rem; }
+  .hero-card > p:first-child { margin-bottom: .75rem; }
+  .hero-card .space-y-3 > * + * { margin-top: .5rem; }
+}
+@media (max-width: 767px) and (max-height: 680px) {
+  #hero-fundo img { height: 17svh !important; }
+  .hero-piloto { padding-top: 17svh !important; }
+  .hero-card .space-y-3 { font-size: .8125rem; line-height: 1.55; }
+  .hero-card > p:nth-child(3) { font-size: .9375rem; margin-bottom: .75rem; }
+}
+@media (max-width: 767px) and (max-height: 680px) {
+  #hero-fundo img { height: 20svh !important; object-position: center 30%; }
+  .hero-piloto { padding-top: 20svh !important; }
+}
+/* "E depois do projeto-piloto?" (desktop): mais compacto, botão abaixo do texto */
+.depois-piloto-card { padding: 1.75rem 2rem !important; }
+.depois-piloto { gap: 1.5rem !important; align-items: flex-start !important; }
+.depois-piloto > span:first-child { width: 3.5rem !important; height: 3.5rem !important; border-radius: 1rem !important; }
+.depois-piloto > span:first-child svg { width: 1.75rem; height: 1.75rem; }
+.depois-piloto .space-y-2 > p { max-width: 46rem; }
+.depois-cta-desk { height: 2.75rem; padding: 0 1.25rem; font-size: .9375rem; margin-top: 1rem !important; }
+
+/* "E depois do projeto-piloto?" (desktop) no modelo do card de convite da Rede de Parceiros:
+   card branco, selo no topo, título, texto, botão abaixo e ícone à direita; brilho rosado suave no canto */
+.depois-convite { position: relative; overflow: hidden; isolation: isolate; display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+  padding: 2rem 2rem; border-radius: 24px; background: var(--card); border: 1px solid var(--border);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--graphite-950) 7%, transparent), 0 6px 20px color-mix(in srgb, var(--graphite-950) 5%, transparent); }
+.depois-convite::before { content: ""; position: absolute; z-index: -1; right: -6rem; top: -6rem; width: 24rem; height: 24rem; border-radius: 9999px;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--primary) 12%, transparent), transparent); pointer-events: none; }
+.depois-convite-texto { max-width: 46rem; }
+.depois-convite-selo { display: inline-flex; align-items: center; gap: .5rem; padding: .375rem .875rem; margin: 0 0 1rem; border-radius: 9999px;
+  background: var(--card); border: 1px solid var(--border); color: var(--foreground); font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.depois-convite-selo span { width: .5rem; height: .5rem; border-radius: 9999px; background: var(--primary); }
+.depois-convite h3 { margin: 0 0 .5rem; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; color: var(--foreground); }
+.depois-convite h3 .depois-destaque { color: var(--primary); }
+.depois-convite-texto > p:not(.depois-convite-selo) { margin: 0; font-size: 1rem; line-height: 1.6; color: var(--graphite-500); }
+.depois-convite .depois-cta-desk { margin-top: 1.25rem !important; }
+.depois-convite-icone { flex: none; width: 4.5rem; height: 4.5rem; border-radius: 1.25rem; display: flex; align-items: center; justify-content: center; background: var(--primary-muted); color: var(--primary); }
+@media (max-width: 639px) { .depois-convite { display: none !important; } } /* no celular segue como última etapa da linha do tempo */
+/* Guia Completo: fundo cinza clarinho do DS para os accordions brancos se destacarem; o cadastro segue no mesmo tom */
+#guia, #inscricao { background: var(--graphite-50) !important; }
+/* "E depois do projeto-piloto?": área do texto ~20% mais larga */
+.depois-convite-texto { max-width: 55rem; }
+/* tablet: ícone sobe para o canto, liberando largura para o texto */
+@media (max-width: 1023px) {
+  .depois-convite { display: block; }
+  .depois-convite-icone { position: absolute; top: 2rem; right: 2rem; width: 3.5rem; height: 3.5rem; border-radius: 1rem; }
+  .depois-convite-texto { max-width: none; }
+}
+/* accordions brancos com a mesma sombra dos cards da linha do tempo */
+#accordion-group .accordion-item, #accordion-group .accordion-item.active { background: var(--card) !important; box-shadow: 0 20px 25px -5px color-mix(in srgb, var(--secondary) 50%, transparent), 0 8px 10px -6px color-mix(in srgb, var(--secondary) 50%, transparent) !important; }
+/* "E depois do projeto-piloto?" com a mesma largura da linha do tempo (alinhado aos cards das etapas) */
+.depois-convite { width: min(53rem, calc(100% - 3rem)); margin-inline: auto; }
+/* coluna "Para o Studio" com as mesmas cores da coluna "Para sua empresa": selo, checks e box de compromisso */
+#sobre-o-programa .lado-troca > div.selo-studio > p { background: var(--crimson-50) !important; border-color: var(--primary-muted) !important; color: var(--primary) !important; }
+#sobre-o-programa .selo-studio p > span { background: var(--primary) !important; }
+#sobre-o-programa .lado-troca + .lado-troca li > span:first-child { color: var(--primary) !important; }
+#sobre-o-programa .lado-troca + .lado-troca p:has(.compromisso-icone) { background: var(--primary-suave) !important; border-color: var(--crimson-100) !important; }
+#sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { color: var(--primary) !important; background: var(--crimson-100) !important; border-color: var(--crimson-100) !important; }
+
+/* Desktop: "Para sua empresa" x "Para o Studio" numa grade comparativa (um card branco, linhas alinhadas lado a lado) */
+@media (min-width: 1024px) {
+  #sobre-o-programa .troca-grade { column-gap: 0 !important; background: var(--card); border: 1px solid var(--border); border-radius: 24px; overflow: hidden;
+    box-shadow: 0 20px 25px -5px color-mix(in srgb, var(--secondary) 50%, transparent), 0 8px 10px -6px color-mix(in srgb, var(--secondary) 50%, transparent); }
+  #sobre-o-programa .troca-grade::before { display: none; }
+  #sobre-o-programa .lado-troca + .lado-troca { border-left: 1px solid var(--border) !important; }
+  /* cabeçalho de cada coluna (selo, título e descrição) em rosa bem claro */
+  #sobre-o-programa .lado-troca > div.selo-lado { margin: 0 !important; padding: 2rem 2.5rem 1.25rem !important; background: var(--card) !important; }
+  #sobre-o-programa .lado-troca > h3 { margin: 0 !important; padding: 0 2.5rem .75rem; background: var(--card); }
+  #sobre-o-programa .lado-troca > h3 + p { margin: 0 !important; padding: 0 2.5rem 2rem; background: var(--card); }
+  /* cada benefício numa linha da grade, com divisória alinhada entre as colunas */
+  #sobre-o-programa .lado-troca li { margin: 0 !important; padding: 1.25rem 2.5rem; border-top: 1px solid var(--border); align-items: center; }
+  /* compromisso no rodapé da grade */
+  #sobre-o-programa .lado-troca > p:has(.compromisso-icone) { margin: 0 !important; padding: 1.5rem 2.5rem !important; border: 0 !important; border-top: 1px solid var(--border) !important; border-radius: 0 !important; align-self: stretch; }
+}
+
+/* Grade comparativa (desktop), refinada: cabeçalho em degradê suave, divisórias recuadas, selo central de "parceria" e rodapé leve */
+@media (min-width: 1024px) {
+  #sobre-o-programa .troca-grade { border-radius: 28px; border-color: color-mix(in srgb, var(--primary) 12%, transparent); box-shadow: 0 1px 2px color-mix(in srgb, var(--graphite-950) 4%, transparent), 0 24px 48px -16px color-mix(in srgb, var(--primary) 14%, transparent); }
+  #sobre-o-programa .lado-troca + .lado-troca { border-left-color: color-mix(in srgb, var(--primary) 12%, transparent) !important; }
+  /* cabeçalho: rosa no topo, clareando até o branco */
+  #sobre-o-programa .lado-troca > div.selo-lado { padding: 2.5rem 3rem 1.25rem !important; background: var(--primary-suave) !important; }
+  #sobre-o-programa .lado-troca > h3 { padding: 0 3rem .75rem; background: linear-gradient(var(--primary-suave), var(--crimson-50)); font-size: 1.625rem; letter-spacing: -0.02em; }
+  #sobre-o-programa .lado-troca > h3 + p { position: relative; padding: 0 3rem 2.5rem; background: linear-gradient(var(--crimson-50), var(--card)); }
+  /* selo central de parceria, sobre a divisória vertical, na passagem do cabeçalho para os benefícios */
+  #sobre-o-programa .lado-troca + .lado-troca > h3 + p::after { content: ""; position: absolute; z-index: 2; left: -1.5rem; bottom: -1.5rem; width: 3rem; height: 3rem; border-radius: 9999px;
+    background: var(--primary) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m11 17 2 2a1 1 0 1 0 3-3'/%3E%3Cpath d='m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4'/%3E%3Cpath d='m21 3 1 11h-2'/%3E%3Cpath d='M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3'/%3E%3Cpath d='M3 4h8'/%3E%3C/svg%3E") center / 1.375rem no-repeat;
+    box-shadow: 0 0 0 6px var(--card), 0 8px 20px color-mix(in srgb, var(--primary) 30%, transparent); }
+  #sobre-o-programa .lado-troca, #sobre-o-programa .troca-grade { overflow: visible; }
+  #sobre-o-programa .troca-grade { overflow: clip; }
+  /* benefícios: divisórias recuadas e sutis, texto com mais respiro */
+  #sobre-o-programa .lado-troca li { position: relative; padding: 1.375rem 3rem; border-top: 0 !important; transition: background-color .2s ease; }
+  #sobre-o-programa .lado-troca li::before { content: ""; position: absolute; top: 0; left: 3rem; right: 3rem; height: 1px; background: var(--graphite-50); }
+  #sobre-o-programa .lado-troca li:first-child::before { display: none; }
+  #sobre-o-programa .lado-troca li > span:last-child { font-size: 1rem; color: var(--graphite-700); }
+  /* rodapé: compromissos numa faixa leve */
+  #sobre-o-programa .lado-troca > p:has(.compromisso-icone) { padding: 1.75rem 3rem !important; background: var(--card) !important; border-top: 1px solid color-mix(in srgb, var(--primary) 10%, transparent) !important; }
+  #sobre-o-programa .lado-troca .compromisso-icone { background: var(--card) !important; border: 1px solid var(--crimson-100) !important; }
+}
+@media (min-width: 1024px) {
+  #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { background: var(--card) !important; border-color: color-mix(in srgb, var(--primary) 10%, transparent) !important; }
+  #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { background: var(--card) !important; border: 1px solid var(--crimson-100) !important; }
+}
+
+/* Grade comparativa (desktop), nova proposta: sem o selo central; cabeçalho escuro como uma tabela, linhas zebradas lado a lado e rodapé rosa */
+@media (min-width: 1024px) {
+  #sobre-o-programa .lado-troca + .lado-troca > h3 + p::after { display: none !important; }
+  #sobre-o-programa .troca-grade { border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 20px 25px -5px color-mix(in srgb, var(--secondary) 60%, transparent), 0 8px 10px -6px color-mix(in srgb, var(--secondary) 60%, transparent); }
+  #sobre-o-programa .lado-troca + .lado-troca { border-left: 1px solid color-mix(in srgb, var(--card) 8%, transparent) !important; }
+  /* cabeçalho escuro */
+  #sobre-o-programa .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca > h3, #sobre-o-programa .lado-troca > h3 + p { background: var(--foreground) !important; }
+  #sobre-o-programa .lado-troca > div.selo-lado { padding: 2.25rem 3rem 1.25rem !important; }
+  #sobre-o-programa .lado-troca > div.selo-lado > p, #sobre-o-programa .lado-troca > div.selo-studio > p { background: transparent !important; border-color: color-mix(in srgb, var(--primary) 60%, transparent) !important; color: var(--primary) !important; }
+  #sobre-o-programa .lado-troca > h3 { color: var(--primary-foreground) !important; }
+  #sobre-o-programa .lado-troca > h3 + p { color: var(--graphite-200) !important; padding-bottom: 2.25rem; }
+  /* linhas de benefícios: zebradas, alinhadas entre as colunas */
+  #sobre-o-programa .lado-troca li::before { display: none !important; }
+  #sobre-o-programa .lado-troca li { padding: 1.375rem 3rem; background: var(--card); }
+  #sobre-o-programa .lado-troca li:nth-child(even) { background: var(--background); }
+  #sobre-o-programa .lado-troca + .lado-troca li { border-left: 0; }
+  /* rodapé */
+  #sobre-o-programa .lado-troca > p:has(.compromisso-icone), #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { background: var(--primary-suave) !important; border-top: 1px solid var(--crimson-100) !important; }
+  #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { border-left: 1px solid var(--crimson-100); }
+}
+@media (min-width: 1024px) { #sobre-o-programa .lado-troca + .lado-troca { border-left: 1px solid var(--border) !important; } }
+@media (min-width: 1024px) {
+  #sobre-o-programa .lado-troca + .lado-troca { border-left: 0 !important; }
+  #sobre-o-programa .lado-troca + .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca + .lado-troca > h3, #sobre-o-programa .lado-troca + .lado-troca > h3 + p { box-shadow: inset 1px 0 0 color-mix(in srgb, var(--card) 8%, transparent); }
+  #sobre-o-programa .lado-troca + .lado-troca li { box-shadow: inset 1px 0 0 color-mix(in srgb, var(--foreground) 7%, transparent); }
+  #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { border-left: 0 !important; box-shadow: inset 1px 0 0 var(--crimson-100); }
+}
+
+/* Grade comparativa (desktop), versão leve e moderna: tudo branco, linhas finas contínuas entre as colunas, muito respiro */
+@media (min-width: 1024px) {
+  #sobre-o-programa .troca-grade { background: var(--card) !important; border: 1px solid var(--graphite-50) !important; border-radius: 24px !important;
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--graphite-950) 3%, transparent), 0 12px 32px -12px color-mix(in srgb, var(--graphite-950) 8%, transparent) !important; }
+  /* cabeçalho branco */
+  #sobre-o-programa .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca > h3, #sobre-o-programa .lado-troca > h3 + p { background: var(--card) !important; box-shadow: none !important; }
+  #sobre-o-programa .lado-troca > div.selo-lado { padding: 2.5rem 3rem 1.25rem !important; }
+  #sobre-o-programa .lado-troca > div.selo-lado > p, #sobre-o-programa .lado-troca > div.selo-studio > p { background: var(--primary-suave) !important; border-color: var(--crimson-100) !important; color: var(--primary) !important; }
+  #sobre-o-programa .lado-troca > h3 { color: var(--foreground) !important; font-size: 1.5rem; padding: 0 3rem .625rem; }
+  #sobre-o-programa .lado-troca > h3 + p { color: var(--muted-foreground) !important; padding: 0 3rem 2rem; }
+  /* linhas: brancas, separadas por fios finos que atravessam as duas colunas */
+  #sobre-o-programa .lado-troca li, #sobre-o-programa .lado-troca li:nth-child(even) { background: var(--card) !important; border-top: 1px solid var(--graphite-50) !important; padding: 1.25rem 3rem !important; }
+  #sobre-o-programa .lado-troca li > span:last-child { font-size: .9375rem; color: var(--graphite-700); }
+  /* compromisso: última linha, leve, com o ícone em rosa claro */
+  #sobre-o-programa .lado-troca > p:has(.compromisso-icone), #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { background: var(--card) !important; border-top: 1px solid var(--graphite-50) !important; padding: 1.5rem 3rem 2rem !important; }
+  #sobre-o-programa .lado-troca .compromisso-icone, #sobre-o-programa .lado-troca + .lado-troca .compromisso-icone { background: var(--primary-suave) !important; border: 1px solid var(--crimson-100) !important; }
+  /* divisória vertical fina */
+  #sobre-o-programa .lado-troca + .lado-troca > div.selo-lado, #sobre-o-programa .lado-troca + .lado-troca > h3, #sobre-o-programa .lado-troca + .lado-troca > h3 + p,
+  #sobre-o-programa .lado-troca + .lado-troca li, #sobre-o-programa .lado-troca + .lado-troca > p:has(.compromisso-icone) { box-shadow: inset 1px 0 0 var(--graphite-50) !important; }
+}
+
+/* Desktop: transição do hero no estilo do modelo de referência — hero como painel arredondado com respiro nas bordas
+   e uma aba recortada no centro da base (com cantos côncavos) onde fica o "Saiba mais", na cor da seção seguinte */
+@media (min-width: 1024px) {
+  body:has(#hero.hero-piloto) { background: var(--card); }
+  .hero-piloto { margin-inline: 1rem; margin-top: calc(-1 * var(--altura-cabecalho, 80px) + 1rem) !important; border-radius: 32px; isolation: isolate; }
+  #hero-fundo { border-radius: 32px; }
+  .divisao-hero { background: var(--card) !important; padding: 0 !important; }
+  .divisao-hero-cartao { border-radius: 0 !important; max-width: none; }
+  /* aba "Saiba mais" */
+  .rolar-abaixo { bottom: 0 !important; padding: 1rem 2.25rem .875rem !important; border-radius: 28px 28px 0 0 !important; background: var(--card); color: var(--foreground) !important; text-shadow: none !important; gap: .75rem; }
+  .rolar-abaixo::before, .rolar-abaixo::after { content: ""; position: absolute; bottom: 0; width: 28px; height: 28px; pointer-events: none;
+    background: radial-gradient(circle at 0 0, transparent 27.5px, var(--card) 28px); }
+  .rolar-abaixo::before { right: 100%; background: radial-gradient(circle at 0 0, transparent 27.5px, var(--card) 28px); }
+  .rolar-abaixo::after { left: 100%; background: radial-gradient(circle at 100% 0, transparent 27.5px, var(--card) 28px); }
+  .rolar-abaixo .rolar-seta { border-color: color-mix(in srgb, var(--foreground) 15%, transparent) !important; background: transparent !important; color: var(--primary); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .rolar-abaixo:hover .rolar-seta { background: var(--primary-suave) !important; }
+  .rolar-abaixo:focus-visible { box-shadow: inset 0 0 0 2px var(--primary); }
+}
+/* Desktop: a foto do hero fica parada enquanto o painel arredondado sobe na rolagem (efeito janela, como no modelo) */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  #hero-fundo { background-image: image-set(url("/projeto-piloto-hero-v6.webp") 1x); background-size: cover; background-position: 28% center; background-repeat: no-repeat; background-attachment: fixed; }
+  #hero-fundo img { opacity: 0; }
+}
+
+/* Desktop: menu em pílula clara centralizada (ícone + opções), no estilo do modelo, encaixado no hero arredondado */
+@media (min-width: 1024px) {
+  .cabecalho-sobre-hero .site-header, .cabecalho-sobre-hero .site-header.is-scrolled { background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; pointer-events: none; }
+  .cabecalho-sobre-hero .site-header header { pointer-events: auto; width: fit-content !important; max-width: none; margin: 1.75rem auto 0; padding: .5rem .5rem .5rem .75rem !important; justify-content: center; gap: 2.25rem;
+    background: color-mix(in srgb, var(--card) 92%, transparent); -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%); border: 1px solid color-mix(in srgb, var(--card) 60%, transparent); border-radius: 9999px;
+    box-shadow: 0 8px 24px -12px color-mix(in srgb, var(--graphite-950) 35%, transparent); transition: box-shadow .3s ease; }
+  .cabecalho-sobre-hero .site-header.is-scrolled header { box-shadow: 0 10px 30px -10px color-mix(in srgb, var(--graphite-950) 35%, transparent); }
+  /* só o ícone da marca */
+  .cabecalho-sobre-hero .site-header header > a:first-child { visibility: visible !important; height: 2.75rem !important; }
+  .cabecalho-sobre-hero .site-header .logo-completo { display: none !important; }
+  .cabecalho-sobre-hero .site-header .logo-icone { display: block !important; height: 2.5rem !important; animation: none !important; }
+  .cabecalho-sobre-hero .site-header header > div { gap: 2.25rem; }
+  /* opções em grafite, página atual em vermelho sublinhado */
+  .cabecalho-sobre-hero .site-header nav[aria-label="Principal"] { gap: 2.25rem; }
+  .cabecalho-sobre-hero .site-header nav[aria-label="Principal"] a { color: var(--foreground) !important; text-shadow: none !important; font-size: .9375rem; font-weight: 500; }
+  .cabecalho-sobre-hero .site-header nav[aria-label="Principal"] a:hover { color: var(--primary) !important; }
+  .cabecalho-sobre-hero .site-header nav[aria-label="Principal"] a[aria-current="page"] { color: var(--primary) !important; text-decoration-color: var(--primary); }
+  /* "Contato" vira uma opção como as outras */
+  .cabecalho-sobre-hero .site-header .btn-contato { padding: 0 1.25rem 0 0 !important; border: 0 !important; background: transparent !important; color: var(--foreground) !important; font-size: .9375rem; font-weight: 500; transform: none !important; }
+  .cabecalho-sobre-hero .site-header .btn-contato:hover { color: var(--primary) !important; background: transparent !important; }
+}
+@media (min-width: 1024px) {
+  .cabecalho-sobre-hero .site-header { padding-top: 2rem; }
+  .cabecalho-sobre-hero .site-header header { margin: 0 auto !important; }
+}
+/* Desktop: aba "Saiba mais" igual à referência — 320 x 56, topo bem arredondado, sem cantos côncavos, seta longa numa cápsula */
+@media (min-width: 1024px) {
+  .rolar-abaixo { width: 320px; height: 56px; padding: 12px !important; gap: 16px !important; border-radius: 40px 40px 0 0 !important; justify-content: center; font-size: 1rem !important; }
+  .rolar-abaixo::before, .rolar-abaixo::after { display: none !important; }
+  .rolar-abaixo .rolar-seta { width: 20px !important; height: 32px !important; border-radius: 9999px !important; border: 1px solid var(--graphite-100) !important; animation: none !important; }
+  .rolar-abaixo .rolar-seta svg { width: 14px !important; height: 14px !important; }
+}
+
+/* Desktop: sem o card no hero (só a foto e o "Saiba mais"); o texto do card passa para o início de "Sobre o Programa",
+   seguido da grade com as vantagens dos dois lados. No celular segue como antes. */
+.sobre-intro { display: none; }
+@media (min-width: 1024px) {
+  .hero-card { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap; border: 0 !important; }
+  .hero-card > :not(h1) { display: none !important; }
+  #sobre-o-programa .rv-cabecalho:not(.sobre-intro) { display: none; }
+  .sobre-intro { display: block; }
+  .sobre-intro-sub { margin: 0 0 1.25rem; font-size: 1.25rem; font-weight: 600; line-height: 1.4; color: var(--graphite-700); }
+  .sobre-intro-txt { max-width: 42rem; margin: 0 auto .75rem; font-size: 1.0625rem; line-height: 1.65; color: var(--graphite-500); }
+  .sobre-intro-txt strong { color: var(--foreground); font-weight: 600; }
+  .sobre-intro-acao { margin-top: 2rem; display: flex; justify-content: center; }
+}
+/* foto v7 (com o título do programa na própria arte, à direita): enquadramento central para não cortar o texto */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  #hero-fundo { background-image: url("/projeto-piloto-hero-v11.webp") !important; background-position: center center !important; }
+}
+@media (min-width: 1024px) { #hero-fundo img { object-position: center center !important; } }
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) { #hero-fundo { background-position: 75% center !important; } }
+@media (min-width: 1024px) { #hero-fundo img { object-position: 75% center !important; } }
+/* Efeito janela mais leve: a foto fica fixa via position: fixed recortada pelo painel (clip-path), composta na GPU,
+   em vez de background-attachment: fixed, que redesenha a imagem a cada quadro e deixa a rolagem travada */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  #hero-fundo { background-image: none !important; background-attachment: scroll !important; clip-path: inset(0 round 32px); }
+  #hero-fundo img { opacity: 1 !important; position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; object-fit: cover; will-change: transform; }
+}
+
+/* Desempenho da rolagem: as manchas de luz deixam de usar filter: blur (redesenhado a cada quadro) e passam a ser
+   degradês radiais com o mesmo aspecto difuso; o movimento lento continua, agora só com transform (GPU) */
+.fundo-gradiente span { filter: none !important; background: radial-gradient(closest-side, var(--mancha, color-mix(in srgb, var(--crimson-200) 55%, transparent)) 0%, transparent 100%) !important; transform-origin: center; scale: 1.35; }
+.fundo-gradiente span:nth-child(1) { --mancha: color-mix(in srgb, var(--crimson-200) 55%, transparent); }
+.fundo-gradiente span:nth-child(2) { --mancha: color-mix(in srgb, var(--graphite-100) 70%, transparent); }
+.fundo-gradiente span:nth-child(3) { --mancha: color-mix(in srgb, var(--primary-suave) 95%, transparent); }
+.fundo-gradiente-escuro span:nth-child(1) { --mancha: color-mix(in srgb, var(--crimson-600) 45%, transparent); }
+.fundo-gradiente-escuro span:nth-child(2) { --mancha: color-mix(in srgb, var(--graphite-600) 60%, transparent); }
+.fundo-gradiente-escuro span:nth-child(3) { --mancha: color-mix(in srgb, var(--primary) 18%, transparent); }
+/* Desktop: o hero termina 16px acima da dobra (mesmo respiro das laterais), então a aba "Saiba mais" aparece inteira, com margem */
+@media (min-width: 1024px) { .hero-piloto { min-height: calc(100svh - 2rem) !important; } }
+
+/* =========================================================================
+   SEÇÃO "PROGRAMA PROJETO PILOTO" (redesenho editorial): introdução, diagrama de colaboração,
+   resultados para os dois lados ligados ao núcleo, faixa de transparência e CTA.
+   ========================================================================= */
+/* fundo claro em todos os tamanhos (no celular a seção deixa de ficar sobre o azul escuro) */
+.divisao-hero .divisao-hero-cartao, .pp.transicao-sobre { background: var(--card) !important; }
+@media (max-width: 1023px) { .divisao-hero .divisao-hero-cartao { border-radius: 28px 28px 0 0 !important; overflow: hidden !important; } }
+.pp { color: var(--foreground); }
+/* introdução */
+.pp-intro { max-width: 46rem; margin: 0 auto; text-align: center; }
+.pp-intro h2 { margin: 0 0 1rem; font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.625rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: var(--foreground); }
+.pp-sub { margin: 0 0 .75rem; font-size: 1.125rem; font-weight: 600; line-height: 1.45; color: var(--graphite-700); }
+.pp-desc { margin: 0 auto; max-width: 40rem; font-size: 1rem; line-height: 1.7; color: var(--graphite-500); }
+.pp-desc strong { color: var(--foreground); font-weight: 600; }
+@media (min-width: 640px) { .pp-desc { font-size: 1.0625rem; } }
+
+/* diagrama de colaboração */
+.pp-diagrama { --nucleo: 184px; --anel: 76px; display: grid; grid-template-columns: 1fr minmax(48px, 1.1fr) var(--nucleo) minmax(48px, 1.1fr) 1fr; align-items: start; margin: 4.5rem auto 0; max-width: 62rem; }
+.pp-no { text-align: center; }
+.pp-no h3 { margin: 1.25rem 0 .375rem; font-size: 1.0625rem; font-weight: 700; color: var(--foreground); letter-spacing: -0.01em; }
+.pp-no p { margin: 0 auto; max-width: 15rem; font-size: .9375rem; line-height: 1.55; color: var(--graphite-500); }
+.pp-no-lado { padding-top: calc((var(--nucleo) - var(--anel)) / 2); }
+.pp-anel { width: var(--anel); height: var(--anel); margin: 0 auto; border-radius: 9999px; border: 1px solid var(--graphite-100); background: var(--card); color: var(--graphite-700); display: flex; align-items: center; justify-content: center; position: relative; }
+.pp-anel::after { content: ""; position: absolute; inset: -9px; border-radius: inherit; border: 1px dashed var(--graphite-100); }
+.pp-anel img { width: 30px; height: auto; }
+/* núcleo central */
+.pp-nucleo { position: relative; width: var(--nucleo); height: var(--nucleo); margin: 0 auto; border-radius: 9999px; background: var(--primary); color: var(--primary-foreground); display: flex; align-items: center; justify-content: center; text-align: center;
+  box-shadow: 0 14px 32px -14px color-mix(in srgb, var(--primary) 55%, transparent); }
+.pp-nucleo span { font-size: 1.5rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+.pp-nucleo::before, .pp-nucleo::after { content: ""; position: absolute; border-radius: 9999px; pointer-events: none; }
+.pp-nucleo::before { inset: -14px; border: 1px solid color-mix(in srgb, var(--primary) 28%, transparent); }
+.pp-nucleo::after { inset: -30px; border: 1px solid color-mix(in srgb, var(--primary) 12%, transparent); }
+.pp-no-centro p { margin-top: 2.75rem; max-width: 14rem; color: var(--graphite-700); font-weight: 500; }
+/* conectores: fio fino com nós nas pontas e um pulso que leva a troca até o núcleo */
+.pp-con { position: relative; height: 2px; margin-top: calc(var(--nucleo) / 2 - 1px); margin-inline: -4px; }
+.pp-con-a { margin-left: calc(-1 * ((100% - 0px) * 0)); }
+.pp-con-linha { position: absolute; inset: 0 22px; background: repeating-linear-gradient(to right, color-mix(in srgb, var(--primary) 55%, transparent) 0 6px, transparent 6px 11px); }
+.pp-con-linha::before, .pp-con-linha::after { content: ""; position: absolute; top: 50%; width: 9px; height: 9px; border-radius: 9999px; background: var(--card); border: 2px solid var(--primary); translate: 0 -50%; }
+.pp-con-linha::before { left: -4px; }
+.pp-con-linha::after { right: -4px; }
+.pp-con-pulso { position: absolute; top: 50%; left: 22px; width: 7px; height: 7px; border-radius: 9999px; background: var(--primary); translate: 0 -50%; box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 15%, transparent); }
+@media (prefers-reduced-motion: no-preference) {
+  .pp-con-a .pp-con-pulso { animation: pp-pulso-ida 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+  .pp-con-b .pp-con-pulso { animation: pp-pulso-volta 3.2s cubic-bezier(0.45, 0, 0.55, 1) 1.6s infinite; left: auto; right: 22px; }
+}
+@keyframes pp-pulso-ida { 0% { left: 22px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { left: calc(100% - 29px); opacity: 0; } }
+@keyframes pp-pulso-volta { 0% { right: 22px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { right: calc(100% - 29px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .pp-con-pulso { display: none; } }
+
+/* legenda e ramificação do núcleo para os resultados */
+.pp-legenda { margin: 3rem auto 0; max-width: 34rem; text-align: center; font-size: 1.0625rem; font-weight: 600; line-height: 1.5; color: var(--graphite-700); }
+.pp-ramo { position: relative; height: 4.5rem; margin: 1.5rem auto 0; max-width: 62rem; }
+.pp-ramo::before { content: ""; position: absolute; left: 50%; top: 0; height: 50%; border-left: 1px solid color-mix(in srgb, var(--primary) 45%, transparent); }
+.pp-ramo span { position: absolute; left: 25%; right: 25%; top: 50%; bottom: 0; border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent); border-bottom: 0; border-radius: 18px 18px 0 0; }
+.pp-ramo span::before { content: ""; position: absolute; left: 50%; top: -5px; width: 9px; height: 9px; border-radius: 9999px; background: var(--primary); translate: -50% 0; box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 15%, transparent); }
+
+/* resultados para os dois lados: áreas abertas, sem cards */
+.pp-resultados { display: grid; grid-template-columns: 1fr 1fr; max-width: 62rem; margin: 0 auto; }
+.pp-lado { padding: 0 2.5rem; }
+.pp-lado + .pp-lado { border-left: 1px solid var(--muted); }
+.pp-eyebrow { display: flex; align-items: center; justify-content: center; gap: .5rem; margin: 0 0 .875rem; font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--primary); }
+.pp-eyebrow span { width: 6px; height: 6px; border-radius: 9999px; background: var(--primary); }
+.pp-lado h3 { margin: 0 0 .625rem; text-align: center; font-size: 1.375rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; color: var(--foreground); }
+.pp-lado-desc { margin: 0 auto 1.75rem; max-width: 26rem; text-align: center; font-size: .9375rem; line-height: 1.65; color: var(--graphite-500); }
+.pp-bens { margin: 0; padding: 0; list-style: none; }
+.pp-ben { display: grid; grid-template-columns: 2.25rem 1fr; gap: .875rem; padding: 1.125rem 0; border-top: 1px solid var(--graphite-50); }
+.pp-ben-ic { width: 2.25rem; height: 2.25rem; display: flex; align-items: center; justify-content: center; color: var(--primary); }
+.pp-ben-ic svg { width: 1.25rem; height: 1.25rem; stroke-width: 1.75; }
+.pp-ben strong { display: block; margin-bottom: .2rem; font-size: 1rem; font-weight: 600; color: var(--foreground); }
+.pp-ben > span:last-child > span { display: block; font-size: .9375rem; line-height: 1.6; color: var(--graphite-500); }
+.pp-compromisso { display: grid; grid-template-columns: 2.25rem 1fr; gap: .875rem; margin: 0; padding: 1.125rem 0 0; border-top: 1px solid var(--graphite-50); font-size: .875rem; line-height: 1.6; color: var(--graphite-500); }
+.pp-compromisso > span:first-child { width: 2.25rem; display: flex; justify-content: center; padding-top: .125rem; color: var(--graphite-300); }
+.pp-compromisso strong { color: var(--foreground); font-weight: 600; }
+
+/* citação */
+#sobre-o-programa .pp-citacao { margin-top: 4.5rem !important; }
+#sobre-o-programa .pp-citacao blockquote p { color: var(--foreground) !important; }
+#sobre-o-programa .pp-citacao blockquote p .text-coral-600 { color: var(--primary) !important; }
+
+/* faixa de transparência: editorial, nem alerta nem letra miúda */
+.pp-faixa { display: grid; grid-template-columns: minmax(0, 15rem) 1fr; gap: 2rem; align-items: center; max-width: 52rem; margin: 4rem auto 0; padding: 1.75rem 0; border-top: 1px solid var(--muted); border-bottom: 1px solid var(--muted); }
+.pp-faixa-titulo { margin: 0; font-size: 1.25rem; font-weight: 700; line-height: 1.3; color: var(--foreground); }
+.pp-faixa-texto { margin: 0; font-size: 1rem; line-height: 1.65; color: var(--graphite-500); }
+.pp-cta { display: flex; justify-content: center; margin-top: 2.5rem; }
+
+/* tablet: diagrama mais compacto */
+@media (max-width: 1023px) {
+  .pp-diagrama { --nucleo: 148px; --anel: 64px; margin-top: 3.5rem; grid-template-columns: 1fr minmax(28px, .6fr) var(--nucleo) minmax(28px, .6fr) 1fr; }
+  .pp-nucleo span { font-size: 1.25rem; }
+  .pp-nucleo::after { inset: -24px; }
+  .pp-no p { max-width: 12rem; font-size: .875rem; }
+  .pp-lado { padding: 0 1.5rem; }
+  .pp-con-linha { inset: 0 12px; }
+}
+/* celular: sequência vertical conectada */
+@media (max-width: 767px) {
+  .pp-diagrama { --nucleo: 136px; --anel: 64px; grid-template-columns: 1fr; justify-items: center; margin-top: 2.75rem; }
+  .pp-no-lado { padding-top: 0; }
+  .pp-no h3 { margin-top: 1rem; }
+  .pp-no p { max-width: 18rem; }
+  .pp-no-centro p { margin-top: 2.25rem; }
+  .pp-con { width: 2px; height: 4.5rem; margin: 1.25rem 0; }
+  .pp-con-linha { inset: 10px 0; background: repeating-linear-gradient(to bottom, color-mix(in srgb, var(--primary) 55%, transparent) 0 6px, transparent 6px 11px); }
+  .pp-con-linha::before, .pp-con-linha::after { left: 50% !important; right: auto !important; translate: -50% 0; }
+  .pp-con-linha::before { top: -4px; }
+  .pp-con-linha::after { top: auto; bottom: -4px; }
+  .pp-con-pulso { left: 50% !important; right: auto !important; translate: -50% 0; top: 10px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .pp-con-a .pp-con-pulso { animation: pp-pulso-desce 2.6s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+    .pp-con-b .pp-con-pulso { animation: pp-pulso-sobe 2.6s cubic-bezier(0.45, 0, 0.55, 1) 1.3s infinite; }
+  }
+  .pp-ramo { height: 3rem; margin-top: 1.25rem; }
+  .pp-ramo::before { height: 100%; }
+  .pp-ramo span { display: none; }
+  .pp-resultados { grid-template-columns: 1fr; gap: 3rem; }
+  .pp-lado { padding: 0; }
+  .pp-lado + .pp-lado { border-left: 0; border-top: 1px solid var(--muted); padding-top: 3rem; }
+  .pp-faixa { grid-template-columns: 1fr; gap: .5rem; text-align: center; margin-top: 3rem; }
+  .pp-cta a { width: 100%; }
+}
+@keyframes pp-pulso-desce { 0% { top: 10px; opacity: 0; } 15%, 85% { opacity: 1; } 100% { top: calc(100% - 17px); opacity: 0; } }
+@keyframes pp-pulso-sobe { 0% { top: calc(100% - 17px); opacity: 0; } 15%, 85% { opacity: 1; } 100% { top: 10px; opacity: 0; } }
+/* diagrama: os dois lados com o mesmo volume (nome numa linha, descrição curta de mesma largura) */
+.pp-no-lado h3 { white-space: nowrap; }
+.pp-no-lado p { max-width: 13.5rem; }
+/* cabeçalho escondido ao rolar: some por inteiro, sem deixar a sombra da pílula aparecendo no topo */
+@media (min-width: 1024px) { .site-header.is-hidden { transform: translateY(calc(-100% - 40px)) !important; } }
+.pp-no-lado p { max-width: 15rem; }
+@media (min-width: 768px) {
+  .pp-diagrama { grid-template-columns: 1.6fr minmax(40px, 1fr) var(--nucleo) minmax(40px, 1fr) 1.6fr !important; }
+  .pp-no-lado p { max-width: 16rem; }
+}
+/* feixes animados do diagrama (substituem os fios tracejados) */
+.pp-diagrama { position: relative; }
+.pp-con { visibility: hidden; }
+.pp-feixes { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: visible; }
+.pp-no { position: relative; z-index: 1; }
+.pp-feixe-base { stroke: var(--graphite-100); stroke-width: 2; stroke-linecap: round; }
+.pp-feixe-luz { stroke-width: 2.5; stroke-linecap: round; }
+.pp-feixe-luz { stroke-width: 3; }
+/* Animated Beam: nós no estilo do componente (círculos brancos com borda e sombra suave, por cima das ligações) */
+.pp-feixes { position: absolute; top: 0; left: 0; z-index: 0; pointer-events: none; overflow: visible; }
+.pp-beam-base { stroke: var(--graphite-300); stroke-width: 2; stroke-opacity: .25; stroke-linecap: round; }
+.pp-beam-luz { stroke-width: 2; stroke-linecap: round; }
+.pp-feixe-base, .pp-feixe-luz { display: none; }
+.pp-anel { position: relative; z-index: 1; border: 2px solid var(--graphite-50) !important; background: var(--card) !important; box-shadow: 0 0 20px -12px color-mix(in srgb, var(--graphite-950) 80%, transparent); }
+.pp-anel::after { display: none !important; }
+.pp-nucleo { z-index: 1; border: 2px solid var(--card); box-shadow: 0 0 20px -12px color-mix(in srgb, var(--graphite-950) 80%, transparent), 0 0 0 1px var(--graphite-50) !important; }
+.pp-nucleo::before, .pp-nucleo::after { display: none !important; }
+.pp-beam-luz { stroke-width: 2.5; }
+/* ligações animadas sobre toda a área da seção: textos por cima das linhas, ramificação estática dá lugar aos feixes */
+.pp-area-feixes { position: relative; }
+.pp-area-feixes > * { position: relative; z-index: 1; }
+.pp-area-feixes > .pp-feixes { position: absolute; z-index: 0; }
+.pp-no-centro p, .pp-legenda { position: relative; background: var(--card); padding-block: .375rem; }
+.pp-legenda { padding-inline: 1rem; width: fit-content; }
+.pp-eyebrow { position: relative; background: var(--card); width: fit-content; margin-inline: auto !important; padding: .25rem .75rem; }
+@media (min-width: 768px) { .pp-ramo span, .pp-ramo::before { display: none; } }
+@media (min-width: 768px) { .pp-ramo { height: 6rem; } }
+
+/* =========================================================================
+   SEÇÃO DO PROGRAMA, versão da referência enviada: eyebrow com traço, título com destaque, pílulas
+   "Sua empresa" e "O Studio" ligadas ao núcleo DM, duas colunas de benefícios, faixa "Uma troca transparente" e CTA.
+   ========================================================================= */
+.divisao-hero .divisao-hero-cartao, .pv.transicao-sobre { background: linear-gradient(180deg, var(--background) 0%, var(--card) 55%, var(--background) 100%) !important; }
+@media (max-width: 1023px) { .divisao-hero .divisao-hero-cartao { border-radius: 28px 28px 0 0 !important; overflow: hidden !important; } }
+.pv { color: var(--foreground); }
+.pv-intro { max-width: 52rem; margin: 0 auto; text-align: center; }
+.pv-eyebrow { display: inline-flex; align-items: center; gap: .875rem; margin: 0 0 1.25rem; font-size: .8125rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; color: var(--graphite-700); }
+.pv-eyebrow span { width: 2.75rem; height: 2px; border-radius: 2px; background: var(--primary); }
+.pv-eyebrow strong { font-weight: 700; color: var(--foreground); }
+.pv-intro h2 { margin: 0 0 1.25rem; font-size: clamp(1.75rem, 1.1rem + 2.6vw, 2.75rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: var(--foreground); }
+.pv-desc { max-width: 44rem; margin: 0 auto; font-size: 1.0625rem; line-height: 1.65; color: var(--graphite-500); }
+
+/* diagrama: duas pílulas ligadas ao núcleo */
+.pv-diagrama { display: grid; grid-template-columns: 1fr minmax(32px, 90px) auto minmax(32px, 90px) 1fr; align-items: center; margin: 4rem auto 0; }
+.pv-pilula { display: flex; align-items: center; gap: 1.125rem; padding: 1.25rem 2rem 1.25rem 1.25rem; border-radius: 9999px; background: color-mix(in srgb, var(--graphite-50) 70%, transparent); }
+.pv-pilula-ic { flex: none; width: 4.5rem; height: 4.5rem; border-radius: 9999px; display: flex; align-items: center; justify-content: center; color: var(--primary); background: var(--card); box-shadow: 0 6px 18px -10px color-mix(in srgb, var(--primary) 45%, transparent); }
+.pv-pilula-ic svg { stroke-width: 1.5; }
+.pv-pilula strong { display: block; margin-bottom: .25rem; font-size: 1.25rem; font-weight: 700; color: var(--foreground); }
+.pv-pilula > span:last-child > span { display: block; font-size: .9375rem; line-height: 1.5; color: var(--graphite-500); }
+.pv-linha { position: relative; height: 2px; background: var(--primary); }
+.pv-linha::before, .pv-linha::after { content: ""; position: absolute; top: 50%; width: 2px; height: 10px; background: var(--primary); translate: 0 -50%; }
+.pv-linha::before { left: 0; } .pv-linha::after { right: 0; }
+.pv-nucleo { position: relative; width: 8.5rem; height: 8.5rem; border-radius: 9999px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 35% 30%, var(--crimson-300), var(--primary) 45%, var(--primary-hover));
+  box-shadow: 0 0 0 18px color-mix(in srgb, var(--primary) 8%, transparent), 0 0 0 36px color-mix(in srgb, var(--primary) 4%, transparent), 0 18px 40px -16px color-mix(in srgb, var(--primary-hover) 60%, transparent); }
+.pv-nucleo img { width: 3.5rem; height: auto; }
+
+/* colunas de benefícios */
+.pv-colunas { display: grid; grid-template-columns: 1fr 1fr; margin: 5rem auto 0; }
+.pv-col { padding: 0 3rem; }
+.pv-col:first-child { padding-left: 2rem; }
+.pv-col + .pv-col { border-left: 1px solid var(--graphite-100); }
+.pv-col-eyebrow { margin: 0 0 1rem; font-size: .875rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--primary); }
+.pv-col h3 { margin: 0 0 2rem; font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: var(--foreground); max-width: 22rem; }
+.pv-bens { margin: 0; padding: 0; list-style: none; display: grid; gap: 1.75rem; }
+.pv-ben { display: grid; grid-template-columns: 4rem 1fr; gap: 1.25rem; align-items: start; }
+.pv-ben-ic { width: 4rem; height: 4rem; border-radius: 1.125rem; display: flex; align-items: center; justify-content: center; color: var(--primary); background: var(--card); box-shadow: 0 6px 18px -10px color-mix(in srgb, var(--primary) 35%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--primary) 6%, transparent); }
+.pv-ben-ic svg { stroke-width: 1.75; }
+.pv-ben strong { display: block; margin: .25rem 0 .25rem; font-size: 1.125rem; font-weight: 700; color: var(--foreground); }
+.pv-ben > span:last-child > span { display: block; font-size: .9375rem; line-height: 1.55; color: var(--graphite-500); }
+
+/* faixa de transparência */
+.pv-faixa { display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 2.25rem; margin: 4.5rem auto 0; padding: 1.75rem 2.75rem; border-radius: 9999px; background: linear-gradient(90deg, var(--primary-suave), var(--card) 70%); box-shadow: 0 10px 30px -18px color-mix(in srgb, var(--primary) 35%, transparent); }
+.pv-faixa-ic { color: var(--primary); display: flex; padding-right: 2.25rem; border-right: 1px solid var(--graphite-200); }
+.pv-faixa-ic svg { stroke-width: 1.5; }
+.pv-faixa-titulo { margin: 0; font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; color: var(--foreground); white-space: nowrap; }
+.pv-faixa-texto { margin: 0; font-size: 1rem; line-height: 1.6; color: var(--graphite-500); }
+.pv-faixa-texto strong { color: var(--foreground); font-weight: 600; }
+
+/* CTA */
+.pv-cta { display: flex; justify-content: center; margin-top: 2.5rem; }
+.pv-botao { display: inline-flex; align-items: center; gap: .875rem; padding: 1rem 2.25rem; border-radius: 9999px; background: var(--primary); color: var(--primary-foreground); font-size: 1.0625rem; font-weight: 700; text-decoration: none; box-shadow: 0 14px 30px -12px color-mix(in srgb, var(--primary) 60%, transparent); transition: background-color .2s ease, transform .2s ease; }
+.pv-botao:hover { background: var(--primary-hover); }
+.pv-botao:hover svg:last-child { transform: translateX(3px); }
+.pv-botao svg:last-child { transition: transform .2s ease; }
+.pv-botao:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--card), 0 0 0 5px color-mix(in srgb, var(--primary) 60%, transparent); }
+
+/* tablet */
+@media (max-width: 1023px) {
+  .pv-pilula { padding: 1rem 1.25rem 1rem 1rem; gap: .875rem; }
+  .pv-pilula-ic { width: 3.5rem; height: 3.5rem; }
+  .pv-pilula strong { font-size: 1.0625rem; }
+  .pv-pilula > span:last-child > span { font-size: .875rem; }
+  .pv-nucleo { width: 6.5rem; height: 6.5rem; }
+  .pv-nucleo img { width: 2.75rem; }
+  .pv-col { padding: 0 1.75rem !important; }
+  .pv-faixa { gap: 1.5rem; padding: 1.5rem 2rem; }
+  .pv-faixa-ic { padding-right: 1.5rem; }
+  .pv-faixa-titulo { font-size: 1.375rem; }
+}
+/* celular: pílulas empilhadas ligadas pelo núcleo, colunas uma abaixo da outra */
+@media (max-width: 767px) {
+  .pv-diagrama { grid-template-columns: 1fr; justify-items: center; margin-top: 2.75rem; }
+  .pv-pilula { width: 100%; border-radius: 1.5rem; }
+  .pv-linha { width: 2px; height: 2rem; }
+  .pv-linha::before, .pv-linha::after { width: 10px; height: 2px; left: 50% !important; right: auto !important; translate: -50% 0; }
+  .pv-linha::before { top: 0; } .pv-linha::after { top: auto; bottom: 0; }
+  .pv-nucleo { box-shadow: 0 0 0 12px color-mix(in srgb, var(--primary) 8%, transparent), 0 18px 40px -16px color-mix(in srgb, var(--primary-hover) 60%, transparent); }
+  .pv-colunas { grid-template-columns: 1fr; gap: 3rem; margin-top: 3.5rem; }
+  .pv-col { padding: 0 !important; }
+  .pv-col + .pv-col { border-left: 0; border-top: 1px solid var(--graphite-100); padding-top: 3rem !important; }
+  .pv-ben { grid-template-columns: 3.25rem 1fr; gap: 1rem; }
+  .pv-ben-ic { width: 3.25rem; height: 3.25rem; border-radius: 1rem; }
+  .pv-faixa { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: .75rem; border-radius: 1.75rem; padding: 1.75rem 1.5rem; margin-top: 3rem; }
+  .pv-faixa-ic { border-right: 0; padding-right: 0; }
+  .pv-faixa-titulo { white-space: normal; font-size: 1.375rem; }
+  .pv-cta .pv-botao { width: 100%; justify-content: center; }
+}
+.pv-ben-ic svg { width: 1.75rem; height: 1.75rem; }
+.pv-pilula-ic svg { width: 2.25rem; height: 2.25rem; }
+@media (max-width: 767px) { .pv-ben-ic svg { width: 1.5rem; height: 1.5rem; } .pv-pilula-ic svg { width: 1.875rem; height: 1.875rem; } }
+/* aba "Saiba mais" e margem em volta do hero na mesma cor do início da seção seguinte */
+@media (min-width: 1024px) {
+  .rolar-abaixo { background: var(--background) !important; }
+  body:has(#hero.hero-piloto), .divisao-hero { background: var(--background) !important; }
+}
+
+/* Ligações animadas no padrão "Animated Beam": linha base translúcida e um feixe de luz que corre até o núcleo
+   (rápido no início e desacelerando, easeOutExpo), de cada lado em direção ao centro; núcleo pulsando com os halos */
+.pv-linha { background: color-mix(in srgb, var(--primary) 28%, transparent); }
+.pv-feixe { position: absolute; inset: 0; overflow: hidden; }
+.pv-feixe::after { content: ""; position: absolute; top: 0; bottom: 0; width: 45%; left: -45%;
+  background: linear-gradient(90deg, transparent 0%, var(--crimson-200) 30%, var(--primary) 85%, transparent 100%); }
+.pv-linha-b .pv-feixe::after { left: auto; right: -45%; background: linear-gradient(270deg, transparent 0%, var(--crimson-200) 30%, var(--primary) 85%, transparent 100%); }
+.pv-linha { height: 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  .pv-linha-a .pv-feixe::after { animation: pv-feixe-dir 3s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+  .pv-linha-b .pv-feixe::after { animation: pv-feixe-esq 3s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+  .pv-nucleo { animation: pv-pulso 3s ease-in-out infinite; }
+  .pv-nucleo::before, .pv-nucleo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: color-mix(in srgb, var(--primary) 16%, transparent); z-index: -1; animation: pv-onda 3s ease-out infinite; }
+  .pv-nucleo::after { animation-delay: 1.5s; }
+}
+@keyframes pv-feixe-dir { from { left: -45%; } to { left: 100%; } }
+@keyframes pv-feixe-esq { from { right: -45%; } to { right: 100%; } }
+/* o núcleo "respira" quando os feixes chegam e os halos acompanham */
+@keyframes pv-pulso {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 18px color-mix(in srgb, var(--primary) 8%, transparent), 0 0 0 36px color-mix(in srgb, var(--primary) 4%, transparent), 0 18px 40px -16px color-mix(in srgb, var(--primary-hover) 60%, transparent); }
+  50% { transform: scale(1.04); box-shadow: 0 0 0 24px color-mix(in srgb, var(--primary) 11%, transparent), 0 0 0 48px color-mix(in srgb, var(--primary) 5%, transparent), 0 22px 48px -16px color-mix(in srgb, var(--primary-hover) 70%, transparent); }
+}
+@keyframes pv-onda { from { transform: scale(1); opacity: .9; } to { transform: scale(1.9); opacity: 0; } }
+.pv-nucleo { isolation: isolate; }
+/* celular: ligações verticais, feixe descendo/subindo até o núcleo */
+@media (max-width: 767px) {
+  .pv-linha { width: 3px; height: 2.25rem; }
+  .pv-feixe::after, .pv-linha-b .pv-feixe::after { left: 0 !important; right: 0 !important; width: auto; height: 45%; top: -45%; bottom: auto;
+    background: linear-gradient(180deg, transparent 0%, var(--crimson-200) 30%, var(--primary) 85%, transparent 100%); }
+  .pv-linha-b .pv-feixe::after { top: auto; bottom: -45%; background: linear-gradient(0deg, transparent 0%, var(--crimson-200) 30%, var(--primary) 85%, transparent 100%); }
+  @media (prefers-reduced-motion: no-preference) {
+    .pv-linha-a .pv-feixe::after { animation: pv-feixe-desce 3s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+    .pv-linha-b .pv-feixe::after { animation: pv-feixe-sobe 3s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+  }
+}
+@keyframes pv-feixe-desce { from { top: -45%; } to { top: 100%; } }
+@keyframes pv-feixe-sobe { from { bottom: -45%; } to { bottom: 100%; } }
+/* feixe visível por mais tempo na linha curta: percorre em ~1,6s (desacelerando no fim) e descansa antes de repetir */
+@media (prefers-reduced-motion: no-preference) {
+  .pv-linha-a .pv-feixe::after { animation: pv-feixe-dir 2.6s cubic-bezier(0.33, 0.1, 0.25, 1) infinite; }
+  .pv-linha-b .pv-feixe::after { animation: pv-feixe-esq 2.6s cubic-bezier(0.33, 0.1, 0.25, 1) infinite; }
+  .pv-nucleo { animation-duration: 2.6s; }
+  .pv-nucleo::before, .pv-nucleo::after { animation-duration: 2.6s; }
+  .pv-nucleo::after { animation-delay: 1.3s; }
+}
+@keyframes pv-feixe-dir { 0% { left: -45%; } 62%, 100% { left: 100%; } }
+@keyframes pv-feixe-esq { 0% { right: -45%; } 62%, 100% { right: 100%; } }
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .pv-linha-a .pv-feixe::after { animation: pv-feixe-desce 2.6s cubic-bezier(0.33, 0.1, 0.25, 1) infinite; }
+  .pv-linha-b .pv-feixe::after { animation: pv-feixe-sobe 2.6s cubic-bezier(0.33, 0.1, 0.25, 1) infinite; }
+}
+@keyframes pv-feixe-desce { 0% { top: -45%; } 62%, 100% { top: 100%; } }
+@keyframes pv-feixe-sobe { 0% { bottom: -45%; } 62%, 100% { bottom: 100%; } }
+.pv-feixe::after { width: 55%; }
+@media (max-width: 767px) {
+  .pv-nucleo::before, .pv-nucleo::after { animation-name: pv-onda-menor !important; }
+  .pv-linha { height: 2.75rem; }
+}
+@keyframes pv-onda-menor { from { transform: scale(1); opacity: .8; } to { transform: scale(1.45); opacity: 0; } }
+
+/* =========================================================================
+   SEÇÃO DO PROGRAMA, referência mais recente: três passos ligados por linhas com nós,
+   painel com os ganhos de cada lado, faixa "Uma parceria com transparência" e CTA.
+   ========================================================================= */
+.pz .pv-intro h2 { max-width: 46rem; margin-inline: auto; }
+.pz-passos { list-style: none; margin: 4.5rem auto 0; padding: 0; display: grid; grid-template-columns: 1fr minmax(60px, 1fr) 1fr minmax(60px, 1fr) 1fr; align-items: start; max-width: 64rem; }
+.pz-passo { text-align: center; }
+.pz-ic { width: 5.5rem; height: 5.5rem; margin: 0 auto; border-radius: 1.5rem; display: flex; align-items: center; justify-content: center; color: var(--primary);
+  background: linear-gradient(160deg, var(--card), var(--primary-suave)); box-shadow: 0 10px 26px -14px color-mix(in srgb, var(--primary) 45%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--primary) 6%, transparent); }
+.pz-ic svg { width: 2.5rem; height: 2.5rem; stroke-width: 1.5; }
+.pz-passo h3 { margin: 1.5rem 0 .75rem; font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; color: var(--foreground); }
+.pz-passo p { margin: 0 auto; max-width: 18rem; font-size: 1rem; line-height: 1.6; color: var(--graphite-500); }
+/* ligação entre os passos: linha fina com um nó no meio e um feixe de luz percorrendo (Animated Beam) */
+.pz-lig { position: relative; height: 2px; margin-top: calc(2.75rem - 1px); margin-inline: -.5rem; background: color-mix(in srgb, var(--primary) 30%, transparent); }
+.pz-no { position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; border-radius: 9999px; background: var(--card); border: 2px solid var(--primary); translate: -50% -50%; }
+.pz-feixe { position: absolute; inset: 0; overflow: hidden; }
+.pz-feixe::after { content: ""; position: absolute; top: 0; bottom: 0; width: 55%; left: -55%; background: linear-gradient(90deg, transparent, var(--crimson-200) 30%, var(--primary) 85%, transparent); }
+@media (prefers-reduced-motion: no-preference) {
+  .pz-feixe::after { animation: pz-feixe 2.8s cubic-bezier(0.33, 0.1, 0.25, 1) infinite; }
+  .pz-lig + .pz-passo + .pz-lig .pz-feixe::after { animation-delay: 1.1s; }
+  .pz-no { animation: pz-no 2.8s ease-in-out infinite; }
+  .pz-lig + .pz-passo + .pz-lig .pz-no { animation-delay: 1.1s; }
+}
+@keyframes pz-feixe { 0% { left: -55%; } 62%, 100% { left: 100%; } }
+@keyframes pz-no { 0%, 20%, 100% { box-shadow: 0 0 0 0 transparent; } 32% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--primary) 18%, transparent); } }
+
+/* painel com os ganhos de cada lado */
+.pz-painel { display: grid; grid-template-columns: 1fr 1fr; margin: 5rem auto 0; padding: 2.75rem 2.5rem; border-radius: 2rem; background: color-mix(in srgb, var(--graphite-50) 55%, transparent); }
+.pz-lado { display: grid; grid-template-columns: 4.75rem 1fr; gap: 1.75rem; align-items: start; padding: 0 2rem; }
+.pz-lado + .pz-lado { border-left: 1px solid var(--graphite-100); }
+.pz-ic-p { width: 4.75rem; height: 4.75rem; border-radius: 1.25rem; }
+.pz-ic-p svg { width: 2.25rem; height: 2.25rem; }
+.pz-eyebrow { margin: 0 0 .75rem; font-size: .8125rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--primary); }
+.pz-lado h3 { margin: 0 0 .75rem; font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; color: var(--foreground); }
+.pz-lado p:last-child { margin: 0; font-size: .9375rem; line-height: 1.6; color: var(--graphite-500); }
+
+/* faixa de transparência */
+.pz-faixa { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 2.75rem; max-width: 60rem; margin: 4.5rem auto 0; }
+.pz-faixa-titulo { margin: 0; padding-left: 1.75rem; border-left: 3px solid var(--primary); font-size: 1.875rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: var(--foreground); }
+.pz-faixa-texto { margin: 0; padding-left: 2.75rem; border-left: 1px solid var(--graphite-100); font-size: 1.0625rem; line-height: 1.65; color: var(--graphite-500); }
+.pz .pv-cta { margin-top: 3rem; }
+
+/* tablet */
+@media (max-width: 1023px) {
+  .pz-passos { grid-template-columns: 1fr minmax(24px, .5fr) 1fr minmax(24px, .5fr) 1fr; }
+  .pz-ic { width: 4.5rem; height: 4.5rem; border-radius: 1.25rem; }
+  .pz-ic svg { width: 2rem; height: 2rem; }
+  .pz-lig { margin-top: calc(2.25rem - 1px); }
+  .pz-passo h3 { font-size: 1.1875rem; }
+  .pz-passo p { font-size: .9375rem; }
+  .pz-painel { padding: 2rem 1.25rem; }
+  .pz-lado { grid-template-columns: 1fr; gap: 1rem; padding: 0 1.5rem; }
+  .pz-faixa-titulo { font-size: 1.5rem; }
+}
+/* celular: passos em sequência vertical, painel e faixa empilhados */
+@media (max-width: 767px) {
+  .pz-passos { grid-template-columns: 1fr; justify-items: center; margin-top: 3rem; }
+  .pz-lig { width: 2px; height: 3.5rem; margin: 1.5rem 0; }
+  .pz-feixe::after { width: auto; left: 0; right: 0; height: 55%; top: -55%; bottom: auto; background: linear-gradient(180deg, transparent, var(--crimson-200) 30%, var(--primary) 85%, transparent); }
+  @media (prefers-reduced-motion: no-preference) { .pz-feixe::after { animation-name: pz-feixe-v; } }
+  .pz-passo h3 br { display: none; }
+  .pz-painel { grid-template-columns: 1fr; gap: 2rem; margin-top: 3.5rem; padding: 2rem 1.5rem; border-radius: 1.5rem; }
+  .pz-lado { grid-template-columns: 3.75rem 1fr; gap: 1.125rem; padding: 0; }
+  .pz-lado + .pz-lado { border-left: 0; border-top: 1px solid var(--graphite-100); padding-top: 2rem; }
+  .pz-ic-p { width: 3.75rem; height: 3.75rem; border-radius: 1rem; }
+  .pz-ic-p svg { width: 1.75rem; height: 1.75rem; }
+  .pz-lado h3 { font-size: 1.25rem; }
+  .pz-faixa { grid-template-columns: 1fr; gap: 1rem; margin-top: 3rem; }
+  .pz-faixa-titulo { font-size: 1.5rem; padding-left: 1.25rem; }
+  .pz-faixa-titulo br { display: none; }
+  .pz-faixa-texto { padding-left: 1.25rem; border-left: 0; }
+}
+@keyframes pz-feixe-v { 0% { top: -55%; } 62%, 100% { top: 100%; } }
+.pz .pv-intro { max-width: 60rem; }
+.pz .pv-intro h2 { max-width: 52rem; }
+@media (min-width: 1024px) {
+  .pz-passos { grid-template-columns: 1.5fr minmax(60px, .8fr) 1.5fr minmax(60px, .8fr) 1.5fr; max-width: 72rem; }
+  .pz-passo p { max-width: 20rem; }
+  .pz-painel { max-width: 74rem; padding: 2.75rem 1.5rem; }
+  .pz-faixa { max-width: 62rem; }
+}
+/* ícones no padrão "Icon Container" do DS: fundo --primary-muted (vermelho a 10%), sem sombra nem degradê,
+   64px com raio de 20px e ícone "feature" de 32px com traço 1.75 */
+.pz-ic, .pz-ic-p { width: 4rem !important; height: 4rem !important; border-radius: 20px !important; background: var(--primary-muted) !important; box-shadow: none !important; }
+.pz-ic svg, .pz-ic-p svg { width: 2rem !important; height: 2rem !important; stroke-width: 1.75 !important; }
+.pz-lig { margin-top: calc(2rem - 1px); }
+.pz-lado { grid-template-columns: 4rem 1fr; }
+@media (max-width: 767px) {
+  .pz-lado { grid-template-columns: 3.5rem 1fr; }
+  .pz-ic-p { width: 3.5rem !important; height: 3.5rem !important; border-radius: 16px !important; }
+  .pz-ic-p svg { width: 1.75rem !important; height: 1.75rem !important; }
+  .pz-lig { margin-top: 1.5rem; }
+}
+/* ícones dos três passos redondos (container circular do DS, como "h-12 w-12 rounded-full bg-primary/10") */
+.pz-passo .pz-ic { border-radius: 9999px !important; }
+/* Escopo (seção escura): curva para baixo no topo, vinda da seção clara; mais respiro para o conteúdo */
+#atuacao { padding-top: calc(4rem + 3rem) !important; }
+@media (min-width: 640px) { #atuacao { padding-top: calc(6rem + 5rem) !important; } }
+@media (min-width: 1024px) { #atuacao { padding-top: calc(6rem + 6rem) !important; } }
+/* rodapé sem a curva: começa reto */
+footer.relative { padding-top: 4rem; }
+/* rodapé escuro sobe e fica parcialmente por baixo do card de convite */
+#inscricao { position: relative; z-index: 2; padding-bottom: 0 !important; background: linear-gradient(to bottom, transparent calc(100% - 9rem), var(--foreground) calc(100% - 9rem)) , var(--graphite-50) !important; }
+#inscricao .convite-card { position: relative; z-index: 1; }
+main + footer.relative { margin-top: 0; padding-top: 4rem !important; }
+@media (max-width: 767px) { #inscricao { background: linear-gradient(to bottom, transparent calc(100% - 6rem), var(--foreground) calc(100% - 6rem)), var(--graphite-50) !important; } }
+/* rodapé com o mesmo fundo da seção escura (Escopo): base #0D1119 com as manchas de luz vinho e grafite */
+.rodape-escuro { isolation: isolate; }
+.rodape-escuro > .fundo-gradiente { z-index: -1; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 140px); mask-image: linear-gradient(to bottom, transparent 0, #000 140px); }
+.rodape-escuro > :not(.fundo-gradiente) { position: relative; z-index: 1; }
+#inscricao { background: linear-gradient(to bottom, transparent calc(100% - 9rem), var(--graphite-950) calc(100% - 9rem)), var(--graphite-50) !important; }
+@media (max-width: 767px) { #inscricao { background: linear-gradient(to bottom, transparent calc(100% - 6rem), var(--graphite-950) calc(100% - 6rem)), var(--graphite-50) !important; } }
+/* painel de ganhos: ícones neutros (grafite em quadrado branco) e texto em lista com checks discretos */
+.pz-ic-p { background: var(--card) !important; color: var(--graphite-500) !important; box-shadow: 0 0 0 1px var(--border) !important; }
+.pz-lista { list-style: none; margin: 1.125rem 0 0; padding: 0; display: grid; gap: .75rem; }
+.pz-lista li { display: grid; grid-template-columns: 1.25rem 1fr; gap: .625rem; align-items: start; font-size: .9375rem; line-height: 1.5; color: var(--graphite-700); }
+.pz-lista svg { width: 1rem; height: 1rem; margin-top: .2rem; color: var(--graphite-300); stroke-width: 2.25; }
+/* painel de ganhos sem ícones: só a tag, o título e os checks */
+.pz-lado { grid-template-columns: 1fr !important; padding: 0 2.5rem; }
+@media (max-width: 767px) { .pz-lado { padding: 0; } }
+/* card de convite ~20px mais para cima */
+#inscricao { padding-top: calc(4rem - 20px) !important; }
+@media (min-width: 640px) { #inscricao { padding-top: calc(6rem - 20px) !important; } }
+/* card de convite mais perto do FAQ e mais longe das informações do rodapé; fundo escuro começa mais alto */
+#guia { padding-bottom: 3rem !important; }
+#inscricao { padding-top: 1.5rem !important; background: linear-gradient(to bottom, transparent calc(100% - 13rem), var(--graphite-950) calc(100% - 13rem)), var(--graphite-50) !important; }
+main + footer.relative { padding-top: 6rem !important; }
+@media (max-width: 767px) {
+  #guia { padding-bottom: 2.5rem !important; }
+  #inscricao { padding-top: 1rem !important; background: linear-gradient(to bottom, transparent calc(100% - 9rem), var(--graphite-950) calc(100% - 9rem)), var(--graphite-50) !important; }
+  main + footer.relative { padding-top: 4.5rem !important; }
+}
+/* Convite com o mesmo arredondamento dos blocos grandes da página (hero e painel do programa: 32px a partir de 768px) */
+@media (min-width: 768px) { .convite-card { border-radius: 32px; } }
+/* Convite com a mesma largura do painel "Programa Projeto Piloto" */
+@media (max-width: 639px) { #inscricao .convite-card { margin-inline: .5rem; } }
+@media (min-width: 640px) and (max-width: 1023px) { #inscricao .convite-card { margin-inline: 1rem; } }
+/* Títulos dos lados do painel um pouco menores */
+.pz-painel .pz-lado h3 { font-size: 1.3125rem !important; }
+@media (max-width: 639px) { .pz-painel .pz-lado h3 { font-size: 1.125rem !important; } }
+
+/* =========================================================================
+   Celular e tablet: hero no mesmo estilo do computador — painel arredondado com a foto, 8 px de respiro nas bordas
+   e a alça "Saiba mais" na base. O texto do card passa para o início de "Sobre o Programa", como no computador.
+   ========================================================================= */
+@media (max-width: 1023px) {
+  body:has(#hero.hero-piloto) { background: var(--card) !important; }
+  .hero-piloto { position: relative; isolation: isolate; display: block !important; margin: calc(-1 * var(--altura-cabecalho, 68px) + .5rem) .5rem 0 !important;
+    padding: 0 !important; min-height: calc(100svh - 1rem) !important; border-radius: 24px; overflow: hidden !important; }
+  #hero-fundo { border-radius: 24px; }
+  #hero-fundo img { position: absolute !important; inset: 0 !important; top: 0 !important; width: 100% !important; height: 100% !important; aspect-ratio: auto !important;
+    object-fit: cover; object-position: 30% center !important; opacity: 1 !important; }
+  .hero-piloto > div:has(.hero-card) { position: static; padding: 0 !important; }
+  .hero-card { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap; border: 0 !important; min-height: 0 !important; }
+  .hero-card > :not(h1) { display: none !important; }
+  /* alça "Saiba mais" */
+  .rolar-abaixo { display: flex !important; position: absolute !important; left: 0 !important; right: 0 !important; bottom: 0 !important; margin: 0 auto; transform: none !important; translate: none !important;
+    width: 220px; height: 48px; padding: 8px !important; gap: 12px !important; align-items: center; justify-content: center; border-radius: 28px 28px 0 0 !important;
+    background: var(--card) !important; color: var(--foreground) !important; text-shadow: none !important; font-size: .9375rem !important; }
+  .rolar-abaixo .rolar-seta { width: 18px !important; height: 28px !important; border-radius: 9999px !important; border: 1px solid var(--graphite-100) !important; background: transparent !important; color: var(--primary);
+    -webkit-backdrop-filter: none !important; backdrop-filter: none !important; animation: none !important; }
+  .rolar-abaixo .rolar-seta svg { width: 13px !important; height: 13px !important; }
+  /* a seção seguinte começa logo abaixo, em branco */
+  .divisao-hero { background: var(--card) !important; padding: 0 !important; }
+  .divisao-hero .divisao-hero-cartao { border-radius: 0 !important; background: var(--card) !important; }
+  /* texto do card no início de "Sobre o Programa" (igual ao computador) */
+  #sobre-o-programa .rv-cabecalho:not(.sobre-intro) { display: none; }
+  .sobre-intro { display: block; }
+  .sobre-intro-sub { margin: 0 0 1rem; font-size: 1.0625rem; font-weight: 600; line-height: 1.45; color: var(--graphite-700); }
+  .sobre-intro-txt { margin: 0 auto .75rem; font-size: 1rem; line-height: 1.65; color: var(--graphite-500); }
+  .sobre-intro-txt strong { color: var(--foreground); font-weight: 600; }
+  .sobre-intro-acao { margin-top: 1.5rem; display: flex; justify-content: center; }
+}
+@media (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
+  .rolar-abaixo { animation: pp-alca-entra .7s cubic-bezier(0.16, 1, 0.3, 1) .5s both !important; }
+}
+@keyframes pp-alca-entra { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: none; } }
+/* celular: o painel termina acima da barra fixa "Cadastrar empresa", para a alça aparecer inteira */
+@media (max-width: 767px) { .hero-piloto { min-height: calc(100svh - 1rem - 5.5rem) !important; } }
+@media (max-width: 1023px) { .rolar-abaixo { margin-left: auto !important; margin-right: auto !important; --tw-translate-x: 0 !important; } }
+/* celular e tablet: o hero é só um filete da foto (sob o cabeçalho) e a seção 2 já começa logo abaixo */
+@media (max-width: 1023px) {
+  .hero-piloto { min-height: 0 !important; height: calc(var(--altura-cabecalho, 68px) + 7.5rem) !important; }
+  #hero-fundo img { object-position: 30% 22% !important; }
+  .rolar-abaixo { display: none !important; }
+}
+/* celular e tablet: foto de ponta a ponta (sem arredondar) e o card branco do conteúdo sobe por cima da base da foto */
+@media (max-width: 1023px) {
+  .hero-piloto { margin: calc(-1 * var(--altura-cabecalho, 68px)) 0 0 !important; border-radius: 0 !important; height: calc(var(--altura-cabecalho, 68px) + 9rem) !important; }
+  #hero-fundo { border-radius: 0 !important; }
+  .divisao-hero { position: relative; z-index: 1; background: transparent !important; margin-top: -1.75rem; }
+  .divisao-hero .divisao-hero-cartao { border-radius: 28px 28px 0 0 !important; background: var(--card) !important; overflow: hidden !important; }
+}
+/* celular e tablet: sem o logo no cabeçalho desta página (só o botão do menu) */
+@media (max-width: 1023px) { .cabecalho-sobre-hero .site-header header > a:first-child { visibility: hidden !important; } }
+/* celular e tablet: foto um pouco mais alta */
+@media (max-width: 1023px) { .hero-piloto { height: calc(var(--altura-cabecalho, 68px) + 15rem) !important; } #hero-fundo img { object-position: 30% 25% !important; } }
+/* celular e tablet: ao rolar, a foto fica parada e o card do conteúdo sobe por cima dela até perto do menu;
+   enquanto houver foto atrás, o cabeçalho continua visível e transparente (menu branco), sem ser coberto */
+@media (max-width: 1023px) {
+  #hero-fundo { clip-path: inset(0); }
+  #hero-fundo img { position: fixed !important; inset: 0 auto auto 0 !important; width: 100% !important; height: calc(var(--altura-cabecalho, 68px) + 15rem) !important; }
+  .cabecalho-sobre-hero .site-header.sobre-foto { transform: none !important; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .cabecalho-sobre-hero .site-header.sobre-foto #menu-botao { color: var(--primary-foreground) !important; }
+}
+/* celular e tablet: nesta página o menu não some ao rolar; o card do conteúdo passa por baixo dele */
+@media (max-width: 1023px) { .cabecalho-sobre-hero .site-header.is-hidden { transform: none !important; } }
+/* celular: títulos menores */
+@media (max-width: 767px) {
+  main h2 { font-size: 1.5rem !important; line-height: 1.2 !important; }
+  main h3 { font-size: min(1.0625rem, 1em) !important; line-height: 1.3 !important; }
+  main .sobre-intro-sub { font-size: 1rem !important; }
+}
+@media (max-width: 767px) { html body main h3 { font-size: 1rem !important; } html body main h2 { font-size: 1.5rem !important; } }
+@media (max-width: 767px) { html body .pz-painel .pz-lado h3 { font-size: 1rem !important; } }
+/* celular e tablet: menu sempre transparente sobre a foto fixa; card com a tampa arredondada presa abaixo do menu */
+.pp-tampa { display: none; }
+@media (max-width: 1023px) {
+  html:has(body.cabecalho-sobre-hero) { scroll-padding-top: calc(var(--altura-cabecalho, 68px) + 2.5rem); }
+  .cabecalho-sobre-hero .site-header, .cabecalho-sobre-hero .site-header.is-scrolled { transform: none !important; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .cabecalho-sobre-hero .site-header #menu-botao { color: var(--primary-foreground) !important; }
+  .hero-piloto { isolation: auto !important; overflow: visible !important; }
+  #hero-fundo { position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: auto !important; height: calc(var(--altura-cabecalho, 68px) + 15rem) !important; z-index: 20 !important;
+    clip-path: inset(0 0 calc(100% - var(--pp-tampa, 100vh) - 28px) 0) !important; }
+  #hero-fundo img { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
+  .pp-tampa { display: block; position: fixed; z-index: 21; left: 0; right: 0; top: var(--pp-tampa, 100vh); height: 28px; background: var(--background); border-radius: 28px 28px 0 0; pointer-events: none; }
+  .divisao-hero .divisao-hero-cartao { border-radius: 0 !important; }
+}
+@media (max-width: 1023px) {
+  html body.cabecalho-sobre-hero .site-header.is-hidden { transform: none !important; translate: none !important; }
+  .divisao-hero .divisao-hero-cartao { padding-top: 1.25rem; }
+}
+@media (max-width: 1023px) { html body.cabecalho-sobre-hero .site-header.is-scrolled #menu-botao, html body.cabecalho-sobre-hero .site-header #menu-botao { color: var(--primary-foreground) !important; } }
+
+/* Celular: tags das seções um pouco menores */
+@media (max-width: 767px) {
+  main p.rounded-full.bg-coral-50, .convite-selo, .depois-convite-selo { padding: .25rem .75rem !important; font-size: 11px !important; line-height: 15px !important; }
+  main p.rounded-full.bg-coral-50 > span, .convite-selo span, .depois-convite-selo span { width: .375rem !important; height: .375rem !important; }
+}
+
+/* Celular e tablet: a foto do topo ocupa a tela até a mesma altura da Home e do Seja Parceiro, deixando só o filete do
+   card branco aparecendo acima do botão flutuante */
+@media (max-width: 1023px) {
+  html body .hero-piloto { height: calc(100svh - 62px) !important; }
+  html body #hero-fundo, html body #hero-fundo img { height: calc(100svh - 62px) !important; }
+}
+
+/* Celular e tablet: foto do topo enquadrando a Dani e o homem à esquerda. A foto é ampliada pela largura (mostra do
+   homem até a Dani) e presa na base; o espaço acima dela, atrás do menu, fica no tom escuro da própria foto. */
+@media (max-width: 1023px) {
+  html body #hero-fundo { background: var(--graphite-950) !important; background-image: none !important; }
+  html body #hero-fundo img { inset: auto auto 0 -6vw !important; width: 261vw !important; max-width: none !important; height: auto !important; min-height: 0 !important;
+    aspect-ratio: 1672 / 941 !important; object-fit: cover !important; object-position: 0% 100% !important;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18%); mask-image: linear-gradient(to bottom, transparent 0, #000 18%); }
+}
+/* tablet: a tela é larga o bastante para a foto cobrir o topo inteiro mostrando os dois */
+@media (min-width: 640px) and (max-width: 1023px) {
+  html body #hero-fundo img { inset: 0 !important; width: 100% !important; height: 100% !important; aspect-ratio: auto !important; object-position: 4% 50% !important;
+    -webkit-mask-image: none; mask-image: none; }
+}
+/* celular: foto vertical própria (Dani e o homem), cobrindo o topo inteiro */
+@media (max-width: 639px) {
+  html body #hero-fundo img { inset: 0 !important; width: 100% !important; height: 100% !important; aspect-ratio: auto !important; object-fit: cover !important; object-position: 50% 30% !important;
+    -webkit-mask-image: none; mask-image: none; }
+}
+
+/* Celular e tablet: ícone do logo no canto superior esquerdo (como na Home e no Seja Parceiro) */
+@media (max-width: 1023px) { html body.cabecalho-sobre-hero .site-header header > a:first-child { visibility: visible !important; } }
+
+/* Celular e tablet: degradê preto → transparente atrás do cabeçalho (sobre a foto do topo), só nesta página */
+@media (max-width: 1023px) {
+  html body.cabecalho-sobre-hero .site-header::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: calc(100% + 1.5rem); z-index: -1; pointer-events: none;
+    background: linear-gradient(to bottom, color-mix(in srgb, var(--graphite-950) 60%, transparent) 0%, color-mix(in srgb, var(--graphite-950) 30%, transparent) 55%, transparent 100%); }
+}
+
+/* Títulos das seções no mesmo padrão da Home e do Seja Parceiro: celular 24 px, computador 36 px; altura de linha 1,2 */
+html body main h2 { line-height: 1.2 !important; letter-spacing: -0.02em !important; }
+html body main h2 span { font-size: inherit !important; }
+@media (min-width: 768px) { html body main h2 { font-size: 2.25rem !important; } }
+html body main h2:not(.secao-escura h2) { color: var(--foreground); }
+/* Guia de participação: título com linhas equilibradas quando quebra (sem palavra solta na 2ª linha) */
+#guia-titulo { text-wrap: balance; }
+
+/* ---------- Guia de participação: accordions no mesmo estilo dos do Seja Parceiro (padrão único do site) ----------
+   card branco com borda do DS e raio 16px, sem sombra; número em vermelho; pergunta 17px (16px no celular) que fica
+   vermelha quando aberta; resposta 15px graphite-500 com divisor interno alinhado ao texto. */
+html body #accordion-group > * + * { margin-top: 12px !important; }
+html body #accordion-group .accordion-item, html body #accordion-group .accordion-item.active { border-radius: 16px; border: 1px solid var(--border); background: var(--card) !important; box-shadow: none !important; }
+html body #accordion-group .accordion-trigger { padding: 20px 24px; gap: 14px; border-radius: 16px; }
+html body #accordion-group .accordion-header, html body #accordion-group .accordion-item.active .accordion-header { font-size: 17px; font-weight: 600; line-height: 1.4; color: var(--foreground); gap: 14px; align-items: center; }
+html body #accordion-group .accordion-header > span:first-child { flex: none; min-width: 24px; font-size: 15px; font-weight: 600; letter-spacing: .04em; line-height: 1.5; color: var(--primary); }
+html body #accordion-group .accordion-chevron { width: 20px; height: 20px; color: var(--muted-foreground); }
+html body #accordion-group .accordion-item.active .accordion-chevron { color: var(--primary); }
+html body #accordion-group .accordion-content > div > div { margin: 0 24px 22px 62px; padding: 16px 0 0; border-top: 1px solid var(--graphite-50); font-size: 15px; line-height: 1.65; color: var(--graphite-500); }
+html body #accordion-group .accordion-content p, html body #accordion-group .accordion-content li, html body #accordion-group .accordion-content span:not(.text-coral-600) { font-size: 15px; line-height: 1.65; color: var(--graphite-500); }
+html body #accordion-group .accordion-content p.text-slate-800, html body #accordion-group .accordion-content p.text-slate-900, html body #accordion-group .accordion-content strong { font-size: 15px; font-weight: 600; color: var(--foreground); }
+html body #accordion-group .accordion-content p.text-slate-500 { font-size: 14px; color: var(--muted-foreground); }
+@media (max-width: 767px) {
+  html body #accordion-group .accordion-trigger { padding: 16px 18px; }
+  html body #accordion-group .accordion-header, html body #accordion-group .accordion-item.active .accordion-header { font-size: 16px; }
+  html body #accordion-group .accordion-content > div > div { margin: 0 18px 18px; }
+}
+html body #accordion-group .accordion-item.active .accordion-chevron { transform: rotate(180deg) !important; rotate: none; }
+
+/* Celular e tablet: os cantos arredondados abaixo do menu são um recorte da própria foto (e não uma faixa de cor fixa),
+   então o conteúdo que passa por baixo aparece com a cor dele — inclusive nas seções escuras */
+@media (max-width: 1023px) {
+  html body #hero-fundo { clip-path: none !important;
+    -webkit-mask-image: linear-gradient(#000, #000), radial-gradient(circle at 100% 100%, transparent 27.5px, #000 28px), radial-gradient(circle at 0 100%, transparent 27.5px, #000 28px);
+    mask-image: linear-gradient(#000, #000), radial-gradient(circle at 100% 100%, transparent 27.5px, #000 28px), radial-gradient(circle at 0 100%, transparent 27.5px, #000 28px);
+    -webkit-mask-size: 100% var(--pp-tampa, 100vh), 28px 28px, 28px 28px; mask-size: 100% var(--pp-tampa, 100vh), 28px 28px, 28px 28px;
+    -webkit-mask-position: 0 0, 0 var(--pp-tampa, 100vh), 100% var(--pp-tampa, 100vh); mask-position: 0 0, 0 var(--pp-tampa, 100vh), 100% var(--pp-tampa, 100vh);
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+  .pp-tampa { visibility: hidden; } /* continua existindo só para a aba "Saiba mais" copiar a cor */
+}
+
+/* ---------- Regra dos cards do DS (D-064): cards só com borda, sem sombra parada. A sombra do passar do mouse
+   continua; quem não tinha borda ganha o contorno do DS (--border) por dentro, sem mudar o tamanho do card. ---------- */
+html body .card-frente:not(:hover),
+html body .convite-card:not(:hover),
+html body .depois-convite { box-shadow: none !important; }
