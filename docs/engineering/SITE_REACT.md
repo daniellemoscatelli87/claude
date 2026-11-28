@@ -11,7 +11,7 @@
 | App em `apps/site/` (Vite 6 + React 18.3 + Tailwind 4.1.12, as versões do DS e da área restrita) | implementado e testado |
 | HTML pronto de cada página gravado no build (o React assume a página no navegador) | implementado e testado |
 | Mapa de páginas com o lote de cada uma e o estado "previa" ou "publicada" (`apps/site/src/rotas.json`) | implementado e testado |
-| Pasta `ui` inteira do DS sincronizada no app (`4bbaaca` desde 28/11/2026; antes `27ff621`, `0685afb` e `d2aeb40`) | implementado; os contornos que o DS corrigiu saíram (seção 9) |
+| Pasta `ui` inteira do DS sincronizada no app (`22c26c9` desde 28/11/2026; antes `4bbaaca`, `27ff621`, `0685afb` e `d2aeb40`) | implementado; os contornos que o DS corrigiu saíram (seção 9) |
 | Conformidade com o DS (`npm run conformidade`) | zero desvios |
 | Lote S0: app React antigo apagado (cerca de 3.000 linhas sem uso) | feito; o dist ficou igual byte a byte |
 | Lote S7: 404, descadastro e privacidade **publicadas** | feito e testado (seção 6) |

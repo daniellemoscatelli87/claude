@@ -6,6 +6,12 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · DS `22c26c9` no site e na área restrita: botão de contorno sem fundo
+
+- **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-ds-22c26c9`.
+- **O que muda:** correção da dona do produto no DS. Os botões secundário e de contorno (`outline`, inclusive o de erro) ficam sem fundo, só com a borda e o texto; o passar do mouse continua cinza. Sincronização com `DS_REF=22c26c9`; mudou só o `button.tsx` dos dois apps; `apps/experience-intelligence` intocado.
+- **Testes executados:** build da raiz (passou); `apps/site` (typecheck, 62 testes, conformidade em zero) e `apps/area-restrita` (typecheck, 49 testes, conformidade em zero).
+
 ## 2026-11-28 · DS `4bbaaca` no site e na área restrita; 404 em card e links sem código válido mostrando a 404 (D-064)
 
 - **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-ds-4bbaaca`.
