@@ -53,6 +53,7 @@ describe("corte página a página", () => {
   it("recusa página desconhecida, estado inválido e página sem cabeça", () => {
     expect(() => planoDeSaida({ ...rotas, react: { nada: "previa" } })).toThrow(/desconhecida/);
     expect(() => planoDeSaida({ ...rotas, react: { privacidade: "sim" } })).toThrow(/inválido/);
-    expect(() => planoDeSaida({ ...rotas, react: { "galeria-autorizar": "previa" } })).toThrow(/sem "cabeca"/);
+    const semCabeca = { id: "sem-cabeca", caminho: "/sem-cabeca/", saida: "sem-cabeca/index.html", origem: "", lote: "S0" };
+    expect(() => planoDeSaida({ ...rotas, paginas: [...rotas.paginas, semCabeca], react: { "sem-cabeca": "previa" } } as unknown as typeof rotas)).toThrow(/sem "cabeca"/);
   });
 });
