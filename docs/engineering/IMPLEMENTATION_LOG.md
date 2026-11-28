@@ -6,6 +6,13 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Site em React: pesquisa de moda (S6) parada por FALTA NO DS (D-053)
+
+- **Status:** não implementado. A pesquisa (`/pesquisa/moda-curitiba/`) continua em HTML, sem mudança no código nem no ar.
+- **Análise:** o script (`src/pesquisa-moda.ts`), a página, o CSS, `supabase/functions/pesquisa/questionario.json` e a função `pesquisa` foram lidos inteiros; cada peça foi ligada a um componente do DS `0685afb` (`SITE_REACT.md`, seção 6f). Faltam no DS (e também no DS FindLook) duas peças que a página não pode ter feitas à mão: `EscolhaOrdenada` (classificação pela ordem dos toques, perguntas 2 e 5) e `EscalaDeNotas` (notas de 1 a 10 por aspecto, pergunta 4). As especificações estão na seção 6f; o `Confete` continua opcional.
+- **Verificação executada:** busca no catálogo do DS e na pasta `ui` do `main` dos dois DS (nada de classificação, ordem ou escala de notas); capturas da pesquisa de hoje nas perguntas 2 e 4 em 390 e 1280 px, com o servidor da pesquisa simulado (nada enviado), como referência para o DS.
+- **Pendências:** criar as duas peças no DS (com proposta, documentação, changelog e catálogo), sincronizar no `apps/site` e fazer o lote S6 pela tabela da seção 6f.
+
 ## 2026-11-28 · Área restrita em React: Parceiros e Pesquisas publicadas, páginas de HTML de /admin/ apagadas (D-056)
 
 - **Status:** implementado e testado; publicado pelo PR deste lote (ver o PR para a conferência ao vivo).

@@ -15,7 +15,7 @@
 | Lote S7: 404, descadastro e privacidade **publicadas** | feito e testado (seção 6) |
 | Lotes S1 (casca), S2 (Projeto Piloto), S3 (página inicial) e S4 (Rede de Parceiros) **publicados** | feito e testado (seções 6b, 6c e 6d) |
 | Lote S5: cadastro de parceiro **publicado**; autorizar galeria continua em HTML (FALTA NO DS: `RecorteDeFoto`) | feito e testado (seção 6e) |
-| Lote S6: pesquisa moda Curitiba | não iniciado (seção 9) |
+| Lote S6: pesquisa moda Curitiba | **parado por FALTA NO DS** (`EscolhaOrdenada` e `EscalaDeNotas`, seção 6f); a página continua em HTML |
 | Páginas de HTML de hoje | intactas; continuam servidas até cada página ser trocada |
 
 ## 2. Como publicar
@@ -89,7 +89,7 @@ Esforço: P = até 1 dia, M = 2 a 3 dias, G = 4 dias ou mais (sem contar a cria�
 | **S3** | Início | `/` | `Heading`, `Input`, `Button`, `Carousel`, `SeloSecao` | `CardDeDepoimento`, `CardDeArtigo`, `FaixaDeLogos`, `LinkSaibaMais`, `PilulaDeAcao`, `LuzesDifusas`, estado de envio e de sucesso no `Button` | G | **publicada** (seção 6c) |
 | **S4** | Rede de Parceiros | `/rede-parceiros/` | `Selo`, `Heading`, `AvatarCircles`, `Button`, `Tabs`/`ToggleGroup`, `Carousel`, `Accordion`, `PartnerCard`, `SidePanel` | `ListaDePilares`, `CartaoFlutuante`, `LinkSaibaMais`, `Simulacao`/`CursorDeDemonstracao`, `Quadro`, `CardDeParceiro`, diagrama do ecossistema | G | **publicada** (seção 6d) |
 | **S5** | Cadastro de parceiro + autorizar galeria | `/rede-parceiros/cadastro/`, `/rede-parceiros/galeria/autorizar/` | `Input`, `Select`, `Checkbox`, `RadioGroup`, `Textarea`, `Label`, `Collapsible`, `Dialog`, `Upload`, `Alert`, `Card` | `RecorteDeFoto` (galeria); campo com prefixo fixo (`https://`); `Confete` (as peças do cadastro chegaram em `d2aeb40`) | G | cadastro **publicado** (seção 6e); autorizar galeria em HTML |
-| **S6** | Pesquisa moda Curitiba | `/pesquisa/moda-curitiba/` | `Card`, `Heading`, `Button`, `RadioGroup`, `Checkbox`, `Textarea`, `Input`, `Progress`, `AlertDialog`, `Dialog` | `PerguntaGuiada`, `EstadoFinal`, cartões selecionáveis | M | planejado |
+| **S6** | Pesquisa moda Curitiba | `/pesquisa/moda-curitiba/` | `CabecalhoDoSite`, `Progress`, `BarraDaEtapa`, `GrupoDeCartoesDeEscolha`/`CartaoDeEscolha`, `Checkbox`, `Campo`, `CampoDeTelefone`, `CampoDeEmail`, `Textarea` (contador), `Select`, `CommandDialog` (busca de bairro), `AlertDialog`, `Dialog` + `Prosa`, `Alert`, `EstadoFinal`, `BotaoDeEnvio`, `CampoCopiavel`, `Avatar`, `RodapeSite` (seção 6f) | `EscolhaOrdenada` (classificação na ordem dos toques) e `EscalaDeNotas` (notas de 1 a 10), que seguram a página; `Confete` (opcional) | M | **parado** (FALTA NO DS, seção 6f) |
 | **S7** | Privacidade, descadastro, 404 | `/privacidade/`, `/comunicados/descadastro/`, 404 | `Selo`, `Heading`, `Button`, `Card` (rodapé com divisor), `Alert`, `RodapeSite`, `AvisoCookies`, `BotaoWhatsApp` | `Prosa` (texto longo), `Logo`, `PaginaDeErro`/`EstadoVazio`, links do `RodapeSite` com 44 px no celular | P | **feito**: as três publicadas (privacidade com a `Prosa` desde `d2aeb40`) |
 | **S8** | Apresentação do EI (a versão escolhida) | `/experience-intelligence*` | `Selo`, `SeloSecao`, `Heading`, `Timeline`, `GlassCard`, `Card`, `Accordion`, `Carousel`, `SidePanel` | as de S3 e `Citacao`; antes, a dona do produto escolhe a versão (seção 7) | G | aguarda a escolha |
 
@@ -184,6 +184,53 @@ Ordem sugerida (junto com a área restrita): S7 (feito) → S1 → S2 → S3 →
 
 **Autorizar galeria** (`/rede-parceiros/galeria/autorizar/`, `functions/v1/galeria-autorizacao`): continua em HTML. Falta no DS o `RecorteDeFoto` (especificação: escolher a imagem com o `UploadDropzone`; área quadrada com máscara circular sobre o fundo `bg-sobreposicao`; arrastar com o dedo ou o mouse e mover com as setas do teclado; zoom de 1 a 3 com o `Slider`; "Usar esta foto" e "Cancelar"; devolve um `Blob` 600 x 600 px recortado no aparelho, sem os dados da foto; textos "Arraste a foto para enquadrar o rosto no círculo e use o zoom se precisar."; respeita "menos movimento"). A galeria continua oculta (decisão da Dani de 23/11/2026).
 
+## 6f. Lote S6 (pesquisa moda Curitiba): análise de 28/11/2026 (DS `0685afb`), parado por FALTA NO DS
+
+A pesquisa (`pesquisa/moda-curitiba/index.html`, `src/pesquisa-moda.ts` e `.css`, perguntas em `supabase/functions/pesquisa/questionario.json`, função `pesquisa` do Supabase) continua em HTML. O DS `0685afb` (e também o `main` do DS FindLook) não tem a peça da classificação nem a da escala de notas; fazê-las no site seria peça à mão, o que a regra do DS proíbe. Nada foi feito no app do site.
+
+**O que cada peça usaria do DS** (para o lote andar rápido quando as duas peças chegarem):
+
+| Peça da pesquisa | Componente do DS |
+|---|---|
+| Cabeçalho (logo e "Home") | `CabecalhoDoSite` com o `Logo` e a ação "Home"; "Home" no meio da pesquisa abre o `AlertDialog` "Quer mesmo interromper a pesquisa?" (Continuar respondendo / Sair e voltar para o site) |
+| Progresso ("Pergunta N de 12", "Antes de começar", "Quase lá…") | `Progress` (o `Stepper` não serve: são até 16 etapas e a barra conta só as perguntas principais) |
+| Apresentação | `Selo`, `Heading`, `Prosa`, `Card` com `IconeComBase` ("Por que vale participar"), `ListaDePilares` (tempo, voluntária, privacidade), `Button` "Começar pesquisa" |
+| Identificação | `Campo`, `CampoDeTelefone` (a máscara do DS dá o mesmo texto que a `mascaraWhats` de hoje), `CampoDeEmail`, `Card` com o aviso da LGPD e o `Checkbox` do aceite, `ResumoDeErros` |
+| Voltar e Continuar, "Conferindo…"/"Enviando…", aviso do campo que falta | `BarraDaEtapa` (de `cadastro-em-etapas`) com `Alert` de erro |
+| Escolha única (1, 1.1, 3, foto, disponibilidade, 7) | `GrupoDeCartoesDeEscolha` + `CartaoDeEscolha`; na 1, o campo de cidade ou bairro entra logo abaixo da opção, dentro do grupo |
+| Bairro (75, por regional) e cidade da Região Metropolitana (28) | `CommandDialog` (`CommandInput`, `CommandGroup` "Regional …", `CommandItem` com o `Check` na opção escolhida, `CommandEmpty` com o texto de hoje; filtro sem acento pela prop `filter`), aberto por um `Button variant="outline"` com o valor escolhido |
+| Várias escolhas (2.1, 6, categorias, 9), com limite, opção exclusiva e "Outro" | `Checkbox` + `Label` em lista (como no cadastro de parceiro), `Input` "Qual?" no "Outro" |
+| Matriz (8) | um `GrupoDeCartoesDeEscolha` por item, com a legenda do item |
+| **Classificação (2 e 5)** | **FALTA NO DS: `EscolhaOrdenada`** |
+| **Notas de 1 a 10 por aspecto (4)** | **FALTA NO DS: `EscalaDeNotas`** |
+| Relato (opcional) | `Textarea` com `contador` e `maxLength` 2.000 |
+| Sobre você (gênero, faixa etária, estado civil) | `GrupoDeCartoesDeEscolha colunas={2}` no computador e `Select` no celular, como hoje; `Input` "Qual?" no "Outro" |
+| Novidades (sim ou não, com o consentimento no "Sim") | `Card` de destaque com `IconeComBase`, `GrupoDeCartoesDeEscolha` (o consentimento na `descricao` do "Sim") |
+| Política de Privacidade | `Dialog` com a `Prosa` (carrega `/privacidade/` e rola até `#pesquisa-moda`), como hoje |
+| Telas finais (enviada, encerrada, sem compras, já participou, fora do ar) | `EstadoFinal` com `Avatar` (assinatura da Dani); "Indique a pesquisa": `CampoCopiavel` com o link e `Button` "Compartilhar" (compartilhar do aparelho; sem ele, os links de WhatsApp com o `IconeWhatsApp`, Facebook e LinkedIn de `icones-preservados`) |
+| Rodapé | `RodapeSite variante="compacto"` |
+| Confete na tela de enviada | FALTA NO DS: `Confete` (opcional; sem ele a tela fica sem o confete, como no cadastro) |
+
+O que não muda (e o teste do lote deve conferir rodando o script de hoje, como em `tests/rede-parceiros-cadastro.test.ts`): perguntas e ordem lidas do mesmo `questionario.json`; condicionais (1.1 e 2.1); opções que encerram (1 "outra cidade", 2 "Não comprei"); mensagens de erro; rascunho `pq-moda-rascunho-v5` (localStorage, 30 dias) com o contato `pq-moda-rascunho-v5-contato` (sessionStorage) e o fim `pq-moda-concluida`; os corpos das chamadas `status`, `verificar`, `parcial` (ao trocar de etapa, ao sair da página, com `keepalive`) e `enviar` (mesmo `envio_id`), o campo isca `site`, as respostas 409 (`ja_respondeu`) e 410 (fora do ar); o endereço; a cabeça (já está em `rotas.json`); a medição (só o `analytics.js`, sem eventos próprios).
+
+**Especificação: `EscolhaOrdenada`** (classificação pela ordem dos toques; perguntas 2 e 5)
+
+- **Para quê:** escolher até N opções na ordem de importância, sem arrastar: o primeiro toque é o 1º lugar, o segundo é o 2º, e assim por diante. Serve a qualquer pesquisa ou formulário com "escolha até 3, na ordem".
+- **API sugerida:** `EscolhaOrdenada({ opcoes: { valor, titulo, descricao?, exclusiva? }[], valor: string[], onValorChange(valor: string[]), maximo, rotulo | aria-labelledby, textos?, className })`. O valor é a lista na ordem dos toques (o formato que a função `pesquisa` já valida).
+- **Comportamento (o de hoje):** tocar numa opção não escolhida põe-na no fim da lista; tocar de novo tira-a, e as seguintes sobem uma posição. Com o máximo atingido, as outras opções ficam desativadas (a exclusiva continua livre). A opção `exclusiva` ("Não comprei…", "Não costumo procurar…") fica sozinha e tira as demais; escolher outra tira a exclusiva.
+- **Aparência (com os tokens do DS):** cada opção é um cartão do tamanho e da moldura do `CartaoDeEscolha` (borda neutra; escolhida: borda primária e fundo `--primary-suave`; hover cinza; desativada: `bg-disabled`). À esquerda, um selo redondo de 32 px: vazio com borda quando não escolhida; preenchido na primária com "1º", "2º", "3º" em branco quando escolhida; na exclusiva, o `Check` no lugar do número. Embaixo da lista, a contagem: "Toque em até 3 opções, na ordem." / "2 de até 3 escolhidas · toque de novo para tirar".
+- **Movimento:** o selo entra com um pulo curto (`--duration-fast`, `--ease-out`) ao ganhar um número; parado com "menos movimento".
+- **Acessibilidade:** cada opção é uma caixa de seleção nativa (`checkbox`) com o cartão inteiro como rótulo e alvo de toque (44 px ou mais); o nome lido inclui a posição ("Marketplaces…, 1º lugar"); uma região `aria-live="polite"` anuncia cada mudança ("Marketplaces…: 1º lugar."); grupo com nome (a pergunta). Opcional para uma versão 2: botões "Subir"/"Descer" nas escolhidas, para reordenar sem tirar e pôr de novo (com o mesmo anúncio).
+- **Estados:** erro do grupo pelo `MensagemDeErro` embaixo; desativado; somente leitura (para mostrar uma resposta na área restrita).
+
+**Especificação: `EscalaDeNotas`** (uma nota de `minimo` a `maximo`; pergunta 4, três aspectos de 1 a 10)
+
+- **Para quê:** dar uma nota numa escala curta e numerada (1 a 10, 0 a 10, 1 a 5), com o significado das pontas escrito. Também serve ao NPS.
+- **API sugerida:** `EscalaDeNotas({ minimo, maximo, valor?: number, onValorChange(n), rotulo, descricao?, rotuloMinimo, rotuloMaximo, erro?, name?, className })` e `GrupoDeEscalas` para várias escalas num só card, separadas por divisor (cada uma com título e descrição, como "Qualidade · Qualidade dos materiais, tecidos e acabamentos").
+- **Aparência:** uma fileira de botões numerados do mesmo tamanho (44 px de altura no toque, 40 px no computador; cantos `--radius-md`), em grade de 5 colunas quando o espaço é estreito (duas linhas: 1 a 5 e 6 a 10) e de 10 ou 11 colunas quando cabe (a partir de cerca de 34 rem, pela largura do próprio bloco). Escolhido: fundo primário com texto branco; hover cinza; foco com o anel do DS. Embaixo, as pontas: "1 = Muito ruim" à esquerda e "10 = Excelente" à direita. Faltando no envio: borda de erro nos botões daquele aspecto e a `MensagemDeErro`.
+- **Acessibilidade:** rádios nativos (`role="radiogroup"` com o nome do aspecto; setas trocam a nota); o nome do primeiro e do último inclui a ponta ("1, Muito ruim", "10, Excelente"), como hoje; nunca só a cor (o escolhido também muda o peso do texto ou ganha contorno).
+- **Movimento:** a troca de cor com `--duration-fast`; nada além disso.
+
 ## 7. Páginas de apresentação do EI: três versões (decisão da dona do produto pendente)
 
 Todas privadas (`noindex`, login de administrador pelas funções `functions/experience-intelligence*/_middleware.js`). Nenhuma página pública tem link para elas.
@@ -208,7 +255,7 @@ Em `apps/site/`:
 
 - **Contornos retirados com o DS `0685afb` (lote S5):** `LOGO_CORRIGIDO` (o `Logo` já desenha com evenodd), as respostas do `Accordion` mantidas no HTML à mão (agora `AccordionContent manterNoHtml`) e o link "Pular para o conteúdo" feito no site (agora `LinkPularConteudo`).
 - **Lacunas do DS achadas no lote S5:** `Label`/`Campo` são flex e, com rótulo longo, o asterisco de obrigatório vai para a ponta direita (o cadastro passa o texto e o asterisco num só bloco); falta campo com prefixo fixo (`https://`); falta `RecorteDeFoto` (seção 6e); falta um efeito de comemoração (`Confete`), opcional.
-- **Lote S6 (pesquisa) não feito:** a página tem perguntas de classificação, busca de bairro por regional numa janela, identificação antes das perguntas, conferência de participação, progresso no servidor e indicação por redes. Ficou para o próximo lote.
+- **Lote S6 (pesquisa) parado por FALTA NO DS (28/11/2026):** a análise peça por peça está na seção 6f. Faltam no DS duas peças sem as quais a página teria de ser feita à mão: `EscolhaOrdenada` (as perguntas 2 e 5) e `EscalaDeNotas` (a pergunta 4). As especificações estão na seção 6f. Quando chegarem ao DS e forem sincronizadas, o lote pode ser feito sem outra análise; até lá, a pesquisa continua em HTML, intacta.
 
 - **Build do site depende do app** (como na área restrita): se ele não compilar, o site não publica. O workflow do DS testa o app antes do PR.
 - **Duas instalações de dependências** no build (área restrita e site, as mesmas versões): mais tempo de build. Otimização futura: um pacote só para os dois apps.
