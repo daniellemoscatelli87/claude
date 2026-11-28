@@ -6,6 +6,7 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+<<<<<<< HEAD
 ## 2026-11-28 · Área restrita em React: Parceiros e Pesquisas publicadas, páginas de HTML de /admin/ apagadas (D-056)
 
 - **Status:** implementado e testado; publicado pelo PR deste lote (ver o PR para a conferência ao vivo).
@@ -14,6 +15,26 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 - **Testes executados:** `npm run typecheck`, `npm test` (49 testes), `npm run conformidade` (zero desvios), `npm run build` (raiz); `tests/navegador/parceiros-pesquisas.cjs` em 1280, 390, 768 e 1024 px (Supabase simulado; funcionalidades da §8.2, axe WCAG A/AA, sem rolagem horizontal, alvos de 44 px e bordas esquerdas no celular).
 - **Achados para o DS:** `Button` sem `forwardRef` (React 18): com `asChild` em gatilhos do Radix (`DropdownMenuTrigger`, `PopoverTrigger`), o menu fica em `translate(0, -200%)`, fora da tela; é a causa do "Popover dentro do Dialog" da §7.2. `Funil` com `<ol role="img">` falha no axe (`listitem`). Detalhes em `ADMIN_REACT.md` §7.3.
 
+=======
+## 2026-11-27 · Site em React: Rede de Parceiros em HTML sai do repositório (S4, D-053)
+
+- A Rede de Parceiros em React foi conferida no ar (`tests/navegador/rede-parceiros.cjs` com `BASE=https://www.danimoscatelli.com.br`, sem enviar formulário: 25 de 25). `rede-parceiros/index.html` foi para `apps/site/tests/referencia/rede-parceiros.html` (só testes); `src/rede-parceiros-inicio.ts` e `.css` apagados; entrada `redeParceiros` saiu do `vite.config.ts`.
+- **Verificação executada:** tipos, testes, conformidade e build do app; build da raiz e `comparar-dist` contra o `main`.
+
+## 2026-11-27 · Site em React: Rede de Parceiros publicada (S4, D-053) e limpeza da página inicial em HTML
+
+- **S4 (`apps/site/src/paginas/rede-parceiros/`):** `/rede-parceiros/` em React com o DS (peças em `SITE_REACT.md`, seção 6d), marcada "publicada". Cenas da simulação em `Cenas.tsx`; e-mail do estúdio com `email_off` num componente comum (`compartilhado/EmailDoEstudio.tsx`, também usado pela privacidade).
+- **Limpeza:** `index.html` movido para `apps/site/tests/referencia/inicio.html`; `src/em-breve.ts`, `src/em-breve.css` e `public/inicio/ie3-secoes.*` apagados; entrada `main` saiu do `vite.config.ts`. A página inicial em React foi conferida no ar antes (`tests/navegador/inicio.cjs` com `BASE=https://www.danimoscatelli.com.br`, Supabase simulado: 37 de 37).
+- **Verificação executada:** em `apps/site`: tipos, 49 de 49 testes, conformidade em 0, build. Na raiz: build e `comparar-dist` contra o `main` anterior: 300 iguais; fora o app e as páginas publicadas, só os arquivos de `assets/` das páginas de HTML apagadas (sumiram) e os nomes novos dos pedaços que elas dividiam. Navegador (`tests/navegador/rede-parceiros.cjs`): 390, 768, 1024 e 1280 px sem erros (também sem "menos movimento"), sem rolagem horizontal, axe sem violações, alvos de 44 px, uma borda esquerda a 390 px, setores com a mesma altura; gaveta do cadastro (abre pelos links, carrega o formulário, fecha no Esc e no X); simulação por clique e pelas setas; dúvidas; pílula; botão subir.
+- **Pendências:** apagar `rede-parceiros/index.html`, `src/rede-parceiros-inicio.ts`/`.css` depois de conferida no ar. Lacunas do DS: `SITE_REACT.md`, seção 9.
+
+## 2026-11-27 · Site em React: página inicial publicada (S3, D-053) e limpeza do Projeto Piloto e da privacidade em HTML
+
+- **S3 (`apps/site/src/paginas/inicio/`):** `/` em React com o DS (peças por seção em `SITE_REACT.md`, seção 6c), marcada "publicada". "Notificar lançamento" grava só o e-mail em `notificacoes_lancamento` (como o `src/em-breve.ts`), com "Informe um e-mail válido.", "Não foi possível enviar. Tente novamente.", "Enviando…" e "Obrigado! Até breve!" por 4 s; evento `cadastro_lancamento`. Redes sociais com `clique_rede_social`; aviso "Tem um projeto?" com `clique_aviso_whatsapp`. A cabeça ganhou os dados estruturados (`cabeca.jsonld` no `rotas.json`, gravados pelo `montar-saida.mjs` e comparados por `tests/cabeca.test.ts`). `CabecalhoDeSecao` passou a ser comum (`compartilhado/site/`), usado pelo Projeto Piloto e pela Início.
+- **Limpeza:** `projeto-piloto/index.html` e `public/privacidade/index.html` movidos para `apps/site/tests/referencia/` (só testes); `src/projeto-piloto.ts`, `src/projeto-piloto.css` e a entrada `projetoPiloto` do `vite.config.ts` apagados.
+- **Verificação executada:** em `apps/site`: tipos sem erros, 46 de 46 testes (inclui todas as frases da página de HTML na versão em React, os 21 depoimentos na mesma ordem, os links das redes e as regras do aviso de lançamento), conformidade em 0, build. Na raiz: build e `comparar-dist` contra o `main` (`bd46af8`): 299 iguais; diferenças só no app, nas páginas publicadas e em 2 arquivos que somem de propósito (`assets/projetoPiloto-*.js`/`.css`, que nenhuma página usava desde o S2). Navegador (`tests/navegador/inicio.cjs`, em `/` e na prévia): 390, 768, 1024 e 1280 px sem rolagem horizontal nem erros de hidratação, axe sem violações, alvos de 44 px, uma borda esquerda a 390 px, cards lado a lado com a mesma altura; aviso de lançamento vazio, inválido, sugestão de domínio, envio, obrigado e volta, falha do servidor; carrossel; aviso "Tem um projeto?" (WhatsApp, fechar, não volta na sessão); faixa de logos com Pausar; "Saiba mais". Projeto Piloto e páginas pequenas: todas as conferências passaram de novo.
+- **Pendências:** apagar `index.html`, `src/em-breve.ts`/`.css` e `public/inicio/ie3-secoes.*` depois de conferida no ar (próximo lote). Lacunas do DS achadas: `SITE_REACT.md`, seção 9.
+>>>>>>> origin/main
 ## 2026-11-27 · Área restrita em React: DS d2aeb40, Reuniões e Contato publicadas, limpeza das páginas de HTML (D-055)
 
 - **Sincronização:** `DS_REF=main bash scripts/sincronizar-design-system.sh` (`versao.txt` = `d2aeb40`), com `apps/experience-intelligence/` de volta ao `main`.

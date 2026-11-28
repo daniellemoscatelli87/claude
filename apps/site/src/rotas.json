@@ -1,12 +1,41 @@
 {
   "_leia": "Páginas do site público e o corte página a página para React com o Design System (D-053). Cada página tem o endereço de hoje (caminho), o arquivo que o build grava no dist do site (saida), o HTML que a servia antes do React (origem; depois de publicada e conferida no ar, a cópia sai de public/ e fica em apps/site/tests/referencia/ só para os testes) e o lote da migração. Em 'react', cada página já feita em React tem um estado: 'previa' = servida só em /site/previa/<caminho>, sem indexação; 'publicada' = também substitui, só no dist, o HTML de hoje no mesmo endereço. Página fora de 'react' continua sendo a de HTML. Cabeça (título, descrição, canonical, compartilhamento) fica em 'cabeca' e precisa ser igual à da página de HTML (teste tests/cabeca.test.ts).",
   "paginas": [
-    { "id": "inicio", "caminho": "/", "saida": "index.html", "origem": "index.html", "lote": "S3" },
+    {
+      "id": "inicio",
+      "caminho": "/",
+      "saida": "index.html",
+      "origem": "apps/site/tests/referencia/inicio.html",
+      "lote": "S3",
+      "cabeca": {
+        "titulo": "Dani Moscatelli | Experience Design Studio",
+        "meta": [
+          ["name", "description", "Consultoria em Service Design, Business Design, CX, UX e EX para transformar complexidade de negócio em experiências de valor com design, tecnologia e IA."],
+          ["name", "google-site-verification", "lPMx712zU54YSwCXw-GPs63Jgc8NIAZkl9j4WDM1Yyg"],
+          ["property", "og:type", "website"],
+          ["property", "og:locale", "pt_BR"],
+          ["property", "og:site_name", "Dani Moscatelli | Experience Design Studio"],
+          ["property", "og:title", "Dani Moscatelli | Experience Design Studio"],
+          ["property", "og:description", "Consultoria em Service Design, Business Design, CX, UX e EX para transformar complexidade de negócio em experiências de valor com design, tecnologia e IA."],
+          ["property", "og:url", "https://www.danimoscatelli.com.br/"],
+          ["property", "og:image", "https://www.danimoscatelli.com.br/compartilhar.png"],
+          ["property", "og:image:width", "1200"],
+          ["property", "og:image:height", "630"],
+          ["property", "og:image:alt", "Logo Dani Moscatelli | Experience Design Studio"],
+          ["name", "twitter:card", "summary_large_image"],
+          ["name", "twitter:title", "Dani Moscatelli | Experience Design Studio"],
+          ["name", "twitter:description", "Consultoria em Service Design, Business Design, CX, UX e EX para transformar complexidade de negócio em experiências de valor com design, tecnologia e IA."],
+          ["name", "twitter:image", "https://www.danimoscatelli.com.br/compartilhar.png"]
+        ],
+        "canonical": "https://www.danimoscatelli.com.br/",
+        "jsonld": {"@context":"https://schema.org","@graph":[{"@type":"ProfessionalService","@id":"https://www.danimoscatelli.com.br/#estudio","name":"Dani Moscatelli | Experience Design Studio","url":"https://www.danimoscatelli.com.br/","logo":"https://www.danimoscatelli.com.br/logo-dm.png","image":"https://www.danimoscatelli.com.br/compartilhar.png","description":"Consultoria em Service Design, Business Design, CX, UX e EX para transformar complexidade de negócio em experiências de valor com design, tecnologia e IA.","founder":{"@id":"https://www.danimoscatelli.com.br/#dani"},"sameAs":["https://www.linkedin.com/company/danimoscatellistudio/","https://www.instagram.com/danimoscatellistudio"],"areaServed":"BR","address":{"@type":"PostalAddress","addressLocality":"Curitiba","addressRegion":"PR","addressCountry":"BR"},"knowsAbout":["Service Design","Business Design","Business Experience (BX)","Customer Experience (CX)","User Experience (UX)","Employee Experience (EX)","Experience Design","Diagnóstico de experiências e jornadas","Transformação organizacional","PD&I","IA aplicada à pesquisa, ao design e à inovação","Facilitação de workshops"]},{"@type":"Person","@id":"https://www.danimoscatelli.com.br/#dani","name":"Dani Moscatelli","jobTitle":"Líder de Design de Experiência e Inovação, especialista em Service Design","sameAs":["https://www.linkedin.com/in/danimoscatelli/"],"worksFor":{"@id":"https://www.danimoscatelli.com.br/#estudio"},"url":"https://www.danimoscatelli.com.br/"},{"@type":"WebSite","@id":"https://www.danimoscatelli.com.br/#site","name":"Dani Moscatelli | Experience Design Studio","url":"https://www.danimoscatelli.com.br/","inLanguage":"pt-BR","publisher":{"@id":"https://www.danimoscatelli.com.br/#estudio"}}]}
+      }
+    },
     {
       "id": "projeto-piloto",
       "caminho": "/projeto-piloto/",
       "saida": "projeto-piloto/index.html",
-      "origem": "projeto-piloto/index.html",
+      "origem": "apps/site/tests/referencia/projeto-piloto.html",
       "lote": "S2",
       "cabeca": {
         "titulo": "Programa Projeto Piloto | Dani Moscatelli Experience Design Studio",
@@ -24,7 +53,31 @@
         "canonical": "https://www.danimoscatelli.com.br/projeto-piloto/"
       }
     },
-    { "id": "rede-parceiros", "caminho": "/rede-parceiros/", "saida": "rede-parceiros/index.html", "origem": "rede-parceiros/index.html", "lote": "S4" },
+    {
+      "id": "rede-parceiros",
+      "caminho": "/rede-parceiros/",
+      "saida": "rede-parceiros/index.html",
+      "origem": "apps/site/tests/referencia/rede-parceiros.html",
+      "lote": "S4",
+      "cabeca": {
+        "titulo": "Dani Moscatelli | Partners & Connections",
+        "meta": [
+          ["name", "description", "Rede de parceiros da Dani Moscatelli | Experience Design Studio: profissionais independentes para colaborar em projetos de Design, Experiência Humana, Negócios, Tecnologia e Inovação."],
+          ["property", "og:type", "website"],
+          ["property", "og:locale", "pt_BR"],
+          ["property", "og:site_name", "Dani Moscatelli | Experience Design Studio"],
+          ["property", "og:title", "Dani Moscatelli | Partners & Connections"],
+          ["property", "og:description", "Rede de parceiros da Dani Moscatelli | Experience Design Studio: profissionais independentes para colaborar em projetos de Design, Experiência Humana, Negócios, Tecnologia e Inovação."],
+          ["property", "og:url", "https://www.danimoscatelli.com.br/rede-parceiros/"],
+          ["property", "og:image", "https://www.danimoscatelli.com.br/compartilhar.png"],
+          ["property", "og:image:width", "1200"],
+          ["property", "og:image:height", "630"],
+          ["property", "og:image:alt", "Logo Dani Moscatelli | Experience Design Studio"],
+          ["name", "twitter:card", "summary_large_image"]
+        ],
+        "canonical": "https://www.danimoscatelli.com.br/rede-parceiros/"
+      }
+    },
     { "id": "rede-parceiros-cadastro", "caminho": "/rede-parceiros/cadastro/", "saida": "rede-parceiros/cadastro/index.html", "origem": "rede-parceiros/cadastro/index.html", "lote": "S5" },
     { "id": "galeria-autorizar", "caminho": "/rede-parceiros/galeria/autorizar/", "saida": "rede-parceiros/galeria/autorizar/index.html", "origem": "public/rede-parceiros/galeria/autorizar/index.html", "lote": "S5" },
     { "id": "pesquisa-moda", "caminho": "/pesquisa/moda-curitiba/", "saida": "pesquisa/moda-curitiba/index.html", "origem": "pesquisa/moda-curitiba/index.html", "lote": "S6" },
@@ -32,7 +85,7 @@
       "id": "privacidade",
       "caminho": "/privacidade/",
       "saida": "privacidade/index.html",
-      "origem": "public/privacidade/index.html",
+      "origem": "apps/site/tests/referencia/privacidade.html",
       "lote": "S7",
       "cabeca": {
         "titulo": "Política de Privacidade • Dani Moscatelli | Experience Design Studio",
@@ -89,6 +142,8 @@
     "privacidade": "publicada",
     "descadastro": "publicada",
     "erro-404": "publicada",
-    "projeto-piloto": "publicada"
+    "projeto-piloto": "publicada",
+    "inicio": "publicada",
+    "rede-parceiros": "publicada"
   }
 }
