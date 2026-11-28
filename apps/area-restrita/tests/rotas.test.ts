@@ -39,11 +39,13 @@ describe("corte página a página", () => {
     expect(resolverHref("/admin/parceiros/?id=1#emails", "/admin/app", {})).toEqual({ interno: false, href: "/admin/parceiros/?id=1#emails" });
     expect(resolverHref("https://exemplo.com/", "/admin", {})).toEqual({ interno: false, href: "https://exemplo.com/" });
   });
-  it("hoje: Início, Lançamento, Configurações, Comunicados, Contato e Reuniões publicadas (substituem as de HTML só no dist)", () => {
-    expect(REACT).toEqual({ inicio: "publicada", lancamento: "publicada", configuracoes: "publicada", comunicados: "publicada", contatos: "publicada", reunioes: "publicada" });
+  it("hoje: todas as páginas publicadas em React (A1 a A8; substituem as de HTML só no dist)", () => {
+    expect(REACT).toEqual({ inicio: "publicada", lancamento: "publicada", configuracoes: "publicada", comunicados: "publicada", contatos: "publicada", reunioes: "publicada", parceiros: "publicada", projetos: "publicada", pesquisas: "publicada" });
+    for (const p of todasAsPaginas()) expect(REACT[p.id], p.id).toBe("publicada");
     expect(planoDeSaida(rotas)).toContain("contatos/index.html");
     expect(planoDeSaida(rotas)).toContain("reunioes/index.html");
-    expect(planoDeSaida(rotas)).not.toContain("parceiros/index.html");
+    expect(planoDeSaida(rotas)).toContain("parceiros/index.html");
+    expect(planoDeSaida(rotas)).toContain("pesquisas/index.html");
   });
   it("publicar uma página grava o index também no lugar da de HTML", () => {
     expect(planoDeSaida({ ...rotas, react: { inicio: "publicada", contatos: "previa" } })).toEqual(["app/contatos/index.html", "app/index.html", "index.html"]);

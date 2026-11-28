@@ -404,8 +404,11 @@ async function contato(page, L, registro) {
   await janela.getByRole("button", { name: "Enviar convite" }).click();
   ok(await janela.getByText("Escolha a data da reunião.").isVisible(), `${L} Contato: reunião sem data avisa no campo`);
   await janela.getByRole("button", { name: /Escolha a data/ }).click();
-  const pop = page.locator("#reuniao-calendario");
+  // Data no Popover do DS (o Button com forwardRef, DS 0685afb): abre embaixo do campo, dentro da tela.
+  const pop = page.locator("[data-radix-popper-content-wrapper]").filter({ has: page.locator("table, [role=grid]") });
   await pop.waitFor();
+  const caixa = await pop.boundingBox();
+  ok(!!caixa && caixa.y >= 0 && caixa.y + 40 < (page.viewportSize().height), `${L} Contato: o calendário da data abre no Popover, posicionado na tela`);
   const amanha = new Date(Date.now() + 864e5);
   if (amanha.getDate() === 1) await pop.getByRole("button", { name: /next|próximo/i }).click();
   await pop.locator("button:not([disabled])", { hasText: new RegExp("^" + amanha.getDate() + "$") }).first().click();
@@ -413,13 +416,20 @@ async function contato(page, L, registro) {
   await janela.getByRole("radio", { name: /Presencial/ }).click().catch(async () => { await janela.getByText("Presencial", { exact: true }).click(); });
   await janela.getByRole("button", { name: "Enviar convite" }).click();
   ok(await janela.getByText("Informe o endereço da reunião presencial.").isVisible(), `${L} Contato: presencial pede o endereço`);
-  await page.locator("#reuniao-endereco").fill("Rua XV de Novembro, 200, Curitiba");
+  // Sugestões de endereço (CampoDeEndereco do DS com a mesma busca da página de HTML: Photon, 5, perto de Curitiba, Brasil)
+  await page.route(/photon\.komoot\.io\/api\//, (r) => { registro.photon = r.request().url(); r.fulfill({ contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ features: [{ properties: { osm_id: 1, name: "Praça Tiradentes", street: "Rua XV de Novembro", housenumber: "200", city: "Curitiba", state: "Paraná", countrycode: "BR" } }, { properties: { osm_id: 2, name: "Outro lugar", city: "Lisboa", countrycode: "PT" } }] }) }); });
+  await page.locator("#reuniao-endereco").fill("Rua XV");
+  const sugestao = page.getByRole("option", { name: /Praça Tiradentes/ });
+  await sugestao.waitFor({ timeout: 4000 });
+  ok(/limit=5&lat=-25\.43&lon=-49\.27&q=Rua%20XV/.test(registro.photon || "") && await page.getByRole("option").count() === 1, `${L} Contato: sugestões de endereço como na página de HTML (Photon, 5, Curitiba, só Brasil)`);
+  await sugestao.click();
+  ok((await page.locator("#reuniao-endereco").inputValue()).includes("Rua XV de Novembro, 200"), `${L} Contato: escolher a sugestão preenche o endereço`);
   await page.screenshot({ path: `${S}/a6-contato-reuniao-${L}.png`, animations: "disabled" });
   await axe(page, `${L} Contato (reunião)`);
   await janela.getByRole("button", { name: "Enviar convite" }).click();
   await janela.waitFor({ state: "hidden", timeout: 4000 }).catch(() => {});
   const salvo = registro.funcoes.find((f) => f.nome === "google-agenda" && f.acao === "salvar" && f.enviar);
-  ok(!!salvo && salvo.formato === "presencial" && salvo.endereco.includes("XV de Novembro") && salvo.duracao_min === 60, `${L} Contato: convite pelo Google Agenda com formato, endereço e duração`);
+  ok(!!salvo && salvo.formato === "presencial" && salvo.endereco.includes("XV de Novembro, 200") && salvo.duracao_min === 60, `${L} Contato: convite pelo Google Agenda com formato, endereço e duração`);
   await espera(500);
   ok((await page.locator("[data-situacao]").innerText()).includes("Reunião agendada"), `${L} Contato: a situação mostra a reunião agendada`);
   // Excluir reunião pede o motivo
