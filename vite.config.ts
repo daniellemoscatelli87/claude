@@ -60,6 +60,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(import.meta.dirname, 'index.html'),
+        projetoPiloto: resolve(import.meta.dirname, 'projeto-piloto/index.html'),
         pesquisaModa: resolve(import.meta.dirname, 'pesquisa/moda-curitiba/index.html'),
       },
     },
