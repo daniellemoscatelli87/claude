@@ -73,6 +73,9 @@
     "configuracoes": "publicada",
     "comunicados": "publicada",
     "contatos": "publicada",
-    "reunioes": "publicada"
+    "reunioes": "publicada",
+    "parceiros": "publicada",
+    "projetos": "publicada",
+    "pesquisas": "publicada"
   }
 }

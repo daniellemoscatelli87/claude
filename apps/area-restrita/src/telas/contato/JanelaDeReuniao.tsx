@@ -1,7 +1,7 @@
 // Agendar ou alterar a reunião de uma mensagem de contato no Google Agenda: os mesmos campos, regras, textos e ações do
 // painel de public/admin/contatos/index.html, numa janela (Dialog do DS):
-// data (Calendar, aberto embaixo do campo), horário (CampoDeHorario, de 15 em 15 min), duração (Select), formato (SegmentedControl:
-// online com Google Meet ou presencial com endereço), título, assunto e descrição (Campo, Textarea), link do Meet
+// data (Popover com Calendar), horário (CampoDeHorario, de 15 em 15 min), duração (Select), formato (SegmentedControl:
+// online com Google Meet ou presencial com endereço e sugestões: CampoDeEndereco + buscaNoPhoton), título, assunto e descrição (Campo, Textarea), link do Meet
 // (CampoCopiavel) e as ações (Excluir/Descartar em contorno de exclusão, Enviar convite/Salvar em botão cheio).
 import * as React from "react";
 import { CalendarDays, ExternalLink, LoaderCircle, MapPin, Video } from "lucide-react";
@@ -11,6 +11,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { Campo, MensagemDeErro } from "@/components/ui/campo";
 import { CampoCopiavel } from "@/components/ui/campo-copiavel";
 import { CampoDeHorario } from "@/components/ui/campo-de-horario";
+import { buscaNoPhoton, CampoDeEndereco } from "@/components/ui/campo-de-endereco";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { SegmentedControl } from "@/components/ui/segmented-control";
@@ -54,6 +56,9 @@ type Props = {
   aoMudar: (reuniao: Reuniao | null, aviso?: string) => void;
   enviarResposta: (body: object) => Promise<boolean>;
 };
+
+/** Sugestões de endereço: a mesma busca da página de HTML (Photon/komoot, até 5, perto de Curitiba, só Brasil). */
+const BUSCAR_ENDERECO = buscaNoPhoton();
 
 export function JanelaDeReuniao({ aberta, mudar, contato: r, reuniao: reu, aoMudar, enviarResposta }: Props) {
   const [google, setGoogle] = React.useState<StatusDoGoogle | null>(null);
@@ -177,20 +182,21 @@ export function JanelaDeReuniao({ aberta, mudar, contato: r, reuniao: reu, aoMud
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="min-w-0 space-y-2">
                 <Label id="reuniao-dia-rotulo" htmlFor="reuniao-dia" className="text-body-sm font-semibold">Data</Label>
-                {/* O calendário abre logo abaixo do campo, dentro da janela (um Popover dentro do Dialog não se posiciona). */}
-                <Button id="reuniao-dia" aria-labelledby="reuniao-dia-rotulo reuniao-dia-valor" aria-expanded={calendario} aria-controls="reuniao-calendario" type="button" variant="outline" className="w-full justify-start bg-card font-normal" aria-invalid={erros.dia ? true : undefined} aria-describedby={erros.dia ? "reuniao-dia-erro" : undefined} onClick={() => setCalendario((v) => !v)}>
-                  <CalendarDays aria-hidden className="text-muted-foreground" />
-                  <span id="reuniao-dia-valor">{dataEscolhida ? dataEscolhida.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "long", year: "numeric" }) : "Escolha a data"}</span>
-                </Button>
-                {calendario && (
-                  <div id="reuniao-calendario" className="w-fit rounded-md border border-border bg-card motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-200">
+                <Popover open={calendario} onOpenChange={setCalendario}>
+                  <PopoverTrigger asChild>
+                    <Button id="reuniao-dia" aria-labelledby="reuniao-dia-rotulo reuniao-dia-valor" type="button" variant="outline" className="w-full justify-start bg-card font-normal" aria-invalid={erros.dia ? true : undefined} aria-describedby={erros.dia ? "reuniao-dia-erro" : undefined}>
+                      <CalendarDays aria-hidden className="text-muted-foreground" />
+                      <span id="reuniao-dia-valor">{dataEscolhida ? dataEscolhida.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "long", year: "numeric" }) : "Escolha a data"}</span>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="start" className="w-auto p-0">
                     <Calendar
                       mode="single" selected={dataEscolhida} defaultMonth={dataEscolhida}
                       disabled={{ before: new Date() }}
-                      onSelect={(d) => { if (d) { setDia(diaLocal(d)); setErros((x) => ({ ...x, dia: "" })); } setCalendario(false); document.getElementById("reuniao-dia")?.focus(); }}
+                      onSelect={(d) => { if (d) { setDia(diaLocal(d)); setErros((x) => ({ ...x, dia: "" })); } setCalendario(false); }}
                     />
-                  </div>
-                )}
+                  </PopoverContent>
+                </Popover>
                 {erros.dia && <MensagemDeErro id="reuniao-dia-erro">{erros.dia}</MensagemDeErro>}
               </div>
               <CampoDeHorario id="reuniao-hora" valor={hora} onValorChange={(v) => { setHora(v); setErros((x) => ({ ...x, hora: "" })); }} erro={erros.hora || null} />
@@ -210,10 +216,10 @@ export function JanelaDeReuniao({ aberta, mudar, contato: r, reuniao: reu, aoMud
               />
             </div>
             {formato === "presencial" && (
-              <Campo
+              <CampoDeEndereco
                 id="reuniao-endereco" rotulo="Endereço" placeholder="Endereço ou nome do local" maxLength={500} autoComplete="street-address"
                 ajuda="Confira o número e acrescente o complemento, se precisar." erro={erros.endereco || null}
-                value={endereco} onChange={(e) => { setEndereco(e.target.value); setErros((x) => ({ ...x, endereco: "" })); }}
+                valor={endereco} onValorChange={(v) => { setEndereco(v); setErros((x) => ({ ...x, endereco: "" })); }} buscar={BUSCAR_ENDERECO}
               />
             )}
             <Campo id="reuniao-titulo" rotulo="Título" maxLength={200} value={titulo} onChange={(e) => setTitulo(e.target.value)} />

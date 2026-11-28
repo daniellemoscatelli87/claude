@@ -8,9 +8,6 @@
 # Catálogo do design system (gerado no DS a cada build): consultar antes de montar qualquer interface (regra de consumo do DS)
 CATALOGO.md              design-system/CATALOGO.md
 
-# Tokens (cores, sombras, raio, movimento, gráficos), usados pela área restrita (public/admin/)
-src/styles/theme.css     public/design-system/theme.css
-
 # Site público em React (apps/site, decisão de 27/11/2026, D-053): tokens, fontes e Tailwind v4 e a pasta ui inteira,
 # como a área restrita em React (D-051). src/components/ui/ do app é só do design system: o que sair do DS é apagado ali.
 # Sem exclusões: o app usa React 18.3, a mesma versão do DS, então todos os componentes compilam.

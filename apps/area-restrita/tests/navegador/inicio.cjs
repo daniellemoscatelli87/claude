@@ -1,5 +1,5 @@
 // Login -> Início da área restrita em React (/admin/app/), com o Supabase simulado na rede (as páginas usam o cliente
-// real, que conversa com respostas falsas, com dados fictícios). Confere a Início publicada em /admin/ e uma página de HTML ainda não migrada, que reaproveitam
+// real, que conversa com respostas falsas, com dados fictícios). Confere a Início publicada em /admin/ e outra página da área aberta na mesma sessão (desde a D-056 não há páginas de HTML), que reaproveitam
 // a mesma sessão. 1280 e 390 px: sem erros no console, sem rolagem horizontal e axe sem violações WCAG A/AA na Início.
 //
 // Uso, na raiz do repositório, depois de "npm run build":
@@ -309,18 +309,15 @@ async function rodar(browser, largura) {
   ok(await publicada.evaluate(() => window.__semRecarga === 1 && /^\/admin\/?$/.test(location.pathname)), `${L}: em /admin/, o logo volta à Início sem recarregar (navegação interna)`);
   ok(errosPublicada.length === 0, `${L}: Início publicada sem erros${errosPublicada.length ? ": " + errosPublicada.join("; ") : ""}`);
 
-  // A mesma sessão abre uma página de HTML que ainda não foi migrada (corte página a página sem novo login).
-  const antiga = await ctx.newPage();
-  await simularSupabase(antiga);
-  const errosAntiga = [];
-  antiga.on("pageerror", (e) => errosAntiga.push(e.message));
-  await antiga.goto(BASE + "/admin/parceiros/");
-  await antiga.waitForSelector("#app:not(.hidden)", { timeout: 8000 });
-  await espera(500);
-  ok(true, `${L}: a página de HTML abre já logada com a sessão do React`);
-  ok(await antiga.evaluate(() => [...document.querySelectorAll("a")].some((a) => a.getAttribute("href") === "/admin/")), `${L}: a página de HTML leva de volta à Início (/admin/)`);
-  await antiga.screenshot({ path: `${S}/admin-html-parceiros-${L}.png`, fullPage: true });
-  ok(errosAntiga.length === 0, `${L}: página de HTML sem erros${errosAntiga.length ? ": " + errosAntiga.join("; ") : ""}`);
+  // Desde a D-056 não há mais páginas de HTML: a mesma sessão abre outra página da área (aba nova) já logada.
+  const outra = await ctx.newPage();
+  await simularSupabase(outra);
+  const errosOutra = [];
+  outra.on("pageerror", (e) => errosOutra.push(e.message));
+  await outra.goto(BASE + "/admin/pesquisas/");
+  await outra.getByRole("heading", { level: 1, name: "Pesquisas" }).waitFor({ timeout: 8000 });
+  ok(true, `${L}: outra página da área abre já logada com a mesma sessão`);
+  ok(errosOutra.length === 0, `${L}: sem erros na outra página${errosOutra.length ? ": " + errosOutra.join("; ") : ""}`);
   await ctx.close();
 }
 

@@ -1,5 +1,4 @@
-// Estrutura do formulário da Rede de Parceiros (gerada de /rede-parceiros/index.html).
-window.FORM_PARCEIROS = [
+[
  {
   "title": "Seção 1: Informações profissionais e contato",
   "questions": [
@@ -567,4 +566,4 @@ window.FORM_PARCEIROS = [
    }
   ]
  }
-];
+]

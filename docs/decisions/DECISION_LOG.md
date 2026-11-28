@@ -615,6 +615,24 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **O que mudou em relação à página de HTML (forma, não conteúdo):** a busca de endereço da reunião presencial (sugestões do OpenStreetMap) ficou de fora: o DS não tem campo de endereço com sugestões (FALTA NO DS, `ADMIN_REACT.md` §7.2); o endereço é digitado. O calendário da data da reunião abre embaixo do campo, dentro da janela (o `Popover` do DS não se posiciona dentro do `Dialog`).
 - **Voltar atrás:** trocar `"publicada"` por `"previa"` no `rotas.json` e restaurar a página de HTML do histórico do git (commit anterior a este lote).
 
+## D-056 · 28/11/2026 · Parceiros e Pesquisas da área restrita em React publicadas; fim das páginas de HTML de `/admin/` (lotes A7, A8 e A9 da D-051)
+
+- **Origem:** últimos dois lotes do plano da área restrita em React (`docs/engineering/ADMIN_REACT.md` §8.1), com as peças do DS `d2aeb40`. Publicação delegada pela dona do produto (27/11/2026).
+- **Decisão:**
+  - Parceiros (Dashboard, desafio com IA, filtros, autorização da galeria com agendamento, tabela e candidatura com galeria, e-mails e LGPD) e Pesquisas (lista, painel com link, QR Code, exportar relatório em PDF e Excel, Resultado, Inteligência e Dados) em `"publicada"`, com as mesmas consultas, funções, regras e textos das páginas de HTML (lista de conferência em `ADMIN_REACT.md` §8.2);
+  - limpeza A9: saem `public/admin/parceiros/`, `public/admin/pesquisas/`, `public/admin/admin.css`, `public/admin/admin.js`, `public/admin/form-parceiros.js` (o formulário virou `apps/area-restrita/src/dados/form-parceiros.json`) e a cópia `public/design-system/theme.css` (e a linha dela em `design-system/arquivos.txt`). Fica `public/admin/avatar-dani.webp` (foto padrão do perfil);
+  - Resultados e Inteligência das Pesquisas viram "modelos" (`dados/pesquisas-resultados.ts`, `dados/pesquisas-inteligencia.ts`) que a tela desenha e a exportação usa; antes, o Excel lia o texto da tela.
+- **O que mudou em relação à página de HTML (forma, não conteúdo):**
+  - gráficos feitos à mão trocados pelos do DS: `GraficoDeRosca`, `BarrasOrdenadas` (percentual e quantidade escritos no fim), `BarrasAgrupadas` (1º lugar e "entre os 3"), `Pirulito` com máximo 10 e a nota geral como referência (nota de 1 a 10 por aspecto), `BarrasEmpilhadas100` (fácil, médio e difícil), `GraficoDeHalteres` e `DescobertaVisual`; "Ver números" com `TabelaDeDados`;
+  - "Quem chegou até onde" em `BarrasOrdenadas` com "% da etapa anterior" no nome: o `Funil` do DS falha no axe (§7.3);
+  - números do Dashboard que eram percentuais ("67% de especialistas em…") aparecem como "6 de 9" no `CardIndicador` (que só mostra números) e o percentual vai na linha de apoio;
+  - no Dashboard, com desafio, os perfis continuam em cards, ordenados por aderência, com a aderência em `ChipDeEstado` (antes, uma linha do tempo com o percentual no círculo);
+  - filtros ativos aparecem como `ChipFiltravel` (um toque tira o filtro); candidatura nova marcada com "Nova" em texto (antes, só um ponto rosa);
+  - horário do envio agendado em passos de 15 minutos (`CampoDeHorario`), com a data no `Calendar` aberto embaixo do campo, dentro da janela;
+  - o painel lateral "Ver mais" do perfil não foi refeito: na página de HTML ele não abria por nenhum caminho (código sem uso).
+- **DS `0685afb` no mesmo lote (28/11/2026):** a área restrita e o site em React sincronizados com o DS `0685afb` (o app Experience Intelligence fica fora). Com ele, o Contato recupera o que a D-055 tinha deixado de fora: sugestões de endereço da reunião presencial (`CampoDeEndereco` com `buscaNoPhoton`, a mesma busca da página de HTML: Photon/komoot, 5 resultados, perto de Curitiba, só Brasil), anexos por arrastar e soltar (`UploadDropzone` acessível), data da reunião no `Popover` (o `Button` do DS passou a repassar a ref) e as datas embaixo das etapas no `Stepper` (`detalhe`), no lugar da linha separada.
+- **Voltar atrás:** trocar `"publicada"` por `"previa"` no `rotas.json` e restaurar do histórico do git as páginas de HTML, `admin.css`, `admin.js`, `form-parceiros.js` e `public/design-system/theme.css` (commit anterior a este lote).
+
 ## Decisões pendentes
 
 - **P-006 · 21/10/2026 · Cruzar o cadastro com o formulário de contato do site.** Pedido da dona do produto: se o e-mail já enviou contato pelo site, mostrar se a pessoa já relatou o desafio e o que ficou registrado. Proposta do Claude:

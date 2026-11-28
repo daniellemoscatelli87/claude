@@ -153,6 +153,16 @@ const MenuLateral = React.forwardRef<HTMLElement, MenuLateralProps>(function Men
     const id = window.requestAnimationFrame(() => setMontado(true));
     return () => window.cancelAnimationFrame(id);
   }, []);
+  // Os nomes dos itens só entram com o esmaecer quando a pessoa abre ou recolhe o menu (27/11/2026). Quando quem muda
+  // é a largura da janela (o menu volta a expandir abaixo de 1024 px), eles aparecem prontos, sem repetir a animação.
+  const [escolhaAnterior, setEscolhaAnterior] = React.useState(escolha);
+  const [animar, setAnimar] = React.useState(false);
+  if (escolhaAnterior !== escolha) { setEscolhaAnterior(escolha); setAnimar(true); }
+  React.useEffect(() => {
+    if (!animar) return;
+    const id = window.setTimeout(() => setAnimar(false), 400);
+    return () => window.clearTimeout(id);
+  }, [animar]);
   const valor = React.useMemo(() => ({ recolhido, dentro: true, podeRecolher: larga }), [recolhido, larga]);
   return (
     <aside
@@ -160,7 +170,9 @@ const MenuLateral = React.forwardRef<HTMLElement, MenuLateralProps>(function Men
       aria-label="Menu lateral"
       data-slot="menu-lateral"
       data-recolhido={recolhido ? "" : undefined}
+      data-animar={animar ? "" : undefined}
       className={cn(
+        "group/menu",
         "flex shrink-0 flex-col border-r border-border bg-sidebar",
         // Coluna da página: estica até o fim da página; clip (e não hidden) para o conteúdo poder grudar no topo.
         grudarAbaixoDe === undefined ? "h-full overflow-hidden" : "self-stretch overflow-x-clip",
@@ -376,7 +388,7 @@ const ItemDoMenu = React.forwardRef<HTMLAnchorElement, ItemDoMenuProps>(function
         <span className="sr-only">{children}{!!contador && `, ${contador} ${rotuloContador}`}</span>
       ) : (
         <>
-          <span className="min-w-0 flex-1 truncate animate-in fade-in-0 duration-[var(--duration-normal)] motion-reduce:animate-none">{children}</span>
+          <span className="min-w-0 flex-1 truncate group-data-[animar]/menu:animate-in group-data-[animar]/menu:fade-in-0 duration-[var(--duration-normal)] motion-reduce:animate-none">{children}</span>
           {!!contador && <ContadorDoPainel valor={contador} rotulo={rotuloContador} />}
         </>
       )}
@@ -481,7 +493,7 @@ function CardDeAjuda({ titulo = "Precisa de ajuda?", texto = "Acesse a central d
           target="_blank"
           rel="noreferrer"
           className={cn(
-            "mx-auto flex h-10 w-10 items-center justify-center rounded-md border border-border bg-card text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
+            "mx-auto flex h-10 w-10 items-center justify-center rounded-md border border-input bg-card text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             className,
           )}
@@ -524,7 +536,7 @@ function CampoDeBuscaGlobal({ placeholder = "Buscar no painel", atalho = "Ctrl +
       onClick={onAbrir}
       aria-keyshortcuts={atalho === "Ctrl + K" ? "Control+K" : undefined}
       className={cn(
-        "flex h-10 w-full items-center gap-3 rounded-md border border-border bg-card px-3 text-left text-body-sm text-muted-foreground transition-colors hover:bg-accent",
+        "flex h-10 w-full items-center gap-3 rounded-md border border-input bg-card px-3 text-left text-body-sm text-muted-foreground transition-colors hover:bg-accent",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className,
       )}

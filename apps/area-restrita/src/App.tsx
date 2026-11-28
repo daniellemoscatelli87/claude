@@ -19,6 +19,8 @@ const Contatos = React.lazy(() => import("@/telas/Contatos").then((m) => ({ defa
 const Reunioes = React.lazy(() => import("@/telas/Reunioes").then((m) => ({ default: m.Reunioes })));
 const Configuracoes = React.lazy(() => import("@/telas/Configuracoes").then((m) => ({ default: m.Configuracoes })));
 const Lancamento = React.lazy(() => import("@/telas/Lancamento").then((m) => ({ default: m.Lancamento })));
+const Parceiros = React.lazy(() => import("@/telas/Parceiros").then((m) => ({ default: m.Parceiros })));
+const Pesquisas = React.lazy(() => import("@/telas/Pesquisas").then((m) => ({ default: m.Pesquisas })));
 const CarregandoPagina = () => <Skeleton aria-busy="true" aria-label="Carregando a página" className="h-96 w-full rounded-xl" />;
 
 function NaoEncontrada() {
@@ -85,6 +87,8 @@ function Portao() {
                   <Route path="/comunicados/" element={<Comunicados />} />
                   <Route path="/contatos/" element={<Contatos />} />
                   <Route path="/reunioes/" element={<Reunioes />} />
+                  <Route path="/parceiros/" element={<Parceiros />} />
+                  <Route path="/pesquisas/" element={<Pesquisas />} />
                   <Route path="*" element={<NaoEncontrada />} />
                 </Routes>
                 </React.Suspense>
