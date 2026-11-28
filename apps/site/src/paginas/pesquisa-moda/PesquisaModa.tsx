@@ -410,7 +410,7 @@ export function PesquisaModa() {
   );
 
   return (
-    <div className="flex min-h-dvh flex-col bg-background">
+    <div className="flex flex-col bg-background">
       <LinkPularConteudo href="#pq-conteudo" />
       <div onClickCapture={aoClicarNoCabecalho}>
         <CabecalhoDoSite
@@ -421,7 +421,7 @@ export function PesquisaModa() {
         />
       </div>
 
-      <main id="pq-conteudo" tabIndex={-1} className="mx-auto w-full max-w-2xl flex-1 px-4 pb-16 pt-8 outline-none sm:px-6">
+      <main id="pq-conteudo" tabIndex={-1} className="mx-auto w-full max-w-2xl px-4 pb-16 pt-8 outline-none sm:px-6">
         {tela === "intro" && (
           <section aria-labelledby="pq-intro-titulo" className="flex flex-col gap-8">
             <div className="flex flex-col items-start gap-4">
@@ -486,7 +486,8 @@ export function PesquisaModa() {
                 <AlertDescription>{erroGeral}</AlertDescription>
               </Alert>
             )}
-            <div className="sticky bottom-0 z-10 mt-8 flex flex-col gap-3 bg-background pt-3">
+            {/* A barra segue o conteúdo (sem ficar presa embaixo): a página rola inteira e nada fica atrás dela. */}
+            <div className="mt-8 flex flex-col gap-3">
               {falta && (
                 <Alert variant="error" role="alert">
                   <CircleAlert aria-hidden />
@@ -501,7 +502,7 @@ export function PesquisaModa() {
                 carregando={enviando}
                 textoCarregando={etapa === ETAPA_ID ? "Conferindo…" : "Enviando…"}
                 rotuloContinuar={<>{textoDoBotao(E, false)}<ArrowRight aria-hidden /></>}
-                className="rounded-xl border"
+                className="static rounded-xl border"
               />
             </div>
           </form>

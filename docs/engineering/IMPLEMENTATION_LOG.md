@@ -6,6 +6,13 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Pesquisa de moda: Voltar e Continuar seguem o conteúdo (D-053)
+
+- **Status:** corrigido e testado; publicado pelo pull request da branch `claude/site-pesquisa-barra`.
+- **Problema:** a barra de Voltar e Continuar ficava presa embaixo da tela; nas capturas do celular, a última opção da pergunta 2 aparecia cortada atrás dela, com um vão grande antes do rodapé.
+- **Correção:** a barra segue o conteúdo (`BarraDaEtapa` com `static`) e a página deixa de ter altura mínima de tela (sem vão antes do rodapé). Arquivo: `apps/site/src/paginas/pesquisa-moda/PesquisaModa.tsx`.
+- **Testes executados:** medição rolando a página de verdade em 390, 768, 1024 e 1280 px, em todas as etapas (apresentação, identificação, pergunta 1, classificação, notas, matriz, relato, sobre você, novidades e tela final): nenhuma área com rolagem própria, nada atrás da barra no fim da página, vão antes do rodapé de no máximo 64 px; `pesquisa-moda.cjs` (com a mesma conferência acrescentada), `npm test` (62) e conformidade zero, todos passaram.
+
 ## 2026-11-28 · Site em React: autorizar galeria publicada (S5b) e fim do build de HTML da raiz (D-053)
 
 - **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-ds-s5b-limpeza`.

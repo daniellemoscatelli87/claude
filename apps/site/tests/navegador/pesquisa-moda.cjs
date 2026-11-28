@@ -188,6 +188,15 @@ const normal = (cs) => cs.map((c) => ({ ...c, envio_id: c.envio_id ? "ID" : unde
         return r;
       }, w);
       ok(!m.rolagem, `${w}px ${nome}: sem rolagem horizontal`);
+      // a página rola inteira: nenhuma área com rolagem própria e, no fim da página, nada atrás da barra de botões
+      const f = await n.p.evaluate(async () => {
+        const internas = [...document.querySelectorAll("main *")].filter((e) => /(auto|scroll)/.test(getComputedStyle(e).overflowY) && e.scrollHeight > e.clientHeight + 2 && e.clientHeight > 40).length;
+        window.scrollTo(0, document.documentElement.scrollHeight); await new Promise((r) => setTimeout(r, 150));
+        const barra = document.querySelector('[data-slot="barra-da-etapa"]').getBoundingClientRect();
+        const ultimo = Math.max(...[...document.querySelectorAll("main [data-etapa] *")].map((e) => e.getBoundingClientRect().bottom));
+        return { internas, tapado: ultimo > barra.top + 1 };
+      });
+      ok(f.internas === 0 && !f.tapado, `${w}px ${nome}: sem rolagem interna e nada atrás da barra ${JSON.stringify(f)}`);
       if (w === 390) {
         ok(m.pequenos.length === 0, `390px ${nome}: alvos de toque de 44 px ${m.pequenos.join(", ")}`);
         ok(new Set(m.bordas).size === 1, `390px ${nome}: progresso e pergunta na mesma borda esquerda ${JSON.stringify(m.bordas)}`);
