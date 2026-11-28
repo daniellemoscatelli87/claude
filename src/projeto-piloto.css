@@ -1097,7 +1097,7 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: va
    SEÇÃO DO PROGRAMA, versão da referência enviada: eyebrow com traço, título com destaque, pílulas
    "Sua empresa" e "O Studio" ligadas ao núcleo DM, duas colunas de benefícios, faixa "Uma troca transparente" e CTA.
    ========================================================================= */
-.divisao-hero .divisao-hero-cartao, .pv.transicao-sobre { background: linear-gradient(180deg, var(--background) 0%, var(--card) 55%, var(--background) 100%) !important; }
+.divisao-hero .divisao-hero-cartao, .pv.transicao-sobre { background: var(--card) !important; } /* branco, como a aba "Saiba mais" (D-064) */
 @media (max-width: 1023px) { .divisao-hero .divisao-hero-cartao { border-radius: 28px 28px 0 0 !important; overflow: hidden !important; } }
 .pv { color: var(--foreground); }
 .pv-intro { max-width: 52rem; margin: 0 auto; text-align: center; }
@@ -1187,8 +1187,8 @@ main section h2 .text-coral-600, main section h2 span.text-coral-600 { color: va
 @media (max-width: 767px) { .pv-ben-ic svg { width: 1.5rem; height: 1.5rem; } .pv-pilula-ic svg { width: 1.875rem; height: 1.875rem; } }
 /* aba "Saiba mais" e margem em volta do hero na mesma cor do início da seção seguinte */
 @media (min-width: 1024px) {
-  .rolar-abaixo { background: var(--background) !important; }
-  body:has(#hero.hero-piloto), .divisao-hero { background: var(--background) !important; }
+  .rolar-abaixo { background: var(--card) !important; } /* aba "Saiba mais" branca, como nas outras páginas (D-064) */
+  body:has(#hero.hero-piloto), .divisao-hero { background: var(--card) !important; }
 }
 
 /* Ligações animadas no padrão "Animated Beam": linha base translúcida e um feixe de luz que corre até o núcleo
@@ -1476,7 +1476,7 @@ main + footer.relative { padding-top: 6rem !important; }
   #hero-fundo { position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: auto !important; height: calc(var(--altura-cabecalho, 68px) + 15rem) !important; z-index: 20 !important;
     clip-path: inset(0 0 calc(100% - var(--pp-tampa, 100vh) - 28px) 0) !important; }
   #hero-fundo img { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
-  .pp-tampa { display: block; position: fixed; z-index: 21; left: 0; right: 0; top: var(--pp-tampa, 100vh); height: 28px; background: var(--background); border-radius: 28px 28px 0 0; pointer-events: none; }
+  .pp-tampa { display: block; position: fixed; z-index: 21; left: 0; right: 0; top: var(--pp-tampa, 100vh); height: 28px; background: var(--card); border-radius: 28px 28px 0 0; pointer-events: none; }
   .divisao-hero .divisao-hero-cartao { border-radius: 0 !important; }
 }
 @media (max-width: 1023px) {
