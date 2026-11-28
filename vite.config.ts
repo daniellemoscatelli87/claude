@@ -32,6 +32,10 @@ function coresDoDS(): Plugin {
       this.addWatchFile(arquivo)
       return coresDoTema(readFileSync(arquivo, 'utf8'))
     },
+    // Também como arquivo fixo, para a página de autorizar a galeria (HTML em public/, fora do build do Vite).
+    generateBundle() {
+      this.emitFile({ type: 'asset', fileName: 'assets/cores-do-ds.css', source: coresDoTema(readFileSync(arquivo, 'utf8')) })
+    },
   }
 }
 

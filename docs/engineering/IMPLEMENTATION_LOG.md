@@ -6,6 +6,27 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Autorizar galeria original de volta, com as cores e os cards do DS (D-064)
+
+- **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-galeria-original`.
+- **Arquivo restaurado:** `public/rede-parceiros/galeria/autorizar/index.html`, do `ba7d829` (antes do #269). `rotas.json`: `galeria-autorizar` em `previa`. Como a página fica em `public/` (fora do build do Vite), o `vite.config.ts` gera `assets/cores-do-ds.css` com as variáveis de cor do DS, e a página carrega esse arquivo.
+- **Cores e cards:**
+  - cores por token do DS;
+  - campos com `--input`;
+  - o confete com as cores do `Confete` do DS;
+  - o cartão da página e a prévia do perfil perdem a sombra parada.
+- **Testes executados:**
+  - `npm run build` da raiz (passou);
+  - `apps/site`: typecheck sem erros, 62 testes passaram, conformidade com zero desvios;
+  - fidelidade em 390, 768, 1024 e 1280 px contra o original: mesma geometria e estilos fora a cor; outras diferenças, só as duas sombras paradas tiradas;
+  - fluxo do token com a função `galeria-autorizacao` simulada, sem erros no console:
+    - `ver` com o token e o nome na prévia;
+    - sem a autorização marcada, nada é enviado;
+    - `decidir` autorizado, com o LinkedIn levando o `https://` uma vez, e a tela de enviado;
+    - `ia` atualizando especialidade e tags;
+    - "já autorizado" mostrando o aviso.
+- **Pendência:** link inválido ou sem código passará a mostrar o conteúdo da 404 em card, quando o DS publicar a variante da `PaginaDeErro`.
+
 ## 2026-11-28 · Rede de Parceiros e cadastro de parceiro originais de volta, com as cores e os cards do DS (D-064)
 
 - **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-rede-original`.
