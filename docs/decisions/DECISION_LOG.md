@@ -650,6 +650,7 @@ Legenda de origem: **Dona do produto** (decidido por Dani Moscatelli) · **Propo
 - **Ordem:** a pesquisa de moda primeiro, num pull request próprio (prioridade da dona do produto); depois as outras páginas.
 - **Trade-offs:** volta o build de HTML da raiz (Vite 8 e Tailwind 4.3, além dos dois apps em React); as páginas originais não usam componentes do DS (só as cores), até a dona do produto decidir o que vai para o DS; o React feito para elas fica parado como prévia.
 - **Voltar atrás:** trocar `"previa"` por `"publicada"` no `rotas.json` (o build volta a pôr a versão em React no endereço).
+- **Pesquisa sem o aviso flutuante (dona do produto, 28/11/2026):** o aviso "Preencha os campos em vermelho para prosseguir · Ver" saiu, porque cobria os campos no celular. Com erro, a tela vai até o primeiro campo errado, o foco fica nele e os leitores de tela ouvem quantos campos corrigir; cada campo mantém a sua mensagem.
 
 ## Decisões pendentes
 

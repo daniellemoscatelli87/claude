@@ -6,6 +6,26 @@ Distinguir sempre: **implementado** (código existe), **testado** (comando execu
 
 ---
 
+## 2026-11-28 · Pesquisa de moda: sem o aviso flutuante "Preencha os campos em vermelho" (D-064)
+
+- **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-pesquisa-sem-aviso`.
+- **Pedido da dona do produto:** no celular, o aviso flutuante "Preencha os campos em vermelho para prosseguir · Ver" ficava por cima dos campos, acima da barra de botões. Ele sai.
+- **Como ficou:**
+  - cada campo continua com a própria mensagem de erro;
+  - ao tocar no botão com erro, a tela rola até o primeiro campo com erro e o foco vai para ele (rolagem suave; direta com "menos movimento");
+  - leitores de tela ouvem a quantidade numa região invisível (`aria-live`): "Confira 3 campos marcados em vermelho." ou "Confira o campo marcado em vermelho.";
+  - mensagens do servidor, como "já participou", aparecem junto do formulário e são anunciadas.
+- **Arquivos:** `pesquisa/moda-curitiba/index.html` (o aviso vira um parágrafo invisível com `aria-live`), `src/pesquisa-moda.ts` (`avisarFalta`, sem o botão "Ver"), `src/pesquisa-moda.css` (sem os estilos do aviso).
+- **Testes executados:**
+  - build da raiz; dist comparado com o do `main`: só muda a pesquisa;
+  - teste no navegador em 390 e 1280 px, com e sem "menos movimento", em cada etapa que valida: identificação (vazia e só sem o aceite), pergunta 1 (sem resposta e sem bairro), classificação, notas, matriz, sobre você e novidades. Em todas:
+    - não há aviso flutuante;
+    - o erro aparece junto do campo;
+    - o foco fica no primeiro campo com erro, à vista e acima da barra de botões;
+    - o anúncio é invisível;
+    - não há erros de script;
+  - fluxo completo com a função `pesquisa` simulada: passou.
+
 ## 2026-11-28 · Pesquisa de moda original: contorno dos campos com o --input do DS (D-064)
 
 - **Status:** implementado e testado; publicado pelo pull request da branch `claude/site-pesquisa-campos`.
