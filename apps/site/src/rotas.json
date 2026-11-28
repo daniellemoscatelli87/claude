@@ -82,7 +82,7 @@
       "id": "rede-parceiros-cadastro",
       "caminho": "/rede-parceiros/cadastro/",
       "saida": "rede-parceiros/cadastro/index.html",
-      "origem": "rede-parceiros/cadastro/index.html",
+      "origem": "apps/site/tests/referencia/rede-parceiros-cadastro.html",
       "lote": "S5",
       "cabeca": {
         "titulo": "Dani Moscatelli | Partners & Connections",
