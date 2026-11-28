@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Galeria de profissionais | Dani Moscatelli</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/cores-do-ds.css"><!-- cores do DS Dani Moscatelli (D-064), geradas no build -->
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; padding: 32px 16px 48px; background: var(--graphite-50); color: var(--foreground); font-family: "Plus Jakarta Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+  main { width: 100%; max-width: 40rem; margin: 0 auto; padding: 2.25rem 2rem; border-radius: 28px; background: var(--card); border: 1px solid var(--border); box-shadow: 0 1px 3px color-mix(in srgb, var(--graphite-950) 7%, transparent), 0 2px 6px color-mix(in srgb, var(--graphite-950) 5%, transparent); }
+  @media (max-width: 639px) { main { padding: 1.75rem 1.25rem; border-radius: 24px; } }
+  .logo { display: block; height: 52px; margin: 0 auto 1.75rem; }
+  .selo { display: flex; width: fit-content; margin: 0 auto .75rem; align-items: center; gap: .5rem; padding: .375rem .875rem; border-radius: 9999px; background: var(--primary-suave); border: 1px solid var(--crimson-100); color: var(--primary); font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .selo::before { content: ""; width: .5rem; height: .5rem; border-radius: 9999px; background: var(--primary); }
+  h1 { margin: 0 0 .75rem; text-align: center; font-size: 1.625rem; line-height: 1.2; letter-spacing: -0.02em; }
+  .lead { margin: 0 auto 1.75rem; max-width: 32rem; text-align: center; font-size: 1rem; line-height: 1.6; color: var(--graphite-500); }
+  h2 { margin: 1.75rem 0 .75rem; font-size: 1rem; }
+  /* prévia: mesmo card da galeria */
+  .card { display: flex; flex-direction: column; max-width: 22rem; margin: 0 auto; padding: 1.5rem; border-radius: 24px; background: var(--card); border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent); box-shadow: 0 8px 24px color-mix(in srgb, var(--graphite-950) 8%, transparent); }
+  .topo { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
+  .foto { width: 4.5rem; height: 4.5rem; border-radius: 9999px; display: grid; place-items: center; background: var(--primary-muted); color: var(--primary); font-size: 1.375rem; font-weight: 700; box-shadow: 0 0 0 3px var(--card), 0 0 0 4px color-mix(in srgb, var(--primary) 25%, transparent); }
+  .in { width: 2.25rem; height: 2.25rem; border-radius: 9999px; display: grid; place-items: center; color: var(--muted-foreground); background: var(--background); border: 1px solid var(--graphite-50); }
+  .in svg { width: 1rem; height: 1rem; }
+  .card h3 { margin: 0; font-size: 1.125rem; }
+  .esp { margin: .25rem 0 1rem; font-size: .875rem; font-weight: 600; color: var(--primary); min-height: 1.25rem; }
+  .tags { list-style: none; margin: 0 0 1rem; padding: 0; display: flex; flex-wrap: wrap; gap: .375rem; max-height: 3.75rem; overflow: hidden; }
+  .tags li { padding: .25rem .625rem; border-radius: 9999px; background: var(--background); border: 1px solid var(--graphite-50); font-size: .75rem; line-height: 1.125rem; font-weight: 500; color: var(--graphite-700); }
+  .seg { margin: 0; padding-top: .875rem; border-top: 1px solid var(--graphite-50); font-size: .8125rem; color: var(--graphite-500); }
+  .seg span { display: block; margin-bottom: .125rem; font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--graphite-300); }
+  .nota { margin: .875rem auto 0; max-width: 22rem; font-size: .8125rem; line-height: 1.5; color: var(--muted-foreground); text-align: center; }
+  label { display: grid; gap: .375rem; margin-bottom: 1rem; font-size: .875rem; font-weight: 600; }
+  label small { font-weight: 400; color: var(--muted-foreground); }
+  input { width: 100%; font: inherit; font-size: 1rem; padding: .75rem .875rem; border: 1px solid var(--input); border-radius: 12px; color: var(--foreground); background: var(--card); }
+  input:focus-visible { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent); }
+  /* senioridade: lista no mesmo estilo dos campos */
+  select.campo-sel { width: 100%; font: inherit; font-size: 1rem; padding: .75rem 2.5rem .75rem .875rem; border: 1px solid var(--input); border-radius: 12px; color: var(--foreground); cursor: pointer;
+    appearance: none; -webkit-appearance: none; background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235A6A80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right .875rem center / 1rem; }
+  select.campo-sel:focus-visible { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent); }
+  /* LinkedIn com "https://" fixo antes do campo */
+  .url-campo { position: relative; }
+  .url-pre { position: absolute; left: .875rem; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--muted-foreground); pointer-events: none; }
+  .url-campo input { padding-left: 4.4rem; }
+  .termo { margin: 0 0 1.25rem; padding: 1rem 1.125rem; border-radius: 16px; background: var(--background); border: 1px solid var(--graphite-50); font-size: .875rem; line-height: 1.6; color: var(--graphite-700); }
+  .acoes { display: flex; flex-wrap: wrap; gap: .75rem; }
+  .aceite { display: flex; align-items: flex-start; gap: .625rem; margin: 0 0 1rem; padding: .875rem 1rem; border: 1px solid var(--secondary); border-radius: 12px; background: var(--card); font-size: .9375rem; font-weight: 500; line-height: 1.5; color: var(--foreground); cursor: pointer; }
+  .aceite[hidden] { display: none; }
+  .aceite input { flex: none; width: 1.125rem; height: 1.125rem; margin: .1875rem 0 0; accent-color: var(--primary); }
+  .aceite.invalido { border-color: var(--error); background: var(--error-muted); }
+  .aceite-nota { margin: .75rem 0 0; font-size: .8125rem; color: var(--muted-foreground); }
+  /* link "termos" (abre a modal com o texto do termo) */
+  .link-termo { display: inline; min-height: 0; padding: 0; border: 0; background: none; font: inherit; font-weight: 600; color: var(--primary); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+  .link-termo:hover { color: var(--primary-hover); }
+  .link-termo:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 4px; }
+  .modal-termo { width: min(34rem, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 1.5rem; border: 0; border-radius: 24px; background: var(--card); color: var(--foreground); box-shadow: 0 24px 64px color-mix(in srgb, var(--graphite-950) 24%, transparent); overflow-y: auto; }
+  .modal-termo::backdrop { background: color-mix(in srgb, var(--graphite-950) 50%, transparent); }
+  .mt-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+  .mt-topo h2 { margin: 0; font-size: 1.125rem; line-height: 1.35; }
+  .mt-x { flex: none; width: 40px; min-height: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: var(--background); color: var(--graphite-700); }
+  .mt-x:hover { background: var(--graphite-50); }
+  .mt-x svg { width: 20px; height: 20px; }
+  .modal-termo .termo { margin: 0 0 1.25rem; }
+  .mt-acoes { display: flex; justify-content: flex-end; }
+  button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.5rem; border-radius: 9999px; font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; }
+  .sim { border: 0; background: var(--primary); color: var(--primary-foreground); }
+  .sim:hover { background: var(--primary-hover); }
+  .nao { border: 1px solid var(--graphite-100); background: var(--card); color: var(--graphite-700); }
+  .nao:hover { border-color: var(--primary); color: var(--primary); }
+  button:focus-visible, a:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--card), 0 0 0 4px color-mix(in srgb, var(--primary) 60%, transparent); }
+  button:disabled { opacity: .6; cursor: default; }
+  .beneficios { list-style: none; margin: 0 0 .5rem; padding: 0; display: grid; gap: .625rem; }
+  .beneficios li { position: relative; padding: .875rem 1rem .875rem 2.75rem; border-radius: 14px; background: var(--background); border: 1px solid var(--secondary); font-size: .9375rem; line-height: 1.55; color: var(--graphite-700); }
+  .beneficios li::before { content: ""; position: absolute; left: 1rem; top: 1.1rem; width: 1.125rem; height: 1.125rem; border-radius: 9999px; background: var(--primary) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / .75rem no-repeat; }
+  .beneficios strong { color: var(--foreground); }
+  .foto-img { object-fit: cover; padding: 0; }
+  .foto-campo { display: grid; gap: .5rem; margin-bottom: 1rem; }
+  .foto-rot { display: grid; gap: .375rem; font-size: .875rem; font-weight: 600; }
+  .foto-rot small { font-weight: 400; color: var(--muted-foreground); }
+  .recorte { display: grid; gap: .75rem; justify-items: center; padding: 1rem; border: 1px solid var(--secondary); border-radius: 16px; background: var(--card); }
+  .recorte-dica { margin: 0; font-size: .875rem; color: var(--graphite-500); text-align: center; }
+  .recorte-area { position: relative; width: min(280px, 100%); aspect-ratio: 1; overflow: hidden; border-radius: 12px; background: var(--graphite-50); cursor: grab; touch-action: none; user-select: none; }
+  .recorte-area:active { cursor: grabbing; }
+  .recorte-area:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 35%, transparent); }
+  .recorte-area img { position: absolute; left: 0; top: 0; max-width: none; transform-origin: 0 0; pointer-events: none; }
+  .recorte-area::after { content: ""; position: absolute; inset: 0; border-radius: 9999px; box-shadow: 0 0 0 999px color-mix(in srgb, var(--foreground) 45%, transparent); pointer-events: none; }
+  .recorte-zoom { display: flex; align-items: center; gap: .75rem; width: min(280px, 100%); margin: 0; font-size: .875rem; font-weight: 600; }
+  .recorte-zoom input { flex: 1; accent-color: var(--primary); border: 0 !important; padding: 0 !important; margin: 0; background: transparent !important; box-shadow: none !important; min-height: 0; height: 24px; }
+  .recorte-acoes { display: flex; flex-wrap: wrap; gap: .625rem; justify-content: center; }
+  .arquivo { display: flex; align-items: center; gap: .5rem; width: 100%; max-width: 420px; padding: .375rem .375rem .375rem .75rem; border: 1px solid var(--secondary); border-radius: 12px; background: var(--card); }
+  .arquivo[hidden] { display: none; }
+  .arq-ic { flex: none; display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 8px; background: var(--primary-suave); color: var(--primary); }
+  .arq-ic svg { width: 1rem; height: 1rem; }
+  .arq-nome { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .875rem; font-weight: 600; color: var(--foreground); }
+  .ic-btn { flex: none; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; margin: 0; padding: 0; border: 0; border-radius: 9999px; background: transparent; color: var(--graphite-500); cursor: pointer; }
+  .ic-btn:hover { background: var(--primary-suave); color: var(--primary); }
+  .ic-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 35%, transparent); }
+  .ic-btn svg { width: 1.125rem; height: 1.125rem; }
+  .esp-campo { display: grid; gap: .375rem; margin-bottom: 1rem; }
+  .esp-campo small { font-weight: 400; }
+  .li-campo { margin-bottom: 1rem; }
+  .card .tempo { margin: -6px 0 12px; font-size: .8125rem; color: var(--muted-foreground); }
+  .foto-acoes { display: flex; flex-wrap: wrap; gap: .625rem; align-items: center; }
+  .botao-arquivo { display: inline-flex; align-items: center; min-height: 44px; margin: 0; padding: 0 1.25rem; border-radius: 9999px; border: 1px solid var(--primary); color: var(--primary); font-size: .9375rem; font-weight: 600; cursor: pointer; }
+  .botao-arquivo:hover { background: var(--primary-suave); }
+  #foto-arquivo:focus-visible + * , .botao-arquivo:focus-within { box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 35%, transparent); }
+  .pequeno { min-height: 44px; font-size: .9375rem; padding: 0 1.25rem; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+  .li-campo { display: grid; gap: .5rem; margin-bottom: 1rem; }
+  .status { margin: 0 0 1.25rem; padding: .875rem 1rem; border-radius: 14px; font-size: .9375rem; line-height: 1.5; }
+  .status.ok { background: color-mix(in srgb, var(--success) 12%, transparent); color: var(--success-text); }
+  .status.no { background: var(--graphite-50); color: var(--graphite-700); }
+  .erro { margin: 1rem 0 0; color: var(--error-text); font-size: .9375rem; }
+  /* feedback da foto, logo abaixo do campo */
+  .foto-erro { display: flex; align-items: flex-start; gap: .5rem; margin: .75rem 0 0; color: var(--error-text); font-size: .875rem; line-height: 1.45; }
+  .foto-erro svg { width: 1.125rem; height: 1.125rem; flex: none; margin-top: .05rem; }
+  a { color: var(--primary); font-weight: 600; text-underline-offset: 4px; }
+  .enviado { display: grid; justify-items: center; gap: .25rem; margin-top: .5rem; padding: 0; border: 0; background: transparent; text-align: center; }
+  .enviado:focus { outline: none; }
+  .enviado-foto { display: block; width: min(300px, 85%); height: auto; margin: -.5rem auto .75rem; border-bottom: 1px solid var(--secondary); }
+  .enviado-ic { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; margin-bottom: .75rem; border-radius: 9999px; background: var(--primary-suave); color: var(--primary); }
+  .enviado-ic svg { width: 1.75rem; height: 1.75rem; }
+  .enviado h2 { margin: 0 0 .5rem; }
+  .enviado p { margin: 0 0 .75rem; max-width: 30rem; font-size: .9375rem; line-height: 1.6; color: var(--graphite-500); }
+  .enviado-botao { display: inline-flex; align-items: center; min-height: 48px; margin-top: .5rem; padding: 0 1.75rem; border-radius: 9999px; background: var(--primary); color: var(--primary-foreground) !important; font-weight: 600; text-decoration: none; }
+  .enviado-botao:hover { background: var(--primary-hover); }
+  [hidden] { display: none !important; }
+  /* Skeleton do Design System: bloco --muted (#E8EDF3), raio 8px, pulso (animate-pulse) */
+  .sk-b { background: var(--muted); border-radius: 8px; animation: sk-pulso 2s cubic-bezier(.4, 0, .6, 1) infinite; }
+  .sk-card { width: 100%; }
+  @keyframes sk-pulso { 50% { opacity: .5; } }
+  @media (prefers-reduced-motion: reduce) { .sk-b { animation: none; } }
+  /* Regra dos cards do DS (D-064): cards só com borda, sem sombra parada. */
+  main, .card { box-shadow: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <a href="/" aria-label="Ir para a página inicial"><img class="logo" src="/logo-dm.png" alt="Dani Moscatelli | Experience Design Studio"></a>
+  <p class="selo">Galeria de profissionais</p>
+  <h1>Seu perfil na galeria da rede</h1>
+  <p class="lead">Veja como o seu perfil profissional vai aparecer no site e decida se autoriza a exibição.</p>
+  <!-- Skeleton (Design System: Feedback > Skeleton Loading) enquanto os dados do perfil carregam -->
+  <div id="carregando" class="sk" role="status" aria-busy="true">
+    <span class="sr-only">Carregando…</span>
+    <div class="sk-b" style="height:1.1rem;width:9.5rem;margin:1.75rem 0 1rem"></div>
+    <div class="sk-b" style="height:.9rem;width:7rem"></div>
+    <div class="sk-b" style="height:.75rem;width:60%;margin-top:.5rem"></div>
+    <div class="sk-b" style="height:3rem;width:100%;margin-top:.75rem"></div>
+    <div class="sk-b" style="height:.9rem;width:9rem;margin-top:1.5rem"></div>
+    <div class="sk-b" style="height:.75rem;width:50%;margin-top:.5rem"></div>
+    <div class="sk-b" style="height:3rem;width:100%;margin-top:.75rem"></div>
+    <div class="sk-b" style="height:.9rem;width:5rem;margin-top:1.5rem"></div>
+    <div class="sk-b" style="height:3rem;width:9.5rem;margin-top:.75rem;border-radius:999px"></div>
+    <div class="sk-b" style="height:1.1rem;width:10rem;margin:2rem 0 1rem"></div>
+    <div class="card sk-card">
+      <div class="sk-b" style="height:6rem;width:6rem;border-radius:50%"></div>
+      <div class="sk-b" style="height:1.1rem;width:70%;margin-top:1.25rem"></div>
+      <div class="sk-b" style="height:.9rem;width:45%;margin-top:.6rem"></div>
+      <div class="sk-b" style="height:.8rem;width:25%;margin-top:.6rem"></div>
+      <div style="display:flex;gap:.375rem;margin-top:1rem"><div class="sk-b" style="height:1.5rem;width:5rem;border-radius:999px"></div><div class="sk-b" style="height:1.5rem;width:4rem;border-radius:999px"></div></div>
+    </div>
+  </div>
+  <p class="erro" id="erro-geral" role="alert" hidden></p>
+
+  <div id="conteudo" hidden>
+    <p class="status" id="status" role="status" hidden></p>
+    <h2>Dados do seu perfil</h2>
+    <label class="esp-campo">Especialidade<small>Sugerida a partir do seu cadastro. Se preferir, altere. Até 80 caracteres.</small><input type="text" id="especialidade" maxlength="80"></label>
+    <label class="esp-campo">Senioridade<small>Pelo tempo de atuação na sua principal especialidade, informado no cadastro. Se mudou, atualize: o seu cadastro também é atualizado.</small><select id="tempo" class="campo-sel"></select></label>
+    <div class="li-campo">
+      <span class="foto-rot">Link do seu LinkedIn<small>Informado no seu cadastro. Se precisar, altere.</small></span>
+      <label id="li-editar" style="margin:0"><span class="sr-only">Link do seu LinkedIn (já começa com https://; digite o restante)</span><span class="url-campo"><span class="url-pre" aria-hidden="true">https://</span><input type="url" id="linkedin" maxlength="300" placeholder="www.linkedin.com/in/seu-perfil" autocomplete="url" inputmode="url" autocapitalize="off" spellcheck="false"></span></label>
+    </div>
+    <div class="foto-campo">
+      <span class="foto-rot">Sua foto<small>JPG, PNG ou WEBP, até 15 MB e com pelo menos 300 × 300 pixels. Depois de escolher, ajuste o enquadramento.</small></span>
+      <div class="foto-acoes">
+        <label class="botao-arquivo" id="foto-enviar" for="foto-arquivo"><span>Enviar foto</span></label>
+        <input type="file" id="foto-arquivo" accept="image/jpeg,image/png,image/webp" class="sr-only">
+        <div class="arquivo" id="arquivo" hidden>
+          <span class="arq-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg></span>
+          <span class="arq-nome" id="arq-nome"></span>
+          <label class="ic-btn" for="foto-arquivo" title="Alterar foto"><span class="sr-only">Alterar foto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></label>
+          <button type="button" class="ic-btn" id="foto-remover" title="Excluir foto"><span class="sr-only">Excluir foto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
+        </div>
+      </div>
+      <p class="foto-erro" id="foto-erro" role="alert" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg><span id="foto-erro-txt"></span></p>
+      <div class="recorte" id="recorte" hidden>
+        <p class="recorte-dica">Arraste a foto para enquadrar o rosto no círculo e use o zoom se precisar.</p>
+        <div class="recorte-area" id="rec-area" tabindex="0" aria-label="Área de recorte da foto. Use as setas do teclado para mover."><img id="rec-img" alt="" draggable="false"></div>
+        <label class="recorte-zoom">Zoom<input type="range" id="rec-zoom" min="1" max="3" step="0.01" value="1"></label>
+        <div class="recorte-acoes"><button type="button" class="sim pequeno" id="rec-usar">Usar esta foto</button><button type="button" class="nao pequeno" id="rec-cancelar">Cancelar</button></div>
+      </div>
+    </div>
+
+    <h2>Prévia do seu perfil</h2>
+    <div class="card" id="previa" aria-label="Prévia do perfil">
+      <div class="topo"><span class="foto" id="p-ini" aria-hidden="true"></span><img class="foto foto-img" id="p-img" alt="" hidden><span class="in" id="p-in" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span></div>
+      <h3 id="p-nome"></h3>
+      <p class="esp" id="p-cargo"></p>
+      <p class="tempo" id="p-tempo"></p>
+      <ul class="tags" id="p-areas" aria-label="Áreas de atuação e segmentos"></ul>
+    </div>
+    <p class="nota">É assim que o seu perfil vai aparecer no site <a href="https://www.danimoscatelli.com.br/rede-parceiros/" target="_blank" rel="noopener">www.danimoscatelli.com.br/rede-parceiros</a></p>
+
+    <h2 id="aut-tit" hidden>Autorização</h2>
+    <label class="aceite" id="aceite-box" hidden><input type="checkbox" id="aceite"><span>Autorizo a exibição do meu perfil na Galeria de Profissionais, conforme os <button type="button" class="link-termo" data-termo>termos</button>.</span></label>
+    <div class="acoes">
+      <button type="button" class="sim" id="enviar">Enviar perfil</button>
+    </div>
+    <p class="aceite-nota">Ao enviar, você concorda com a exibição do seu perfil na Galeria de Profissionais do site, conforme os <button type="button" class="link-termo" data-termo>termos</button>.</p>
+    <p class="erro" id="erro" role="alert" hidden></p>
+  </div>
+  <!-- Termos da galeria em modal: abre pelo link "termos" -->
+  <dialog class="modal-termo" id="modal-termo" aria-labelledby="modal-termo-tit">
+    <div class="mt-topo"><h2 id="modal-termo-tit">Termos da Galeria de Profissionais</h2><button type="button" class="mt-x" id="modal-termo-x" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+    <p class="termo" id="termo"></p>
+    <div class="mt-acoes"><button type="button" class="sim pequeno" id="modal-termo-ok">Fechar</button></div>
+  </dialog>
+  <section class="enviado" id="enviado" hidden aria-label="Perfil enviado com sucesso!" tabindex="-1">
+    <img class="enviado-foto" src="/rede-parceiros/galeria/dani-positivo-v3.webp" alt="Dani Moscatelli fazendo sinal de positivo com as duas mãos, ao lado de um selo de confirmado" width="1254" height="1254" loading="lazy">
+    <p>Obrigada por fazer parte da Galeria de Profissionais da Rede de Parceiros. Seu perfil vai compor a galeria do site.</p>
+    <p>Se quiser remover o seu perfil, é só enviar um e-mail para <a href="mailto:contato@danimoscatelli.com.br">contato@danimoscatelli.com.br</a>.</p>
+    <a class="enviado-botao" href="https://www.danimoscatelli.com.br/rede-parceiros/">Ir para o site</a>
+  </section>
+</main>
+<script>
+  (function () {
+    var API = "https://lipfvnerohkaajegqvwr.supabase.co/functions/v1/galeria-autorizacao";
+    var t = new URLSearchParams(location.search).get("t") || "";
+    var $ = function (id) { return document.getElementById(id); };
+    var post = function (body) {
+      return fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ t: t }, body)) })
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || "Não foi possível concluir agora."); return j; }); });
+    };
+    var iniciais = function (n) { return (n || "?").trim().split(/\s+/).slice(0, 2).map(function (p) { return p[0]; }).join("").toUpperCase(); };
+    function status(s) {
+      var el = $("status");
+      if (!s) { el.hidden = true; return; }
+      el.hidden = false;
+      el.className = "status " + (s === "autorizado" ? "ok" : "no");
+      el.textContent = s === "autorizado" ? "A exibição do seu perfil está autorizada. Para retirar a autorização, escreva para contato@danimoscatelli.com.br." : "Você não autorizou a exibição. Seu perfil não aparece na galeria. Se mudar de ideia, marque a autorização abaixo e envie o perfil.";
+    }
+    var fotoNova = "", removerFoto = false, fotoAtual = "", nomeArquivo = "", nomePendente = "";
+    function mostrarFoto(src) {
+      var img = $("p-img"), ini = $("p-ini");
+      if (src) { img.src = src; img.hidden = false; ini.hidden = true; } else { img.hidden = true; img.removeAttribute("src"); ini.hidden = false; }
+      $("foto-enviar").hidden = !!src; $("arquivo").hidden = !src; $("arq-nome").textContent = src ? (nomeArquivo || "Foto atual") : "";
+    }
+    // Foto: a pessoa escolhe a imagem, ajusta o recorte (arrastar + zoom) e a prévia do card mostra o resultado.
+    // O recorte é feito no próprio aparelho, em 600 x 600 px (também descarta dados da foto, como localização).
+    var V = 0, rec = { img: null, url: "", base: 1, zoom: 1, x: 0, y: 0 };
+    function recLimites() {
+      var esc = rec.base * rec.zoom, w = rec.img.naturalWidth * esc, h = rec.img.naturalHeight * esc;
+      rec.x = Math.min(0, Math.max(V - w, rec.x)); rec.y = Math.min(0, Math.max(V - h, rec.y));
+    }
+    function recDesenhar() { recLimites(); $("rec-img").style.transform = "translate(" + rec.x + "px," + rec.y + "px) scale(" + rec.base * rec.zoom + ")"; }
+    function recCortar(tam) {
+      var esc = rec.base * rec.zoom, c = document.createElement("canvas"); c.width = c.height = tam;
+      c.getContext("2d").drawImage(rec.img, -rec.x / esc, -rec.y / esc, V / esc, V / esc, 0, 0, tam, tam);
+      return c.toDataURL("image/jpeg", 0.88);
+    }
+    function recAbrir() {
+      $("recorte").hidden = false; V = $("rec-area").clientWidth;
+      rec.base = V / Math.min(rec.img.naturalWidth, rec.img.naturalHeight);
+      $("rec-img").src = rec.url; $("rec-zoom").value = String(rec.zoom); recDesenhar(); $("rec-area").focus();
+    }
+    // modal dos termos
+    (function () {
+      var dlg = $("modal-termo"), origem = null;
+      document.querySelectorAll("[data-termo]").forEach(function (b) {
+        b.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); origem = b; dlg.showModal(); $("modal-termo-ok").focus(); });
+      });
+      function fechar() { dlg.close(); }
+      $("modal-termo-x").addEventListener("click", fechar); $("modal-termo-ok").addEventListener("click", fechar);
+      dlg.addEventListener("click", function (e) { if (e.target !== dlg) return; var r = dlg.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) fechar(); });
+      dlg.addEventListener("close", function () { if (origem) origem.focus(); });
+    })();
+    function fotoErro(msg) { $("foto-erro-txt").textContent = msg; $("foto-erro").hidden = !msg; }
+    $("foto-arquivo").addEventListener("change", function (e) {
+      var f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
+      fotoErro("");
+      // feedback logo abaixo do campo quando a imagem está fora dos parâmetros (formato ou tamanho)
+      var mb = (f.size / 1024 / 1024).toFixed(1).replace(".", ",");
+      if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { fotoErro("O arquivo “" + f.name + "” não é JPG, PNG ou WEBP. Escolha uma foto em um desses formatos."); return; }
+      if (f.size > 15 * 1024 * 1024) { fotoErro("A foto “" + f.name + "” tem " + mb + " MB. Escolha uma foto de até 15 MB."); return; }
+      nomePendente = f.name;
+      var url = URL.createObjectURL(f), img = new Image();
+      img.onload = function () {
+        // mínimo de 300 × 300 pixels para a foto não ficar borrada no card
+        if (img.naturalWidth < 300 || img.naturalHeight < 300) { URL.revokeObjectURL(url); fotoErro("A foto “" + f.name + "” tem " + img.naturalWidth + " × " + img.naturalHeight + " pixels. Escolha uma foto com pelo menos 300 × 300 pixels para não ficar borrada."); return; }
+        if (rec.url) URL.revokeObjectURL(rec.url);
+        rec = { img: img, url: url, base: 1, zoom: 1, x: 0, y: 0 };
+        $("recorte").hidden = false; V = $("rec-area").clientWidth; rec.base = V / Math.min(img.naturalWidth, img.naturalHeight);
+        // começa centralizado
+        rec.x = (V - img.naturalWidth * rec.base) / 2; rec.y = (V - img.naturalHeight * rec.base) / 2;
+        recAbrir();
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); fotoErro("Não foi possível abrir “" + f.name + "”. O arquivo pode estar corrompido. Escolha outra foto."); };
+      img.src = url;
+    });
+    (function () {
+      var area = $("rec-area"), ini = null;
+      area.addEventListener("pointerdown", function (e) { if (!rec.img) return; ini = { px: e.clientX, py: e.clientY, x: rec.x, y: rec.y }; area.setPointerCapture(e.pointerId); });
+      area.addEventListener("pointermove", function (e) { if (!ini) return; rec.x = ini.x + e.clientX - ini.px; rec.y = ini.y + e.clientY - ini.py; recDesenhar(); });
+      area.addEventListener("pointerup", function () { ini = null; });
+      area.addEventListener("pointercancel", function () { ini = null; });
+      area.addEventListener("keydown", function (e) {
+        var d = { ArrowLeft: [8, 0], ArrowRight: [-8, 0], ArrowUp: [0, 8], ArrowDown: [0, -8] }[e.key]; if (!d || !rec.img) return;
+        e.preventDefault(); rec.x += d[0]; rec.y += d[1]; recDesenhar();
+      });
+      $("rec-zoom").addEventListener("input", function () {
+        if (!rec.img) return;
+        var antes = rec.base * rec.zoom, cx = (V / 2 - rec.x) / antes, cy = (V / 2 - rec.y) / antes;
+        rec.zoom = parseFloat($("rec-zoom").value); var depois = rec.base * rec.zoom;
+        rec.x = V / 2 - cx * depois; rec.y = V / 2 - cy * depois; recDesenhar();
+      });
+    })();
+    $("rec-usar").addEventListener("click", function () {
+      fotoNova = recCortar(600); removerFoto = false; nomeArquivo = nomePendente; mostrarFoto(fotoNova); $("recorte").hidden = true;
+
+      $("previa").scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+    $("rec-cancelar").addEventListener("click", function () { $("recorte").hidden = true; });
+    $("foto-remover").addEventListener("click", function () { fotoNova = ""; nomeArquivo = ""; removerFoto = !!fotoAtual; mostrarFoto(""); $("recorte").hidden = true; });
+    function atualizarIn() { $("p-in").style.visibility = $("linkedin").value.trim() ? "visible" : "hidden"; }
+    // LinkedIn: o "https://" fica fixo; se a pessoa colar o link inteiro, o https:// do começo sai do campo
+    var semScheme = function (v) { return String(v || "").replace(/\s+/g, "").replace(/^(?:https?:\/\/)+/i, ""); };
+    $("linkedin").addEventListener("input", function () { var v = semScheme($("linkedin").value); if (v !== $("linkedin").value) $("linkedin").value = v; });
+    post({ acao: "ver" }).then(function (d) {
+      $("carregando").hidden = true; $("conteudo").hidden = false;
+      $("p-nome").textContent = d.nome || ""; $("p-ini").textContent = iniciais(d.nome);
+      // especialidade: campo 13 do cadastro (ou o texto definido pelo Studio); tags: áreas e segmentos
+      $("especialidade").value = d.cargo || ""; $("p-cargo").textContent = d.cargo || "";
+      // Senioridade: as opções do cadastro (tempo na principal especialidade) com o nível que aparece no card.
+      var NIVEL = { "Menos de 1 ano": "Júnior", "Entre 1 e 2 anos": "Júnior", "Entre 3 e 5 anos": "Pleno", "Entre 6 e 10 anos": "Sênior", "Entre 11 e 15 anos": "Especialista", "Entre 16 e 20 anos": "Especialista", "Mais de 20 anos": "Especialista" };
+      var nivelDe = function (t) { return NIVEL[String(t || "").replace(/\.\s*$/, "")] || ""; };
+      var sel = $("tempo");
+      if (!d.tempo) { var vazio = document.createElement("option"); vazio.value = ""; vazio.textContent = "Selecione"; sel.appendChild(vazio); }
+      (d.tempos || []).forEach(function (t) { var o = document.createElement("option"); o.value = t; o.textContent = t.replace(/\.\s*$/, "") + " · " + nivelDe(t); sel.appendChild(o); });
+      sel.value = d.tempo || "";
+      function mostrarNivel() { var nivel = nivelDe(sel.value); $("p-tempo").textContent = nivel; $("p-tempo").hidden = !nivel; }
+      mostrarNivel(); sel.addEventListener("change", mostrarNivel);
+      var espEditada = false;
+      $("especialidade").addEventListener("input", function () { espEditada = true; $("p-cargo").textContent = $("especialidade").value.trim() || d.cargo || ""; });
+      function mostrarTags(tags) {
+        var lista = $("p-areas"); lista.replaceChildren();
+        ((tags && tags.length) ? tags : d.areas.concat(d.segmentos)).filter(function (a, i, l) { return a && l.indexOf(a) === i; }).forEach(function (a) { var li = document.createElement("li"); li.textContent = a; lista.appendChild(li); });
+      }
+      mostrarTags(d.tags);
+      // A página abre na hora; as sugestões da IA (especialidade e tags) chegam em seguida e atualizam a prévia,
+      // sem apagar o que a pessoa já tiver digitado.
+      if (d.ia_pendente) post({ acao: "ia" }).then(function (ia) {
+        if (ia.cargo && !espEditada) { d.cargo = ia.cargo; $("especialidade").value = ia.cargo; $("p-cargo").textContent = ia.cargo; }
+        if (ia.tags && ia.tags.length) mostrarTags(ia.tags);
+      }).catch(function () {});
+      $("linkedin").value = String(d.linkedin || "").replace(/^(?:https?:\/\/)+/i, "");
+      $("termo").textContent = d.texto;
+      fotoAtual = d.foto_url || ""; mostrarFoto(fotoAtual);
+      // LinkedIn do cadastro: já vem no campo, aberto para edição.
+      status(d.status); atualizarIn();
+      // quem já autorizou (no formulário de cadastro ou antes) não precisa marcar de novo; quem está na base sem autorizar marca a caixa
+      $("aceite-box").hidden = d.status === "autorizado"; $("aut-tit").hidden = d.status === "autorizado";
+      $("linkedin").addEventListener("input", atualizarIn);
+    }).catch(function (e) { $("carregando").hidden = true; $("erro-geral").textContent = e.message; $("erro-geral").hidden = false; });
+    // Confete no topo da tela ao enviar o perfil, o mesmo do fim do cadastro de parceiros (respeita quem prefere menos movimento).
+function confetti() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var cv = document.createElement("canvas");
+  cv.style.cssText = "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50";
+  document.body.appendChild(cv);
+  var ctx = cv.getContext("2d"), dpr = window.devicePixelRatio || 1;
+  var W = innerWidth, H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+  // cores do Confete do DS (D-064), lidas das variáveis da página
+  var estilo = getComputedStyle(document.documentElement);
+  var colors = ["--primary", "--primary", "--primary-muted-foreground", "--muted-foreground", "--input", "--warning"].map(function (c) { return estilo.getPropertyValue(c).trim(); });
+  var ps = Array.from({ length: 160 }, function () { return {
+    x: Math.random() * W, y: -20 - Math.random() * H * 0.4,
+    vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3,
+    w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
+    r: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3,
+    c: colors[Math.floor(Math.random() * colors.length)],
+  }; });
+  var t0 = performance.now();
+  (function frame(t) {
+    var el = t - t0;
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalAlpha = el > 3000 ? Math.max(0, 1 - (el - 3000) / 1000) : 1;
+    ps.forEach(function (p) {
+      p.x += p.vx + Math.sin((el / 300) + p.r) * 0.6; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r))); ctx.restore();
+    });
+    if (el < 4000) requestAnimationFrame(frame); else cv.remove();
+  })(t0);
+}
+    function enviar() {
+      var erro = $("erro"); erro.hidden = true;
+      if (!$("aceite-box").hidden && !$("aceite").checked) { $("aceite-box").classList.add("invalido"); erro.textContent = "Marque a autorização para enviar o seu perfil."; erro.hidden = false; $("aceite").focus(); return; }
+      $("enviar").disabled = true; $("enviar").textContent = "Enviando…";
+      var li = semScheme($("linkedin").value);
+      post({ acao: "decidir", decisao: "autorizado", especialidade: $("especialidade").value, tempo: $("tempo").value, linkedin: li ? "https://" + li : "", foto: fotoNova, remover_foto: removerFoto })
+        .then(function (r) {
+          // tela final: some com o formulário e mostra a confirmação com o link para o site
+          fotoNova = ""; removerFoto = false;
+          $("conteudo").hidden = true; document.querySelector("main .lead").hidden = true; document.querySelector("main h1").textContent = "Perfil enviado com sucesso!"; $("enviado").hidden = false; confetti();
+          window.scrollTo({ top: 0, behavior: "smooth" }); $("enviado").focus({ preventScroll: true });
+        })
+        .catch(function (e) { erro.textContent = e.message; erro.hidden = false; })
+        .finally(function () { $("enviar").disabled = false; $("enviar").textContent = "Enviar perfil"; });
+    }
+    $("aceite").addEventListener("change", function () { $("aceite-box").classList.remove("invalido"); $("erro").hidden = true; });
+    $("enviar").addEventListener("click", enviar);
+  })();
+</script>
+</body>
+</html>

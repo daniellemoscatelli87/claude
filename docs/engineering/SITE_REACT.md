@@ -2,7 +2,7 @@
 
 > Decisão de 27/11/2026 (D-053): o site público do estúdio (início, Projeto Piloto, Rede de Parceiros, cadastro, galeria, pesquisa, privacidade, descadastro, 404 e as páginas de apresentação do EI) passa a ser refeito em React, página por página, com os componentes reais do Design System Dani Moscatelli, como a área restrita (D-051, `docs/engineering/ADMIN_REACT.md`). Endereços, textos, cabeça (título, descrição, canonical, compartilhamento) e comportamento continuam os mesmos. A dona do produto delegou a escolha de como o site consome o DS.
 
-> **Correção de 28/11/2026 (D-064):** a dona do produto pediu que as páginas originais não mudassem de estrutura: o trabalho era só identificar o que não está no DS e componentizar no DS. A página inicial, o Projeto Piloto, a Rede de Parceiros com o cadastro, a pesquisa de moda e a página de autorizar a galeria voltam às páginas de HTML de antes; só as **cores** (tokens do DS) e os **cards** (só borda, sem sombra parada) seguem o DS. As versões em React ficam só como prévia. Situação (28/11/2026): **pesquisa de moda, página inicial, Projeto Piloto e Rede de Parceiros com o cadastro de volta** (HTML original com as cores e os cards do DS); falta a página de autorizar a galeria. Exceção de cor: ícones de marcas (WhatsApp, Facebook, LinkedIn, Instagram) nas cores oficiais. O descadastro continua em React, com o conteúdo centralizado como no original. Como as cores chegam: seção 3.7.
+> **Correção de 28/11/2026 (D-064):** a dona do produto pediu que as páginas originais não mudassem de estrutura: o trabalho era só identificar o que não está no DS e componentizar no DS. A página inicial, o Projeto Piloto, a Rede de Parceiros com o cadastro, a pesquisa de moda e a página de autorizar a galeria voltam às páginas de HTML de antes; só as **cores** (tokens do DS) e os **cards** (só borda, sem sombra parada) seguem o DS. As versões em React ficam só como prévia. Situação (28/11/2026): **pesquisa de moda, página inicial, Projeto Piloto e Rede de Parceiros com o cadastro de volta** (HTML original com as cores e os cards do DS); todas de volta, com a página de autorizar a galeria. Exceção de cor: ícones de marcas (WhatsApp, Facebook, LinkedIn, Instagram) nas cores oficiais. O descadastro continua em React, com o conteúdo centralizado como no original. Como as cores chegam: seção 3.7.
 
 ## 1. Situação em 27/11/2026
 
@@ -16,9 +16,9 @@
 | Lote S0: app React antigo apagado (cerca de 3.000 linhas sem uso) | feito; o dist ficou igual byte a byte |
 | Lote S7: 404, descadastro e privacidade **publicadas** | feito e testado (seção 6) |
 | Lotes S1 (casca), S2 (Projeto Piloto), S3 (página inicial) e S4 (Rede de Parceiros) | publicados em React em 27/11/2026; pela D-064, voltam ao HTML original: **todas de volta** (28/11/2026) |
-| Lote S5: cadastro de parceiro e autorizar galeria | publicados em React em 28/11/2026; pela D-064, o cadastro **voltou ao HTML original** (28/11/2026) e a galeria volta a seguir; o React fica em prévia |
+| Lote S5: cadastro de parceiro e autorizar galeria | publicados em React em 28/11/2026; pela D-064, o cadastro e a galeria **voltaram ao HTML original** (28/11/2026); o React fica em prévia |
 | Lote S6: pesquisa moda Curitiba | publicada em React em 28/11/2026; **voltou ao HTML original pela D-064** (cores e cards do DS); o React fica em prévia |
-| Páginas de HTML | pesquisa, início, Projeto Piloto, Rede de Parceiros e cadastro de volta ao HTML original (D-064), com o build de HTML da raiz (Vite); as três apresentações do EI continuam em `public/` |
+| Páginas de HTML | pesquisa, início, Projeto Piloto, Rede de Parceiros, cadastro e autorizar galeria de volta ao HTML original (D-064), com o build de HTML da raiz (Vite); as três apresentações do EI continuam em `public/` |
 
 ## 2. Como publicar
 
@@ -75,6 +75,7 @@ CSS do site em React: 188 kB (28 kB comprimido), com todas as classes da pasta `
 ### 3.7 Cores do DS nas páginas originais (D-064)
 
 - As classes de cor do Tailwind das páginas originais (`slate`, `red`, `rose`, `white`, `black`, `brand-*`, `ds-*`) apontam para os tokens no `@theme` do `src/compartilhado/menu.css`. Campos com `--input`. Ícones de marcas nas cores oficiais (exceção).
+- A página de autorizar a galeria (HTML em `public/`, fora do build do Vite) carrega `assets/cores-do-ds.css`, gerado no build com o mesmo conteúdo.
 - As páginas originais em HTML (a pesquisa pelo próprio script; as outras pelo `src/compartilhado/menu.ts`) importam `virtual:cores-ds.css`, um módulo do `vite.config.ts` da raiz que lê `apps/site/src/styles/theme.css` (a cópia sincronizada do DS) e entrega só as variáveis de cor do tema claro. Quando o DS muda uma cor, o próximo build já usa a nova.
 - As cores escritas à mão nas folhas das páginas viraram `var(--token)` (ou `color-mix(in srgb, var(--token) N%, transparent)` para transparências). Dentro de SVG embutido em `url(data:...)`, onde `var()` não funciona, fica o valor hexadecimal do token. A troca foi feita por um script com a tabela de papéis (vermelho antigo → `--primary`, cinza de texto → `--muted-foreground`, erros → `--error*`, fundo → `--background`) e, sem papel conhecido, o token mais próximo; o resultado foi conferido à mão.
 - Cards: só borda, sem sombra parada (a sombra continua no passar do mouse e nas janelas).
@@ -251,6 +252,7 @@ O que não muda (e o teste do lote deve conferir rodando o script de hoje, como 
 | Página inicial | build do `155ab15` (antes do #258) | página inteira, animações no estado final, Supabase simulado; 390, 768, 1024 e 1280 px | mesma altura, mesmos elementos, posições, tamanhos e estilos fora a cor; outras diferenças: a sombra parada tirada dos depoimentos, artigos, card das recomendações e card de clientes, e um degradê escrito de outro jeito pelo navegador (só cor) |
 | Projeto Piloto | build do `155ab15` (antes do #258) | página inteira, animações no estado final, Supabase simulado; 390, 768, 1024 e 1280 px | mesma altura, mesmos elementos, posições, tamanhos e estilos fora a cor; outras diferenças: a sombra parada tirada dos cards de frente, do convite e do "depois do piloto", e um degradê escrito de outro jeito pelo navegador (só cor) |
 | Rede de Parceiros e cadastro | build do `155ab15` | página inteira, animações no estado final, Supabase simulado; 390, 768, 1024 e 1280 px | cadastro igual fora a cor; Rede de Parceiros com a mesma geometria e estilos fora a cor; outras diferenças: a sombra parada tirada dos pilares e da carta, dois degradês escritos de outro jeito pelo navegador (só cor) e as barrinhas da simulação, que variam a cada execução também no original |
+| Autorizar galeria | página do `ba7d829` (antes do #269) | página inteira, função simulada; 390, 768, 1024 e 1280 px | mesma geometria e estilos fora a cor; outras diferenças: a sombra parada tirada do cartão da página e da prévia do perfil |
 
 Fluxo testado com a função `pesquisa` simulada nas duas versões (status, identificação, verificar, parcial, enviar, 409, 410, erro do servidor), sem erros no console.
 
